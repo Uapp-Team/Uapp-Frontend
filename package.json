@@ -29,6 +29,7 @@
     "chroma-js": "^2.4.2",
     "classnames": "^2.3.2",
     "dompurify": "^2.4.3",
+    "dotenv": "^16.4.5",
     "draftjs-to-html": "^0.9.1",
     "file-saver": "^2.0.2",
     "firebase": "^7.24.0",
