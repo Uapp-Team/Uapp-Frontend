@@ -1,0 +1,24 @@
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+
+const SideMenuItem = ({ title, icon, path }) => {
+  const location = useLocation();
+  const currentLocation = location.pathname;
+
+  return (
+    <li
+      className={`nav-item uapp-nav-item ${
+        currentLocation === path && "active"
+      }`}
+    >
+      <Link to={path} className="d-flex justify-content-start studentmenu">
+        <div className="menu-text">
+          <i className={icon}></i>
+          <span className="menu-item menu-title">{title}</span>
+        </div>
+      </Link>
+    </li>
+  );
+};
+
+export default SideMenuItem;

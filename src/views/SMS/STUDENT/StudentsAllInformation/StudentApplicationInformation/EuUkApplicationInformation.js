@@ -1,0 +1,378 @@
+import React, { useEffect, useState } from "react";
+import { FormGroup, Input, Label } from "reactstrap";
+
+export default function EuUkApplicationInformation({
+  applicationStudentId,
+  applicationInformation,
+  studentTypeValue,
+  countryLabel,
+  handleDate,
+  date,
+  dateError,
+  loansForEu,
+  setLoansForEu,
+  handleEuManyYears,
+  loanYearsForEUError,
+  loanYearsForEU,
+  isSettlementStatus,
+  setIsSettlementStatus,
+  shareCode,
+  handleshareCode,
+  shareCodeError,
+  statusInUK,
+  statusInUKError,
+  handleresidencyStatusUK,
+}) {
+  const [isStayedInUkInLast3Years, setIsStayedInUkInLast3Years] =
+    useState(false);
+  const [havingUnderGraduateCourseForEU, setHavingUnderGraduateCourseForEU] =
+    useState(false);
+  const minDate = "1950-01-01";
+  useEffect(() => {
+    setLoansForEu(
+      applicationInformation != null &&
+        applicationInformation?.loanfromStudentLoansCompanyForEU === true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.loanfromStudentLoansCompanyForEU === null
+        ? false
+        : false
+    );
+
+    setIsSettlementStatus(
+      applicationInformation != null &&
+        applicationInformation?.isHavePre_Settlementstatus === true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.isHavePre_Settlementstatus === null
+        ? false
+        : false
+    );
+    setIsStayedInUkInLast3Years(
+      applicationInformation != null &&
+        applicationInformation?.isStayedInsideInUkinLast3Years === true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.isStayedInsideInUkinLast3Years === null
+        ? false
+        : false
+    );
+    setHavingUnderGraduateCourseForEU(
+      applicationInformation != null &&
+        applicationInformation?.havingUndergraduatePostgraduateCourseForEU ===
+          true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.havingUndergraduatePostgraduateCourseForEU ===
+            null
+        ? false
+        : false
+    );
+  }, [applicationInformation]);
+
+  // const handleDate = (e) => {
+  //   var datee = e;
+  //   var utcDate = new Date(datee);
+  //   var localeDate = utcDate.toLocaleString("en-CA");
+  //   const x = localeDate.split(",")[0];
+  //   return x;
+  // };
+  return (
+    <div>
+      <input
+        type="hidden"
+        name="studentId"
+        id="studentId"
+        value={applicationStudentId}
+      />
+
+      <input
+        type="hidden"
+        name="id"
+        id="id"
+        value={
+          applicationInformation?.id === null ||
+          applicationInformation?.id === undefined
+            ? 0
+            : applicationInformation?.id
+        }
+      />
+
+      <input
+        type="hidden"
+        name="studentTypeId"
+        id="studentTypeId"
+        value={studentTypeValue}
+      />
+      <FormGroup className="has-icon-left position-relative">
+        <span>
+          <span className="text-danger">*</span> When Did You Move to The{" "}
+          {countryLabel}?
+        </span>
+
+        <Input
+          className="form-mt"
+          type="date"
+          name="DateOfMoveToUk"
+          id="DateOfMoveToUk"
+          onChange={(e) => {
+            handleDate(e);
+          }}
+          value={date}
+          min={minDate}
+        />
+        <span className="text-danger">{dateError}</span>
+      </FormGroup>
+
+      <FormGroup className="has-icon-left position-relative">
+        <span>
+          <span className="text-danger">*</span> Have You Ever Had Any Other
+          Loans From The Student Loans Company (SLC)?
+        </span>
+        <br />
+
+        <FormGroup check inline className="form-mt">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="loanfromStudentLoansCompanyForEU"
+            value={true}
+            checked={loansForEu === true}
+            onChange={() => setLoansForEu(!loansForEu)}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="loanfromStudentLoansCompanyForEU"
+          >
+            Yes
+          </Label>
+        </FormGroup>
+
+        <FormGroup check inline>
+          <input
+            className="form-check-input"
+            type="radio"
+            name="loanfromStudentLoansCompanyForEU"
+            value={false}
+            checked={loansForEu === false}
+            onChange={() => setLoansForEu(!loansForEu)}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="loanfromStudentLoansCompanyForEU"
+          >
+            No
+          </Label>
+        </FormGroup>
+      </FormGroup>
+
+      {loansForEu === true ? (
+        <FormGroup className="has-icon-left position-relative">
+          <span>
+            <span className="text-danger">*</span> How Many Years?
+          </span>
+
+          <Input
+            className="form-mt"
+            type="text"
+            name="loanYearsForEU"
+            id="loanYearsForEU"
+            placeholder="Enter Years"
+            onChange={(e) => {
+              handleEuManyYears(e);
+            }}
+            value={loanYearsForEU}
+          />
+          <span className="text-danger">{loanYearsForEUError}</span>
+        </FormGroup>
+      ) : null}
+
+      <FormGroup className="has-icon-left position-relative">
+        <span>
+          <span className="text-danger">*</span> Do You Have Settled or
+          Pre-settled Status Under The EU Settlement Scheme?
+        </span>
+        <br />
+
+        <FormGroup check inline className="form-mt">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="IsHavePre_Settlementstatus"
+            value={true}
+            onChange={() => setIsSettlementStatus(!isSettlementStatus)}
+            checked={isSettlementStatus === true}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="IsHavePre_Settlementstatus"
+          >
+            Yes
+          </Label>
+        </FormGroup>
+
+        <FormGroup check inline>
+          <input
+            className="form-check-input"
+            type="radio"
+            name="IsHavePre_Settlementstatus"
+            value={false}
+            onChange={() => setIsSettlementStatus(!isSettlementStatus)}
+            checked={isSettlementStatus === false}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="IsHavePre_Settlementstatus"
+          >
+            No
+          </Label>
+        </FormGroup>
+      </FormGroup>
+
+      {isSettlementStatus === true ? (
+        <>
+          <FormGroup className="has-icon-left position-relative">
+            <span>
+              <span className="text-danger">*</span> Please Provide The Valid
+              Share Code
+            </span>
+
+            <Input
+              className="form-mt"
+              type="text"
+              name="shareCode"
+              id="shareCode"
+              placeholder="Enter Share Code"
+              value={shareCode}
+              onChange={(e) => {
+                handleshareCode(e);
+              }}
+            />
+            <span className="text-danger">{shareCodeError}</span>
+          </FormGroup>
+
+          <FormGroup className="has-icon-left position-relative">
+            <span>
+              <span className="text-danger mr-1">*</span>
+              Have You Been Resident in The UK And Islands For The Last Three
+              Years?
+            </span>
+            <br />
+
+            <FormGroup check inline className="form-mt">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="isStayedInsideInUkinLast3Years"
+                value={true}
+                onChange={() =>
+                  setIsStayedInUkInLast3Years(!isStayedInUkInLast3Years)
+                }
+                checked={isStayedInUkInLast3Years === true}
+              />
+              <Label
+                className="form-check-label"
+                check
+                htmlFor="IsStayedInsideInUkinLast3Years"
+              >
+                Yes
+              </Label>
+            </FormGroup>
+
+            <FormGroup check inline>
+              <input
+                className="form-check-input"
+                type="radio"
+                name="isStayedInsideInUkinLast3Years"
+                value={false}
+                onChange={() =>
+                  setIsStayedInUkInLast3Years(!isStayedInUkInLast3Years)
+                }
+                checked={isStayedInUkInLast3Years === false}
+              />
+              <Label
+                className="form-check-label"
+                check
+                htmlFor="IsStayedInsideInUkinLast3Years"
+              >
+                No
+              </Label>
+            </FormGroup>
+          </FormGroup>
+        </>
+      ) : isSettlementStatus === false ? (
+        <FormGroup className="has-icon-left position-relative">
+          <span>
+            <span className="text-danger">*</span> What is Your Current
+            Residency Status in The UK?
+          </span>
+
+          <Input
+            className="form-mt"
+            type="text"
+            name="CurrentResidencyStatusForEU"
+            id="CurrentResidencyStatusForEU"
+            placeholder="Enter Residency Status"
+            value={statusInUK}
+            onChange={(e) => {
+              handleresidencyStatusUK(e);
+            }}
+          />
+          <span className="text-danger">{statusInUKError}</span>
+        </FormGroup>
+      ) : null}
+
+      <FormGroup className="has-icon-left position-relative">
+        <span>
+          <span className="text-danger">*</span> Have You Started An
+          Undergraduate or Postgraduate Course of Higher Education in Any
+          Country Since Leaving School?
+        </span>
+        <br />
+        <FormGroup check inline className="form-mt">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="HavingUndergraduatePostgraduateCourseForEU"
+            value={true}
+            onChange={() =>
+              setHavingUnderGraduateCourseForEU(!havingUnderGraduateCourseForEU)
+            }
+            checked={havingUnderGraduateCourseForEU === true}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="HavingUndergraduatePostgraduateCourseForEU"
+          >
+            Yes
+          </Label>
+        </FormGroup>
+
+        <FormGroup check inline>
+          <input
+            className="form-check-input"
+            type="radio"
+            name="HavingUndergraduatePostgraduateCourseForEU"
+            value={false}
+            onChange={() =>
+              setHavingUnderGraduateCourseForEU(!havingUnderGraduateCourseForEU)
+            }
+            checked={havingUnderGraduateCourseForEU === false}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="HavingUndergraduatePostgraduateCourseForEU"
+          >
+            No
+          </Label>
+        </FormGroup>
+      </FormGroup>
+    </div>
+  );
+}
