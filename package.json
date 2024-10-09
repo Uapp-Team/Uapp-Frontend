@@ -116,9 +116,13 @@
   "scripts": {
     "dev": "REACT_APP_ENV=dev react-app-rewired start",
     "local": "REACT_APP_ENV=local react-app-rewired start",
-    "prod": "cREACT_APP_ENV=prod react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "prod": "REACT_APP_ENV=prod react-app-rewired start",
+    "build:dev": "REACT_APP_ENV=dev react-app-rewired build",
+    "build:local": "REACT_APP_ENV=local react-app-rewired build",
+    "build:prod": "REACT_APP_ENV=prod react-app-rewired build",
+    "test:dev": "REACT_APP_ENV=dev react-app-rewired test",
+    "test:local": "REACT_APP_ENV=local react-app-rewired test",
+    "test:prod": "REACT_APP_ENV=prod react-app-rewired test",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
