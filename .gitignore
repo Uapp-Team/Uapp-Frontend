@@ -16,6 +16,11 @@ build
 # ignore env file
 .env
 
+# ignore package lock json
+package-lock.json
+./package-lock.json
+/package-lock.json
+
 # Mono auto generated files
 mono_crash.*
 
