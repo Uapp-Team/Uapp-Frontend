@@ -114,7 +114,9 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "dev": "REACT_APP_ENV=dev react-app-rewired start",
+    "local": "REACT_APP_ENV=local react-app-rewired start",
+    "prod": "cREACT_APP_ENV=prod react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
