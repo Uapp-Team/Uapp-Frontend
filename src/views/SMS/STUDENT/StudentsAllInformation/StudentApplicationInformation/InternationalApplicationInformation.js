@@ -2,8 +2,8 @@ import { Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { rootUrl } from "../../../../../constants/constants";
-import downloadBtn from "../../../../../assets/img/download.png";
-import uploadBtn from "../../../../../assets/img/upload.png";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../components/buttons/DownloadButton";
 
 export default function InternationalApplicationInformation({
   applicationInformation,
@@ -65,7 +65,7 @@ export default function InternationalApplicationInformation({
         ? false
         : false
     );
-  }, [applicationInformation]);
+  }, [applicationInformation, setIsAppliedForUkVisa, setIsApplyingFromInside]);
   return (
     <div>
       {" "}
@@ -285,11 +285,7 @@ export default function InternationalApplicationInformation({
                           }}
                           style={{ height: "32px" }}
                         >
-                          {FileList.length < 1 ? (
-                            <img className="mb-1" src={uploadBtn} alt="" />
-                          ) : (
-                            ""
-                          )}
+                          {FileList.length < 1 ? <UploadButton /> : ""}
                         </Upload>
                       </Col>
                       <Col md="4">
@@ -303,7 +299,7 @@ export default function InternationalApplicationInformation({
                             }
                             target="blank"
                           >
-                            <img className="mb-1" src={downloadBtn} alt="" />
+                            <DownloadButton />
                           </a>
                         ) : null}
                       </Col>
@@ -383,11 +379,7 @@ export default function InternationalApplicationInformation({
                       }}
                       style={{ height: "32px" }}
                     >
-                      {FileList2.length < 1 ? (
-                        <img className="mb-1" src={uploadBtn} alt="" />
-                      ) : (
-                        ""
-                      )}
+                      {FileList2.length < 1 ? <UploadButton /> : ""}
                     </Upload>
                   </Col>
                   <Col md="4">
@@ -401,7 +393,7 @@ export default function InternationalApplicationInformation({
                         }
                         target="blank"
                       >
-                        <img className="mb-1" src={downloadBtn} alt="" />
+                        <DownloadButton />
                       </a>
                     ) : null}
                   </Col>

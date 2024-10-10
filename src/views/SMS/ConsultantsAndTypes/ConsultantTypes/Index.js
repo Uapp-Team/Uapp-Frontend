@@ -155,12 +155,11 @@ const AddConsultantType = () => {
 
   return (
     <div>
+      <BreadCrumb title="Consultant Types" backTo="" path="/" />
       {loading ? (
         <div className="text-center"></div>
       ) : (
         <div>
-          <BreadCrumb title="Consultant Types" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList?.Add_Consultant_type) ? (
@@ -203,7 +202,7 @@ const AddConsultantType = () => {
                     <Table className="table-sm table-bordered">
                       <thead className="tablehead">
                         <tr style={{ textAlign: "center" }}>
-                          <th>SL/NO</th>
+                          {/* <th>SL/NO</th> */}
                           <th>Consultant Type Name</th>
                           <th>Count</th>
                           <th>Action</th>
@@ -215,7 +214,7 @@ const AddConsultantType = () => {
                             key={consultant?.id}
                             style={{ textAlign: "center" }}
                           >
-                            <th scope="row">{i + 1}</th>
+                            {/* <th scope="row">{i + 1}</th> */}
                             <td>{consultant?.name}</td>
                             <td className="text-center">
                               <span className="badge badge-pill badge-primary">
@@ -257,18 +256,6 @@ const AddConsultantType = () => {
                                   ) : null}
                                 </ButtonGroup>
                               ) : null}
-
-                              <ConfirmModal
-                                text="Do You Want To Delete This Consultant Types ? Once Deleted it can't be Undone "
-                                isOpen={deleteModal}
-                                toggle={closeDeleteModal}
-                                cancel={closeDeleteModal}
-                                buttonStatus={buttonStatus}
-                                progress={progress}
-                                confirm={() =>
-                                  handleDeleteConsultant(consultantNameId)
-                                }
-                              ></ConfirmModal>
                             </td>
                           </tr>
                         ))}
@@ -281,6 +268,16 @@ const AddConsultantType = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Consultant Types ? Once Deleted it can't be Undone "
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        confirm={() => handleDeleteConsultant(consultantNameId)}
+      />
     </div>
   );
 };

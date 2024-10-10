@@ -51,6 +51,11 @@ const ContactInformation = () => {
   const [addressLineError, setAddressLineError] = useState("");
   const [city, setCity] = useState("");
   const [cityError, setCityError] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [zipCodeError, setZipCodeError] = useState("");
+  const [street, setStreet] = useState("");
+  const [route, setRoute] = useState("");
+  const [state, setState] = useState("");
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -78,6 +83,8 @@ const ContactInformation = () => {
         setEmail(res?.emailAddress);
         setAddressLine(res?.addressLine);
         setCity(res?.city);
+        setZipCode(res?.zipCode);
+        setState(res?.state);
       }
     );
   }, [success, applicationStudentId]);
@@ -95,19 +102,31 @@ const ContactInformation = () => {
   };
 
   const handleReferenceName = (e) => {
-    setReferenceName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setReferenceName(data);
+    if (data === "") {
       setReferenceNameError("Reference name is required");
     } else {
       setReferenceNameError("");
     }
   };
   const handleInstitute = (e) => {
-    setRelationship(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setRelationship(data);
+    if (data === "") {
       setRelationshipError("Relationship is required");
     } else {
       setRelationshipError("");
+    }
+  };
+
+  const handleZipCode = (e) => {
+    let data = e.target.value.trimStart();
+    setZipCode(data);
+    if (data === "") {
+      setZipCodeError("Zip code is required");
+    } else {
+      setZipCodeError("");
     }
   };
 
@@ -131,19 +150,14 @@ const ContactInformation = () => {
     ) {
       setEmailError("Email is not valid");
     } else {
-      get(`EmailCheck/EmailCheck/${e.target.value}`).then((res) => {
-        if (!res) {
-          setEmailError("Email already exists");
-        } else {
-          setEmailError("");
-        }
-      });
+      setEmailError("");
     }
   };
 
   const handleAddressLine = (e) => {
-    setAddressLine(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setAddressLine(data);
+    if (data === "") {
       setAddressLineError("Address line is required");
     } else {
       setAddressLineError("");
@@ -151,8 +165,9 @@ const ContactInformation = () => {
   };
 
   const handleCity = (e) => {
-    setCity(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCity(data);
+    if (data === "") {
       setCityError("City is required");
     } else {
       setCityError("");
@@ -205,6 +220,10 @@ const ContactInformation = () => {
       isFormValid = false;
       setCityError("City is required");
     }
+    if (!zipCode) {
+      isFormValid = false;
+      setZipCodeError("Post/Zip code is required");
+    }
 
     return isFormValid;
   };
@@ -236,6 +255,69 @@ const ContactInformation = () => {
   const handlePrevious = () => {
     history.push(`/addReference/${applicationStudentId}/${1}`);
   };
+
+  let addressField = document.querySelector("#addressLine");
+  useEffect(() => {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      addressField,
+      {
+        fields: ["address_components", "geometry"],
+        types: ["address"],
+      }
+    );
+
+    autocomplete.addListener("place_changed", fillInAddress);
+    function fillInAddress() {
+      // Get the place details from the autocomplete object.
+      const place = autocomplete.getPlace();
+      console.log(place);
+      for (const component of place.address_components) {
+        // @ts-ignore remove once typings fixed
+        let componentType = component.types[0];
+        switch (componentType) {
+          case "street_number":
+            setStreet(component.long_name);
+            break;
+          case "route":
+            setRoute(component.long_name);
+            break;
+          case "locality":
+            setCity(component.long_name);
+            setCityError("");
+            break;
+          case "postal_town":
+            setCityError("");
+            setCity(component.long_name);
+            break;
+          case "administrative_area_level_1":
+            setState(component.long_name);
+            break;
+          case "postal_code":
+            setZipCode(component.long_name);
+            setZipCodeError("");
+            break;
+          default:
+          // code block
+        }
+      }
+    }
+    if (street !== "" || route !== "") {
+      setAddressLine(street + " " + route);
+    }
+  }, [
+    addressField,
+
+    setAddressLine,
+    setZipCodeError,
+    setCity,
+    setState,
+    setZipCode,
+    street,
+    route,
+    setCityError,
+    setStreet,
+    setRoute,
+  ]);
   return (
     <div>
       <BreadCrumb
@@ -319,9 +401,10 @@ const ContactInformation = () => {
                       type="string"
                       name="phoneNumber"
                       id="phoneNumber"
-                      country={"us"}
+                      country={"gb"}
+                      enableLongNumbers={true}
                       onChange={handlePhoneNumber}
-                      value={phoneNumber ? phoneNumber : "1"}
+                      value={phoneNumber ? phoneNumber : ""}
                       inputProps={{
                         required: true,
                       }}
@@ -353,7 +436,6 @@ const ContactInformation = () => {
 
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    {" "}
                     <span>
                       <span className="text-danger">*</span> Country
                     </span>
@@ -385,7 +467,7 @@ const ContactInformation = () => {
                       onChange={(e) => {
                         handleAddressLine(e);
                       }}
-                      defaultValue={oneData?.addressLine}
+                      value={addressLine}
                     />
                     <span className="text-danger">{addressLineError}</span>
                   </Col>
@@ -405,7 +487,7 @@ const ContactInformation = () => {
                       onChange={(e) => {
                         handleCity(e);
                       }}
-                      defaultValue={oneData?.city}
+                      value={city}
                     />
                     <span className="text-danger">{cityError}</span>
                   </Col>
@@ -413,15 +495,32 @@ const ContactInformation = () => {
 
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    {" "}
                     <span>State/County</span>
                     <Input
                       type="text"
                       name="state"
                       id="state"
                       placeholder="Enter State/County"
-                      defaultValue={oneData?.state}
+                      value={state}
                     />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span> Zip/Post Code
+                    </span>
+                    <Input
+                      type="text"
+                      placeholder="Enter Post/Zip Code"
+                      id="zipCode"
+                      name="zipCode"
+                      onChange={(e) => {
+                        handleZipCode(e);
+                      }}
+                      value={zipCode}
+                    />
+                    <span className="text-danger">{zipCodeError}</span>
                   </Col>
                 </FormGroup>
 

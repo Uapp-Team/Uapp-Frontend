@@ -88,7 +88,7 @@ const AdmissionManagerSubjects = () => {
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Course</th>
 
                   <th>Action</th>
@@ -97,7 +97,7 @@ const AdmissionManagerSubjects = () => {
               <tbody>
                 {subject?.map((sub, i) => (
                   <tr key={sub?.id} style={{ textAlign: "center" }}>
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
 
                     <td>{sub?.subjectName}</td>
 

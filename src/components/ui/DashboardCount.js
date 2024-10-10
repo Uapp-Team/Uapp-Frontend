@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const DashboardCount = ({ title, value, link, bgColor, borderColor }) => {
+const DashboardCount = ({
+  title,
+  value,
+  link,
+  bgColor,
+  borderColor,
+  secondValue,
+  secondColor,
+  secondBgColor,
+}) => {
   return (
     <div
       className="dashboard-count-card consultant-dashboard-count-card"
@@ -15,6 +24,19 @@ const DashboardCount = ({ title, value, link, bgColor, borderColor }) => {
           <Link to={link}>
             <p className="dashboard-count-value consultant-dashboard-count-value">
               {value}
+              {secondValue && (
+                <span
+                  className="fs-12px fw-500 rounded nopointer"
+                  style={{
+                    padding: "4px 6px",
+                    marginLeft: "16px",
+                    backgroundColor: secondBgColor,
+                    color: secondColor,
+                  }}
+                >
+                  {secondValue} Students
+                </span>
+              )}
             </p>
           </Link>
           <Link to={link}>
@@ -27,6 +49,19 @@ const DashboardCount = ({ title, value, link, bgColor, borderColor }) => {
         <>
           <p className="dashboard-count-value consultant-dashboard-count-value">
             {value}
+            {secondValue && (
+              <span
+                className="fs-12px fw-500 rounded nopointer"
+                style={{
+                  padding: "4px 6px",
+                  marginLeft: "16px",
+                  backgroundColor: secondBgColor,
+                  color: secondColor,
+                }}
+              >
+                {secondValue} Students
+              </span>
+            )}
           </p>
           <p className="dashboard-count-title consultant-dashboard-count-title">
             {title}

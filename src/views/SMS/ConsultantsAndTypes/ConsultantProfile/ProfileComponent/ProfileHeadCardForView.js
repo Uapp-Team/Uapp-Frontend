@@ -26,6 +26,7 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../../Components/ButtonLoader";
 import roundimg from "../../../../../assets/img/roundimg.svg";
 import Loader from "../../../Search/Loader/Loader";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
 const ProfileHeadCardForView = ({ id }) => {
   const currentUser = localStorage.getItem("userType");
@@ -334,7 +335,14 @@ const ProfileHeadCardForView = ({ id }) => {
                       <li className="d-flex">
                         <div>
                           <h4 className="">{headData?.fullName}</h4>
-                          <p>{headData?.viewId}</p>
+                          <p>
+                            {headData?.viewId} |{" "}
+                            <i
+                              className="fas fa-star"
+                              style={{ color: "#FFB33E" }}
+                            ></i>
+                            {headData?.rating}
+                          </p>
 
                           <p>
                             <i class="far fa-envelope"></i> {headData?.email}

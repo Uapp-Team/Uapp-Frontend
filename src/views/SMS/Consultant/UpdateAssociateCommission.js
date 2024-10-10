@@ -41,6 +41,7 @@ import CustomButtonRipple from "../Components/CustomButtonRipple";
 import PromotionalCommission from "./PromotionalCommission";
 import ButtonLoader from "../Components/ButtonLoader";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../components/date/calenderFormate";
 
 const UpdateAssociateCommission = () => {
   const history = useHistory();
@@ -97,9 +98,11 @@ const UpdateAssociateCommission = () => {
       setPriceRangeList(res);
     });
 
-    get("PromotionalCommission/Index").then((res) => {
-      setPromotionalList(res);
-    });
+    get(`PromotionalCommission/ForConsultant/${consultantRegisterId}`).then(
+      (res) => {
+        setPromotionalList(res);
+      }
+    );
   }, [consultantRegisterId, success]);
 
   const commissionMenu = commissionDD.map((commission) => ({
@@ -496,9 +499,9 @@ const UpdateAssociateCommission = () => {
                         </td>
 
                         <td>
-                          {handleDate(commission?.createdOn)}
+                          {dateFormate(commission?.createdOn)}
                           {" to "}
-                          {handleDate(commission?.updatedOn)}
+                          {dateFormate(commission?.updatedOn)}
                         </td>
 
                         <td style={{ width: "20%" }} className="text-center">

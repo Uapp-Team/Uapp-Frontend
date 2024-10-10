@@ -63,14 +63,14 @@ const BankInformationForm = ({
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
               <span>
-                <span className="text-danger">*</span> Account Name
+                <span className="text-danger">*</span> Account Holder Name
               </span>
 
               <Input
                 type="text"
                 name="accountName"
                 id="accountName"
-                placeholder="Enter Account Name"
+                placeholder="Enter Account Holder Name"
                 onChange={(e) => {
                   handleAccountName(e);
                 }}
@@ -146,41 +146,54 @@ const BankInformationForm = ({
                 defaultValue={fetchedData?.bankAddress}
               />
             </FormGroup>
-            <FormGroup className="has-icon-left position-relative">
-              <span>
-                <span className="text-danger">*</span>
-                Use This Bank For Transaction.
-              </span>
-              <br />
 
-              <FormGroup check inline className="form-mt">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="isDefault"
-                  value={true}
-                  checked={isDefault === true}
-                  onChange={() => setIsDefault(!isDefault)}
-                />
-                <Label className="form-check-label" check htmlFor="isDefault">
-                  Yes
-                </Label>
-              </FormGroup>
+            {bankDetailsData?.length < 1 ? null : (
+              <>
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
+                    <span className="text-danger">*</span>
+                    Use This Bank For Transaction.
+                  </span>
+                  <br />
 
-              <FormGroup check inline>
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="IsDefault"
-                  value={false}
-                  checked={isDefault === false}
-                  onChange={() => setIsDefault(!isDefault)}
-                />
-                <Label className="form-check-label" check htmlFor="isDefault">
-                  No
-                </Label>
-              </FormGroup>
-            </FormGroup>
+                  <FormGroup check inline className="form-mt">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="isDefault"
+                      value={true}
+                      checked={isDefault === true}
+                      onChange={() => setIsDefault(!isDefault)}
+                    />
+                    <Label
+                      className="form-check-label"
+                      check
+                      htmlFor="isDefault"
+                    >
+                      Yes
+                    </Label>
+                  </FormGroup>
+
+                  <FormGroup check inline>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="IsDefault"
+                      value={false}
+                      checked={isDefault === false}
+                      onChange={() => setIsDefault(!isDefault)}
+                    />
+                    <Label
+                      className="form-check-label"
+                      check
+                      htmlFor="isDefault"
+                    >
+                      No
+                    </Label>
+                  </FormGroup>
+                </FormGroup>
+              </>
+            )}
           </Col>
         </Row>
 

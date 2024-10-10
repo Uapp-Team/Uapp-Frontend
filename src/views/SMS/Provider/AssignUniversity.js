@@ -32,6 +32,7 @@ import EditAssignUniversityModal from "./EditAssignUniversityModal";
 import AssignProvidersUniversityModal from "./AssignProvidersUniversityModal";
 import { userTypes } from "../../../constants/userTypeConstant";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const AssignUniversity = () => {
   // const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ const AssignUniversity = () => {
   useEffect(() => {
     get(`AdmissionManagerUniversity/Index/${managerId}`).then((res) => {
       setUniList(res);
+      console.log(res, "university list");
     });
 
     get(`AdmissionManager/Get/${managerId}`).then((res) => {
@@ -328,8 +330,8 @@ const AssignUniversity = () => {
               className="uapp-modal2"
               size="lg"
             >
-              <ModalHeader style={{ backgroundColor: "#1d94ab" }}>
-                <span className="text-white">University</span>
+              <ModalHeader>
+                <span>University</span>
               </ModalHeader>
               <ModalBody>
                 <AssignProvidersUniversityModal
@@ -349,8 +351,8 @@ const AssignUniversity = () => {
               className="uapp-modal2"
               size="lg"
             >
-              <ModalHeader style={{ backgroundColor: "#1d94ab" }}>
-                <span className="text-white">University</span>
+              <ModalHeader>
+                <span>University</span>
               </ModalHeader>
               <ModalBody>
                 <AssignUniversityModal
@@ -370,8 +372,8 @@ const AssignUniversity = () => {
               className="uapp-modal2"
               size="md"
             >
-              <ModalHeader style={{ backgroundColor: "#1d94ab" }}>
-                <span className="text-white">University</span>
+              <ModalHeader>
+                <span>University</span>
               </ModalHeader>
               <ModalBody>
                 <EditAssignUniversityModal
@@ -388,7 +390,7 @@ const AssignUniversity = () => {
           {/* {loading ? (
             <h2 className="text-center">Loading...</h2>
           ) : ( */}
-          <div className="table-responsive" ref={componentRef}>
+          <div className="table-responsive fixedhead" ref={componentRef}>
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
@@ -406,44 +408,28 @@ const AssignUniversity = () => {
               <tbody>
                 {uniList?.map((uni, i) => (
                   <tr key={uni?.id} style={{ textAlign: "center" }}>
-                    {checkSlNo ? <th scope="row">{i + 1}</th> : null}
-                    <td className="cursor-pointer hyperlink-hover">
+                    {checkSlNo ? <td>{i + 1}</td> : null}
+                    <td>
                       {userType === userTypes?.SystemAdmin.toString() ||
                       userType === userTypes?.Admin.toString() ? (
-                        <span
-                          onClick={() => {
-                            history.push(
-                              `/providerDetails/${uni?.university?.providerId}`
-                            );
-                          }}
+                        <Link
+                          className="text-id hover"
+                          to={`/providerDetails/${uni?.university?.providerId}`}
                         >
-                          {" "}
                           {uni?.providerName}
-                        </span>
+                        </Link>
                       ) : (
-                        <span
-                          onClick={() => {
-                            history.push(
-                              `/profile/${uni?.university?.providerId}`
-                            );
-                          }}
-                        >
-                          {" "}
-                          {uni?.providerName}
-                        </span>
+                        <span>{uni?.providerName}</span>
                       )}
                     </td>
                     {checkName ? (
-                      <td className="cursor-pointer hyperlink-hover">
-                        <span
-                          onClick={() => {
-                            history.push(
-                              `/universityDetails/${uni?.universityId}`
-                            );
-                          }}
+                      <td>
+                        <Link
+                          className="text-id hover"
+                          to={`/universityDetails/${uni?.universityId}`}
                         >
                           {uni?.university?.name}
-                        </span>
+                        </Link>
                       </td>
                     ) : null}
                     {checkType ? (
@@ -492,26 +478,26 @@ const AssignUniversity = () => {
                     ) : null}
                   </tr>
                 ))}
-
-                <ConfirmModal
-                  text={`Do You Want To Delete This ${managerUniName} Information ?`}
-                  isOpen={deleteModal}
-                  toggle={closeModal}
-                  confirm={() => handleDeletePermission(managerUniId)}
-                  cancel={() => {
-                    setDeleteModal(false);
-                    setManagerUniId(0);
-                    setManagerUniName("");
-                  }}
-                  buttonStatus={buttonStatus1}
-                  progress={progress1}
-                />
               </tbody>
             </Table>
           </div>
           {/* )} */}
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text={`Do You Want To Delete This ${managerUniName} Information ?`}
+        isOpen={deleteModal}
+        toggle={closeModal}
+        confirm={() => handleDeletePermission(managerUniId)}
+        cancel={() => {
+          setDeleteModal(false);
+          setManagerUniId(0);
+          setManagerUniName("");
+        }}
+        buttonStatus={buttonStatus1}
+        progress={progress1}
+      />
     </div>
   );
 };

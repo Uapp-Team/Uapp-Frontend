@@ -15,7 +15,7 @@ export default function AuthFooter() {
         </div>
         <div>
           <span className="register-footer-credit">
-            UAPP <span>© SMS Higher Education Group.</span>
+            <span>© UAPP</span>
           </span>
         </div>
       </div>

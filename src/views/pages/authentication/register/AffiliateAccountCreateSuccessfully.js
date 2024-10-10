@@ -1,0 +1,53 @@
+import React from "react";
+import {} from "reactstrap";
+// import StudentRegisterForm from "./StudentRegisterForm";
+import "../../../../assets/scss/pages/authentication.scss";
+import providerlogo from "../../../../assets/img/providerlogo.svg";
+import "../../../../assets/CoustomStyle/auth.css";
+import AuthFooter from "./components/AuthFooter";
+// import { Link } from "react-router-dom";
+const AffiliateAccountCreateSuccessfully = () => {
+  return (
+    <div className="auth-container">
+      <div className="left-illustration d-md-block d-lg-block d-none  ">
+        <div className="consultant-register-container">
+          <img src={providerlogo} className="auth-logo-fixed" alt="uapp" />
+        </div>
+      </div>
+      <div className="right-container">
+        <div className="form-container">
+          <div className="d-block d-sm-none my-4 text-center">
+            <img src={providerlogo} className="w-50" alt="" />
+          </div>
+          <div className="d-flex justify-content-center">
+            <div className="w-75 my-5">
+              <div className="register-header mt-5">
+                <h1 className="text-orange fw-600">Congratulations !</h1>
+                <h1 className="my-4" style={{ fontSize: "20px" }}>
+                  Registration is successful
+                </h1>
+
+                <p style={{ fontSize: "14px" }}>
+                  Your affiliate account has been created. We have send a
+                  verification email to your email address. To continue to the
+                  next steps please verify your email first.
+                </p>
+              </div>
+
+              {/* <div className="mb-3 ">
+                <Link to="/" className="already-registered">
+                  <button className="btn-register-lg" type="submit">
+                    Login Now
+                  </button>
+                </Link>
+              </div> */}
+            </div>
+          </div>
+          <AuthFooter />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AffiliateAccountCreateSuccessfully;

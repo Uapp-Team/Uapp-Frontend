@@ -26,6 +26,7 @@ import uapploader from "../../../../../../assets/img/Uapp_fav.png";
 import uapploader2 from "../../../../../../assets/img/Asset 12Icon.svg";
 import put from "../../../../../../helpers/put";
 import get from "../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const ProviderAdminProfileHeadcard = ({ providerAdminId, userId }) => {
   const [headData, setHeadData] = useState({});
@@ -301,14 +302,6 @@ const ProviderAdminProfileHeadcard = ({ providerAdminId, userId }) => {
         }
       });
     }
-  };
-
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
   };
 
   return (
@@ -731,7 +724,7 @@ const ProviderAdminProfileHeadcard = ({ providerAdminId, userId }) => {
                       color: "#d4d4d4",
                     }}
                   >
-                    {handleDate(headData?.uappRegistrationDate)}
+                    {dateFormate(headData?.uappRegistrationDate)}
                   </span>
                 </div>
 

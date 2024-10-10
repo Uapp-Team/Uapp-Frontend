@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
@@ -17,8 +17,15 @@ import PrintCard from "./Component/PrintCard";
 import AddmissionOfficerTable from "./Component/AddmissionOfficerTable";
 import SelectAndClear from "./Component/SelectAndClear";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import ColumnAdmissionOfficer from "../../../TableColumn/ColumnAdmissionOfficer.js";
 
 const Index = () => {
+  const AdmissionOfficerPaging = JSON.parse(
+    sessionStorage.getItem("admissionOfficer")
+  );
+  const { providerId, managerId, admissionManagerId } = useParams();
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
@@ -28,7 +35,9 @@ const Index = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [callApi, setCallApi] = useState(false);
-  const [searchStr, setSearchStr] = useState("");
+  const [searchStr, setSearchStr] = useState(
+    AdmissionOfficerPaging?.searchStr ? AdmissionOfficerPaging?.searchStr : ""
+  );
   const [managerDD, setManagerDD] = useState([]);
   const [countryList, setCountryList] = useState([]);
   const [officerList, setOfficerList] = useState([]);
@@ -36,8 +45,16 @@ const Index = () => {
   const [officerId, setOfficerId] = useState(0);
   const [deleteData, setDeleteData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
-  const [managerLabel, setManagerLabel] = useState("Select Admission Manager");
-  const [managerValue, setManagerValue] = useState(0);
+  const [managerLabel, setManagerLabel] = useState(
+    AdmissionOfficerPaging?.managerLabel
+      ? AdmissionOfficerPaging?.managerLabel
+      : "Select Admission Manager"
+  );
+  const [managerValue, setManagerValue] = useState(
+    AdmissionOfficerPaging?.managerValue
+      ? AdmissionOfficerPaging?.managerValue
+      : 0
+  );
   const [nameTitleDD, setNameTitleDD] = useState([]);
   const [providerDD, setProviderDD] = useState([]);
   const [managerDDForm, setManagerDDForm] = useState([]);
@@ -47,17 +64,58 @@ const Index = () => {
   const [tableData, setTableData] = useState([]);
   const history = useHistory();
   const { addToast } = useToasts();
-  const { providerId, managerId } = useParams();
   const userType = localStorage.getItem("userType");
   const referenceId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [buttonStatus, setButtonStatus] = useState(false);
-  const [proLabel, setProLabel] = useState("Select Provider");
-  const [proValue, setProValue] = useState(0);
+  const [proLabel, setProLabel] = useState(
+    AdmissionOfficerPaging?.proLabel
+      ? AdmissionOfficerPaging?.proLabel
+      : "Select Provider"
+  );
+  const [proValue, setProValue] = useState(
+    AdmissionOfficerPaging?.proValue ? AdmissionOfficerPaging?.proValue : 0
+  );
   const [progress, setProgress] = useState(false);
   const [manager, setManager] = useState([]);
-  const { admissionManagerId } = useParams();
   const [mId, setMId] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const tableColumnAdmissionOfficer = JSON.parse(
+      localStorage.getItem("ColumnAdmissionOfficer")
+    );
+    tableColumnAdmissionOfficer && setTableData(tableColumnAdmissionOfficer);
+    !tableColumnAdmissionOfficer &&
+      localStorage.setItem(
+        "ColumnAdmissionOfficer",
+        JSON.stringify(ColumnAdmissionOfficer)
+      );
+    !tableColumnAdmissionOfficer && setTableData(ColumnAdmissionOfficer);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "admissionOfficer",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        proLabel: proLabel && proLabel,
+        proValue: proValue && proValue,
+        managerLabel: managerLabel && managerLabel,
+        managerValue: managerValue && managerValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    proLabel,
+    proValue,
+    managerLabel,
+    managerValue,
+    searchStr,
+    dataPerPage,
+  ]);
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -70,15 +128,6 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    get(`TableDefination/Index/${tableIdList?.Admission_officer_List}`).then(
-      (res) => {
-        setTableData(res);
-        console.log(res, "table data");
-      }
-    );
-  }, [success]);
-
-  useEffect(() => {
     if (admissionManagerId) {
       get("AdmissionManagerDD/index").then((res) => {
         setManager(res);
@@ -87,18 +136,19 @@ const Index = () => {
         setManagerValue(result?.id);
       });
     } else {
-      get("ConsultantDD/index").then((res) => {
+      get("ConsultantDD/ByUser").then((res) => {
         setManager(res);
       });
     }
   }, [admissionManagerId]);
-
   useEffect(() => {
     if (providerId) {
       get("ProviderDD/Index").then((res) => {
         setProviderDD(res);
         const result = res?.find((ans) => ans?.id == providerId);
+        console.log(result);
         setProLabel(result?.name);
+        setProValue(result?.id);
       });
       get(`AdmissionManagerDD/Index/${providerId}`).then((res) => {
         setManagerDDForm(res);
@@ -113,24 +163,26 @@ const Index = () => {
         setProviderDD(res);
       });
     }
-    if (providerId !== undefined && managerId !== undefined) {
-      get(
-        `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}`
-      ).then((res) => {
-        setOfficerList(res?.models);
-        setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
-        setLoading(false);
-      });
-    } else {
-      get(
-        `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${proValue}&admissionmanagerId=${managerValue}&search=${searchStr}`
-      ).then((res) => {
-        setOfficerList(res?.models);
-        setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
-        setLoading(false);
-      });
+    if (!isTyping) {
+      if (providerId !== undefined && managerId !== undefined) {
+        get(
+          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}`
+        ).then((res) => {
+          setOfficerList(res?.models);
+          setEntity(res?.totalEntity);
+          setSerialNum(res?.firstSerialNumber);
+          setLoading(false);
+        });
+      } else {
+        get(
+          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${proValue}&admissionmanagerId=${managerValue}&search=${searchStr}`
+        ).then((res) => {
+          setOfficerList(res?.models);
+          setEntity(res?.totalEntity);
+          setSerialNum(res?.firstSerialNumber);
+          setLoading(false);
+        });
+      }
     }
   }, [
     providerId,
@@ -141,6 +193,7 @@ const Index = () => {
     searchStr,
     success,
     proValue,
+    isTyping,
   ]);
 
   useEffect(() => {
@@ -212,6 +265,7 @@ const Index = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -258,14 +312,18 @@ const Index = () => {
   const handleClearSearch = () => {
     setManagerLabel("Select Admission Manager");
     setManagerValue(0);
-    setProLabel("Select Provider");
-    setProValue(0);
+    !providerId && setProLabel("Select Provider");
+    !providerId && setProValue(0);
     setCallApi((prev) => !prev);
     setSearchStr("");
+    setCurrentPage(1);
     history.replace({
       universityId: null,
     });
   };
+  // useEffect(() => {
+  //   handleClearSearch();
+  // }, [currentRoute]);
 
   const closeDeleteModal = () => {
     setDeleteModal(false);
@@ -341,18 +399,11 @@ const Index = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Admission_officer_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        setSuccess(!success);
-      } else {
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnAdmissionOfficer", JSON.stringify(values));
   };
 
   const redirectEdit = (officerId) => {
@@ -367,22 +418,22 @@ const Index = () => {
   };
   return (
     <div>
+      <BreadCrumb
+        title="Admission Officer List"
+        backTo={
+          providerId !== undefined && managerId !== undefined
+            ? "Admission Manager List"
+            : ""
+        }
+        path="/admissionManagerList"
+      />
+
       {loading ? (
         <div className="text-center">
           <img src={loader} alt="" className="img-fluid" />
         </div>
       ) : (
         <div>
-          <BreadCrumb
-            title="Admission Officer List"
-            backTo={
-              providerId !== undefined && managerId !== undefined
-                ? "Admission Manager List"
-                : ""
-            }
-            path="/admissionManagerList"
-          />
-
           <SelectAndClear
             userType={userType}
             providerMenu={providerMenu}
@@ -403,6 +454,8 @@ const Index = () => {
             setManagerValue={setManagerValue}
             setProLabel={setProLabel}
             setProValue={setProValue}
+            setIsTyping={setIsTyping}
+            setSearchStr={setSearchStr}
           ></SelectAndClear>
 
           <Card className="uapp-employee-search">
@@ -451,7 +504,7 @@ const Index = () => {
                     <div className="mr-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div className="mr-2">
+                        <div className="mr-2 ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}

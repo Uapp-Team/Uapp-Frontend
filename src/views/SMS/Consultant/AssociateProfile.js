@@ -48,6 +48,7 @@ import { permissionList } from "../../../constants/AuthorizationConstant";
 import ButtonLoader from "../Components/ButtonLoader";
 import Loader from "../Search/Loader/Loader";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../components/date/calenderFormate";
 
 const AssociateProfile = () => {
   const location = useLocation();
@@ -1112,9 +1113,9 @@ const AssociateProfile = () => {
                                   </td>
 
                                   <td>
-                                    {handleDate(commission?.createdOn)}
+                                    {dateFormate(commission?.createdOn)}
                                     {" to "}
-                                    {handleDate(commission?.updatedOn)}
+                                    {dateFormate(commission?.updatedOn)}
                                   </td>
                                 </tr>
                               ))}

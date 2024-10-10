@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import get from "../../helpers/get";
 
-const CurrencyValue = ({ currencyId }) => {
-  const [currencyDD, setCurrencyDD] = useState([]);
+const CurrencyValue = ({ currencyList, currencyId }) => {
+  const [currencyDD, setCurrencyDD] = useState(
+    currencyList ? currencyList : []
+  );
   const [currencyValue, setCurrencyValue] = useState("Select");
 
   useEffect(() => {
-    get(`CurrencyDD/Index`).then((res) => {
-      setCurrencyDD(res);
-    });
-  }, []);
+    if (!currencyList) {
+      get(`CurrencyDD/Index`).then((res) => {
+        console.log(res);
+        setCurrencyDD(res);
+      });
+    }
+  }, [currencyList]);
 
   useEffect(() => {
     const filterData = currencyDD.filter((status) => {

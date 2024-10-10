@@ -1,39 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import user1 from "../../../../../assets/img/user1.svg";
-import user2 from "../../../../../assets/img/user2.svg";
-import capture from "../../../../../assets/img/capture.PNG";
-import images1 from "../../../../../assets/img/images1.svg";
+import { Col, Row } from "reactstrap";
 import "../../../../../assets/scss/pages/dashboard-analytics.scss";
-import { Drawer } from "antd";
 import plusicon from "../../../../../assets/img/plusicon.svg";
-import Vectorbeat from "../../../../../assets/img/Vectorbeat.svg";
-import gift from "../../../../../assets/img/gift.PNG";
 import get from "../../../../../helpers/get";
 import { useHistory } from "react-router-dom";
 import "../../../../../assets/CoustomStyle/dashboard.css";
 import DashboardApplication from "../../../../../components/ui/DashboardApplication";
 import DashboardReadyToApply from "../../../../../components/ui/DashboardReadyToApply";
-import BranchEstimatedIncome from "./BranchEstimatedIncome";
-import IncomeAmount from "./IncomeAmount";
 import ConsultantListForBranch from "./ConsultantListForBranch";
 import CountCard from "./CountCard";
 import UserNotices from "../../Component/UserNotices";
+import Filter from "../../../../../components/Dropdown/Filter";
 
 const BranchManager = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
-  const [open, setOpen] = useState(false);
-
   const history = useHistory();
   const [intake, setIntake] = useState({});
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
   const [manager, setManager] = useState({});
 
   useEffect(() => {
     const branchManagerId = localStorage.getItem("referenceId");
 
     get(`BranchManager/Get/${branchManagerId}`).then((res) => {
-      console.log(res);
       setManager(res);
+    });
+
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
@@ -41,12 +37,14 @@ const BranchManager = () => {
     });
   }, []);
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    const filterData = intakeRngDD.filter((status) => {
+      return status.id === intake?.id;
+    });
+
+    setIntakeRngValue(filterData[0]?.id);
+    setIntakeRngLabel(filterData[0]?.name);
+  }, [intakeRngDD, intake]);
 
   return (
     <>
@@ -57,15 +55,25 @@ const BranchManager = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
-        <div className="d-flex flex-wrap">
-          <div className="mt-2 mr-4">
-            <span style={{ fontWeight: "500" }}>
-              Intake Range: {intake?.intakeName}
-            </span>
+        <div className="d-flex  align-items-center">
+          <div
+            className=" mr-4 mb-1 d-flex align-items-center"
+            style={{ marginTop: "-17px" }}
+          >
+            <span className="mr-1 fw-500">Intake Range:</span>
+            <Filter
+              data={intakeRngDD}
+              label={intakeRngLabel}
+              setLabel={setIntakeRngLabel}
+              value={intakeRngValue}
+              setValue={setIntakeRngValue}
+              action={() => {}}
+              isDisabled={false}
+            />
           </div>
 
           <div
@@ -92,13 +100,15 @@ const BranchManager = () => {
 
       <Row>
         <Col lg={12}>
-          <CountCard id={manager?.branchId} />
+          <CountCard id={manager?.branchId} intakeRngValue={intakeRngValue} />
           <ConsultantListForBranch id={manager?.branchId} />
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}
 
-          <DashboardApplication url={`BranchManagerDashboard/Application`} />
+          <DashboardApplication
+            url={`BranchManagerDashboard/Application?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
+          />
           <DashboardReadyToApply
-            url={`BranchManagerDashboard/readytoapplyapplications`}
+            url={`BranchManagerDashboard/readytoapplyapplications?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
           />
         </Col>
         {/* <Col lg={3}>

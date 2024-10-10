@@ -110,7 +110,6 @@ const AddBranchManager = () => {
       setEmailError("Email is not valid");
     } else {
       get(`EmailCheck/EmailCheck/${data}`).then((res) => {
-        setEmailExistError(res);
         if (!res) {
           setEmailError("Email already exists");
         } else {
@@ -190,8 +189,6 @@ const AddBranchManager = () => {
 
   // manager Image code end
 
-  const AuthStr = localStorage.getItem("token");
-
   const validateRegisterForm = () => {
     let isFormValid = true;
 
@@ -216,10 +213,10 @@ const AddBranchManager = () => {
       setEmailError("Email is not Valid");
     }
 
-    if (emailExistError === false) {
-      isFormValid = false;
-      setEmailExistError(emailExistError);
-    }
+    // if (emailExistError === false) {
+    //   isFormValid = false;
+    //   setEmailExistError(emailExistError);
+    // }
 
     if (branchManagerId === 0 || branchManagerId === undefined) {
       if (!password) {
@@ -267,15 +264,15 @@ const AddBranchManager = () => {
         setButtonStatus(true);
         setProgress(true);
         put("BranchManager/Update", subdata).then((res) => {
-          setButtonStatus(false);
-          setProgress(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {
             addToast(res.data.message, {
               appearance: "success",
               autoDismiss: true,
             });
-            history.push(`/addBranchConsultant/${branchId}`);
           }
+          setButtonStatus(false);
+          setProgress(false);
+          history.push(`/addBranchConsultant/${branchId}`);
         });
       } else {
         setButtonStatus(true);
@@ -477,9 +474,10 @@ const AddBranchManager = () => {
                           type="string"
                           name="phoneNumber"
                           id="phoneNumber"
-                          country={"us"}
+                          country={"gb"}
+                          enableLongNumbers={true}
                           onChange={handlePhoneNumber}
-                          value={phoneNumber ? phoneNumber : "1"}
+                          value={phoneNumber ? phoneNumber : ""}
                           inputProps={{
                             required: true,
                           }}
@@ -558,10 +556,10 @@ const AddBranchManager = () => {
                             </div>
                           </div>
                         </Col>
-                        <Col md="4">
+                        <Col md="4" className="pt-4">
                           <span className="text-gray">
-                            Recommanded resolution is 640*640 with file size
-                            less than 2MB, keep visual elements centered
+                            File size less than 2MB, keep visual elements
+                            centered
                           </span>
                         </Col>
                         {/* 

@@ -93,17 +93,17 @@ const UniversityFunding = () => {
 
   return (
     <div>
+      <BreadCrumb
+        title="University Funding"
+        backTo="University"
+        path="/universityList"
+      />
+
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="University Funding"
-            backTo="University"
-            path="/universityList"
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>

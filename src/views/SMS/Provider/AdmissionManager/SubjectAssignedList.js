@@ -59,7 +59,7 @@ const SubjectAssignedList = ({
 
   return (
     <tr key={i} style={{ textAlign: "center" }}>
-      {checkSlNo ? <th scope="row">{i + 1}</th> : null}
+      {/* {checkSlNo ? <th scope="row">{i + 1}</th> : null} */}
       {checkSubject ? <td>{list?.subjectName}</td> : null}
       {checkAction ? (
         <td style={{ width: "8%" }} className="text-center">

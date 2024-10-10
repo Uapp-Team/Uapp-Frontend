@@ -33,7 +33,7 @@ const ConsProgressReport = ({ id }) => {
 
   useEffect(() => {
     get(
-      `Report/ProgressReport/${id}/${intakeValue}/${date}/${monthValue}/${yearValue}`
+      `Report/ConsultantProgressReport/${id}/${intakeValue}/${date}/${monthValue}/${yearValue}`
     ).then((res) => {
       setProgress(res);
     });
@@ -87,7 +87,7 @@ const ConsProgressReport = ({ id }) => {
               styles={{
                 control: (baseStyles, state) => ({
                   ...baseStyles,
-                  border: "none",
+                  border: "1px solid rgba(0,0,0,.1)",
                 }),
               }}
               options={intakeList}
@@ -114,7 +114,8 @@ const ConsProgressReport = ({ id }) => {
               styles={{
                 control: (baseStyles, state) => ({
                   ...baseStyles,
-                  border: "none",
+                  border: "1px solid rgba(0,0,0,.1)",
+                  marginRight: "8px",
                 }),
               }}
               options={monthList}
@@ -126,7 +127,10 @@ const ConsProgressReport = ({ id }) => {
             />
 
             <input
-              style={{ border: "none" }}
+              style={{
+                border: "1px solid rgba(0,0,0,.1)",
+                borderRadius: "4px",
+              }}
               type="date"
               name="date"
               id="date"

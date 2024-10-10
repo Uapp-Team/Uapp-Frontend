@@ -3,14 +3,14 @@ import { Card, Table } from "reactstrap";
 import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
-const ExperienceCard = ({ sId }) => {
-  const [info, setInfo] = useState([]);
+const ExperienceCard = ({ sId, experienceInfo, setExperienceInfo }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
     get(`Experience/GetByStudentId/${sId}`).then((res) => {
-      setInfo(res);
+      setExperienceInfo(res);
     });
   }, [sId]);
 
@@ -40,11 +40,11 @@ const ExperienceCard = ({ sId }) => {
       </Table>
 
       <Card>
-        {info?.length < 1 ? (
+        {experienceInfo?.length < 1 ? (
           <span className="pl-10px">There is no experience added here.</span>
         ) : (
           <>
-            {info?.length > 0 && (
+            {experienceInfo?.length > 0 && (
               <Table className="text-gray-70">
                 <thead className="tablehead">
                   <td
@@ -63,7 +63,7 @@ const ExperienceCard = ({ sId }) => {
                     className="border-0"
                     style={{ borderLeft: "1px solid #dee2e6" }}
                   >
-                    <b>Employeement Details</b>
+                    <b>Duties and Responsibilities</b>
                   </td>
                   <td
                     className="border-0"
@@ -79,7 +79,7 @@ const ExperienceCard = ({ sId }) => {
                   </td>
                 </thead>
                 <tbody>
-                  {info?.map((inf, i) => (
+                  {experienceInfo?.map((inf, i) => (
                     <tr
                       key={inf.id}
                       style={{ borderBottom: "1px solid #dee2e6" }}
@@ -87,10 +87,12 @@ const ExperienceCard = ({ sId }) => {
                       <td className="border-0">{inf?.jobTitle}</td>
                       <td className="border-0">{inf?.companyName}</td>
                       <td className="border-0">{inf?.employeementDetails}</td>
-                      <td className="border-0">{handleDate(inf?.startDate)}</td>
+                      <td className="border-0">
+                        {dateFormate(inf?.startDate)}
+                      </td>
                       <td className="border-0">
                         {inf?.isStillWorking === false ? (
-                          handleDate(inf?.endDate)
+                          dateFormate(inf?.endDate)
                         ) : (
                           <span>Continue</span>
                         )}

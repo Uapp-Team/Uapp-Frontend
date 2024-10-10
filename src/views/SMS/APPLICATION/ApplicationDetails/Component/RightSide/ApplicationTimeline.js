@@ -6,7 +6,7 @@ const ApplicationTimeline = ({ applicationTimeline, id }) => {
       <div id={id}>
         <h5>Application Timeline</h5>
 
-        <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+        <div className="overflowY-300p">
           <ul className="pt-3 pl-2">
             {applicationTimeline?.map((timeline, i) => (
               <li className="list" key={i}>

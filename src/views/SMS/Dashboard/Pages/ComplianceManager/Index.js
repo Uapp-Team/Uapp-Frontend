@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
-import user1 from "../../../../../assets/img/user1.svg";
-import user2 from "../../../../../assets/img/user2.svg";
-import capture from "../../../../../assets/img/capture.PNG";
-import images1 from "../../../../../assets/img/images1.svg";
-import "../../../../../assets/scss/pages/dashboard-analytics.scss";
-import { Drawer } from "antd";
-import plusicon from "../../../../../assets/img/plusicon.svg";
 import Vectorbeat from "../../../../../assets/img/Vectorbeat.svg";
-import gift from "../../../../../assets/img/gift.PNG";
-import cuser1 from "../../../../../assets/img/cuser1.svg";
 import user from "../../../../../assets/img/Uapp_fav.png";
 import get from "../../../../../helpers/get";
 import { rootUrl } from "../../../../../constants/constants";
 import { Link, useHistory } from "react-router-dom";
 import "../../../../../assets/CoustomStyle/dashboard.css";
+import Filter from "../../../../../components/Dropdown/Filter";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
 const ComplianceManager = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
 
-  const [open, setOpen] = useState(false);
   const [count, setCount] = useState({});
   const [applications, setApplications] = useState([]);
   const history = useHistory();
   const [intake, setIntake] = useState({});
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
 
   useEffect(() => {
-    get(`CompilanceManagerDashboard/Counting`).then((res) => {
-      setCount(res);
-    });
-
-    get(`CompilanceManagerDashboard/Application`).then((res) => {
-      setApplications(res);
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
@@ -39,19 +30,26 @@ const ComplianceManager = () => {
     });
   }, []);
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    const filterData = intakeRngDD.filter((status) => {
+      return status.id === intake?.id;
+    });
 
-  const textDecorationStyle = {
-    textDecoration: "underline",
-    textDecorationColor: "#1e98b0",
-    color: "#1e98b0",
-    cursor: "pointer",
-  };
+    setIntakeRngValue(filterData[0]?.id);
+    setIntakeRngLabel(filterData[0]?.name);
+  }, [intakeRngDD, intake]);
+
+  useEffect(() => {
+    get(`CompilanceManagerDashboard/Counting/${intakeRngValue}`).then((res) => {
+      setCount(res);
+    });
+
+    get(`CompilanceManagerDashboard/Application/${intakeRngValue}`).then(
+      (res) => {
+        setApplications(res);
+      }
+    );
+  }, [intakeRngValue]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -70,22 +68,36 @@ const ComplianceManager = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
-        <div className="d-flex flex-wrap">
-          <div className="mt-2 mr-4">
-            <span style={{ fontWeight: "500" }}>
-              Intake Range: {intake?.intakeName}
-            </span>
+        <div className="d-flex  align-items-center">
+          <div
+            className=" mr-4 mb-1 d-flex align-items-center"
+            style={{ marginTop: "-17px" }}
+          >
+            <span className="mr-1 fw-500">Intake Range:</span>
+            <Filter
+              data={intakeRngDD}
+              label={intakeRngLabel}
+              setLabel={setIntakeRngLabel}
+              value={intakeRngValue}
+              setValue={setIntakeRngValue}
+              action={() => {}}
+              isDisabled={false}
+            />
           </div>
 
           <div style={{ cursor: "pointer" }}>
             <div className="std-dashboard-style6"></div>
 
             <div>
-              <img src={Vectorbeat} className="img-fluid dashbard-img-style2" />
+              <img
+                src={Vectorbeat}
+                className="img-fluid dashbard-img-style2"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -94,48 +106,52 @@ const ComplianceManager = () => {
       {/* Status reports start */}
       <Row className="p-2">
         <Col className="m-2 p-3 AdmissionManager-card-application">
-          <Link to="/applications">
+          <Link to={`/applicationsbyintake/${intakeRngValue}`}>
             <h2> {count?.totalApplication}</h2>
           </Link>
-          <Link to="/applications">
+          <Link to={`/applicationsbyintake/${intakeRngValue}`}>
             <p className="text-gray-70">Total Application</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Process">
-          <Link to={`/applicationsByStatus/${2}/${1}`}>
+          <Link to={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}>
             <h2>{count?.totalApplicationInProgress}</h2>
           </Link>
-          <Link to={`/applicationsByStatus/${2}/${1}`}>
+          <Link to={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}>
             <p className="text-gray-70">Applications in Process</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Unconditional">
-          <Link to="">
+          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
             <h2>{count?.totalUnconditionalOffer}</h2>
           </Link>
-          <Link to="">
+          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
             <p className="text-gray-70">Unconditional Offer</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Registered">
-          <Link to="">
+          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
             <h2> {count?.totalRegistered}</h2>
           </Link>
-          <Link to="">
+          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
             <p className="text-gray-70">Total Registered</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Rejected">
-          <Link to="">
+          <Link to={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}>
             <h2> {count?.totalRejected}</h2>
           </Link>
-          <Link to="">
+          <Link to={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}>
             <p className="text-gray-70">Rejected / Cancelled</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Withdrawn">
-          <h2> {count?.totalWithdrawn}</h2>
-          <p className="text-gray-70">Withdrawn Application</p>
+          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
+            <h2> {count?.totalWithdrawn}</h2>
+          </Link>
+          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
+            <p className="text-gray-70">Withdrawn Application</p>
+          </Link>
         </Col>
       </Row>
 
@@ -190,6 +206,7 @@ const ComplianceManager = () => {
                                 borderRadius: "50%",
                               }}
                               className="img-fluid"
+                              alt=""
                             />
                             <span style={{ marginLeft: "5px" }}>
                               {app?.student?.nameTittle?.name}{" "}
@@ -200,7 +217,7 @@ const ComplianceManager = () => {
                         <td>{app?.universityName}</td>
                         <td>{app?.applicationStatusName}</td>
                         <td>{app?.applicationAssesment}</td>
-                        <td>{handleDate(app?.applicationDate)}</td>
+                        <td>{dateFormate(app?.applicationDate)}</td>
                       </tr>
                     ))}
                   </tbody>

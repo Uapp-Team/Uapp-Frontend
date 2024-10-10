@@ -7,11 +7,11 @@ import post from "../../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import uploadBtn from "../../../../../../assets/img/upload.png";
-import downloadBtn from "../../../../../../assets/img/download.png";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { useHistory } from "react-router-dom";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../../components/buttons/DownloadButton";
 const SelfFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState([]);
@@ -103,11 +103,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                     return false;
                   }}
                 >
-                  {FileList1.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList1.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
                 <div className="text-danger d-block">{selfError}</div>
@@ -116,7 +112,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
               <Col sm="4">
                 {selfFunding?.attachement ? (
                   <a href={rootUrl + selfFunding?.attachement} target="blank">
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>

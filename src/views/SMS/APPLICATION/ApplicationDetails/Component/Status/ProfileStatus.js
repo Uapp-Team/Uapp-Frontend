@@ -5,7 +5,7 @@ import SaveButton from "../../../../../../components/buttons/SaveButton";
 import put from "../../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import ReactQuill from "react-quill";
 
 const ProfileStatus = ({ id, success, setSuccess }) => {
   const { addToast } = useToasts();
@@ -16,7 +16,6 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
   const [statusValue, setStatusvalue] = useState(0);
   const [note, setNote] = useState("");
   const [noteError, setNoteError] = useState(false);
-  const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
     get(`ApplicationAssesmentStatusDD/index`).then((res) => {
@@ -27,8 +26,9 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
   useEffect(() => {
     get(`ApplicationAssesment/ProfileDetails/${id}`).then((res) => {
       setStatus(res);
+      setNote(res?.note);
     });
-  }, [id]);
+  }, [id, success]);
 
   useEffect(() => {
     const initialStatus = statusDD.filter((item) => {
@@ -50,7 +50,7 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
 
   const handleApplicationUpdateSubmit = (e) => {
     e.preventDefault();
-    if (statusValue !== 3 && note === "") {
+    if (statusValue !== 1 && statusValue !== 3 && note === "") {
       setNoteError(true);
     } else {
       setProgress(true);
@@ -77,7 +77,7 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
           <Col md={7}>
             <FormGroup>
               <span>
-                Application Status <span className="text-danger">*</span>{" "}
+                Status <span className="text-danger">*</span>{" "}
               </span>
 
               <Select
@@ -89,13 +89,14 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
                 onChange={(opt) => selectStatus(opt.label, opt.value)}
                 name="statusId"
                 id="statusId"
+                isDisabled={status?.statusId === 3 ? true : false}
               />
             </FormGroup>
-            {statusValue !== 3 && (
+            {statusValue !== 1 && statusValue !== 3 ? (
               <FormGroup>
-                <span>Note</span><span className="text-danger">*</span>{" "}
-
-                <Input
+                <span>Note</span>
+                <span className="text-danger">*</span>{" "}
+                {/* <Input
                   type="textarea"
                   placeholder="Write note"
                   name="note"
@@ -105,15 +106,27 @@ const ProfileStatus = ({ id, success, setSuccess }) => {
                     setNote(e.target.value);
                     setNoteError(false);
                   }}
-                />
+                /> */}
+                <div className="notetext">
+                  <ReactQuill
+                    theme="snow"
+                    value={note}
+                    className="editor-input"
+                    placeholder="Write note..."
+                    onChange={setNote}
+                  />
+                </div>
                 {noteError && (
                   <span className="text-danger">Note is required</span>
                 )}
               </FormGroup>
-            )}
-            <FormGroup>
-              <SaveButton text="Save" progress={progress} />
-            </FormGroup>
+            ) : null}
+
+            {status?.statusId !== 3 ? (
+              <FormGroup>
+                <SaveButton text="Save" progress={progress} />
+              </FormGroup>
+            ) : null}
           </Col>
         </Row>
       </Form>

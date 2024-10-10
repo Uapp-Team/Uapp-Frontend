@@ -496,7 +496,7 @@ const CopyUniversitySubjectDocumentRequirement = () => {
                       <Table className="table-sm table-bordered">
                         <thead className="thead-uapp-bg">
                           <tr style={{ textAlign: "center" }}>
-                            <th>SL/NO</th>
+                            {/* <th>SL/NO</th> */}
                             <th>Document Group</th>
                             <th className="text-center">Application Type</th>
                             <th>Action</th>
@@ -508,7 +508,7 @@ const CopyUniversitySubjectDocumentRequirement = () => {
                               key={document.id}
                               style={{ textAlign: "center" }}
                             >
-                              <th scope="row">{i + 1}</th>
+                              {/* <th scope="row">{i + 1}</th> */}
                               <td>{document?.documentGroup?.title}</td>
                               <td className="text-center">
                                 {document?.applicationTypeId === 1

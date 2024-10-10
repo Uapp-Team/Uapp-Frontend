@@ -94,12 +94,11 @@ const AddUniversityType = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="University Types" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="University Types" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               <br />
@@ -194,7 +193,7 @@ const AddUniversityType = (props) => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       {permissions?.includes(
                         permissionList?.View_University_List
@@ -206,7 +205,7 @@ const AddUniversityType = (props) => {
                   <tbody>
                     {universityTypes?.map((uniType, i) => (
                       <tr key={uniType.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{uniType?.name}</td>
                         {permissions?.includes(
                           permissionList?.View_University_List

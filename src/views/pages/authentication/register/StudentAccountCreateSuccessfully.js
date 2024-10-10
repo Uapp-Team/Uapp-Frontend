@@ -1,11 +1,12 @@
 import React from "react";
 import {} from "reactstrap";
-import StudentRegisterForm from "./StudentRegisterForm";
+// import StudentRegisterForm from "./StudentRegisterForm";
 import "../../../../assets/scss/pages/authentication.scss";
 import providerlogo from "../../../../assets/img/providerlogo.svg";
 import "../../../../assets/CoustomStyle/auth.css";
 import AuthFooter from "./components/AuthFooter";
 import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 const StudentAccountCreateSuccessfully = () => {
   return (
     <div className="auth-container">
@@ -20,26 +21,35 @@ const StudentAccountCreateSuccessfully = () => {
             <img src={providerlogo} className="w-50" alt="" />
           </div>
           <div className="d-flex justify-content-center">
-            <div className="w-50 my-5">
-              <div className="register-header">
-                <h1 style={{ color: "black", marginBottom: "5px" }}>
-                  Congratulation
+            <div className="w-75 my-5">
+              <div className="register-header mt-5">
+                <h1 className="text-orange fw-600">Congratulations !</h1>
+                <h1 className="my-4" style={{ fontSize: "20px" }}>
+                  Successfully submitted
                 </h1>
-                <h1 style={{ fontSize: "20px" }}>Registration is successful</h1>
-                <p className="my-4" style={{ fontSize: "14px" }}>
-                  {" "}
-                  your student account has been created,you can now login to
-                  your portal and apply to universities abroad.
-                </p>
-              </div>
 
+                <p style={{ fontSize: "14px" }}>
+                  Your data has been submitted to our team. <br /> Our expert
+                  will reach you very soon.
+                </p>
+                <Link className="text-id hover" to="/">
+                  Log In to your UAPP Account
+                </Link>
+
+                {/* <p style={{ fontSize: "14px" }}>
+                  Your student account has been created. We have send a
+                  verification email to your email address. To continue to the
+                  next steps please verify your email first.
+                </p> */}
+              </div>
+              {/* 
               <div className="mb-3 ">
                 <Link to="/" className="already-registered">
                   <button className="btn-register-lg" type="submit">
                     Login Now
                   </button>
                 </Link>
-              </div>
+              </div> */}
             </div>
           </div>
           <AuthFooter />

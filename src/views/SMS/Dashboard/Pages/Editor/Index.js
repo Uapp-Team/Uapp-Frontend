@@ -1,36 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import user1 from "../../../../../assets/img/user1.svg";
-import user2 from "../../../../../assets/img/user2.svg";
-import capture from "../../../../../assets/img/capture.PNG";
-import images1 from "../../../../../assets/img/images1.svg";
+import { Col, Row } from "reactstrap";
 import "../../../../../assets/scss/pages/dashboard-analytics.scss";
-import { Drawer } from "antd";
 import plusicon from "../../../../../assets/img/plusicon.svg";
-import Vectorbeat from "../../../../../assets/img/Vectorbeat.svg";
-import gift from "../../../../../assets/img/gift.PNG";
 import get from "../../../../../helpers/get";
 import { useHistory } from "react-router-dom";
 import "../../../../../assets/CoustomStyle/dashboard.css";
 import DashboardCount from "../../../../../components/ui/DashboardCount";
-import DashboardProgressReportStaff from "../../../../../components/ui/DashboardProgressReportStaff";
 import RecentUniversity from "./RecentUniversity";
 import UserNotices from "../../Component/UserNotices";
+import DashboardProgressChart from "../../../../../components/ui/DashboardProgressChart";
 
 const Editor = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
-  const [open, setOpen] = useState(false);
   const [count, setCount] = useState({});
   const [universities, setUniversities] = useState([]);
   const history = useHistory();
   const [intake, setIntake] = useState({});
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     get(`EditorDashboard/Counting`).then((res) => {
@@ -55,7 +40,7 @@ const Editor = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
@@ -69,7 +54,7 @@ const Editor = () => {
           <div
             style={{ cursor: "pointer" }}
             onClick={() => {
-              history.push("/createUniversity");
+              history.push("/addUniversity");
             }}
           >
             <div className="std-dashboard-style4"></div>
@@ -95,7 +80,7 @@ const Editor = () => {
           <DashboardCount
             title="Total Application"
             value={count?.totalApplication}
-            link="/applications"
+            // link={`/applicationsbyintake/${intake?.id}`}
             bgColor="#E1F5FC"
             borderColor="#24A1CD"
           />
@@ -104,7 +89,7 @@ const Editor = () => {
           <DashboardCount
             title="Applications in Process"
             value={count?.totalApplicationInProgress}
-            link={`/applicationsByStatus/${5}/${1}`}
+            // link={`/applicationsByStatus/${5}/${1}/${intake?.id}`}
             bgColor="#FBF5E8"
             borderColor="#FFBA08"
           />
@@ -113,7 +98,7 @@ const Editor = () => {
           <DashboardCount
             title="Unconditional Offer"
             value={count?.totalUnconditionalOffer}
-            link={`/applicationsByStatus/${2}/${2}`}
+            // link={`/applicationsByStatus/${2}/${2}/${intake?.id}`}
             bgColor="#F8F3FF"
             borderColor="#AE75F8"
           />
@@ -122,16 +107,16 @@ const Editor = () => {
           <DashboardCount
             title="Total Registered"
             value={count?.totalRegistered}
-            link={`/applicationsByStatus/${2}/${3}`}
+            // link={`/applicationsByStatus/${2}/${3}/${intake?.id}`}
             bgColor="#F0FFE0"
             borderColor="#70E000"
           />
         </Col>
         <Col lg={2} md={4} xs={6} className="mb-30px">
           <DashboardCount
-            title="Total Rejected"
+            title="Total Rejected / cancelled"
             value={count?.totalRejected}
-            link={`/applicationsByStatus/${12}/${1}`}
+            // link={`/applicationsByStatus/${12}/${1}/${intake?.id}`}
             bgColor="#FEF6F5"
             borderColor="#F87675"
           />
@@ -140,7 +125,7 @@ const Editor = () => {
           <DashboardCount
             title="Withdrawn Application"
             value={count?.totalWithdrawn}
-            link={`/applicationsByStatus/${4}/${3}`}
+            // link={`/applicationsByStatus/${4}/${3}/${intake?.id}`}
             bgColor="#EDF1F5"
             borderColor="#34495E"
           />
@@ -149,7 +134,7 @@ const Editor = () => {
 
       {/* status reports end */}
       <RecentUniversity data={universities} />
-      <DashboardProgressReportStaff />
+      <DashboardProgressChart />
     </>
   );
 };

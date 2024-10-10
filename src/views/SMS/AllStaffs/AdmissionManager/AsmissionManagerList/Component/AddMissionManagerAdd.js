@@ -1,16 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
   Col,
   Modal,
   ModalBody,
-  ModalHeader,
   Row,
-  Form,
   FormGroup,
-  ModalFooter,
-  Button,
   Table,
   Dropdown,
   DropdownToggle,
@@ -19,51 +15,25 @@ import {
   ButtonGroup,
 } from "reactstrap";
 import ReactToPrint from "react-to-print";
-import * as Icon from "react-feather";
 import ReactTableConvertToXl from "../../../../ReactTableConvertToXl/ReactTableConvertToXl";
 import ButtonForFunction from "../../../../Components/ButtonForFunction";
 import Select from "react-select";
 import Pagination from "../../../../Pagination/Pagination";
-import ButtonLoader from "../../../../Components/ButtonLoader";
 import ToggleSwitch from "../../../../Components/ToggleSwitch";
-import CustomButtonRipple from "../../../../Components/CustomButtonRipple";
-import { Upload } from "antd";
 import ConfirmModal from "../../../../../../components/modal/ConfirmModal";
+import PopOverText from "../../../../../../components/PopOverText";
+import { useHistory } from "react-router-dom";
+import CancelButton from "../../../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import put from "../../../../../../helpers/put";
+import { useToasts } from "react-toast-notifications";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const AddMissionManagerAdd = ({
   permissions,
   permissionList,
   redirectToAddAdmissionmanager,
-  modalOpen,
-  closeModal,
-  handleSubmit,
-  userType,
   userTypes,
-  mId,
-  providerMenu,
-  providerLabel2,
-  providerValue2,
-  selectProvider2,
-  providerError,
-  nameTitleMenu,
-  nameTitleLabel,
-  nameTitleValue,
-  selectNameTitle,
-  nameTitleError,
-  handlePass,
-  passError,
-  countryDD,
-  uniCountryLabel,
-  uniCountryValue,
-  selectUniCountry,
-  countryError,
-  handlePreview,
-  handleChange,
-  previewVisible,
-  previewTitle,
-  handleCancel,
-  previewImage,
-  error,
   progress,
   buttonStatus1,
   dataSizeName,
@@ -78,7 +48,6 @@ const AddMissionManagerAdd = ({
   handleChecked,
   loading,
   managerList,
-  serialNum,
   redirectToAssignPage,
   redirectToSub,
   redirectToAdmissionOfficerList,
@@ -88,13 +57,100 @@ const AddMissionManagerAdd = ({
   toggleDelete,
   deleteModal,
   closeDeleteModal,
-  managerName,
-  buttonStatus,
   handleDelete,
   entity,
   paginate,
   currentPage,
 }) => {
+  const history = useHistory();
+  const { addToast } = useToasts();
+  const [popoverOpen, setPopoverOpen] = useState("");
+  const userTypeId = localStorage.getItem("userType");
+  const [pass, setPass] = useState("");
+  const [cPass, setCPass] = useState("");
+  const [passData, setPassData] = useState({});
+  const [passModal, setPassModal] = useState(false);
+  const [passError, setPassError] = useState("");
+  const [error, setError] = useState("");
+  const [resetButtonStatus, setResetButtonStatus] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handlePass = (data) => {
+    setPassData(data);
+    setPassModal(true);
+  };
+
+  const handleToggle = () => {
+    setPassError("");
+    setError("");
+    setPassModal(!passModal);
+  };
+
+  const passValidate = (e) => {
+    setPass(e.target.value);
+    if (e.target.value === "") {
+      setError("Provide a valid password");
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(e.target.value)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else {
+      setError("");
+    }
+  };
+
+  const confirmPassword = (e) => {
+    setCPass(e.target.value);
+    if (e.target.value === "") {
+      setPassError("Confirm your password");
+    } else {
+      setPassError("");
+    }
+    if (pass && e.target.value !== pass) {
+      setPassError("Passwords doesn't match.");
+    } else {
+      setPassError("");
+    }
+  };
+
+  const submitModalForm = (event) => {
+    event.preventDefault();
+
+    const subData = new FormData(event.target);
+
+    subData.append("id", passData?.id);
+    subData.append("password", pass);
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else if (pass !== cPass) {
+      setPassError("Passwords do not match");
+    } else {
+      setResetButtonStatus(true);
+      put(`Password/ChangePasswordForAdmissionManager`, subData).then((res) => {
+        setResetButtonStatus(false);
+        if (res?.status === 200 && res.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+          setPassData({});
+          setPassModal(false);
+          setPass("");
+          setCPass("");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <Card className="uapp-employee-search">
@@ -111,327 +167,6 @@ const AddMissionManagerAdd = ({
                   permission={6}
                 />
               ) : null}
-
-              <Modal
-                isOpen={modalOpen}
-                toggle={closeModal}
-                className="uapp-modal4"
-                size="lg"
-              >
-                <ModalHeader style={{ backgroundColor: "#1d94ab" }}>
-                  <span className="text-white">Admission Manager</span>
-                </ModalHeader>
-                <ModalBody>
-                  <Form onSubmit={handleSubmit}>
-                    {userType === userTypes?.ProviderAdmin ? (
-                      <input
-                        type="hidden"
-                        name="providerId"
-                        id="providerId"
-                        value={mId}
-                      />
-                    ) : (
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="3">
-                          <span>
-                            Provider <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="6">
-                          <Select
-                            options={providerMenu}
-                            value={{
-                              label: providerLabel2,
-                              value: providerValue2,
-                            }}
-                            onChange={(opt) =>
-                              selectProvider2(opt.label, opt.value)
-                            }
-                            name="providerId"
-                            id="providerId"
-                          />
-
-                          {providerError ? (
-                            <span className="text-danger">
-                              Provider is required
-                            </span>
-                          ) : null}
-                        </Col>
-                      </FormGroup>
-                    )}
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Title <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Select
-                          options={nameTitleMenu}
-                          value={{
-                            label: nameTitleLabel,
-                            value: nameTitleValue,
-                          }}
-                          onChange={(opt) =>
-                            selectNameTitle(opt.label, opt.value)
-                          }
-                          name="nameTittleId"
-                          id="nameTittleId"
-                        />
-
-                        {nameTitleError ? (
-                          <span className="text-danger">Title is required</span>
-                        ) : null}
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          First Name <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          name="firstName"
-                          id="firstName"
-                          placeholder="Type First Name"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Last Name <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          name="lastName"
-                          id="lastName"
-                          placeholder="Type Last Name"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Email <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="email"
-                          name="email"
-                          id="email"
-                          placeholder="Type Your Email"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Password <span className="text-danger">*</span>
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="password"
-                          name="password"
-                          id="password"
-                          placeholder="Type Your Password"
-                          required
-                          onChange={handlePass}
-                        />
-                        <span className="text-danger">{passError}</span>
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Phone Number <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          name="phoneNumber"
-                          id="phoneNumber"
-                          placeholder="Type Your Phone Number"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Post Code <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          name="postCode"
-                          id="postCode"
-                          placeholder="Type Post Code"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          City <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          name="city"
-                          id="city"
-                          placeholder="Type City Name"
-                          required
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          Country <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Select
-                          options={countryDD}
-                          value={{
-                            label: uniCountryLabel,
-                            value: uniCountryValue,
-                          }}
-                          onChange={(opt) =>
-                            selectUniCountry(opt.label, opt.value)
-                          }
-                          name="countryId"
-                          id="countryId"
-                        />
-                        {countryError ? (
-                          <span className="text-danger">
-                            Country is required
-                          </span>
-                        ) : null}
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>
-                          State/County <span className="text-danger">*</span>{" "}
-                        </span>
-                      </Col>
-                      <Col md="6">
-                        <Input
-                          type="string"
-                          name="stateName"
-                          id="stateName"
-                          placeholder="Type State/County"
-                        />
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup row className="has-icon-left position-relative">
-                      <Col md="3">
-                        <span>Image</span>
-                      </Col>
-                      <Col md="6">
-                        <div className="row">
-                          <div className="col-md-3">
-                            <>
-                              <Upload
-                                listType="picture-card"
-                                multiple={false}
-                                fileList={FileList}
-                                onPreview={handlePreview}
-                                onChange={handleChange}
-                                beforeUpload={(file) => {
-                                  return false;
-                                }}
-                              >
-                                {FileList.length < 1 ? (
-                                  <div
-                                    className="text-danger"
-                                    style={{ marginTop: 8 }}
-                                  >
-                                    <Icon.Upload />
-                                    <br />
-                                    <span>Upload Image Here</span>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </Upload>
-                              <Modal
-                                visible={previewVisible}
-                                title={previewTitle}
-                                footer={null}
-                                onCancel={handleCancel}
-                              >
-                                <img
-                                  alt="example"
-                                  style={{ width: "100%" }}
-                                  src={previewImage}
-                                />
-                              </Modal>
-                              <span className="text-danger d-block">
-                                {error}
-                              </span>
-                            </>
-                          </div>
-                        </div>
-                      </Col>
-                    </FormGroup>
-
-                    <FormGroup
-                      className="has-icon-left position-relative"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Button
-                        color="danger"
-                        className="mr-1 mt-3"
-                        onClick={closeModal}
-                      >
-                        Close
-                      </Button>
-
-                      <CustomButtonRipple
-                        color={"primary"}
-                        type={"submit"}
-                        className={"mr-1 mt-3"}
-                        name={progress ? <ButtonLoader /> : "Submit"}
-                        permission={6}
-                        isDisabled={buttonStatus1}
-                      />
-                    </FormGroup>
-                  </Form>
-                </ModalBody>
-              </Modal>
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12" className="mt-md-0 mt-sm-3">
@@ -439,7 +174,7 @@ const AddMissionManagerAdd = ({
                 <div className="mr-3">
                   <div className="d-flex align-items-center">
                     <div className="mr-2">Showing :</div>
-                    <div>
+                    <div className="ddzindex">
                       <Select
                         options={dataSizeName}
                         value={{ label: dataPerPage, value: dataPerPage }}
@@ -498,16 +233,16 @@ const AddMissionManagerAdd = ({
                       <i className="fas fa-bars"></i>
                     </DropdownToggle>
                     <DropdownMenu className="bg-dd-1">
-                      {tableData.map((table, i) => (
+                      {tableData?.map((table, i) => (
                         <div key={i}>
-                          {i === 6 ? (
+                          {i === 2 ? (
                             <>
                               {permissions?.includes(
-                                permissionList.AdmissionManager_Assign_University
+                                permissionList.Staff_Password_Change
                               ) && (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -518,7 +253,7 @@ const AddMissionManagerAdd = ({
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -527,14 +262,14 @@ const AddMissionManagerAdd = ({
                                 </div>
                               )}
                             </>
-                          ) : i === 7 ? (
+                          ) : i === 5 ? (
                             <>
                               {permissions?.includes(
-                                permissionList?.AdmissionManager_Assign_Subject
+                                permissionList.AdmissionManager_Assign_University
                               ) && (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -545,7 +280,34 @@ const AddMissionManagerAdd = ({
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
+                                        }}
+                                        defaultChecked={table?.isActive}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </div>
+                              )}
+                            </>
+                          ) : i === 6 ? (
+                            <>
+                              {permissions?.includes(
+                                permissionList?.AdmissionManager_Assign_Subject
+                              ) && (
+                                <div className="d-flex justify-content-between">
+                                  <Col md="8" className="">
+                                    <p className="">{table?.title}</p>
+                                  </Col>
+
+                                  <Col md="4" className="text-center">
+                                    <FormGroup check inline>
+                                      <Input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id=""
+                                        name="isAcceptHome"
+                                        onChange={(e) => {
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -554,14 +316,14 @@ const AddMissionManagerAdd = ({
                                 </div>
                               )}{" "}
                             </>
-                          ) : i === 11 ? (
+                          ) : i === 7 ? (
                             <>
                               {permissions?.includes(
-                                permissionList?.AdmissionManager_Account_Status
+                                permissionList?.AdmissionManager_Assign_AdmissionOfficer
                               ) && (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -572,7 +334,34 @@ const AddMissionManagerAdd = ({
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
+                                        }}
+                                        defaultChecked={table?.isActive}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </div>
+                              )}{" "}
+                            </>
+                          ) : i === 10 ? (
+                            <>
+                              {permissions?.includes(
+                                permissionList?.AdmissionManager_Account_Status
+                              ) && (
+                                <div className="d-flex justify-content-between">
+                                  <Col md="8" className="">
+                                    <p className="">{table?.title}</p>
+                                  </Col>
+
+                                  <Col md="4" className="text-center">
+                                    <FormGroup check inline>
+                                      <Input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id=""
+                                        name="isAcceptHome"
+                                        onChange={(e) => {
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -584,7 +373,7 @@ const AddMissionManagerAdd = ({
                           ) : (
                             <div className="d-flex justify-content-between">
                               <Col md="8" className="">
-                                <p className="">{table?.collumnName}</p>
+                                <p className="">{table?.title}</p>
                               </Col>
 
                               <Col md="4" className="text-center">
@@ -595,7 +384,7 @@ const AddMissionManagerAdd = ({
                                     id=""
                                     name="isAcceptHome"
                                     onChange={(e) => {
-                                      handleChecked(e, table?.id);
+                                      handleChecked(e, i);
                                     }}
                                     defaultChecked={table?.isActive}
                                   />
@@ -622,21 +411,34 @@ const AddMissionManagerAdd = ({
                   </div>
                 </div>
               ) : (
-                <div className="table-responsive" ref={componentRef}>
+                <div className="table-responsive fixedhead" ref={componentRef}>
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="tablehead">
                       <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>UAPP ID</th> : null}
-                        {tableData[2]?.isActive ? <th>Full Name</th> : null}
+                        {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
+                        {tableData[1]?.isActive ? <th>Full Name</th> : null}
+                        {permissions?.includes(
+                          permissionList.Staff_Password_Change
+                        ) ? (
+                          <>
+                            {userTypeId === userTypes?.SystemAdmin ||
+                            userTypeId === userTypes?.Admin ? (
+                              <>
+                                {tableData[2]?.isActive ? (
+                                  <th>Password</th>
+                                ) : null}
+                              </>
+                            ) : null}
+                          </>
+                        ) : null}
                         {tableData[3]?.isActive ? <th>Provider</th> : null}
-                        {tableData[4]?.isActive ? <th>Email</th> : null}
-                        {tableData[5]?.isActive ? <th>Phone No</th> : null}
+                        {tableData[4]?.isActive ? <th>Contact</th> : null}
+
                         {permissions?.includes(
                           permissionList?.AdmissionManager_Assign_University
                         ) ? (
                           <>
-                            {tableData[6]?.isActive ? (
+                            {tableData[5]?.isActive ? (
                               <th>Assigned University</th>
                             ) : null}
                           </>
@@ -645,31 +447,38 @@ const AddMissionManagerAdd = ({
                           permissionList?.AdmissionManager_Assign_Subject
                         ) ? (
                           <>
-                            {tableData[7]?.isActive ? (
+                            {tableData[6]?.isActive ? (
                               <th>Assigned Courses</th>
                             ) : null}
                           </>
                         ) : null}
 
-                        {tableData[8]?.isActive ? (
-                          <th>Admission Officers</th>
+                        {permissions?.includes(
+                          permissionList?.AdmissionManager_Assign_AdmissionOfficer
+                        ) ? (
+                          <>
+                            {" "}
+                            {tableData[7]?.isActive ? (
+                              <th>Admission Officers</th>
+                            ) : null}
+                          </>
                         ) : null}
 
-                        {tableData[9]?.isActive ? (
+                        {tableData[8]?.isActive ? (
                           <th>Registered Student</th>
                         ) : null}
 
-                        {tableData[10]?.isActive ? <th>Applications</th> : null}
+                        {tableData[9]?.isActive ? <th>Applications</th> : null}
                         {permissions?.includes(
                           permissionList?.AdmissionManager_Account_Status
                         ) ? (
                           <>
-                            {tableData[11]?.isActive ? (
+                            {tableData[10]?.isActive ? (
                               <th>Account Status</th>
                             ) : null}
                           </>
                         ) : null}
-                        {tableData[12]?.isActive ? (
+                        {tableData[11]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -680,9 +489,6 @@ const AddMissionManagerAdd = ({
                       {managerList?.map((manager, i) => (
                         <tr key={manager.id} style={{ textAlign: "center" }}>
                           {tableData[0]?.isActive ? (
-                            <th scope="row">{serialNum + i}</th>
-                          ) : null}
-                          {tableData[1]?.isActive ? (
                             <td className="cursor-pointer hyperlink-hover">
                               {" "}
                               <span
@@ -698,7 +504,7 @@ const AddMissionManagerAdd = ({
                             </td>
                           ) : null}
 
-                          {tableData[2]?.isActive ? (
+                          {tableData[1]?.isActive ? (
                             <td className="cursor-pointer hyperlink-hover">
                               <span
                                 onClick={() => {
@@ -715,28 +521,63 @@ const AddMissionManagerAdd = ({
                             </td>
                           ) : null}
 
+                          {permissions?.includes(
+                            permissionList.Staff_Password_Change
+                          ) ? (
+                            <>
+                              {userTypeId === userTypes?.SystemAdmin ||
+                              userTypeId === userTypes?.Admin ? (
+                                <>
+                                  {tableData[2]?.isActive ? (
+                                    <td>
+                                      <Link onClick={() => handlePass(manager)}>
+                                        Change
+                                      </Link>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+                            </>
+                          ) : null}
+
                           {tableData[3]?.isActive ? (
                             <td>{manager?.provider?.name}</td>
                           ) : null}
 
                           {tableData[4]?.isActive ? (
-                            <td>{manager?.email}</td>
+                            <td>
+                              <div className=" d-flex">
+                                <PopOverText
+                                  value={
+                                    manager?.phoneNumber &&
+                                    manager?.phoneNumber.includes("+")
+                                      ? manager?.phoneNumber
+                                      : manager?.phoneNumber &&
+                                        !manager?.phoneNumber.includes("+")
+                                      ? "+" + manager?.phoneNumber
+                                      : null
+                                  }
+                                  btn={<i class="fas fa-phone"></i>}
+                                  popoverOpen={popoverOpen}
+                                  setPopoverOpen={setPopoverOpen}
+                                />
+                                <PopOverText
+                                  value={manager?.email}
+                                  btn={<i className="far fa-envelope"></i>}
+                                  popoverOpen={popoverOpen}
+                                  setPopoverOpen={setPopoverOpen}
+                                />
+                              </div>
+                            </td>
                           ) : null}
 
-                          {tableData[5]?.isActive ? (
-                            <td>{manager?.phoneNumber}</td>
-                          ) : null}
                           {permissions?.includes(
                             permissionList?.AdmissionManager_Assign_University
                           ) ? (
                             <>
-                              {tableData[6]?.isActive ? (
+                              {tableData[5]?.isActive ? (
                                 <td>
-                                  {" "}
-                                  <span
-                                    className="badge badge-secondary"
-                                    style={{ cursor: "pointer" }}
-                                  >
+                                  <div style={{ marginTop: "5px" }}>
                                     <span
                                       onClick={() =>
                                         redirectToAssignPage(
@@ -744,11 +585,11 @@ const AddMissionManagerAdd = ({
                                           manager?.id
                                         )
                                       }
-                                      className="text-decoration-none"
+                                      className="Count-fifth"
                                     >
                                       View
                                     </span>
-                                  </span>{" "}
+                                  </div>
                                 </td>
                               ) : null}
                             </>
@@ -757,20 +598,16 @@ const AddMissionManagerAdd = ({
                             permissionList?.AdmissionManager_Assign_Subject
                           ) ? (
                             <>
-                              {tableData[7]?.isActive ? (
+                              {tableData[6]?.isActive ? (
                                 <td>
-                                  {" "}
-                                  <span
-                                    className="badge badge-secondary"
-                                    style={{ cursor: "pointer" }}
-                                  >
+                                  <div style={{ marginTop: "5px" }}>
                                     <span
                                       onClick={() => redirectToSub(manager?.id)}
-                                      className="text-decoration-none"
+                                      className="Count-fourth"
                                     >
                                       View
                                     </span>
-                                  </span>{" "}
+                                  </div>
                                 </td>
                               ) : null}
                             </>
@@ -780,39 +617,60 @@ const AddMissionManagerAdd = ({
                             permissionList?.AdmissionManager_Assign_AdmissionOfficer
                           ) ? (
                             <>
-                              {tableData[8]?.isActive ? (
+                              {tableData[7]?.isActive ? (
                                 <td>
-                                  <span
-                                    onClick={() =>
-                                      redirectToAdmissionOfficerList(
-                                        manager?.providerId,
-                                        manager?.id
-                                      )
-                                    }
-                                    className="badge badge-secondary"
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    {`View (${manager?.totalOfficers})`}
-                                  </span>
+                                  <div style={{ marginTop: "5px" }}>
+                                    <span
+                                      onClick={() =>
+                                        redirectToAdmissionOfficerList(
+                                          manager?.providerId,
+                                          manager?.id
+                                        )
+                                      }
+                                      className="Count-first"
+                                    >
+                                      {manager?.totalOfficers}
+                                    </span>
+                                  </div>
                                 </td>
                               ) : null}
                             </>
                           ) : null}
 
-                          {tableData[9]?.isActive ? (
+                          {tableData[8]?.isActive ? (
                             <td>
-                              <span className="badge badge-secondary">
-                                {manager?.registeredApplication}
-                              </span>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  onClick={() => {
+                                    history.push(
+                                      `/admission-manager-applications/${2}/${3}/${
+                                        manager?.id
+                                      }`
+                                    );
+                                  }}
+                                  className="Count-second"
+                                >
+                                  {manager?.registeredApplication}
+                                </span>
+                              </div>
                             </td>
                           ) : null}
 
                           {/* Applications starts here */}
-                          {tableData[10]?.isActive ? (
+                          {tableData[9]?.isActive ? (
                             <td>
-                              <span className="badge badge-secondary">
-                                {manager?.totalApplication}
-                              </span>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  onClick={() => {
+                                    history.push(
+                                      `/ApplicationListByAdmissionmanager/${manager?.id}`
+                                    );
+                                  }}
+                                  className="Count-third"
+                                >
+                                  {manager?.totalApplication}
+                                </span>
+                              </div>
                             </td>
                           ) : null}
                           {/* Applications ends here */}
@@ -821,7 +679,7 @@ const AddMissionManagerAdd = ({
                             permissionList?.AdmissionManager_Account_Status
                           ) ? (
                             <>
-                              {tableData[11]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td>
                                   {
                                     <ToggleSwitch
@@ -840,7 +698,7 @@ const AddMissionManagerAdd = ({
                             </>
                           ) : null}
 
-                          {tableData[12]?.isActive ? (
+                          {tableData[11]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(
@@ -896,40 +754,6 @@ const AddMissionManagerAdd = ({
                                   </>
                                 )}
                               </ButtonGroup>
-                              <ConfirmModal
-                                text="Do You Want To Delete This Admission Manager? Once Deleted it can't be Undone "
-                                // ${delData?.name}
-                                isOpen={deleteModal}
-                                toggle={closeDeleteModal}
-                                cancel={closeDeleteModal}
-                                buttonStatus={buttonStatus}
-                                progress={progress}
-                                confirm={handleDelete}
-                              ></ConfirmModal>
-                              {/* 
-                          <Modal
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            className="uapp-modal"
-                          >
-                            <ModalBody>
-                              <p>
-                                Are You Sure to Delete this <b>{managerName}</b>{" "}
-                                ? Once Deleted it can't be Undone!
-                              </p>
-                            </ModalBody>
-
-                            <ModalFooter>
-                              <Button
-                                disabled={buttonStatus}
-                                color="danger"
-                                onClick={handleDelete}
-                              >
-                                {progress ? <ButtonLoader /> : "YES"}
-                              </Button>
-                              <Button onClick={closeDeleteModal}>NO</Button>
-                            </ModalFooter>
-                          </Modal> */}
                             </td>
                           ) : null}
                         </tr>
@@ -949,6 +773,72 @@ const AddMissionManagerAdd = ({
           />
         </CardBody>
       </Card>
+
+      <Modal
+        isOpen={passModal}
+        toggle={() => handleToggle}
+        className="uapp-modal2"
+      >
+        <ModalBody className="p-5">
+          <h5>
+            Change password for {passData?.nameTittle?.name}{" "}
+            {passData?.firstName} {passData?.lastName}
+          </h5>
+          <form onSubmit={submitModalForm} className="mt-3">
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    passValidate(e);
+                  }}
+                />
+                <span className="text-danger">{error}</span>
+              </Col>
+            </FormGroup>
+
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Confirm Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    confirmPassword(e);
+                  }}
+                />
+
+                <span className="text-danger">{passError}</span>
+              </Col>
+            </FormGroup>
+            <FormGroup className="d-flex justify-content-between mt-3">
+              <CancelButton cancel={() => handleToggle(false)} />
+
+              <SaveButton
+                text="Submit"
+                progress={progress}
+                buttonStatus={resetButtonStatus}
+              />
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
+      <ConfirmModal
+        text="Do You Want To Delete This Admission Manager? Once Deleted it can't be Undone "
+        // ${delData?.name}
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        cancel={closeDeleteModal}
+        buttonStatus={resetButtonStatus}
+        progress={progress}
+        confirm={handleDelete}
+      />
     </div>
   );
 };

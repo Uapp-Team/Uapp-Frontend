@@ -3,11 +3,11 @@ import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { Upload } from "antd";
 import { rootUrl } from "../../../../../../../constants/constants";
-import downloadBtn from "../../../../../../../assets/img/download.png";
-import uploadBtn from "../../../../../../../assets/img/upload.png";
 import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -230,6 +230,7 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup row>
             <Col md="4">
+              {residencyValue === 2 && <span className="text-danger">* </span>}
               <span>Id/Passport</span>
             </Col>
             <Col md="4">
@@ -242,11 +243,7 @@ const EligibilityForm = ({
                 }}
                 style={{ height: "32px" }}
               >
-                {FileList3.length < 1 ? (
-                  <img className="mb-1" src={uploadBtn} alt="" />
-                ) : (
-                  ""
-                )}
+                {FileList3.length < 1 ? <UploadButton /> : ""}
               </Upload>
 
               {idPassportError && (
@@ -256,7 +253,7 @@ const EligibilityForm = ({
             <Col md="4">
               {eligibilityData?.idOrPassport?.fileUrl != null ? (
                 <a href={rootUrl + eligibilityData?.idOrPassport?.thumbnailUrl}>
-                  <img className="mb-1" src={downloadBtn} alt="" />
+                  <DownloadButton />
                 </a>
               ) : null}
             </Col>
@@ -275,11 +272,7 @@ const EligibilityForm = ({
                   return false;
                 }}
               >
-                {FileList4.length < 1 ? (
-                  <img className="mb-1" src={uploadBtn} alt="" />
-                ) : (
-                  ""
-                )}
+                {FileList4.length < 1 ? <UploadButton /> : ""}
               </Upload>
 
               {proofOfAddressError && (
@@ -291,14 +284,14 @@ const EligibilityForm = ({
                 <a
                   href={rootUrl + eligibilityData?.proofOfAddress?.thumbnailUrl}
                 >
-                  <img className="mb-1" src={downloadBtn} alt="" />
+                  <DownloadButton />
                 </a>
               ) : null}
             </Col>
           </FormGroup>
           <FormGroup row>
             <Col md="4">
-              <span>BRP/TRP</span>
+              <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
             </Col>
             <Col md="4">
               <Upload
@@ -310,11 +303,7 @@ const EligibilityForm = ({
                   return false;
                 }}
               >
-                {FileList5.length < 1 ? (
-                  <img className="mb-1" src={uploadBtn} alt="" />
-                ) : (
-                  ""
-                )}
+                {FileList5.length < 1 ? <UploadButton /> : ""}
               </Upload>
 
               <span className="text-danger">{proofOfRightError}</span>
@@ -322,7 +311,7 @@ const EligibilityForm = ({
             <Col md="4">
               {eligibilityData?.brp?.fileUrl != null ? (
                 <a href={rootUrl + eligibilityData?.brp?.thumbnailUrl}>
-                  <img className="mb-1" src={downloadBtn} alt="" />
+                  <DownloadButton />
                 </a>
               ) : null}
             </Col>
@@ -341,11 +330,7 @@ const EligibilityForm = ({
                   return false;
                 }}
               >
-                {FileList6.length < 1 ? (
-                  <img className="mb-1" src={uploadBtn} alt="" />
-                ) : (
-                  ""
-                )}
+                {FileList6.length < 1 ? <UploadButton /> : ""}
               </Upload>
 
               <span className="text-danger">{cvError}</span>
@@ -353,7 +338,7 @@ const EligibilityForm = ({
             <Col md="4">
               {eligibilityData?.cv?.fileUrl != null ? (
                 <a href={rootUrl + eligibilityData?.cv?.thumbnailUrl}>
-                  <img className="mb-1" src={downloadBtn} alt="" />
+                  <DownloadButton />
                 </a>
               ) : null}
             </Col>

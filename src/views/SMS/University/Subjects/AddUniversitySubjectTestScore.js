@@ -16,6 +16,7 @@ import { permissionList } from "../../../../constants/AuthorizationConstant";
 const AddUniversitySubjectTestScore = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { id, subjId } = useParams();
+  const history = useHistory();
   const activetab = "3";
   const [ieltsReq4, setIeltsReq4] = useState(false);
   const [euIeltsReq4, setEuIeltsReq4] = useState(false);
@@ -48,8 +49,17 @@ const AddUniversitySubjectTestScore = () => {
   const [showForm3, setShowForm3] = useState(false);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
-  const history = useHistory();
+  const [errorIeltsHome, setErrorIeltsHome] = useState("");
+  const [errorGreHome, setErrorGreHome] = useState("");
+  const [errorGmatHome, setErrorGmatHome] = useState("");
 
+  const [errorIeltsEu, setErrorIeltsEu] = useState("");
+  const [errorGreEu, setErrorGreEu] = useState("");
+  const [errorGmatEu, setErrorGmatEu] = useState("");
+
+  const [errorIeltsInt, setErrorIeltsInt] = useState("");
+  const [errorGreInt, setErrorGreInt] = useState("");
+  const [errorGmatInt, setErrorGmatInt] = useState("");
   useEffect(() => {
     get(`SubjectTestScore/GetBySubject/${subjId}`).then((res) => {
       console.log("TestScore", res);
@@ -120,32 +130,80 @@ const AddUniversitySubjectTestScore = () => {
 
   const handleIeltsReq4 = (e) => {
     setIeltsReq4(e.target.checked);
+
+    errorIeltsHome !== "" &&
+      setErrorIeltsHome(
+        `IELTS ${!e.target.checked ? "Equivalent" : ""} score required`
+      );
+
+    // if (errorIeltsHome !== "") {
+    //   if (e.target.checked === false) {
+    //     setErrorIeltsHome("IELTS Equivalent score required");
+    //   } else {
+    //     setErrorIeltsHome("IELTS score required");
+    //   }
+    // }
   };
   const handleEuIeltsReq4 = (e) => {
     setEuIeltsReq4(e.target.checked);
+    errorIeltsEu !== "" &&
+      setErrorIeltsEu(
+        `IELTS ${!e.target.checked ? "Equivalent" : ""} score required`
+      );
   };
   const handleIntIeltsReq4 = (e) => {
     setIntIeltsReq4(e.target.checked);
+    errorIeltsInt !== "" &&
+      setErrorIeltsInt(
+        `IELTS ${!e.target.checked ? "Equivalent" : ""} score required`
+      );
   };
 
   const handleGreRequired4 = (e) => {
     setGreRequired4(e.target.checked);
+    e.target.checked === false && setErrorGreHome("");
   };
   const handleEuGreRequired4 = (e) => {
     setEuGreRequired(e.target.checked);
+    e.target.checked === false && setErrorGreEu("");
   };
   const handleIntGreRequired4 = (e) => {
     setIntGreRequired(e.target.checked);
+    e.target.checked === false && setErrorGreInt("");
   };
 
   const handleGmatRequired4 = (e) => {
     setGmatRequired4(e.target.checked);
+    e.target.checked === false && setErrorGmatHome("");
   };
   const handleEuGmatRequired4 = (e) => {
     setEuGmatRequired4(e.target.checked);
+    e.target.checked === false && setErrorGmatEu("");
   };
   const handleIntGmatRequired4 = (e) => {
     setIntGmatRequired4(e.target.checked);
+    e.target.checked === false && setErrorGmatInt("");
+  };
+
+  const ValidateFormHome = () => {
+    var isValid = true;
+    if (!ieltsScore4) {
+      isValid = false;
+      setErrorIeltsHome(
+        `IELTS ${!ieltsReq4 ? "Equivalent" : ""} score required`
+      );
+    }
+
+    if (greRequired4 && !greScore4) {
+      isValid = false;
+      setErrorGreHome("GRE score required");
+    }
+    if (gmatRequired4 && !gmatScore4) {
+      isValid = false;
+      setErrorGmatHome("GMAT score required");
+    }
+
+    return isValid;
   };
 
   const submitScore = (event) => {
@@ -153,48 +211,70 @@ const AddUniversitySubjectTestScore = () => {
 
     const subData = new FormData(event.target);
 
+    subData.append("isIELTSMandatory", ieltsReq4 ? true : false);
     subData.append("isGreMandatory", greRequired4 ? true : false);
     subData.append("isGmatMandatory", gmatRequired4 ? true : false);
-    subData.append("isIELTSMandatory", ieltsReq4 ? true : false);
 
-    if (otherData?.testScore?.id) {
-      setProgress5(true);
-      put(`SubjectTestScore/Update`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    } else {
-      setProgress5(true);
-      post(`SubjectTestScore/Create`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
+    if (ValidateFormHome()) {
+      if (otherData?.testScore?.id) {
+        setProgress5(true);
+        put(`SubjectTestScore/Update`, subData).then((res) => {
           setProgress5(false);
-        }
-      });
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else {
+        setProgress5(true);
+        post(`SubjectTestScore/Create`, subData).then((res) => {
+          setProgress5(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+            setProgress5(false);
+          }
+        });
+      }
     }
+  };
+
+  const ValidateFormEu = () => {
+    var isValid = true;
+    if (!euIeltsScore4) {
+      isValid = false;
+      setErrorIeltsEu(
+        `IELTS ${!euIeltsReq4 ? "Equivalent" : ""} score required`
+      );
+    }
+    if (euGreRequired && !euGreScore4) {
+      isValid = false;
+      setErrorGreEu("GRE score required");
+    }
+    if (euGmatRequired4 && !euGmatScore4) {
+      isValid = false;
+      setErrorGmatEu("GMAT score required");
+    }
+
+    return isValid;
   };
 
   const submitEuScore = (event) => {
@@ -202,47 +282,49 @@ const AddUniversitySubjectTestScore = () => {
 
     const subData = new FormData(event.target);
 
+    subData.append("isIELTSMandatory", euIeltsReq4 ? true : false);
     subData.append("isGreMandatory", euGreRequired ? true : false);
     subData.append("isGmatMandatory", euGmatRequired4 ? true : false);
-    subData.append("isIELTSMandatory", euIeltsReq4 ? true : false);
 
-    if (otherEuData?.testScore?.id) {
-      setProgress5(true);
-      put(`SubjectTestScore/Update`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm2(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    } else {
-      setProgress5(true);
-      post(`SubjectTestScore/Create`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm2(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
+    if (ValidateFormEu()) {
+      if (otherEuData?.testScore?.id) {
+        setProgress5(true);
+        put(`SubjectTestScore/Update`, subData).then((res) => {
           setProgress5(false);
-        }
-      });
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm2(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else {
+        setProgress5(true);
+        post(`SubjectTestScore/Create`, subData).then((res) => {
+          setProgress5(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm2(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+            setProgress5(false);
+          }
+        });
+      }
     }
   };
 
@@ -253,66 +335,89 @@ const AddUniversitySubjectTestScore = () => {
     history.push(`/add-university-course-requirements/${id}/${subjId}`);
   };
 
+  const ValidateFormInt = () => {
+    var isValid = true;
+    if (!intIeltsScore4) {
+      isValid = false;
+      setErrorIeltsInt(
+        `IELTS ${!intIeltsReq4 ? "Equivalent" : ""} score required`
+      );
+    }
+    if (intGreRequired && !intGreScore4) {
+      isValid = false;
+      setErrorGreInt("GRE score required");
+    }
+    if (intGmatRequired4 && !intGmatScore4) {
+      isValid = false;
+      setErrorGmatInt("GMAT score required");
+    }
+
+    return isValid;
+  };
+
   const submitIntScore = (event) => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
 
-    subData.append("isGreMandatory", intGreRequired ? true : false);
-    subData.append("isGmatMandatory", intGmatRequired4 ? true : false);
     subData.append("isIELTSMandatory", intIeltsReq4 ? true : false);
 
-    if (otherIntData?.testScore?.id) {
-      setProgress5(true);
-      put(`SubjectTestScore/Update`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm3(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    } else {
-      setProgress5(true);
-      post(`SubjectTestScore/Create`, subData).then((res) => {
-        setProgress5(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          setShowForm3(false);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
+    subData.append("isGreMandatory", intGreRequired ? true : false);
+    subData.append("isGmatMandatory", intGmatRequired4 ? true : false);
+
+    if (ValidateFormInt()) {
+      if (otherIntData?.testScore?.id) {
+        setProgress5(true);
+        put(`SubjectTestScore/Update`, subData).then((res) => {
           setProgress5(false);
-        }
-      });
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm3(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else {
+        setProgress5(true);
+        post(`SubjectTestScore/Create`, subData).then((res) => {
+          setProgress5(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            setShowForm3(false);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+            setProgress5(false);
+          }
+        });
+      }
     }
   };
   return (
     <div>
+      <SubjectNavbar
+        title="Course Test Score"
+        activeTab={activetab}
+        id={id}
+        subjId={subjId}
+      />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <SubjectNavbar
-            title="Course Test Score"
-            activeTab={activetab}
-            id={id}
-            subjId={subjId}
-          />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -395,6 +500,12 @@ const AddUniversitySubjectTestScore = () => {
                           gmatScore4={gmatScore4}
                           ieltsScore4={ieltsScore4}
                           applicationTypeId={1}
+                          errorIelts={errorIeltsHome}
+                          errorGre={errorGreHome}
+                          errorGmat={errorGmatHome}
+                          setErrorIelts={setErrorIeltsHome}
+                          setErrorGre={setErrorGreHome}
+                          setErrorGmat={setErrorGmatHome}
                         />
                       </>
                     ) : null}
@@ -481,6 +592,12 @@ const AddUniversitySubjectTestScore = () => {
                           gmatScore4={euGmatScore4}
                           ieltsScore4={euIeltsScore4}
                           applicationTypeId={2}
+                          errorIelts={errorIeltsEu}
+                          errorGre={errorGreEu}
+                          errorGmat={errorGmatEu}
+                          setErrorIelts={setErrorIeltsEu}
+                          setErrorGre={setErrorGreEu}
+                          setErrorGmat={setErrorGmatEu}
                         />
                       </>
                     ) : null}
@@ -567,6 +684,12 @@ const AddUniversitySubjectTestScore = () => {
                           gmatScore4={intGmatScore4}
                           ieltsScore4={intIeltsScore4}
                           applicationTypeId={3}
+                          errorIelts={errorIeltsInt}
+                          errorGre={errorGreInt}
+                          errorGmat={errorGmatInt}
+                          setErrorIelts={setErrorIeltsInt}
+                          setErrorGre={setErrorGreInt}
+                          setErrorGmat={setErrorGmatInt}
                         />
                       </>
                     ) : null}

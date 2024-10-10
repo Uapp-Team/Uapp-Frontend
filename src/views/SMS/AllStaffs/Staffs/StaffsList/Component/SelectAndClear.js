@@ -3,6 +3,8 @@ import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import TagButton from "../../../../../../components/buttons/TagButton";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import icon_info from "../../../../../../assets/img/icons/icon_info.png";
+import Typing from "../../../../../../components/form/Typing";
 
 const SelectAndClear = ({
   empOptiopns,
@@ -22,12 +24,13 @@ const SelectAndClear = ({
   setEmpLabel,
   setEmpValue,
   handleReset,
+  setIsTyping,
 }) => {
   const userTypeId = localStorage.getItem("userType");
 
   return (
     <Card className="uapp-employee-search">
-      <CardBody>
+      <CardBody className="search-card-body">
         <Row>
           <Col className="uapp-mb" md="4" sm="12">
             <Select
@@ -48,34 +51,33 @@ const SelectAndClear = ({
                 onChange={(opt) => selectBranch(opt.label, opt.value)}
                 name="branchId"
                 id="branchId"
-                isDisabled={type ? true : false}
+                // isDisabled={type ? true : false}
               />
             </Col>
           )}
 
-          <Col className="uapp-mb" md="4" sm="12" style={{ display: "flex" }}>
-            <Input
-              style={{ height: "2.7rem" }}
-              type="text"
+          <Col className="uapp-mb" md="4" sm="12">
+            <Typing
               name="search"
-              value={searchStr}
-              id="search"
               placeholder="Id, Name, Email"
-              onChange={(e) => setSearchStr(e.target.value)}
+              value={searchStr}
+              setValue={setSearchStr}
+              setIsTyping={setIsTyping}
               onKeyDown={handleKeyDown}
             />
+
+            <div className="mt-1 d-flex justify-between-start">
+              <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
+              <div className="pl-2" style={{ paddingTop: "2px" }}>
+                <span>Name should not include title.</span>
+              </div>
+            </div>
           </Col>
         </Row>
 
         <Row>
           <Col lg="12" md="12" sm="12" xs="12">
-            <div
-              style={{
-                marginTop: "10px",
-                display: "flex",
-                justifyContent: "start",
-              }}
-            >
+            <div className="d-flex justify-between-start">
               <div className="mt-1 mx-1" style={{ display: "flex" }}>
                 {empValue !== 0 || branchValue !== 0 ? "" : ""}
                 {empValue !== 0 ? (
@@ -99,7 +101,7 @@ const SelectAndClear = ({
                 )}
               </div>
 
-              <div className="mt-1 mx-0 d-flex btn-clear">
+              <div className="mt-1 mx-0 d-flex btn-clear mb-2">
                 {empValue !== 0 || branchValue !== 0 ? (
                   <button className="tag-clear" onClick={handleReset}>
                     Clear All

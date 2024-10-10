@@ -21,6 +21,7 @@ const CampusAssignSubject = () => {
   useEffect(() => {
     get(`CampusSubjects/GetAll/${campusId}`).then((res) => {
       setCampusList(res);
+      console.log(res, 'campuslist')
     });
   }, [campusId]);
 

@@ -45,6 +45,7 @@ import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import { useParams } from "react-router-dom";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import ColumnIntake from "../../TableColumn/ColumnIntake.js";
 
 const Intake = () => {
   const [intakeList, setIntakeList] = useState([]);
@@ -103,6 +104,14 @@ const Intake = () => {
   const [updateDocument, setUpdateDocument] = useState(undefined);
   // const { id } = useParams();
 
+  useEffect(() => {
+    const tableColumnIntake = JSON.parse(localStorage.getItem("ColumnIntake"));
+    tableColumnIntake && setTableData(tableColumnIntake);
+    !tableColumnIntake &&
+      localStorage.setItem("ColumnIntake", JSON.stringify(ColumnIntake));
+    !tableColumnIntake && setTableData(ColumnIntake);
+  }, []);
+
   const handleAddNewButton = () => {
     setModalopen1(true);
   };
@@ -156,11 +165,6 @@ const Intake = () => {
 
     get("YearDD/Index").then((res) => {
       setYear(res);
-    });
-
-    get(`TableDefination/Index/${tableIdList?.Intake_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
     });
   }, [success, success2]);
 
@@ -285,26 +289,11 @@ const Intake = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(`TableDefination/Update/${tableIdList?.Intake_List}/${columnId}`).then(
-      (res) => {
-        if (res?.status == 200 && res?.data?.isSuccess == true) {
-          // addToast(res?.data?.message, {
-          //   appearance: "success",
-          //   autoDismiss: true,
-          // });
-          setSuccess(!success);
-        } else {
-          // addToast(res?.data?.message, {
-          //   appearance: "error",
-          //   autoDismiss: true,
-          // });
-        }
-      }
-    );
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnIntake", JSON.stringify(values));
   };
 
   const validateRegisterForm = () => {
@@ -416,6 +405,7 @@ const Intake = () => {
 
   return (
     <div>
+      <BreadCrumb title="Intake List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
@@ -625,8 +615,6 @@ const Intake = () => {
             </ModalBody>
           </Modal>
 
-          <BreadCrumb title="Intake List" backTo="" path="/" />
-
           <Card className="uapp-employee-search">
             <CardBody>
               <Row className="mb-3">
@@ -710,25 +698,59 @@ const Intake = () => {
                         </DropdownToggle>
                         <DropdownMenu className="bg-dd-2">
                           {tableData.map((table, i) => (
-                            <div className="d-flex justify-content-between">
-                              <Col md="8" className="">
-                                <p className="">{table?.collumnName}</p>
-                              </Col>
+                            <div key={i}>
+                              {i === 1 ? (
+                                <>
+                                  {(permissions?.includes(
+                                    permissionList.Edit_Account_Intake
+                                  ) ||
+                                    permissions?.includes(
+                                      permissionList.Delete_Account_Intake
+                                    )) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
 
-                              <Col md="4" className="text-center">
-                                <FormGroup check inline>
-                                  <Input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id=""
-                                    name="isAcceptHome"
-                                    onChange={(e) => {
-                                      handleChecked(e, table?.id);
-                                    }}
-                                    defaultChecked={table?.isActive}
-                                  />
-                                </FormGroup>
-                              </Col>
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            checked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <div className="d-flex justify-content-between">
+                                  <Col md="8" className="">
+                                    <p className="">{table?.title}</p>
+                                  </Col>
+
+                                  <Col md="4" className="text-center">
+                                    <FormGroup check inline>
+                                      <Input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id=""
+                                        name="check"
+                                        onChange={(e) => {
+                                          handleChecked(e, i);
+                                        }}
+                                        checked={table?.isActive}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </DropdownMenu>
@@ -747,12 +769,25 @@ const Intake = () => {
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>Name</th> : null}
-                        {tableData[2]?.isActive ? (
-                          <th style={{ width: "8%" }} className="text-center">
-                            Action
-                          </th>
+                        {tableData[0]?.isActive ? <th>Name</th> : null}
+
+                        {permissions?.includes(
+                          permissionList.Edit_Account_Intake
+                        ) ||
+                        permissions?.includes(
+                          permissionList.Delete_Account_Intake
+                        ) ? (
+                          <>
+                            {" "}
+                            {tableData[1]?.isActive ? (
+                              <th
+                                style={{ width: "8%" }}
+                                className="text-center"
+                              >
+                                Action
+                              </th>
+                            ) : null}
+                          </>
                         ) : null}
                       </tr>
                     </thead>
@@ -760,29 +795,38 @@ const Intake = () => {
                       {intakeList?.map((intake, i) => (
                         <tr key={intake.id} style={{ textAlign: "center" }}>
                           {tableData[0]?.isActive ? (
-                            <th scope="row">{serialNum + i}</th>
-                          ) : null}
-
-                          {tableData[1]?.isActive ? (
                             <td>{intake?.name}</td>
                           ) : null}
 
-                          {tableData[2]?.isActive ? (
-                            <td style={{ width: "8%" }} className="text-center">
-                              <ButtonGroup variant="text">
-                                {permissions?.includes(
-                                  permissionList.Edit_Account_Intake
-                                ) ? (
-                                  <ButtonForFunction
-                                    func={() => redirecttoUpdateIntake(intake)}
-                                    color={"warning"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-edit"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
+                          {permissions?.includes(
+                            permissionList.Edit_Account_Intake
+                          ) ||
+                          permissions?.includes(
+                            permissionList.Delete_Account_Intake
+                          ) ? (
+                            <>
+                              {" "}
+                              {tableData[1]?.isActive ? (
+                                <td
+                                  style={{ width: "8%" }}
+                                  className="text-center"
+                                >
+                                  <ButtonGroup variant="text">
+                                    {permissions?.includes(
+                                      permissionList.Edit_Account_Intake
+                                    ) ? (
+                                      <ButtonForFunction
+                                        func={() =>
+                                          redirecttoUpdateIntake(intake)
+                                        }
+                                        color={"warning"}
+                                        className={"mx-1 btn-sm"}
+                                        icon={<i className="fas fa-edit"></i>}
+                                        permission={6}
+                                      />
+                                    ) : null}
 
-                                {/* <LinkButton
+                                    {/* <LinkButton
                               url={`/updateIntake/${intake?.id}`}
                               color={"warning"}
                               className={"mx-1 btn-sm"}
@@ -790,37 +834,40 @@ const Intake = () => {
                               permission={6}
                             /> */}
 
-                                {permissions?.includes(
-                                  permissionList.Delete_Account_Intake
-                                ) ? (
-                                  <ButtonForFunction
-                                    func={() =>
-                                      toggleDanger(intake?.name, intake?.id)
-                                    }
-                                    color={"danger"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-trash-alt"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
-                              </ButtonGroup>
-                            </td>
+                                    {permissions?.includes(
+                                      permissionList.Delete_Account_Intake
+                                    ) ? (
+                                      <ButtonForFunction
+                                        func={() =>
+                                          toggleDanger(intake?.name, intake?.id)
+                                        }
+                                        color={"danger"}
+                                        className={"mx-1 btn-sm"}
+                                        icon={
+                                          <i className="fas fa-trash-alt"></i>
+                                        }
+                                        permission={6}
+                                      />
+                                    ) : null}
+                                  </ButtonGroup>
+                                </td>
+                              ) : null}
+                            </>
                           ) : null}
                         </tr>
                       ))}
-
-                      {/* modal for delete */}
-                      <ConfirmModal
-                        text="Do You Want To Delete This Intake? Once Deleted it can't be Undone "
-                        // ${delData?.name}
-                        isOpen={deleteModal}
-                        toggle={closeDeleteModal}
-                        cancel={closeDeleteModal}
-                        progress={progress}
-                        confirm={() => handleDelete(intakeId)}
-                      ></ConfirmModal>
                     </tbody>
                   </Table>
+                  {/* modal for delete */}
+                  <ConfirmModal
+                    text="Do You Want To Delete This Intake? Once Deleted it can't be Undone"
+                    // ${delData?.name}
+                    isOpen={deleteModal}
+                    toggle={closeDeleteModal}
+                    cancel={closeDeleteModal}
+                    progress={progress}
+                    confirm={() => handleDelete(intakeId)}
+                  />
                 </div>
               )}
 

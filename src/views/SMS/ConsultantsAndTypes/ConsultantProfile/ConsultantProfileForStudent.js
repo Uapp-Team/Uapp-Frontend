@@ -4,6 +4,7 @@ import ProfileReview from "./ProfileComponent/ProfileReview";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import RatingBreakdown from "./ProfileComponent/RatingBreakdown";
 import ProfileHeadCardForView from "./ProfileComponent/ProfileHeadCardForView";
+import ProfileRatingsBreakdown from "./ProfileComponent/ProfileRatingsBreakdown";
 
 const ConsultantProfileForStudent = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const ConsultantProfileForStudent = () => {
       <div className="row">
         <div className="col-lg-8 col-sm-12">
           <ProfileHeadCardForView id={id} />
-          <RatingBreakdown id={id} />
+          {/* <RatingBreakdown id={id} /> */}
           <ProfileReview id={id} />
         </div>
 
@@ -32,6 +33,9 @@ const ConsultantProfileForStudent = () => {
             allowfullscreen
             style={{ marginBottom: "19px" }}
           ></iframe>
+          <div>
+            <ProfileRatingsBreakdown id={id} />
+          </div>
         </div>
       </div>
     </>

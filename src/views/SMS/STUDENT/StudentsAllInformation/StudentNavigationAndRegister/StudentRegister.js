@@ -18,7 +18,6 @@ const StudentRegister = () => {
   const { consultantId } = useParams();
   const referenceId = localStorage.getItem("referenceId");
   const userTypeId = localStorage.getItem("userType");
-  const userType = localStorage.getItem("userType");
 
   const [studentType, setStudentType] = useState([]);
   const [studentTypeLabel, setStudentTypeLabel] = useState(
@@ -47,10 +46,12 @@ const StudentRegister = () => {
   const [registerId, setRegisterId] = useState();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
+  //api part starts here
+
   useEffect(() => {
-    get("UniversityCountryDD/Index").then((res) => {
-      setStudentType(res);
-    });
+    // get("UniversityCountryDD/Index").then((res) => {
+    //   setStudentType(res);
+    // });
 
     if (userTypeId !== userTypes?.Consultant.toString()) {
       if (consultantId) {
@@ -63,14 +64,27 @@ const StudentRegister = () => {
     } else {
       setConsultantValue(referenceId);
     }
-  }, []);
+  }, [consultantId, referenceId, userTypeId]);
+
+  useEffect(() => {
+    get(
+      `RecruitmentFor/ByConsultant/${
+        consultantId ? consultantId : consultantValue
+      }`
+    ).then((res) => {
+      setStudentType(res);
+    });
+  }, [consultantId, consultantValue]);
+
+  //api part ends here
+
+  //Dropdown selection part starts here
 
   const studentTypeName = studentType?.map((student) => ({
     label: student?.name,
     value: student?.id,
   }));
 
-  // select  Student type
   const selectStudentType = (label, value) => {
     setStudentError(false);
     setStudentTypeLabel(label);
@@ -82,20 +96,19 @@ const StudentRegister = () => {
     value: cons?.id,
   }));
 
-  // select  consultant
   const selectConsultant = (label, value) => {
     setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
   };
 
-  const cancelForm = () => {
-    history.push("/studentList");
-  };
+  //Dropdown selection part ends here
 
+  //Form on change validation starts here
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFirstName(data);
+    if (data === "") {
       setFirstNameError("First Name is required");
     } else {
       setFirstNameError("");
@@ -103,8 +116,9 @@ const StudentRegister = () => {
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last Name is required");
     } else {
       setLastNameError("");
@@ -130,6 +144,10 @@ const StudentRegister = () => {
       });
     }
   };
+
+  //Form on change validation ends here
+
+  //Form submitting validation starts here
 
   const ValidateForm = () => {
     var isValid = true;
@@ -178,6 +196,11 @@ const StudentRegister = () => {
     }
     return isValid;
   };
+
+  //Form validation ends here
+
+  //Form submitting starts here
+
   const handleRegisterStudent = (event) => {
     event.preventDefault();
 
@@ -209,9 +232,24 @@ const StudentRegister = () => {
       });
     }
   };
+
+  //Form submitting ends here
+
+  //Cancel form starts
+
+  const cancelForm = () => {
+    history.push("/studentList");
+  };
+
+  //Cancel form ends
+
+  //after submitting form redirect this page
+
   const goToProfile = () => {
     history.push(`/addStudentInformation/${registerId}`);
   };
+
+  //after submitting form redirect this page
 
   console.log("first");
   return (
@@ -223,6 +261,7 @@ const StudentRegister = () => {
       />
       <Card>
         <CardBody>
+          {/*Create Student text part starts here */}
           <p className="section-title">Create Student Account</p>
           <div className="mt-1 mb-4 d-flex justify-between cardborder">
             <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
@@ -230,33 +269,13 @@ const StudentRegister = () => {
               <span>Provide Information Below To Create Student Account.</span>
             </div>
           </div>
+          {/*Create Student text part ends here */}
+
+          {/*Student Register Form starts here */}
 
           <Form onSubmit={handleRegisterStudent} className="mt-4">
             <Row>
               <Col lg="6" md="8">
-                <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span> Student Preferred
-                    Country{" "}
-                  </span>
-
-                  <Select
-                    options={studentTypeName}
-                    value={{
-                      label: studentTypeLabel,
-                      value: studentTypeValue,
-                    }}
-                    onChange={(opt) => selectStudentType(opt.label, opt.value)}
-                    name="universityCountryId"
-                    id="universityCountryId"
-                  />
-                  {studentError && (
-                    <span className="text-danger">
-                      Preferred country is required
-                    </span>
-                  )}
-                </FormGroup>
-
                 {/* Conditional rendering on consultant type start */}
                 {!consultantId &&
                 userTypeId !== userTypes?.Consultant &&
@@ -301,6 +320,29 @@ const StudentRegister = () => {
                   />
                 )}
                 {/* Conditional rendering on consultant type end */}
+
+                <FormGroup>
+                  <span>
+                    <span className="text-danger">*</span> Student Preferred
+                    Country{" "}
+                  </span>
+
+                  <Select
+                    options={studentTypeName}
+                    value={{
+                      label: studentTypeLabel,
+                      value: studentTypeValue,
+                    }}
+                    onChange={(opt) => selectStudentType(opt.label, opt.value)}
+                    name="universityCountryId"
+                    id="universityCountryId"
+                  />
+                  {studentError && (
+                    <span className="text-danger">
+                      Preferred country is required
+                    </span>
+                  )}
+                </FormGroup>
 
                 <FormGroup>
                   <span>
@@ -371,8 +413,12 @@ const StudentRegister = () => {
               </Col>
             </Row>
           </Form>
+
+          {/*Student Register Form ends here */}
         </CardBody>
       </Card>
+
+      {/*ConfirmModal starts here */}
 
       <ConfirmModal
         text="Student added successfully"
@@ -386,6 +432,8 @@ const StudentRegister = () => {
         cancel={() => setIsModalOpen(false)}
         confirm={goToProfile}
       />
+
+      {/*ConfirmModal ends here */}
     </div>
   );
 };

@@ -61,11 +61,11 @@ const IntakeRangeReportForAdministrator = () => {
   };
 
   useEffect(() => {
-    get(`UniversityDD/Index`).then((res) => {
+    get(`SearchFilter/Universities/0/0/0`).then((res) => {
       setUniversity(res);
     });
 
-    get(`ConsultantDD/Index`).then((res) => {
+    get(`ConsultantDD/ByUser`).then((res) => {
       setConsultant(res);
     });
 
@@ -184,7 +184,7 @@ const IntakeRangeReportForAdministrator = () => {
           },
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         xaxis: {
           categories: [
@@ -250,7 +250,7 @@ const IntakeRangeReportForAdministrator = () => {
       setMonthStatistics(res);
       setOptions1({
         chart: {
-          // id: "basic-bar",
+          id: "basic-bar",
           type: "bar",
           toolbar: {
             show: false,
@@ -273,40 +273,41 @@ const IntakeRangeReportForAdministrator = () => {
             "Dec",
           ],
         },
-        yaxis: {
-          axisBorder: {
-            show: true,
-          },
-          axisTicks: {
-            show: true,
-          },
-          labels: {
-            show: true,
-            formatter: function (val) {
-              return val;
-            },
-          },
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: "60%",
-            dataLabels: {
-              position: "top", // top, center, bottom
-            },
-          },
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: function (val) {
-            return val;
-          },
-          offsetY: -30,
-          style: {
-            fontSize: "14px",
-            colors: ["#304758"],
-            fontWeight: "500",
-          },
-        },
+
+        // yaxis: {
+        //   axisBorder: {
+        //     show: true,
+        //   },
+        //   axisTicks: {
+        //     show: true,
+        //   },
+        //   labels: {
+        //     show: true,
+        //     formatter: function (val) {
+        //       return val;
+        //     },
+        //   },
+        // },
+        // plotOptions: {
+        //   bar: {
+        //     columnWidth: "60%",
+        //     dataLabels: {
+        //       position: "top", // top, center, bottom
+        //     },
+        //   },
+        // },
+        // dataLabels: {
+        //   enabled: true,
+        //   formatter: function (val) {
+        //     return val;
+        //   },
+        //   offsetY: -30,
+        //   style: {
+        //     fontSize: "14px",
+        //     colors: ["#304758"],
+        //     fontWeight: "500",
+        //   },
+        // },
       });
 
       setSeries1([
@@ -524,6 +525,9 @@ const IntakeRangeReportForAdministrator = () => {
     setOfferLabel(label);
     setOfferValue(value);
   };
+
+  console.log("options2", options2);
+  console.log("series2", series2);
   return (
     <div>
       <BreadCrumb title="Intake Range Report" backTo="" path="/" />

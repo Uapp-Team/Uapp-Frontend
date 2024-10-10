@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Upload } from "antd";
 import * as Icon from "react-feather";
-import uapploader from "../../../../../assets/img/Uapp_fav.png";
-import uapploader2 from "../../../../../assets/img/Asset 12Icon.svg";
+import uapploader from "../../../../../assets/img/profile-img.png";
+import profileCover from "../../../../../assets/img/profile-cover.png";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import {
@@ -27,6 +27,7 @@ import ButtonLoader from "../../../Components/ButtonLoader";
 
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
 const AssociateProfileHead = ({ id }) => {
   const [headData, setHeadData] = useState({});
@@ -47,7 +48,7 @@ const AssociateProfileHead = ({ id }) => {
         setStatusLabel(res?.accountStatus?.statusName);
       });
     }
-  }, [success, id]);
+  }, [success, id, userId]);
 
   const history = useHistory();
 
@@ -296,136 +297,12 @@ const AssociateProfileHead = ({ id }) => {
               backgroundImage: `url(${
                 headData?.consultantCoverImageMedia
                   ? rootUrl + headData?.consultantCoverImageMedia?.fileUrl
-                  : uapploader2
+                  : profileCover
               })`,
             }}
-          >
-            {/* {headData?.consultantCoverImageMedia == null ? (
-                <img src={uapploader2} alt="cover_img" />
-              ) : (
-                <img
-                  src={rootUrl + headData?.consultantCoverImageMedia?.fileUrl}
-                  alt="cover_img"
-                />
-              )} */}
-            <div className="uplode-cover-image">
-              {permissions?.includes(permissionList.Edit_Consultant) ? (
-                <span onClick={updateCoverPhoto}>
-                  {" "}
-                  <i className="fas fa-camera" style={{ cursor: "pointer" }}>
-                    {" "}
-                  </i>
-                </span>
-              ) : null}
-            </div>
-          </div>
+          ></div>
         </div>
 
-        {/* cover photo edit modal starts here */}
-        <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
-          <ModalHeader>Update Cover Photo</ModalHeader>
-
-          <ModalBody>
-            <form onSubmit={handleSubmitCoverPhoto}>
-              <input type="hidden" name="id" id="id" value={id} />
-
-              {/* <input type="hidden" name="id" id="id" value={adminData?.id} /> */}
-
-              <FormGroup row className="has-icon-left position-relative">
-                <Col className="ml-5" md="4">
-                  <span>
-                    Cover Photo <span className="text-danger">*</span>{" "}
-                  </span>
-                </Col>
-                <Col md="6">
-                  <div className="row d-flex">
-                    {/* {headData?.consultantCoverImageMedia !== null ? (
-                        <div className="col-md-6">
-                          <Image
-                            width={104}
-                            height={104}
-                            src={
-                              rootUrl + headData?.consultantCoverImageMedia?.thumbnailUrl
-                            }
-                          />
-                        </div>
-                      ) : null} */}
-
-                    <div className="col-md-6">
-                      <>
-                        <Upload
-                          listType="picture-card"
-                          multiple={false}
-                          fileList={FileList}
-                          onPreview={handlePreview}
-                          onChange={handleChange}
-                          beforeUpload={(file) => {
-                            return false;
-                          }}
-                        >
-                          {FileList.length < 1 ? (
-                            <div
-                              className="text-danger"
-                              style={{ marginTop: 8 }}
-                            >
-                              <Icon.Upload />
-                              <br />
-                              <span>Upload Image Here</span>
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </Upload>
-                        <Modal
-                          visible={previewVisible}
-                          title={previewTitle}
-                          footer={null}
-                          onCancel={handleCancel}
-                        >
-                          <img
-                            alt="example"
-                            style={{ width: "100%" }}
-                            src={previewImage}
-                          />
-                        </Modal>
-
-                        <span className="text-danger d-block">{text}</span>
-
-                        {error && (
-                          <span className="text-danger">
-                            Cover photo is required
-                          </span>
-                        )}
-                      </>
-                    </div>
-                  </div>
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col md="12">
-                  <div className="d-flex justify-content-end">
-                    <Button
-                      color="danger"
-                      onClick={closeModal}
-                      className="mr-1 mt-3"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      className="ml-1 mt-3"
-                      color="primary"
-                      disabled={buttonStatus}
-                    >
-                      {progress ? <ButtonLoader /> : "Update"}
-                    </Button>
-                  </div>
-                </Col>
-              </FormGroup>
-            </form>
-          </ModalBody>
-        </Modal>
-        {/* cover photo edit modal ends here */}
         <CardBody>
           <div className="uapp-employee-profile-image-edit">
             <Row>
@@ -449,19 +326,6 @@ const AssociateProfileHead = ({ id }) => {
                           alt="img-desc"
                         />
                       )}
-
-                      {permissions?.includes(permissionList.Edit_Consultant) ? (
-                        <div class="edit">
-                          <span onClick={updateProfilePic}>
-                            <i
-                              className="fas fa-camera"
-                              style={{ cursor: "pointer" }}
-                            >
-                              {" "}
-                            </i>
-                          </span>
-                        </div>
-                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -469,176 +333,50 @@ const AssociateProfileHead = ({ id }) => {
             </Row>
           </div>
 
-          {/* profile photo edit modal starts here */}
-          <Modal
-            isOpen={modalOpen2}
-            toggle={closeModal1}
-            className="uapp-modal"
-          >
-            <ModalHeader>Update Profile Photo</ModalHeader>
-
-            <ModalBody>
-              <form onSubmit={handleSubmitProfilePhoto}>
-                <input type="hidden" name="id" id="id" value={id} />
-
-                {/* <input type="hidden" name="id" id="id" value={adminData?.id} /> */}
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col className="ml-5" md="4">
-                    <span>
-                      Profile Photo <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="6">
-                    <div className="row d-flex">
-                      {/* {headData?.consultantCoverImageMedia !== null ? (
-                             <div className="col-md-6">
-                               <Image
-                                 width={104}
-                                 height={104}
-                                 src={
-                                   rootUrl + headData?.consultantCoverImageMedia?.thumbnailUrl
-                                 }
-                               />
-                             </div>
-                           ) : null} */}
-
-                      <div className="col-md-6">
-                        <>
-                          <Upload
-                            listType="picture-card"
-                            multiple={false}
-                            fileList={FileList1}
-                            onPreview={handlePreview1}
-                            onChange={handleChange1}
-                            beforeUpload={(file) => {
-                              return false;
-                            }}
-                          >
-                            {FileList1.length < 1 ? (
-                              <div
-                                className="text-danger"
-                                style={{ marginTop: 8 }}
-                              >
-                                <Icon.Upload />
-                                <br />
-                                <span>Upload Image Here</span>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </Upload>
-                          <Modal
-                            visible={previewVisible1}
-                            title={previewTitle1}
-                            footer={null}
-                            onCancel={handleCancel1}
-                          >
-                            <img
-                              alt="example"
-                              style={{ width: "100%" }}
-                              src={previewImage1}
-                            />
-                          </Modal>
-
-                          <span className="text-danger d-block">{text1}</span>
-
-                          {error1 && (
-                            <span className="text-danger">
-                              Profile photo is required
-                            </span>
-                          )}
-                        </>
-                      </div>
-                    </div>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col md="12">
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        color="danger"
-                        onClick={closeModal1}
-                        className="mr-1 mt-3"
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type="submit"
-                        className="ml-1 mt-3"
-                        color="primary"
-                        disabled={buttonStatus1}
-                      >
-                        {progress ? <ButtonLoader /> : "Update"}
-                      </Button>
-                    </div>
-                  </Col>
-                </FormGroup>
-              </form>
-            </ModalBody>
-          </Modal>
-          {/* profile photo edit modal ends here */}
-
           <div className="uapp-employee-profile-generalInfo">
             <Row>
               <Col md="7">
-                <ul className="uapp-ul text-left">
-                  <li className="d-flex">
-                    <div>
-                      <h4>
-                        {headData?.nameTitle?.name} {headData?.firstName}{" "}
-                        {headData?.lastName} ({headData?.viewId})
-                      </h4>
+                <div>
+                  <h4 className="">
+                    {headData?.nameTitle?.name} {headData?.firstName}{" "}
+                    {headData?.lastName}
+                  </h4>
+                  <h5 className="">{headData?.designation}</h5>
+                  <p>{headData?.viewId}</p>
 
-                      <span
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          color: "#707070",
-                        }}
-                      >
-                        {headData?.branchName}
-                      </span>
-                      <br />
+                  {headData?.email === null ? null : (
+                    <p>
+                      <i class="far fa-envelope pr-2"></i>
+                      {headData?.email}
+                    </p>
+                  )}
 
-                      <span
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "400",
-                          color: "#A2A2A2",
-                        }}
-                      >
-                        {headData?.consultantTypeName}
-                      </span>
-                    </div>
-
-                    <div
-                      style={{
-                        cursor: "pointer",
-                        position: "relative",
-                        left: "10px",
-                        top: "2px",
-                        display: "flex",
-                      }}
-                    ></div>
-                  </li>
-
-                  <li></li>
-                </ul>
-                <br />
-                <br />
-                <br />
-                <br />
+                  {headData?.phoneNumber === null ? null : (
+                    <p>
+                      <i className="fas fa-phone pr-2"></i>
+                      {headData?.phoneNumber}
+                    </p>
+                  )}
+                </div>
 
                 <div className="d-flex">
-                  <button className="consultant-profile-redesign-style px-2 py-2">
+                  <button
+                    className="consultant-profile-redesign-style px-2 py-2"
+                    onClick={() => {
+                      history.push(
+                        `/applicationsFromAssociate/${headData?.id}`
+                      );
+                    }}
+                  >
                     Applications ({headData?.applicationCount})
                   </button>
 
                   <button
                     style={{ marginLeft: "23px" }}
                     className="consultant-profile-redesign-style px-2 py-2"
+                    onClick={() => {
+                      history.push(`/studentByConsultant/${headData?.id}`);
+                    }}
                   >
                     Students ({headData?.studentCount})
                   </button>
@@ -646,72 +384,49 @@ const AssociateProfileHead = ({ id }) => {
                   <button
                     style={{ marginLeft: "23px" }}
                     className="consultant-profile-redesign-style px-2 py-2"
+                    onClick={() => {
+                      history.push(`/associates/${headData?.id}`);
+                    }}
                   >
                     Associates ({headData?.associateCount})
                   </button>
                 </div>
               </Col>
 
-              <Col md="5" className="mt-4">
-                <div className="text-right">
-                  <span
-                    style={{
-                      color: "#6B6B6B",
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      marginTop: "5px",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    UAPP Registration Date
-                  </span>
-                </div>
-
-                <div className="text-right mb-2">
-                  <span
-                    style={{
-                      fontWeight: "400",
-                      fontSize: "14px",
-                      color: "#d4d4d4",
-                    }}
-                  >
-                    {headData?.createdOn}
-                  </span>
-                </div>
-                <ul className="uapp-ul text-right">
+              <Col md="5" className="text-md-right mt-3">
+                <span>UAPP Registration Date</span>
+                <br />
+                <span className="text-gray">
+                  {headData?.createdOn}
+                  {/* {dateFormate(headData?.createdOn)} */}
+                </span>
+                <br />
+                {/* <span>{headData?.branchName}</span> */}
+                <br />
+                <ul className="uapp-ul text-md-right">
                   {permissions?.includes(
-                    permissionList?.Change_Status_Consultant
+                    permissionList?.Change_Consultant_AccountStatus
                   ) ? (
-                    <>
-                      {!(userTypeId == userTypes?.Consultant) ? (
-                        <div className="d-flex justify-content-end mb-2">
-                          <Select
-                            className=" w-50"
-                            options={statusTypeMenu}
-                            value={{ label: statusLabel, value: statusValue }}
-                            onChange={(opt) =>
-                              selectStatusType(opt.label, opt.value)
-                            }
-                            name="consultantTypeId"
-                            id="consultantTypeId"
-                          />
-                        </div>
-                      ) : null}
-                    </>
-                  ) : null}
-
-                  <li>
-                    <span> Account Status : {statusLabel}</span>
-                  </li>
-
-                  <li>
-                    <span> Email : {headData?.email}</span>
-                  </li>
-
-                  <li>
-                    <span> Phone Number : {headData?.phoneNumber}</span>
-                  </li>
+                    <div className="d-flex justify-content-md-end mb-2">
+                      <Select
+                        className=" w-50"
+                        options={statusTypeMenu}
+                        value={{
+                          label: statusLabel,
+                          value: statusValue,
+                        }}
+                        onChange={(opt) =>
+                          selectStatusType(opt.label, opt.value)
+                        }
+                        name="consultantTypeId"
+                        id="consultantTypeId"
+                      />
+                    </div>
+                  ) : (
+                    statusLabel
+                  )}
                 </ul>
+                <p className="text-gray">{headData?.consultantTypeName}</p>
               </Col>
             </Row>
           </div>

@@ -51,7 +51,7 @@ const AssignedSubjectCard = ({ admissionManagerId }) => {
             <Table borderless responsive className="mt-3">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Course</th>
                   <th>University</th>
                 </tr>
@@ -65,7 +65,7 @@ const AssignedSubjectCard = ({ admissionManagerId }) => {
                       borderBottom: "1px solid #2525251F",
                     }}
                   >
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
                     <td>
                       {" "}
                       <Link

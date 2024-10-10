@@ -27,39 +27,80 @@ import put from "../../../../helpers/put";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import TagButton from "../../../../components/buttons/TagButton";
 import Filter from "../../../../components/Dropdown/Filter";
-
+import { Link } from "react-router-dom";
+import LinkButton from "../../Components/LinkButton";
+import ColumnApplicationTransaction from "../../TableColumn/ColumnApplicationTransaction";
 const Index = () => {
+  const appTransaction = JSON.parse(sessionStorage.getItem("appTransaction"));
   const userType = localStorage.getItem("userType");
   const history = useHistory();
   const { consultantId } = useParams();
   const [uapp, setUapp] = useState([]);
-  const [uappLabel, setUappLabel] = useState("UAPP ID");
-  const [uappValue, setUappValue] = useState(0);
+  const [uappLabel, setUappLabel] = useState(
+    appTransaction?.uappLabel ? appTransaction?.uappLabel : "UAPP ID"
+  );
+  const [uappValue, setUappValue] = useState(
+    appTransaction?.uappValue ? appTransaction?.uappValue : 0
+  );
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
-  const [branchValue, setBranchValue] = useState(0);
+  const [branchLabel, setBranchLabel] = useState(
+    appTransaction?.branchLabel ? appTransaction?.branchLabel : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    appTransaction?.branchValue ? appTransaction?.branchValue : 0
+  );
   const [student, setStudent] = useState([]);
-  const [studentLabel, setStudentLabel] = useState("Student");
-  const [studentValue, setStudentValue] = useState(0);
+  const [studentLabel, setStudentLabel] = useState(
+    appTransaction?.studentLabel ? appTransaction?.studentLabel : "Student"
+  );
+  const [studentValue, setStudentValue] = useState(
+    appTransaction?.studentValue ? appTransaction?.studentValue : 0
+  );
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [consultant, setConsultant] = useState([]);
   const [consultantType, setConsultantType] = useState([]);
-  const [consultantLabel, setConsultantLabel] = useState("Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [consultantTypeLabel, setConsultantTypeLabel] =
-    useState("Consultant Type");
-  const [consultantTypeValue, setConsultantTypeValue] = useState(0);
+  const [consultantLabel, setConsultantLabel] = useState(
+    appTransaction?.consultantLabel
+      ? appTransaction?.consultantLabel
+      : "Consultant"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    appTransaction?.consultantValue ? appTransaction?.consultantValue : 0
+  );
+  const [consultantTypeLabel, setConsultantTypeLabel] = useState(
+    appTransaction?.consultantTypeLabel
+      ? appTransaction?.consultantTypeLabel
+      : "Consultant Type"
+  );
+  const [consultantTypeValue, setConsultantTypeValue] = useState(
+    appTransaction?.consultantTypeValue
+      ? appTransaction?.consultantTypeValue
+      : 0
+  );
   const [intake, setIntake] = useState([]);
-  const [intakeLabel, setIntakeLabel] = useState("Intake Range");
-  const [intakeValue, setIntakeValue] = useState(0);
+  const [intakeLabel, setIntakeLabel] = useState(
+    appTransaction?.intakeLabel ? appTransaction?.intakeLabel : "Intake Range"
+  );
+  const [intakeValue, setIntakeValue] = useState(
+    appTransaction?.intakeValue ? appTransaction?.intakeValue : 0
+  );
   const [transaction, setTransaction] = useState([]);
-  const [transactionLabel, setTransactionLabel] =
-    useState("Transaction Status");
-  const [transactionValue, setTransactionValue] = useState(0);
+  const [transactionLabel, setTransactionLabel] = useState(
+    appTransaction?.transactionLabel
+      ? appTransaction?.transactionLabel
+      : "Transaction Status"
+  );
+  const [transactionValue, setTransactionValue] = useState(
+    appTransaction?.transactionValue ? appTransaction?.transactionValue : 0
+  );
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    appTransaction?.currentPage ? appTransaction?.currentPage : 1
+  );
   const [callApi, setCallApi] = useState(false);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [dataPerPage, setDataPerPage] = useState(
+    appTransaction?.dataPerPage ? appTransaction?.dataPerPage : 15
+  );
   const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // user select data per page
@@ -73,7 +114,64 @@ const Index = () => {
   const [tableData, setTableData] = useState([]);
   const [success, setSuccess] = useState(false);
 
+  useEffect(() => {
+    const tableColumnApplicationTransaction = JSON.parse(
+      localStorage.getItem("ColumnApplicationTransaction")
+    );
+    tableColumnApplicationTransaction &&
+      setTableData(tableColumnApplicationTransaction);
+    !tableColumnApplicationTransaction &&
+      localStorage.setItem(
+        "ColumnApplicationTransaction",
+        JSON.stringify(ColumnApplicationTransaction)
+      );
+    !tableColumnApplicationTransaction &&
+      setTableData(ColumnApplicationTransaction);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "appTransaction",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        consultantLabel: consultantLabel && consultantLabel,
+        consultantValue: consultantValue && consultantValue,
+        consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
+        consultantTypeValue: consultantTypeValue && consultantTypeValue,
+        uappLabel: uappLabel && uappLabel,
+        uappValue: uappValue && uappValue,
+        studentLabel: studentLabel && studentLabel,
+        studentValue: studentValue && studentValue,
+        intakeLabel: intakeLabel && intakeLabel,
+        intakeValue: intakeValue && intakeValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
+        transactionLabel: transactionLabel && transactionLabel,
+        transactionValue: transactionValue && transactionValue,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    consultantLabel,
+    consultantValue,
+    consultantTypeLabel,
+    consultantTypeValue,
+    uappLabel,
+    uappValue,
+    studentLabel,
+    studentValue,
+    intakeLabel,
+    intakeValue,
+    branchLabel,
+    branchValue,
+    transactionLabel,
+    transactionValue,
+    dataPerPage,
+  ]);
+
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -121,13 +219,6 @@ const Index = () => {
 
     get(`UappIdDD/Index`).then((res) => {
       setUapp(res);
-    });
-
-    get(
-      `TableDefination/Index/${tableIdList?.Application_Transaction_List}`
-    ).then((res) => {
-      setTableData(res);
-      console.log(res, "table data");
     });
   }, [success]);
 
@@ -257,38 +348,26 @@ const Index = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Application_Transaction_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem(
+      "ColumnApplicationTransaction",
+      JSON.stringify(values)
+    );
   };
 
   console.log(consultantValue);
 
   return (
     <div>
+      <BreadCrumb title="Application Transaction List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <BreadCrumb title="Application Transaction List" backTo="" path="/" />
-
-          <Card>
+          <Card className="zindex-100">
             <CardBody>
               <div className="row">
                 <div className="col-md-12">
@@ -504,7 +583,7 @@ const Index = () => {
                     <div className="mr-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}
@@ -566,7 +645,7 @@ const Index = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData.map((table, i) => (
                             <div key={i}>
-                              {i === 13 ? (
+                              {i === 12 ? (
                                 <>
                                   {" "}
                                   {permissions?.includes(
@@ -574,7 +653,7 @@ const Index = () => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -585,7 +664,7 @@ const Index = () => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -597,7 +676,7 @@ const Index = () => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -608,7 +687,7 @@ const Index = () => {
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -625,95 +704,156 @@ const Index = () => {
                 </Col>
               </Row>
 
-              <div className="table-responsive">
-                <Table id="table-to-xls" className="table-sm table-bordered">
-                  <thead className="tablehead">
-                    <tr className="text-center">
-                      {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                      {tableData[1]?.isActive ? <th>Id</th> : null}
-                      {tableData[2]?.isActive ? <th>Intake</th> : null}
-                      {tableData[3]?.isActive ? <th>Consultant</th> : null}
-                      {tableData[4]?.isActive ? <th>Student</th> : null}
-                      {tableData[5]?.isActive ? <th>University</th> : null}
-                      {tableData[6]?.isActive ? <th>Courses</th> : null}
-                      {tableData[7]?.isActive ? <th>Intake Range</th> : null}
-                      {tableData[8]?.isActive ? <th>Amount</th> : null}
-                      {tableData[9]?.isActive ? <th>Reg. Status</th> : null}
+              {data?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
+              ) : (
+                <>
+                  <div className="table-responsive fixedhead">
+                    <Table
+                      id="table-to-xls"
+                      className="table-sm table-bordered"
+                    >
+                      <thead className="tablehead">
+                        <tr className="text-center">
+                          {tableData[0]?.isActive ? <th>Id</th> : null}
+                          {tableData[1]?.isActive ? <th>Intake</th> : null}
+                          {userType !== userTypes?.Consultant &&
+                          tableData[2]?.isActive ? (
+                            <th>Consultant</th>
+                          ) : null}
+                          {tableData[3]?.isActive ? <th>Student</th> : null}
+                          {tableData[4]?.isActive ? <th>University</th> : null}
+                          {tableData[5]?.isActive ? <th>Courses</th> : null}
+                          {tableData[6]?.isActive ? (
+                            <th>Intake Range</th>
+                          ) : null}
+                          {tableData[7]?.isActive ? <th>Amount</th> : null}
+                          {tableData[8]?.isActive ? <th>Reg. Status</th> : null}
 
-                      {tableData[10]?.isActive ? (
-                        <th>Transaction Date</th>
-                      ) : null}
-                      {tableData[11]?.isActive ? <th>Status</th> : null}
-                      {tableData[12]?.isActive ? <th>Branch</th> : null}
-                      {permissions?.includes(
-                        permissionList?.View_Application_Transactions
-                      ) ? (
-                        <>{tableData[13]?.isActive ? <th>Action</th> : null}</>
-                      ) : null}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.map((ls, i) => (
-                      <tr key={i} className="text-center">
-                        {tableData[0]?.isActive ? (
-                          <th scope="row">{i + 1}</th>
-                        ) : null}
-                        {tableData[1]?.isActive ? <td>{ls?.id}</td> : null}
-                        {tableData[2]?.isActive ? <td>{ls?.intake}</td> : null}
-                        {tableData[3]?.isActive ? (
-                          <td>{ls?.consultant}</td>
-                        ) : null}
-                        {tableData[4]?.isActive ? <td>{ls?.student}</td> : null}
-                        {tableData[5]?.isActive ? (
-                          <td>{ls?.unviersity}</td>
-                        ) : null}
-                        {tableData[6]?.isActive ? <td>{ls?.subject}</td> : null}
-                        {tableData[7]?.isActive ? (
-                          <td>{ls?.accountIntake}</td>
-                        ) : null}
-                        {tableData[8]?.isActive ? <td>£{ls?.amount}</td> : null}
-                        {tableData[9]?.isActive ? (
-                          <td> {ls?.registrationStatus}</td>
-                        ) : null}
-
-                        {tableData[10]?.isActive ? (
-                          <td>{ls?.transactionDate}</td>
-                        ) : null}
-                        {tableData[11]?.isActive ? (
-                          <td>{ls?.transactionStatus}</td>
-                        ) : null}
-                        {tableData[12]?.isActive ? (
-                          <td>{ls?.branchName}</td>
-                        ) : null}
-
-                        <>
+                          {tableData[9]?.isActive ? (
+                            <th>Transaction Date</th>
+                          ) : null}
+                          {tableData[10]?.isActive ? <th>Status</th> : null}
+                          {tableData[11]?.isActive ? <th>Branch</th> : null}
                           {permissions?.includes(
                             permissionList?.View_Application_Transactions
                           ) ? (
                             <>
-                              {" "}
-                              {tableData[13]?.isActive ? (
-                                <td className="text-center">
-                                  <ButtonGroup variant="text">
-                                    <Button
-                                      className="me-1 btn-sm"
-                                      color="primary"
-                                      onClick={() => viewDetails(ls)}
-                                    >
-                                      <i className="fas fa-eye"></i>
-                                    </Button>
-                                  </ButtonGroup>
-                                </td>
-                              ) : null}
+                              {tableData[12]?.isActive ? <th>Action</th> : null}
                             </>
                           ) : null}
-                        </>
-                        {/* ) : null} */}
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data?.map((ls, i) => (
+                          <tr key={i} className="text-center">
+                            {tableData[0]?.isActive ? <td>{ls?.id}</td> : null}
+                            {tableData[1]?.isActive ? (
+                              <td>{ls?.intake}</td>
+                            ) : null}
+                            {userType !== userTypes?.Consultant &&
+                            tableData[2]?.isActive ? (
+                              <td>
+                                {permissions?.includes(
+                                  permissionList?.View_Consultant
+                                ) ? (
+                                  <Link
+                                    className="text-body"
+                                    to={`consultantProfile/${ls?.consultantId}`}
+                                  >
+                                    {ls?.consultant}
+                                  </Link>
+                                ) : (
+                                  <>{ls?.consultant}</>
+                                )}
+                              </td>
+                            ) : null}
+                            {tableData[3]?.isActive ? (
+                              <td>
+                                {" "}
+                                {permissions?.includes(
+                                  permissionList?.View_Student
+                                ) ? (
+                                  <Link
+                                    className="text-body"
+                                    to={`studentProfile/${ls?.studentId}`}
+                                  >
+                                    {ls?.student}
+                                  </Link>
+                                ) : (
+                                  <>{ls?.student}</>
+                                )}
+                              </td>
+                            ) : null}
+                            {tableData[4]?.isActive ? (
+                              <td>
+                                {" "}
+                                {permissions?.includes(
+                                  permissionList?.View_University
+                                ) ? (
+                                  <Link
+                                    className="text-body"
+                                    to={`universityDetails/${ls?.universityId}`}
+                                  >
+                                    {ls?.unviersity}
+                                  </Link>
+                                ) : (
+                                  <>{ls?.unviersity}</>
+                                )}
+                              </td>
+                            ) : null}
+                            {tableData[5]?.isActive ? (
+                              <td>{ls?.subject}</td>
+                            ) : null}
+                            {tableData[6]?.isActive ? (
+                              <td>{ls?.accountIntake}</td>
+                            ) : null}
+                            {tableData[7]?.isActive ? (
+                              <td>£{ls?.amount}</td>
+                            ) : null}
+                            {tableData[8]?.isActive ? (
+                              <td> {ls?.registrationStatus}</td>
+                            ) : null}
+
+                            {tableData[9]?.isActive ? (
+                              <td>{ls?.transactionDate}</td>
+                            ) : null}
+                            {tableData[10]?.isActive ? (
+                              <td>{ls?.transactionStatus}</td>
+                            ) : null}
+                            {tableData[11]?.isActive ? (
+                              <td>{ls?.branchName}</td>
+                            ) : null}
+
+                            <>
+                              {permissions?.includes(
+                                permissionList?.View_Application_Transactions
+                              ) ? (
+                                <>
+                                  {" "}
+                                  {tableData[12]?.isActive ? (
+                                    <td className="text-center">
+                                      <ButtonGroup variant="text">
+                                        <LinkButton
+                                          url={`/applicationTransactionDetails/${ls?.id}`}
+                                          color="primary"
+                                          className={"mx-1 btn-sm mt-2"}
+                                          icon={<i className="fas fa-eye"></i>}
+                                        />
+                                      </ButtonGroup>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+                            </>
+                            {/* ) : null} */}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                </>
+              )}
 
               <Pagination
                 dataPerPage={dataPerPage}

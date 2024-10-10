@@ -21,11 +21,11 @@ const ConfirmModal = ({
     <>
       <Modal isOpen={isOpen} toggle={toggle} className="uapp-modal">
         <ModalBody style={{ padding: "30px" }}>
-          <p>
+          <div className="mb-3">
             <b>{text}</b>
             <br />
             {text2}
-          </p>
+          </div>
           <div>
             <CancelButton text={noText} cancel={cancel} />
 

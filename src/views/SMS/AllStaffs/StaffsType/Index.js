@@ -38,6 +38,7 @@ const EmployeeType = (props) => {
   const myForm = createRef();
   const [success, setSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen1, setModalOpen1] = useState(false);
   const [employeesTypeName, setemployeesTypeName] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedError, setSelectedError] = useState("");
@@ -60,6 +61,9 @@ const EmployeeType = (props) => {
     setSelectedError("");
     setSelectedId(undefined);
   };
+  const openModal1 = () => {
+    setModalOpen1(!modalOpen1);
+  };
 
   console.log(EmployeesTypeList);
   const closeModal = () => {
@@ -69,6 +73,9 @@ const EmployeeType = (props) => {
     setemployeesTypeName("");
     setSelectedError("");
     localStorage.removeItem("updateemployeesType");
+  };
+  const closeModal1 = () => {
+    setModalOpen1(false);
   };
 
   useEffect(() => {
@@ -100,6 +107,7 @@ const EmployeeType = (props) => {
       post(`EmployeType/Create`, subdata).then((action) => {
         setSuccess(!success);
         setModalOpen(false);
+        // setModalOpen1(true);
 
         setProgress(false);
         addToast(action?.data?.message, {
@@ -199,13 +207,13 @@ const EmployeeType = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="Staff Types" backTo="" path="/" />
       {loading ? (
         <div className="text-center">
           <img className="img-fluid" src={loader} alt="uapp_loader" />
         </div>
       ) : (
         <div>
-          <BreadCrumb title="Staff Types" backTo="" path="/" />
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList?.Add_Staff_type) && (
@@ -282,6 +290,46 @@ const EmployeeType = (props) => {
                 handleDeletePermission={handleDeletePermission}
                 progress2={progress2}
               ></StaffTypeTable>
+
+              {/* <Modal
+                isOpen={modalOpen1}
+                toggle={openModal}
+                className="uapp-modal"
+              >
+                <ModalHeader>sakib Type</ModalHeader>
+                <ModalBody>
+                  <Form ref={myForm}>
+                    <Input type="number" name="Id" id="Id" hidden />
+
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          sakib Type <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Input
+                          type="text"
+                          name="Name"
+                          id="Name"
+                          value={selected}
+                          placeholder="Employees Type"
+                          onChange={(e) => {
+                            handleEmployee(e);
+                          }}
+                        />
+                        <span className="text-danger">{selectedError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup className="d-flex justify-content-between mt-3">
+                      <CancelButton cancel={closeModal1} />
+
+                      <SaveButton text="Submit" progress={progress} />
+                    </FormGroup>
+                  </Form>
+                </ModalBody>
+              </Modal> */}
             </CardBody>
           </Card>
         </div>

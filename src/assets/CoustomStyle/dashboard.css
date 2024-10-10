@@ -46,7 +46,6 @@
   color: #ea5057;
   position: relative;
   border: 1px solid #ea5057;
-
 }
 
 /* .std-consent-and-profile {
@@ -79,6 +78,29 @@
   font-size: 14px;
   color: #fc7300;
   font-weight: 500;
+}
+
+.complete-assessment {
+  border-radius: 3px;
+  height: 38px;
+  width: 175px;
+  cursor: pointer;
+  /* background-color: #EFFEFC; */
+  text-align: center;
+  padding-top: 6px;
+  position: relative;
+  border: 1px solid #045d5e;
+  right: 16px;
+  font-size: 14px;
+  color: #045d5e;
+  font-weight: 500;
+}
+
+.complete-assessment a {
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #045d5e;
 }
 
 .std-student {
@@ -179,7 +201,7 @@
   padding: 5px 8px;
   text-decoration: none;
   color: #019088;
-  transition: .3s ease-in;
+  transition: 0.3s ease-in;
 }
 
 .link-view-notice:hover {
@@ -188,7 +210,7 @@
   text-decoration: none;
   color: #019088;
 
-  transition: .3s ease-out;
+  transition: 0.3s ease-out;
 }
 
 .notice-view-all {
@@ -198,7 +220,7 @@
   color: #fff;
   text-align: center;
   border-radius: 4px;
-  transition: all .3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   font-size: 17px;
   position: sticky;
   bottom: 10px;

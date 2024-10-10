@@ -1,24 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
 import {
   Card,
   CardBody,
-  CardHeader,
   ButtonGroup,
-  Button,
   Input,
   Col,
   Row,
   Table,
   Dropdown,
-  Form,
   FormGroup,
-  DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Modal,
-  ModalBody,
-  ModalFooter,
 } from "reactstrap";
 import Select from "react-select";
 import Pagination from "../Pagination/Pagination.jsx";
@@ -26,79 +18,103 @@ import { useHistory, useLocation, useParams } from "react-router";
 import uapploader from "../../../assets/img/Uapp_fav.png";
 import get from "../../../helpers/get.js";
 import { rootUrl } from "../../../constants/constants.js";
-import { StoreUniversityStateData } from "../../../redux/actions/SMS/UniversityAction/UniversityStateAction.js";
-import { Link } from "react-router-dom";
 import remove from "../../../helpers/remove.js";
-import { StoreUniversityListData } from "../../../redux/actions/SMS/UniversityAction/UniversityListAction";
-
 import ReactTableConvertToXl from "../ReactTableConvertToXl/ReactTableConvertToXl";
-import * as XLSX from "xlsx/xlsx.mjs";
+// import * as XLSX from "xlsx/xlsx.mjs";
 import ReactToPrint from "react-to-print";
 import ButtonForFunction from "../Components/ButtonForFunction.js";
-import LinkSpanButton from "../Components/LinkSpanButton.js";
-import SpanButton from "../Components/SpanButton.js";
-import LinkButton from "../Components/LinkButton.js";
 import { userTypes } from "../../../constants/userTypeConstant.js";
-import { Axios } from "axios";
 import Loader from "../Search/Loader/Loader.js";
 import { useToasts } from "react-toast-notifications";
 import { permissionList } from "../../../constants/AuthorizationConstant.js";
-import ButtonLoader from "../Components/ButtonLoader.js";
 import ToggleSwitch from "../Components/ToggleSwitch.js";
 import put from "../../../helpers/put.js";
 import { tableIdList } from "../../../constants/TableIdConstant.js";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
 import TagButton from "../../../components/buttons/TagButton.js";
 import ConfirmModal from "../../../components/modal/ConfirmModal.js";
+import { Link } from "react-router-dom";
+import ColumnUniversity from "../TableColumn/ColumnUniversity.js";
+import Typing from "../../../components/form/Typing.js";
 
 const UniversityList = (props) => {
-  const dispatch = useDispatch();
+  const UniversityPaging = JSON.parse(sessionStorage.getItem("university"));
+  const { counId, univerTypeId, provideId } = useParams();
   const location = useLocation();
+  const currentRoute = location.pathname;
   const history = useHistory();
   const [universityList, setUniversityList] = useState([]);
-  console.log(universityList, "vairevai");
-
   const [entity, setEntity] = useState(0);
-  const [callApi, setCallApi] = useState(false);
-  const [serialNum, setSerialNum] = useState(0);
+  // const [callApi, setCallApi] = useState(false);
+  // const [serialNum, setSerialNum] = useState(0);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
-  const [orderLabel, setOrderLabel] = useState("Order By");
-  const [orderValue, setOrderValue] = useState(0);
-  const [searchStr, setSearchStr] = useState("");
+  const [currentPage, setCurrentPage] = useState(
+    UniversityPaging?.currentPage ? UniversityPaging?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    UniversityPaging?.dataPerPage ? UniversityPaging?.dataPerPage : 15
+  );
+  const [orderLabel, setOrderLabel] = useState(
+    UniversityPaging?.orderLabel ? UniversityPaging?.orderLabel : "Order By"
+  );
+  const [orderValue, setOrderValue] = useState(
+    UniversityPaging?.orderValue ? UniversityPaging?.orderValue : 0
+  );
+  const [searchStr, setSearchStr] = useState(
+    UniversityPaging?.searchStr ? UniversityPaging?.searchStr : ""
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
-  const [stateList, setstateList] = useState([0]);
+  // const [stateList, setstateList] = useState([0]);
   // const univerSityCountries = props.univerSityCountryList[0];
   const [univerSityCountries, setUniverSityCountries] = useState([]);
   // const universityTypes = props.univerSityTypeList[0];
   const [universityTypes, setUniversityTypes] = useState([]);
   const [providerList, setProviderList] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [ulist, setUList] = useState([]);
+  // const [ulist, setUList] = useState([]);
 
   // const universityStates = props.univerSityStateList[0];
   const [universityStates, setUniversityStates] = useState([]);
 
-  const univerSList = props.univerSityDropDownList[0];
+  // const univerSList = props.univerSityDropDownList[0];
 
-  const [stateByCountry, setStateByCountry] = useState(0);
+  // const [stateByCountry, setStateByCountry] = useState(0);
 
-  const [uniTypeLabel, setUniTypeLabel] = useState("Type");
-  const [uniTypeValue, setUniTypeValue] = useState(0);
-  const [uniCountryLabel, setUniCountryLabel] = useState("Country");
-  const [uniCountryValue, setUniCountryValue] = useState(0);
-  const [uniStateLabel, setUniStateLabel] = useState("State");
-  const [unistateValue, setUniStateValue] = useState(0);
-  const [providerLabel, setProviderLabel] = useState("Provider");
-  const [providerValue, setProviderValue] = useState(0);
+  const [uniTypeLabel, setUniTypeLabel] = useState(
+    UniversityPaging?.uniTypeLabel ? UniversityPaging?.uniTypeLabel : "Type"
+  );
+  const [uniTypeValue, setUniTypeValue] = useState(
+    UniversityPaging?.uniTypeValue ? UniversityPaging?.uniTypeValue : 0
+  );
+  const [uniCountryLabel, setUniCountryLabel] = useState(
+    UniversityPaging?.uniCountryLabel
+      ? UniversityPaging?.uniCountryLabel
+      : "Country"
+  );
+  const [uniCountryValue, setUniCountryValue] = useState(
+    UniversityPaging?.uniCountryValue ? UniversityPaging?.uniCountryValue : 0
+  );
+  const [uniStateLabel, setUniStateLabel] = useState(
+    UniversityPaging?.uniStateLabel ? UniversityPaging?.uniStateLabel : "State"
+  );
+  const [unistateValue, setUniStateValue] = useState(
+    UniversityPaging?.unistateValue ? UniversityPaging?.unistateValue : 0
+  );
+  const [providerLabel, setProviderLabel] = useState(
+    UniversityPaging?.providerLabel
+      ? UniversityPaging?.providerLabel
+      : "Provider"
+  );
+  const [providerValue, setProviderValue] = useState(
+    UniversityPaging?.providerValue ? UniversityPaging?.providerValue : 0
+  );
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column
-  const [check, setCheck] = useState(true);
+  // const [check, setCheck] = useState(true);
   const [tableData, setTableData] = useState([]);
+  console.log(tableData, "tableData");
 
   const [delData, setDelData] = useState({});
   const { addToast } = useToasts();
@@ -107,104 +123,146 @@ const UniversityList = (props) => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
 
-  const providerData = useSelector(
-    (state) => state?.universityProviderDataReducer?.universityProviders
-  );
-  const providerDataResult = providerData?.models;
+  // const providerData = useSelector(
+  //   (state) => state?.universityProviderDataReducer?.universityProviders
+  // );
+  // const providerDataResult = providerData?.models;
   //
   const userType = localStorage.getItem("userType");
-  const referenceId = localStorage.getItem("referenceId");
-  const { counId, univerTypeId, provideId } = useParams();
+  // const referenceId = localStorage.getItem("referenceId");
+  const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
-    provideId
-      ? get(`ProviderDD/Index`).then((res) => {
-          setProviderList(res);
-
-          const result = res?.find((ans) => ans?.id == provideId);
-          setProviderLabel(result?.name);
-        })
-      : get(`ProviderDD/Index`).then((res) => {
-          setProviderList(res);
-        });
-
-    counId
-      ? get(`UniversityCountryDD/Index`).then((res) => {
-          setUniverSityCountries(res);
-
-          const result = res?.find((ans) => ans?.id == counId);
-          setUniCountryLabel(result?.name);
-
-          get(`UniversityStateDD/Index/${counId}`).then((res) => {
-            setUniversityStates(res);
-          });
-        })
-      : get(`UniversityCountryDD/Index`).then((res) => {
-          setUniverSityCountries(res);
-        });
-
-    univerTypeId
-      ? get(`UniversityTypeDD/Index`).then((res) => {
-          setUniversityTypes(res);
-
-          const result = res?.find((ans) => ans?.id == univerTypeId);
-        })
-      : get(`UniversityTypeDD/Index`).then((res) => {
-          setUniversityTypes(res);
-        });
-  }, [providerValue, uniCountryValue, uniTypeValue]);
+    const tableColumnUniversity = JSON.parse(
+      localStorage.getItem("ColumnUniversity")
+    );
+    tableColumnUniversity && setTableData(tableColumnUniversity);
+    !tableColumnUniversity &&
+      localStorage.setItem(
+        "ColumnUniversity",
+        JSON.stringify(ColumnUniversity)
+      );
+    !tableColumnUniversity && setTableData(ColumnUniversity);
+  }, []);
 
   useEffect(() => {
-    if (counId !== undefined) {
-      get(
-        `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
-      ).then((action) => {
-        setUniversityList(action?.models);
-
-        setLoading(false);
-        setEntity(action?.totalEntity);
-        setSerialNum(action?.firstSerialNumber);
-        setLoading(false);
-      });
-    } else if (univerTypeId !== undefined) {
-      get(
-        `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}`
-      ).then((action) => {
-        setUniversityList(action?.models);
-
-        setLoading(false);
-        setEntity(action?.totalEntity);
-        setSerialNum(action?.firstSerialNumber);
-        setLoading(false);
-      });
-    } else if (provideId !== undefined) {
-      get(
-        `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
-      ).then((action) => {
-        setUniversityList(action?.models);
-        setLoading(false);
-        setEntity(action?.totalEntity);
-        setSerialNum(action?.firstSerialNumber);
-        setLoading(false);
-      });
-    } else {
-      get(
-        `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
-      ).then((action) => {
-        console.log("action", action);
-        setUniversityList(action?.models);
-        setLoading(false);
-        setEntity(action?.totalEntity);
-        setSerialNum(action?.firstSerialNumber);
-        setLoading(false);
-      });
-    }
-
-    get(`TableDefination/Index/${tableIdList?.University_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
+    sessionStorage.setItem(
+      "university",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        uniTypeLabel: uniTypeLabel && uniTypeLabel,
+        uniTypeValue: uniTypeValue && uniTypeValue,
+        uniCountryLabel: uniCountryLabel && uniCountryLabel,
+        uniCountryValue: uniCountryValue && uniCountryValue,
+        uniStateLabel: uniStateLabel && uniStateLabel,
+        unistateValue: unistateValue && unistateValue,
+        providerLabel: providerLabel && providerLabel,
+        providerValue: providerValue && providerValue,
+        orderLabel: orderLabel && orderLabel,
+        orderValue: orderValue && orderValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
   }, [
+    currentPage,
+    uniTypeLabel,
+    uniTypeValue,
+    uniCountryLabel,
+    uniCountryValue,
+    uniStateLabel,
+    unistateValue,
+    providerLabel,
+    providerValue,
+    orderLabel,
+    orderValue,
+    searchStr,
+    dataPerPage,
+  ]);
+
+  useEffect(() => {
+    get(`ProviderDD/Index`).then((res) => {
+      setProviderList(res);
+    });
+
+    get(`UniversityCountryDD/Index`).then((res) => {
+      setUniverSityCountries(res);
+    });
+
+    get(`UniversityTypeDD/Index`).then((res) => {
+      setUniversityTypes(res);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (provideId) {
+      const result = providerList?.find(
+        (ans) => ans?.id.toString() === provideId
+      );
+      setProviderLabel(result?.name);
+    }
+  }, [provideId, providerList]);
+
+  useEffect(() => {
+    if (counId) {
+      const result = univerSityCountries?.find(
+        (ans) => ans?.id.toString() === counId
+      );
+      setUniCountryLabel(result?.name);
+    }
+  }, [counId, univerSityCountries]);
+
+  useEffect(() => {
+    if (!isTyping) {
+      if (counId !== undefined) {
+        get(
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+        ).then((action) => {
+          setUniversityList(action?.models);
+
+          setLoading(false);
+          setEntity(action?.totalEntity);
+          // setSerialNum(action?.firstSerialNumber);
+          setLoading(false);
+        });
+      } else if (univerTypeId !== undefined) {
+        get(
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}`
+        ).then((action) => {
+          setUniversityList(action?.models);
+
+          setLoading(false);
+          setEntity(action?.totalEntity);
+          // setSerialNum(action?.firstSerialNumber);
+          setLoading(false);
+        });
+      } else if (provideId !== undefined) {
+        get(
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+        ).then((action) => {
+          setUniversityList(action?.models);
+          setLoading(false);
+          setEntity(action?.totalEntity);
+          // setSerialNum(action?.firstSerialNumber);
+          setLoading(false);
+        });
+      } else {
+        get(
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+        ).then((action) => {
+          console.log("action", action);
+          setUniversityList(action?.models);
+          setLoading(false);
+          setEntity(action?.totalEntity);
+          // setSerialNum(action?.firstSerialNumber);
+          setLoading(false);
+        });
+      }
+    }
+  }, [
+    counId,
+    provideId,
+    univerTypeId,
     currentPage,
     dataPerPage,
     searchStr,
@@ -214,6 +272,7 @@ const UniversityList = (props) => {
     orderValue,
     providerValue,
     success,
+    isTyping,
   ]);
 
   const searchStateByCountry = (countryValue) => {
@@ -226,7 +285,7 @@ const UniversityList = (props) => {
   // search handler
   const handleSearch = () => {
     setCurrentPage(1);
-    setCallApi((prev) => !prev);
+    // setCallApi((prev) => !prev);
   };
 
   // user select data per page
@@ -259,9 +318,10 @@ const UniversityList = (props) => {
   }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
-    setCallApi((prev) => !prev);
+    // setCallApi((prev) => !prev);
   };
 
   const selectOrder = (label, value) => {
@@ -269,18 +329,20 @@ const UniversityList = (props) => {
     setLoading(true);
     setOrderLabel(label);
     setOrderValue(value);
-    setCallApi((prev) => !prev);
+    // setCallApi((prev) => !prev);
   };
 
   //  change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setCallApi((prev) => !prev);
+    // setCallApi((prev) => !prev);
   };
 
   // add university handler
   const handleAddUniversity = () => {
-    history.push("/addUniversity");
+    provideId
+      ? history.push(`/addUniversityByprovideId/${provideId}`)
+      : history.push("/addUniversity");
   };
 
   // toggle1 dropdown
@@ -291,19 +353,6 @@ const UniversityList = (props) => {
   // toggle dropdown
   const toggle = () => {
     setDropdownOpen((prev) => !prev);
-  };
-
-  // redirect to dashboard
-  const backToDashboard = () => {
-    if (counId != undefined) {
-      history.push("/UniversityCountry");
-    } else if (univerTypeId != undefined) {
-      history.push("/UniversityTypes");
-    } else if (provideId != undefined) {
-      history.push("/providerList");
-    } else {
-      history.push("/");
-    }
   };
 
   const universityCountryName = univerSityCountries?.map((uniCountry) => ({
@@ -382,14 +431,19 @@ const UniversityList = (props) => {
     setSearchStr("");
     setProviderLabel("Provider");
     setProviderValue(0);
-    setCallApi((prev) => !prev);
+    setCurrentPage(1);
+    // setCallApi((prev) => !prev);
   };
+
+  // useEffect(() => {
+  //   handleClearSearch();
+  // }, [currentRoute]);
 
   // on enter press
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       setCurrentPage(1);
-      setCallApi((prev) => !prev);
+      // setCallApi((prev) => !prev);
     }
   };
 
@@ -408,7 +462,7 @@ const UniversityList = (props) => {
     setButtonStatus(true);
     setProgress(true);
     remove(`University/Delete/${delData?.id}`).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
         addToast(res, {
           appearance: "error",
           autoDismiss: true,
@@ -445,20 +499,15 @@ const UniversityList = (props) => {
     history.push(`/addUniversity/${data?.id}`);
   };
 
-  const handleExportXLSX = () => {
-    var wb = XLSX.utils.book_new(),
-      ws = XLSX.utils.json_to_sheet(universityList);
-    XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
+  // const handleExportXLSX = () => {
+  //   var wb = XLSX.utils.book_new(),
+  //     ws = XLSX.utils.json_to_sheet(universityList);
+  //   XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
 
-    XLSX.writeFile(wb, "MyExcel.xlsx");
-  };
+  //   XLSX.writeFile(wb, "MyExcel.xlsx");
+  // };
 
   const componentRef = useRef();
-
-  const handleRedirectToSubList = (id) => {
-    localStorage.setItem("uniIdForSubList", id);
-    history.push("/subjectList");
-  };
 
   const redirectToApplications = (universityId, universityName) => {
     history.push({
@@ -474,7 +523,7 @@ const UniversityList = (props) => {
 
   const handleUpdateStatus = (data) => {
     put(`University/UpdateStatus/${data?.id}`).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
         addToast(res?.data?.message, {
           appearance: "success",
           autoDismiss: true,
@@ -492,27 +541,11 @@ const UniversityList = (props) => {
   // for hide/unhide column
 
   // for hide/unhide column
-
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.University_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnUniversity", JSON.stringify(values));
   };
 
   return (
@@ -543,7 +576,7 @@ const UniversityList = (props) => {
             }
           />
 
-          <Card className="uapp-employee-search">
+          <Card className="uapp-employee-search zindex-100">
             <CardBody className="search-card-body">
               <div className="test-score-div-1-style mt-1 mb-4">
                 <div>
@@ -585,10 +618,10 @@ const UniversityList = (props) => {
                   />
                 </Col>
                 {!(
-                  userType == userTypes?.Provider ||
-                  userType == userTypes?.ProviderAdmin ||
-                  userType == userTypes?.AdmissionOfficer ||
-                  userType == userTypes?.AdmissionManager
+                  userType === userTypes?.Provider ||
+                  userType === userTypes?.ProviderAdmin ||
+                  userType === userTypes?.AdmissionOfficer ||
+                  userType === userTypes?.AdmissionManager
                 ) ? (
                   <Col lg="2" md="3" sm="6" xs="6">
                     <Select
@@ -605,14 +638,12 @@ const UniversityList = (props) => {
                 ) : null}
 
                 <Col lg="4" md="4" sm="6" xs="6">
-                  <Input
-                    style={{ height: "2.7rem" }}
-                    type="text"
+                  <Typing
                     name="search"
+                    placeholder="Name, Short Name"
                     value={searchStr}
-                    id="search"
-                    placeholder="Name ,Short Name"
-                    onChange={searchValue}
+                    setValue={setSearchStr}
+                    setIsTyping={setIsTyping}
                     onKeyDown={handleKeyDown}
                   />
                 </Col>
@@ -716,7 +747,7 @@ const UniversityList = (props) => {
                     <div className="me-3 mb-2">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Order By :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             className="mr-md-2 mr-sm-0"
                             options={orderName}
@@ -732,7 +763,7 @@ const UniversityList = (props) => {
                     <div className="mr-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}
@@ -791,7 +822,7 @@ const UniversityList = (props) => {
                           <i className="fas fa-bars"></i>
                         </DropdownToggle>
                         <DropdownMenu className="bg-dd-1">
-                          {tableData.map((table, i) => (
+                          {tableData?.map((table, i) => (
                             <div key={i}>
                               {i === 5 ? (
                                 <>
@@ -800,7 +831,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -811,7 +842,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -828,7 +859,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -839,7 +870,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -856,7 +887,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -867,7 +898,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -884,7 +915,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -895,7 +926,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -911,7 +942,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -922,7 +953,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -939,7 +970,7 @@ const UniversityList = (props) => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -950,7 +981,7 @@ const UniversityList = (props) => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -962,7 +993,7 @@ const UniversityList = (props) => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -973,7 +1004,7 @@ const UniversityList = (props) => {
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -992,336 +1023,379 @@ const UniversityList = (props) => {
                 </Col>
               </Row>
 
-              {loading ? (
-                <h2 className="text-center">Loading...</h2>
+              {universityList?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
               ) : (
-                <div className="table-responsive" ref={componentRef}>
-                  <Table id="table-to-xls" className="table-sm table-bordered">
-                    <thead className="thead-uapp-bg">
-                      <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
+                <>
+                  {loading ? (
+                    <h2 className="text-center">Loading...</h2>
+                  ) : (
+                    <div
+                      className="table-responsive fixedhead"
+                      ref={componentRef}
+                    >
+                      <Table
+                        id="table-to-xls"
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="thead-uapp-bg">
+                          <tr style={{ textAlign: "center" }}>
+                            {tableData[0]?.isActive ? <th>Logo</th> : null}
 
-                        {tableData[1]?.isActive ? <th>Logo</th> : null}
+                            {tableData[1]?.isActive ? <th>Name</th> : null}
+                            {tableData[2]?.isActive ? <th>Provider</th> : null}
 
-                        {tableData[2]?.isActive ? <th>Name</th> : null}
+                            {tableData[3]?.isActive ? <th>Type</th> : null}
 
-                        {tableData[3]?.isActive ? <th>Type</th> : null}
+                            {tableData[4]?.isActive ? <th>Country</th> : null}
 
-                        {tableData[4]?.isActive ? <th>Country</th> : null}
-
-                        {permissions?.includes(
-                          permissionList?.AdmissionManager_Assign_University
-                        ) ? (
-                          <>{tableData[5]?.isActive ? <th>ADM</th> : null}</>
-                        ) : null}
-
-                        {permissions?.includes(
-                          permissionList?.AdmissionOfficer_Assign_University
-                        ) ? (
-                          <>{tableData[6]?.isActive ? <th>ADO</th> : null}</>
-                        ) : null}
-
-                        {permissions?.includes(
-                          permissionList.View_University
-                        ) ? (
-                          <>
-                            {" "}
-                            {tableData[7]?.isActive ? <th>Campus</th> : null}
-                          </>
-                        ) : null}
-
-                        {permissions?.includes(
-                          permissionList.View_Application_List
-                        ) ? (
-                          <>
-                            {tableData[8]?.isActive ? (
-                              <th>Applications</th>
+                            {permissions?.includes(
+                              permissionList?.AdmissionManager_Assign_University
+                            ) ? (
+                              <>
+                                {tableData[5]?.isActive ? <th>ADM</th> : null}
+                              </>
                             ) : null}
-                          </>
-                        ) : null}
 
-                        {permissions?.includes(
-                          permissionList.View_Subject_List
-                        ) ? (
-                          <>
-                            {" "}
-                            {tableData[9]?.isActive ? <th>Courses</th> : null}
-                          </>
-                        ) : null}
+                            {permissions?.includes(
+                              permissionList?.AdmissionOfficer_Assign_University
+                            ) ? (
+                              <>
+                                {tableData[6]?.isActive ? <th>ADO</th> : null}
+                              </>
+                            ) : null}
 
-                        {permissions?.includes(
-                          permissionList?.Change_University_Status
-                        ) ? (
-                          <>
-                            {tableData[10]?.isActive ? <th>Status</th> : null}
-                          </>
-                        ) : null}
+                            {permissions?.includes(
+                              permissionList.View_University
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[7]?.isActive ? (
+                                  <th>Campus</th>
+                                ) : null}
+                              </>
+                            ) : null}
 
-                        {tableData[11]?.isActive ? (
-                          <th style={{ width: "8%" }} className="text-center">
-                            Action
-                          </th>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {universityList?.map((university, i) => (
-                        <tr
-                          key={university?.id}
-                          style={{ textAlign: "center" }}
-                        >
-                          {tableData[0]?.isActive ? (
-                            <th scope="row">{serialNum + i}</th>
-                          ) : null}
+                            {permissions?.includes(
+                              permissionList.View_Application_List
+                            ) ? (
+                              <>
+                                {tableData[8]?.isActive ? (
+                                  <th>Applications</th>
+                                ) : null}
+                              </>
+                            ) : null}
 
-                          {tableData[1]?.isActive ? (
-                            <td>
-                              {university?.universityLogo == null ? (
-                                <>
-                                  {" "}
-                                  <img
-                                    className="Uapp-c-image bg-white"
-                                    src={uapploader}
-                                    alt="university_logo"
-                                  />{" "}
-                                </>
-                              ) : (
-                                <>
-                                  {" "}
-                                  <img
-                                    className="Uapp-c-image"
-                                    src={
-                                      rootUrl +
-                                      university?.universityLogo?.thumbnailUrl
-                                    }
-                                    alt="university_logo"
-                                  />{" "}
-                                </>
-                              )}
-                            </td>
-                          ) : null}
+                            {permissions?.includes(
+                              permissionList.View_Subject_List
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[9]?.isActive ? (
+                                  <th>Courses</th>
+                                ) : null}
+                              </>
+                            ) : null}
 
-                          {tableData[2]?.isActive ? (
-                            <td className="cursor-pointer hyperlink-hover">
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `/universityDetails/${university?.id}`
-                                  );
-                                }}
+                            {permissions?.includes(
+                              permissionList?.Change_University_Status
+                            ) ? (
+                              <>
+                                {tableData[10]?.isActive ? (
+                                  <th>Status</th>
+                                ) : null}
+                              </>
+                            ) : null}
+
+                            {tableData[11]?.isActive ? (
+                              <th
+                                style={{ width: "8%" }}
+                                className="text-center"
                               >
-                                {university?.name} ({university?.shortName})
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[3]?.isActive ? (
-                            <td>{university?.universityType?.name}</td>
-                          ) : null}
-
-                          {tableData[4]?.isActive ? (
-                            <td>
-                              {university?.universityCountry?.name} (
-                              {university?.universityState?.name})
-                            </td>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList?.AdmissionManager_Assign_University
-                          ) ? (
-                            <>
-                              {tableData[5]?.isActive ? (
+                                Action
+                              </th>
+                            ) : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {universityList?.map((university, i) => (
+                            <tr
+                              key={university?.id}
+                              style={{ textAlign: "center" }}
+                            >
+                              {tableData[0]?.isActive ? (
                                 <td>
-                                  <span
-                                    className="badge badge-secondary"
-                                    onClick={() =>
-                                      redirectToAdManagerList(university?.id)
-                                    }
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    View
-                                  </span>
-                                </td>
-                              ) : null}
-                            </>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList?.AdmissionOfficer_Assign_University
-                          ) ? (
-                            <>
-                              {tableData[6]?.isActive ? (
-                                <td>
-                                  <span
-                                    className="badge badge-secondary"
-                                    onClick={() =>
-                                      redirectToAdOfficerList(university?.id)
-                                    }
-                                    style={{ cursor: "pointer" }}
-                                  >
-                                    View
-                                  </span>
-                                </td>
-                              ) : null}
-                            </>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList.View_University
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[7]?.isActive ? (
-                                <td>
-                                  <SpanButton
-                                    func={() =>
-                                      redirectToCampusList(university?.id)
-                                    }
-                                    className={"badge badge-secondary"}
-                                    style={{ cursor: "pointer" }}
-                                    data={`View (${university?.totalCampus})`}
-                                    permission={6}
-                                  />
-                                </td>
-                              ) : null}
-                            </>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList.View_Application_List
-                          ) ? (
-                            <>
-                              {tableData[8]?.isActive ? (
-                                <td>
-                                  {university?.totalApplication > 0 ? (
-                                    <SpanButton
-                                      func={() =>
-                                        redirectToApplications(
-                                          university?.id,
-                                          university?.name
-                                        )
-                                      }
-                                      className={"badge badge-secondary"}
-                                      style={{ cursor: "pointer" }}
-                                      data={`View (${university?.totalApplication})`}
-                                      permission={6}
-                                    />
+                                  {university?.universityLogo == null ? (
+                                    <>
+                                      {" "}
+                                      <img
+                                        className="Uapp-c-image bg-white"
+                                        src={uapploader}
+                                        alt="university_logo"
+                                      />{" "}
+                                    </>
                                   ) : (
-                                    <SpanButton
-                                      className={"badge badge-secondary"}
-                                      data={university?.totalApplication}
-                                      permission={6}
-                                    />
+                                    <>
+                                      {" "}
+                                      <img
+                                        className="Uapp-c-image"
+                                        src={
+                                          rootUrl +
+                                          university?.universityLogo
+                                            ?.thumbnailUrl
+                                        }
+                                        alt="university_logo"
+                                      />{" "}
+                                    </>
                                   )}
                                 </td>
                               ) : null}
-                            </>
-                          ) : null}
 
-                          {/* <td onClick={()=>handleRedirectToSubList(university?.id)}> */}
-
-                          {permissions?.includes(
-                            permissionList.View_Subject_List
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[9]?.isActive ? (
-                                <td>
-                                  <span
-                                    className="badge badge-secondary"
-                                    style={{ cursor: "pointer" }}
+                              {tableData[1]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/universityDetails/${university?.id}`}
                                   >
-                                    <LinkSpanButton
-                                      className={"text-decoration-none"}
-                                      url={`/university-courses/${university?.id}`}
-                                      data={`View (${university?.totalSubject})`}
-                                      permission={6}
-                                    />
-                                  </span>
+                                    {university?.name}{" "}
+                                    {university?.shortName &&
+                                      `(${university?.shortName})`}
+                                  </Link>
                                 </td>
                               ) : null}
-                            </>
-                          ) : null}
 
-                          {permissions?.includes(
-                            permissionList?.Change_University_Status
-                          ) ? (
-                            <>
-                              {tableData[10]?.isActive ? (
+                              {tableData[2]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/providerDetails/${university?.providerId}`}
+                                  >
+                                    {university?.providerName}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {tableData[3]?.isActive ? (
+                                <td>{university?.universityType?.name}</td>
+                              ) : null}
+
+                              {tableData[4]?.isActive ? (
                                 <td>
-                                  <ToggleSwitch
-                                    defaultChecked={university?.isActive}
-                                    onChange={() =>
-                                      handleUpdateStatus(university)
-                                    }
-                                  />
+                                  {university?.universityCountry?.name} (
+                                  {university?.universityState?.name})
                                 </td>
                               ) : null}
-                            </>
-                          ) : null}
 
-                          {tableData[11]?.isActive ? (
-                            <td style={{ width: "8%" }} className="text-center">
-                              <ButtonGroup variant="text">
-                                {permissions?.includes(
-                                  permissionList.View_University
-                                ) ? (
-                                  <ButtonForFunction
-                                    func={() =>
-                                      redirectToUniprofile(university?.id)
-                                    }
-                                    color={"primary"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-eye"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
+                              {permissions?.includes(
+                                permissionList?.AdmissionManager_Assign_University
+                              ) ? (
+                                <>
+                                  {tableData[5]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() =>
+                                            redirectToAdManagerList(
+                                              university?.id
+                                            )
+                                          }
+                                          className="Count-fifth"
+                                        >
+                                          View
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                                {permissions?.includes(
-                                  permissionList.Edit_University
-                                ) ? (
-                                  <ButtonForFunction
-                                    func={() => handleEdit(university)}
-                                    color={"warning"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-edit"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
+                              {permissions?.includes(
+                                permissionList?.AdmissionOfficer_Assign_University
+                              ) ? (
+                                <>
+                                  {tableData[6]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() =>
+                                            redirectToAdOfficerList(
+                                              university?.id
+                                            )
+                                          }
+                                          className="Count-fourth"
+                                        >
+                                          View
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                                {/* </Link> */}
+                              {permissions?.includes(
+                                permissionList.View_University
+                              ) ? (
+                                <>
+                                  {" "}
+                                  {tableData[7]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() =>
+                                            redirectToCampusList(university?.id)
+                                          }
+                                          className="Count-first"
+                                        >
+                                          {university?.totalCampus}
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                                {permissions?.includes(
-                                  permissionList.Delete_University
-                                ) ? (
-                                  <ButtonForFunction
-                                    func={() => toggleDanger(university)}
-                                    color={"danger"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-trash-alt"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
-                              </ButtonGroup>
+                              {permissions?.includes(
+                                permissionList.View_Application_List
+                              ) ? (
+                                <>
+                                  {tableData[8]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        {university?.totalApplication > 0 ? (
+                                          <span
+                                            onClick={() =>
+                                              redirectToApplications(
+                                                university?.id,
+                                                university?.name
+                                              )
+                                            }
+                                            className="Count-second"
+                                          >
+                                            {university?.totalApplication}
+                                          </span>
+                                        ) : (
+                                          <span className="Count-second noPointer">
+                                            {university?.totalApplication}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                              {/* modal for delete */}
-                              <ConfirmModal
-                                text="Do You Want To Delete This University ? Once Deleted it can't be Undone "
-                                // ${delData?.name}
-                                isOpen={deleteModal}
-                                toggle={closeDeleteModal}
-                                cancel={closeDeleteModal}
-                                buttonStatus={buttonStatus}
-                                progress={progress}
-                                confirm={handleDeleteUniversity}
-                              ></ConfirmModal>
-                            </td>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                              {/* <td onClick={()=>handleRedirectToSubList(university?.id)}> */}
+
+                              {permissions?.includes(
+                                permissionList.View_Subject_List
+                              ) ? (
+                                <>
+                                  {" "}
+                                  {tableData[9]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() => {
+                                            history.push(
+                                              `/university-courses/${university?.id}`
+                                            );
+                                          }}
+                                          className="Count-third"
+                                        >
+                                          {university?.totalSubject}
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+
+                              {permissions?.includes(
+                                permissionList?.Change_University_Status
+                              ) ? (
+                                <>
+                                  {tableData[10]?.isActive ? (
+                                    <td>
+                                      <ToggleSwitch
+                                        defaultChecked={university?.isActive}
+                                        onChange={() =>
+                                          handleUpdateStatus(university)
+                                        }
+                                      />
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+
+                              {tableData[11]?.isActive ? (
+                                <td
+                                  style={{ width: "8%" }}
+                                  className="text-center"
+                                >
+                                  <ButtonGroup variant="text">
+                                    {permissions?.includes(
+                                      permissionList.View_University
+                                    ) ? (
+                                      <ButtonForFunction
+                                        func={() =>
+                                          redirectToUniprofile(university?.id)
+                                        }
+                                        color={"primary"}
+                                        className={"mx-1 btn-sm"}
+                                        icon={<i className="fas fa-eye"></i>}
+                                        permission={6}
+                                      />
+                                    ) : null}
+
+                                    {permissions?.includes(
+                                      permissionList.Edit_University
+                                    ) ? (
+                                      <ButtonForFunction
+                                        func={() => handleEdit(university)}
+                                        color={"warning"}
+                                        className={"mx-1 btn-sm"}
+                                        icon={<i className="fas fa-edit"></i>}
+                                        permission={6}
+                                      />
+                                    ) : null}
+
+                                    {/* </Link> */}
+
+                                    {permissions?.includes(
+                                      permissionList.Delete_University
+                                    ) ? (
+                                      <ButtonForFunction
+                                        func={() => toggleDanger(university)}
+                                        color={"danger"}
+                                        className={"mx-1 btn-sm"}
+                                        icon={
+                                          <i className="fas fa-trash-alt"></i>
+                                        }
+                                        permission={6}
+                                      />
+                                    ) : null}
+                                  </ButtonGroup>
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+
+                      {/* modal for delete */}
+                      <ConfirmModal
+                        text="Do You Want To Delete This University ? Once Deleted it can't be Undone "
+                        // ${delData?.name}
+                        isOpen={deleteModal}
+                        toggle={closeDeleteModal}
+                        cancel={closeDeleteModal}
+                        buttonStatus={buttonStatus}
+                        progress={progress}
+                        confirm={handleDeleteUniversity}
+                      />
+                    </div>
+                  )}
+                </>
               )}
 
               <Pagination
@@ -1338,10 +1412,4 @@ const UniversityList = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  univerSityTypeList: state.universityTypeDataReducer.universityTypes,
-  univerSityCountryList: state.universityCountryDataReducer.universityCountries,
-  univerSityStateList: state.universityStateDataReducer.universityStates,
-  univerSityDropDownList: state.universityListReducer.universityList,
-});
-export default connect(mapStateToProps)(UniversityList);
+export default UniversityList;

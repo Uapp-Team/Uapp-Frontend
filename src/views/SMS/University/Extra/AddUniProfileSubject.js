@@ -138,7 +138,7 @@ const AddUniProfileSubject = () => {
         })
         .catch();
     } else {
-      get("UniversityDD/Index")
+      get("SearchFilter/Universities/0/0/0")
         .then((res) => {
           setUniversityList(res);
         })

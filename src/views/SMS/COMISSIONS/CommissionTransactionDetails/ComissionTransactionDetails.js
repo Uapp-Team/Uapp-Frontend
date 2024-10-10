@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader, Table } from "reactstrap";
 import get from "../../../../helpers/get";
 import Loader from "../../Search/Loader/Loader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../../components/date/calenderFormate";
 
 const ComissionTransactionDetails = () => {
   const [data, setData] = useState({});
@@ -79,7 +80,7 @@ const ComissionTransactionDetails = () => {
 
                     <td width="60%">
                       <div className="d-flex justify-content-between">
-                        <>{handleDate(data?.transactionDate)}</>
+                        <>{dateFormate(data?.transactionDate)}</>
                       </div>
                     </td>
                   </tr>

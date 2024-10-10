@@ -42,6 +42,7 @@ const UsersNoticeList = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -79,8 +80,8 @@ const UsersNoticeList = () => {
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
-                  <th>Date</th>
+                  {/* <th>SL/NO</th>
+                  <th>Date</th> */}
                   <th>Title </th>
                   <th>Description</th>
                   <th>To Users</th>
@@ -90,7 +91,7 @@ const UsersNoticeList = () => {
               <tbody>
                 {noticeList?.map((notice, i) => (
                   <tr key={notice?.id} style={{ textAlign: "center" }}>
-                    <td>{serialNum + i}</td>
+                    {/* <td>{serialNum + i}</td> */}
                     <td>{notice?.createdOn}</td>
                     <td>{notice?.title}</td>
                     <td>

@@ -28,6 +28,8 @@ import { Link } from "react-router-dom";
 import editbtn from "../../../../../assets/img/editbtn.png";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import Loader from "../../../Search/Loader/Loader";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
+import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCrop";
 
 export default function StudentProfileHeadComponent({ studentid }) {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -57,7 +59,7 @@ export default function StudentProfileHeadComponent({ studentid }) {
 
   const [previewImage1, setPreviewImage1] = useState("");
   const [previewTitle1, setPreviewTitle1] = useState("");
-
+  const [croppedImage, setCroppedImage] = useState(null);
   useEffect(() => {
     get(`StudentProfile/ProfileHead/${studentid}`).then((res) => {
       console.log(res);
@@ -78,36 +80,42 @@ export default function StudentProfileHeadComponent({ studentid }) {
 
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
+    console.log("croppedImage", croppedImage);
 
-    const subData = new FormData(event.target);
+    // const subData = new FormData(event.target);
 
-    subData.append("coverImageFile", FileList[0]?.originFileObj);
-
-    if (FileList.length < 1) {
-      setError(true);
-    } else {
-      setProgress(true);
-      setButtonStatus(true);
-      put(`Student/UpdateCoverPhoto`, subData).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setFileList([]);
-          setModalOpen(false);
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    }
+    // subData.append("id", studentid);
+    // subData.append("coverImageFile", croppedImage);
+    const subData = {
+      id: studentid,
+      coverImageFile: croppedImage,
+    };
+    // if (FileList.length < 1) {
+    //   setError(true);
+    // } else {
+    setProgress(true);
+    setButtonStatus(true);
+    put(`Student/UpdateCoverPhoto`, subData).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setFileList([]);
+        setModalOpen(false);
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+    // }
   };
+
   function getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -116,6 +124,7 @@ export default function StudentProfileHeadComponent({ studentid }) {
       reader.onerror = (error) => reject(error);
     });
   }
+
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -237,8 +246,6 @@ export default function StudentProfileHeadComponent({ studentid }) {
     });
   };
 
-  console.log(studentDetails);
-
   return (
     <>
       {loading ? (
@@ -256,14 +263,15 @@ export default function StudentProfileHeadComponent({ studentid }) {
                 })`,
               }}
             >
-              {/* {studentDetails?.coverImage == null ? (
-            <img src={profileCover} alt="cover_img" />
-          ) : (
-            <img
-              src={rootUrl + studentDetails?.coverImage?.fileUrl}
-              alt="cover_img"
-            />
-          )} */}
+              {/* <img
+                src={
+                  studentDetails?.coverImage
+                    ? rootUrl + studentDetails?.coverImage?.fileUrl
+                    : profileCover
+                }
+                alt=""
+              /> */}
+
               <div className="uplode-cover-image">
                 {permissions?.includes(permissionList?.Change_CoverPhoto) ? (
                   <span onClick={updateCoverPhoto}>
@@ -276,7 +284,21 @@ export default function StudentProfileHeadComponent({ studentid }) {
               </div>
             </div>
           </div>
-          <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
+
+          <ImageUploadCrop
+            modalOpen={modalOpen}
+            closeModal={closeModal}
+            heading="Update Cover Photo"
+            onSubmit={handleSubmitCoverPhoto}
+            croppedImage={croppedImage}
+            setCroppedImage={setCroppedImage}
+            error={error}
+            errorText="Cover photo is required"
+            progress={progress}
+            buttonStatus={buttonStatus}
+          />
+
+          {/* <Modal isOpen={modalOpen} toggle={closeModal}>
             <ModalHeader>Update Cover Photo</ModalHeader>
 
             <ModalBody>
@@ -316,18 +338,6 @@ export default function StudentProfileHeadComponent({ studentid }) {
                               ""
                             )}
                           </Upload>
-                          <Modal
-                            visible={previewVisible}
-                            title={previewTitle}
-                            footer={null}
-                            onCancel={handleCancel}
-                          >
-                            <img
-                              alt="example"
-                              style={{ width: "100%" }}
-                              src={previewImage}
-                            />
-                          </Modal>
 
                           <span className="text-danger d-block">{text}</span>
 
@@ -364,7 +374,7 @@ export default function StudentProfileHeadComponent({ studentid }) {
                 </FormGroup>
               </form>
             </ModalBody>
-          </Modal>
+          </Modal> */}
           <CardBody>
             <div className="uapp-employee-profile-image-edit">
               <Row>
@@ -597,7 +607,7 @@ export default function StudentProfileHeadComponent({ studentid }) {
                   <span>UAPP Registration Date</span>
                   <br />
                   <span className="text-gray mb-1">
-                    {studentDetails?.registrationDate}
+                    {dateFormate(studentDetails?.registrationDate)}
                   </span>
                   <br />
                   <br />

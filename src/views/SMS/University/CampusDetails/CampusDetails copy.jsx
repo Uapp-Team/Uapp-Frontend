@@ -992,7 +992,7 @@ const CampusDetails = () => {
                       <Table className="table-sm striped">
                         <thead className="tablehead">
                           <tr style={{ textAlign: "center" }}>
-                            <th>SL/NO</th>
+                            {/* <th>SL/NO</th> */}
                             <th>Course</th>
                             <th>EU/UK</th>
                             <th>Home</th>
@@ -1010,7 +1010,7 @@ const CampusDetails = () => {
                         <tbody>
                           {subjectList?.map((sub, i) => (
                             <tr key={i} style={{ textAlign: "center" }}>
-                              <th scope="row">{1 + i}</th>
+                              {/* <th scope="row">{1 + i}</th> */}
 
                               <td>{sub?.subject?.name}</td>
                               <td>

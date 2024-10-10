@@ -11,13 +11,10 @@ const ProviderCard = ({ officerId, userId }) => {
 
   const userTypeId = localStorage.getItem("userType");
   const history = useHistory();
-  console.log("provider", officerId);
-
   useEffect(() => {
     if (officerId !== undefined) {
       get(`AdmissionOfficerProfile/Provider/${officerId}`).then((res) => {
         console.log("provider", res);
-
         setproviderData(res);
       });
     } else {

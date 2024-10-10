@@ -25,11 +25,10 @@ const DailyReport = () => {
 
   return (
     <>
+      <BreadCrumb title="Daily Report" backTo="" path="/" />
       <div className="animated fadeIn">
         <div className="uapp-dashboard">
           <div className="uapp-dashboard-activity">
-            <BreadCrumb title="Daily Report" backTo="" path="/" />
-
             <Card className="p-3">
               <CardBody>
                 <h5 className="mb-0">Daily Report</h5>

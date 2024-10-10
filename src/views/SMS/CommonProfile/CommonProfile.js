@@ -2,14 +2,17 @@ import React from "react";
 import { userTypes } from "../../../constants/userTypeConstant";
 import BranchManagerNewProfile from "../Branches/BranchManager/BranchManagerNewProfile";
 import ComplianceOfficerNewProfile from "../Branches/ComplianceOfficer/ComplianceOfficerNewProfile";
-import EmployeeNewProfile from "../Configuration/Employees/EmployeeNewProfile";
+// import EmployeeNewProfile from "../Configuration/Employees/EmployeeNewProfile";
 import Index from "../ConsultantsAndTypes/ConsultantProfile/Index";
 import AdmissionManagerNewProfile from "../AllStaffs/AdmissionManager/AdmissionManagerProfile/Index";
 import AdmissionOfficerProfile from "../AllStaffs/AdmissionOfficer/AdmissionOfficerProfile/Component/AdmissionOfficerProfile";
-import ProviderAdminOwnProfile from "../Provider/ProviderAdmin/ProviderAdminProfile/ProviderAdminOwnProfile";
+// import ProviderAdminOwnProfile from "../Provider/ProviderAdmin/ProviderAdminProfile/ProviderAdminOwnProfile";
 import StudentProfileView from "../STUDENT/StudentProfile/StudentProfileView";
 import ProviderDetails from "../Provider/ProviderDetails/ProviderDetails";
 import EmployeeProfile from "../AllStaffs/Staffs/StaffProfile/Index";
+import ProviderComplianceProfile from "../AllStaffs/ProviderCompliance/StaffProfile/Index";
+import AffiliateProfile from "../Affiliate/AffiliateProfile/AffiliateProfile";
+import CompanionProfile from "../Companion/CompanionProfile/CompanionProfile";
 
 const CommonProfile = () => {
   const currentUser = localStorage.getItem("userType");
@@ -19,6 +22,9 @@ const CommonProfile = () => {
 
   return (
     <>
+      {currentUser === userTypes?.Affiliate.toString() && <AffiliateProfile />}
+      {currentUser === userTypes?.Companion.toString() && <CompanionProfile />}
+
       {currentUser === userTypes?.AdmissionManager.toString() && (
         <AdmissionManagerNewProfile />
       )}
@@ -40,6 +46,9 @@ const CommonProfile = () => {
       {currentUser === userTypes?.ProviderAdmin.toString() && (
         <ProviderDetails />
         // <ProviderAdminOwnProfile userId={userId} />
+      )}
+      {currentUser === userTypes?.ProviderCompliance && (
+        <ProviderComplianceProfile userId={userId} />
       )}
       {currentUser === userTypes?.AdmissionOfficer.toString() && (
         <AdmissionOfficerProfile userId={userId} />

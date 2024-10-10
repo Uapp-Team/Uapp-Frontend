@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
-
 import { Card, CardBody, Form, FormGroup, Row, Col, Input } from "reactstrap";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
@@ -11,11 +10,10 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-
+  const { branchId } = useParams();
   const [consParent, setConsParent] = useState([]);
   const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
@@ -24,9 +22,9 @@ const ConsultantRegistration = () => {
   const [typeValue, setTypeValue] = useState(0);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [homeAccept, setHomeAccept] = useState(false);
-  const [ukAccept, setUkAccept] = useState(false);
-  const [intAccept, setIntAccept] = useState(false);
+  const [homeAccept, setHomeAccept] = useState(true);
+  const [ukAccept, setUkAccept] = useState(true);
+  const [intAccept, setIntAccept] = useState(true);
   const [acceptError, setAcceptError] = useState(false);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("London office");
@@ -47,14 +45,13 @@ const ConsultantRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [registerId, setRegisterId] = useState();
   const [emailExistError, setEmailExistError] = useState(true);
-  const userType = localStorage.getItem("userType");
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsParent(res);
     });
 
@@ -65,8 +62,13 @@ const ConsultantRegistration = () => {
     get("BranchDD/index").then((res) => {
       setBranch(res);
       setBranchValue(res[0]?.id);
+      if (branchId) {
+        const result = res?.find((ans) => ans?.id.toString() === branchId);
+        setBranchLabel(result?.name);
+        setBranchValue(result?.id);
+      }
     });
-  }, []);
+  }, [branchId]);
 
   const consParentMenu = consParent?.map((consParentOptions) => ({
     label: consParentOptions?.name,
@@ -101,8 +103,9 @@ const ConsultantRegistration = () => {
   };
 
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFirstName(data);
+    if (data === "") {
       setFirstNameError("First Name is required");
     } else {
       setFirstNameError("");
@@ -110,8 +113,9 @@ const ConsultantRegistration = () => {
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last Name is required");
     } else {
       setLastNameError("");
@@ -119,8 +123,9 @@ const ConsultantRegistration = () => {
   };
 
   const handleEmailError = (e) => {
-    setEmail(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setEmail(data);
+    if (data === "") {
       setEmailError("Email is required");
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
@@ -231,11 +236,11 @@ const ConsultantRegistration = () => {
   const goToProfile = () => {
     history.push(`/consultantInformation/${registerId}`);
   };
-  console.log(branchValue);
+
   return (
     <div>
       <BreadCrumb
-        title="Consultant General Information"
+        title="Add Consultant"
         backTo="Consultant List"
         path="/consultantList"
       />
@@ -268,6 +273,7 @@ const ConsultantRegistration = () => {
                       onChange={(opt) => selectBranch(opt.label, opt.value)}
                       name="BranchId"
                       id="BranchId"
+                      isDisabled={branchId ? true : false}
                     />
 
                     {branchError && (

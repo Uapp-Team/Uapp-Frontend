@@ -22,6 +22,9 @@ const Overview = ({ id }) => {
           <Row>
             <Col md={6} lg={4} className="mb-30px">
               <div className="consultant-overview-card-current">
+                <p className="fs-17px fw-600" style={{ color: "#045d5e" }}>
+                  Current Stage
+                </p>
                 <p className="fs-20px fw-600">
                   {data?.currentDesignation.title}
                 </p>
@@ -63,6 +66,9 @@ const Overview = ({ id }) => {
             {data?.nextDesignation && (
               <Col md={6} lg={4} className="mb-30px">
                 <div className="consultant-overview-card-others">
+                  <p className="fs-17px fw-600" style={{ color: "#045d5e" }}>
+                    Next Stage
+                  </p>
                   <p className="fs-20px fw-600">
                     {data?.nextDesignation.title}
                   </p>
@@ -96,6 +102,9 @@ const Overview = ({ id }) => {
             )}
             <Col md={6} lg={4} className="mb-30px">
               <div className="consultant-overview-card-others">
+                <p className="fs-17px fw-600" style={{ color: "#045d5e" }}>
+                  Current Progress
+                </p>
                 <p className="fs-20px fw-600">{data?.currentOverview.title}</p>
                 <p className="text-gray">{data?.currentIntake}</p>
                 <p className="consultant-overview-card-text">

@@ -48,9 +48,7 @@ const UpdateCoverPhoto = ({
       >
         <div className="uplode-cover-image">
           <div className="uplode-cover-image">
-            {permissions?.includes(
-              permissionList.Update_Employee
-            ) ? (
+            {permissions?.includes(permissionList.Edit_Provider) ? (
               <span onClick={updateCoverPhoto}>
                 {" "}
                 <i className="fas fa-camera" style={{ cursor: "pointer" }}>

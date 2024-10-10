@@ -62,11 +62,11 @@ const IntakeRangeReport = () => {
   };
 
   useEffect(() => {
-    get(`UniversityDD/Index`).then((res) => {
+    get(`SearchFilter/Universities/0/0/0`).then((res) => {
       setUniversity(res);
     });
 
-    get(`ConsultantDD/Index`).then((res) => {
+    get(`ConsultantDD/ByUser`).then((res) => {
       setConsultant(res);
     });
 
@@ -604,7 +604,7 @@ const IntakeRangeReport = () => {
               </div>
 
               <div>
-                <img src={camera444} className="img-fluid" alt=""/>
+                <img src={camera444} className="img-fluid" alt="" />
               </div>
 
               <div

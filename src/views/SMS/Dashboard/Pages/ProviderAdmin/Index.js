@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
 import "../../../../../assets/scss/pages/dashboard-analytics.scss";
-import { Drawer } from "antd";
 import plusicon from "../../../../../assets/img/plusicon.svg";
-import Vectorbeat from "../../../../../assets/img/Vectorbeat.svg";
-import gift from "../../../../../assets/img/gift.PNG";
 import get from "../../../../../helpers/get";
 import { useHistory } from "react-router-dom";
 import "../../../../../assets/CoustomStyle/dashboard.css";
@@ -13,33 +9,46 @@ import DashboardApplication from "../../../../../components/ui/DashboardApplicat
 import DashboardReadyToApply from "../../../../../components/ui/DashboardReadyToApply";
 import DashboardProgressReport from "../../../../../components/ui/DashboardProgressReport";
 import UserNotices from "../../Component/UserNotices";
+import Filter from "../../../../../components/Dropdown/Filter";
+import DashboardProgressChart from "../../../../../components/ui/DashboardProgressChart";
 
 const ProviderAdmin = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
-  const [open, setOpen] = useState(false);
 
   const history = useHistory();
   const [intake, setIntake] = useState({});
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
   const [accountStatus, setAccountStatus] = useState(1);
   const [providerId, setProviderId] = useState(0);
-  console.log(providerId);
+
   useEffect(() => {
-    get(`ProviderDashboard/Overview`).then((res) => {
-      setAccountStatus(res.accountStatusId);
-      setProviderId(res.providerId);
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
       setIntake(res);
+      setIntakeRngValue(res?.id);
     });
   }, []);
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    const filterData = intakeRngDD.filter((status) => {
+      return status.id === intake?.id;
+    });
+
+    setIntakeRngValue(filterData[0]?.id);
+    setIntakeRngLabel(filterData[0]?.name);
+  }, [intakeRngDD, intake]);
+
+  useEffect(() => {
+    get(`ProviderDashboard/Overview?rangeid=${intakeRngValue}`).then((res) => {
+      setAccountStatus(res.accountStatusId);
+      setProviderId(res.providerId);
+    });
+  }, [intakeRngValue]);
 
   return (
     <>
@@ -50,11 +59,11 @@ const ProviderAdmin = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
-        <div className="d-flex flex-wrap">
+        <div className="d-flex align-items-center">
           {accountStatus === 1 ? (
             <>
               <div className="mt-2 mr-4">
@@ -65,16 +74,26 @@ const ProviderAdmin = () => {
             </>
           ) : accountStatus === 2 ? (
             <>
-              <div className="mt-2 mr-4 mb-1">
-                <span style={{ fontWeight: "500" }}>
-                  Intake Range: {intake?.intakeName}
-                </span>
+              <div
+                className=" mr-4 mb-1 d-flex align-items-center"
+                style={{ marginTop: "-17px" }}
+              >
+                <span className="mr-1 fw-500">Intake Range:</span>
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  isDisabled={false}
+                />
               </div>
 
               <div
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  history.push(`/createUniversity`);
+                  history.push(`/addUniversity`);
                 }}
               >
                 <div className="std-dashboard-style4"></div>
@@ -122,10 +141,17 @@ const ProviderAdmin = () => {
           </>
         ) : accountStatus === 2 && providerId !== 0 ? (
           <>
-            <ProviderCountingCard id={providerId} />
-            <DashboardApplication url="ProviderAdminDashboard/newApplications" />
-            <DashboardReadyToApply url="ProviderAdminDashboard/ReadyToApplyApplications" />
-            <DashboardProgressReport />
+            <ProviderCountingCard
+              id={providerId}
+              intakeRngValue={intakeRngValue}
+            />
+            <DashboardApplication
+              url={`ProviderAdminDashboard/newApplications?id=${providerId}&rangeid=${intakeRngValue}`}
+            />
+            <DashboardReadyToApply
+              url={`ProviderAdminDashboard/ReadyToApplyApplications?id=${providerId}&rangeid=${intakeRngValue}`}
+            />
+            <DashboardProgressChart />
             {/* <ProviderApplicationList id={providerId} /> */}
             {/* <ProviderManagerList id={providerId} />
             <ProviderUniversity id={providerId} /> */}

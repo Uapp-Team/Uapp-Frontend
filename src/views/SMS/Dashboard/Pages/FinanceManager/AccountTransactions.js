@@ -35,7 +35,14 @@ const AccountTransactions = () => {
                 {data?.map((item, i) => (
                   <tr key={i} className="border-buttom">
                     <td>{item?.transactionDate}</td>
-                    <td>{item?.consultantName}</td>
+                    <td>
+                      <Link
+                        className="text-body"
+                        to={`consultantProfile/${item?.consultantId}`}
+                      >
+                        {item?.consultantName}
+                      </Link>
+                    </td>
                     <td>{item?.transactionCode}</td>
                     <td>{item?.transactionType}</td>
                     <td>{item?.amount}</td>

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Col, Row } from "reactstrap";
 import { rootUrl } from "../../../constants/constants";
 
-const UniversityHead = ({ info }) => {
+const UniversityHead = ({ info, className }) => {
   return (
-    <div className="custom-card-border p-4 mb-24px">
+    <div className={`px-4 py-2 university-name ${className}`}>
       <Row>
         <Col md={10} className="py-2">
           <div className="d-flex justify-content-start">
@@ -19,14 +19,16 @@ const UniversityHead = ({ info }) => {
 
             <div className="justify-content-start">
               <Link to={`/universityDetails/${info?.universityId}`}>
-                <span className="university-title-style mb-10px">
+                <span className="university-title-style-for-search mb-10px">
                   {info?.name}
                 </span>
               </Link>
               <br />
               <span className="d-flex justify-content-start align-items-center">
-                <i className="fas fa-location-dot text-gray fs-16px pr-2"></i>
-                <span className="university-span-style">{info?.address}</span>
+                <i className="fas fa-location-dot fs-16px pr-2"></i>
+                <span className="university-span-style-for-search">
+                  {info?.address}
+                </span>
               </span>
             </div>
           </div>

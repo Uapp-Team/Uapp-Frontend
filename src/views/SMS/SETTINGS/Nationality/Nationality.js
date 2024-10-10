@@ -257,12 +257,11 @@ const Nationality = () => {
 
   return (
     <div>
+      <BreadCrumb title="Nationalities" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Nationalities" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               <div>
@@ -477,7 +476,7 @@ const Nationality = () => {
                 <Table className="table-sm table-bordered text-center">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th> Name</th>
 
                       <th>Action</th>
@@ -486,7 +485,7 @@ const Nationality = () => {
                   <tbody>
                     {countryList.map((list, index) => (
                       <tr key={index} list={list}>
-                        <td>{index + 1}</td>
+                        {/* <td>{index + 1}</td> */}
                         <td>{list?.name}</td>
 
                         <td>

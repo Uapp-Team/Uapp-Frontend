@@ -26,8 +26,10 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../../Components/ButtonLoader";
 import roundimg from "../../../../../assets/img/roundimg.svg";
 import Loader from "../../../Search/Loader/Loader";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
+import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCrop";
 
-const ProfileHeadCard = ({ id }) => {
+const ProfileHeadCard = ({ id, status = false }) => {
   const userType = localStorage.getItem("userType");
   const [headData, setHeadData] = useState({});
   const [success, setSuccess] = useState(false);
@@ -56,7 +58,8 @@ const ProfileHeadCard = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
-
+  const [croppedImage, setCroppedImage] = useState(null);
+  console.log(id);
   useEffect(() => {
     if (id !== undefined) {
       get(`ConsultantProfile/ProfileHead/${id}`).then((res) => {
@@ -165,35 +168,40 @@ const ProfileHeadCard = ({ id }) => {
 
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
+    console.log("croppedImage", croppedImage);
 
-    const subData = new FormData(event.target);
+    // const subData = new FormData(event.target);
+    // subData.append("consultantCoverImage", FileList[0]?.originFileObj);
 
-    subData.append("consultantCoverImage", FileList[0]?.originFileObj);
+    const subData = {
+      id: id ? id : userId,
+      consultantCoverImage: croppedImage,
+    };
 
-    if (FileList.length < 1) {
-      setError(true);
-    } else {
-      setProgress(true);
-      setButtonStatus(true);
-      put(`Consultant/UpdateCoverPhoto`, subData).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setFileList([]);
-          setModalOpen(false);
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    }
+    // if (FileList.length < 1) {
+    //   setError(true);
+    // } else {
+    setProgress(true);
+    setButtonStatus(true);
+    put(`Consultant/UpdateCoverPhoto`, subData).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setFileList([]);
+        setModalOpen(false);
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+    // }
   };
 
   const handleCancel1 = () => {
@@ -267,6 +275,7 @@ const ProfileHeadCard = ({ id }) => {
     }
   };
   console.log(headData);
+
   return (
     <>
       {loading ? (
@@ -285,14 +294,6 @@ const ProfileHeadCard = ({ id }) => {
                   })`,
                 }}
               >
-                {/* {headData?.consultantCoverImageMedia === null ? (
-                  <img src={profileCover} alt="cover_img" />
-                ) : (
-                  <img
-                    src={rootUrl + headData?.consultantCoverImageMedia?.fileUrl}
-                    alt="cover_img"
-                  />
-                )} */}
                 <div className="uplode-cover-image">
                   {permissions?.includes(permissionList.Edit_Consultant) ? (
                     <span onClick={updateCoverPhoto}>
@@ -309,8 +310,21 @@ const ProfileHeadCard = ({ id }) => {
               </div>
             </div>
 
+            <ImageUploadCrop
+              modalOpen={modalOpen}
+              closeModal={closeModal}
+              heading="Update Cover Photo"
+              onSubmit={handleSubmitCoverPhoto}
+              croppedImage={croppedImage}
+              setCroppedImage={setCroppedImage}
+              error={error}
+              errorText="Cover photo is required"
+              progress={progress}
+              buttonStatus={buttonStatus}
+            />
+
             {/* cover photo edit modal starts here */}
-            <Modal
+            {/* <Modal
               isOpen={modalOpen}
               toggle={closeModal}
               className="uapp-modal"
@@ -319,7 +333,12 @@ const ProfileHeadCard = ({ id }) => {
 
               <ModalBody>
                 <form onSubmit={handleSubmitCoverPhoto}>
-                  <input type="hidden" name="id" id="id" value={id} />
+                  <input
+                    type="hidden"
+                    name="id"
+                    id="id"
+                    value={id ? id : userId}
+                  />
 
                   <FormGroup row className="has-icon-left position-relative">
                     <Col className="ml-5" md="4">
@@ -402,7 +421,7 @@ const ProfileHeadCard = ({ id }) => {
                   </FormGroup>
                 </form>
               </ModalBody>
-            </Modal>
+            </Modal> */}
             {/* cover photo edit modal ends here */}
             <CardBody>
               <div className="uapp-employee-profile-image-edit">
@@ -459,7 +478,12 @@ const ProfileHeadCard = ({ id }) => {
 
                 <ModalBody>
                   <form onSubmit={handleSubmitProfilePhoto}>
-                    <input type="hidden" name="id" id="id" value={id} />
+                    <input
+                      type="hidden"
+                      name="id"
+                      id="id"
+                      value={id ? id : userId}
+                    />
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="ml-5" md="4">
@@ -555,7 +579,15 @@ const ProfileHeadCard = ({ id }) => {
                       <li className="d-flex">
                         <div>
                           <h4 className="">{headData?.fullName}</h4>
-                          <p>{headData?.viewId}</p>
+                          <h5 className="">{headData?.designation}</h5>
+                          <p>
+                            {headData?.viewId} |{" "}
+                            <i
+                              className="fas fa-star"
+                              style={{ color: "#FFB33E" }}
+                            ></i>
+                            {headData?.rating}
+                          </p>
                           {userTypeId ===
                           userTypes?.Consultant.toString() ? null : (
                             <>
@@ -570,6 +602,28 @@ const ProfileHeadCard = ({ id }) => {
                                 <p>
                                   <i className="fas fa-phone pr-2"></i>
                                   {headData?.phoneNumber}
+                                </p>
+                              )}
+                              {headData?.linkTypeId === null ? null : (
+                                <p>
+                                  <a
+                                    href={headData?.linkedIn_Facebook}
+                                    target="blank"
+                                  >
+                                    {headData?.linkTypeId === 1 && (
+                                      <>
+                                        <i class="fab fa-linkedin-in pr-2"></i>
+                                        Linkedin
+                                      </>
+                                    )}
+                                    {headData?.linkTypeId === 2 && (
+                                      <>
+                                        <i class="fab fa-facebook-f pr-2"></i>
+                                        Facebook
+                                      </>
+                                    )}
+                                    {/* {headData?.linkedIn_Facebook} */}
+                                  </a>
                                 </p>
                               )}
                             </>
@@ -624,46 +678,47 @@ const ProfileHeadCard = ({ id }) => {
                       </li>
                       <li></li>
                     </ul>
+                    {!status && (
+                      <div className="d-flex">
+                        <Link
+                          to={
+                            userType !== userTypes?.Consultant.toString()
+                              ? `/applicationsFromConsultant/${id}`
+                              : `/applications/${userId}`
+                          }
+                        >
+                          <button className="consultant-profile-redesign-style px-2 py-2">
+                            Applications
+                          </button>
+                        </Link>
 
-                    <div className="d-flex">
-                      <Link
-                        to={
-                          userType !== userTypes?.Consultant.toString()
-                            ? `/applicationsFromConsultant/${id}`
-                            : `/applications/${userId}`
-                        }
-                      >
-                        <button className="consultant-profile-redesign-style px-2 py-2">
-                          Applications
-                        </button>
-                      </Link>
+                        <Link
+                          to={
+                            userType !== userTypes?.Consultant.toString()
+                              ? `/studentByConsultant/${id}`
+                              : `/studentList/${userId}`
+                          }
+                          style={{ marginLeft: "23px" }}
+                        >
+                          <button className="consultant-profile-redesign-style px-2 py-2">
+                            Students
+                          </button>
+                        </Link>
 
-                      <Link
-                        to={
-                          userType !== userTypes?.Consultant.toString()
-                            ? `/studentListByConsultant/${id}`
-                            : `/studentList/${userId}`
-                        }
-                        style={{ marginLeft: "23px" }}
-                      >
-                        <button className="consultant-profile-redesign-style px-2 py-2">
-                          Students
-                        </button>
-                      </Link>
-
-                      <Link
-                        to={
-                          userType !== userTypes?.Consultant.toString()
-                            ? `/associateList/${id}`
-                            : `/associateList/${userId}`
-                        }
-                        style={{ marginLeft: "23px" }}
-                      >
-                        <button className="consultant-profile-redesign-style px-2 py-2">
-                          Associates
-                        </button>
-                      </Link>
-                    </div>
+                        <Link
+                          to={
+                            userType !== userTypes?.Consultant.toString()
+                              ? `/associates/${id}`
+                              : `/associateList/${userId}`
+                          }
+                          style={{ marginLeft: "23px" }}
+                        >
+                          <button className="consultant-profile-redesign-style px-2 py-2">
+                            Associates
+                          </button>
+                        </Link>
+                      </div>
+                    )}
                   </Col>
 
                   <Col md="5" className="text-md-right mt-3">
@@ -692,7 +747,9 @@ const ProfileHeadCard = ({ id }) => {
                             id="consultantTypeId"
                           />
                         </div>
-                      ) : null}
+                      ) : (
+                        statusLabel
+                      )}
                     </ul>
                     <p className="text-gray">{headData?.consultantTypeName}</p>
                   </Col>

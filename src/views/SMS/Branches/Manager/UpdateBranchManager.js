@@ -32,9 +32,6 @@ const UpdateBranchManager = () => {
 
   const { addToast } = useToasts();
 
-  const backToDashboard = () => {
-    history.push("/");
-  };
 
   useEffect(() => {
     get(`Branch/Index`).then((res) => {

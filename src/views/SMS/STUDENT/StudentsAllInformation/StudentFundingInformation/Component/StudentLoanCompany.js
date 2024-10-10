@@ -7,11 +7,11 @@ import { useToasts } from "react-toast-notifications";
 import post from "../../../../../../helpers/post";
 import get from "../../../../../../helpers/get";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import uploadBtn from "../../../../../../assets/img/upload.png";
-import downloadBtn from "../../../../../../assets/img/download.png";
 import { useHistory } from "react-router-dom";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../../components/buttons/DownloadButton";
 
 const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -108,11 +108,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
                     return false;
                   }}
                 >
-                  {FileList3.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList3.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
                 <div className="text-danger d-block">{sLoanError}</div>
@@ -124,7 +120,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
                     href={rootUrl + studentFunding?.attachement}
                     target="blank"
                   >
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>

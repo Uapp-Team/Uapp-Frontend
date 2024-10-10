@@ -34,7 +34,7 @@ const DashboardProgressReport = () => {
 
   useEffect(() => {
     get(
-      `Report/ProgressReport/$/${intakeValue}/${date}/${monthValue}/${yearValue}`
+      `Report/ProgressReport/${intakeValue}/${date}/${monthValue}/${yearValue}`
     ).then((res) => {
       setProgress(res);
     });
@@ -86,7 +86,7 @@ const DashboardProgressReport = () => {
             styles={{
               control: (baseStyles, state) => ({
                 ...baseStyles,
-                border: "none",
+                border: "1px solid rgba(0,0,0,.1)",
               }),
             }}
             options={intakeList}
@@ -113,7 +113,8 @@ const DashboardProgressReport = () => {
             styles={{
               control: (baseStyles, state) => ({
                 ...baseStyles,
-                border: "none",
+                border: "1px solid rgba(0,0,0,.1)",
+                marginRight: "8px",
               }),
             }}
             options={monthList}
@@ -125,7 +126,7 @@ const DashboardProgressReport = () => {
           />
 
           <input
-            style={{ border: "none" }}
+            style={{ border: "1px solid rgba(0,0,0,.1)", borderRadius: "4px" }}
             type="date"
             name="date"
             id="date"
@@ -172,7 +173,7 @@ const DashboardProgressReport = () => {
               </Col>
               <Col className="mb-30px">
                 <DashboardProgressCount
-                  title="Total Rejected"
+                  title="Total Rejected / cancelled"
                   value={50}
                   bgColor="linear-gradient(142deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.00) 100%), #F87675"
                 />

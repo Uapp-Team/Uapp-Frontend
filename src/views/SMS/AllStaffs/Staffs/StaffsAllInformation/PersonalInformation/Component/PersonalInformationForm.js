@@ -9,6 +9,7 @@ import { userTypes } from "../../../../../../../constants/userTypeConstant";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
+import moment from "moment";
 
 const PersonalInformationForm = ({
   handleSubmit,
@@ -73,6 +74,7 @@ const PersonalInformationForm = ({
             onChange={(e) => {
               handleDate(e);
             }}
+            // value={moment(new Date(Dates)).format("DD-MM-YYYY")}
             value={Dates}
           />
           {DatesError && (
@@ -177,9 +179,10 @@ const PersonalInformationForm = ({
             type="string"
             name="officialPhoneNumber"
             id="officialPhoneNumber"
-            country={"us"}
+            country={"gb"}
+            enableLongNumbers={true}
             onChange={handlePhoneNumber}
-            value={phone ? phone : "1"}
+            value={phone ? phone : ""}
             inputProps={{
               required: true,
             }}
@@ -258,10 +261,9 @@ const PersonalInformationForm = ({
                 <span className="text-danger">Profile photo is required</span>
               )}
             </Col>
-            <Col md="4">
+            <Col md="4" className="pt-4">
               <span className="text-gray">
-                Recommanded resolution is 640*640 with file size less than 2MB,
-                keep visual elements centered
+                File size less than 2MB, keep visual elements centered
               </span>
             </Col>
           </FormGroup>
@@ -326,10 +328,9 @@ const PersonalInformationForm = ({
                 </div>
               </div>
             </Col>
-            <Col md="4">
-              <span className="text-gray">
-                Recommanded resolution is 1720*640 with file size less than 2MB,
-                keep visual elements centered
+            <Col md="4" className="pt-4">
+              <span className="text-gray ">
+                File size less than 2MB, keep visual elements centered
               </span>
             </Col>
           </FormGroup>

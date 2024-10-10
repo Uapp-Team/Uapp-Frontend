@@ -43,7 +43,7 @@ const Applications = ({ admissionManagerId }) => {
                     textAlign: "center",
                   }}
                 >
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>University</th>
                   <th>Campus</th>
                   <th>Student Name</th>
@@ -60,7 +60,7 @@ const Applications = ({ admissionManagerId }) => {
                       borderBottom: "1px solid #2525251F",
                     }}
                   >
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
                     <td>
                       <Link
                         className="text-body"

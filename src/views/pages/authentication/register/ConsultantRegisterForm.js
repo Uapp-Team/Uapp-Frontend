@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, FormGroup, Input, Label } from "reactstrap";
+import { Col, Form, FormGroup, Input, Label } from "reactstrap";
 import { connect } from "react-redux";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 import { rootUrl } from "../../../../constants/constants";
@@ -7,6 +7,9 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import post from "../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
 import notify from "../../../../assets/img/notify.png";
+import axios from "axios";
+import { Upload } from "antd";
+import UploadButton from "../../../../components/buttons/UploadButton";
 
 const ConsultantRegisterForm = () => {
   const [parameter, setParameter] = useState("");
@@ -28,7 +31,12 @@ const ConsultantRegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [referCode, setReferCode] = useState("");
+  const [linkedFacebook, setLinkedFacebook] = useState("");
+  const [linkedFacebookError, setLinkedFacebookError] = useState("");
   const [checked, setChecked] = useState(null);
+  const [cvFile, setCvFile] = useState([]);
+  const [cvError, setCvError] = useState("");
+  const [loansForEu, setLoansForEu] = useState(true);
 
   useEffect(() => {
     setParameter(invitationcode);
@@ -50,6 +58,11 @@ const ConsultantRegisterForm = () => {
       });
   }, []);
 
+  const handleFile = ({ fileList }) => {
+    setCvFile(fileList);
+    setCvError("");
+  };
+
   const SetNameTitleFromDD = (e) => {
     setTitle(e.target.value);
   };
@@ -61,6 +74,15 @@ const ConsultantRegisterForm = () => {
       setLastNameError("");
     }
   };
+  const handleLinkedFacebookChange = (e) => {
+    setLinkedFacebook(e.target.value);
+    if (e.target.value === "") {
+      setLinkedFacebookError("LinkedIn or Facebook is required");
+    } else {
+      setLinkedFacebookError("");
+    }
+  };
+
   const handleradio = (e) => {
     setChecked("radio");
   };
@@ -110,20 +132,24 @@ const ConsultantRegisterForm = () => {
   function validateRegisterForm(subData) {
     var isFormValid = true;
 
-    if (subData.FirstName === "") {
+    if (firstName === "") {
       isFormValid = false;
       setFirstNameError("First name is required");
     }
-    if (subData.LastName === "") {
+    if (lastName === "") {
       isFormValid = false;
       setLastNameError("Last name is required");
     }
-    if (subData.Email === "") {
+    if (linkedFacebook === "") {
+      isFormValid = false;
+      setLinkedFacebookError("LinkedIn or Facebook is required");
+    }
+    if (email === "") {
       isFormValid = false;
       setEmailError("Email is required");
     }
 
-    if (subData.Password == "") {
+    if (password == "") {
       isFormValid = false;
       setPasswordError("Provide a valid password");
     }
@@ -135,44 +161,72 @@ const ConsultantRegisterForm = () => {
       isFormValid = false;
       setConfirmPasswordError("Password doesn't match");
     }
+
+    // }
+
+    if (cvFile.length < 1) {
+      isFormValid = false;
+      setCvError("CV file is required");
+    }
     return isFormValid;
   }
 
   const handleRegister = (e) => {
     e.preventDefault();
+    const subData = new FormData(e.target);
+    subData.append("consultantTypeId", 2);
+    subData.append("nameTittleId", title);
+    subData.append("firstName", firstName);
+    subData.append("lastName", lastName);
+    subData.append("email", email);
+    subData.append("invitationCode", referCode);
+    subData.append("linkedIn_Facebook", linkedFacebook);
+    subData.append(
+      "cvfile",
+      cvFile.length === 0 ? null : cvFile[0]?.originFileObj
+    );
+    subData.append("password", password);
+    subData.append("linkTypeId", loansForEu);
 
-    const subData = {
-      ConsultantTypeId: 2,
-      NameTittleId: title,
-      FirstName: firstName,
-      LastName: lastName,
-      Email: email,
-      Password: password,
-      InvitationCode: referCode,
-    };
+    // const subData = {
+    //   ConsultantTypeId: 2,
+    //   NameTittleId: title,
+    //   FirstName: firstName,
+    //   LastName: lastName,
+    //   Email: email,
+    //   Password: password,
+    //   InvitationCode: referCode,
+    //   LinkedIn_Facebook: linkedFacebook,
+    // };
     console.log("subdata", subData);
+
+    for (var x of subData.values()) {
+      console.log("subdata", x);
+    }
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
       // clearAllErrors();
-      fetch(`${rootUrl}ConsultantRegister/Register`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(subData),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.isSuccess == true) {
-            console.log("data", data);
-            addToast(data?.message, {
+
+      // fetch(`${rootUrl}ConsultantRegister/Register`, {
+      //   method: "POST",
+      //   headers: {
+      //     "content-type": "multipart/form-data",
+      //   },
+      //   body: subData,
+      // })
+      axios
+        .post(`${rootUrl}ConsultantRegister/Register`, subData)
+        .then((res) => {
+          if (res?.data?.isSuccess == true) {
+            console.log("data", res);
+            addToast(res?.data?.message, {
               appearance: "success",
               autoDismiss: true,
             });
             history.push("/consultantAccountCreated");
           } else {
-            setPasswordError(data?.message);
+            setPasswordError(res?.data?.message);
           }
         });
     }
@@ -261,6 +315,65 @@ const ConsultantRegisterForm = () => {
           <span className="text-danger">{lastNameError}</span>
         </FormGroup>
 
+        <FormGroup
+          className="has-icon-left position-relative"
+          style={{ marginBottom: "5px" }}
+        >
+          <span>Social Media</span>
+          <br />
+
+          <FormGroup check inline className="form-mt">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="loanfromStudentLoansCompanyForEU"
+              value={true}
+              checked={loansForEu === true}
+              onChange={() => setLoansForEu(!loansForEu)}
+            />
+            <Label
+              className="form-check-label"
+              check
+              htmlFor="loanfromStudentLoansCompanyForEU"
+            >
+              LinkedIn
+            </Label>
+          </FormGroup>
+
+          <FormGroup check inline>
+            <input
+              className="form-check-input"
+              type="radio"
+              name="loanfromStudentLoansCompanyForEU"
+              value={false}
+              checked={loansForEu === false}
+              onChange={() => setLoansForEu(!loansForEu)}
+            />
+            <Label
+              className="form-check-label"
+              check
+              htmlFor="loanfromStudentLoansCompanyForEU"
+            >
+              Facebook
+            </Label>
+          </FormGroup>
+        </FormGroup>
+
+        {loansForEu === true || loansForEu === false ? (
+          <div className="mb-3">
+            <FormGroup className="form-label-group position-relative has-icon-left">
+              <Input
+                className="inside-placeholder"
+                type="text"
+                placeholder="LinkedIn/Facebook (Mandatory)"
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+                onChange={(e) => handleLinkedFacebookChange(e)}
+              />
+              <span className="text-danger">{linkedFacebookError}</span>
+            </FormGroup>
+          </div>
+        ) : null}
+
         <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"
@@ -326,6 +439,29 @@ const ConsultantRegisterForm = () => {
             <span className="text-danger">{confirmPasswordError}</span>
           </FormGroup>
         </div>
+
+        <FormGroup>
+          <div className="d-flex align-items-center">
+            {" "}
+            <Col sm={4} style={{ paddingLeft: "1px" }}>
+              <span>CV File : </span>
+            </Col>
+            <Col sm={8}>
+              <Upload
+                multiple={false}
+                fileList={cvFile}
+                onChange={handleFile}
+                beforeUpload={(file) => {
+                  return false;
+                }}
+              >
+                {cvFile.length < 1 ? <UploadButton /> : ""}
+              </Upload>
+            </Col>
+          </div>
+          <span className="text-danger">{cvError}</span>
+        </FormGroup>
+
         <div className="mb-3">
           <FormGroup className="form-label-group position-relative has-icon-left">
             <Input

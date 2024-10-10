@@ -6,6 +6,7 @@ import get from "../../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
 import SpanButton from "../../../Components/SpanButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
 const ApplicationStudentProfile = ({ stdId }) => {
   const [studentProInfo, setStudentProInfo] = useState({});
@@ -100,14 +101,6 @@ const ApplicationStudentProfile = ({ stdId }) => {
 
   const handleEdit = (data) => {
     history.push(`/addStudentCountryInformation/${data?.id}/${1}`);
-  };
-
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
   };
 
   const handleConsentDate = (e) => {
@@ -212,7 +205,9 @@ const ApplicationStudentProfile = ({ stdId }) => {
                 </td>
 
                 <td width="60%">
-                  {handleDate(studentProInfo?.applicationInfos?.dateOfMoveToUk)}
+                  {dateFormate(
+                    studentProInfo?.applicationInfos?.dateOfMoveToUk
+                  )}
                 </td>
               </tr>
 
@@ -318,7 +313,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
             </td>
 
             <td width="60%">
-              {handleDate(studentProInfo?.applicationInfos?.dateOfMoveToUk)}
+              {dateFormate(studentProInfo?.applicationInfos?.dateOfMoveToUk)}
             </td>
           </tr>
           :
@@ -407,7 +402,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
 
             <td width="60%">
               {studentProInfo?.dateOfBirth ? (
-                <>{handleDate(studentProInfo?.dateOfBirth)}</>
+                <>{dateFormate(studentProInfo?.dateOfBirth)}</>
               ) : null}
             </td>
           </tr>
@@ -692,7 +687,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                   </td>
 
                   <td width="60%">
-                    {handleDate(
+                    {dateFormate(
                       studentProInfo?.educationInfos?.attendedInstitutionFrom
                     )}
                   </td>
@@ -714,7 +709,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                     <td width="60%">
                       {studentProInfo?.educationInfos?.attendedInstitutionTo !==
                       null
-                        ? handleDate(
+                        ? dateFormate(
                             studentProInfo?.educationInfos
                               ?.attendedInstitutionTo
                           )
@@ -847,7 +842,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                     </span>
                     <br />
                     <span className="bank-account-info-text">
-                      Exam Date: {handleDate(ielts?.examDate)}
+                      Exam Date: {dateFormate(ielts?.examDate)}
                     </span>
                   </div>
                 </div>
@@ -883,7 +878,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                     </span>
                     <br />
                     <span className="bank-account-info-text">
-                      Exam Date: {handleDate(duolingo?.examDate)}
+                      Exam Date: {dateFormate(duolingo?.examDate)}
                     </span>
                     <br />
                     <span className="bank-account-info-text">
@@ -927,7 +922,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                     </span>
                     <br />
                     <span className="bank-account-info-text">
-                      Exam Date: {handleDate(toefl?.examDate)}
+                      Exam Date: {dateFormate(toefl?.examDate)}
                     </span>
                     <br />
                     <span className="bank-account-info-text">
@@ -972,7 +967,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
                     </span>
                     <br />
                     <span className="bank-account-info-text">
-                      Exam Date: {handleDate(functions?.examDate)}
+                      Exam Date: {dateFormate(functions?.examDate)}
                     </span>
                     <br />
                     <span className="bank-account-info-text">
@@ -1134,7 +1129,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
             </tr>
             <tr>
               <td width="40%">
-                <b>Employeement Details:</b>
+                <b>Duties and Responsibilities:</b>
               </td>
 
               <td width="60%">
@@ -1147,7 +1142,7 @@ const ApplicationStudentProfile = ({ stdId }) => {
               </td>
 
               <td width="60%">
-                {handleDate(studentProInfo?.experienceinfo?.startDate)}
+                {dateFormate(studentProInfo?.experienceinfo?.startDate)}
               </td>
             </tr>
             {studentProInfo?.experienceinfo?.isStillWorking ? (
@@ -1166,9 +1161,9 @@ const ApplicationStudentProfile = ({ stdId }) => {
 
                 <td width="60%">
                   {studentProInfo?.experienceinfo?.endDate !== null
-                    ? handleDate(studentProInfo?.experienceinfo?.endDate)
+                    ? dateFormate(studentProInfo?.experienceinfo?.endDate)
                     : null}
-                  {/* {handleDate(
+                  {/* {dateFormate(
                                 studentProInfo?.experienceinfo?.endDate
                               )} */}
                 </td>

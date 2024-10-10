@@ -3,20 +3,28 @@ import get from "../../../../helpers/get";
 import { Table } from "reactstrap";
 import Loader from "../../Search/Loader/Loader";
 import { Link } from "react-router-dom";
-import PopOverText from "../../../../components/Popover";
+import PopOverText from "../../../../components/PopOverText";
 import AddButton from "../../../../components/buttons/AddButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+// import Popover from "react-popover";
+import { Popover } from "react-tiny-popover";
 
 const ProviderStaffList = ({ id, accountStatusId }) => {
   const [data, setData] = useState([]);
   const [designated, setDesignated] = useState({});
   const [loading, setLoading] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [popoverOpen, setPopoverOpen] = useState("");
+
+  // const togglePopover = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   useEffect(() => {
     get(`ProviderProfile/Staffs/${id}`).then((action) => {
       setData(action);
       setLoading(false);
+      console.log(action);
     });
   }, [id]);
 
@@ -26,7 +34,7 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
       setLoading(false);
     });
   }, [id]);
-  console.log(data);
+
   return (
     <>
       {loading ? (
@@ -71,7 +79,7 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                   {permissions?.includes(
                     permissionList.Add_AdmissionManager
                   ) ? (
-                    <Link to={`/addAdmissionManager/${id}`} className="mb-1">
+                    <Link to={`/addAdmissionManager/${id}`}>
                       <AddButton />
                     </Link>
                   ) : null}
@@ -85,9 +93,15 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                 <Table responsive>
                   <thead className="tablehead">
                     <tr>
-                      <td className="border-0">UAPP ID</td>
-                      <td className="border-0">Full Name</td>
-                      <td className="border-0">Contact </td>
+                      <td className="border-0" width="40%">
+                        UAPP ID
+                      </td>
+                      <td className="border-0" width="40%">
+                        Full Name
+                      </td>
+                      <td className="border-0" width="20%">
+                        Contact{" "}
+                      </td>
                     </tr>
                   </thead>
                   <tbody>
@@ -111,14 +125,22 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                         </td>
                         <td className="border-0 d-flex ">
                           <PopOverText
-                            value={item?.phone}
-                            i={`AmPhone${i}`}
+                            value={
+                              item?.phone && item?.phone.includes("+")
+                                ? item?.phone
+                                : item?.phone && !item?.phone.includes("+")
+                                ? "+" + item?.phone
+                                : null
+                            }
                             btn={<i className="fas fa-phone"></i>}
+                            popoverOpen={popoverOpen}
+                            setPopoverOpen={setPopoverOpen}
                           />
                           <PopOverText
                             value={item?.email}
-                            i={`AmEmail${i}`}
                             btn={<i className="far fa-envelope"></i>}
+                            popoverOpen={popoverOpen}
+                            setPopoverOpen={setPopoverOpen}
                           />
                         </td>
                       </tr>
@@ -145,7 +167,7 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                   {permissions?.includes(
                     permissionList.Add_AdmissionOfficer
                   ) ? (
-                    <Link to={`/addAdmissionOfficerReg/${id}`} className="mb-1">
+                    <Link to={`/addAdmissionOfficerReg/${id}`}>
                       <AddButton />
                     </Link>
                   ) : null}{" "}
@@ -160,9 +182,15 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                 <Table responsive>
                   <thead className="tablehead">
                     <tr>
-                      <td className="border-0">UAPP ID</td>
-                      <td className="border-0">Full Name</td>
-                      <td className="border-0">Contact </td>
+                      <td className="border-0" width="40%">
+                        UAPP ID
+                      </td>
+                      <td className="border-0" width="40%">
+                        Full Name
+                      </td>
+                      <td className="border-0" width="20%">
+                        Contact{" "}
+                      </td>
                     </tr>
                   </thead>
                   <tbody>
@@ -187,14 +215,23 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
 
                         <td className="border-0 d-flex ">
                           <PopOverText
-                            value={item?.phone}
-                            i={`AoPhone${i}`}
+                            value={
+                              item?.phone && item?.phone.includes("+")
+                                ? item?.phone
+                                : item?.phone && !item?.phone.includes("+")
+                                ? "+" + item?.phone
+                                : null
+                            }
+                            // value={item?.phone}
                             btn={<i className="fas fa-phone"></i>}
+                            popoverOpen={popoverOpen}
+                            setPopoverOpen={setPopoverOpen}
                           />
                           <PopOverText
                             value={item?.email}
-                            i={`AoEmail${i}`}
                             btn={<i className="far fa-envelope"></i>}
+                            popoverOpen={popoverOpen}
+                            setPopoverOpen={setPopoverOpen}
                           />
                         </td>
                       </tr>

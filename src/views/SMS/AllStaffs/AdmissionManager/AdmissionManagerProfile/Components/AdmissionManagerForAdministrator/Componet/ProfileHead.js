@@ -26,9 +26,12 @@ import ButtonLoader from "../../../../../../Components/ButtonLoader";
 import roundimg from "../../../../../../../../assets/img/roundimg.svg";
 // import profileCover from "../../../../../assets/img/profile-cover.png";
 import profileCover from "../../../../../../../../assets/img/profile-cover.png";
+import { dateFormate } from "../../../../../../../../components/date/calenderFormate";
+import ImageUploadCrop from "../../../../../../../../components/ImageUpload/ImageUploadCrop";
 
 const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
   const [success, setSuccess] = useState(false);
+
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userTypeId = localStorage.getItem("userType");
@@ -54,6 +57,7 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
   const [loading, setLoading] = useState(true);
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
+  const [croppedImage, setCroppedImage] = useState(null);
 
   useEffect(() => {
     if (admissionManagerId !== undefined) {
@@ -63,7 +67,7 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
         setStatusLabel(res?.accountStatus?.statusName);
       });
 
-      get(`AccountStatusDD/index/${admissionManagerId}`).then((res) => {
+      get(`AccountStatusDD/Manager/${admissionManagerId}`).then((res) => {
         setStatusType(res);
         setLoading(false);
       });
@@ -74,12 +78,12 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
         setStatusLabel(res?.accountStatus?.statusName);
       });
 
-      get(`AccountStatusDD/index/${userId}`).then((res) => {
+      get(`AccountStatusDD/Manager/${userId}`).then((res) => {
         setStatusType(res);
         setLoading(false);
       });
     }
-  }, [success, admissionManagerId]);
+  }, [success, admissionManagerId, setHeadData, userId]);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
@@ -91,17 +95,19 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
     setStatusValue(value);
 
     const accountStatusData = {
-      id: parseInt(admissionManagerId),
-      accountStatusId: value,
+      ManagerId: parseInt(admissionManagerId),
+      StatusId: value,
     };
-
-    put("Consultant/statuschange", accountStatusData).then((res) => {
-      addToast(res?.data?.message, {
-        appearance: "success",
-        autoDismiss: true,
-      });
-      setSuccess(!success);
-    });
+    console.log(accountStatusData);
+    put("AdmissionManager/UpdateAccountStatusChange", accountStatusData).then(
+      (res) => {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
+      }
+    );
   };
 
   const updateCoverPhoto = () => {
@@ -165,32 +171,37 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
 
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
-    const subData = new FormData(event.target);
-    subData.append("coverImage", FileList[0]?.originFileObj);
-    if (FileList.length < 1) {
-      setError(true);
-    } else {
-      setProgress(true);
-      setButtonStatus(true);
-      put(`AdmissionManager/UpdateCoverPhoto`, subData).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res?.status == 200 && res?.data?.isSuccess == true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setFileList([]);
-          setModalOpen(false);
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    }
+    // const subData = new FormData(event.target);
+    // subData.append("coverImage", FileList[0]?.originFileObj);
+
+    const subData = {
+      id: admissionManagerId ? admissionManagerId : userId,
+      coverImage: croppedImage,
+    };
+    // if (FileList.length < 1) {
+    //   setError(true);
+    // } else {
+    setProgress(true);
+    setButtonStatus(true);
+    put(`AdmissionManager/UpdateCoverPhoto`, subData).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      if (res?.status == 200 && res?.data?.isSuccess == true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setFileList([]);
+        setModalOpen(false);
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+    // }
   };
 
   const handleCancel1 = () => {
@@ -302,8 +313,20 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
         </div>
       </div>
 
+      <ImageUploadCrop
+        modalOpen={modalOpen}
+        closeModal={closeModal}
+        heading="Update Cover Photo"
+        onSubmit={handleSubmitCoverPhoto}
+        croppedImage={croppedImage}
+        setCroppedImage={setCroppedImage}
+        error={error}
+        errorText="Cover photo is required"
+        progress={progress}
+        buttonStatus={buttonStatus}
+      />
       {/* cover photo edit modal starts here */}
-      <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
+      {/* <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
         <ModalHeader>Update Cover Photo</ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmitCoverPhoto}>
@@ -389,7 +412,7 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
             </FormGroup>
           </form>
         </ModalBody>
-      </Modal>
+      </Modal> */}
       {/* cover photo edit modal ends here */}
       <CardBody>
         <div className="uapp-employee-profile-image-edit px-2">
@@ -621,23 +644,20 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
               </ul>
 
               <div className="d-flex">
-                <Link
-                // to="/universityList"
-                // to={
-                //   admissionManagerId !== undefined
-                //     ? `/ApplicationListByAdmissionofficer/${admissionManagerId}`
-                //     : `/ApplicationListByAdmissionofficer/${userId}`
-                // }
-                >
-                  <button className="consultant-profile-redesign-style px-3 py-2">
-                    Universities
-                  </button>
-                </Link>
+                {userTypeId !== userTypes?.AdmissionManager && (
+                  <Link
+                    to={`/assignUniversity/${headData?.providerId}/${headData?.id}`}
+                  >
+                    <button className="consultant-profile-redesign-style px-3 py-2">
+                      Universities
+                    </button>
+                  </Link>
+                )}
                 <Link
                   to={
                     admissionManagerId !== undefined
-                      ? `/ApplicationListByAdmissionofficer/${admissionManagerId}`
-                      : `/ApplicationListByAdmissionofficer/${userId}`
+                      ? `/ApplicationListByAdmissionmanager/${admissionManagerId}`
+                      : `/ApplicationListByAdmissionmanager/${userId}`
                   }
                 >
                   <button
@@ -650,8 +670,8 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
                 <Link
                   to={
                     admissionManagerId !== undefined
-                      ? `/admissionManagersOfficerList/${admissionManagerId}`
-                      : `/admissionManagersOfficerList/${userId}`
+                      ? `/admissionOfficerListFromAdmissionManagerList/${headData?.providerId}/${admissionManagerId}`
+                      : `/admissionOfficerListFromAdmissionManagerList/${headData?.providerId}/${userId}`
                   }
                 >
                   <button
@@ -687,7 +707,7 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
                     color: "#d4d4d4",
                   }}
                 >
-                  {headData?.createdOn}
+                  {dateFormate(headData?.createdOn)}
                 </span>
               </div>
               <ul className="uapp-ul text-right">

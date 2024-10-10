@@ -59,7 +59,7 @@ const IntakeRangeReportForProviderAdmin = () => {
   };
 
   useEffect(() => {
-    get(`UniversityDD/Index`).then((res) => {
+    get(`SearchFilter/Universities/0/0/0`).then((res) => {
       setUniversity(res);
     });
 
@@ -155,7 +155,7 @@ const IntakeRangeReportForProviderAdmin = () => {
           labels: {
             show: false,
             formatter: function (val) {
-              return val + "%";
+              return val;
             },
           },
         },
@@ -182,7 +182,7 @@ const IntakeRangeReportForProviderAdmin = () => {
           },
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         xaxis: {
           categories: [
@@ -483,7 +483,8 @@ const IntakeRangeReportForProviderAdmin = () => {
           <Card>
             <CardBody>
               <span style={{ fontWeight: "500" }}>
-                Total Applications: {statistics?.totalApplication}
+                Total Applications %
+                {/* Total Applications: {statistics?.totalApplication} */}
               </span>
 
               <Chart

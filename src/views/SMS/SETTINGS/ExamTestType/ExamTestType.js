@@ -92,12 +92,11 @@ const ExamTestType = () => {
 
   return (
     <div>
+      <BreadCrumb title="Exam Test Types" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Exam Test Types" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               <div className="ml-auto">
@@ -189,16 +188,16 @@ const ExamTestType = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th> Name</th>
                     </tr>
                   </thead>
                   <tbody>
                     {examTestType?.map((exam, i) => (
                       <tr key={exam?.id}>
-                        <th style={{ textAlign: "center" }} scope="row">
+                        {/* <th style={{ textAlign: "center" }} scope="row">
                           {i + 1}
-                        </th>
+                        </th> */}
                         <td style={{ textAlign: "center" }}>{exam?.name}</td>
                       </tr>
                     ))}

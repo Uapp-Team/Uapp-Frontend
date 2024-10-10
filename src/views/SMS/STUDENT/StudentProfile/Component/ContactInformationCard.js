@@ -4,15 +4,14 @@ import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
-const ContactInformationCard = ({ sId }) => {
-  const [contactData, setContactData] = useState([]);
+const ContactInformationCard = ({ sId, contactData, setContactData }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-
+  console.log(sId);
   useEffect(() => {
     get(`StudentAddress/GetByStudentId/${sId}`).then((res) => {
       setContactData(res);
     });
-  }, [sId]);
+  }, [sId, setContactData]);
   return (
     <>
       <Table>
@@ -28,7 +27,7 @@ const ContactInformationCard = ({ sId }) => {
         </thead>
       </Table>
 
-      {contactData.map((contact, i) => (
+      {contactData?.map((contact, i) => (
         <div
           className="col-12 border p-2 rounded mb-3"
           style={{ textAlign: "left" }}

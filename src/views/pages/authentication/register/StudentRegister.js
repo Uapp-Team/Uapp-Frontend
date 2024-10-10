@@ -1,11 +1,10 @@
 import React from "react";
-import { } from "reactstrap";
+import {} from "reactstrap";
 import StudentRegisterForm from "./StudentRegisterForm";
 import "../../../../assets/scss/pages/authentication.scss";
 import providerlogo from "../../../../assets/img/providerlogo.svg";
 import "../../../../assets/CoustomStyle/auth.css";
 import AuthFooter from "./components/AuthFooter";
-
 
 export default function Register() {
   return (
@@ -35,7 +34,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-

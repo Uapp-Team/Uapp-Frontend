@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FormGroup, Col } from "reactstrap";
+import { FormGroup, Col, Label } from "reactstrap";
 import get from "../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
 import post from "../../../../helpers/post";
@@ -28,6 +28,7 @@ const UniversityEnglishRequirements = () => {
   useEffect(() => {
     get(`UniversityEnglishRequirement/GetByUniversityId/${univerId}`).then(
       (res) => {
+        console.log(res, "requirements");
         setLoading(false);
         setValue(
           res?.requirementInformation === "undefined"
@@ -40,8 +41,23 @@ const UniversityEnglishRequirements = () => {
             : res?.englishWaiverDetails
         );
         setValue2(res?.moiDetails === "undefined" ? "" : res?.moiDetails);
-        setEngWaiver(res?.englishWaiver);
-        setMoi(res?.moiAccepted);
+
+        setEngWaiver(
+          res != null && res?.englishWaiver === true
+            ? true
+            : res != null && res?.englishWaiver === null
+            ? false
+            : false
+        );
+
+        setMoi(
+          res != null && res?.moiAccepted === true
+            ? true
+            : res != null && res?.moiAccepted === null
+            ? false
+            : false
+        );
+
         setRequirementId(res == null ? 0 : res?.id);
       }
     );
@@ -121,30 +137,42 @@ const UniversityEnglishRequirements = () => {
                   <p className="commission-text pr-3 mt-2">
                     English waiver available
                   </p>
-                  <input
-                    type="radio"
-                    value="Yes"
-                    onClick={() => setEngWaiver(true)}
-                    checked={engWaiver === true && true}
-                  />
-                  <label
-                    className="mt-2 px-2"
-                    style={{ fontWeight: 500, fontSize: "14px" }}
-                  >
-                    Yes
-                  </label>
-                  <input
-                    type="radio"
-                    value="No"
-                    onClick={() => setEngWaiver(false)}
-                    checked={engWaiver === false && true}
-                  />
-                  <label
-                    className="mt-2 px-2"
-                    style={{ fontWeight: 500, fontSize: "14px" }}
-                  >
-                    No
-                  </label>
+                  <FormGroup check inline>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="englishWaiver"
+                      name="englishWaiver"
+                      value={true}
+                      onClick={() => setEngWaiver(!engWaiver)}
+                      checked={engWaiver === true}
+                    />
+                    <Label
+                      className="form-check-label"
+                      check
+                      htmlFor="englishWaiver"
+                    >
+                      Yes
+                    </Label>
+                  </FormGroup>
+                  <FormGroup check inline>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      id="englishWaiver"
+                      name="englishWaiver"
+                      value={false}
+                      onClick={() => setEngWaiver(!engWaiver)}
+                      checked={engWaiver === false}
+                    />
+                    <Label
+                      className="form-check-label"
+                      check
+                      htmlFor="englishWaiver"
+                    >
+                      No
+                    </Label>
+                  </FormGroup>
                 </div>
               </Col>
             </FormGroup>
@@ -210,6 +238,7 @@ const UniversityEnglishRequirements = () => {
                 </Col>
               </FormGroup>
             )}
+
             <FormGroup row>
               <Col md="8" className="text-right">
                 {permissions?.includes(permissionList.Edit_University) && (

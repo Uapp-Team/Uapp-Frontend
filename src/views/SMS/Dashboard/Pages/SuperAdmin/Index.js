@@ -18,38 +18,53 @@ import DashboardReadyToApply from "../../../../../components/ui/DashboardReadyTo
 import DashboardProgressReportStaff from "../../../../../components/ui/DashboardProgressReportStaff";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import UserNotices from "../../Component/UserNotices";
+import Filter from "../../../../../components/Dropdown/Filter";
+import DashboardProgressChart from "../../../../../components/ui/DashboardProgressChart";
+import DashboardComission from "../../Component/DashboardComission";
 
 const SuperAdmin = () => {
   const [open, setOpen] = useState(false);
 
   const [count, setCount] = useState({});
   const [consultants, setConsultants] = useState([]);
+
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
+
   const history = useHistory();
   const [intake, setIntake] = useState({});
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
-    // get(`SystemAdminDashboard/Counting`).then((res) => {
-    get(`AdminDashboard/Cards`).then((res) => {
-      console.log(res);
-      setCount(res);
-    });
-
-    get(`SystemAdminDashboard/GetTransactions`).then((res) => {
-      setConsultants(res);
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
       setIntake(res);
     });
+
+    get(`SystemAdminDashboard/GetTransactions`).then((res) => {
+      setConsultants(res);
+    });
   }, []);
 
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    const filterData = intakeRngDD.filter((status) => {
+      return status.id === intake?.id;
+    });
+
+    setIntakeRngValue(filterData[0]?.id);
+    setIntakeRngLabel(filterData[0]?.name);
+  }, [intakeRngDD, intake]);
+
+  useEffect(() => {
+    get(`AdminDashboard/Cards/${intakeRngValue}`).then((res) => {
+      setCount(res);
+      console.log(res);
+    });
+  }, [intakeRngValue]);
 
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
 
@@ -62,15 +77,25 @@ const SuperAdmin = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
-        <div className="d-flex flex-wrap">
-          <div className="mt-2 mr-4 mb-1">
-            <span style={{ fontWeight: "500" }}>
-              Intake Range: {intake?.intakeName}
-            </span>
+        <div className="d-flex  align-items-center">
+          <div
+            className=" mr-4 mb-1 d-flex align-items-center"
+            style={{ marginTop: "-17px" }}
+          >
+            <span className="mr-1 fw-500">Intake Range:</span>
+            <Filter
+              data={intakeRngDD}
+              label={intakeRngLabel}
+              setLabel={setIntakeRngLabel}
+              value={intakeRngValue}
+              setValue={setIntakeRngValue}
+              action={() => {}}
+              isDisabled={false}
+            />
           </div>
           <div
             style={{ cursor: "pointer" }}
@@ -101,16 +126,19 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Total Application"
             value={count?.totalApplication}
-            link="/applications"
+            link={`/applicationsbyintake/${intakeRngValue}`}
             bgColor="#E1F5FC"
             borderColor="#24A1CD"
+            secondValue={count?.totalApplicant}
+            secondColor="#176682"
+            secondBgColor="#BAE7F7"
           />
         </Col>
         <Col md={3} xs={6} className="mb-30px">
           <DashboardCount
             title="Applications in Process"
             value={count?.totalApplicationInProgress}
-            link={`/applicationsByStatus/${5}/${1}`}
+            // link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
             bgColor="#FBF5E8"
             borderColor="#FFBA08"
           />
@@ -119,25 +147,28 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Unconditional Offer"
             value={count?.totalUnconditionalOffer}
-            link={`/applicationsByStatus/${2}/${2}`}
+            link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
             bgColor="#F8F3FF"
             borderColor="#AE75F8"
+            secondValue={count?.totalUnconditionalStudent}
+            secondColor="#451782"
+            secondBgColor="#E3D1FA"
           />
         </Col>
         <Col md={3} xs={6} className="mb-30px">
           <DashboardCount
             title="Total Registered"
             value={count?.totalRegistered}
-            link={`/applicationsByStatus/${2}/${3}`}
+            link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
             bgColor="#F0FFE0"
             borderColor="#70E000"
           />
         </Col>
         <Col md={3} xs={6} className="mb-30px">
           <DashboardCount
-            title="Total Rejected"
+            title="Total Rejected / cancelled"
             value={count?.totalRejected}
-            link={`/applicationsByStatus/${12}/${1}`}
+            // link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
             bgColor="#FEF6F5"
             borderColor="#F87675"
           />
@@ -146,7 +177,7 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Withdrawn Application"
             value={count?.totalWithdrawn}
-            link={`/applicationsByStatus/${4}/${3}`}
+            link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
             bgColor="#EDF1F5"
             borderColor="#34495E"
           />
@@ -174,18 +205,21 @@ const SuperAdmin = () => {
       {/* table start */}
 
       <>
-        <DashboardApplication url={`AdminDashboard/NewApplications`} />
-        <DashboardReadyToApply
-          url={`AdminDashboard/ReadyToApplyApplications`}
+        <DashboardApplication
+          url={`AdminDashboard/NewApplications/${intakeRngValue}`}
         />
-        <DashboardProgressReportStaff />
+        <DashboardReadyToApply
+          url={`AdminDashboard/ReadyToApplyApplications/${intakeRngValue}`}
+        />
+        <DashboardProgressChart />
+        <DashboardComission id={intakeRngValue} />
       </>
 
       <div className="custom-card-border p-4 mb-30px">
         <h5>Consultant Transaction List</h5>
 
         {consultants?.length > 0 ? (
-          <div>
+          <div className="overflowY-300px">
             <Table borderless responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
@@ -202,7 +236,7 @@ const SuperAdmin = () => {
                   <tr key={i} className="border-buttom">
                     <td className="cursor-pointer hyperlink-hover">
                       <Link
-                        className="text-body"
+                        className="text-id hover"
                         to={`consultantProfile/${con?.consultantId}`}
                       >
                         {con?.consultantViewId}
@@ -216,9 +250,9 @@ const SuperAdmin = () => {
                         {con?.consultantName}
                       </Link>
                     </td>
-                    <td>{con?.credit}</td>
-                    <td>{con?.debit}</td>
-                    <td>{con?.balance}</td>
+                    <td>£ {con?.credit}</td>
+                    <td>£ {con?.debit}</td>
+                    <td>£ {con?.balance} </td>
                     <td className="cursor-pointer hyperlink-hover">
                       <Link
                         to={`accountTransactionByConsultant/${con?.consultantId}`}
@@ -230,9 +264,9 @@ const SuperAdmin = () => {
                 ))}
               </tbody>
             </Table>
-            <div className="text-center text-blue">
+            {/* <div className="text-center text-blue">
               <Link to="/accountTransaction">See All</Link>
-            </div>
+            </div> */}
           </div>
         ) : (
           <p className="text-center">No Transaction</p>

@@ -51,6 +51,7 @@ import ButtonLoader from "../Components/ButtonLoader";
 import Loader from "../Search/Loader/Loader";
 import ConsultantRatingList from "./ConsultantRatingList";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../components/date/calenderFormate";
 
 const ConsultantNewProfile = () => {
   const location = useLocation();
@@ -822,7 +823,7 @@ const ConsultantNewProfile = () => {
                                   color: "#d4d4d4",
                                 }}
                               >
-                                {consultantData?.createdOn}
+                                {dateFormate(consultantData?.createdOn)}
                               </span>
                             </div>
                             <ul className="uapp-ul text-right">

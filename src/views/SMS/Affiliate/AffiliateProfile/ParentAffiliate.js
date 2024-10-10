@@ -1,0 +1,110 @@
+import React, { useEffect, useState } from "react";
+import { Card, Col, Row } from "reactstrap";
+import { useHistory } from "react-router-dom";
+import profileImage from "../../../../assets/img/profile/user-uploads/user-07.jpg";
+import get from "../../../../helpers/get";
+import { rootUrl } from "../../../../constants/constants";
+import { userTypes } from "../../../../constants/userTypeConstant";
+
+const ParentAffiliate = ({ affiliateProfileData, affiliateId }) => {
+  const [consultantData, setConsultantData] = useState({});
+  // const [success, setSuccess] = useState(false);
+  const userTypeId = localStorage.getItem("userType");
+  const history = useHistory();
+
+  const adminRedirectToParentConsultantProfile = () => {
+    history
+      .push
+      // `/consultantProfile/${affiliateProfileData?.data?.parent?.id}`
+      ();
+  };
+  const redirectToParentConsultantProfile = () => {
+    // history.push(`/parentConsultantProfile/${consultantData?.id}`);
+  };
+
+  return (
+    <>
+      {affiliateProfileData?.data?.parent === null ? null : (
+        <Card className="p-4">
+          <div className="d-flex justify-between-start">
+            <div className="pr-3">
+              {affiliateProfileData?.data?.parent.profilePic == null ? (
+                <img
+                  src={profileImage}
+                  alt="profile_img"
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50px",
+                  }}
+                />
+              ) : (
+                <img
+                  src={
+                    rootUrl +
+                    affiliateProfileData?.data?.parent.profilePic?.fileUrl
+                  }
+                  alt="profile_img"
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50px",
+                  }}
+                />
+              )}
+            </div>
+            <div>
+              {" "}
+              <h5>
+                {userTypeId === userTypes?.SystemAdmin.toString() ||
+                userTypeId === userTypes?.Admin.toString() ? (
+                  <span
+                    onClick={adminRedirectToParentConsultantProfile}
+                    // style={{ cursor: "pointer" }}
+                  >
+                    {affiliateProfileData?.data?.parent?.name}
+                  </span>
+                ) : (
+                  <span
+                    onClick={redirectToParentConsultantProfile}
+                    // style={{ cursor: "pointer" }}
+                  >
+                    {affiliateProfileData?.data?.parent?.name}
+                  </span>
+                )}
+              </h5>
+              {/* {userTypeId === userTypes?.Consultant.toString() ? null : (
+                <p className="text-gray-70">
+                  {consultantData?.parentConsultant}{" "}
+                </p>
+              )} */}
+              <p> Parent Affiliate</p>
+            </div>
+          </div>
+
+          <Row>
+            <Col>
+              <ul className="uapp-ul">
+                {affiliateProfileData?.data?.parent?.email === null ? null : (
+                  <li>
+                    <i className="far fa-envelope pr-2"></i>
+                    {affiliateProfileData?.data?.parent?.email}
+                  </li>
+                )}
+
+                {affiliateProfileData?.data?.parent?.phone === null ? null : (
+                  <li>
+                    <i className="fas fa-phone pr-2"></i>
+                    {affiliateProfileData?.data?.parent?.phone}
+                  </li>
+                )}
+              </ul>
+            </Col>
+          </Row>
+        </Card>
+      )}
+    </>
+  );
+};
+
+export default ParentAffiliate;

@@ -88,7 +88,7 @@ const EmployeeList = (props) => {
               <Table className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
-                    <th>SL/NO</th>
+                    {/* <th>SL/NO</th> */}
                     <th>Title</th>
                     <th>Icon</th>
                     <th>Type</th>
@@ -100,7 +100,7 @@ const EmployeeList = (props) => {
                 <tbody>
                   {menuList?.map((men, i) => (
                     <tr key={men.id} style={{ textAlign: "center" }}>
-                      <th scope="row">{serialNum + i}</th>
+                      {/* <th scope="row">{serialNum + i}</th> */}
                       <td>{men.title}</td>
                       <td>{men.icon}</td>
                       <td>{men.type}</td>

@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  Col,
-  Row,
-} from "reactstrap";
+import { Card, Col, Row } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import get from "../../../helpers/get";
 import { useState } from "react";
 import post from "../../../helpers/post";
@@ -14,6 +9,7 @@ import remove from "../../../helpers/remove";
 import SubjectIntakeFormComponent from "./SubjectIntakeFormComponent";
 import SubjectIntakeListComponent from "./SubjectIntakeListComponent";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import moment from "moment";
 
 const SubjectIntake = () => {
   const { camId } = useParams();
@@ -33,7 +29,7 @@ const SubjectIntake = () => {
   const [deleteModal, setDeleteModal] = useState(false);
 
   const [intId, setIntId] = useState(0);
-  const [intName, setIntName] = useState('');
+  const [intName, setIntName] = useState("");
 
   const [intakeError, setIntakeError] = useState(false);
 
@@ -42,20 +38,17 @@ const SubjectIntake = () => {
   const [progress, setProgress] = useState(false);
   const [progress1, setProgress1] = useState(false);
 
-  const [value, setValue] = useState();
+  const [date, setDate] = useState();
+  const [dateError, setDateError] = useState(false);
 
-  const history = useHistory();
-  const location = useLocation();
   const { addToast } = useToasts();
 
   useEffect(() => {
     get("Intake/Index").then((res) => {
-
       setIntake(res);
     });
 
     get("IntakeStatus/GetAll").then((res) => {
-
       setStatus(res);
     });
 
@@ -65,7 +58,7 @@ const SubjectIntake = () => {
       console.log("intklist", res);
       setSubIntake(res);
     });
-  }, [success]);
+  }, [success, subbId, camId]);
 
   const intakes = intake.map((intakeOptions) => ({
     label: intakeOptions?.name,
@@ -80,6 +73,7 @@ const SubjectIntake = () => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
+    setDate(moment(new Date(label)).format("YYYY-MM-DD"));
   };
 
   const selectStatus = (label, value) => {
@@ -88,19 +82,31 @@ const SubjectIntake = () => {
     setStatusValue(value);
   };
 
+  const validateForm = () => {
+    let isFormValid = true;
+
+    if (intakeValue === 0) {
+      isFormValid = false;
+      setIntakeError(true);
+    }
+    if (statusValue === 0) {
+      isFormValid = false;
+      setStatusError(true);
+    }
+
+    if (!date && statusValue === 1) {
+      isFormValid = false;
+      setDateError(true);
+    }
+
+    return isFormValid;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
-    // for (var x of subData) {
 
-    // }
-
-    if (intakeValue === 0) {
-      setIntakeError(true);
-    }
-    else if (statusValue === 0) {
-      setStatusError(true);
-    } else {
+    if (validateForm()) {
       setButtonStatus(true);
       setProgress1(true);
       post(`SubjectIntake/AssignToSubject`, subData).then((res) => {
@@ -116,7 +122,7 @@ const SubjectIntake = () => {
           setIntakeValue(0);
           setStatusLabel("Select Status");
           setStatusValue(0);
-          setValue("");
+          setDate("");
         } else {
           addToast(res?.data?.message, {
             appearance: "warning",
@@ -135,31 +141,25 @@ const SubjectIntake = () => {
 
   const closeDeleteModal = () => {
     setDeleteModal(false);
-    setIntName('');
+    setIntName("");
     setIntId(0);
   };
 
   const handleDelete = (id) => {
     setButtonStatus1(true);
     setProgress(true);
-    const returnValue = remove(`SubjectIntake/DeleteById/${id}`).then(
-      (action) => {
-        setButtonStatus1(false);
-        setProgress(false);
-        setSuccess(!success);
-        setDeleteModal(false);
-        addToast(action, {
-          appearance: "error",
-          autoDismiss: true,
-        });
-        setIntName('');
-        setIntId(0);
-      }
-    );
-  };
-
-  const backToList = () => {
-    history.push(`/campusSubjectList/${camId}`);
+    remove(`SubjectIntake/DeleteById/${id}`).then((action) => {
+      setButtonStatus1(false);
+      setProgress(false);
+      setSuccess(!success);
+      setDeleteModal(false);
+      addToast(action, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setIntName("");
+      setIntId(0);
+    });
   };
 
   const handleReset = () => {
@@ -169,8 +169,8 @@ const SubjectIntake = () => {
     setStatusValue(0);
     setIntakeError(false);
     setStatusError(false);
-    setValue("");
-  }
+    setDate("");
+  };
 
   const handleDate = (e) => {
     var datee = e;
@@ -182,20 +182,17 @@ const SubjectIntake = () => {
 
   return (
     <div>
-   
-
       <BreadCrumb
         title="subject Intake List"
         backTo="Campus Course"
         path={`/campusSubjectList/${camId}`}
       />
 
-
       <div className="">
         <Card>
           <Row className="pt-3 gx-4">
             <Col md="4">
-              <SubjectIntakeFormComponent 
+              <SubjectIntakeFormComponent
                 camId={camId}
                 subbId={subbId}
                 handleSubmit={handleSubmit}
@@ -209,15 +206,16 @@ const SubjectIntake = () => {
                 statusValue={statusValue}
                 selectStatus={selectStatus}
                 statusError={statusError}
-                value={value}
-                setValue={setValue}
+                date={date}
+                setDate={setDate}
+                dateError={dateError}
                 handleReset={handleReset}
                 progress1={progress1}
                 buttonStatus={buttonStatus}
               />
             </Col>
             <Col md="8">
-              <SubjectIntakeListComponent 
+              <SubjectIntakeListComponent
                 subIntake={subIntake}
                 serialNum={serialNum}
                 handleDate={handleDate}

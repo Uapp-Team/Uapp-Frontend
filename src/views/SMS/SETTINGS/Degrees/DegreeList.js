@@ -218,6 +218,7 @@ const DegreeList = () => {
 
   return (
     <div>
+      <BreadCrumb title="Degrees" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
@@ -305,8 +306,6 @@ const DegreeList = () => {
             </ModalBody>
           </Modal>
 
-          <BreadCrumb title="Degrees" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {/* <div className='mb-3'> */}
@@ -338,7 +337,7 @@ const DegreeList = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Education Level Name</th>
                       <th>Education Level Description </th>
@@ -351,7 +350,7 @@ const DegreeList = () => {
                   <tbody>
                     {degreeList?.map((degree, i) => (
                       <tr key={degree?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{serialNum + i}</th>
+                        {/* <th scope="row">{serialNum + i}</th> */}
                         <td>{degree?.name}</td>
 
                         <td>{degree?.educationLevel?.name}</td>
@@ -376,13 +375,6 @@ const DegreeList = () => {
                               func={() => toggleDanger(degree)}
                             />
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Degree? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={() => handleDeleteData(deleteData)}
-                            cancel={() => setDeleteModal(false)}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -393,6 +385,14 @@ const DegreeList = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Degree? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={() => handleDeleteData(deleteData)}
+        cancel={() => setDeleteModal(false)}
+      />
     </div>
   );
 };

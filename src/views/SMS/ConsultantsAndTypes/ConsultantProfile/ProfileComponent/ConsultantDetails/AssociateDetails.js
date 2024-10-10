@@ -17,6 +17,7 @@ import { rootUrl } from "../../../../../../constants/constants";
 
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import ButtonForFunction from "../../../../Components/ButtonForFunction";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 const userId = localStorage.getItem("referenceId");
 
 const AssociateDetails = ({ id }) => {
@@ -331,9 +332,9 @@ const AssociateDetails = ({ id }) => {
                         </td>
 
                         <td>
-                          {handleDate(commission?.createdOn)}
+                          {dateFormate(commission?.createdOn)}
                           {" to "}
-                          {handleDate(commission?.updatedOn)}
+                          {dateFormate(commission?.updatedOn)}
                         </td>
                       </tr>
                     ))}
@@ -399,7 +400,7 @@ const AssociateDetails = ({ id }) => {
                       <td>
                         <b>Expiry Date of Your BRP/TRP or Visa:</b>
                       </td>
-                      <td>{handleDate(eligibility?.expireDate)}</td>
+                      <td>{dateFormate(eligibility?.expireDate)}</td>
                     </tr>
                     <tr>
                       <td>

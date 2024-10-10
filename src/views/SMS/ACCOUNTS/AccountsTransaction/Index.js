@@ -31,39 +31,78 @@ import { transactionTypes } from "../../../../constants/TransactionConstant";
 import Loader from "../../Search/Loader/Loader";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../Components/ButtonLoader";
-import { tableIdList } from "../../../../constants/TableIdConstant";
-import put from "../../../../helpers/put";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import TagButton from "../../../../components/buttons/TagButton";
 import Branch from "../../../../components/Dropdown/Filter";
+import { Link } from "react-router-dom";
+import ColumnAccountsTransaction from "../../TableColumn/ColumnAccountsTransaction";
+import Typing from "../../../../components/form/Typing";
+import Filter from "../../../../components/Dropdown/Filter";
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 
 const Index = () => {
-  const history = useHistory();
+  const accountTransactionPaging = JSON.parse(
+    sessionStorage.getItem("accountTransaction")
+  );
   const { consultantId } = useParams();
   const userType = localStorage.getItem("userType");
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
+  const [pagedata, setfetchData] = useState([]);
   const [consultant, setConsultant] = useState([]);
-  const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
+
+  const [consultantLabel, setConsultantLabel] = useState(
+    accountTransactionPaging?.consultantLabel
+      ? accountTransactionPaging?.consultantLabel
+      : "Select Consultant"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    accountTransactionPaging?.consultantValue
+      ? accountTransactionPaging?.consultantValue
+      : 0
+  );
   const [consultantType, setConsultantType] = useState([]);
   const [consultantLabelType, setConsultantLabelType] = useState(
-    "Select Consultant Type"
+    accountTransactionPaging?.consultantLabelType
+      ? accountTransactionPaging?.consultantLabelType
+      : "Select Consultant Type"
+  );
+  const [consultantValueType, setConsultantValueType] = useState(
+    accountTransactionPaging?.consultantValueType
+      ? accountTransactionPaging?.consultantValueType
+      : 0
   );
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
-  const [consultantValueType, setConsultantValueType] = useState(0);
   const [transaction, setTransaction] = useState([]);
   const [transactionLabel, setTransactionLabel] = useState(
-    "Select Transaction Type"
+    accountTransactionPaging?.transactionLabel
+      ? accountTransactionPaging?.transactionLabel
+      : "Select Transaction Type"
+  );
+  const [transactionValue, setTransactionValue] = useState(
+    accountTransactionPaging?.transactionValue
+      ? accountTransactionPaging?.transactionValue
+      : 0
   );
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const [transactionValue, setTransactionValue] = useState(0);
   const [status, setStatus] = useState([]);
-  const [statusLabel, setStatusLabel] = useState("Select Status");
-  const [statusValue, setStatusValue] = useState(0);
-  const [transactionCode, setTransactionCode] = useState("");
+  const [statusLabel, setStatusLabel] = useState(
+    accountTransactionPaging?.statusLabel
+      ? accountTransactionPaging?.statusLabel
+      : "Select Status"
+  );
+  const [statusValue, setStatusValue] = useState(
+    accountTransactionPaging?.statusValue
+      ? accountTransactionPaging?.statusValue
+      : 0
+  );
+  const [transactionCode, setTransactionCode] = useState(
+    accountTransactionPaging?.transactionCode
+      ? accountTransactionPaging?.transactionCode
+      : ""
+  );
   const [modalOpen, setModalOpen] = useState(false);
   const [inflowConsultantError, setInflowConsultantError] = useState("");
   const [inflowTransactionError, setInflowTransactionError] = useState("");
@@ -97,9 +136,9 @@ const Index = () => {
   const [noteError, setNoteError] = useState("");
   const [cError, setCError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   // for hide/unhide column
-  const [check, setCheck] = useState(true);
   const [tableData, setTableData] = useState([]);
   const [ser, setSer] = useState(1);
 
@@ -148,23 +187,74 @@ const Index = () => {
     // }),
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    accountTransactionPaging?.currentPage
+      ? accountTransactionPaging?.currentPage
+      : 1
+  );
   const [callApi, setCallApi] = useState(false);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // user select data per page
-  const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
-  const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+  //const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
+  //const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [progress, setProgress] = useState(false);
   const [progress1, setProgress1] = useState(false);
   const [disabledSelect, setDisabledSelect] = useState(false);
 
-  const selectDataSize = (value) => {
-    setDataPerPage(value);
-    setCallApi((prev) => !prev);
-  };
+  //const selectDataSize = (value) => {
+  //  setDataPerPage(value);
+  //  setCallApi((prev) => !prev);
+  //};
+
+  useEffect(() => {
+    const tableColumnAccountsTransaction = JSON.parse(
+      localStorage.getItem("ColumnAccountsTransaction")
+    );
+    tableColumnAccountsTransaction &&
+      setTableData(tableColumnAccountsTransaction);
+
+    !tableColumnAccountsTransaction &&
+      localStorage.setItem(
+        "ColumnAccountsTransaction",
+        JSON.stringify(ColumnAccountsTransaction)
+      );
+    !tableColumnAccountsTransaction && setTableData(ColumnAccountsTransaction);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "accountTransaction",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+
+        consultantLabel: consultantLabel && consultantLabel,
+        consultantValue: consultantValue && consultantValue,
+        consultantLabelType: consultantLabelType && consultantLabelType,
+        consultantValueType: consultantValueType && consultantValueType,
+        transactionLabel: transactionLabel && transactionLabel,
+        transactionValue: transactionValue && transactionValue,
+        statusLabel: statusLabel && statusLabel,
+        statusValue: statusValue && statusValue,
+        transactionCode: transactionCode && transactionCode,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    consultantLabel,
+    consultantValue,
+    consultantLabelType,
+    consultantValueType,
+    transactionLabel,
+    transactionValue,
+    statusLabel,
+    statusValue,
+    transactionCode,
+    dataPerPage,
+  ]);
 
   // search handler
   const handleSearch = () => {
@@ -245,7 +335,7 @@ const Index = () => {
     get(`ConsultantTypeDD/Index`).then((res) => {
       setConsultantType(res);
     });
-    get(`PaymentTypeDD/Index`).then((res) => {
+    get(`TransactionTypeDD/Index`).then((res) => {
       setTransaction(res);
     });
 
@@ -253,35 +343,32 @@ const Index = () => {
       setStatus(res);
     });
 
-    get(`TableDefination/Index/${tableIdList?.Account_Transaction_List}`).then(
-      (res) => {
-        console.log("table data", res);
-        setTableData(res);
+    if (!isTyping) {
+      if (consultantId) {
+        get(
+          `AccountTransaction/Index?consultanttypeid=${consultantValueType}&consultantid=${consultantId}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
+            transactionCode === "" ? "emptystring" : transactionCode
+          }&branchid=${branchValue}`
+        ).then((res) => {
+          console.log(res);
+          setEntity(res?.length);
+          setfetchData(res);
+          setLoading(false);
+          //setSer(res?.firstSerialNumber);
+        });
+      } else {
+        get(
+          `AccountTransaction/Index?consultanttypeid=${consultantValueType}&consultantid=${consultantValue}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
+            transactionCode === "" ? "emptystring" : transactionCode
+          }&branchid=${branchValue}`
+        ).then((res) => {
+          console.log(res);
+          setEntity(res?.length);
+          setfetchData(res);
+          setLoading(false);
+          //setSer(res?.firstSerialNumber);
+        });
       }
-    );
-
-    if (consultantId) {
-      get(
-        `AccountTransaction/Index?page=${currentPage}&pageSize=${dataPerPage}&consultanttypeid=${consultantValueType}&consultantid=${consultantId}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
-          transactionCode === "" ? "emptystring" : transactionCode
-        }&branchid=${branchValue}`
-      ).then((res) => {
-        setEntity(res?.totalEntity);
-        setData(res?.models);
-        setLoading(false);
-        setSer(res?.firstSerialNumber);
-      });
-    } else {
-      get(
-        `AccountTransaction/Index?page=${currentPage}&pageSize=${dataPerPage}&consultanttypeid=${consultantValueType}&consultantid=${consultantValue}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
-          transactionCode === "" ? "emptystring" : transactionCode
-        }&branchid=${branchValue}`
-      ).then((res) => {
-        setEntity(res?.totalEntity);
-        setData(res?.models);
-        setLoading(false);
-        setSer(res?.firstSerialNumber);
-      });
     }
 
     get(`BonusTransactionTypeDD/Index`).then((res) => {
@@ -295,12 +382,20 @@ const Index = () => {
     statusValue,
     transactionCode,
     bonusTransactionValue,
-    dataPerPage,
+    //dataPerPage,
     callApi,
     currentPage,
     consultantValueType,
     branchValue,
+    isTyping,
   ]);
+
+  useEffect(() => {
+    const form = dataPerPage * (currentPage - 1);
+    const to = form + dataPerPage;
+    setData(pagedata.slice(form, to));
+    setSer(form + 1);
+  }, [dataPerPage, currentPage, pagedata]);
 
   const gotoDetailsPage = (data) => {
     if (data?.transactionTypeId == transactionTypes?.ApplicationTransaction) {
@@ -320,15 +415,8 @@ const Index = () => {
     } else if (
       data?.transactionTypeId == transactionTypes?.CommissionTransaction
     ) {
-      window.open(
-        `/commissionTransactionDetails/${data?.baseTransactionId}`,
-        "_blank"
-      );
+      window.open(`/commissionTransactionDetails/${data?.id}`, "_blank");
     }
-  };
-
-  const backToDashboard = () => {
-    history.push("/");
   };
 
   const consultantOptions = consultant?.map((con) => ({
@@ -616,534 +704,543 @@ const Index = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Account_Transaction_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnAccountsTransaction", JSON.stringify(values));
   };
 
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div>
-          {/* Outflow Modal */}
-          <Modal
-            isOpen={modal2Open}
-            toggle={closeModal2}
-            className="uapp-modal2"
-          >
-            <ModalHeader>Create Withdraw Request</ModalHeader>
-            <ModalBody>
-              <Form onSubmit={submitWithdrawRequest}>
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Select Consultant <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      styles={customStyles}
-                      options={consultantOptions}
-                      value={{ label: label2, value: value2 }}
-                      onChange={(opt) =>
-                        selectConsultant2(opt.label, opt.value)
-                      }
-                      name="consultantId"
-                      id="consultantId"
-                    />
-                    <span className="text-danger">{cError}</span>
-                  </Col>
-                </FormGroup>
+      <BreadCrumb title="Accounts Transaction List" backTo="" path="/" />
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Amount Available to Pay{" "}
-                      <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input type="text" value={amount} disabled required />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Amount<span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      type="text"
-                      onChange={(e) => {
-                        handleWithdrawAmount(e);
-                      }}
-                      value={amountInput}
-                      placeholder="Enter Amount"
-                    />
-                    <span className="text-danger">{amountInputError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Select Payment Type <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      styles={customStyles}
-                      options={outflowTransactionOptions}
-                      value={{ label: tLabel, value: tValue }}
-                      onChange={(opt) =>
-                        selectOutflowTransaction(opt.label, opt.value)
-                      }
-                    />
-                    <span className="text-danger">{tError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Ref/Invoice<span className="text-danger">*</span>
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      type="text"
-                      value={reference}
-                      placeholder="Enter Ref/Invoice"
-                      onChange={(e) => {
-                        handleWithDrawReference(e);
-                      }}
-                    />
-                    <span className="text-danger">{referenceError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Note<span className="text-danger">*</span>
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      type="textarea"
-                      value={note}
-                      onChange={(e) => {
-                        handleWithdrawNote(e);
-                      }}
-                      rows={2}
-                      placeholder="Enter Note"
-                    />
-                    <span className="text-danger">{noteError}</span>
-                  </Col>
-                </FormGroup>
-
-                <div className="d-flex justify-content-end">
-                  <FormGroup className="has-icon-left position-relative">
-                    <Button
-                      color="primary"
-                      className="mr-1 mt-3"
-                      disabled={
-                        amountInput < 50 ||
-                        amountInput > amount ||
-                        amountInput == isNaN(amountInput) ||
-                        buttonStatus
-                          ? true
-                          : false
-                      }
-                    >
-                      {progress1 ? <ButtonLoader /> : "Submit"}
-                    </Button>
-                  </FormGroup>
-                </div>
-              </Form>
-              <ul>
-                <li>
-                  <span style={{ fontWeight: "500" }}>
-                    Minimum Amount limit is &#xA3; 50{" "}
+      <div>
+        {/* Outflow Modal */}
+        <Modal isOpen={modal2Open} toggle={closeModal2} className="uapp-modal2">
+          <ModalHeader>Create Withdraw Request</ModalHeader>
+          <ModalBody>
+            <Form onSubmit={submitWithdrawRequest}>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Select Consultant <span className="text-danger">*</span>{" "}
                   </span>
-                </li>
-              </ul>
-            </ModalBody>
-          </Modal>
+                </Col>
+                <Col md="8">
+                  <Select
+                    styles={customStyles}
+                    options={consultantOptions}
+                    value={{ label: label2, value: value2 }}
+                    onChange={(opt) => selectConsultant2(opt.label, opt.value)}
+                    name="consultantId"
+                    id="consultantId"
+                  />
+                  <span className="text-danger">{cError}</span>
+                </Col>
+              </FormGroup>
 
-          {/* Inflow Modal */}
-          <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
-            <ModalHeader>Inflow Transaction</ModalHeader>
-            <ModalBody>
-              <Form onSubmit={handleInflowSubmit}>
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Select Consultant <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      styles={customStyles2}
-                      options={consultantOptions}
-                      value={{ label: consultantLabel, value: consultantValue }}
-                      onChange={(opt) => selectConsultant(opt.label, opt.value)}
-                      name="consultantId"
-                      id="consultantId"
-                      isDisabled={consultantId ? true : false}
-                    />
-                    <span className="text-danger">{inflowConsultantError}</span>
-                  </Col>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Amount Available to Pay{" "}
+                    <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input type="text" value={amount} disabled required />
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Amount<span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="text"
+                    onChange={(e) => {
+                      handleWithdrawAmount(e);
+                    }}
+                    value={amountInput}
+                    placeholder="Enter Amount"
+                  />
+                  <span className="text-danger">{amountInputError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Select Payment Type <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Select
+                    styles={customStyles}
+                    options={outflowTransactionOptions}
+                    value={{ label: tLabel, value: tValue }}
+                    onChange={(opt) =>
+                      selectOutflowTransaction(opt.label, opt.value)
+                    }
+                  />
+                  <span className="text-danger">{tError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Ref/Invoice<span className="text-danger">*</span>
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="text"
+                    value={reference}
+                    placeholder="Enter Ref/Invoice"
+                    onChange={(e) => {
+                      handleWithDrawReference(e);
+                    }}
+                  />
+                  <span className="text-danger">{referenceError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Note<span className="text-danger">*</span>
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="textarea"
+                    value={note}
+                    onChange={(e) => {
+                      handleWithdrawNote(e);
+                    }}
+                    rows={2}
+                    placeholder="Enter Note"
+                  />
+                  <span className="text-danger">{noteError}</span>
+                </Col>
+              </FormGroup>
+
+              <div className="d-flex justify-content-end">
+                <FormGroup className="has-icon-left position-relative">
+                  <Button
+                    color="primary"
+                    className="mr-1 mt-3"
+                    disabled={
+                      amountInput < 50 ||
+                      amountInput > amount ||
+                      amountInput == isNaN(amountInput) ||
+                      buttonStatus
+                        ? true
+                        : false
+                    }
+                  >
+                    {progress1 ? <ButtonLoader /> : "Submit"}
+                  </Button>
                 </FormGroup>
+              </div>
+            </Form>
+            <ul>
+              <li>
+                <span style={{ fontWeight: "500" }}>
+                  Minimum Amount limit is &#xA3; 50{" "}
+                </span>
+              </li>
+            </ul>
+          </ModalBody>
+        </Modal>
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Transaction Type <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      styles={customStyles2}
-                      options={bonusTransactionOptions}
-                      value={{
-                        label: bonusTransactionLabel,
-                        value: bonusTransactionValue,
-                      }}
-                      onChange={(opt) =>
-                        selectBonusTransaction(opt.label, opt.value)
-                      }
-                      name="transactionTypeId"
-                      id="transactionTypeId"
-                    />
+        {/* Inflow Modal */}
+        <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
+          <ModalHeader>Inflow Transaction</ModalHeader>
+          <ModalBody>
+            <Form onSubmit={handleInflowSubmit}>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Select Consultant <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Select
+                    styles={customStyles2}
+                    options={consultantOptions}
+                    value={{ label: consultantLabel, value: consultantValue }}
+                    onChange={(opt) => selectConsultant(opt.label, opt.value)}
+                    name="consultantId"
+                    id="consultantId"
+                    isDisabled={consultantId ? true : false}
+                  />
+                  <span className="text-danger">{inflowConsultantError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Transaction Type <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Select
+                    styles={customStyles2}
+                    options={bonusTransactionOptions}
+                    value={{
+                      label: bonusTransactionLabel,
+                      value: bonusTransactionValue,
+                    }}
+                    onChange={(opt) =>
+                      selectBonusTransaction(opt.label, opt.value)
+                    }
+                    name="transactionTypeId"
+                    id="transactionTypeId"
+                  />
+                  <span className="text-danger">{inflowTransactionError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Amount <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="text"
+                    placeholder="Enter Amount"
+                    name="amount"
+                    id="amount"
+                    onChange={(e) => {
+                      handleInflowAmount(e);
+                    }}
+                  />
+                  <span className="text-danger">{inflowAmountError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Reference <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    placeholder="Enter Reference"
+                    onChange={(e) => {
+                      handleInflowReference(e);
+                    }}
+                    name="reference"
+                    id="reference"
+                  />
+                  <span className="text-danger">{inflowReferenceError}</span>
+                </Col>
+              </FormGroup>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Note <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="textarea"
+                    rows={2}
+                    placeholder="Enter Note"
+                    name="transactionNote"
+                    id="transactionNote"
+                    onChange={(e) => {
+                      handleInflowNote(e);
+                    }}
+                  />
+                  <span className="text-danger">{inflowNoteError}</span>
+                </Col>
+              </FormGroup>
+
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="12">
+                  <span>
                     <span className="text-danger">
-                      {inflowTransactionError}
-                    </span>
-                  </Col>
-                </FormGroup>
+                      <b>Note:</b>
+                    </span>{" "}
+                    Adding any inflow will add amount directly to the withdrawal
+                    balance.
+                  </span>
+                </Col>
+              </FormGroup>
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Amount <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="12">
+                  <div className="d-flex flex-wrap ml-3 pl-1">
                     <Input
-                      type="text"
-                      placeholder="Enter Amount"
-                      name="amount"
-                      id="amount"
-                      onChange={(e) => {
-                        handleInflowAmount(e);
-                      }}
+                      type="checkbox"
+                      checked={agree}
+                      onChange={(e) => setAgree(e.target.checked)}
                     />
-                    <span className="text-danger">{inflowAmountError}</span>
-                  </Col>
+                    <span>I acknowledge and understand the process.</span>
+                  </div>
+                </Col>
+              </FormGroup>
+
+              <div className="d-flex justify-content-end">
+                <FormGroup className="has-icon-left position-relative">
+                  <Button.Ripple
+                    color="primary"
+                    className="mr-1 mt-3"
+                    disabled={!agree || buttonStatus}
+                  >
+                    {progress ? <ButtonLoader /> : "Submit"}
+                  </Button.Ripple>
                 </FormGroup>
+              </div>
+            </Form>
+          </ModalBody>
+        </Modal>
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Reference <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      placeholder="Enter Reference"
-                      onChange={(e) => {
-                        handleInflowReference(e);
-                      }}
-                      name="reference"
-                      id="reference"
-                    />
-                    <span className="text-danger">{inflowReferenceError}</span>
-                  </Col>
-                </FormGroup>
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Note <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      type="textarea"
-                      rows={2}
-                      placeholder="Enter Note"
-                      name="transactionNote"
-                      id="transactionNote"
-                      onChange={(e) => {
-                        handleInflowNote(e);
-                      }}
-                    />
-                    <span className="text-danger">{inflowNoteError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="12">
-                    <span>
-                      <span className="text-danger">
-                        <b>Note:</b>
-                      </span>{" "}
-                      Adding any inflow will add amount directly to the
-                      withdrawal balance.
-                    </span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="12">
-                    <div className="d-flex flex-wrap ml-3 pl-1">
-                      <Input
-                        type="checkbox"
-                        checked={agree}
-                        onChange={(e) => setAgree(e.target.checked)}
-                      />
-                      <span>I acknowledge and understand the process.</span>
-                    </div>
-                  </Col>
-                </FormGroup>
-
-                <div className="d-flex justify-content-end">
-                  <FormGroup className="has-icon-left position-relative">
-                    <Button.Ripple
-                      color="primary"
-                      className="mr-1 mt-3"
-                      disabled={!agree || buttonStatus}
-                    >
-                      {progress ? <ButtonLoader /> : "Submit"}
-                    </Button.Ripple>
-                  </FormGroup>
-                </div>
-              </Form>
-            </ModalBody>
-          </Modal>
-
-          <BreadCrumb title="Accounts Transaction List" backTo="" path="/" />
-
-          <Card>
-            <CardBody>
-              <div className="row g-2">
-                <div className="col-md-10">
-                  <div className="row mb-3">
-                    {userType !== userTypes?.Consultant ? (
-                      <div className="col-md-3 mb-2">
-                        <Select
-                          options={consultantTypeOptions}
-                          value={{
-                            label: consultantLabelType,
-                            value: consultantValueType,
-                          }}
-                          onChange={(opt) =>
-                            selectConsultantType(opt.label, opt.value)
-                          }
-                        />
-                      </div>
-                    ) : null}
-
-                    {userType !== userTypes?.Consultant ? (
-                      <div className="col-md-3 mb-2">
-                        <>
-                          <Select
-                            options={consultantOptions}
-                            value={{
-                              label: consultantLabel,
-                              value: consultantValue,
-                            }}
-                            onChange={(opt) =>
-                              selectConsultant(opt.label, opt.value)
-                            }
-                            isDisabled={consultantId ? true : false}
-                          />
-                        </>
-                      </div>
-                    ) : null}
-
+        <Card className="zindex-100">
+          <CardBody>
+            <div className="row g-2">
+              <div className="col-md-10">
+                <div className="row mb-3">
+                  {userType !== userTypes?.Consultant ? (
                     <div className="col-md-3 mb-2">
                       <Select
-                        options={transactionOptions}
+                        options={consultantTypeOptions}
                         value={{
-                          label: transactionLabel,
-                          value: transactionValue,
+                          label: consultantLabelType,
+                          value: consultantValueType,
                         }}
                         onChange={(opt) =>
-                          selectTransaction(opt.label, opt.value)
+                          selectConsultantType(opt.label, opt.value)
                         }
                       />
                     </div>
-                    <div className="col-md-3 mb-2">
-                      <Select
-                        options={statusOptions}
-                        value={{ label: statusLabel, value: statusValue }}
-                        onChange={(opt) => selectStatus(opt.label, opt.value)}
-                      />
-                    </div>
+                  ) : null}
 
-                    {branch.length > 1 && (
-                      <div className="col-md-3 mb-2">
-                        <Branch
-                          data={branch}
-                          label={branchLabel}
-                          setLabel={setBranchLabel}
-                          value={branchValue}
-                          setValue={setBranchValue}
-                          name=""
-                          error={() => {}}
-                          setError={() => {}}
-                          action={() => {}}
+                  {userType !== userTypes?.Consultant ? (
+                    <div className="col-md-3 mb-2">
+                      <>
+                        <Select
+                          options={consultantOptions}
+                          value={{
+                            label: consultantLabel,
+                            value: consultantValue,
+                          }}
+                          onChange={(opt) =>
+                            selectConsultant(opt.label, opt.value)
+                          }
+                          isDisabled={consultantId ? true : false}
                         />
-                      </div>
-                    )}
+                      </>
+                    </div>
+                  ) : null}
+                  {/* 
+                  {userType === userTypes?.SystemAdmin && (
+                    <>
+                      {(userTypeValue === 0 || userTypeValue === 2) && (
+                        <div className="col-md-3 mb-2">
+                          <DefaultDropdown
+                            label={affiliateLabel}
+                            setLabel={setAffiliateLabel}
+                            value={affiliateValue}
+                            setValue={setAffiliateValue}
+                            url="AffiliateDD"
+                            name="status"
+                            error={() => {}}
+                            setError={() => {}}
+                            action={() => {}}
+                          />
+                        </div>
+                      )}
+                      {(userTypeValue === 0 || userTypeValue === 3) && (
+                        <div className="col-md-3 mb-2">
+                          <DefaultDropdown
+                            label={companionLabel}
+                            setLabel={setCompanionLabel}
+                            value={companionValue}
+                            setValue={setCompanionValue}
+                            url="CompanionDD"
+                            name="status"
+                            error={() => {}}
+                            setError={() => {}}
+                            action={() => {}}
+                          />
+                        </div>
+                      )}
+                    </>
+                  )} */}
 
+                  <div className="col-md-3 mb-2">
+                    <Select
+                      options={transactionOptions}
+                      value={{
+                        label: transactionLabel,
+                        value: transactionValue,
+                      }}
+                      onChange={(opt) =>
+                        selectTransaction(opt.label, opt.value)
+                      }
+                    />
+                  </div>
+                  <div className="col-md-3 mb-2">
+                    <Select
+                      options={statusOptions}
+                      value={{ label: statusLabel, value: statusValue }}
+                      onChange={(opt) => selectStatus(opt.label, opt.value)}
+                    />
+                  </div>
+
+                  {branch.length > 1 && (
                     <div className="col-md-3 mb-2">
-                      <Input
-                        className="mb-2 transaction-code"
-                        type="text"
-                        placeholder="Enter Transaction Code"
-                        value={transactionCode}
-                        onChange={(e) => setTransactionCode(e.target.value)}
+                      <Branch
+                        data={branch}
+                        label={branchLabel}
+                        setLabel={setBranchLabel}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        name=""
+                        error={() => {}}
+                        setError={() => {}}
+                        action={() => {}}
                       />
                     </div>
+                  )}
+
+                  <div className="col-md-3 mb-2">
+                    <Typing
+                      placeholder="Enter Transaction Code"
+                      value={transactionCode}
+                      setValue={setTransactionCode}
+                      setIsTyping={setIsTyping}
+                    />
                   </div>
                 </div>
-
-                {userType === userTypes?.Consultant ? null : (
-                  <div className="col-md-2">
-                    <div className="d-flex flex-column">
-                      {permissions?.includes(
-                        permissionList.Add_Inflow_Transaction
-                      ) ? (
-                        <button
-                          className="mb-1 acc-tran-btn-style"
-                          onClick={() => setModalOpen(true)}
-                        >
-                          Inflow
-                        </button>
-                      ) : null}
-                      {permissions?.includes(
-                        permissionList.Add_Outflow_Transaction
-                      ) ? (
-                        <button
-                          className="mt-1 acc-tran-btn-style"
-                          onClick={() => setModal2Open(true)}
-                        >
-                          Outflow
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
-                )}
               </div>
 
-              <div className="row">
-                <div className="col-12 d-flex justify-content-start">
-                  <div className="d-flex mt-1">
-                    {consultantValueType !== 0 ||
-                    consultantValue !== 0 ||
-                    transactionValue !== 0 ||
-                    statusValue !== 0
-                      ? ""
-                      : ""}
-                    {consultantValueType !== 0 ? (
-                      <TagButton
-                        label={consultantLabelType}
-                        setValue={() => setConsultantValueType(0)}
-                        setLabel={() =>
-                          setConsultantLabelType("Select Consultant Type")
-                        }
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {(consultantValueType !== 0 && consultantValue !== 0) ||
-                    transactionValue !== 0 ||
-                    statusValue !== 0
-                      ? ""
-                      : ""}
-                    {consultantValue !== 0 ? (
-                      <TagButton
-                        label={consultantLabel}
-                        setValue={() => setConsultantValue(0)}
-                        setLabel={() => setConsultantLabel("Select consultant")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {(consultantValue !== 0 && transactionValue !== 0) ||
-                    statusValue !== 0
-                      ? ""
-                      : ""}
-                    {transactionValue !== 0 ? (
-                      <TagButton
-                        label={transactionLabel}
-                        setValue={() => setTransactionValue(0)}
-                        setLabel={() =>
-                          setTransactionLabel("Select Transaction Type")
-                        }
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-
-                    {transactionValue !== 0 && statusValue !== 0 ? "" : ""}
-                    {statusValue !== 0 ? (
-                      <TagButton
-                        label={statusLabel}
-                        setValue={() => setStatusValue(0)}
-                        setLabel={() => setStatusLabel("Select Status")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-
-                    {branchValue !== 0 ? (
-                      <TagButton
-                        label={branchLabel}
-                        setValue={() => setBranchValue(0)}
-                        setLabel={() => setBranchLabel("Select Branch")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="mt-1 mx-1 d-flex btn-clear">
-                    {consultantValueType !== 0 ||
-                    consultantValue !== 0 ||
-                    transactionValue !== 0 ||
-                    branchValue !== 0 ||
-                    statusValue !== 0 ? (
-                      <button className="tag-clear" onClick={handleReset}>
-                        Clear All
+              {userType === userTypes?.Consultant ? null : (
+                <div className="col-md-2">
+                  <div className="d-flex flex-column">
+                    {permissions?.includes(
+                      permissionList.Add_Inflow_Transaction
+                    ) ? (
+                      <button
+                        className="mb-1 acc-tran-btn-style"
+                        onClick={() => setModalOpen(true)}
+                      >
+                        Inflow
                       </button>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
+                    {permissions?.includes(
+                      permissionList.Add_Outflow_Transaction
+                    ) ? (
+                      <button
+                        className="mt-1 acc-tran-btn-style"
+                        onClick={() => setModal2Open(true)}
+                      >
+                        Outflow
+                      </button>
+                    ) : null}
                   </div>
                 </div>
+              )}
+            </div>
+
+            <div className="row">
+              <div className="col-12 d-flex justify-content-start">
+                <div className="d-flex mt-1">
+                  {consultantValueType !== 0 ||
+                  consultantValue !== 0 ||
+                  transactionValue !== 0 ||
+                  statusValue !== 0
+                    ? ""
+                    : ""}
+                  {consultantValueType !== 0 ? (
+                    <TagButton
+                      label={consultantLabelType}
+                      setValue={() => setConsultantValueType(0)}
+                      setLabel={() =>
+                        setConsultantLabelType("Select Consultant Type")
+                      }
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {(consultantValueType !== 0 && consultantValue !== 0) ||
+                  transactionValue !== 0 ||
+                  statusValue !== 0
+                    ? ""
+                    : ""}
+                  {consultantValue !== 0 ? (
+                    <TagButton
+                      label={consultantLabel}
+                      setValue={() => setConsultantValue(0)}
+                      setLabel={() => setConsultantLabel("Select consultant")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {(consultantValue !== 0 && transactionValue !== 0) ||
+                  statusValue !== 0
+                    ? ""
+                    : ""}
+                  {transactionValue !== 0 ? (
+                    <TagButton
+                      label={transactionLabel}
+                      setValue={() => setTransactionValue(0)}
+                      setLabel={() =>
+                        setTransactionLabel("Select Transaction Type")
+                      }
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+
+                  {transactionValue !== 0 && statusValue !== 0 ? "" : ""}
+                  {statusValue !== 0 ? (
+                    <TagButton
+                      label={statusLabel}
+                      setValue={() => setStatusValue(0)}
+                      setLabel={() => setStatusLabel("Select Status")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+
+                  {branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select Branch")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="mt-1 mx-1 d-flex btn-clear">
+                  {consultantValueType !== 0 ||
+                  consultantValue !== 0 ||
+                  transactionValue !== 0 ||
+                  branchValue !== 0 ||
+                  statusValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleReset}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
-              {/* <div className="row">
+            </div>
+            {/* <div className="row">
                 <div className="col-12 d-flex justify-content-start">
                   <div className="d-flex mt-1">
                     {consultantValueType !== 0 ||
@@ -1200,42 +1297,46 @@ const Index = () => {
                   </div>
                 </div>
               </div> */}
-            </CardBody>
-          </Card>
-
+          </CardBody>
+        </Card>
+        {loading ? (
+          <Loader />
+        ) : (
           <Card className="uapp-employee-search">
             <CardBody>
               <div className=" row mb-3">
                 <div className="col-lg-7 col-md-7 col-sm-8 col-xs-4">
-                  <span className="mr-2">
-                    <b>CB: </b>Created By.
-                  </span>
-                  <span className="mr-2">
-                    <b>LUO: </b>Last Updated On.
-                  </span>
-                  <span className="mr-2">
-                    <b>LUB: </b>Last Updated By.
-                  </span>
-                  <span>
-                    <b>ATW: </b>Available To Withdraw.
-                  </span>
+                  {/* <div>
+                    <span className="mr-2">
+                      <b>CB: </b>Created By.
+                    </span>
+                    <span className="mr-2">
+                      <b>LUO: </b>Last Updated On.
+                    </span>
+                    <span className="mr-2">
+                      <b>LUB: </b>Last Updated By.
+                    </span>
+                    <span>
+                      <b>ATW: </b>Available To Withdraw.
+                    </span>
+                  </div> */}
                 </div>
 
                 <div className="col-lg-5 col-md-7 col-sm-4 col-xs-8">
                   <div className="d-flex justify-content-end flex-wrap">
-                    <div className="ml-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div>
-                          <Select
-                            className="mr-2"
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    {/*<div className="ml-3">*/}
+                    {/*  <div className="d-flex align-items-center">*/}
+                    {/*    <div className="mr-2">Showing :</div>*/}
+                    {/*    <div>*/}
+                    {/*      <Select*/}
+                    {/*        className="mr-2"*/}
+                    {/*        options={dataSizeName}*/}
+                    {/*        value={{ label: dataPerPage, value: dataPerPage }}*/}
+                    {/*        onChange={(opt) => selectDataSize(opt.value)}*/}
+                    {/*      />*/}
+                    {/*    </div>*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
 
                     <div className="mr-2">
                       <Dropdown
@@ -1298,7 +1399,7 @@ const Index = () => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -1309,7 +1410,7 @@ const Index = () => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -1321,7 +1422,7 @@ const Index = () => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -1332,7 +1433,7 @@ const Index = () => {
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -1354,107 +1455,154 @@ const Index = () => {
               {permissions?.includes(
                 permissionList.View_Account_Transactions
               ) ? (
-                <div className="table-responsive">
-                  <Table id="table-to-xls" className="table-sm table-bordered">
-                    <thead className="tablehead">
-                      <tr className="text-center">
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>Date</th> : null}
-                        {tableData[2]?.isActive ? <th>Consultant</th> : null}
-                        {tableData[3]?.isActive ? (
-                          <th>Transaction Code/Type</th>
-                        ) : null}
-                        {tableData[4]?.isActive ? <th>Details</th> : null}
-                        {tableData[5]?.isActive ? <th>Inflow/Credit</th> : null}
-                        {tableData[6]?.isActive ? <th>Outflow/Debit</th> : null}
-                        {tableData[7]?.isActive ? <th>Balance</th> : null}
-                        {tableData[8]?.isActive ? <th>Status</th> : null}
-                        {tableData[9]?.isActive ? <th>Branch</th> : null}
-                        {tableData[10]?.isActive ? <th>Log</th> : null}
-
-                        {permissions?.includes(
-                          permissionList.View_Account_Transaction_Details
-                        ) ? (
-                          <>
-                            {tableData[11]?.isActive ? <th>Action</th> : null}{" "}
-                          </>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data?.map((ls, i) => (
-                        <tr key={i} className="text-center">
-                          {tableData[0]?.isActive ? (
-                            <th scope="row">{i + ser}</th>
-                          ) : null}
-                          {tableData[1]?.isActive ? (
-                            <td>{ls?.transactionDate}</td>
-                          ) : null}
-                          {tableData[2]?.isActive ? (
-                            <td>{ls?.consultantName}</td>
-                          ) : null}
-                          {tableData[3]?.isActive ? (
-                            <td>
-                              <b>{ls?.transactionCode}</b>
-                              <br />
-                              {ls?.transactionType}
-                            </td>
-                          ) : null}
-                          {tableData[4]?.isActive ? (
-                            <td>{ls?.details}</td>
-                          ) : null}
-                          {tableData[5]?.isActive ? (
-                            <td>£{ls?.credit}</td>
-                          ) : null}
-                          {tableData[6]?.isActive ? (
-                            <td>£ {ls?.debit}</td>
-                          ) : null}
-
-                          {tableData[7]?.isActive ? (
-                            <td>
-                              Total: £ {ls?.balance}
-                              <br />
-                              ATW: £{ls?.withdrawBalance}
-                            </td>
-                          ) : null}
-                          {tableData[8]?.isActive ? (
-                            <td>{ls?.status}</td>
-                          ) : null}
-                          {tableData[9]?.isActive ? (
-                            <td>{ls?.branchName}</td>
-                          ) : null}
-                          {tableData[10]?.isActive ? (
-                            <td>
-                              CB: {ls?.createdBy} LUO: {ls?.updatedOn} LUB:{" "}
-                              {ls?.updatedBy}{" "}
-                            </td>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList.View_Account_Transaction_Details
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[11]?.isActive ? (
-                                <td className="text-center">
-                                  <ButtonGroup variant="text">
-                                    <Button
-                                      className="me-1 btn-sm"
-                                      color="primary"
-                                      onClick={() => gotoDetailsPage(ls)}
-                                    >
-                                      Details
-                                    </Button>
-                                  </ButtonGroup>
-                                </td>
+                <>
+                  {" "}
+                  {data?.length === 0 ? (
+                    <h4 className="text-center">No Data Found</h4>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="table-responsive fixedhead">
+                        <Table
+                          id="table-to-xls"
+                          className="table-sm table-bordered"
+                        >
+                          <thead className="tablehead">
+                            <tr className="text-center">
+                              {tableData[0]?.isActive ? <th>Date</th> : null}
+                              {userType !== userTypes?.Consultant &&
+                              tableData[1]?.isActive ? (
+                                <th>Name</th>
                               ) : null}
-                            </>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                              {tableData[2]?.isActive ? (
+                                <th>Transaction Code/Type</th>
+                              ) : null}
+                              {tableData[3]?.isActive ? <th>Details</th> : null}
+                              {tableData[4]?.isActive ? (
+                                <th>Inflow/Credit</th>
+                              ) : null}
+                              {tableData[5]?.isActive ? (
+                                <th>Outflow/Debit</th>
+                              ) : null}
+                              {tableData[6]?.isActive ? <th>Balance</th> : null}
+                              {tableData[7]?.isActive ? (
+                                <th>Available To Withdraw</th>
+                              ) : null}
+                              {tableData[8]?.isActive ? <th>Status</th> : null}
+                              {tableData[9]?.isActive ? <th>Branch</th> : null}
+                              {tableData[10]?.isActive ? <th>Log</th> : null}
+
+                              {permissions?.includes(
+                                permissionList.View_Account_Transaction_Details
+                              ) ? (
+                                <>
+                                  {tableData[11]?.isActive ? (
+                                    <th>Action</th>
+                                  ) : null}{" "}
+                                </>
+                              ) : null}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data?.map((ls, i) => (
+                              <tr key={i} className="text-center">
+                                {tableData[0]?.isActive ? (
+                                  <td>{ls?.transactionDate}</td>
+                                ) : null}
+                                {userType !== userTypes?.Consultant &&
+                                tableData[1]?.isActive ? (
+                                  <td>
+                                    {" "}
+                                    {permissions?.includes(
+                                      permissionList?.View_Consultant
+                                    ) ? (
+                                      <Link
+                                        className="text-body"
+                                        to={`consultantProfile/${ls?.consultantId}`}
+                                      >
+                                        {ls?.consultantName}
+                                      </Link>
+                                    ) : (
+                                      <>{ls?.consultantName}</>
+                                    )}
+                                  </td>
+                                ) : null}
+                                {tableData[2]?.isActive ? (
+                                  <td>
+                                    <b>{ls?.transactionCode}</b>
+                                    <br />
+                                    {ls?.transactionType}
+                                  </td>
+                                ) : null}
+                                {tableData[3]?.isActive ? (
+                                  <td>{ls?.details}</td>
+                                ) : null}
+                                {tableData[4]?.isActive ? (
+                                  <>
+                                    {ls?.credit ? (
+                                      <td>£ {ls?.credit}</td>
+                                    ) : (
+                                      <td>£ 0</td>
+                                    )}
+                                  </>
+                                ) : null}
+                                {tableData[5]?.isActive ? (
+                                  <>
+                                    {ls?.debit ? (
+                                      <td>£ {ls?.debit}</td>
+                                    ) : (
+                                      <td>£ 0</td>
+                                    )}
+                                  </>
+                                ) : null}
+
+                                {tableData[6]?.isActive ? (
+                                  <td>£ {ls?.balance}</td>
+                                ) : null}
+                                {tableData[7]?.isActive ? (
+                                  <td>£ {ls?.withdrawBalance}</td>
+                                ) : null}
+                                {tableData[8]?.isActive ? (
+                                  <td>{ls?.status}</td>
+                                ) : null}
+                                {tableData[9]?.isActive ? (
+                                  <td>{ls?.branchName}</td>
+                                ) : null}
+                                {tableData[10]?.isActive ? (
+                                  <td>
+                                    CB: {ls?.createdBy} LUO: {ls?.updatedOn}{" "}
+                                    LUB: {ls?.updatedBy}{" "}
+                                  </td>
+                                ) : null}
+
+                                {permissions?.includes(
+                                  permissionList.View_Account_Transaction_Details
+                                ) ? (
+                                  <>
+                                    {" "}
+                                    {tableData[11]?.isActive ? (
+                                      <td className="text-center">
+                                        <ButtonGroup variant="text">
+                                          <Button
+                                            className="me-1 btn-sm"
+                                            color="primary"
+                                            onClick={() => gotoDetailsPage(ls)}
+                                          >
+                                            Details
+                                          </Button>
+                                        </ButtonGroup>
+                                      </td>
+                                    ) : null}
+                                  </>
+                                ) : null}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </div>{" "}
+                    </>
+                  )}
+                </>
               ) : null}
 
               <Pagination
@@ -1465,8 +1613,8 @@ const Index = () => {
               />
             </CardBody>
           </Card>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -59,16 +59,18 @@ const OtherInformation = () => {
   }, [success, applicationStudentId]);
 
   const handleDescription = (e) => {
-    setDisabilityDes(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setDisabilityDes(data);
+    if (data === "") {
       setDisabilityDesError("Disability description is required");
     } else {
       setDisabilityDesError("");
     }
   };
   const handleCriminal = (e) => {
-    setCriminal(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCriminal(data);
+    if (data === "") {
       setCriminalError("Criminal convictions Description is required");
     } else {
       setCriminalError("");

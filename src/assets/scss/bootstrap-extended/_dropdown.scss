@@ -268,23 +268,23 @@
       left: -10px;
     }
   }
-  .dropdown-menu {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 1.285rem;
-      right: 0;
-      width: 0.714rem;
-      height: 0.714rem;
-      display: block;
-      background: $white;
-      transform: rotate(130deg) translate(-8px);
-      border-top: 1px solid rgba($pure-black, 0.1);
-      border-left: 1px solid rgba($pure-black, 0.1);
-      z-index: 10;
-      box-sizing: border-box;
-    }
-  }
+  // .dropdown-menu {
+  //   &::before {
+  //     content: "";
+  //     position: absolute;
+  //     top: 1.285rem;
+  //     right: 0;
+  //     width: 0.714rem;
+  //     height: 0.714rem;
+  //     display: block;
+  //     background: $white;
+  //     transform: rotate(130deg) translate(-8px);
+  //     border-top: 1px solid rgba($pure-black, 0.1);
+  //     border-left: 1px solid rgba($pure-black, 0.1);
+  //     z-index: 10;
+  //     box-sizing: border-box;
+  //   }
+  // }
 }
 
 // DropRight
@@ -304,23 +304,23 @@
       content: "\e844" !important;
     }
   }
-  .dropdown-menu {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 1.285rem;
-      left: -0.9rem;
-      width: 0.714rem;
-      height: 0.714rem;
-      display: block;
-      background: $white;
-      transform: rotate(140deg) translate(-9px);
-      border-bottom: 1px solid rgba($pure-black, 0.1);
-      border-right: 1px solid rgba($pure-black, 0.1);
-      z-index: 10;
-      box-sizing: border-box;
-    }
-  }
+  // .dropdown-menu {
+  //   &::before {
+  //     content: "";
+  //     position: absolute;
+  //     top: 1.285rem;
+  //     left: -0.9rem;
+  //     width: 0.714rem;
+  //     height: 0.714rem;
+  //     display: block;
+  //     background: $white;
+  //     transform: rotate(140deg) translate(-9px);
+  //     border-bottom: 1px solid rgba($pure-black, 0.1);
+  //     border-right: 1px solid rgba($pure-black, 0.1);
+  //     z-index: 10;
+  //     box-sizing: border-box;
+  //   }
+  // }
 }
 
 // Dropdown icon

@@ -1,17 +1,7 @@
 import React, { createRef, useEffect, useState } from "react";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Col,
-  Row,
-  Card,
-  CardHeader,
-  CardBody,
-} from "reactstrap";
-import { useHistory } from "react-router";
+import { Button, Form, FormGroup, Col, Row, Card, CardBody } from "reactstrap";
 import post from "../../../../helpers/post";
 import get from "../../../../helpers/get";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
@@ -23,9 +13,8 @@ const UnderProcessRolePermission = () => {
   const [permissionName, setPermissionName] = useState([]);
   const [rolelabel, setRoleLabel] = useState("Select Role...");
   const [roleValue, setRoleValue] = useState("");
-  let [checked, setChecked] = useState([]);
+  const [checked, setChecked] = useState([]);
   const { addToast } = useToasts();
-  const history = useHistory();
   const [roles, setRoles] = useState([]);
   const [progress, setProgress] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -44,8 +33,8 @@ const UnderProcessRolePermission = () => {
     subData.append("RoleId", roleValue);
     subData.append("CheckedArr", checked);
     //  watch form data values
-    for (var value of subData.values()) {
-    }
+    // for (var value of subData.values()) {
+    // }
     setPermissionName([]);
 
     // posting form Data
@@ -64,19 +53,19 @@ const UnderProcessRolePermission = () => {
   // onChange role
   const selectRole = (label, value) => {
     setPermissionName([]);
-    checked = [];
+    setChecked([]);
     setRoleLabel(label);
     setRoleValue(value);
     get(`RolePermission/GetCheckBoxes/${value}`).then((action) => {
       console.log(action);
       setPermissionName(action);
-      let defaultChecked = checked;
+      let defaultChecked = [];
       if (action.length > 0) {
         for (let i = 0; i < action.length; i++) {
           const per = action[i]?.permissions;
 
           for (let j = 0; j < per?.length; j++) {
-            if (per[j]?.isChecked == true) {
+            if (per[j]?.isChecked === true) {
               const id = per[j]?.id.toString();
               defaultChecked.push(id);
               setChecked([...defaultChecked]);
@@ -92,7 +81,7 @@ const UnderProcessRolePermission = () => {
     let id = e.target.id;
     let val = e.target.checked;
 
-    if (val == true) {
+    if (val === true) {
       if (!checked?.includes(id)) {
         setChecked([...checked, id]);
       }
@@ -152,7 +141,7 @@ const UnderProcessRolePermission = () => {
                       <b>Retrieve</b>{" "}
                       {per?.permissions?.map((p, i) => (
                         <>
-                          {p?.permissionType == 2 ? (
+                          {p?.permissionType === 2 ? (
                             <div className="form-check">
                               <input
                                 className="form-check-input"
@@ -178,7 +167,7 @@ const UnderProcessRolePermission = () => {
                       <b>Action</b>{" "}
                       {per?.permissions?.map((p, i) => (
                         <>
-                          {p?.permissionType == 1 ? (
+                          {p?.permissionType === 1 ? (
                             <div className="form-check">
                               <input
                                 className="form-check-input"

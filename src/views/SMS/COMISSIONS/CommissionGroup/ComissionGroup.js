@@ -12,6 +12,7 @@ import {
   Col,
   Table,
   ButtonGroup,
+  ModalHeader,
 } from "reactstrap";
 import post from "../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
@@ -56,8 +57,16 @@ const ComissionGroup = () => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setFilterBranch(res);
+      console.log(res);
     });
   }, []);
+
+  useEffect(() => {
+    if (userType === userTypes?.BranchManager) {
+      setBranchValue(filterbranch[0]?.id);
+      setBranchLable(filterbranch[0]?.name);
+    }
+  }, [userType, filterbranch]);
 
   useEffect(() => {
     get(`CommissionGroup/Index?branchid=${filterbranchValue}`).then((res) => {
@@ -169,11 +178,13 @@ const ComissionGroup = () => {
 
   return (
     <div>
+      <BreadCrumb title="Commission Groups" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
           <Modal isOpen={openModal} toggle={modalOff} className="uapp-modal">
+            <ModalHeader> Add Commission Groups </ModalHeader>
             <ModalBody>
               <form onSubmit={submitModalForm} className="mt-3">
                 {edit ? (
@@ -200,27 +211,37 @@ const ComissionGroup = () => {
                   </Col>
                 </FormGroup>
 
-                <FormGroup row>
-                  <Col md="4">
-                    <span>
-                      Branch <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <DefaultDropdown
-                      label={branchLable}
-                      setLabel={setBranchLable}
-                      value={branchValue}
-                      setValue={setBranchValue}
-                      url="BranchDD/Index"
-                      name="branchId"
-                      error={branchError}
-                      setError={setBranchError}
-                      errorText="Branch is required"
-                      action={() => {}}
-                    />
-                  </Col>
-                </FormGroup>
+                {userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.Admin ? (
+                  <FormGroup row>
+                    <Col md="4">
+                      <span>
+                        Branch <span className="text-danger">*</span>{" "}
+                      </span>
+                    </Col>
+                    <Col md="8">
+                      <DefaultDropdown
+                        label={branchLable}
+                        setLabel={setBranchLable}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        url="BranchDD/Index"
+                        name="branchId"
+                        error={branchError}
+                        setError={setBranchError}
+                        errorText="Branch is required"
+                        action={() => {}}
+                      />
+                    </Col>
+                  </FormGroup>
+                ) : (
+                  <input
+                    type="hidden"
+                    name="branchId"
+                    id="branchId"
+                    value={branchValue}
+                  />
+                )}
 
                 <FormGroup row>
                   <Col md="12">
@@ -234,14 +255,12 @@ const ComissionGroup = () => {
             </ModalBody>
           </Modal>
 
-          <BreadCrumb title="Commission Groups" backTo="" path="/" />
-
-          <Card>
-            <CardBody>
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="row">
-                    {filterbranch.length > 1 && (
+          {filterbranch.length > 1 && (
+            <Card>
+              <CardBody>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="row">
                       <div className="col-md-5 mb-3">
                         <Filter
                           data={filterbranch}
@@ -252,44 +271,43 @@ const ComissionGroup = () => {
                           action={() => {}}
                         />
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="row">
-                <div className="col-12 d-flex justify-content-start">
-                  <div className="d-flex mt-1">
-                    {filterbranchValue !== 0 ? (
-                      <TagButton
-                        label={filterbranchLabel}
-                        setValue={() => setFilterBranchValue(0)}
-                        setLabel={() => setFilterBranchLabel("Select Branch")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="mt-1 mx-1 d-flex btn-clear">
-                    {filterbranchValue !== 0 ? (
-                      <button
-                        className="tag-clear"
-                        onClick={() => {
-                          setFilterBranchValue(0);
-                          setFilterBranchLabel("Select Branch");
-                        }}
-                      >
-                        Clear All
-                      </button>
-                    ) : (
-                      ""
-                    )}
+                <div className="row">
+                  <div className="col-12 d-flex justify-content-start">
+                    <div className="d-flex mt-1">
+                      {filterbranchValue !== 0 ? (
+                        <TagButton
+                          label={filterbranchLabel}
+                          setValue={() => setFilterBranchValue(0)}
+                          setLabel={() => setFilterBranchLabel("Select Branch")}
+                        ></TagButton>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="mt-1 mx-1 d-flex btn-clear">
+                      {filterbranchValue !== 0 ? (
+                        <button
+                          className="tag-clear"
+                          onClick={() => {
+                            setFilterBranchValue(0);
+                            setFilterBranchLabel("Select Branch");
+                          }}
+                        >
+                          Clear All
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardBody>
-          </Card>
-
+              </CardBody>
+            </Card>
+          )}
           <Card className="uapp-employee-search">
             <CardHeader>
               {permissions?.includes(
@@ -323,7 +341,7 @@ const ComissionGroup = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       {(userType === userTypes?.SystemAdmin ||
                         userType === userTypes?.Admin) && <th>Branch</th>}
@@ -338,7 +356,7 @@ const ComissionGroup = () => {
                   <tbody>
                     {commission?.map((comm, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{comm?.name}</td>
                         {(userType === userTypes?.SystemAdmin ||
                           userType === userTypes?.Admin) && (
@@ -381,15 +399,6 @@ const ComissionGroup = () => {
                               </Button>
                             ) : null}
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Commission Group ? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={confirmDelete}
-                            cancel={() => setDeleteModal(false)}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -400,6 +409,16 @@ const ComissionGroup = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Commission Group ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={confirmDelete}
+        cancel={() => setDeleteModal(false)}
+        buttonStatus={buttonStatus}
+        progress={progress}
+      />
     </div>
   );
 };

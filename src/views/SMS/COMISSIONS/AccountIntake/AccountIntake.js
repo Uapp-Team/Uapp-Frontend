@@ -29,7 +29,10 @@ import Loader from "../../Search/Loader/Loader";
 import ButtonLoader from "../../Components/ButtonLoader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import { currentDate } from "../../../../components/date/calenderFormate";
+import {
+  currentDate,
+  dateFormate,
+} from "../../../../components/date/calenderFormate";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 
@@ -359,12 +362,11 @@ const AccountIntake = () => {
 
   return (
     <div>
+      <BreadCrumb title="Account Intake List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Account Intake List" backTo="" path="/" />
-
           <Card className="uapp-employee-search">
             <CardHeader>
               {permissions?.includes(permissionList?.Add_Account_Intake) ? (
@@ -588,23 +590,26 @@ const AccountIntake = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Start Date</th>
                       <th>End Date</th>
                       <th>Applications</th>
-                      <th>Action</th>
+                      {permissions?.includes(
+                        permissionList?.Delete_Account_Intake ||
+                          permissionList?.Edit_Account_Intake
+                      ) && <th>Action</th>}
                     </tr>
                   </thead>
                   <tbody>
                     {intakeList?.map((list, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{list?.intakeName}</td>
 
-                        <td>{handleDate(list?.startDate)}</td>
+                        <td>{dateFormate(list?.startDate)}</td>
 
-                        <td>{handleDate(list?.endDate)}</td>
+                        <td>{dateFormate(list?.endDate)}</td>
 
                         <td>
                           <span className="badge badge-pill badge-primary">
@@ -612,40 +617,36 @@ const AccountIntake = () => {
                           </span>
                         </td>
 
-                        <td className="text-center">
-                          <ButtonGroup variant="text">
-                            {permissions?.includes(
-                              permissionList?.Edit_Account_Intake
-                            ) ? (
-                              <ButtonForFunction
-                                icon={<i className="fas fa-edit"></i>}
-                                color={"warning"}
-                                className={"mx-1 btn-sm"}
-                                func={() => handleUpdate(list)}
-                              />
-                            ) : null}
+                        {permissions?.includes(
+                          permissionList?.Delete_Account_Intake ||
+                            permissionList?.Edit_Account_Intake
+                        ) && (
+                          <td className="text-center">
+                            <ButtonGroup variant="text">
+                              {permissions?.includes(
+                                permissionList?.Edit_Account_Intake
+                              ) ? (
+                                <ButtonForFunction
+                                  icon={<i className="fas fa-edit"></i>}
+                                  color={"warning"}
+                                  className={"mx-1 btn-sm"}
+                                  func={() => handleUpdate(list)}
+                                />
+                              ) : null}
 
-                            {permissions?.includes(
-                              permissionList?.Delete_Account_Intake
-                            ) ? (
-                              <ButtonForFunction
-                                icon={<i className="fas fa-trash-alt"></i>}
-                                color={"danger"}
-                                className={"mx-1 btn-sm"}
-                                func={() => toggleDanger(list)}
-                              />
-                            ) : null}
-                          </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Intake? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={handleDeleteData}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                            cancel={() => setDeleteModal(false)}
-                          ></ConfirmModal>
-                        </td>
+                              {permissions?.includes(
+                                permissionList?.Delete_Account_Intake
+                              ) ? (
+                                <ButtonForFunction
+                                  icon={<i className="fas fa-trash-alt"></i>}
+                                  color={"danger"}
+                                  className={"mx-1 btn-sm"}
+                                  func={() => toggleDanger(list)}
+                                />
+                              ) : null}
+                            </ButtonGroup>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -655,6 +656,16 @@ const AccountIntake = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Intake? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteData}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        cancel={() => setDeleteModal(false)}
+      />
     </div>
   );
 };

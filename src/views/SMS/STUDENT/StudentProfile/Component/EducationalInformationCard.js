@@ -3,15 +3,19 @@ import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
-const EducationalInformationCard = ({ sId }) => {
-  const [educationInfos, setEducationInfos] = useState([]);
+const EducationalInformationCard = ({
+  sId,
+  educationalInfos,
+  setEducationalInfos,
+}) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   useEffect(() => {
     get(`EducationInformation/GetByStudentId/${sId}`).then((res) => {
-      setEducationInfos(res);
+      setEducationalInfos(res);
     });
-  }, [sId]);
+  }, [sId, setEducationalInfos]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -20,6 +24,8 @@ const EducationalInformationCard = ({ sId }) => {
     const x = localeDate.split(",")[0];
     return x;
   };
+
+  console.log(educationalInfos, sId);
 
   return (
     <div>
@@ -38,8 +44,9 @@ const EducationalInformationCard = ({ sId }) => {
         </thead>
       </Table>
 
-      {educationInfos.length > 0 &&
-        educationInfos?.map((edu, i) => (
+      {educationalInfos &&
+        educationalInfos?.length > 0 &&
+        educationalInfos?.map((edu, i) => (
           <div
             className="col-12 border p-2 rounded mb-3"
             key={edu.id}
@@ -64,14 +71,14 @@ const EducationalInformationCard = ({ sId }) => {
                     <p>
                       <span>Attended From</span>
                       <br />
-                      <b>{handleDate(edu?.attendedInstitutionFrom)}</b>
+                      <b>{dateFormate(edu?.attendedInstitutionFrom)}</b>
                     </p>
                     <p>
                       <span>Attended To</span>
                       <br />
                       <b>
                         {edu?.qualificationAchieved === true &&
-                          handleDate(edu?.attendedInstitutionTo)}
+                          dateFormate(edu?.attendedInstitutionTo)}
                       </b>
                     </p>
                   </Col>
@@ -116,7 +123,7 @@ const EducationalInformationCard = ({ sId }) => {
             </Card>
           </div>
         ))}
-      {educationInfos.length === 0 && (
+      {educationalInfos.length === 0 && (
         <p className="pl-10px">Education information is not added.</p>
       )}
     </div>

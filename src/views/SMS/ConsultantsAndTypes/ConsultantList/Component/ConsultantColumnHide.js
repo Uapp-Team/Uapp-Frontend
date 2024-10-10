@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Col,
   Dropdown,
@@ -8,14 +8,31 @@ import {
   Input,
 } from "reactstrap";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import ColumnConsultant from "../../../TableColumn/ColumnConsultant";
 
 const ConsultantColumnHide = ({
   dropdownOpen1,
   toggle1,
   tableData,
+  setTableData,
   handleChecked,
 }) => {
+  console.log(tableData, "consultant hide");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+
+  useEffect(() => {
+    const tableColumnConsultant = JSON.parse(
+      localStorage.getItem("ColumnConsultant")
+    );
+    tableColumnConsultant && setTableData(tableColumnConsultant);
+    !tableColumnConsultant &&
+      localStorage.setItem(
+        "ColumnConsultant",
+        JSON.stringify(ColumnConsultant)
+      );
+    !tableColumnConsultant && setTableData(ColumnConsultant);
+  }, [setTableData]);
+
   return (
     <div className="d-block">
       {/* column hide unhide starts here */}
@@ -31,14 +48,14 @@ const ConsultantColumnHide = ({
         <DropdownMenu className="bg-dd-1">
           {tableData.map((table, i) => (
             <div key={i}>
-              {i === 5 ? (
+              {i === 3 ? (
                 <>
                   {permissions?.includes(
                     permissionList.Consultant_Password_Change
                   ) && (
                     <div className="d-flex justify-content-between">
                       <Col md="8" className="">
-                        <p className="">{table?.collumnName}</p>
+                        <p className="">{table?.title}</p>
                       </Col>
 
                       <Col md="4" className="text-center">
@@ -49,7 +66,7 @@ const ConsultantColumnHide = ({
                             id=""
                             name="check"
                             onChange={(e) => {
-                              handleChecked(e, table?.id);
+                              handleChecked(e, i);
                             }}
                             defaultChecked={table?.isActive}
                           />
@@ -58,14 +75,14 @@ const ConsultantColumnHide = ({
                     </div>
                   )}
                 </>
-              ) : i === 13 ? (
+              ) : i === 12 ? (
                 <>
                   {permissions?.includes(
                     permissionList.Change_Consultant_AccountStatus
                   ) && (
                     <div className="d-flex justify-content-between">
                       <Col md="8" className="">
-                        <p className="">{table?.collumnName}</p>
+                        <p className="">{table?.title}</p>
                       </Col>
 
                       <Col md="4" className="text-center">
@@ -76,7 +93,7 @@ const ConsultantColumnHide = ({
                             id=""
                             name="check"
                             onChange={(e) => {
-                              handleChecked(e, table?.id);
+                              handleChecked(e, i);
                             }}
                             defaultChecked={table?.isActive}
                           />
@@ -88,7 +105,7 @@ const ConsultantColumnHide = ({
               ) : (
                 <div className="d-flex justify-content-between">
                   <Col md="8" className="">
-                    <p className="">{table?.collumnName}</p>
+                    <p className="">{table?.title}</p>
                   </Col>
 
                   <Col md="4" className="text-center">
@@ -99,7 +116,7 @@ const ConsultantColumnHide = ({
                         id=""
                         name="check"
                         onChange={(e) => {
-                          handleChecked(e, table?.id);
+                          handleChecked(e, i);
                         }}
                         defaultChecked={table?.isActive}
                       />

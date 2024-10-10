@@ -124,7 +124,7 @@ const StudentPersonalForm = () => {
       setNationality(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsultant(res);
       setConsultantLabel(res?.name);
       setConsultantValue(res?.id);

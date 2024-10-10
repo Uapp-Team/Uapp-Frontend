@@ -1,290 +1,303 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   UncontrolledDropdown,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
-  Media,
   Badge,
 } from "reactstrap";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import axios from "axios";
 import * as Icon from "react-feather";
-import { useAuth0 } from "../../../authServices/auth0/auth0Service";
 import { history } from "../../../history";
-import { studentLogOutJwtAction } from "../../../redux/actions/SMS/AuthAction/AuthAction";
 import { rootUrl } from "../../../constants/constants";
 import { userTypes } from "../../../constants/userTypeConstant";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import { Link } from "react-router-dom";
 import get from "../../../helpers/get";
 import user from "../../../assets/img/Uapp_fav.png";
+import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
 
-const handleNavigation = (e, path) => {
-  e.preventDefault();
-  history.push(path);
-};
+const NavbarUser = () => {
+  // const [navbarSearch, setnavbarSearch] = useState(false);
+  // const [langDropdown, setlangDropdown] = useState(false);
+  // const [suggestions, setsuggestions] = useState([]);
+  // const [connection, setconnection] = useState([]);
+  // const [chat, setchat] = useState("");
+  const [notificationCount, setnotificationCount] = useState();
+  console.log(notificationCount);
 
-const userInfo = JSON.parse(localStorage.getItem("current_user"));
-const AuthStr = localStorage.getItem("token");
+  const [notificationData, setnotificationData] = useState([]);
+  console.log(notificationData);
 
-// const redirectToProfile = () => {
+  const [newNotificationData, setNewNotification] = useState([]);
+  console.log(newNotificationData);
 
-//   if ( userInfo?.userTypeId == userTypes?.AccountManager ||
-//     userInfo?.userTypeId == userTypes?.Editor ||
-//     userInfo?.userTypeId == userTypes?.AccountOfficer ||
-//     userInfo?.userTypeId == userTypes?.ComplianceManager ||
-//     userInfo?.userTypeId == userTypes?.FinanceManager) {
-//     history.push(`/staffProfile/${userInfo?.referenceId}`);
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.AdmissionManager) {
-//     history.push(`/admissionManagerProfile/${userInfo?.referenceId}`);
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.AdmissionOfficer) {
-//     history.push(`/admissionOfficerDetails/${userInfo?.referenceId}`);
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.ProviderAdmin) {
-//     history.push(`/providerAdminProfile/${userInfo?.referenceId}`);
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.BranchManager) {
-//     history.push(`/branchManagerProfile/${userInfo?.referenceId}`);//TODO
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.Consultant) {
-//     history.push(`/consultantProfile/${userInfo?.referenceId}`);
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.Student) {
-//     history.push(`/studentProfile/${userInfo?.referenceId}`);//TODO
-//   }
-//   else if (userInfo?.userTypeId == userTypes?.Provider) {
-//     history.push(`/providerDetails/${userInfo?.referenceId}`);//TODO
-//   }
-//   else {
-//     history.push('/');
-//   }
+  useEffect(() => {
+    if (newNotificationData.length > 0) {
+      // const agerNotification = notificationData;
+      const newNotificationList = [...newNotificationData, ...notificationData];
+      setnotificationData(newNotificationList);
+      setNewNotification([]);
+    }
+  }, [newNotificationData, notificationData]);
 
-// }
+  const [canSwitch, setcanSwitch] = useState(false);
+  const [message, setmessage] = useState([]);
+  const [messageCount, setmessageCount] = useState();
 
-const handleDate = (e) => {
-  var datee = e;
-  var utcDate = new Date(datee);
-  var localeDate = utcDate.toLocaleString("en-CA");
-  const x = localeDate.split(",")[0];
-  return x;
-};
+  const userInfo = JSON.parse(localStorage.getItem("current_user"));
+  const AuthStr = localStorage.getItem("token");
 
-const handleLogOut = (e) => {
-  e.preventDefault();
-  history.push("/");
-  window.localStorage.clear();
-  window.location.reload();
-  //const AuthStr = localStorage.getItem("token");
-  //axios
-  //  .get(`${rootUrl}Account/LogOut`, {
-  //    method: "GET",
-  //    headers: {
-  //      authorization: AuthStr,
-  //    },
-  //  })
-  //  .then((res) => {
-  //    // localStorage.removeItem('token');
-  //    history.push("/");
-  //    window.localStorage.clear();
-  //    window.location.reload();
-  //  });
-};
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    history.push("/");
+    logoutStorageHandler();
+  };
 
-const convertAccount = (e) => {
-  axios
-    .get(`${rootUrl}AccountSwitch/SwitchToConsultant`, {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
-    })
-    .then((response) => {
-      if (response?.status === 200) {
-        if (response?.data?.isSuccess === true) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("permissions");
+  const convertAccount = (e) => {
+    axios
+      .get(`${rootUrl}AccountSwitch/SwitchToConsultant`, {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        if (response?.status === 200) {
+          if (response?.data?.isSuccess === true) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("permissions");
 
-          localStorage.setItem("token", "Bearer " + response?.data?.message);
-          localStorage.setItem(
-            "permissions",
-            JSON.stringify(response?.data?.permissions)
-          );
-          const AuthStr = "Bearer " + response?.data?.message;
-          axios
-            .get(`${rootUrl}Account/GetCurrentUser`, {
-              headers: {
-                authorization: AuthStr,
-              },
-            })
-            .then((res) => {
-              if (res?.status === 200) {
-                if (res?.data?.isActive === true) {
-                  localStorage.setItem(
-                    "current_user",
-                    JSON.stringify(res?.data)
-                  );
-                  localStorage.setItem("userType", res?.data?.userTypeId);
-                  localStorage.setItem("referenceId", res?.data?.referenceId);
-                  window.location.reload();
+            localStorage.setItem("token", "Bearer " + response?.data?.message);
+            localStorage.setItem(
+              "permissions",
+              JSON.stringify(response?.data?.permissions)
+            );
+            const AuthStr = "Bearer " + response?.data?.message;
+            axios
+              .get(`${rootUrl}Account/GetCurrentUser`, {
+                headers: {
+                  authorization: AuthStr,
+                },
+              })
+              .then((res) => {
+                if (res?.status === 200) {
+                  if (res?.data?.isActive === true) {
+                    localStorage.setItem(
+                      "current_user",
+                      JSON.stringify(res?.data)
+                    );
+                    localStorage.setItem("userType", res?.data?.userTypeId);
+                    localStorage.setItem("referenceId", res?.data?.referenceId);
+                    window.location.reload();
+                  }
                 }
-              }
-            });
+              });
 
-          history.push("/");
+            history.push("/");
+          }
         }
-      }
-    })
-    .catch();
-};
+      })
+      .catch();
+  };
 
-const convertToConsultantAccount = (e) => {
-  axios
-    .get(`${rootUrl}AccountSwitch/SwitchToStudent`, {
-      headers: {
-        authorization: localStorage.getItem("token"),
-      },
-    })
-    .then((response) => {
-      if (response?.status === 200) {
-        if (response?.data?.isSuccess === true) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("permissions");
+  const convertToConsultantAccount = (e) => {
+    axios
+      .get(`${rootUrl}AccountSwitch/SwitchToStudent`, {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        if (response?.status === 200) {
+          if (response?.data?.isSuccess === true) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("permissions");
 
-          localStorage.setItem("token", "Bearer " + response?.data?.message);
-          localStorage.setItem(
-            "permissions",
-            JSON.stringify(response?.data?.permissions)
-          );
-          const AuthStr = "Bearer " + response?.data?.message;
-          axios
-            .get(`${rootUrl}Account/GetCurrentUser`, {
-              headers: {
-                authorization: AuthStr,
-              },
-            })
-            .then((res) => {
-              if (res?.status === 200) {
-                if (res?.data?.isActive === true) {
-                  localStorage.setItem(
-                    "current_user",
-                    JSON.stringify(res?.data)
-                  );
-                  localStorage.setItem("userType", res?.data?.userTypeId);
-                  localStorage.setItem("referenceId", res?.data?.referenceId);
-                  window.location.reload();
+            localStorage.setItem("token", "Bearer " + response?.data?.message);
+            localStorage.setItem(
+              "permissions",
+              JSON.stringify(response?.data?.permissions)
+            );
+            const AuthStr = "Bearer " + response?.data?.message;
+            axios
+              .get(`${rootUrl}Account/GetCurrentUser`, {
+                headers: {
+                  authorization: AuthStr,
+                },
+              })
+              .then((res) => {
+                if (res?.status === 200) {
+                  if (res?.data?.isActive === true) {
+                    localStorage.setItem(
+                      "current_user",
+                      JSON.stringify(res?.data)
+                    );
+                    localStorage.setItem("userType", res?.data?.userTypeId);
+                    localStorage.setItem("referenceId", res?.data?.referenceId);
+                    window.location.reload();
+                  }
                 }
-              }
-            });
+              });
 
-          history.push("/");
+            history.push("/");
+          }
         }
-      }
-    })
-    .catch();
-};
+      })
+      .catch();
+  };
 
-const goToLoginHistory = () => {
-  history.push("/loginHistory");
-};
+  const goToLoginHistory = () => {
+    history.push("/loginHistory");
+  };
 
-const goToSettings = () => {
-  history.push(`/accountSettings/${userInfo?.referenceId}`);
-};
+  const goToSettings = () => {
+    history.push(`/accountSettings/${userInfo?.referenceId}`);
+  };
 
-const UserDropdown = (props) => {
-  useEffect(() => {}, [props]);
-  return (
-    <DropdownMenu right>
-      {userInfo?.userTypeId === userTypes?.SystemAdmin ? null : (
-        <Link style={{ textDecoration: "none" }} to="/profile">
-          <DropdownItem
-            tag="a"
-            // href="#"
-            // onClick={redirectToProfile}
-          >
-            <Icon.User size={14} className="mr-1 align-middle" />
-            <span className="align-middle">Profile</span>
+  const goToBin = () => {
+    history.push(`/recycle`);
+  };
+
+  const UserDropdown = (props) => {
+    useEffect(() => {}, [props]);
+    return (
+      <DropdownMenu right>
+        {userInfo?.userTypeId === userTypes?.SystemAdmin ? null : (
+          <Link style={{ textDecoration: "none" }} to="/profile">
+            <DropdownItem
+              tag="a"
+              // href="#"
+              // onClick={redirectToProfile}
+            >
+              <Icon.User size={14} className="mr-1 align-middle" />
+              <span className="align-middle">Profile</span>
+            </DropdownItem>
+          </Link>
+        )}
+
+        {(userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+          userInfo?.userTypeId.toString() === userTypes?.Admin) && (
+          <DropdownItem tag="a" onClick={goToBin}>
+            <i className="fas fa-recycle mr-1 align-middle"></i>
+            <span className="align-middle">Recycle Bin</span>
           </DropdownItem>
-        </Link>
-      )}
+        )}
 
-      <DropdownItem tag="a" onClick={goToSettings}>
-        <Icon.Settings size={14} className="mr-1 align-middle" />
-        <span className="align-middle">Settings</span>
-      </DropdownItem>
+        <DropdownItem tag="a" onClick={goToSettings}>
+          <Icon.Settings size={14} className="mr-1 align-middle" />
+          <span className="align-middle">Settings</span>
+        </DropdownItem>
 
-      <DropdownItem tag="a" onClick={goToLoginHistory}>
-        <Icon.LogIn size={14} className="mr-1 align-middle" />
-        <span className="align-middle">Login History</span>
-      </DropdownItem>
+        <DropdownItem tag="a" onClick={goToLoginHistory}>
+          <Icon.LogIn size={14} className="mr-1 align-middle" />
+          <span className="align-middle">Login History</span>
+        </DropdownItem>
 
-      <DropdownItem divider />
+        <DropdownItem divider />
 
-      {userInfo?.userTypeId?.toString() === userTypes?.Student ? (
-        <>
-          {props?.switch ? (
-            <DropdownItem
-              tag="a"
-              onClick={(e) => {
-                convertAccount(e);
-              }}
-            >
-              <Icon.Repeat size={14} className="mr-1 align-middle" />
-              <span className="align-middle">Switch To Consultant</span>
-            </DropdownItem>
-          ) : null}
-        </>
-      ) : userInfo?.userTypeId?.toString() === userTypes?.Consultant ? (
-        <>
-          {props?.switch ? (
-            <DropdownItem
-              tag="a"
-              onClick={(e) => {
-                convertToConsultantAccount(e);
-              }}
-            >
-              <Icon.Repeat size={14} className="mr-1 align-middle" />
-              <span className="align-middle">Switch To Student</span>
-            </DropdownItem>
-          ) : null}
-        </>
-      ) : null}
+        {userInfo?.userTypeId?.toString() === userTypes?.Student ? (
+          <>
+            {props?.switch ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertAccount(e);
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Consultant</span>
+              </DropdownItem>
+            ) : null}
+          </>
+        ) : userInfo?.userTypeId?.toString() === userTypes?.Consultant ? (
+          <>
+            {props?.switch ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertToConsultantAccount(e);
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Student</span>
+              </DropdownItem>
+            ) : null}
+          </>
+        ) : null}
 
-      <DropdownItem
-        tag="a"
-        onClick={(e) => {
-          handleLogOut(e);
-        }}
-      >
-        <Icon.Power size={14} className="mr-1 align-middle" />
-        <span className="align-middle">Log Out</span>
-      </DropdownItem>
-    </DropdownMenu>
-  );
-};
+        <DropdownItem
+          tag="a"
+          onClick={(e) => {
+            handleLogOut(e);
+          }}
+        >
+          <Icon.Power size={14} className="mr-1 align-middle" />
+          <span className="align-middle">Log Out</span>
+        </DropdownItem>
+      </DropdownMenu>
+    );
+  };
 
-class NavbarUser extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      navbarSearch: false,
-      langDropdown: false,
-      suggestions: [],
-      connection: [],
-      chat: "",
-      notificationCount: 0,
-      notificationData: [],
-      canSwitch: false,
-      message: [],
-      messageCount: 0,
-    };
-  }
+  const countNotification = () => {
+    axios
+      .get(`${rootUrl}Notification/UserNotificationCount`, {
+        headers: {
+          authorization: AuthStr,
+        },
+      })
+      .then((res) => {
+        setnotificationCount(res?.data);
+        // setState({ notificationCount: res?.data });
+      });
+  };
 
-  componentDidMount() {
-    console.log("navysersdvcsd", userInfo?.userTypeId);
-    if (userInfo?.userTypeId == userTypes?.Student) {
+  const messageFunction = () => {};
+
+  const countMessage = () => {
+    axios
+      .get(`${rootUrl}MessageNotification/Count`, {
+        headers: {
+          authorization: AuthStr,
+        },
+      })
+      .then((res) => {});
+  };
+
+  const allNotifications = () => {
+    history.push(`/allNotifications`);
+  };
+
+  const allMessage = () => {
+    history.push(`/allMessages`);
+  };
+
+  const notificationByIdFunction = (data) => {
+    axios
+      .get(`${rootUrl}Notification/ViewNotification/${data}`, {
+        headers: {
+          authorization: AuthStr,
+        },
+      })
+      .then((res) => {});
+  };
+
+  const redirect = (data) => {
+    notificationByIdFunction(data?.id);
+    console.log(data?.targetUrl);
+    history.push(`${data?.targetUrl}`);
+
+    let value = data?.id;
+    let arrays = notificationData;
+    let final = arrays.filter((arr) => arr.id !== value);
+
+    setnotificationData(final);
+    // countNotification();
+    setnotificationCount(notificationCount - 1);
+  };
+
+  useEffect(() => {
+    if (userInfo?.userTypeId === userTypes?.Student) {
       axios
         .get(
           `${rootUrl}Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`,
@@ -295,8 +308,7 @@ class NavbarUser extends React.PureComponent {
           }
         )
         .then((res) => {
-          console.log("object", res);
-          this.setState({ canSwitch: res?.data?.result });
+          setcanSwitch(res?.data?.result);
         });
     }
 
@@ -311,7 +323,7 @@ class NavbarUser extends React.PureComponent {
           }
         )
         .then((res) => {
-          this.setState({ canSwitch: res?.data?.result });
+          setcanSwitch(res?.data?.result);
         });
     }
 
@@ -322,7 +334,7 @@ class NavbarUser extends React.PureComponent {
         },
       })
       .then((res) => {
-        this.setState({ notificationCount: res?.data });
+        setnotificationCount(res?.data);
       });
 
     axios
@@ -332,43 +344,41 @@ class NavbarUser extends React.PureComponent {
         },
       })
       .then((res) => {
-        console.log("Navbar massae", res);
-        this.setState({ messageCount: res?.data?.result });
+        setmessageCount(res?.data?.result);
       });
+
+    axios
+      .get(`${rootUrl}Notification/GetInitial`, {
+        headers: {
+          authorization: AuthStr,
+        },
+      })
+      .then((res) => {
+        setnotificationData(res?.data?.result);
+      });
+
     if (
-      userInfo?.userTypeId.toString() === userTypes?.Student ||
       userInfo?.userTypeId.toString() === userTypes?.Consultant ||
       userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
-      userInfo?.userTypeId.toString() === userTypes?.SystemAdmin
+      userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+      userInfo?.userTypeId.toString() === userTypes?.Admin ||
+      userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+      userInfo?.userTypeId.toString() === userTypes?.Student
     ) {
-      axios
-        .get(`${rootUrl}Notification/GetInitial`, {
-          headers: {
-            authorization: AuthStr,
-          },
-        })
-        .then((res) => {
-          this.setState({ notificationData: res?.data?.result });
-        });
-      // axios
-      //   .get(`${rootUrl}MessageNotification/GetPreview`, {
-      //     headers: {
-      //       authorization: AuthStr,
-      //     },
-      //   })
-      //   .then((res) => {
-      //     this.setState({ message: res?.data?.result });
-      //   });
-
       get(`MessageNotification/GetPreview`).then((res) => {
-        this.setState({ message: res });
+        setmessage(res);
       });
     }
+  }, [AuthStr, userInfo.displayEmail, userInfo.userTypeId]);
 
+  useEffect(() => {
     if (
-      userInfo?.userTypeId === userTypes?.Student ||
-      userInfo?.userTypeId === userTypes?.Consultant ||
-      userInfo?.userTypeId === userTypes?.AdmissionManager
+      userInfo?.userTypeId.toString() === userTypes?.Consultant ||
+      userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
+      userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+      userInfo?.userTypeId.toString() === userTypes?.Admin ||
+      userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+      userInfo?.userTypeId.toString() === userTypes?.Student
     ) {
       const messageConnection = new HubConnectionBuilder()
         .withUrl(`${rootUrl}messageNotificationHub`)
@@ -379,8 +389,8 @@ class NavbarUser extends React.PureComponent {
           messageConnection.start().then((result) => {
             messageConnection.on("messageNotificationHub", (message) => {
               if (message) {
-                this.countMessage();
-                this.messageFunction();
+                countMessage();
+                messageFunction();
               }
             });
           });
@@ -388,113 +398,139 @@ class NavbarUser extends React.PureComponent {
       }
     }
 
+    let token = localStorage.getItem("token");
+
+    let newToken = token ? token.slice(6) : null;
+
     const newConnection = new HubConnectionBuilder()
-      .withUrl(`${rootUrl}testnotificationHub`)
+      .withUrl(`${rootUrl}notification-hub`, {
+        accessTokenFactory: () => newToken,
+      })
+      // .withUrl(`${rootUrl}notification-hub`)
       .withAutomaticReconnect()
       .build();
-    console.log("result1", newConnection);
     if (newConnection) {
       newConnection.start().then((result) => {
-        console.log("result2", result);
-        newConnection.on("testnotificationHub", (message) => {
+        newConnection.on("ReceiveNotification", (user, message) => {
+          setNewNotification([message]);
+
           if (message) {
-            this.countFunction();
-            this.initialFunction();
+            countNotification();
           }
         });
       });
     }
-  }
+  }, []);
 
-  //  Code testing start
+  return (
+    <>
+      <>
+        <ul className="nav navbar-nav navbar-nav-user float-right">
+          {/* Message Dropdown */}
 
-  //  const [ connection, setConnection ] = useState(null);
-  //  const [ chat, setChat ] = useState('');
-  //  const latestChat = useRef(null);
+          {userInfo?.userTypeId.toString() === userTypes?.Consultant ||
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+          userInfo?.userTypeId.toString() === userTypes?.Admin ||
+          userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+          userInfo?.userTypeId.toString() === userTypes?.Student ? (
+            <UncontrolledDropdown
+              tag="li"
+              className="dropdown-notification nav-item"
+            >
+              <DropdownToggle tag="a" className="nav-link nav-link-label">
+                <i class="fa-regular fa-message fa-20px"></i>
 
-  //  latestChat.current = chat;
+                <Badge pill color="primary" className="badge-up">
+                  {" "}
+                  {messageCount}{" "}
+                </Badge>
+              </DropdownToggle>
+              <DropdownMenu
+                tag="ul"
+                right
+                className="dropdown-menu-media notification-menu-style"
+              >
+                <li className="dropdown-menu-header">
+                  <div className="d-flex justify-content-between">
+                    <div className="dropdown-header mt-0">
+                      <h6 className=" notification-title text-white">
+                        {messageCount} Unread Messages
+                      </h6>
+                    </div>
+                    <div
+                      className="dropdown-header mt-0"
+                      style={{ cursor: "pointer" }}
+                    ></div>
+                  </div>
+                </li>
+                <PerfectScrollbar
+                  className="media-list overflow-hidden position-relative"
+                  options={{
+                    wheelPropagation: false,
+                  }}
+                >
+                  {message?.map((data, i) => (
+                    <DropdownItem
+                      key={i}
+                      // onClick={toggle}
+                      // onClick={() => {
+                      //   history.push(
+                      //     `/applicationDetails/${data?.applicationId}/${data?.studentId}`
+                      //   );
+                      // }}
+                      className={
+                        data?.isSeen
+                          ? "d-flex justify-content-between notification-active-style"
+                          : "d-flex justify-content-between notification-inactive-style"
+                      }
+                    >
+                      <div
+                        style={{ overflowX: "hidden" }}
+                        onClick={() => {
+                          history.push(
+                            `/applicationDetails/${data?.applicationId}/${data?.studentId}`
+                          );
+                        }}
+                      >
+                        <div
+                          style={{ color: "#1e98b0" }}
+                          heading
+                          className=" media-heading"
+                          tag="h6"
+                        >
+                          {data?.senderName}
+                        </div>
+                        <p className="notification-text text-wrap">
+                          {data?.messageBody}
+                        </p>
+                        <small></small>
+                      </div>
+                    </DropdownItem>
+                  ))}
+                </PerfectScrollbar>
+                <li className="dropdown-menu-footer">
+                  <div
+                    className="p-3 notification-footer-style text-center dropdown-bottom-header"
+                    onClick={() => allMessage()}
+                  >
+                    <span className="align-middle">Read All</span>
+                  </div>
+                </li>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          ) : null}
 
-  countFunction = () => {
-    axios
-      .get(`${rootUrl}Notification/UserNotificationCount`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        this.setState({ notificationCount: res?.data });
-      });
-  };
+          {/* message dropdown end */}
 
-  initialFunction = () => {};
-
-  messageFunction = () => {};
-
-  countMessage = () => {
-    axios
-      .get(`${rootUrl}MessageNotification/Count`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {});
-  };
-
-  allNotifications = () => {
-    history.push(`/allNotifications`);
-  };
-
-  allMessage = () => {
-    history.push(`/allMessages`);
-  };
-
-  notificationByIdFunction = (data) => {
-    axios
-      .get(`${rootUrl}Notification/ViewNotification/${data}`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {});
-  };
-
-  redirect = (data) => {
-    this.notificationByIdFunction(data?.id);
-    history.push(data?.targetUrl);
-  };
-
-  // Code testing end
-
-  handleNavbarSearch = () => {
-    this.setState({
-      navbarSearch: !this.state.navbarSearch,
-    });
-  };
-
-  handleLangDropdown = () =>
-    this.setState({ langDropdown: !this.state.langDropdown });
-
-  render() {
-    return (
-      <ul className="nav navbar-nav navbar-nav-user float-right">
-        {/* Message Dropdown */}
-
-        {userInfo?.userTypeId.toString() === userTypes?.Consultant ||
-        userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
-        userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
-        userInfo?.userTypeId.toString() === userTypes?.Admin ||
-        userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
-        userInfo?.userTypeId.toString() === userTypes?.Student ? (
           <UncontrolledDropdown
             tag="li"
             className="dropdown-notification nav-item"
           >
             <DropdownToggle tag="a" className="nav-link nav-link-label">
-              <i class="fa-regular fa-message fa-20px"></i>
-
+              <i className="far fa-bell fa-20px"></i>
               <Badge pill color="primary" className="badge-up">
-                {" "}
-                {this?.state?.messageCount}{" "}
+                {notificationCount}
               </Badge>
             </DropdownToggle>
             <DropdownMenu
@@ -506,7 +542,7 @@ class NavbarUser extends React.PureComponent {
                 <div className="d-flex justify-content-between">
                   <div className="dropdown-header mt-0">
                     <h6 className=" notification-title text-white">
-                      {this?.state?.messageCount} Unread Messages
+                      {notificationCount} Unread Notifications
                     </h6>
                   </div>
                   <div
@@ -521,152 +557,85 @@ class NavbarUser extends React.PureComponent {
                   wheelPropagation: false,
                 }}
               >
-                {this?.state?.message?.map((data, i) => (
-                  <div
+                {notificationData?.map((data, i) => (
+                  <DropdownItem
                     key={i}
-                    onClick={() => {
-                      history.push(
-                        `/applicationDetails/${data?.applicationId}/${data?.studentId}`
-                      );
-                    }}
+                    // onClick={toggle}
                     className={
                       data?.isSeen
                         ? "d-flex justify-content-between notification-active-style"
                         : "d-flex justify-content-between notification-inactive-style"
                     }
                   >
-                    <Media className="d-flex align-items-start">
-                      <Media body>
-                        <Media
-                          style={{ color: "#1e98b0" }}
-                          heading
-                          className=" media-heading"
-                          tag="h6"
-                          // onClick={() => this.redirect(data)}
-                        >
-                          {data?.senderName}
-                        </Media>
-                        <p className="notification-text">{data?.messageBody}</p>
-                      </Media>
-                      <small></small>
-                    </Media>
-                  </div>
-                ))}
-              </PerfectScrollbar>
-              <li className="dropdown-menu-footer">
-                <div
-                  className="p-3 notification-footer-style text-center dropdown-bottom-header"
-                  onClick={() => this.allMessage()}
-                >
-                  <span className="align-middle">Read All</span>
-                </div>
-              </li>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        ) : null}
-
-        {/* message dropdown end */}
-
-        <UncontrolledDropdown
-          tag="li"
-          className="dropdown-notification nav-item"
-        >
-          <DropdownToggle tag="a" className="nav-link nav-link-label">
-            {/*<Icon.Bell size={21} />*/}
-            <i className="far fa-bell fa-20px"></i>
-            <Badge pill color="primary" className="badge-up">
-              {" "}
-              {this?.state?.notificationCount}{" "}
-            </Badge>
-          </DropdownToggle>
-          <DropdownMenu
-            tag="ul"
-            right
-            className="dropdown-menu-media notification-menu-style"
-          >
-            <li className="dropdown-menu-header">
-              <div className="d-flex justify-content-between">
-                <div className="dropdown-header mt-0">
-                  <h6 className=" notification-title text-white">
-                    {this?.state?.notificationCount} Unread Notifications
-                  </h6>
-                </div>
-                <div
-                  className="dropdown-header mt-0"
-                  style={{ cursor: "pointer" }}
-                ></div>
-              </div>
-            </li>
-            <PerfectScrollbar
-              className="media-list overflow-hidden position-relative"
-              options={{
-                wheelPropagation: false,
-              }}
-            >
-              {this.state.notificationData?.map((data, i) => (
-                <div
-                  key={i}
-                  className={
-                    data?.isSeen
-                      ? "d-flex justify-content-between notification-active-style"
-                      : "d-flex justify-content-between notification-inactive-style"
-                  }
-                >
-                  <Media className="d-flex align-items-start">
-                    <Media body>
-                      <Media
+                    <div
+                      onClick={() => {
+                        redirect(data);
+                      }}
+                      style={{ overflowX: "hidden" }}
+                    >
+                      <div
                         style={{ color: "#1e98b0" }}
                         heading
-                        className=" media-heading"
+                        className="media-heading"
                         tag="h6"
-                        onClick={() => this.redirect(data)}
                       >
                         {data?.title}
-                      </Media>
-                      <p className="notification-text">{data?.description}</p>
-                    </Media>
-                    <small>{/* {this.handleDate(data?.createdOn)} */}</small>
-                  </Media>
-                </div>
-              ))}
-            </PerfectScrollbar>
-            <li className="dropdown-menu-footer">
-              <div
-                className="p-3 notification-footer-style text-center dropdown-bottom-header"
-                onClick={() => this.allNotifications()}
+                      </div>
+                      <p className="notification-text text-wrap">
+                        {data?.description}
+                      </p>
+                      <small>{/* {dateFormate(data?.createdOn)} */}</small>
+                    </div>
+                  </DropdownItem>
+                ))}
+              </PerfectScrollbar>
+              <DropdownItem
+                className="dropdown-menu-footer"
+                // onClick={toggle}
+                style={{
+                  padding: "0",
+                  display: "block",
+                  width: "100%",
+                }}
               >
-                <span className="align-middle">Read All</span>
-              </div>
-            </li>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+                <div
+                  className="p-3 notification-footer-style text-center dropdown-bottom-header w-100 align-middle"
+                  onClick={() => allNotifications()}
+                >
+                  Read All
+                </div>
+              </DropdownItem>
+            </DropdownMenu>
+          </UncontrolledDropdown>
 
-        <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
-          <DropdownToggle tag="a" className="nav-link dropdown-user-link">
-            <div className="user-nav d-sm-flex d-none">
-              <span className="user-name text-bold-600">
-                {userInfo?.displayName}
+          <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
+            <DropdownToggle tag="a" className="nav-link dropdown-user-link">
+              <div className="user-nav d-sm-flex d-none">
+                <span className="user-name text-bold-600">
+                  {userInfo?.displayName}
+                </span>
+                <span className="user-status">{userInfo?.roleName}</span>
+              </div>
+              <span data-tour="user">
+                <img
+                  src={
+                    userInfo?.displayImage == null
+                      ? user
+                      : rootUrl + userInfo?.displayImage
+                  }
+                  className="round"
+                  height="40"
+                  width="40"
+                  alt="avatar"
+                />
               </span>
-              <span className="user-status">{userInfo?.roleName}</span>
-            </div>
-            <span data-tour="user">
-              <img
-                src={
-                  userInfo?.displayImage == null
-                    ? user
-                    : rootUrl + userInfo?.displayImage
-                }
-                className="round"
-                height="40"
-                width="40"
-                alt="avatar"
-              />
-            </span>
-          </DropdownToggle>
-          <UserDropdown switch={this?.state?.canSwitch} />
-        </UncontrolledDropdown>
-      </ul>
-    );
-  }
-}
+            </DropdownToggle>
+            <UserDropdown switch={canSwitch} />
+          </UncontrolledDropdown>
+        </ul>
+      </>
+    </>
+  );
+};
+
 export default NavbarUser;

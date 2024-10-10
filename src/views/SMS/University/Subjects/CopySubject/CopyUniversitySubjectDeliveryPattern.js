@@ -402,7 +402,7 @@ const CopyUniversitySubjectDeliveryPattern = () => {
                     <Table className="table-sm table-bordered">
                       <thead className="thead-uapp-bg">
                         <tr style={{ textAlign: "center" }}>
-                          <th>SL/NO</th>
+                          {/* <th>SL/NO</th> */}
                           <th>Delivery Pattern</th>
                           {/* <th className="text-center">Application Type</th> */}
                           <th>Action</th>
@@ -411,7 +411,7 @@ const CopyUniversitySubjectDeliveryPattern = () => {
                       <tbody>
                         {patternList?.map((pattern, i) => (
                           <tr key={pattern.id} style={{ textAlign: "center" }}>
-                            <th scope="row">{i + 1}</th>
+                            {/* <th scope="row">{i + 1}</th> */}
                             <td>{pattern?.deliveryPattern?.name}</td>
 
                             <td>

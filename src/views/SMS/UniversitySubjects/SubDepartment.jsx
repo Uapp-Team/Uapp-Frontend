@@ -69,9 +69,7 @@ const SubDepartment = (props) => {
   }, []);
 
   useEffect(() => {
-    get(
-      `SubDepartment/Index?id=${filterdepartmentValue}`
-    ).then((action) => {
+    get(`SubDepartment/Index?id=${filterdepartmentValue}`).then((action) => {
       setSubDepartmentList(action);
     });
   }, [success, filterdepartmentValue]);
@@ -442,8 +440,6 @@ const SubDepartment = (props) => {
                         buttonStatus={buttonStatus}
                       />
                     </FormGroup>
-
-
                   </Form>
                 </ModalBody>
               </Modal>
@@ -454,70 +450,78 @@ const SubDepartment = (props) => {
                 <Table className="table-sm table-bordered">
                   <thead className="thead-uapp-bg">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th> Name</th>
                       <th className="text-center">Department</th>
-                      <th>Action</th>
+                      {permissions?.includes(permissionList.Edit_Departments) ||
+                      permissions?.includes(
+                        permissionList.Delete_Departments
+                      ) ? (
+                        <th>Action</th>
+                      ) : null}
                     </tr>
                   </thead>
                   <tbody>
                     {subdepartmentList?.map((subDeplist, i) => (
                       <tr key={subDeplist.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{subDeplist?.name}</td>
                         <td>{subDeplist?.departmentinfo?.name}</td>
-                        <td>
-                          {/* <Button className="mx-1 btn-sm" onClick={() => toggleDanger(subDeplist.name, subDeplist.id)} color="danger"><i className="fas fa-trash-alt"></i></Button> */}
-                          <ButtonGroup variant="text">
-                            {permissions.includes(
-                              permissionList.Edit_Departments
-                            ) ? (
-                              <ButtonForFunction
-                                func={() => handleUpdate(subDeplist)}
-                                className={"mx-1 btn-sm"}
-                                color={"warning"}
-                                icon={<i className="fas fa-edit"></i>}
-                                permission={6}
-                              />
-                            ) : null}
+                        {permissions?.includes(
+                          permissionList.Edit_Departments
+                        ) ||
+                        permissions?.includes(
+                          permissionList.Delete_Departments
+                        ) ? (
+                          <>
+                            {" "}
+                            <td>
+                              {/* <Button className="mx-1 btn-sm" onClick={() => toggleDanger(subDeplist.name, subDeplist.id)} color="danger"><i className="fas fa-trash-alt"></i></Button> */}
+                              <ButtonGroup variant="text">
+                                {permissions.includes(
+                                  permissionList.Edit_Departments
+                                ) ? (
+                                  <ButtonForFunction
+                                    func={() => handleUpdate(subDeplist)}
+                                    className={"mx-1 btn-sm"}
+                                    color={"warning"}
+                                    icon={<i className="fas fa-edit"></i>}
+                                    permission={6}
+                                  />
+                                ) : null}
 
-                            {permissions.includes(
-                              permissionList.Delete_Departments
-                            ) ? (
-                              <ButtonForFunction
-                                func={() =>
-                                  toggleDanger(subDeplist.name, subDeplist.id)
-                                }
-                                className={"mx-1 btn-sm"}
-                                color={"danger"}
-                                icon={<i className="fas fa-trash-alt"></i>}
-                                permission={6}
-                              />
-                            ) : null}
+                                {permissions.includes(
+                                  permissionList.Delete_Departments
+                                ) ? (
+                                  <ButtonForFunction
+                                    func={() =>
+                                      toggleDanger(
+                                        subDeplist.name,
+                                        subDeplist.id
+                                      )
+                                    }
+                                    className={"mx-1 btn-sm"}
+                                    color={"danger"}
+                                    icon={<i className="fas fa-trash-alt"></i>}
+                                    permission={6}
+                                  />
+                                ) : null}
 
-                            {/* <Link to={`editSubDepartment/${subDeplist?.id}`}>
+                                {/* <Link to={`editSubDepartment/${subDeplist?.id}`}>
                       <Button className="mx-1 btn-sm" color="warning"><i className="fas fa-edit"></i></Button>
                     </Link> */}
 
-                            {/* <LinkButton
+                                {/* <LinkButton
                           url={`editSubDepartment/${subDeplist?.id}`}
                           className={"mx-1 btn-sm"}
                           color={"warning"}
                           icon={<i className="fas fa-edit"></i>}
                           permission={6}
                         /> */}
-                          </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Sub Department? Once Deleted it can't be Undone "
-                            // ${delData?.name}
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            cancel={closeDeleteModal}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                            confirm={() => handleDeleteSubDep(SubdepId)}
-                          ></ConfirmModal>
-                        </td>
+                              </ButtonGroup>
+                            </td>
+                          </>
+                        ) : null}
                       </tr>
                     ))}
                   </tbody>
@@ -526,6 +530,16 @@ const SubDepartment = (props) => {
             )}
           </CardBody>
         </Card>
+        <ConfirmModal
+          text="Do You Want To Delete This Sub Department? Once Deleted it can't be Undone "
+          // ${delData?.name}
+          isOpen={deleteModal}
+          toggle={closeDeleteModal}
+          cancel={closeDeleteModal}
+          buttonStatus={buttonStatus}
+          progress={progress}
+          confirm={() => handleDeleteSubDep(SubdepId)}
+        />
       </div>
     </div>
   );

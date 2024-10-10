@@ -227,15 +227,16 @@ const ApplicationReport = () => {
       </Card>
 
       <Row>
-        <Col md={3}>
+        <Col md={5}>
           {consultant.length === 0 ? null : (
             <Card>
               <CardBody>
                 <Table responsive className="mt-3">
                   <thead className="tablehead">
                     <tr>
-                      <td>Consultant</td>
-                      <td>Applications </td>
+                      <td className="text-center">Consultant</td>
+                      <td className="text-center">Applications </td>
+                      <td className="text-center">Unconditionals</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -245,8 +246,11 @@ const ApplicationReport = () => {
                         className="border-buttom pointer"
                         onClick={() => overviewHandle(item?.consultantId)}
                       >
-                        <td>{item?.consultantName}</td>
-                        <td>{item?.applicationCount}</td>
+                        <td className="text-center">{item?.consultantName}</td>
+                        <td className="text-center">
+                          {item?.applicationCount}
+                        </td>
+                        <td className="text-center">{item?.unconditionals}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -255,7 +259,7 @@ const ApplicationReport = () => {
             </Card>
           )}
         </Col>
-        <Col md={9}>
+        <Col md={7}>
           {consultant.length !== 0 && overview.length === 0 ? (
             <Card>
               <CardBody>
@@ -270,24 +274,26 @@ const ApplicationReport = () => {
                     <Table responsive className="mt-3">
                       <thead className="tablehead">
                         <tr>
-                          <td>Uapp ID</td>
-                          <td>Name </td>
-                          <td>University</td>
-                          <td>Course </td>
-                          <td>Intake </td>
-                          <td>Unco No </td>
+                          <td className="text-center">Uapp ID</td>
+                          <td className="text-center">Name </td>
+                          {/* <td>University</td>
+                          <td>Course </td> */}
+                          <td className="text-center">Total Application </td>
+                          <td className="text-center">
+                            Total Unconditionals No
+                          </td>
                         </tr>
                       </thead>
                       <tbody>
                         {overview?.map((item, i) => (
                           <tr key={i} className="border-buttom pointer">
-                            <td>
+                            <td className="text-center">
                               <Link to={`/studentProfile/${item?.studentId}`}>
                                 {item?.uappId}
                               </Link>
                             </td>
-                            <td>{item?.studentName}</td>
-                            <td>
+                            <td className="text-center">{item?.studentName}</td>
+                            {/* <td>
                               <Link
                                 to={`/universityDetails/${item?.universityId}`}
                               >
@@ -298,10 +304,14 @@ const ApplicationReport = () => {
                               <Link to={`/subjectProfile/${item?.subjectId}`}>
                                 {item?.subjectName}
                               </Link>
-                            </td>
+                            </td> */}
 
-                            <td>{item?.intake}</td>
-                            <td>{item?.unconditionalCount}</td>
+                            <td className="text-center">
+                              {item?.totalApplication}
+                            </td>
+                            <td className="text-center">
+                              {item?.unconditionalCount}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

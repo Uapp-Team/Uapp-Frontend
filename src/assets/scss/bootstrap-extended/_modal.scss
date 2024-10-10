@@ -4,35 +4,35 @@
   // Modal Header
   .modal-header {
     background-color: $body-bg;
-    border-radius: 0.42rem;
+    // border-radius: 0.42rem;
     padding: 0.8rem;
-    border-bottom: none;
+
+    // border-bottom: none;
 
     // close button
-    .close {
-      padding: 0.2rem 0.62rem;
-      box-shadow: 0 5px 20px 0 rgba($pure-black, 0.1);
-      border-radius: 0.357rem;
-      background: $white;
-      opacity: 1;
-      transition: all 0.23s ease 0.1s;
-      position: relative;
-      transform: translate(8px, -2px);
-      span {
-        font-weight: 400;
-        font-size: 2rem;
-        color: $primary;
-      }
-      // For hover effect of close btn
-      &:hover,
-      &:focus,
-      &:active {
-        opacity: 1;
-        outline: none;
-        transform: translate(5px, 3px);
-        box-shadow: none;
-      }
-    }
+    // .close {
+    //   padding: 0.2rem 0.62rem;
+    //   box-shadow: 0 5px 20px 0 rgba($pure-black, 0.1);
+    //   border-radius: 0.357rem;
+    //   background: $white;
+    //   opacity: 1;
+    //   transition: all 0.23s ease 0.1s;
+    //   position: relative;
+    //   transform: translate(8px, -2px);
+    //   span {
+    //     font-weight: 400;
+    //     font-size: 2rem;
+    //     color: $primary;
+    //   }
+    //   &:hover,
+    //   &:focus,
+    //   &:active {
+    //     opacity: 1;
+    //     outline: none;
+    //     transform: translate(5px, 3px);
+    //     box-shadow: none;
+    //   }
+    // }
 
     &[class*="bg-"] {
       color: $white;
@@ -41,6 +41,7 @@
 
       .modal-title {
         color: $white;
+        
       }
     }
 

@@ -59,70 +59,84 @@ const Details = () => {
       />
 
       <div className="row">
-        <div className="col-md-8">
-          <Card>
-            <CardBody>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <p className="section-title">
-                    Details Of: {info?.consultant}
-                  </p>
-                  <Table className="table-bordered mt-4">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <b>Transaction Code:</b>
-                        </td>
-
-                        <td>{info?.transactionCode}</td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <b>Transaction Date:</b>
-                        </td>
-
-                        <td>{info?.transactionDate}</td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <b>Transaction Type:</b>
-                        </td>
-
-                        <td>{info?.transactionType}</td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <b>Transaction Note:</b>
-                        </td>
-
-                        <td>{info?.transactionNote}</td>
-                      </tr>
-
-                      <tr>
-                        <td>
-                          <b>Reference:</b>
-                        </td>
-
-                        <td>{info?.reference}</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-
-                <div>
-                  {permissions?.includes(
-                    permissionList.Add_Inflow_Transaction
-                  ) ? (
-                    <Button color="warning" onClick={editInfo}>
-                      Edit
-                    </Button>
-                  ) : null}
-                </div>
+        <div className="col-md-7">
+          <Card className="p-4">
+            <div
+              className="d-flex justify-content-between p-2"
+              style={{ backgroundColor: "#DFEEEE" }}
+            >
+              <span className="app-style-const p-2">
+                Details Of : {info?.consultant}
+              </span>
+              <div>
+                {permissions?.includes(
+                  permissionList.Add_Inflow_Transaction
+                ) ? (
+                  <Button color="primary" onClick={editInfo}>
+                    Edit
+                  </Button>
+                ) : null}
               </div>
-            </CardBody>
+            </div>
+            <Table borderless responsive className="mb-4">
+              <tbody>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Transaction Code:</td>
+
+                  <td width="60%">{info?.transactionCode}</td>
+                </tr>
+
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Transaction Date:</td>
+
+                  <td width="60%">{info?.transactionDate}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Transaction Type:</td>
+
+                  <td width="60%">{info?.transactionType}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Transaction Note:</td>
+
+                  <td width="60%">{info?.transactionNote}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Amount:</td>
+
+                  <td width="60%">{info?.amount}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Reference:</td>
+
+                  <td width="60%">{info?.reference}</td>
+                </tr>
+              </tbody>
+            </Table>
           </Card>
         </div>
       </div>
