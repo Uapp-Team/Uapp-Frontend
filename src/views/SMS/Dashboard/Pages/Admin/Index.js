@@ -33,7 +33,7 @@ const Admin = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
@@ -461,6 +461,7 @@ progress report end */}
                         src={cuser1}
                         style={{ height: "28px", width: "28px" }}
                         className="img-fluid"
+                        alt=""
                       />
                       <span style={{ marginLeft: "5px" }}>
                         Mirela-Gabriela Porcisteanu
@@ -488,6 +489,7 @@ progress report end */}
                         src={cuser1}
                         style={{ height: "28px", width: "28px" }}
                         className="img-fluid"
+                        alt=""
                       />
                       <span style={{ marginLeft: "5px" }}>
                         Mirela-Gabriela Porcisteanu
@@ -515,6 +517,7 @@ progress report end */}
                         src={cuser1}
                         style={{ height: "28px", width: "28px" }}
                         className="img-fluid"
+                        alt=""
                       />
                       <span style={{ marginLeft: "5px" }}>
                         Mirela-Gabriela Porcisteanu

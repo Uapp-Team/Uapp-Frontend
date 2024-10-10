@@ -13,6 +13,7 @@ import userImg from "../../../assets/img/portrait/small/avatar-s-11.jpg";
 import SidebarHeader from "../menu/vertical-menu/SidebarHeader";
 import { rootUrl } from "../../../views/ReusableFunction/Api/ApiFunc";
 import { studentLoginJwtAction } from "../../../redux/actions/SMS/AuthAction/AuthAction";
+import SessionStorage from "../../../utility/context/SessionStorage";
 
 const UserName = (props) => {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const ThemeNavbar = (props) => {
     <>
       {/* <div className="content-overlay" /> */}
       {/* <div className="header-navbar-shadow" /> */}
-
+      <SessionStorage />
       <Navbar
         className={classnames(
           "header-navbar uapp-navbar navbar-expand-lg navbar navbar-with-menu navbar-shadow",

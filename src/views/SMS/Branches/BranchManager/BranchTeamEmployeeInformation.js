@@ -178,7 +178,7 @@ const BranchTeamEmployeeInformation = () => {
             <Table className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>First Name</th>
                   <th>Last Name</th>
                   <th>Email</th>
@@ -189,7 +189,7 @@ const BranchTeamEmployeeInformation = () => {
               <tbody>
                 {teamDetails?.map((details, i) => (
                   <tr key={details?.id} style={{ textAlign: "center" }}>
-                    <td>{serialNum + i}</td>
+                    {/* <td>{serialNum + i}</td> */}
                     <td>{details?.firstName}</td>
                     <td>{details?.lastName}</td>
                     <td>{details?.email}</td>

@@ -4,6 +4,7 @@ import user from "../../../../../assets/img/Uapp_fav.png";
 import { Card, CardBody, Table } from "reactstrap";
 import { rootUrl } from "../../../../../constants/constants";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ProfileApplications = ({ id }) => {
   const [appData, setAppData] = useState([]);
@@ -12,7 +13,7 @@ const ProfileApplications = ({ id }) => {
   useEffect(() => {
     get(`ConsultantProfile/GetApplication/${id}`).then((res) => {
       console.log(res);
-      // setAppData(res);
+      setAppData(res);
     });
   }, [id]);
 
@@ -24,7 +25,7 @@ const ProfileApplications = ({ id }) => {
         <CardBody>
           {/* <span className="app-style-const">New Applications</span> */}
           <h5>New Applications</h5>
-          <div style={{ height: "300px" }}>
+          <div style={{ height: "300px", overflowY: "scroll" }}>
             <Table borderless responsive className="mt-3">
               <thead className="tablehead">
                 <tr
@@ -34,15 +35,15 @@ const ProfileApplications = ({ id }) => {
                     color: "#495057",
                   }}
                 >
-                  <th>Application ID</th>
-                  <th>Applicant</th>
+                  <th>APP ID</th>
+                  <th>Student</th>
                   <th>University</th>
-                  <th>Intake</th>
-                  <th>Application Date</th>
+                  <th>Admission Manager</th>
+                  <th>Date</th>
                 </tr>
               </thead>
               <tbody style={{ overflowY: "scroll" }}>
-                {appData?.map((app, i) => (
+                {appData?.applications?.map((app, i) => (
                   <tr
                     key={i}
                     style={{
@@ -59,7 +60,7 @@ const ProfileApplications = ({ id }) => {
                           );
                         }}
                       >
-                        {app?.applicationViewId}
+                        #{app?.uappId}
                       </span>
                     </td>
 
@@ -67,9 +68,9 @@ const ProfileApplications = ({ id }) => {
                       <div>
                         <img
                           src={
-                            app?.studentImage == null
+                            app?.profileImage == null
                               ? user
-                              : rootUrl + app?.studentImage
+                              : rootUrl + app?.profileImage
                           }
                           alt=""
                           style={{
@@ -91,15 +92,22 @@ const ProfileApplications = ({ id }) => {
                     </td>
                     <td>{app?.universityName}</td>
 
-                    <td>{app?.intakeName}</td>
-                    <td>{app?.ApplicationDate}</td>
+                    <td>
+                      <Link
+                        className="text-body hover"
+                        to={`/admissionManagerProfile/${app?.admissionManagerId}`}
+                      >
+                        {app?.admissionManagerName}
+                      </Link>
+                    </td>
+                    <td>{app?.applicationDate}</td>
                   </tr>
                 ))}
               </tbody>
             </Table>
           </div>
 
-          {appData?.length > 0 ? (
+          {/* {appData?.length > 0 ? (
             <div className="mt-4 text-center">
               <span
                 style={{
@@ -115,7 +123,7 @@ const ProfileApplications = ({ id }) => {
                 See All
               </span>
             </div>
-          ) : null}
+          ) : null} */}
         </CardBody>
       </Card>
     </div>

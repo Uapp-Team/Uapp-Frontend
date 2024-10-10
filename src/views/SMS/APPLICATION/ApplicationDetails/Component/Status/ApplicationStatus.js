@@ -5,6 +5,7 @@ import SaveButton from "../../../../../../components/buttons/SaveButton";
 import put from "../../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
+import ReactQuill from "react-quill";
 
 const ApplicationStatus = ({ id, success, setSuccess }) => {
   const { addToast } = useToasts();
@@ -18,7 +19,6 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
 
   useEffect(() => {
     get(`ApplicationAssesmentStatusDD/index`).then((res) => {
-      console.log(res);
       setStatusDD(res);
     });
   }, []);
@@ -27,9 +27,10 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
     if (id) {
       get(`ApplicationAssesment/ApplicationDetails/${id}`).then((res) => {
         setStatus(res);
+        setNote(res?.note);
       });
     }
-  }, [id]);
+  }, [id, success]);
 
   useEffect(() => {
     const initialStatus = statusDD.filter((item) => {
@@ -51,7 +52,7 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
 
   const handleApplicationUpdateSubmit = (e) => {
     e.preventDefault();
-    if (statusValue !== 3 && note === "") {
+    if (statusValue !== 1 && statusValue !== 3 && note === "") {
       setNoteError(true);
     } else {
       setProgress(true);
@@ -68,6 +69,15 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
     }
   };
 
+  // useEffect(() => {
+  //   if (noteString) {
+  //     const quill = quillRef.current.getEditor();
+  //     const currentContent = quill.getText().trim();
+  //     setNoteCheck(currentContent);
+  //     setNoteError(false);
+  //   }
+  // }, [noteString]);
+
   return (
     <div className="custom-card-border p-4 mb-130px ">
       <h4>Application Info Assessment</h4>
@@ -78,7 +88,7 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
           <Col md={7}>
             <FormGroup>
               <span>
-                Application Status <span className="text-danger">*</span>{" "}
+                Status<span className="text-danger">*</span>{" "}
               </span>
 
               <Select
@@ -90,13 +100,23 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
                 onChange={(opt) => selectStatus(opt.label, opt.value)}
                 name="statusId"
                 id="statusId"
+                isDisabled={status?.statusId === 3 ? true : false}
               />
             </FormGroup>
-            {statusValue !== 3 && (
+            {statusValue !== 1 && statusValue !== 3 ? (
               <FormGroup>
-                <span>Note</span><span className="text-danger">*</span>{" "}
-
-                <Input
+                <span>Note</span>
+                <span className="text-danger">*</span>{" "}
+                <div className="notetext">
+                  <ReactQuill
+                    theme="snow"
+                    value={note}
+                    className="editor-input"
+                    placeholder="Write note..."
+                    onChange={setNote}
+                  />
+                </div>
+                {/* <Input
                   type="textarea"
                   placeholder="Write note"
                   name="note"
@@ -106,16 +126,18 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
                     setNote(e.target.value);
                     setNoteError(false);
                   }}
-                />
+                /> */}
                 {noteError && (
                   <span className="text-danger">Note is required</span>
                 )}
               </FormGroup>
-            )}
+            ) : null}
 
-            <FormGroup>
-              <SaveButton text="Save" progress={progress} />
-            </FormGroup>
+            {status?.statusId !== 3 ? (
+              <FormGroup>
+                <SaveButton text="Save" progress={progress} />
+              </FormGroup>
+            ) : null}
           </Col>
         </Row>
       </Form>

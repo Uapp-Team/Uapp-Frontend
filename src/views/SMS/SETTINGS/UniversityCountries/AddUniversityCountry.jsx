@@ -33,10 +33,16 @@ import { rootUrl } from "../../../../constants/constants";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import remove from "../../../../helpers/remove";
+import CancelButton from "../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../components/buttons/SaveButton";
+import { Upload } from "antd";
+import * as Icon from "react-feather";
+import post from "../../../../helpers/post";
+import Update from "../../InFlow/Update";
 
 const AddUniversityCountry = (props) => {
   const univerSityCountries = props.univerSityCountryList[0];
-  console.log(univerSityCountries);
+  const [buttonStatus1, setButtonStatus1] = useState(false);
   const [universityCountry, setUniversityCountry] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
@@ -64,6 +70,100 @@ const AddUniversityCountry = (props) => {
   const [CurrencyName, setCurrencyName] = useState("");
   const [CurrencySignError, setCurrencySignError] = useState("");
   const [CurrencySign, setCurrencySign] = useState("");
+
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const [previewVisible1, setPreviewVisible1] = useState(false);
+  const [previewImage1, setPreviewImage1] = useState("");
+  const [previewTitle1, setPreviewTitle1] = useState("");
+  const [text1, setText1] = useState("");
+  const [FileList1, setFileList1] = useState([]);
+  const [error1, setError1] = useState(false);
+  const closeModal1 = () => {
+    setModalOpen2(false);
+    setFileList1([]);
+    setError1(false);
+  };
+
+  const handleCancel1 = () => {
+    setPreviewVisible1(false);
+  };
+
+  const updateProfilePic = (country) => {
+    setModalOpen2(true);
+    setFileList1([]);
+    setEditUniCountryId(country?.id);
+  };
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  const handlePreview1 = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage1(file.url || file.preview);
+    setPreviewVisible1(true);
+    setPreviewTitle1(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange1 = ({ fileList }) => {
+    if (
+      fileList.length > 0 &&
+      fileList[0]?.type !== "image/jpeg" &&
+      fileList[0]?.type !== "image/jpg" &&
+      fileList[0]?.type !== "image/png"
+    ) {
+      setFileList1([]);
+      setText1("Only jpeg, jpg, png image is allowed");
+    } else {
+      setFileList1(fileList);
+      setText1("");
+      setError1(false);
+      setButtonStatus1(false);
+    }
+  };
+
+  const handleSubmitProfilePhoto = (event) => {
+    event.preventDefault();
+
+    const subData = new FormData(event.target);
+
+    subData.append("currentFLagFile", FileList1[0]?.originFileObj);
+
+    if (FileList1.length < 1) {
+      setError1(true);
+    } else {
+      setProgress(true);
+      setButtonStatus1(true);
+      post(`UniversityCountry/UpdateFlag`, subData).then((res) => {
+        setButtonStatus1(false);
+        setProgress(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setFileList1([]);
+          setModalOpen2(false);
+          setSuccess(!success);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     get(`UniversityCountry/Index`)
@@ -220,21 +320,18 @@ const AddUniversityCountry = (props) => {
   };
 
   // redirect to dashboard
-  const backToDashboard = () => {
-    history.push("/");
-  };
 
   return (
     <div>
+      <BreadCrumb title="University Countries" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="University Countries" backTo="" path="/" />
-
           <Card>
             <CardHeader>
-              {permissions?.includes(permissionList?.Manage_Core_Data) ? (
+              <div>
+                {/* {permissions?.includes(permissionList?.Manage_Core_Data) ? (
                 <ButtonForFunction
                   className={"btn btn-uapp-add"}
                   func={() => setModalOpen(true)}
@@ -242,7 +339,8 @@ const AddUniversityCountry = (props) => {
                   name={" Add Country"}
                   permission={6}
                 />
-              ) : null}
+              ) : null} */}
+              </div>
 
               <div>
                 {" "}
@@ -359,6 +457,30 @@ const AddUniversityCountry = (props) => {
                         </Col>
                       </FormGroup>
 
+                      {/* <FormGroup row>
+                        <Col md="4">
+                          <span>
+                            <span className="text-danger">*</span>
+                            Country Flag
+                          </span>
+                        </Col>
+                        <Col md="8">
+                          <Input
+                            type="text"
+                            name="currencySign"
+                            id="currencySign"
+                            placeholder="Enter Currency Sign"
+                            onChange={(e) => {
+                              handleCurrencySign(e);
+                            }}
+                            value={CurrencySign}
+                          />
+                          <span className="text-danger">
+                            {CurrencySignError}
+                          </span>
+                        </Col>
+                      </FormGroup> */}
+
                       <FormGroup
                         className="has-icon-left position-relative"
                         style={{
@@ -366,21 +488,12 @@ const AddUniversityCountry = (props) => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Button
-                          color="danger"
-                          className="mr-1 mt-3"
-                          onClick={closeModal}
-                        >
-                          Close
-                        </Button>
-                        <Button
-                          color="primary"
-                          type="submit"
-                          className="mr-1 mt-3"
-                          disabled={buttonStatus}
-                        >
-                          {progress1 ? <ButtonLoader /> : "Submit"}
-                        </Button>
+                        <CancelButton cancel={closeModal} />
+                        <SaveButton
+                          text="Submit"
+                          progress={progress1}
+                          buttonStatus={buttonStatus}
+                        />
                       </FormGroup>
                     </Form>
                   </ModalBody>
@@ -390,7 +503,8 @@ const AddUniversityCountry = (props) => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
+                      <th>Flag</th>
                       <th>Name</th>
                       <th>Currency Name</th>
                       <th>Currency Sign</th>
@@ -406,7 +520,15 @@ const AddUniversityCountry = (props) => {
                   <tbody>
                     {univerSityCountries?.map((uniCountry, i) => (
                       <tr key={uniCountry.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
+                        <td>
+                          <img
+                            src={rootUrl + uniCountry.countryFlag}
+                            alt="flag"
+                            width="25px"
+                            className="rounded-circle"
+                          />
+                        </td>
                         <td>{uniCountry.name}</td>
                         <td>{uniCountry.currencyName}</td>
                         <td>{uniCountry.currencySign}</td>
@@ -427,7 +549,20 @@ const AddUniversityCountry = (props) => {
                           </td>
                         ) : null}
                         <td>
-                          <ButtonGroup>
+                          <ButtonForFunction
+                            func={() => updateProfilePic(uniCountry)}
+                            className={"mx-1 btn-sm"}
+                            color={"warning"}
+                            icon={<i className="fas fa-edit"></i>}
+                            permission={6}
+                          />
+                          {/* <span
+                            onClick={() => updateProfilePic(uniCountry)}
+                            className="pointer"
+                          >
+                            Update Flag
+                          </span> */}
+                          {/* <ButtonGroup>
                             {permissions?.includes(
                               permissionList.Manage_Core_Data
                             ) ? (
@@ -452,43 +587,7 @@ const AddUniversityCountry = (props) => {
                                 permission={6}
                               />
                             ) : null}
-                          </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This University Country? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            confirm={() =>
-                              handleDeleteUniCountry(delUniCountryId)
-                            }
-                            cancel={closeDeleteModal}
-                          />
-
-                          {/* <Modal
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            className="uapp-modal"
-                          >
-                            <ModalBody>
-                              <p>
-                                Are You Sure to Delete this{" "}
-                                <b>{delUniCountryName}</b> ? Once Deleted it
-                                can't be Undone!
-                              </p>
-                            </ModalBody>
-
-                            <ModalFooter>
-                              <Button
-                                color="danger"
-                                onClick={() =>
-                                  handleDeleteUniCountry(delUniCountryId)
-                                }
-                                disabled={buttonStatus}
-                              >
-                                {progress ? <ButtonLoader /> : "YES"}
-                              </Button>
-                              <Button onClick={closeDeleteModal}>NO</Button>
-                            </ModalFooter>
-                          </Modal> */}
+                          </ButtonGroup> */}
                         </td>
                       </tr>
                     ))}
@@ -499,6 +598,109 @@ const AddUniversityCountry = (props) => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This University Country? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => handleDeleteUniCountry(delUniCountryId)}
+        cancel={closeDeleteModal}
+      />
+
+      <Modal isOpen={modalOpen2} toggle={closeModal1} className="uapp-modal">
+        <ModalHeader>Update University Country Flag</ModalHeader>
+
+        <ModalBody>
+          <form onSubmit={handleSubmitProfilePhoto}>
+            <input type="hidden" name="id" id="id" value={editUniCountryId} />
+
+            <FormGroup row className="has-icon-left position-relative">
+              <Col className="ml-5" md="4">
+                <span>
+                  Flag Image <span className="text-danger">*</span>{" "}
+                </span>
+              </Col>
+              <Col md="6">
+                <div className="row d-flex">
+                  <div className="col-md-6">
+                    <>
+                      <Upload
+                        listType="picture-card"
+                        multiple={false}
+                        fileList={FileList1}
+                        onPreview={handlePreview1}
+                        onChange={handleChange1}
+                        beforeUpload={(file) => {
+                          return false;
+                        }}
+                      >
+                        {FileList1.length < 1 ? (
+                          <div className="text-danger" style={{ marginTop: 8 }}>
+                            <Icon.Upload />
+                            <br />
+                            <span>Upload Image Here</span>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </Upload>
+                      <Modal
+                        visible={previewVisible1}
+                        title={previewTitle1}
+                        footer={null}
+                        onCancel={handleCancel1}
+                      >
+                        <img
+                          alt="example"
+                          style={{ width: "100%" }}
+                          src={previewImage1}
+                        />
+                      </Modal>
+
+                      <span className="text-danger d-block">{text1}</span>
+
+                      {error1 && (
+                        <span className="text-danger">
+                          University Country Flag is required
+                        </span>
+                      )}
+                    </>
+                  </div>
+                </div>
+              </Col>
+            </FormGroup>
+
+            <FormGroup row>
+              <Col md="12">
+                <div className="d-flex justify-content-end">
+                  {/* <Button
+                    color="danger"
+                    onClick={closeModal1}
+                    className="mr-1 mt-3"
+                  >
+                    Cancel
+                  </Button> */}
+                  <CancelButton cancel={closeModal1} />
+
+                  <SaveButton
+                    text="Submit"
+                    progress={progress1}
+                    buttonStatus={buttonStatus}
+                  />
+                  {/* <Button
+                    type="submit"
+                    className="ml-1 mt-3"
+                    color="primary"
+                    disabled={buttonStatus1}
+                  >
+                    {progress ? <ButtonLoader /> : "Update"}
+                  </Button> */}
+                </div>
+              </Col>
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

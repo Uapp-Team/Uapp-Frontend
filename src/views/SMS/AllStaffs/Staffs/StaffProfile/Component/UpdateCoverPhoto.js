@@ -12,6 +12,7 @@ import ButtonLoader from "../../../../Components/ButtonLoader";
 import uapploader2 from "../../../../../../assets/img/profile-cover.png";
 import { rootUrl } from "../../../../../../constants/constants";
 import * as Icon from "react-feather";
+import ImageUploadCrop from "../../../../../../components/ImageUpload/ImageUploadCrop";
 
 const UpdateCoverPhoto = ({
   employeeDetails,
@@ -33,6 +34,8 @@ const UpdateCoverPhoto = ({
   previewTitle,
   buttonStatus,
   progress,
+  croppedImage,
+  setCroppedImage,
 }) => {
   return (
     <div className="uapp-employee-cover-image">
@@ -48,9 +51,7 @@ const UpdateCoverPhoto = ({
       >
         <div className="uplode-cover-image">
           <div className="uplode-cover-image">
-            {permissions?.includes(
-              permissionList.Update_Employee
-            ) ? (
+            {permissions?.includes(permissionList.Update_Employee) ? (
               <span onClick={updateCoverPhoto}>
                 {" "}
                 <i className="fas fa-camera" style={{ cursor: "pointer" }}>
@@ -61,8 +62,21 @@ const UpdateCoverPhoto = ({
           </div>
         </div>
 
+        <ImageUploadCrop
+          modalOpen={modalOpen}
+          closeModal={closeModal}
+          heading="Update Cover Photo"
+          onSubmit={handleSubmitCoverPhoto}
+          croppedImage={croppedImage}
+          setCroppedImage={setCroppedImage}
+          error={error}
+          errorText="Cover photo is required"
+          progress={progress}
+          buttonStatus={buttonStatus}
+        />
+
         {/* cover photo edit modal starts here */}
-        <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
+        {/* <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
           <ModalHeader>Update Cover Photo</ModalHeader>
 
           <ModalBody>
@@ -150,7 +164,7 @@ const UpdateCoverPhoto = ({
               </FormGroup>
             </form>
           </ModalBody>
-        </Modal>
+        </Modal> */}
         {/* cover photo edit modal ends here */}
       </div>
     </div>

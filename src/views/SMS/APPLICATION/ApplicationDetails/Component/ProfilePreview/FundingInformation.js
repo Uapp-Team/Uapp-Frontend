@@ -3,11 +3,10 @@ import { Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
 import { rootUrl } from "../../../../../../constants/constants";
 
-const FundingInformation = ({ sId }) => {
-  const [data, setData] = useState({});
+const FundingInformation = ({ sId, fundingData, setFundingData }) => {
   useEffect(() => {
     get(`StudentFunding/Overview/${sId}`).then((res) => {
-      setData(res);
+      setFundingData(res);
     });
   }, [sId]);
 
@@ -20,28 +19,31 @@ const FundingInformation = ({ sId }) => {
           </td>
           <td className="border-0 text-right"></td>
         </thead>
+      </Table>
+
+      <Table borderless responsive className="mb-4">
         <tbody>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-            <td className="border-0">Fund</td>
-            <td className="border-0">
-              {data?.fundingType ? data?.fundingType : "-"}
+            <td width="60%">Fund</td>
+            <td width="40%">
+              {fundingData?.fundingType ? fundingData?.fundingType : "-"}
             </td>
           </tr>
-          {data?.details ? (
+          {fundingData?.details ? (
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-              <td className="border-0">Details</td>
-              <td className="border-0">{data?.details}</td>
+              <td>Details</td>
+              <td>{fundingData?.details}</td>
             </tr>
           ) : null}
-          {data?.fileUrl ? (
+          {fundingData?.fileUrl ? (
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-              <td className="border-0">Attachment</td>
-              <td className="border-0">
+              <td>Attachment</td>
+              <td>
                 {" "}
-                {data?.studentDocumentFile === null ? (
+                {fundingData?.studentDocumentFile === null ? (
                   "-"
                 ) : (
-                  <a href={rootUrl + data?.fileUrl} target="blank">
+                  <a href={rootUrl + fundingData?.fileUrl} target="blank">
                     attachment
                   </a>
                 )}

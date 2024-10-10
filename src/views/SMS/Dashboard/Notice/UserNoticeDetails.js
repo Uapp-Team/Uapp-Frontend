@@ -5,10 +5,8 @@ import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { Card, CardBody } from "reactstrap";
 import { rootUrl } from "../../../../constants/constants";
-import downloadBtn from "../../../../assets/img/download.png";
 
 const UserNoticeDetails = () => {
-  const [success, setSuccess] = useState(false);
   const [noticeDetails, setNoticeDetails] = useState({});
   const { id } = useParams();
   console.log(id, "notice id");
@@ -18,7 +16,7 @@ const UserNoticeDetails = () => {
       setNoticeDetails(res);
       console.log("details", res);
     });
-  }, [success, id]);
+  }, [id]);
 
   const createMarkup = (html) => {
     return {
@@ -28,7 +26,7 @@ const UserNoticeDetails = () => {
 
   return (
     <div>
-      <BreadCrumb title="Notice Details" backTo="Notices" path="/Notices" />
+      <BreadCrumb title="Notice Details fdd" backTo="Notices" path="/Notices" />
       <Card>
         <CardBody>
           <h1 className="text-secondary fs-30px mb-3">
@@ -39,7 +37,7 @@ const UserNoticeDetails = () => {
           </span>
           <div className="my-4">
             {noticeDetails?.noticeForUsers?.map((users, i) => (
-              <span className="user-type-tag">{users?.name}</span>
+              <p className="user-type-tag">{users?.name}</p>
             ))}
           </div>
           <div className="mt-3 mb-5">

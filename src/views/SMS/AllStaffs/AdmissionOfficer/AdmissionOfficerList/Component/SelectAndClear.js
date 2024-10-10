@@ -3,6 +3,8 @@ import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
 import TagButton from "../../../../../../components/buttons/TagButton";
+import icon_info from "../../../../../../assets/img/icons/icon_info.png";
+import Typing from "../../../../../../components/form/Typing";
 
 const SelectAndClear = ({
   userType,
@@ -24,12 +26,14 @@ const SelectAndClear = ({
   setManagerValue,
   setProLabel,
   setProValue,
+  setIsTyping,
+  setSearchStr,
 }) => {
   // console.log(proValue);
   // console.log(managerValue);
   return (
     <div>
-      <Card className="uapp-employee-search">
+      <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row>
             {userType === userTypes?.AdmissionManager ||
@@ -39,8 +43,8 @@ const SelectAndClear = ({
                   options={providerMenu}
                   value={{ label: proLabel, value: proValue }}
                   onChange={(opt) => selectProviders(opt.label, opt.value)}
-                  name="admissionmanagerId"
-                  id="admissionmanagerId"
+                  name="providerId"
+                  id="providerId"
                   isDisabled={providerId !== undefined ? true : false}
                 />
               </Col>
@@ -59,24 +63,31 @@ const SelectAndClear = ({
             )}
 
             <Col lg="6" md="6" sm="12" xs="12">
-              <Input
-                style={{ height: "2.7rem" }}
-                type="text"
+              <Typing
                 name="search"
-                value={searchStr}
                 id="search"
                 placeholder="Name"
-                onChange={searchValue}
+                value={searchStr}
+                setValue={setSearchStr}
+                setIsTyping={setIsTyping}
                 onKeyDown={handleKeyDown}
               />
+
+              <div className="mt-1 d-flex justify-between">
+                <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
+                <div className="pl-2" style={{ paddingTop: "2px" }}>
+                  <span>Name should not include title.</span>
+                </div>
+              </div>
             </Col>
           </Row>
 
-          <Row className="">
+          <Row className="mt-2">
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="d-flex mt-1">
-                  {proValue !== 0 &&
+                  {!providerId &&
+                  proValue !== 0 &&
                   userType !== userTypes?.ProviderAdmin &&
                   userType !== userTypes?.AdmissionManager ? (
                     <TagButton
@@ -102,7 +113,8 @@ const SelectAndClear = ({
                   )}
                 </div>
                 <div className="mt-1 mx-0 d-flex btn-clear">
-                  {(proValue !== 0 &&
+                  {(!providerId &&
+                    proValue !== 0 &&
                     userType !== userTypes?.ProviderAdmin &&
                     userType !== userTypes?.AdmissionManager) ||
                   (managerValue !== 0 &&

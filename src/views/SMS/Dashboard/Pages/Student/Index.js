@@ -1,30 +1,51 @@
 import React, { useEffect, useState } from "react";
-import plusicon from "../../../../../assets/img/plusicon.svg";
 import vector from "../../../../../assets/img/Vector.png";
-import Vectorbeat from "../../../../../assets/img/Vectorbeat.svg";
 import banner from "../../../../../assets/img/banner.svg";
-import arrowright from "../../../../../assets/img/arrowright.svg";
-import tick from "../../../../../assets/img/tick.svg";
-import { Button, Card, CardBody, Col, Row } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
 import get from "../../../../../helpers/get";
 import axios from "axios";
 import { rootUrl } from "../../../../../constants/constants";
 import ApplicationList from "./Components/ApplicationList";
 import profileImage from "../../../../../assets/img/profile/user-uploads/user-07.jpg";
+import UserNotices from "../../Component/UserNotices";
+import Consent from "../../../STUDENT/StudentProfile/Component/Consent";
+import ProfilePreview from "../../../STUDENT/StudentProfile/ProfilePreview";
+import StudentJoinBanner from "../../../Affiliate/AffiliateComponents/StudentJoinBanner";
+import Department from "./Components/Department";
 
 const Student = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
   const [consultantData, setConsultantData] = useState({});
-
   const referenceId = localStorage.getItem("referenceId");
-  const { addToast } = useToasts();
   const history = useHistory();
+  const [canConsultant, setCanConsultant] = useState(false);
   const [info, setInfo] = useState(false);
   const [dashboard, setDashboard] = useState([]);
-  const [applicationinfo, setApplicationInfo] = useState([]);
+  const [studentDetails, setStudentDetails] = useState({});
+  const [contactData, setContactData] = useState([]);
+  const [emergencyContactList, setEmergencyContactList] = useState({});
+  const [applicationData, setApplicationData] = useState({});
+  const [fundingData, setFundingData] = useState({});
+  const [educationalInfos, setEducationalInfos] = useState([]);
+  const [ielts, setIelts] = useState({});
+  const [duolingo, setDuolingo] = useState({});
+  const [toefl, setToefl] = useState({});
+  const [functions, setFunctions] = useState({});
+  const [gcse, setGcse] = useState({});
+  const [pearson, setPearson] = useState({});
+  const [others, setOthers] = useState({});
+  const [pte, setPte] = useState({});
+  const [greData, setGreData] = useState({});
+  const [gmatData, setGmatData] = useState({});
+  const [experienceInfo, setExperienceInfo] = useState([]);
+  const [referenceList, setReferenceList] = useState([]);
+  const [studentStatement, setStudentStatement] = useState({});
+  const [scanId, setScanId] = useState("");
+  const [result, setResult] = useState("");
+  const [otherInformation, setOtherInformation] = useState({});
+  const [UploadData, setUploadData] = useState({});
+  const [completeAssessment, setcompleteAssessment] = useState({});
 
   useEffect(() => {
     get(`Student/CheckIfStudentIsConsultant/${currentUser?.displayEmail}`).then(
@@ -32,12 +53,23 @@ const Student = () => {
         setInfo(res);
       }
     );
-  }, [currentUser]);
+    if (referenceId) {
+      get(`Student/CanBecomeConsultant/${referenceId}`).then((res) => {
+        setCanConsultant(res);
+      });
+    }
+  }, [currentUser.displayEmail, referenceId]);
 
   useEffect(() => {
-    get(`StudentApplication/Index/${referenceId}`).then((res) => {
-      setApplicationInfo(res);
+    get(`ApplicationAssesment/DashboardAssesment`).then((res) => {
+      setcompleteAssessment(res);
     });
+  }, []);
+
+  useEffect(() => {
+    //get(`StudentApplication/Index/${referenceId}`).then((res) => {
+    //  setApplicationInfo(res);
+    //});
 
     get(`ConsultantProfile/StudentParentConsultant/${referenceId}`).then(
       (res) => {
@@ -58,11 +90,16 @@ const Student = () => {
       `/addStudentInformation/${localStorage.getItem("referenceId")}`
     );
   };
+
   const handleConsent = () => {
     history.push(`/studentDeclaration/${localStorage.getItem("referenceId")}`);
   };
   const redirectSearchApply = () => {
     history.push(`/search/${localStorage.getItem("referenceId")}`);
+  };
+
+  const redirectConsultantProfile = () => {
+    history.push(`/consultantProfile/${consultantData?.id}`);
   };
 
   const convertAccount = (e) => {
@@ -113,8 +150,6 @@ const Student = () => {
 
   return (
     <>
-      <div></div>
-
       <div className="d-flex justify-content-between flex-wrap">
         <div>
           <span className="std-dashboard-style1">
@@ -122,15 +157,22 @@ const Student = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 
         <div className="d-flex flex-wrap">
+          {completeAssessment?.isRequired !== false ? (
+            <div className="complete-assessment mr-2">
+              <a href={completeAssessment?.link} target="blank">
+                complete assessment
+              </a>
+            </div>
+          ) : null}
           <div style={{ cursor: "pointer" }}>
             {/* <div className="std-dashboard-style4"></div> */}
 
-            <>
+            {/* <>
               {dashboard?.isProfileCompleted === false ? (
                 <div className="std-profile">
                   <span onClick={redirectToAddStudent}>Complete Profile</span>
@@ -149,24 +191,29 @@ const Student = () => {
                   <span onClick={redirectSearchApply}>Search And Apply</span>
                 </div>
               ) : null}
-            </>
+            </> */}
           </div>
+          <UserNotices />
 
-          <div style={{ cursor: "pointer" }}>
-            <div className="std-dashboard-style6"></div>
+          {/*<div style={{ cursor: "pointer" }}>*/}
+          {/*  <div className="std-dashboard-style6"></div>*/}
 
-            <div>
-              <img
-                src={Vectorbeat}
-                alt=""
-                className="img-fluid dashbard-img-style2"
-              />
-            </div>
-          </div>
+          {/*  <div>*/}
+          {/*    <img*/}
+          {/*      src={Vectorbeat}*/}
+          {/*      alt=""*/}
+          {/*      className="img-fluid dashbard-img-style2"*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
       </div>
 
-      <ApplicationList referenceId={referenceId} />
+      <ApplicationList
+        referenceId={referenceId}
+        consultantData={consultantData}
+        totalStars={5}
+      />
 
       {/* Student Profile Redirect Section End*/}
 
@@ -174,7 +221,8 @@ const Student = () => {
 
       <div className="row">
         <div className="col-md-8">
-          {info ? (
+          <Department />
+          {/* {info ? (
             <Card style={{ marginTop: "24px", backgroundColor: "#1890FF" }}>
               <CardBody>
                 <div
@@ -197,29 +245,33 @@ const Student = () => {
             </Card>
           ) : (
             <>
-              <i mg src={banner} className="w-100" alt="" />
+              {canConsultant ? (
+                <>
+                  <img src={banner} className="w-100" alt="" />
 
-              <Card style={{ marginTop: "24px" }}>
-                <CardBody className="waiting-for">
-                  <div
-                    style={{ height: "60px" }}
-                    className="d-flex flex-wrap align-items-center justify-content-between px-4"
-                  >
-                    <span className="std-dashboard-style-why">
-                      Why you waiting for?
-                    </span>
+                  <Card style={{ marginTop: "24px" }}>
+                    <CardBody className="waiting-for">
+                      <div
+                        style={{ height: "60px" }}
+                        className="d-flex flex-wrap align-items-center justify-content-between px-4"
+                      >
+                        <span className="std-dashboard-style-why">
+                          Why you waiting for?
+                        </span>
 
-                    <button
-                      className="become-consultant"
-                      onClick={makeStudentConsultant}
-                    >
-                      Become Consultant
-                    </button>
-                  </div>
-                </CardBody>
-              </Card>
+                        <button
+                          className="become-consultant"
+                          onClick={makeStudentConsultant}
+                        >
+                          Become Consultant
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </>
+              ) : null}
             </>
-          )}
+          )} */}
         </div>
         <div className="col-md-4">
           <Card className="p-4">
@@ -250,7 +302,11 @@ const Student = () => {
               )}
               <div>
                 <div className="consultant-info-style-std-dashboard">
-                  <span className="consultant-name-style-student-dashboard">
+                  <span
+                    className="consultant-name-style-student-dashboard"
+                    onClick={redirectConsultantProfile}
+                    style={{ cursor: "pointer" }}
+                  >
                     {consultantData?.fullName}
                   </span>
                   <br />
@@ -302,7 +358,86 @@ const Student = () => {
                   </div> */}
           </Card>
 
-          <Card>
+          <Consent
+            sId={referenceId}
+            studentDetails={studentDetails}
+            contactData={contactData}
+            emergencyContactList={emergencyContactList}
+            applicationData={applicationData}
+            fundingData={fundingData}
+            educationalInfos={educationalInfos}
+            ielts={ielts}
+            duolingo={duolingo}
+            toefl={toefl}
+            functions={functions}
+            gcse={gcse}
+            pearson={pearson}
+            others={others}
+            pte={pte}
+            greData={greData}
+            gmatData={gmatData}
+            experienceInfo={experienceInfo}
+            referenceList={referenceList}
+            studentStatement={studentStatement}
+            scanId={scanId}
+            result={result}
+            otherInformation={otherInformation}
+            UploadData={UploadData}
+          />
+          <StudentJoinBanner className="my-4" />
+          <div className="d-none">
+            <ProfilePreview
+              sId={referenceId}
+              studentDetails={studentDetails}
+              setStudentDetails={setStudentDetails}
+              contactData={contactData}
+              setContactData={setContactData}
+              emergencyContactList={emergencyContactList}
+              setEmergencyContactList={setEmergencyContactList}
+              applicationData={applicationData}
+              setApplicationData={setApplicationData}
+              fundingData={fundingData}
+              setFundingData={setFundingData}
+              educationalInfos={educationalInfos}
+              setEducationalInfos={setEducationalInfos}
+              ielts={ielts}
+              setIelts={setIelts}
+              duolingo={duolingo}
+              setDuolingo={setDuolingo}
+              toefl={toefl}
+              setToefl={setToefl}
+              functions={functions}
+              setFunctions={setFunctions}
+              gcse={gcse}
+              setGcse={setGcse}
+              pearson={pearson}
+              setPearson={setPearson}
+              others={others}
+              setOthers={setOthers}
+              pte={pte}
+              setPte={setPte}
+              greData={greData}
+              setGreData={setGreData}
+              gmatData={gmatData}
+              setGmatData={setGmatData}
+              experienceInfo={experienceInfo}
+              setExperienceInfo={setExperienceInfo}
+              referenceList={referenceList}
+              setReferenceList={setReferenceList}
+              studentStatement={studentStatement}
+              setStudentStatement={setStudentStatement}
+              scanId={scanId}
+              setScanId={setScanId}
+              result={result}
+              setResult={setResult}
+              otherInformation={otherInformation}
+              setOtherInformation={setOtherInformation}
+              UploadData={UploadData}
+              setUploadData={setUploadData}
+            />
+          </div>
+
+          {/* <Card>
             <CardBody>
               <iframe
                 className="w-100"
@@ -317,7 +452,7 @@ const Student = () => {
 
               <div>
                 <li style={{ listStyleType: "none" }}>
-                  <img src={arrowright} className="img-fluid" />
+                  <img src={arrowright} className="img-fluid" alt="" />
                   <Link style={{ textDecorationColor: "#1E98B0" }}>
                     {" "}
                     <span className="video-info-style-student-dashboard">
@@ -327,7 +462,7 @@ const Student = () => {
                 </li>
 
                 <li style={{ listStyleType: "none" }}>
-                  <img src={arrowright} className="img-fluid" />
+                  <img src={arrowright} className="img-fluid" alt="" />
                   <Link style={{ textDecorationColor: "#1E98B0" }}>
                     {" "}
                     <span className="video-info-style-student-dashboard">
@@ -337,7 +472,7 @@ const Student = () => {
                 </li>
 
                 <li style={{ listStyleType: "none" }}>
-                  <img src={arrowright} className="img-fluid" />
+                  <img src={arrowright} className="img-fluid" alt="" />
                   <Link style={{ textDecorationColor: "#1E98B0" }}>
                     {" "}
                     <span className="video-info-style-student-dashboard">
@@ -347,7 +482,7 @@ const Student = () => {
                 </li>
               </div>
             </CardBody>
-          </Card>
+          </Card> */}
         </div>
       </div>
 

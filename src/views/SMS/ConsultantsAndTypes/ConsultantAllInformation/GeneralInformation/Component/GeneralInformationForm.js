@@ -163,41 +163,47 @@ const GeneralInformationForm = ({
               </FormGroup>
             )}
 
-            {userTypeId === userTypes?.Consultant.toString() ? (
-              <FormGroup className="has-icon-left position-relative">
-                <span>
-                  <span className="text-danger">*</span>
-                  Parent Consultant
-                </span>
-                {consData?.parentConsultant?.firstName}{" "}
-                {consData?.parentConsultant?.lastName}
-              </FormGroup>
-            ) : (
-              <FormGroup className="has-icon-left position-relative">
-                <span>
-                  {" "}
-                  <span className="text-danger">*</span>
-                  Parent Consultant
-                </span>
-
-                <Select
-                  className="form-mt"
-                  options={consParentMenu}
-                  value={{ label: parentLabel, value: parentValue }}
-                  onChange={(opt) => selectParentCons(opt.label, opt.value)}
-                  name="parentConsultantId"
-                  id="parentConsultantId"
-                />
-
-                {parentError && (
-                  <span className="text-danger">
-                    Parent consultant is required
+            {/* {consData?.parentConsultant?.id && ( */}
+            <>
+              {userTypeId === userTypes?.Consultant.toString() ? (
+                <FormGroup className="has-icon-left position-relative">
+                  <span className="mr-2">
+                    <span className="text-danger">*</span>
+                    Parent Consultant
                   </span>
-                )}
-              </FormGroup>
-            )}
+                  {consData?.parentConsultant?.firstName}{" "}
+                  {consData?.parentConsultant?.lastName}
+                </FormGroup>
+              ) : (
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
+                    {" "}
+                    <span className="text-danger">*</span>
+                    Parent Consultant
+                  </span>
 
-            {userTypeId === userTypes?.Consultant ? null : (
+                  <Select
+                    className="form-mt"
+                    options={consParentMenu}
+                    value={{ label: parentLabel, value: parentValue }}
+                    onChange={(opt) => selectParentCons(opt.label, opt.value)}
+                    name="parentConsultantId"
+                    id="parentConsultantId"
+                  />
+
+                  {parentError && (
+                    <span className="text-danger">
+                      Parent consultant is required
+                    </span>
+                  )}
+                </FormGroup>
+              )}
+            </>
+            {/* )} */}
+
+            {userTypeId === userTypes?.Consultant ? (
+              <input type="hidden" value={branchValue} />
+            ) : branchOptions.length > 1 ? (
               <FormGroup className="has-icon-left position-relative">
                 <span>
                   <span className="text-danger">*</span>
@@ -217,7 +223,7 @@ const GeneralInformationForm = ({
                   <span className="text-danger">Branch is required</span>
                 )}
               </FormGroup>
-            )}
+            ) : null}
 
             <FormGroup>
               <span>
@@ -269,7 +275,7 @@ const GeneralInformationForm = ({
                   handleFirstNameChange(e);
                 }}
                 placeholder="Enter First Name"
-                defaultValue={consData?.firstName}
+                value={firstName}
               />
 
               <span className="text-danger">{firstNameError}</span>
@@ -290,7 +296,7 @@ const GeneralInformationForm = ({
                   handleLastNameChange(e);
                 }}
                 placeholder="Enter Last Name"
-                defaultValue={consData?.lastName}
+                value={lastName}
               />
               <span className="text-danger">{lastNameError}</span>
             </FormGroup>

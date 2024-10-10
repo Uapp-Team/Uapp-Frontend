@@ -33,7 +33,7 @@ const StaffTypeTable = ({
           <Table id="table-to-xls" className="table-sm table-bordered">
             <thead className="tablehead">
               <tr style={{ textAlign: "center" }}>
-                <th>SL/NO</th>
+                {/* <th>SL/NO</th> */}
                 <th>Name</th>
                 <th className="text-center"> Total Staff</th>
                 <th>Action</th>
@@ -42,7 +42,7 @@ const StaffTypeTable = ({
             <tbody>
               {EmployeesTypeList?.map((etype, i) => (
                 <tr key={etype.id} style={{ textAlign: "center" }}>
-                  <th scope="row">{i + 1}</th>
+                  {/* <th scope="row">{i + 1}</th> */}
                   <td>{etype.name}</td>
                   <td className="text-center">
                     {permissions?.includes(
@@ -99,19 +99,19 @@ const StaffTypeTable = ({
                   </td>
                 </tr>
               ))}
-
-              <ConfirmModal
-                text={`Do You Want To Delete This ${empDelName} Information ?`}
-                isOpen={deleteModal}
-                toggle={() => setDeleteModal(!deleteModal)}
-                confirm={() => handleDeletePermission(empDelId)}
-                cancel={() => setDeleteModal(false)}
-                progress={progress2}
-              />
             </tbody>
           </Table>
         </div>
       )}
+
+      <ConfirmModal
+        text={`Do You Want To Delete This ${empDelName} Information ?`}
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={() => handleDeletePermission(empDelId)}
+        cancel={() => setDeleteModal(false)}
+        progress={progress2}
+      />
     </div>
   );
 };

@@ -16,7 +16,6 @@ import {
 } from "reactstrap";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
-import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -46,7 +45,6 @@ const BranchConsultantRegistration = () => {
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
   const [email, setemail] = useState("");
-  console.log(email);
   const [phoneNumber, setphoneNumber] = useState("");
   const [password, setpassword] = useState("");
   const [firstNameError, setfirstNameError] = useState(false);
@@ -56,12 +54,17 @@ const BranchConsultantRegistration = () => {
   const [passwordError, setpasswordError] = useState("");
   const [branchConsultant, setBranchConsultant] = useState({});
   const [consultantRegisterId, setConsultantRegisterId] = useState(0);
-  const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [homeAccept, setHomeAccept] = useState(false);
+  const [ukAccept, setUkAccept] = useState(false);
+  const [intAccept, setIntAccept] = useState(false);
+  const [acceptError, setAcceptError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setNameTitle(res);
+      console.log(res, "title");
     });
   }, []);
 
@@ -72,11 +75,14 @@ const BranchConsultantRegistration = () => {
       setlastName(res?.lastName);
       setfirstName(res?.firstName);
       setphoneNumber(res?.phoneNumber);
-      setTitleValue(res?.nameTittleId);
+      setTitleValue(res?.nameTittleId == null ? 0 : res?.nameTittleId);
       setConsultantRegisterId(res?.id);
+      setHomeAccept(res?.isAcceptedHome);
+      setUkAccept(res?.isAcceptedEU_UK);
+      setIntAccept(res?.isAcceptedInternational);
       console.log(res, "branch consultant");
     });
-  }, []);
+  }, [success, branchId]);
 
   // const consParentMenu = consParent?.map((consParentOptions) => ({
   //   label: consParentOptions?.name,
@@ -116,7 +122,6 @@ const BranchConsultantRegistration = () => {
       setEmailError("Email is not valid");
     } else {
       get(`EmailCheck/EmailCheck/${data}`).then((res) => {
-        setEmailExistError(res);
         if (!res) {
           setEmailError("Email already exists");
         } else {
@@ -177,27 +182,49 @@ const BranchConsultantRegistration = () => {
       isFormValid = false;
       setTitleError(true);
     }
+
     if (!firstName) {
       isFormValid = false;
       setfirstNameError(true);
     }
+
     if (!lastName) {
       isFormValid = false;
       setlastNameError(true);
     }
 
+    if (homeAccept === false && ukAccept === false && intAccept === false) {
+      isFormValid = false;
+      setAcceptError(true);
+    }
+
     if (!email) {
       isFormValid = false;
       setEmailError("Email is required");
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+    }
+
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
       isFormValid = false;
       setEmailError("Email is not Valid");
     }
 
-    if (emailExistError === false) {
-      isFormValid = false;
-      setEmailExistError(emailExistError);
-    }
+    // if (emailExistError === false) {
+    //   isFormValid = false;
+    //   setEmailExistError(emailExistError);
+    // }
+
+    // if (!email) {
+    //   isFormValid = false;
+    //   setEmailError("Email is required");
+    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+    //   isFormValid = false;
+    //   setEmailError("Email is not Valid");
+    // }
+
+    // if (emailExistError === false) {
+    //   isFormValid = false;
+    //   setEmailExistError(emailExistError);
+    // }
 
     if (!phoneNumber) {
       isFormValid = false;
@@ -227,23 +254,25 @@ const BranchConsultantRegistration = () => {
 
     const subdata = new FormData(event.target);
     subdata.append("phoneNumber", phoneNumber);
-
+    subdata.append("isAcceptedHome", homeAccept);
+    subdata.append("isAcceptedEU_UK", ukAccept);
+    subdata.append("isAcceptedInternational", intAccept);
     if (validateRegisterForm()) {
+      console.log("first");
       if (branchConsultant?.branchId) {
         setButtonStatus(true);
         setProgress(true);
         put("BranchConsultant/UpdateDefaultConsultant", subdata).then((res) => {
-          setButtonStatus(false);
-          setProgress(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {
             addToast(res.data.message, {
               appearance: "success",
               autoDismiss: true,
             });
-            history.push({
-              pathname: `/branchProfile/${branchId}`,
-            });
           }
+          setSuccess(!success);
+          setButtonStatus(false);
+          setProgress(false);
+          history.push(`/branchProfile/${branchId}`);
         });
       } else {
         setButtonStatus(true);
@@ -408,6 +437,66 @@ const BranchConsultantRegistration = () => {
                         <span className="text-danger">Last Name required</span>
                       )}
                     </FormGroup>
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span>Recruitment Type
+                      </span>
+
+                      <Row>
+                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                          <FormGroup check inline>
+                            <Input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={homeAccept === true}
+                              onChange={(e) => {
+                                setHomeAccept(false);
+                                setHomeAccept(!homeAccept);
+                                setAcceptError(false);
+                              }}
+                            />
+                            <span className="mr-2">Home </span>
+                          </FormGroup>
+                        </Col>
+
+                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                          <FormGroup check inline>
+                            <Input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={ukAccept === true}
+                              onChange={(e) => {
+                                setUkAccept(false);
+                                setUkAccept(!ukAccept);
+                                setAcceptError(false);
+                              }}
+                            />
+                            <span className="mr-2">EU/UK </span>
+                          </FormGroup>
+                        </Col>
+
+                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                          <FormGroup check inline>
+                            <Input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={intAccept === true}
+                              onChange={(e) => {
+                                setIntAccept(false);
+                                setIntAccept(!intAccept);
+                                setAcceptError(false);
+                              }}
+                            />
+                            <span className="mr-2">International </span>
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      {acceptError ? (
+                        <span className="text-danger">
+                          Recruitment type is required.
+                        </span>
+                      ) : null}
+                    </FormGroup>
                     {consultantRegisterId === 0 ||
                     consultantRegisterId === undefined ? (
                       <FormGroup>
@@ -474,9 +563,10 @@ const BranchConsultantRegistration = () => {
                         type="string"
                         name="phoneNumber"
                         id="phoneNumber"
-                        country={"us"}
+                        country={"gb"}
+                        enableLongNumbers={true}
                         onChange={handlePhoneNumber}
-                        value={phoneNumber ? phoneNumber : "1"}
+                        value={phoneNumber ? phoneNumber : ""}
                         inputProps={{
                           required: true,
                         }}

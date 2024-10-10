@@ -74,7 +74,7 @@ const AddUniversityCampus = (props) => {
   const [addressLine, setAddressLine] = useState("");
   const [addressLineError, setAddressLineError] = useState("");
   const history = useHistory();
-
+  const [currencyDD, setCurrencyDD] = useState([]);
   const [totalStudent, settotalStudent] = useState(0);
   const [intStudent, setintStudent] = useState(0);
   const [tutionFee, settutionFee] = useState(0);
@@ -100,6 +100,10 @@ const AddUniversityCampus = (props) => {
   }
 
   useEffect(() => {
+    get(`CurrencyDD/Index`).then((res) => {
+      setCurrencyDD(res);
+    });
+
     get(`UniversityCountryDD/Index`).then((res) => {
       setUniverSityCountries(res);
     });
@@ -164,16 +168,18 @@ const AddUniversityCampus = (props) => {
   };
 
   const handleCampusName = (e) => {
-    setCampusName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCampusName(data);
+    if (data === "") {
       setCampusNameError("Campus name is required");
     } else {
       setCampusNameError("");
     }
   };
   const handleAddressLine = (e) => {
-    setAddressLine(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setAddressLine(data);
+    if (data === "") {
       setAddressLineError(" Address line is required");
     } else {
       setAddressLineError("");
@@ -383,23 +389,23 @@ const AddUniversityCampus = (props) => {
 
   return (
     <div>
+      <BreadCrumb
+        title="University Campus Information"
+        backTo={
+          location.uniCampId !== undefined ? "Campus Details" : "University"
+        }
+        path={
+          location.uuId !== undefined
+            ? `/campusDetails/${location.uniCampId}`
+            : "/universityList"
+        }
+      />
+
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="University Campus Information"
-            backTo={
-              location.uniCampId !== undefined ? "Campus Details" : "University"
-            }
-            path={
-              location.uuId !== undefined
-                ? `/campusDetails/${location.uniCampId}`
-                : "/universityList"
-            }
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -431,8 +437,9 @@ const AddUniversityCampus = (props) => {
                                 }}
                               >
                                 {" "}
-                                {uniCampus?.university?.name} (
-                                {uniCampus?.university?.shortName}){" "}
+                                {uniCampus?.university?.name}
+                                {uniCampus?.university?.shortName &&
+                                  `(${uniCampus?.university?.shortName})`}
                               </p>
                               <br />
                               <p>
@@ -453,6 +460,7 @@ const AddUniversityCampus = (props) => {
                               <p>
                                 Avarage Tution Fee :{" "}
                                 <CurrencyValue
+                                  currencyList={currencyDD}
                                   currencyId={
                                     uniCampus?.avarageTutionFeeCurrency
                                   }
@@ -462,6 +470,7 @@ const AddUniversityCampus = (props) => {
                               <p>
                                 Avarage Living Cost :{" "}
                                 <CurrencyValue
+                                  currencyList={currencyDD}
                                   currencyId={
                                     uniCampus?.avarageLivingCostCurrency
                                   }
@@ -471,6 +480,7 @@ const AddUniversityCampus = (props) => {
                               <p>
                                 Avarage Application Fee :{" "}
                                 <CurrencyValue
+                                  currencyList={currencyDD}
                                   currencyId={
                                     uniCampus?.avarageApplicationFeeCurrency
                                   }
@@ -480,6 +490,7 @@ const AddUniversityCampus = (props) => {
                               <p>
                                 Estimated TotalCost :{" "}
                                 <CurrencyValue
+                                  currencyList={currencyDD}
                                   currencyId={
                                     uniCampus?.estimatedTotalCostCurrency
                                   }
@@ -493,13 +504,17 @@ const AddUniversityCampus = (props) => {
                                 permissionList.Edit_University
                               ) && (
                                 <p>
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => handleUpdate(uniCampus?.id)}
-                                  >
-                                    Edit
-                                  </span>{" "}
-                                  |{" "}
+                                  <a href="#campus-form">
+                                    <span
+                                      className="pointer text-white"
+                                      onClick={() =>
+                                        handleUpdate(uniCampus?.id)
+                                      }
+                                    >
+                                      Edit
+                                    </span>
+                                  </a>
+                                  |
                                   <span
                                     style={{ cursor: "pointer" }}
                                     onClick={() => toggleDanger(uniCampus)}
@@ -511,411 +526,434 @@ const AddUniversityCampus = (props) => {
                             </Col>
                           </Row>
                         </CardBody>
-                        <ConfirmModal
-                          text="Do You Want To Delete This Campus? Once Deleted it can't be Undone "
-                          // ${delData?.name}
-                          isOpen={deleteModal}
-                          toggle={() => {
-                            setDeleteModal(!deleteModal);
-                            setUniversityCampusId(0);
-                            setUniversityCampusName("");
-                          }}
-                          cancel={() => {
-                            setDeleteModal(!deleteModal);
-                            setUniversityCampusId(0);
-                            setUniversityCampusName("");
-                          }}
-                          buttonStatus={buttonStatus}
-                          progress={progress}
-                          confirm={() =>
-                            handleDeletePermission(UniversityCampusId)
-                          }
-                        ></ConfirmModal>
                       </Card>
                     </div>
                   ))}
-
+                  <ConfirmModal
+                    text="Do You Want To Delete This Campus? Once Deleted it can't be Undone "
+                    isOpen={deleteModal}
+                    toggle={() => {
+                      setDeleteModal(!deleteModal);
+                      setUniversityCampusId(0);
+                      setUniversityCampusName("");
+                    }}
+                    cancel={() => {
+                      setDeleteModal(!deleteModal);
+                      setUniversityCampusId(0);
+                      setUniversityCampusName("");
+                    }}
+                    buttonStatus={buttonStatus}
+                    progress={progress}
+                    confirm={() => handleDeletePermission(UniversityCampusId)}
+                  />
                   {permissions?.includes(permissionList.Edit_University) && (
                     <>
                       {showForm === false && forms === true ? (
-                        <Card
-                          style={{
-                            border: "0.5px solid rgba(37, 37, 37, 0.12)",
-                            borderRadius: "12px",
-                          }}
-                        >
-                          <CardBody>
-                            <Form onSubmit={handleSubmit}>
-                              <FormGroup row>
-                                <Input
-                                  type="hidden"
-                                  id="universityId"
-                                  name="universityId"
-                                  value={univerId}
-                                />
-                                <Input
-                                  type="hidden"
-                                  id="Id"
-                                  name="Id"
-                                  value={selectedId}
-                                />
-                              </FormGroup>
+                        <>
+                          <div
+                            id="campus-form"
+                            className={showForm ? "pb-5" : ""}
+                          ></div>
+                          <Card
+                            className="mt-2"
+                            style={{
+                              border: "0.5px solid rgba(37, 37, 37, 0.12)",
+                              borderRadius: "12px",
+                            }}
+                          >
+                            <CardBody>
+                              <Form onSubmit={handleSubmit}>
+                                <FormGroup row>
+                                  <Input
+                                    type="hidden"
+                                    id="universityId"
+                                    name="universityId"
+                                    value={univerId}
+                                  />
+                                  <Input
+                                    type="hidden"
+                                    id="Id"
+                                    name="Id"
+                                    value={selectedId}
+                                  />
+                                </FormGroup>
 
-                              <Row>
-                                <Col md="5">
-                                  <FormGroup>
-                                    <Col>
-                                      <span>
-                                        <span className="text-danger">*</span>{" "}
-                                        Campus name{" "}
-                                      </span>
-                                    </Col>
-                                    <Col>
-                                      <Input
-                                        type="text"
-                                        name="Name"
-                                        id="Name"
-                                        value={campusName}
-                                        placeholder="Write The Campus Name"
-                                        onChange={(e) => {
-                                          handleCampusName(e);
-                                        }}
-                                      />
-                                      <span className="text-danger">
-                                        {campusNameError}
-                                      </span>
-                                    </Col>
-                                  </FormGroup>
-
-                                  <FormGroup>
-                                    <Col>
-                                      <span>
-                                        <span className="text-danger">*</span>{" "}
-                                        Campus country{" "}
-                                      </span>
-                                    </Col>
-                                    <Col>
-                                      <Select
-                                        options={universityCountryName}
-                                        value={{
-                                          label: uniCountryLabel,
-                                          value: uniCountryValue,
-                                        }}
-                                        required
-                                        onChange={(opt) =>
-                                          selectUniCountry(opt.label, opt.value)
-                                        }
-                                        name="CampusCountryId"
-                                        id="CampusCountryId"
-                                      />
-
-                                      {uniCountryError && (
-                                        <span className="text-danger">
-                                          University country is required
+                                <Row>
+                                  <Col md="5">
+                                    <FormGroup>
+                                      <Col>
+                                        <span>
+                                          <span className="text-danger">*</span>{" "}
+                                          Campus name{" "}
                                         </span>
-                                      )}
-                                    </Col>
-                                  </FormGroup>
-
-                                  <FormGroup>
-                                    <Col>
-                                      <span>
-                                        <span className="text-danger">*</span>{" "}
-                                        Campus state{" "}
-                                      </span>
-                                    </Col>
-                                    <Col>
-                                      <Select
-                                        options={universityStateName}
-                                        value={{
-                                          label: uniStateLabel,
-                                          value: unistateValue,
-                                        }}
-                                        required
-                                        onChange={(opt) =>
-                                          selectUniState(opt.label, opt.value)
-                                        }
-                                        name="CampusStateId"
-                                        id="CampusStateId"
-                                      />
-
-                                      {uniStateError && (
-                                        <span className="text-danger">
-                                          University state is required
-                                        </span>
-                                      )}
-                                    </Col>
-                                  </FormGroup>
-
-                                  <FormGroup>
-                                    <Col>
-                                      <span>
-                                        <span className="text-danger">*</span>{" "}
-                                        Campus city{" "}
-                                      </span>
-                                    </Col>
-                                    <Col>
-                                      <Select
-                                        options={cityOptions}
-                                        value={{
-                                          label: cityLabel,
-                                          value: cityValue,
-                                        }}
-                                        onChange={(opt) =>
-                                          selectCampusCity(opt.label, opt.value)
-                                        }
-                                        name="campusCityId"
-                                        id="campusCityId"
-                                      />
-
-                                      {cityError && (
-                                        <span className="text-danger">
-                                          University city is required
-                                        </span>
-                                      )}
-                                    </Col>
-                                  </FormGroup>
-
-                                  <FormGroup>
-                                    <Col>
-                                      <span>
-                                        <span className="text-danger">*</span>{" "}
-                                        Address line{" "}
-                                      </span>
-                                    </Col>
-                                    <Col>
-                                      <Input
-                                        type="text"
-                                        name="AddressLine"
-                                        id="addressLine"
-                                        value={addressLine}
-                                        placeholder="Write Address Line"
-                                        onChange={(e) => {
-                                          handleAddressLine(e);
-                                        }}
-                                      />
-                                      <span className="text-danger">
-                                        {addressLineError}
-                                      </span>
-                                    </Col>
-                                  </FormGroup>
-
-                                  <FormGroup>
-                                    <Col>
-                                      <span>University on map</span>
-                                    </Col>
-                                    <Col>
-                                      <InputGroup>
-                                        <InputGroupText>http://</InputGroupText>
+                                      </Col>
+                                      <Col>
                                         <Input
-                                          type="url"
-                                          rows="4"
-                                          name="EmbededMap"
-                                          id="EmbededMap"
-                                          defaultValue={
-                                            universityCampusObject?.embededMap
+                                          type="text"
+                                          name="Name"
+                                          id="Name"
+                                          value={campusName}
+                                          placeholder="Write The Campus Name"
+                                          onChange={(e) => {
+                                            handleCampusName(e);
+                                          }}
+                                        />
+                                        <span className="text-danger">
+                                          {campusNameError}
+                                        </span>
+                                      </Col>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                      <Col>
+                                        <span>
+                                          <span className="text-danger">*</span>{" "}
+                                          Campus country{" "}
+                                        </span>
+                                      </Col>
+                                      <Col>
+                                        <Select
+                                          options={universityCountryName}
+                                          value={{
+                                            label: uniCountryLabel,
+                                            value: uniCountryValue,
+                                          }}
+                                          required
+                                          onChange={(opt) =>
+                                            selectUniCountry(
+                                              opt.label,
+                                              opt.value
+                                            )
                                           }
-                                          placeholder="example.com"
+                                          name="CampusCountryId"
+                                          id="CampusCountryId"
+                                        />
+
+                                        {uniCountryError && (
+                                          <span className="text-danger">
+                                            University country is required
+                                          </span>
+                                        )}
+                                      </Col>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                      <Col>
+                                        <span>
+                                          <span className="text-danger">*</span>{" "}
+                                          Campus state{" "}
+                                        </span>
+                                      </Col>
+                                      <Col>
+                                        <Select
+                                          options={universityStateName}
+                                          value={{
+                                            label: uniStateLabel,
+                                            value: unistateValue,
+                                          }}
+                                          required
+                                          onChange={(opt) =>
+                                            selectUniState(opt.label, opt.value)
+                                          }
+                                          name="CampusStateId"
+                                          id="CampusStateId"
+                                        />
+
+                                        {uniStateError && (
+                                          <span className="text-danger">
+                                            University state is required
+                                          </span>
+                                        )}
+                                      </Col>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                      <Col>
+                                        <span>
+                                          <span className="text-danger">*</span>{" "}
+                                          Campus city{" "}
+                                        </span>
+                                      </Col>
+                                      <Col>
+                                        <Select
+                                          options={cityOptions}
+                                          value={{
+                                            label: cityLabel,
+                                            value: cityValue,
+                                          }}
+                                          onChange={(opt) =>
+                                            selectCampusCity(
+                                              opt.label,
+                                              opt.value
+                                            )
+                                          }
+                                          name="campusCityId"
+                                          id="campusCityId"
+                                        />
+
+                                        {cityError && (
+                                          <span className="text-danger">
+                                            University city is required
+                                          </span>
+                                        )}
+                                      </Col>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                      <Col>
+                                        <span>
+                                          <span className="text-danger">*</span>{" "}
+                                          Address line{" "}
+                                        </span>
+                                      </Col>
+                                      <Col>
+                                        <Input
+                                          type="text"
+                                          name="AddressLine"
+                                          id="addressLine"
+                                          value={addressLine}
+                                          placeholder="Write Address Line"
+                                          onChange={(e) => {
+                                            handleAddressLine(e);
+                                          }}
+                                        />
+                                        <span className="text-danger">
+                                          {addressLineError}
+                                        </span>
+                                      </Col>
+                                    </FormGroup>
+
+                                    <FormGroup>
+                                      <Col>
+                                        <span>University on map</span>
+                                      </Col>
+                                      <Col>
+                                        <InputGroup>
+                                          <InputGroupText>
+                                            http://
+                                          </InputGroupText>
+                                          <Input
+                                            type="url"
+                                            rows="4"
+                                            name="EmbededMap"
+                                            id="EmbededMap"
+                                            defaultValue={
+                                              universityCampusObject?.embededMap
+                                            }
+                                            placeholder="example.com"
+                                          />
+                                        </InputGroup>
+                                        <span
+                                          style={{
+                                            color: "rgba(0, 0, 0, 0.45)",
+                                          }}
+                                        >
+                                          Please type the "src" link only from
+                                          the embed map.
+                                        </span>
+                                      </Col>
+                                    </FormGroup>
+                                  </Col>
+
+                                  <Col
+                                    lg="5"
+                                    md="5"
+                                    className="pl-sm-30px mr-sm-30px"
+                                  >
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        Total student:{" "}
+                                      </span>
+                                      <span className="col-md-6">
+                                        <Input
+                                          type="number"
+                                          name="TotalStudent"
+                                          id="TotalStudent"
+                                          min="0"
+                                          value={totalStudent}
+                                          onChange={(e) => {
+                                            settotalStudent(e.target.value);
+                                          }}
+                                        />
+                                      </span>
+                                    </div>
+
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        International student:{" "}
+                                      </span>
+                                      <span className="col-md-6">
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          name="InternationalStudent"
+                                          id="InternationalStudent"
+                                          value={intStudent}
+                                          onChange={(e) => {
+                                            setintStudent(e.target.value);
+                                          }}
+                                        />
+                                      </span>
+                                    </div>
+
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        Avg. tuition fee:{" "}
+                                      </span>
+                                      <InputGroup className="col-md-6 d-flex flex-nowrap">
+                                        <Currency
+                                          currencyId={
+                                            avarageTutionFeeCurrencyId
+                                          }
+                                          setCurrencyId={
+                                            setAvarageTutionFeeCurrencyId
+                                          }
+                                          name="avarageTutionFeeCurrency"
+                                          error={() => {}}
+                                          setError={() => {}}
+                                        />
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          name="AvarageTutionFee"
+                                          id="AvarageTutionFee"
+                                          value={tutionFee}
+                                          onChange={(e) => {
+                                            settutionFee(e.target.value);
+                                          }}
                                         />
                                       </InputGroup>
-                                      <span
-                                        style={{ color: "rgba(0, 0, 0, 0.45)" }}
-                                      >
-                                        Please type the "src" link only from the
-                                        embed map.
+                                    </div>
+
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        Avg. living cost:{" "}
                                       </span>
-                                    </Col>
-                                  </FormGroup>
-                                </Col>
-
-                                <Col
-                                  lg="5"
-                                  md="5"
-                                  className="pl-sm-30px mr-sm-30px"
-                                >
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      Total student:{" "}
-                                    </span>
-                                    <span className="col-md-6">
-                                      <Input
-                                        type="number"
-                                        name="TotalStudent"
-                                        id="TotalStudent"
-                                        min="0"
-                                        value={totalStudent}
-                                        onChange={(e) => {
-                                          settotalStudent(e.target.value);
-                                        }}
-                                      />
-                                    </span>
-                                  </div>
-
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      International student:{" "}
-                                    </span>
-                                    <span className="col-md-6">
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        name="InternationalStudent"
-                                        id="InternationalStudent"
-                                        value={intStudent}
-                                        onChange={(e) => {
-                                          setintStudent(e.target.value);
-                                        }}
-                                      />
-                                    </span>
-                                  </div>
-
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      Avg. tuition fee:{" "}
-                                    </span>
-                                    <InputGroup className="col-md-6 d-flex flex-nowrap">
-                                      <Currency
-                                        currencyId={avarageTutionFeeCurrencyId}
-                                        setCurrencyId={
-                                          setAvarageTutionFeeCurrencyId
-                                        }
-                                        name="avarageTutionFeeCurrency"
-                                        error={() => {}}
-                                        setError={() => {}}
-                                      />
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        name="AvarageTutionFee"
-                                        id="AvarageTutionFee"
-                                        value={tutionFee}
-                                        onChange={(e) => {
-                                          settutionFee(e.target.value);
-                                        }}
-                                      />
-                                    </InputGroup>
-                                  </div>
-
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      Avg. living cost:{" "}
-                                    </span>
-                                    <InputGroup className="col-md-6 d-flex flex-nowrap">
-                                      <Currency
-                                        currencyId={avarageLivingCostCurrencyId}
-                                        setCurrencyId={
-                                          setAvarageLivingCostCurrencyId
-                                        }
-                                        name="avarageLivingCostCurrency"
-                                        error={() => {}}
-                                        setError={() => {}}
-                                      />
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        name="AvarageLivingCost"
-                                        id="AvarageLivingCost"
-                                        value={livingCost}
-                                        onChange={(e) => {
-                                          setlivingCost(e.target.value);
-                                        }}
-                                      />
-                                    </InputGroup>
-                                  </div>
-
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      Avg. application fee:{" "}
-                                    </span>
-                                    <InputGroup className="col-md-6 d-flex flex-nowrap">
-                                      <Currency
-                                        currencyId={
-                                          avarageApplicationFeeCurrencyId
-                                        }
-                                        setCurrencyId={
-                                          setAvarageApplicationFeeCurrencyId
-                                        }
-                                        name="avarageApplicationFeeCurrency"
-                                        error={() => {}}
-                                        setError={() => {}}
-                                      />
-
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        name="AvarageApplicationFee"
-                                        id="AvarageApplicationFee"
-                                        value={applicationFee}
-                                        onChange={(e) => {
-                                          setapplicationFee(e.target.value);
-                                        }}
-                                      />
-                                    </InputGroup>
-                                  </div>
-
-                                  <div className="row d-flex align-items-center mb-1">
-                                    <span className="col-md-6 text-md-right">
-                                      Estimated total cost:{" "}
-                                    </span>
-                                    <InputGroup className="col-md-6 d-flex flex-nowrap">
-                                      <Currency
-                                        currencyId={
-                                          estimatedTotalCostCurrencyId
-                                        }
-                                        setCurrencyId={
-                                          setEstimatedTotalCostCurrencyId
-                                        }
-                                        name="estimatedTotalCostCurrency"
-                                        error={() => {}}
-                                        setError={() => {}}
-                                      />
-
-                                      <Input
-                                        type="number"
-                                        min="0"
-                                        name="EstimatedTotalCost"
-                                        id="EstimatedTotalCost"
-                                        value={estimatedTotal}
-                                        onChange={(e) => {
-                                          setestimatedTotal(e.target.value);
-                                        }}
-                                      />
-                                    </InputGroup>
-                                  </div>
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col md={10}>
-                                  <FormGroup className="text-right">
-                                    <Col>
-                                      <CancelButton cancel={cancel} />
-
-                                      {permissions?.includes(
-                                        permissionList.Edit_University
-                                      ) && (
-                                        <SaveButton
-                                          progress={progress}
-                                          buttonStatus={buttonStatus}
+                                      <InputGroup className="col-md-6 d-flex flex-nowrap">
+                                        <Currency
+                                          currencyId={
+                                            avarageLivingCostCurrencyId
+                                          }
+                                          setCurrencyId={
+                                            setAvarageLivingCostCurrencyId
+                                          }
+                                          name="avarageLivingCostCurrency"
+                                          error={() => {}}
+                                          setError={() => {}}
                                         />
-                                      )}
-                                    </Col>
-                                  </FormGroup>
-                                </Col>
-                              </Row>
-                            </Form>
-                          </CardBody>
-                        </Card>
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          name="AvarageLivingCost"
+                                          id="AvarageLivingCost"
+                                          value={livingCost}
+                                          onChange={(e) => {
+                                            setlivingCost(e.target.value);
+                                          }}
+                                        />
+                                      </InputGroup>
+                                    </div>
+
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        Avg. application fee:{" "}
+                                      </span>
+                                      <InputGroup className="col-md-6 d-flex flex-nowrap">
+                                        <Currency
+                                          currencyId={
+                                            avarageApplicationFeeCurrencyId
+                                          }
+                                          setCurrencyId={
+                                            setAvarageApplicationFeeCurrencyId
+                                          }
+                                          name="avarageApplicationFeeCurrency"
+                                          error={() => {}}
+                                          setError={() => {}}
+                                        />
+
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          name="AvarageApplicationFee"
+                                          id="AvarageApplicationFee"
+                                          value={applicationFee}
+                                          onChange={(e) => {
+                                            setapplicationFee(e.target.value);
+                                          }}
+                                        />
+                                      </InputGroup>
+                                    </div>
+
+                                    <div className="row d-flex align-items-center mb-1">
+                                      <span className="col-md-6 text-md-right">
+                                        Estimated total cost:{" "}
+                                      </span>
+                                      <InputGroup className="col-md-6 d-flex flex-nowrap">
+                                        <Currency
+                                          currencyId={
+                                            estimatedTotalCostCurrencyId
+                                          }
+                                          setCurrencyId={
+                                            setEstimatedTotalCostCurrencyId
+                                          }
+                                          name="estimatedTotalCostCurrency"
+                                          error={() => {}}
+                                          setError={() => {}}
+                                        />
+
+                                        <Input
+                                          type="number"
+                                          min="0"
+                                          name="EstimatedTotalCost"
+                                          id="EstimatedTotalCost"
+                                          value={estimatedTotal}
+                                          onChange={(e) => {
+                                            setestimatedTotal(e.target.value);
+                                          }}
+                                        />
+                                      </InputGroup>
+                                    </div>
+                                  </Col>
+                                </Row>
+
+                                <Row>
+                                  <Col md={10}>
+                                    <FormGroup className="text-right">
+                                      <Col>
+                                        <CancelButton cancel={cancel} />
+
+                                        {permissions?.includes(
+                                          permissionList.Edit_University
+                                        ) && (
+                                          <SaveButton
+                                            progress={progress}
+                                            buttonStatus={buttonStatus}
+                                          />
+                                        )}
+                                      </Col>
+                                    </FormGroup>
+                                  </Col>
+                                </Row>
+                              </Form>
+                            </CardBody>
+                          </Card>
+                        </>
                       ) : (
                         <>
                           {forms === true ? (
-                            <button
-                              className="add-button"
-                              onClick={onShow}
-                              permission={6}
+                            <a
+                              href="#campus-form"
+                              className="text-decoration-none"
                             >
-                              Add campuses
-                            </button>
+                              <button
+                                id="campus-form"
+                                className="add-button"
+                                onClick={onShow}
+                                permission={6}
+                              >
+                                Add campus
+                              </button>
+                            </a>
                           ) : null}
                         </>
                       )}

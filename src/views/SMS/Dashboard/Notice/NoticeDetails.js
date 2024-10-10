@@ -5,10 +5,8 @@ import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import { Card, CardBody } from "reactstrap";
 import { rootUrl } from "../../../../constants/constants";
-import downloadBtn from "../../../../assets/img/download.png";
 
 const NoticeDetails = () => {
-  const [success, setSuccess] = useState(false);
   const [noticeDetails, setNoticeDetails] = useState({});
   const { id } = useParams();
   console.log(id, "notice id");
@@ -18,7 +16,7 @@ const NoticeDetails = () => {
       setNoticeDetails(res);
       console.log("details", res);
     });
-  }, [success, id]);
+  }, [id]);
 
   const createMarkup = (html) => {
     return {
@@ -43,7 +41,7 @@ const NoticeDetails = () => {
           </span>
           <div className="my-4">
             {noticeDetails?.noticeForUsers?.map((users, i) => (
-              <span className="user-type-tag">{users?.name}</span>
+              <p className="user-type-tag">{users?.name}</p>
             ))}
           </div>
           <div className="mt-3 mb-5">

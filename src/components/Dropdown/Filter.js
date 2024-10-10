@@ -1,16 +1,24 @@
 import React from "react";
 import Select from "react-select";
 
-const Filter = ({ data, label, setLabel, value, setValue, action }) => {
-  const options = data?.map((std) => ({
-    label: std?.name,
-    value: std?.id,
+const Filter = ({
+  data,
+  label,
+  setLabel,
+  value,
+  setValue,
+  action,
+  isDisabled,
+}) => {
+  const options = data?.map((item) => ({
+    label: item?.name,
+    value: item?.id,
   }));
 
   const select = (label, value) => {
     setLabel(label);
     setValue(value);
-    action(value);
+    action && action();
   };
 
   return (
@@ -22,6 +30,7 @@ const Filter = ({ data, label, setLabel, value, setValue, action }) => {
           value: value,
         }}
         onChange={(opt) => select(opt.label, opt.value)}
+        isDisabled={isDisabled}
       />
     </>
   );

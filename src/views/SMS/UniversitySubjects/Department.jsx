@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
+import { Image } from "antd";
+import { Upload } from "antd";
+import * as Icon from "react-feather";
 import {
   Card,
   CardBody,
@@ -30,6 +33,7 @@ import ConfirmModal from "../../../components/modal/ConfirmModal";
 import put from "../../../helpers/put";
 import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
+import { rootUrl } from "../../../constants/constants";
 
 const Department = (props) => {
   const history = useHistory();
@@ -52,6 +56,15 @@ const Department = (props) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [data, setData] = useState({});
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [FileList, setFileList] = useState([]);
+  const [error, setError] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const [dImg, setDImg] = useState({})
+  console.log(dImg, 'dimg');
+
 
   useEffect(() => {
     get(`Department/index`).then((res) => {
@@ -68,6 +81,8 @@ const Department = (props) => {
     setDescription("");
     setDescriptionError("");
     setDepartmentNameError("");
+
+
   };
 
   const handleDepartmentName = (e) => {
@@ -102,25 +117,79 @@ const Department = (props) => {
 
   const handleUpdate = (data) => {
     setData(data);
+    console.log(data);
+    setDImg(data?.departmentImage?.fileUrl)
     setModalOpen(true);
     setdepartment(data?.name);
     setDescription(data?.description);
   };
 
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange = ({ fileList }) => {
+    if (
+      fileList.length > 0 &&
+      fileList[0]?.type !== "image/jpeg" &&
+      fileList[0]?.type !== "image/jpg" &&
+      fileList[0]?.type !== "image/png"
+    ) {
+      setFileList([]);
+      setError("Only jpeg, jpg, png image is allowed");
+    } else {
+      setFileList(fileList);
+      setError("");
+      setImgError(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setPreviewVisible(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subdata = {
-      id: data?.id,
-      name: department,
-      description: description,
-    };
 
-    var formIsValid = validateRegisterForm(subdata);
+    const subData = new FormData(e.target);
+
+    subData.append("departmentImage", FileList[0]?.originFileObj);
+    subData.append("name", department);
+    subData.append("id", data?.id ? data.id : 0);
+    subData.append("description", description);
+
+    // const subdata = {
+    //   id: data?.id,
+    //   name: department,
+    //   description: description,
+    //   departmentImage: FileList[0]?.originFileObj,
+    // };
+
+
+    var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
       if (!data?.id) {
         setProgress1(true);
         setButtonStatus(true);
-        post(`Department/Create`, subdata).then((res) => {
+        post(`Department/Create`, subData).then((res) => {
           setProgress1(false);
           setButtonStatus(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {
@@ -138,6 +207,7 @@ const Department = (props) => {
             setModalOpen(false);
             setdepartment("");
             setData({});
+            setFileList([]);
             setDepartmentNameError("");
             setDescription("");
             setDescriptionError("");
@@ -151,7 +221,7 @@ const Department = (props) => {
       } else {
         setButtonStatus(true);
         setProgress(true);
-        put(`Department/Update`, subdata).then((res) => {
+        put(`Department/Update`, subData).then((res) => {
           setButtonStatus(false);
           setProgress(false);
           if (res?.status == 200 && res?.data?.isSuccess == true) {
@@ -166,6 +236,7 @@ const Department = (props) => {
             setDescription("");
             setDescriptionError("");
             setData({});
+            setFileList([]);
           } else {
             addToast(res?.data?.message, {
               appearance: "error",
@@ -215,12 +286,11 @@ const Department = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="Department List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Department List" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList.Add_Departments) ? (
@@ -308,6 +378,68 @@ const Department = (props) => {
                           </GrammarlyEditorPlugin>
                         </Col>
                       </FormGroup>
+                      <FormGroup
+                        row
+                        className="has-icon-left position-relative"
+                      >
+                        <Col md="5">
+                          <span>
+                            Image <span className="text-danger">*</span>{" "}
+                          </span>
+                        </Col>
+                        <Col md="7">
+                          <div className="row">
+                            {data?.id ? <>   {data?.departmentImage !== null ? (
+                              <div className="col-md-6 pb-2 pr-3">
+                                <Image
+                                  width={104}
+                                  height={104}
+                                  src={rootUrl + dImg}
+                                />
+                              </div>
+                            ) : null}</> : null}
+
+                            <div className="col-md-6 pb-2 pr-3">
+                              <Upload
+                                listType="picture-card"
+                                multiple={false}
+                                fileList={FileList}
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                                beforeUpload={(file) => {
+                                  return false;
+                                }}
+                              >
+                                {FileList.length < 1 ? (
+                                  <div
+                                    className="text-danger"
+                                    style={{ marginTop: 8 }}
+                                  >
+                                    <Icon.Upload />
+                                    {/* <br />
+                                  <span>Upload Here</span> */}
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </Upload>
+                              <Modal
+                                visible={previewVisible}
+                                title={previewTitle}
+                                footer={null}
+                                onCancel={handleCancel}
+                              >
+                                <img
+                                  alt="example"
+                                  style={{ width: "100%" }}
+                                  src={previewImage}
+                                />
+                              </Modal>
+                              <span className="text-danger d-block">{error}</span>
+                            </div>
+                          </div>
+                        </Col>
+                      </FormGroup>
 
                       <FormGroup className="d-flex justify-content-between mt-3">
                         <CancelButton cancel={closeModal} />
@@ -318,12 +450,9 @@ const Department = (props) => {
                           buttonStatus={buttonStatus}
                         />
                       </FormGroup>
-
-
                     </Form>
                   </ModalBody>
                 </Modal>
-                <div></div>
               </div>
 
               {permissions?.includes(permissionList.View_Departments) && (
@@ -331,7 +460,7 @@ const Department = (props) => {
                   <Table className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        <th>SL/NO</th>
+                        {/* <th>SL/NO</th> */}
                         <th>Name</th>
                         <th>Description</th>
                         <th>Action</th>
@@ -344,7 +473,7 @@ const Department = (props) => {
                           dept={dept}
                           style={{ textAlign: "center" }}
                         >
-                          <th scope="row">{index + 1}</th>
+                          {/* <th scope="row">{index + 1}</th> */}
                           <td>{dept?.name}</td>
                           <td>{dept?.description}</td>
                           <td>
@@ -391,16 +520,6 @@ const Department = (props) => {
                             </ButtonGroup>
 
                             {/* modal for delete */}
-                            <ConfirmModal
-                              text="Do You Want To Delete This Department? Once Deleted it can't be Undone "
-                              // ${delData?.name}
-                              isOpen={deleteModal}
-                              toggle={closeDeleteModal}
-                              cancel={closeDeleteModal}
-                              buttonStatus={buttonStatus}
-                              progress={progress}
-                              confirm={() => handleDelete(depId)}
-                            ></ConfirmModal>
                           </td>
                         </tr>
                       ))}
@@ -412,6 +531,16 @@ const Department = (props) => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Department? Once Deleted it can't be Undone "
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        confirm={() => handleDelete(depId)}
+      />
     </div>
   );
 };

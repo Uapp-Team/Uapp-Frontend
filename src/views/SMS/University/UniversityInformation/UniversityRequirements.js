@@ -97,17 +97,16 @@ const UniversityRequirements = () => {
 
   return (
     <div>
+      <BreadCrumb
+        title="University General Requirements"
+        backTo="University"
+        path="/universityList"
+      />
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="University General Requirements"
-            backTo="University"
-            path="/universityList"
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -115,7 +114,6 @@ const UniversityRequirements = () => {
                   <div>
                     <form onSubmit={handleSubmit}>
                       <p className="section-title">
-                        {" "}
                         General admission requirements
                       </p>
                       <FormGroup row>

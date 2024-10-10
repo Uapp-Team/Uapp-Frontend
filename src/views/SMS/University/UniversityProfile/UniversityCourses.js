@@ -143,6 +143,7 @@ const UniversityCourses = ({ id, UniversityId }) => {
 
   // on clear
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setDeptLabel("Department");
     setDeptValue(0);
     setSubDeptLabel("Sub Department");
@@ -179,6 +180,7 @@ const UniversityCourses = ({ id, UniversityId }) => {
       }
     });
   };
+
   const toggleModal = (data, data2) => {
     console.log(data2);
     setModalCampus(data?.campuses);

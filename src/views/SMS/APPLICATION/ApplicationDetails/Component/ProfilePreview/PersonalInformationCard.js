@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
-const PersonalInformationCard = ({ sId, setName }) => {
-  const [studentDetails, setStudentDetails] = useState({});
+const PersonalInformationCard = ({
+  sId,
+  setName,
+  studentDetails,
+  setStudentDetails,
+}) => {
   useEffect(() => {
     get(`Student/Get/${sId}`).then((res) => {
       setStudentDetails(res);
-      setName(res?.firstName + " " + res?.lastName);
+
+      setName(
+        res?.nameTittle?.name + " " + res?.firstName + " " + res?.lastName
+      );
     });
-  }, [sId, setName]);
-
-  console.log(studentDetails);
-
-  const handleDate = (e) => {
-    let format =
-      new Date(e).getDate() +
-      "-" +
-      (new Date(e).getMonth() + 1) +
-      "-" +
-      new Date(e).getFullYear();
-
-    return format;
-  };
+  }, [sId, setName, setStudentDetails]);
 
   return (
     <>
@@ -33,40 +28,55 @@ const PersonalInformationCard = ({ sId, setName }) => {
           </td>
           <td className="border-0 text-right"> </td>
         </thead>
+      </Table>
+      <Table borderless responsive className="mb-4">
         <tbody>
-          <tr>
-            <td className="border-0">Name</td>
-            <td className="border-0">
-              {studentDetails?.firstName} {studentDetails?.lastName}
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+            <td width="60%">Name</td>
+            <td width="40%">
+              {studentDetails?.nameTittle?.name} {studentDetails?.firstName}{" "}
+              {studentDetails?.lastName}
             </td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Mobile Number</td>
             <td>{studentDetails?.phoneNumber}</td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Email Address</td>
             <td>{studentDetails?.email}</td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Date of Birth</td>
 
-            <td>{handleDate(studentDetails?.dateOfBirth)}</td>
+            <td>{dateFormate(studentDetails?.dateOfBirth)}</td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Nationality</td>
             <td>{studentDetails?.nationality?.name}</td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Country of Birth</td>
+            <td>{studentDetails?.countryOfBirth?.name}</td>
+          </tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+            <td>Country of Residence</td>
             <td>{studentDetails?.country?.name}</td>
           </tr>
 
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Passport Number</td>
             <td>{studentDetails?.passportNumber}</td>
           </tr>
-          <tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+            <td>Issue Date</td>
+            <td>{dateFormate(studentDetails?.issueDate)}</td>
+          </tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+            <td>Expiry Date</td>
+            <td>{dateFormate(studentDetails?.expireDate)}</td>
+          </tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Gender</td>
             <td>{studentDetails?.gender?.name}</td>
           </tr>

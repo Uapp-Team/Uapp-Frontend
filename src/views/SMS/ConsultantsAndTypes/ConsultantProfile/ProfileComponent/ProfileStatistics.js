@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import get from "../../../../../helpers/get";
-import olivelight from "../../../../../assets/img/olivelight.svg";
-import violetlight from "../../../../../assets/img/violetlight.svg";
-import blueLight from "../../../../../assets/img/blueLight.svg";
+import DashboardCount from "../../../../../components/ui/DashboardCount";
 
 const ProfileStatistics = ({ id }) => {
   const [data, setData] = useState({});
@@ -21,7 +19,7 @@ const ProfileStatistics = ({ id }) => {
         setData(res);
       });
     }
-  }, []);
+  }, [id, userId]);
 
   return (
     <div>
@@ -41,57 +39,34 @@ const ProfileStatistics = ({ id }) => {
             </span>
           </div>
 
-          <div className="mt-4 row ml-md-1 ml-2">
-            <div className="col-md-4 blueLight-bg d-flex flex-column justify-content-center">
-              <div className="row text-white">
-                <div className="col-md-6">
-                  <span style={{ fontSize: "12px", fontWeight: "400" }}>
-                    Total Application added
-                  </span>
-                </div>
+          <Row className="mt-3">
+            <Col lg={4} sm={6} className="pb-4">
+              <DashboardCount
+                title=" Total Application"
+                value={data?.applicationCount}
+                bgColor="#84EBFF"
+                borderColor="#1E98B0"
+              />
+            </Col>
+            <Col lg={4} sm={6} className="pb-4">
+              <DashboardCount
+                title=" Total Submitted"
+                value={data?.applicationSubmitted}
+                bgColor="#A0F9ED"
+                borderColor="#23CCB5"
+              />
+            </Col>
+            <Col lg={4} sm={12} className="pb-4">
+              <DashboardCount
+                title=" Total Completed"
+                value={data?.applicationCompleted}
+                bgColor="#D2DBFF"
+                borderColor="#5C78E7"
+              />
+            </Col>
+          </Row>
 
-                <div className="col-md-6 d-flex align-items-center">
-                  <span style={{ fontSize: "22px", fontWeight: "500" }}>
-                    {data?.applicationCount}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-4 oliveLight-bg d-flex flex-column justify-content-center">
-              <div className="row text-white">
-                <div className="col-md-6">
-                  <span style={{ fontSize: "12px", fontWeight: "400" }}>
-                    Total Application submitted
-                  </span>
-                </div>
-
-                <div className="col-md-6 d-flex align-items-center">
-                  <span style={{ fontSize: "22px", fontWeight: "500" }}>
-                    {data?.applicationSubmitted}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-4 violetLight-bg d-flex flex-column justify-content-center">
-              <div className="row text-white">
-                <div className="col-md-6">
-                  <span style={{ fontSize: "12px", fontWeight: "400" }}>
-                    Total Application Completed
-                  </span>
-                </div>
-
-                <div className="col-md-6 d-flex align-items-center">
-                  <span style={{ fontSize: "22px", fontWeight: "500" }}>
-                    {data?.applicationCompleted}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4">
+          <div className="mt-3">
             <span
               style={{ fontSize: "16px", fontWeight: "500", color: "#495057" }}
             >

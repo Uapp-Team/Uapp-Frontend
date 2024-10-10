@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Input, Form, FormGroup, Table } from "reactstrap";
+import { Col, Form, FormGroup, Input, Row, Table } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
 import Select from "react-select";
 import get from "../../../../../helpers/get";
@@ -7,6 +7,7 @@ import post from "../../../../../helpers/post";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import TagButton from "../../../../../components/buttons/TagButton";
 
 const AssignOfficerUniversityModal = ({
   officerId,
@@ -18,25 +19,49 @@ const AssignOfficerUniversityModal = ({
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const userType = localStorage.getItem("userType");
+  const referenceId = localStorage.getItem("referenceId");
   const [admissionManager, setAdmissionManager] = useState([]);
   const [managerLabel, setManagerLabel] = useState("Select Admission Manager");
   const [managerValue, setManagerValue] = useState(0);
   const [assign, setAssign] = useState({});
+  const [searchStr, setSearchStr] = useState("");
+  const [showUniversity, setShowUniversity] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [callApi, setCallApi] = useState(false);
 
   useEffect(() => {
     get(`AdmissionManagerDD/AdmissionOfficer/${officerId}`).then((res) => {
       setAdmissionManager(res);
     });
   }, [officerId]);
-  console.log("admissionManager", admissionManager);
+
+  useEffect(() => {
+    if (userType === userTypes?.AdmissionManager) {
+      setManagerValue(referenceId);
+    }
+  }, [referenceId, userType]);
+
   useEffect(() => {
     get(
       `AdmissionOfficerUniversity/Unassigned/${officerId}/${managerValue}`
     ).then((res) => {
-      console.log("assign", res);
       setAssign(res);
+      setShowUniversity(res);
     });
   }, [managerValue, officerId]);
+
+  useEffect(() => {
+    if (searchStr) {
+      console.log(searchStr);
+      console.log(assign);
+      const filterData = assign?.filter((search) =>
+        search?.universityName.toLowerCase().includes(searchStr.toLowerCase())
+      );
+
+      console.log(filterData);
+      setShowUniversity(filterData);
+    }
+  }, [searchStr, assign]);
 
   const admissionmanagerOptions = admissionManager.map((uni) => ({
     label: uni?.name,
@@ -78,20 +103,59 @@ const AssignOfficerUniversityModal = ({
     );
   };
 
-  const handleisAcceptHome = (e, i) => {
+  const handleisAcceptHome = (e, id) => {
+    const checkItem = showUniversity.filter((obj) => obj.universityId === id);
+    let i = assign.findIndex(
+      (obj) => obj.universityId === checkItem[0].universityId
+    );
     const values = [...assign];
     values[i].isAcceptHome = e.target.checked;
     setAssign(values);
   };
-  const handleisAcceptEu = (e, i) => {
+
+  const handleisAcceptEu = (e, id) => {
+    const checkItem = showUniversity.filter((obj) => obj.universityId === id);
+    let i = assign.findIndex(
+      (obj) => obj.universityId === checkItem[0].universityId
+    );
     const values = [...assign];
     values[i].isAcceptEu = e.target.checked;
     setAssign(values);
   };
-  const isAcceptInternational = (e, i) => {
+
+  const isAcceptInternational = (e, id) => {
+    const checkItem = showUniversity.filter((obj) => obj.universityId === id);
+    let i = assign.findIndex(
+      (obj) => obj.universityId === checkItem[0].universityId
+    );
     const values = [...assign];
     values[i].isAcceptInternational = e.target.checked;
     setAssign(values);
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+    setCallApi((prev) => !prev);
+  };
+
+  const searchValue = (e) => {
+    setSearchStr(e.target.value);
+    handleSearch();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setCurrentPage(1);
+      // setCallApi((prev) => !prev);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setManagerLabel("Select Admission Manager");
+    setManagerValue(0);
+    setCallApi((prev) => !prev);
+    setSearchStr("");
+    setCurrentPage(1);
   };
 
   return (
@@ -113,6 +177,42 @@ const AssignOfficerUniversityModal = ({
             </FormGroup>
           </>
         )}
+        <Input
+          className="mb-2"
+          style={{ height: "2.7rem" }}
+          type="text"
+          name="search"
+          value={searchStr}
+          id="search"
+          placeholder="Search University"
+          onChange={searchValue}
+          onKeyDown={handleKeyDown}
+        />
+
+        <Row className="mb-2">
+          <Col lg="12" md="12" sm="12" xs="12">
+            <div style={{ display: "flex", justifyContent: "start" }}>
+              <div className="mt-1">
+                {managerValue !== 0 && (
+                  <TagButton
+                    label={managerLabel}
+                    setValue={() => setManagerValue(0)}
+                    setLabel={() => setManagerLabel("Select Admission Manager")}
+                  ></TagButton>
+                )}
+              </div>
+              <div className="mt-1 mx-1 d-flex btn-clear">
+                {managerValue !== 0 ? (
+                  <button className="tag-clear" onClick={handleClearSearch}>
+                    Clear All
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          </Col>
+        </Row>
 
         <Table>
           <thead className="tablehead">
@@ -130,16 +230,16 @@ const AssignOfficerUniversityModal = ({
             </td>
           </thead>
           <tbody style={{ borderBottom: "1px solid #dee2e6" }}>
-            {assign.length > 0 &&
-              assign?.map((item, i) => (
-                <tr key={item?.universityId}>
+            {showUniversity.length > 0 &&
+              showUniversity?.map((item, i) => (
+                <tr key={i}>
                   <td>{item?.universityName}</td>
                   <td className="text-center">
                     <input
                       // className="form-check-input"
                       type="checkbox"
                       onChange={(e) => {
-                        handleisAcceptHome(e, i);
+                        handleisAcceptHome(e, item?.universityId);
                       }}
                       value={item?.isAcceptHome}
                       defaultChecked={
@@ -152,7 +252,7 @@ const AssignOfficerUniversityModal = ({
                       // className="form-check-input"
                       type="checkbox"
                       onChange={(e) => {
-                        handleisAcceptEu(e, i);
+                        handleisAcceptEu(e, item?.universityId);
                       }}
                       value={item?.isAcceptEu}
                       defaultChecked={item?.isAcceptEu === true ? true : false}
@@ -163,7 +263,7 @@ const AssignOfficerUniversityModal = ({
                       // className="form-check-input"
                       type="checkbox"
                       onChange={(e) => {
-                        isAcceptInternational(e, i);
+                        isAcceptInternational(e, item?.universityId);
                       }}
                       value={item?.isAcceptInternational}
                       defaultChecked={

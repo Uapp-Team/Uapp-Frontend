@@ -13,18 +13,33 @@ import { tableIdList } from "../../../../../constants/TableIdConstant";
 import AddMissionManagerClear from "./Component/AddMissionManagerClear";
 import AddMissionManagerAdd from "./Component/AddMissionManagerAdd";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import ColumnAdmissionManager from "../../../TableColumn/ColumnAdmissionManager";
 
 const Index = () => {
+  const AdmissionManagerPaging = JSON.parse(
+    sessionStorage.getItem("admissionManager")
+  );
+  const { providerId } = useParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [serialNum, setSerialNum] = useState(1);
   const [success, setSuccess] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(
+    AdmissionManagerPaging?.currentPage
+      ? AdmissionManagerPaging?.currentPage
+      : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    AdmissionManagerPaging?.dataPerPage
+      ? AdmissionManagerPaging?.dataPerPage
+      : 15
+  );
   const [callApi, setCallApi] = useState(false);
-  const [searchStr, setSearchStr] = useState("");
+  const [searchStr, setSearchStr] = useState(
+    AdmissionManagerPaging?.searchStr ? AdmissionManagerPaging?.searchStr : ""
+  );
   const [providerDD, setProviderDD] = useState([]);
   const [managerList, setManagerList] = useState([]);
   const [managerName, setManagerName] = useState("");
@@ -32,8 +47,16 @@ const Index = () => {
   const [deleteData, setDeleteData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [providerLabel, setProviderLabel] = useState("Select Provider");
-  const [providerValue, setProviderValue] = useState(0);
+  const [providerLabel, setProviderLabel] = useState(
+    AdmissionManagerPaging?.providerLabel
+      ? AdmissionManagerPaging?.providerLabel
+      : "Select Provider"
+  );
+  const [providerValue, setProviderValue] = useState(
+    AdmissionManagerPaging?.providerValue
+      ? AdmissionManagerPaging?.providerValue
+      : 0
+  );
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
   const [providerValue2, setProviderValue2] = useState(0);
   const [providerError, setProviderError] = useState(false);
@@ -53,6 +76,8 @@ const Index = () => {
   const [check, setCheck] = useState(true);
   const history = useHistory();
   const { addToast } = useToasts();
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const [pass, setPass] = useState("");
   const [passError, setPassError] = useState("");
   const userType = localStorage.getItem("userType");
@@ -68,9 +93,49 @@ const Index = () => {
   const [error, setError] = useState(false);
   const [progress, setProgress] = useState(false);
   const [mId, setMId] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
 
   const [tableData, setTableData] = useState([]);
-  const { providerId } = useParams();
+
+  useEffect(() => {
+    const tableColumnAdmissionManager = JSON.parse(
+      localStorage.getItem("ColumnAdmissionManager")
+    );
+    tableColumnAdmissionManager && setTableData(tableColumnAdmissionManager);
+    !tableColumnAdmissionManager &&
+      localStorage.setItem(
+        "ColumnAdmissionManager",
+        JSON.stringify(ColumnAdmissionManager)
+      );
+    !tableColumnAdmissionManager && setTableData(ColumnAdmissionManager);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "admissionManager",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        uniCountryLabel: uniCountryLabel && uniCountryLabel,
+        uniCountryValue: uniCountryValue && uniCountryValue,
+        uniStateLabel: uniStateLabel && uniStateLabel,
+        unistateValue: unistateValue && unistateValue,
+        providerLabel: providerLabel && providerLabel,
+        providerValue: providerValue && providerValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    uniCountryLabel,
+    uniCountryValue,
+    uniStateLabel,
+    unistateValue,
+    providerLabel,
+    providerValue,
+    searchStr,
+    dataPerPage,
+  ]);
 
   useEffect(() => {
     get("ProviderDD/Index").then((res) => {
@@ -97,23 +162,36 @@ const Index = () => {
       });
     }
 
-    get(
-      `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}`
-    ).then((res) => {
-      console.log("Admission Manager List", res);
-      setManagerList(res?.models);
-      setEntity(res?.totalEntity);
-      setSerialNum(res?.firstSerialNumber);
-      setLoading(false);
-    });
+    if (!isTyping) {
+      get(
+        `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}`
+      ).then((res) => {
+        setManagerList(res?.models);
+        setEntity(res?.totalEntity);
+        setSerialNum(res?.firstSerialNumber);
+        setLoading(false);
+      });
+    }
+  }, [
+    currentPage,
+    userType,
+    dataPerPage,
+    providerValue,
+    searchStr,
+    success,
+    isTyping,
+  ]);
 
-    get(`TableDefination/Index/${tableIdList?.Admission_Manager_List}`).then(
-      (res) => {
-        console.log("table data", res);
-        setTableData(res);
-      }
-    );
-  }, [currentPage, dataPerPage, providerValue, searchStr, success]);
+  useEffect(() => {
+    if (providerId) {
+      const findData = providerDD.find((status) => {
+        return status.id.toString() === providerId;
+      });
+
+      setProviderValue(findData?.id);
+      setProviderLabel(findData?.name);
+    }
+  }, [providerDD, providerId]);
 
   const providerMenu = providerDD.map((provider) => ({
     label: provider?.name,
@@ -136,6 +214,7 @@ const Index = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -227,19 +306,18 @@ const Index = () => {
 
   // on clear
   const handleClearSearch = () => {
-    setProviderLabel("Provider");
-    setProviderValue(0);
+    !providerId && setProviderLabel("Provider");
+    !providerId && setProviderValue(0);
     setCallApi((prev) => !prev);
     setSearchStr("");
+    setCurrentPage(1);
     history.replace({
       universityId: null,
     });
   };
-
-  // redirect to dashboard
-  const backToDashboard = () => {
-    history.push("/");
-  };
+  // useEffect(() => {
+  //   handleClearSearch();
+  // }, [currentRoute]);
 
   const redirectToAssignPage = (providerId, managerId) => {
     history.push({
@@ -451,17 +529,11 @@ const Index = () => {
   };
 
   // for hide/unhide column
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Admission_Manager_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        setSuccess(!success);
-      } else {
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnAdmissionManager", JSON.stringify(values));
   };
 
   const redirectToAddAdmissionmanager = () => {
@@ -469,14 +541,13 @@ const Index = () => {
   };
   return (
     <div>
+      <BreadCrumb title="Admission Manager List" backTo="" path="/" />
       {loading ? (
         <div className="text-center">
           <img src={loader} className="img-fluid" alt="uapp_loader" />
         </div>
       ) : (
         <div>
-          <BreadCrumb title="Admission Manager List" backTo="" path="/" />
-
           <AddMissionManagerClear
             userType={userType}
             userTypes={userTypes}
@@ -485,12 +556,14 @@ const Index = () => {
             providerValue={providerValue}
             selectProvider={selectProvider}
             searchStr={searchStr}
+            setSearchStr={setSearchStr}
             searchValue={searchValue}
             providerId={providerId}
             setProviderLabel={setProviderLabel}
             setProviderValue={setProviderValue}
             handleKeyDown={handleKeyDown}
             handleClearSearch={handleClearSearch}
+            setIsTyping={setIsTyping}
           ></AddMissionManagerClear>
 
           <AddMissionManagerAdd

@@ -3,26 +3,40 @@ import ScrollToTop from "react-scroll-up";
 import { Button } from "reactstrap";
 import { ArrowUp } from "react-feather";
 import classnames from "classnames";
-import Lgimage from "../../../assets/img/Asset 12Icon.svg";
+import logo from "../../../assets/img/Logo.svg";
+import { Link } from "react-router-dom";
+import { userTypes } from "../../../constants/userTypeConstant";
+
 const Footer = () => {
+  const userType = localStorage.getItem("userType");
   return (
     <footer className={classnames("footer")}>
       <div className="uapp-footer ">
         <div className="row justify-content-center">
           <div className="show-max-678 uapp-footer-img">
-            <img src={Lgimage} alt="" />
+            <img src={logo} alt="" />
           </div>
         </div>
         <div className="row">
           <div className="col-md-4 col-sm-12 order-md-1 order-3  footer-text">
-            <a href="/">UAPP</a>
-            <span> © SMS Higher Education Group.</span>
+            <span> © UAPP</span>
           </div>
 
           <div className="col-md-4 col-sm-12 order-md-2  order-1 footer-text">
             <ul className="uapp-footer-list">
-              <li> Privacy policy </li>
-              <li> Terms & conditions </li>
+              {/* <li> Privacy policy </li> */}
+
+              {userType === userTypes?.Student.toString() ? (
+                <li>
+                  <Link to={`/student-declaration`}>Terms & conditions</Link>{" "}
+                </li>
+              ) : userType === userTypes?.Consultant.toString() ? (
+                <li>
+                  <Link to={`/consultant-declaration`}>Terms & conditions</Link>{" "}
+                </li>
+              ) : null}
+
+              {/* <li> Terms & conditions </li> */}
             </ul>
           </div>
 

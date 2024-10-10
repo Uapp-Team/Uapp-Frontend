@@ -1714,7 +1714,7 @@ const StudentNewProfile = () => {
                                   <th>#</th>
                                   <th>Company Name</th>
                                   <th>Job Title</th>
-                                  <th>Employment Details</th>
+                                  <th>Duties and Responsibilities</th>
                                   <th>Start Date</th>
                                   <th>End Date</th>
                                   <th>Still Working?</th>

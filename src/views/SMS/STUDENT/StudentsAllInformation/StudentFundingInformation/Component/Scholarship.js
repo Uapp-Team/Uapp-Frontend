@@ -5,12 +5,12 @@ import { rootUrl } from "../../../../../../constants/constants";
 import { useToasts } from "react-toast-notifications";
 import post from "../../../../../../helpers/post";
 import get from "../../../../../../helpers/get";
-import uploadBtn from "../../../../../../assets/img/upload.png";
-import downloadBtn from "../../../../../../assets/img/download.png";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { useHistory } from "react-router-dom";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../../components/buttons/DownloadButton";
 
 const Scholarship = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -117,11 +117,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
                     return false;
                   }}
                 >
-                  {FileList5.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList5.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
                 <div className="text-danger d-block">{scholarshipError}</div>
@@ -133,7 +129,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
                     href={rootUrl + scholarshipFunding?.attachement}
                     target="blank"
                   >
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>

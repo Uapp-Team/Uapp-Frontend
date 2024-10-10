@@ -202,7 +202,7 @@ const ContactFormComponent = ({
 
       <FormGroup>
         <span>
-          <span className="text-danger">*</span> Zip Code
+          <span className="text-danger">*</span> Post/Zip Code
         </span>
 
         <Input

@@ -29,6 +29,8 @@ import providerCover from "../../../../assets/img/provider-cover.png";
 import Accordion from "../../../../components/Accordion/Accordion";
 
 const UniversityProfile = () => {
+  const { id } = useParams();
+  // const [success, setSuccess] = useState(false);
   // const [activeTab, setActiveTab] = useState(1);
   const [uniData, setUniData] = useState({});
   const [campData, setCampData] = useState([]);
@@ -39,7 +41,6 @@ const UniversityProfile = () => {
   // const [topicName, setTopicName] = useState("");
   // const [dataCollection, setDataCollection] = useState([]);
   const [commission, setCommission] = useState(null);
-  const { id } = useParams();
 
   const [openIndex, setOpenIndex] = useState(1);
 
@@ -49,27 +50,22 @@ const UniversityProfile = () => {
 
   useEffect(() => {
     get(`University/Get/${id}`).then((res) => {
-      console.log("uniInfo", res);
       setUniData(res);
     });
 
     get(`UniversityCampus/GetByUniversity/${id}`).then((res) => {
-      console.log("campList", res);
       setCampData(res);
     });
 
     get(`UniversityFunding/GetByUniversityId/${id}`).then((res) => {
-      console.log("funding", res);
       setFunding(res?.fundingDetails);
     });
 
     get(`GeneralRequirement/GetByUniversityId/${id}`).then((res) => {
-      console.log("geneReq", res);
       setReqDetails(res?.requirementDetails);
     });
 
     get(`UniversityEnglishRequirement/GetByUniversityId/${id}`).then((res) => {
-      console.log("EngReq", res);
       setEngReqInfo(res?.requirementInformation);
     });
 
@@ -105,7 +101,6 @@ const UniversityProfile = () => {
       ></ProfileCoverPhoto>
       <div className="university-profile-content">
         <UniversityProfileInfoCard
-          uniData={uniData}
           LogoUrl={uniData?.universityLogo?.fileUrl}
           Name={uniData?.name}
           CountryName={uniData?.universityCountry?.name}
@@ -173,7 +168,7 @@ const UniversityProfile = () => {
           />
 
           <Accordion
-            title="Commission"
+            title="Recruitment"
             content={
               <UniversityProfileCommission
                 uniData={uniData}

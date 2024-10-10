@@ -1,6 +1,15 @@
 /* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Input, Row, Form, FormGroup } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  Col,
+  Input,
+  Row,
+  Form,
+  FormGroup,
+  Table,
+} from "reactstrap";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import moment from "moment";
@@ -15,6 +24,7 @@ import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 const ManageIntakes = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [buttonStatus, setButtonStatus] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [universityValue, setUniversityValue] = useState(0);
   const [universityLable, setUniversityLable] = useState("Select University");
   const [intakeData, setIntakeData] = useState([]);
@@ -31,11 +41,18 @@ const ManageIntakes = () => {
   const [campusIds, setCampusIds] = useState([]);
   const [checkIds, setCheckIds] = useState([]);
   const [checkSubIds, setCheckSubIds] = useState([]);
+  const [checkSubIdsError, setCheckSubIdsError] = useState(false);
   const [progress5, setProgress5] = useState(false);
   const { addToast } = useToasts();
   const [date, setDate] = useState();
   const [dateError, setDateError] = useState(false);
   const [subjectIds, setSubjectIds] = useState([]);
+  const [expandIds, setExpandIds] = useState([]);
+
+  const handleCollapsId = (i) => {
+    const res = expandIds.filter((c) => c !== i);
+    setExpandIds(res);
+  };
 
   useEffect(() => {
     get(`IntakeDD/Index`).then((res) => {
@@ -57,10 +74,8 @@ const ManageIntakes = () => {
   }, [universityValue]);
 
   useEffect(() => {
-    if (campusValue !== 0 && intakeValue !== 0 && statusValue !== 0) {
-      get(
-        `IntakeManagement/GetCampusSubjects/${campusValue}/${intakeValue}/${statusValue}`
-      ).then((res) => {
+    if (campusValue !== 0) {
+      get(`IntakeManagement/GetCampusSubjects/${campusValue}`).then((res) => {
         setSubjectIds(res);
         let newChecked = [];
         res.map((item) => {
@@ -71,7 +86,7 @@ const ManageIntakes = () => {
         setCheckSubIds([...newChecked]);
       });
     }
-  }, [campusValue, intakeValue, statusValue]);
+  }, [success, campusValue]);
 
   // const getSubjects = () => {
   //   if (campusValue !== 0 && intakeValue !== 0 && statusValue !== 0) {
@@ -100,11 +115,19 @@ const ManageIntakes = () => {
     value: campus?.id,
   }));
 
+  function getLastDateOfMonth(dateText) {
+    const [month, year] = dateText.trim().split(" ");
+    const dateObject = new Date(`${month} 1, ${year}`);
+    dateObject.setMonth(dateObject.getMonth() + 1, 0);
+    const lastFullDate = moment(new Date(dateObject)).format("YYYY-MM-DD");
+    return lastFullDate;
+  }
+
   const selectIntakeType = (label, value) => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
-    // getSubjects();
+    setDate(getLastDateOfMonth(label));
   };
 
   const selectStatusType = (label, value) => {
@@ -123,6 +146,11 @@ const ManageIntakes = () => {
 
   const validateForm = () => {
     let isFormValid = true;
+    console.log(checkSubIds);
+    if (checkSubIds.length === 0) {
+      isFormValid = false;
+      setCheckSubIdsError(true);
+    }
 
     if (intakeValue === 0) {
       isFormValid = false;
@@ -158,6 +186,7 @@ const ManageIntakes = () => {
         setButtonStatus(false);
         setProgress5(false);
         if (res?.status === 200 && res?.data?.isSuccess === true) {
+          setSuccess(!success);
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
@@ -168,16 +197,16 @@ const ManageIntakes = () => {
             autoDismiss: true,
           });
         }
-        handleClearSearch();
+        // handleClearSearch();
       });
     }
   };
 
   const handleClearSearch = () => {
-    setUniversityValue(0);
     setUniversityLable("Select University");
-    setCampusValue("Select Campus");
-    setCampusLabel(0);
+    setUniversityValue(0);
+    setCampusLabel("Select Campus");
+    setCampusValue(0);
     setStatusLabel("Select Status");
     setStatusValue(0);
     setIntakeLabel("Select Intake");
@@ -204,9 +233,31 @@ const ManageIntakes = () => {
   //   }
   // };
 
-  const handleCheck = (e, id, i) => {
-    let val = e.target.checked;
-    console.log(i);
+  const handleChecked = (e, id, i) => {
+    // let val = check ? check : e.target.checked;
+
+    const res = checkIds.filter((c) => c !== id);
+    setCheckIds(res);
+    let updateChecked = checkSubIds;
+    subjectIds[i].subjectItems.map((per) => {
+      const perId = per?.subjectId;
+      const result = updateChecked.filter((c) => c !== perId);
+      updateChecked = result;
+    });
+    setCheckSubIds([...updateChecked]);
+
+    let newChecked = [];
+    setCheckIds([...checkIds, id]);
+    subjectIds[i].subjectItems.map((per) => {
+      const perId = per?.subjectId;
+      newChecked.push(perId);
+    });
+    setCheckSubIds([...checkSubIds, ...newChecked]);
+    setCheckSubIdsError(false);
+  };
+
+  const handleCheck = (e, id, i, check) => {
+    let val = check ? check : e.target.checked;
     if (val === true) {
       let newChecked = [];
       setCheckIds([...checkIds, id]);
@@ -215,14 +266,17 @@ const ManageIntakes = () => {
         newChecked.push(perId);
       });
       setCheckSubIds([...checkSubIds, ...newChecked]);
+      setCheckSubIdsError(false);
     } else {
       const res = checkIds.filter((c) => c !== id);
       setCheckIds(res);
+      let updateChecked = checkSubIds;
       subjectIds[i].subjectItems.map((per) => {
         const perId = per?.subjectId;
-        const res = checkSubIds.filter((c) => c !== perId);
-        setCheckSubIds([res]);
+        const result = updateChecked.filter((c) => c !== perId);
+        updateChecked = result;
       });
+      setCheckSubIds([...updateChecked]);
     }
   };
 
@@ -231,6 +285,7 @@ const ManageIntakes = () => {
 
     if (val === true) {
       setCheckSubIds([...checkSubIds, id]);
+      setCheckSubIdsError(false);
     } else {
       const res = checkSubIds.filter((c) => c !== id);
       setCheckSubIds(res);
@@ -244,68 +299,8 @@ const ManageIntakes = () => {
       <Card>
         <CardBody>
           <Form onSubmit={handleSubjectAssignInIntake}>
-            <FormGroup>
-              <Row>
-                <Col lg="4" md="4" sm="6" xs="12">
-                  <span>
-                    <span className="text-danger">*</span> Intake
-                  </span>
-                  <Select
-                    options={intakeDropDown}
-                    value={{ label: intakeLabel, value: intakeValue }}
-                    onChange={(opt) => selectIntakeType(opt.label, opt.value)}
-                    name="intakeId"
-                    id="intakeId"
-                  />
-                  {intakeError ? (
-                    <span className="text-danger">Intake is required</span>
-                  ) : null}
-                </Col>
-
-                <Col lg="4" md="4" sm="6" xs="12">
-                  <span>
-                    <span className="text-danger">*</span> Status
-                  </span>
-
-                  <Select
-                    options={intakeStatusDropDown}
-                    value={{ label: statusLabel, value: statusValue }}
-                    onChange={(opt) => selectStatusType(opt.label, opt.value)}
-                    name="intakeStatusId"
-                    id="intakeStatusId"
-                  />
-                  {statusError ? (
-                    <span className="text-danger">Status is required</span>
-                  ) : null}
-                </Col>
-                {statusValue === 1 && (
-                  <Col className="date-input" lg="4" md="4" sm="6" xs="12">
-                    <span>
-                      <span className="text-danger">*</span> Application
-                      Dateline
-                    </span>
-                    <Input
-                      type="date"
-                      name="deadline"
-                      id="deadline"
-                      value={date}
-                      onChange={(e) => {
-                        setDate(
-                          moment(new Date(e.target.value)).format("YYYY-MM-DD")
-                        );
-                        setDateError(false);
-                      }}
-                    />
-                    {dateError ? (
-                      <span className="text-danger">Date is required</span>
-                    ) : null}
-                  </Col>
-                )}
-              </Row>
-            </FormGroup>
             <Row>
               <Col lg="4" md="4" sm="6" xs="12">
-                {" "}
                 <FormGroup>
                   <span>
                     <span className="text-danger">*</span> University
@@ -326,7 +321,7 @@ const ManageIntakes = () => {
                     }}
                   />
                 </FormGroup>
-              </Col>{" "}
+              </Col>
               {campusIds?.length > 0 && (
                 <Col lg="4" md="4" sm="6" xs="12">
                   <FormGroup>
@@ -378,66 +373,218 @@ const ManageIntakes = () => {
                       </div>
                     )}
                   </Col> */}
-                  {subjectIds?.map((per, i) => (
-                    <Col xs="12" sm="12" md="6" lg="4" key={i}>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          onChange={(e) => handleCheck(e, per?.departmentId, i)}
-                          type="checkbox"
-                          checked={
-                            per.subjectItems.every((value) =>
-                              checkSubIds.includes(value.subjectId)
-                            ) === true
-                              ? true
-                              : false
-                          }
-                          // checked={
-                          //   checkIds.includes(per?.departmentId) === true
-                          //     ? true
-                          //     : false
-                          // }
-                        />
-                        <label className="form-check-label" htmlFor="">
-                          {per?.departmentName}
-                        </label>
-                      </div>
 
-                      {per?.subjectItems?.map((item, j) => (
-                        <div className="form-check ml-4" key={j}>
-                          <input
-                            className="form-check-input"
-                            onChange={(e) =>
-                              handleSubCheck(e, item?.subjectId, i)
-                            }
-                            type="checkbox"
-                            checked={
-                              checkSubIds.includes(item?.subjectId) === true
-                                ? true
-                                : false
-                            }
-                          />
-                          <label className="form-check-label" htmlFor="">
-                            {item?.subjectName}
-                          </label>
+                  <Col md={8}>
+                    <span className="section-title mr-3">Subjects</span>
+                    {checkSubIdsError ? (
+                      <span className="text-danger">Subject is required</span>
+                    ) : null}
+
+                    <Table responsive>
+                      {subjectIds?.map((per, i) => (
+                        <div key={i} className="mb-1">
+                          <thead className="tablehead w-100 d-flex justify-content-between px-1">
+                            <th className="form-check pl-4 border-0">
+                              {per.subjectItems.every((value) =>
+                                checkSubIds?.includes(value.subjectId)
+                              ) === true ? (
+                                <input
+                                  className="form-check-input"
+                                  onChange={(e) =>
+                                    handleCheck(e, per?.departmentId, i)
+                                  }
+                                  type="checkbox"
+                                  checked={true}
+                                />
+                              ) : per.subjectItems.filter((value) =>
+                                  checkSubIds?.includes(value.subjectId)
+                                ).length > 0 ? (
+                                <input
+                                  className="form-check-input"
+                                  style={{ opacity: ".3" }}
+                                  onChange={(e) =>
+                                    handleChecked(e, per?.departmentId, i, true)
+                                  }
+                                  type="checkbox"
+                                  checked={true}
+                                />
+                              ) : (
+                                <input
+                                  className="form-check-input"
+                                  onChange={(e) =>
+                                    handleCheck(e, per?.departmentId, i)
+                                  }
+                                  type="checkbox"
+                                  checked={false}
+                                />
+                              )}
+
+                              <label
+                                className="form-check-label mt-1"
+                                htmlFor=""
+                              >
+                                {per?.departmentName}
+                              </label>
+                            </th>
+                            <th className="border-0">
+                              {expandIds.includes(i) ? (
+                                <i
+                                  class="fas fa-minus fs-16px pointer text-right"
+                                  onClick={() => handleCollapsId(i)}
+                                ></i>
+                              ) : (
+                                <i
+                                  class="fas fa-plus fs-16px pointer text-right"
+                                  onClick={() =>
+                                    setExpandIds([...expandIds, i])
+                                  }
+                                ></i>
+                              )}
+                            </th>
+                          </thead>
+                          {expandIds.includes(i) && (
+                            <tbody className="w-100">
+                              {per?.subjectItems?.map((item, j) => (
+                                <tr key={j} className="w-100">
+                                  <td className="w-50">
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        onChange={(e) =>
+                                          handleSubCheck(e, item?.subjectId, i)
+                                        }
+                                        type="checkbox"
+                                        checked={
+                                          checkSubIds?.includes(
+                                            item?.subjectId
+                                          ) === true
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor=""
+                                      >
+                                        {item?.subjectName}
+                                      </label>
+                                    </div>
+                                  </td>
+
+                                  <td className="w-50">
+                                    {item?.allIntakes.length > 0 && (
+                                      <Table>
+                                        <thead>
+                                          <th>Intake</th>
+                                          <th>Status</th>
+                                          <th>Deadline</th>
+                                        </thead>
+                                        <tbody>
+                                          {item?.allIntakes.map((intake, k) => (
+                                            <tr key={k}>
+                                              <td>{intake?.name}</td>
+                                              <td>{intake?.status}</td>
+                                              <td>{intake?.deadline}</td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </Table>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          )}
                         </div>
                       ))}
-                    </Col>
-                  ))}
-                </Row>
-
-                <FormGroup row>
-                  <Col className="text-center">
-                    <CancelButton text="Clear" cancel={handleClearSearch} />
-                    {permissions?.includes(permissionList.Edit_University) && (
-                      <SaveButton
-                        text="Apply"
-                        progress={progress5}
-                        buttonStatus={buttonStatus}
-                      />
-                    )}
+                    </Table>
                   </Col>
-                </FormGroup>
+                  <Col md={4}>
+                    <FormGroup>
+                      <p className="section-title">Change intake status</p>
+                      <div className="mt-3">
+                        <span>
+                          <span className="text-danger">*</span> Intake
+                        </span>
+                        <Select
+                          options={intakeDropDown}
+                          value={{ label: intakeLabel, value: intakeValue }}
+                          onChange={(opt) =>
+                            selectIntakeType(opt.label, opt.value)
+                          }
+                          name="intakeId"
+                          id="intakeId"
+                        />
+                        {intakeError ? (
+                          <span className="text-danger">
+                            Intake is required
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <div className="mt-3">
+                        <span>
+                          <span className="text-danger">*</span> Status
+                        </span>
+
+                        <Select
+                          options={intakeStatusDropDown}
+                          value={{ label: statusLabel, value: statusValue }}
+                          onChange={(opt) =>
+                            selectStatusType(opt.label, opt.value)
+                          }
+                          name="intakeStatusId"
+                          id="intakeStatusId"
+                        />
+                        {statusError ? (
+                          <span className="text-danger">
+                            Status is required
+                          </span>
+                        ) : null}
+                      </div>
+                      {statusValue === 1 && (
+                        <div className="date-input mt-3">
+                          <span>
+                            <span className="text-danger">*</span> Application
+                            Dateline
+                          </span>
+                          <Input
+                            type="date"
+                            name="deadline"
+                            id="deadline"
+                            value={date}
+                            onChange={(e) => {
+                              setDate(
+                                moment(new Date(e.target.value)).format(
+                                  "YYYY-MM-DD"
+                                )
+                              );
+                              setDateError(false);
+                            }}
+                          />
+                          {dateError ? (
+                            <span className="text-danger">
+                              Date is required
+                            </span>
+                          ) : null}
+                        </div>
+                      )}
+
+                      <div className="d-flex justify-content-between mt-3">
+                        <CancelButton text="Clear" cancel={handleClearSearch} />
+                        {permissions?.includes(
+                          permissionList.Edit_University
+                        ) && (
+                          <SaveButton
+                            text="Apply"
+                            progress={progress5}
+                            buttonStatus={buttonStatus}
+                          />
+                        )}
+                      </div>
+                    </FormGroup>
+                  </Col>
+                </Row>
               </>
             )}
           </Form>

@@ -212,11 +212,11 @@ const AddState = () => {
 
   return (
     <div>
+      <BreadCrumb title="State List" backTo="" path="" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="State List" backTo="" path="" />
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList?.Manage_Core_Data) ? (
@@ -380,7 +380,7 @@ const AddState = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="thead-uapp-bg">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>State</th>
                       <th className="text-center">Country</th>
                       <th>Action</th>
@@ -389,7 +389,7 @@ const AddState = () => {
                   <tbody>
                     {stateList?.map((state, i) => (
                       <tr key={state?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{state?.name}</td>
                         <td>{state?.country?.name}</td>
                         <td>

@@ -101,6 +101,7 @@ const AdmissionOfficerWiseAssignedSubject = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -144,6 +145,7 @@ const AdmissionOfficerWiseAssignedSubject = () => {
     setUniLabel("Select University");
     setStatusLabel("Select Status");
     setStatusValue(0);
+    setCurrentPage(1);
     setCallApi((prev) => !prev);
   };
 
@@ -414,7 +416,7 @@ const AdmissionOfficerWiseAssignedSubject = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="tablehead">
                   <tr style={{ textAlign: "center" }}>
-                    {checkSlNo ? <th>SL/NO</th> : null}
+                    {/* {checkSlNo ? <th>SL/NO</th> : null} */}
                     {checkSubject ? <th>Courses</th> : null}
                     {checkAction ? <th>Action</th> : null}
                   </tr>
@@ -422,7 +424,7 @@ const AdmissionOfficerWiseAssignedSubject = () => {
                 <tbody>
                   {subData?.map((list, i) => (
                     <tr key={i} style={{ textAlign: "center" }}>
-                      {checkSlNo ? <th scope="row">{i + 1}</th> : null}
+                      {/* {checkSlNo ? <th scope="row">{i + 1}</th> : null} */}
                       {checkSubject ? <td>{list?.subjectName}</td> : null}
                       {checkAction ? (
                         <td style={{ width: "8%" }} className="text-center">

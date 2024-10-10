@@ -19,6 +19,12 @@ const TestScoreForm = ({
   setShowForm,
   progress5,
   applicationTypeId,
+  errorIelts,
+  errorGre,
+  errorGmat,
+  setErrorIelts,
+  setErrorGre,
+  setErrorGmat,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -43,7 +49,7 @@ const TestScoreForm = ({
       ) : null}
       <Row>
         <Col md="3">
-          <FormGroup row className="has-icon-left position-relative">
+          <FormGroup row>
             <Col md="8">
               <span>IELTS is Mandatory</span>
             </Col>
@@ -59,7 +65,7 @@ const TestScoreForm = ({
 
           {ieltsReq4 ? (
             <>
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>
                   <span className="text-danger">*</span> IELTS Score
                 </span>
@@ -71,12 +77,16 @@ const TestScoreForm = ({
                   step="any"
                   placeholder="Ex: 7.5"
                   defaultValue={otherData?.testScore?.ieltSscore}
-                  onChange={handleIeltsScore4}
+                  onChange={(e) => {
+                    handleIeltsScore4(e);
+                    setErrorIelts("");
+                  }}
                 />
+                <span className="text-danger">{errorIelts}</span>
               </FormGroup>
             </>
           ) : (
-            <FormGroup className="has-icon-left position-relative">
+            <FormGroup>
               <span>
                 <span className="text-danger">*</span> IELTS Equivalent Score
               </span>
@@ -89,13 +99,16 @@ const TestScoreForm = ({
                 step="any"
                 placeholder="Ex: 7.5"
                 defaultValue={otherData?.testScore?.ieltSscore}
-                required
-                onChange={handleIeltsScore4}
+                onChange={(e) => {
+                  handleIeltsScore4(e);
+                  setErrorIelts("");
+                }}
               />
+              <span className="text-danger">{errorIelts}</span>
             </FormGroup>
           )}
 
-          <FormGroup row className="has-icon-left position-relative">
+          <FormGroup row>
             <Col md="8">
               <span>GRE is Mandatory</span>
             </Col>
@@ -111,7 +124,7 @@ const TestScoreForm = ({
 
           {greRequired4 ? (
             <>
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>
                   <span className="text-danger">*</span> GRE Score
                 </span>
@@ -124,14 +137,17 @@ const TestScoreForm = ({
                   step="any"
                   placeholder="Ex: 550"
                   defaultValue={otherData?.testScore?.greScore}
-                  required
-                  onChange={handleGreScore4}
+                  onChange={(e) => {
+                    handleGreScore4(e);
+                    setErrorGre("");
+                  }}
                 />
+                <span className="text-danger">{errorGre}</span>
               </FormGroup>
             </>
           ) : (
             <>
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>GRE Score</span>
 
                 <Input
@@ -142,13 +158,17 @@ const TestScoreForm = ({
                   step="any"
                   placeholder="Ex: 550"
                   defaultValue={otherData?.testScore?.greScore}
-                  onChange={handleGreScore4}
+                  onChange={(e) => {
+                    handleGreScore4(e);
+                    setErrorGre("");
+                  }}
                 />
+                <span className="text-danger">{errorGre}</span>
               </FormGroup>
             </>
           )}
 
-          <FormGroup row className="has-icon-left position-relative">
+          <FormGroup row>
             <Col md="8">
               <span>GMAT is Mandatory</span>
             </Col>
@@ -164,7 +184,7 @@ const TestScoreForm = ({
 
           {gmatRequired4 ? (
             <>
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>
                   <span className="text-danger">*</span> GMAT Score
                 </span>
@@ -177,14 +197,17 @@ const TestScoreForm = ({
                   step="any"
                   placeholder="Ex: 500"
                   defaultValue={otherData?.testScore?.gmatScore}
-                  required
-                  onChange={handleGmatScore4}
+                  onChange={(e) => {
+                    handleGmatScore4(e);
+                    setErrorGmat("");
+                  }}
                 />
+                <span className="text-danger">{errorGmat}</span>
               </FormGroup>
             </>
           ) : (
             <>
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>GMAT Score</span>
 
                 <Input
@@ -195,8 +218,12 @@ const TestScoreForm = ({
                   step="any"
                   placeholder="Ex: 500"
                   defaultValue={otherData?.testScore?.gmatScore}
-                  onChange={handleGmatScore4}
+                  onChange={(e) => {
+                    handleGmatScore4(e);
+                    setErrorGmat("");
+                  }}
                 />
+                <span className="text-danger">{errorGmat}</span>
               </FormGroup>
             </>
           )}
@@ -209,7 +236,12 @@ const TestScoreForm = ({
             <>
               <button
                 className="cancel-button"
-                onClick={() => setShowForm(false)}
+                onClick={() => {
+                  setShowForm(false);
+                  setErrorIelts("");
+                  setErrorGre("");
+                  setErrorGmat("");
+                }}
               >
                 Cancel
               </button>

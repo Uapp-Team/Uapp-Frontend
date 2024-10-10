@@ -7,63 +7,68 @@ const AdmissionConsultant = ({ applicationInfo }) => {
   return (
     <>
       <div className="custom-card-border p-4 mb-3 ">
-        <div className="d-flex justify-between-start">
-          <div className="pr-3">
-            {applicationInfo?.consultant?.consultantProfileImageMedia ===
-            null ? (
-              <img
-                src={profileImage}
-                alt="profile_img"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "50px",
-                }}
-              />
-            ) : (
-              <img
-                src={
-                  rootUrl +
-                  applicationInfo?.consultant?.consultantProfileImageMedia
-                    ?.thumbnailUrl
-                }
-                alt="profile_img"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "50px",
-                }}
-              />
-            )}
-          </div>
+        <div className="d-flex justify-content-between">
           <div>
-            <h5>Consultant</h5>
+            {" "}
+            <Row>
+              <Col md="3">
+                <div className="user-profile-pic">
+                  {applicationInfo?.consultant?.consultantProfileImageMedia ===
+                  null ? (
+                    <img
+                      src={profileImage}
+                      alt="profile_img"
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
+                    />
+                  ) : (
+                    <img
+                      src={
+                        rootUrl +
+                        applicationInfo?.consultant?.consultantProfileImageMedia
+                          ?.thumbnailUrl
+                      }
+                      alt="profile_img"
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
+                    />
+                  )}
+                </div>
+              </Col>
+              <Col md="9">
+                <div>
+                  <h5>Consultant</h5>
 
-            <p>
-              {applicationInfo?.consultant?.firstName}{" "}
-              {applicationInfo?.consultant?.lastName}
-            </p>
+                  <p>
+                    {applicationInfo?.consultant?.firstName}{" "}
+                    {applicationInfo?.consultant?.lastName}
+                  </p>
+                  <ul className="uapp-ul">
+                    <li>
+                      {" "}
+                      <i className="far fa-envelope pr-1 pb-2"></i>{" "}
+                      {applicationInfo?.consultant?.email}
+                    </li>
+                    {applicationInfo?.consultant?.phoneNumber ===
+                    null ? null : (
+                      <li>
+                        {" "}
+                        <i className="fas fa-phone pr-1"></i>{" "}
+                        {applicationInfo?.consultant?.phoneNumber}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              </Col>
+            </Row>
           </div>
         </div>
-
-        <Row>
-          <Col>
-            <ul className="uapp-ul">
-              <li>
-                {" "}
-                <i className="far fa-envelope pr-2"></i>
-                {applicationInfo?.consultant?.email}
-              </li>
-              {applicationInfo?.consultant?.phoneNumber === null ? null : (
-                <li>
-                  {" "}
-                  <i className="fas fa-phone pr-2"></i>{" "}
-                  {applicationInfo?.consultant?.phoneNumber}
-                </li>
-              )}
-            </ul>
-          </Col>
-        </Row>
       </div>
     </>
   );

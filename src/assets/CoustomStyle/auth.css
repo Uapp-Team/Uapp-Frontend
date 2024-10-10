@@ -147,7 +147,7 @@
   margin-bottom: 70px;
 }
 
-@media(max-width:767.98px) {
+@media (max-width: 767.98px) {
   .w-sm-50-xs-80 {
     width: 80% !important;
   }
@@ -159,50 +159,58 @@
   }
 }
 
-
-
 /* register */
 .register-container {
-  background: url('../img/backgrounds/register-bg.png');
+  background: url("../img/backgrounds/register-bg.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;
+}
 
+.forgot-container {
+  background-image: url("/static/media/Login.5a76679a.png");
+  /* background: url("../img/pages/forgot-password.png"); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-position: center;
+  position: fixed;
+  width: 60%;
 }
 
 .provider-register-container {
-  background: url('../img/backgrounds/provider-register-bg.png');
+  background: url("../img/backgrounds/provider-register-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
   background-position: center;
   position: fixed;
-  width: 60%
+  width: 60%;
 }
 
 .student-register-container {
-  background: url('../img/backgrounds/Sign\ up\ \(1\)\ \(2\).png');
+  background: url("../img/backgrounds/Sign\ up\ \(1\)\ \(2\).png");
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
   background-position: center;
   position: fixed;
-  width: 60%
+  width: 60%;
 }
 
 .consultant-register-container {
-  background: url('../img/backgrounds/Rectangle\ 3296.png');
+  background: url("../img/backgrounds/Rectangle\ 3296.png");
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
   background-position: center;
   position: fixed;
-  width: 60%
+  width: 60%;
 }
 
 .studentLogin-container {
-  background: url('../img/backgrounds/rsz_frame_33900.png');
+  background: url("../img/backgrounds/rsz_frame_33900.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -215,11 +223,9 @@
   top: 50px;
 }
 
-
 .bg-register {
-  background: #FAFCFD !important;
+  background: #fafcfd !important;
 }
-
 
 .btn-register-lg {
   font-weight: 500;
@@ -229,26 +235,25 @@
   font-size: 18px;
   color: #fff !important;
   background: #019088 !important;
-  transition: .5s ease-in;
+  transition: 0.5s ease-in;
   padding: 5px;
   margin-bottom: 20px;
 }
 
 .btn-register-lg:hover {
-  transition: .5s ease-out !important;
+  transition: 0.5s ease-out !important;
   color: #fff !important;
   background: #fc7300 !important;
   border: 2px solid #fc7300 !important;
 }
 
 .btn-register-lg:disabled {
-  transition: .5s ease-out !important;
+  transition: 0.5s ease-out !important;
   color: #fff !important;
   background: #01908987 !important;
   border: 2px solid #01908987 !important;
   cursor: not-allowed;
 }
-
 
 /* register footer */
 .register-footer-link {
@@ -276,7 +281,6 @@
   padding-bottom: 20px;
 }
 
-
 /*fixed css*/
 .w-sm-90 {
   width: 90%;
@@ -290,13 +294,50 @@
 }
 
 .bg-login {
-  background-image: url("/static/media/Login.5a76679a.png");
+  /* background-image: url("/static/media/Login.5a76679a.png"); */
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
   background-position: center;
   position: fixed;
-  width: 60%
+  width: 60%;
+  animation: change_img 15s ease-in-out infinite;
+}
+
+/*========================*/
+
+@keyframes change_img {
+  0% {
+    background-image: url("../img/loginpage-Illustration1.png");
+  }
+
+  25% {
+    background-image: url("../img/loginpage-Illustration2.png");
+  }
+
+  50% {
+    background-image: url("../img/loginpage-Illustration3.png");
+  }
+
+  75% {
+    background-image: url("../img/loginpage-Illustration2.png");
+  }
+
+  100% {
+    background-image: url("../img/loginpage-Illustration1.png");
+  }
+}
+
+/*========================*/
+
+.carousel-img {
+  /* background-image: url("/static/media/Login.5a76679a.png"); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-position: center;
+  position: fixed;
+  width: 60%;
 }
 
 .auth-container {
@@ -317,7 +358,7 @@
   overflow-y: scroll;
 }
 
-@media(max-width:767.98px) {
+@media (max-width: 767.98px) {
   .w-sm-90 {
     width: 95% !important;
   }
@@ -331,7 +372,7 @@
   }
 
   .right-container {
-    width: 100%
+    width: 100%;
   }
 }
 
@@ -339,10 +380,13 @@
   margin-top: 15%;
 }
 
-
 .register-links-section {
-  margin-top: 60px;
+  margin-top: 120px;
 }
+
+/* .register-links-section {
+  margin-top: 60px;
+} */
 
 .register-links-section h1 {
   color: #7f7f7f;
@@ -356,9 +400,9 @@
 }
 
 .register-header h1 {
-  color: #045D5E;
+  color: #111111;
   font-size: 30px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .register-header p {
@@ -372,7 +416,7 @@
   margin-top: 60px;
 }
 
-@media(max-width:767.98px) {
+@media (max-width: 767.98px) {
   .register-header {
     text-align: center;
   }
@@ -390,9 +434,6 @@
   }
 }
 
-
-
-
 @media (min-width: 1400px) {
   .responsive-form {
     width: 42%;
@@ -403,9 +444,9 @@
   }
 
   .register-header h1 {
-    color: #045D5E;
+    color: #111111;
     font-size: 35px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .auth-logo-fixed {
@@ -427,8 +468,6 @@
   }
 }
 
-
-
 .register-button-hover {
   color: #7f7f7f;
   font-size: 16px;
@@ -439,4 +478,10 @@
 .register-button-hover:hover {
   color: #045d5e;
   text-decoration: none;
+}
+
+.maintenance-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f97461;
 }

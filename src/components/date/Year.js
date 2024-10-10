@@ -38,7 +38,9 @@ const Year = ({
         styles={{
           control: (baseStyles, state) => ({
             ...baseStyles,
-            border: border,
+            border: "1px solid rgba(0,0,0,.1)",
+            marginRight: "8px",
+            marginLeft: "8px",
           }),
         }}
         options={years}

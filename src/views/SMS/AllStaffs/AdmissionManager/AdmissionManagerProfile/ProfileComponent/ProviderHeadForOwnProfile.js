@@ -26,6 +26,7 @@ import { userTypes } from "../../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../../../Components/ButtonLoader";
 import roundimg from "../../../../../../assets/img/roundimg.svg";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const ProviderHeadForOwnProfile = ({ admissionManagerId }) => {
   const [headData, setHeadData] = useState({});
@@ -700,7 +701,7 @@ const ProviderHeadForOwnProfile = ({ admissionManagerId }) => {
                       color: "#d4d4d4",
                     }}
                   >
-                    {headData?.createdOn}
+                    {dateFormate(headData?.createdOn)}
                   </span>
                 </div>
                 {userTypeId == userTypes?.SystemAdmin ||

@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import {
-  Col,
-  Row,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-} from "reactstrap";
+import { Col, Row, TabContent, TabPane } from "reactstrap";
 import get from "../../../../helpers/get";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import MessageHistoryCardApplicationDetailsPage from "./Component/RightSide/MessageHistoryCardApplicationDetailsPage";
@@ -26,6 +18,8 @@ import AdmissionConsultant from "./Component/RightSide/AdmissionConsultant";
 import ApplicationNote from "./Component/RightSide/ApplicationNote";
 import moment from "moment";
 import InternalAssessment from "./Component/InternalAssessment";
+import StudentStatement from "./Component/StudentStatement";
+// import useSelection from "antd/lib/table/hooks/useSelection";
 
 const ApplicationDetails = () => {
   const [activetab, setActivetab] = useState("1");
@@ -54,6 +48,7 @@ const ApplicationDetails = () => {
   const [elptWritting, setElptWritting] = useState("");
   const [elptSpeaking, setElptSpeaking] = useState("");
   const [elptOverall, setElptOverall] = useState("");
+  const [chatCount, setChatCount] = useState(0);
 
   const handleScroll = () => {
     const element = document.getElementById("scrollDown");
@@ -64,10 +59,15 @@ const ApplicationDetails = () => {
 
   const [applicationTimeline, setApplicationTimeline] = useState([]);
 
-  const { id, stdId } = useParams();
+  const { id, stdId, tab } = useParams();
   const location = useLocation();
   const userType = localStorage.getItem("userType");
 
+  useEffect(() => {
+    tab && setActivetab(tab);
+  }, [tab]);
+
+  console.log("tab", tab);
   useEffect(() => {
     if (applicationInfo?.subjectId !== undefined) {
       get(`DeliveryPatternDD/Subject/${applicationInfo?.subjectId}`).then(
@@ -115,29 +115,18 @@ const ApplicationDetails = () => {
     });
 
     get(`ApplicationTimeLine/get/${id}`).then((res) => {
-      console.log("timeline", res);
       setApplicationTimeline(res);
     });
 
     get(`ApplicationNote/GetCounting/${id}`).then((res) => {
-      console.log("count", res);
       setNoteCount(res);
+    });
+
+    get(`Application/get-count-by/${id}`).then((res) => {
+      setChatCount(res);
     });
   }, [id, success]);
 
-  const toggle = (tab) => {
-    setActivetab(tab);
-
-    if (tab === "2") {
-      setActivetab(tab);
-    }
-    if (tab === "3") {
-      setActivetab(tab);
-    }
-    if (tab === "4") {
-      setActivetab(tab);
-    }
-  };
   const isChatOpen = () => {
     setChatOpen(!chatOpen);
   };
@@ -164,25 +153,50 @@ const ApplicationDetails = () => {
             }
           />
 
-          <div className="d-flex justify-content-between">
+          {/* <div className="d-flex justify-content-between">
             <Nav tabs>
               <NavItem>
-                <NavLink active={activetab === "1"} onClick={() => toggle("1")}>
-                  Application Info
+                <NavLink
+                  active={activetab === "1"}
+                  onClick={() => setActivetab("1")}
+                >
+                  Application Details
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
-                  Profile
+                <NavLink
+                  active={activetab === "2"}
+                  onClick={() => setActivetab("2")}
+                >
+                  Student Details
+                </NavLink>
+              </NavItem>
+              {userType === userTypes?.AdmissionManager ||
+              userType === userTypes?.SystemAdmin ||
+              userType === userTypes?.Admin ||
+              userType === userTypes?.Student ? (
+                <NavItem>
+                  <NavLink
+                    active={activetab === "3"}
+                    onClick={() => setActivetab("3")}
+                  >
+                    Internal Assessment
+                  </NavLink>
+                </NavItem>
+              ) : null}
+              <NavItem>
+                <NavLink
+                  active={activetab === "4"}
+                  onClick={() => setActivetab("4")}
+                >
+                  Statement Of Purpose
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Internal Assessment
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink active={activetab === "4"} onClick={() => toggle("4")}>
+                <NavLink
+                  active={activetab === "5"}
+                  onClick={() => setActivetab("5")}
+                >
                   Documents
                 </NavLink>
               </NavItem>
@@ -196,9 +210,9 @@ const ApplicationDetails = () => {
                 onClick={isChatOpen}
               >
                 <i className="far fa-comment-dots relative">
-                  {/* <span className="bg-orange text-white p-1 rounded-circle chat-icon">
+                  <span className="bg-orange text-white p-1 rounded-circle chat-icon">
                     5
-                  </span> */}
+                  </span>
                 </i>
                 <span className="ml-2">Chat</span>
               </button>
@@ -213,12 +227,96 @@ const ApplicationDetails = () => {
                       {noteCount}
                     </span>
                   </i>
-                  <span className="ml-2">Note</span>
+                  <span className="ml-2">Notes</span>
                 </a>
               ) : null}
             </div>
-          </div>
+          </div> */}
+          <Row className="mb-3">
+            <Col lg={8} md="7" className="mb-3 overflow">
+              <div
+                className="btn-group w-100"
+                role="group"
+                aria-label="Basic example"
+              >
+                <button
+                  className={`btn border p-2 fw-600 ${
+                    activetab === "1" ? "bg-orange text-white" : "bg-white"
+                  }`}
+                  onClick={() => setActivetab("1")}
+                >
+                  Application Details
+                </button>
+                <button
+                  className={`btn border p-2 fw-600 ${
+                    activetab === "2" ? "bg-orange text-white" : "bg-white"
+                  }`}
+                  onClick={() => setActivetab("2")}
+                >
+                  Student Details
+                </button>
+                {userType === userTypes?.AdmissionManager ||
+                userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.Admin ||
+                userType === userTypes?.Student ? (
+                  <button
+                    className={`btn border p-2 fw-600 ${
+                      activetab === "3" ? "bg-orange text-white" : "bg-white"
+                    }`}
+                    onClick={() => setActivetab("3")}
+                  >
+                    Internal Assessment
+                  </button>
+                ) : null}
+                <button
+                  className={`btn border p-2 fw-600 ${
+                    activetab === "4" ? "bg-orange text-white" : "bg-white"
+                  }`}
+                  onClick={() => setActivetab("4")}
+                >
+                  Statement Of Purpose
+                </button>
+                <button
+                  className={`btn border p-2 fw-600 ${
+                    activetab === "5" ? "bg-orange text-white" : "bg-white"
+                  }`}
+                  onClick={() => setActivetab("5")}
+                >
+                  Documents
+                </button>
+              </div>
+            </Col>
+            <Col lg={4} md="5" className="mb-3">
+              <div
+                className="d-flex justify-content-end align-items-center"
+                style={{ fontSize: "16px" }}
+              >
+                <button
+                  className="d-flex align-items-center ml-3 btn-no-style bg-white rounded-lg py-2 px-3 border text-primary"
+                  onClick={isChatOpen}
+                >
+                  <i className="far fa-comment-dots relative"></i>
+                  <span className="mx-2">Chat</span>
+                  <span className="bg-primary text-white px-2 fs-12px rounded-circle">
+                    {chatCount}
+                  </span>
+                </button>
 
+                {permissions?.includes(permissionList?.View_ApplicationNote) ? (
+                  <a
+                    className="d-flex align-items-center ml-4 text-body bg-white rounded-lg py-2 px-3 border"
+                    href="#notelist"
+                  >
+                    <i className="far fa-file relative"></i>
+                    <span className="mx-2">Notes </span>
+                    <span className="bg-orange text-white px-2 fs-12px rounded-circle">
+                      {noteCount}
+                    </span>
+                  </a>
+                ) : null}
+              </div>
+            </Col>
+          </Row>
           <Row>
             <Col lg={8} md="7">
               {activetab === "1" ? (
@@ -228,6 +326,7 @@ const ApplicationDetails = () => {
                       handleScroll={handleScroll}
                       applicationTimeline={applicationTimeline}
                       id={id}
+                      sId={stdId}
                       applicationInfo={applicationInfo}
                       deliveryDD={deliveryDD}
                       intakeDD={intakeDD}
@@ -266,12 +365,27 @@ const ApplicationDetails = () => {
               ) : activetab === "3" ? (
                 <TabContent activeTab={activetab}>
                   <TabPane tabId="3">
-                    <InternalAssessment />
+                    <InternalAssessment
+                      applicationInfo={applicationInfo}
+                      success={success}
+                      setSuccess={setSuccess}
+                    />
+                  </TabPane>
+                </TabContent>
+              ) : activetab === "4" ? (
+                <TabContent activeTab={activetab}>
+                  <TabPane tabId="4">
+                    <StudentStatement
+                      stdId={stdId}
+                      applicationInfo={applicationInfo}
+                      success={success}
+                      setSuccess={setSuccess}
+                    />
                   </TabPane>
                 </TabContent>
               ) : (
                 <TabContent activeTab={activetab}>
-                  <TabPane tabId="4">
+                  <TabPane tabId="5">
                     <StudentDocument
                       stdId={stdId}
                       success={success}

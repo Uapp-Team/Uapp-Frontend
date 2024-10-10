@@ -52,6 +52,7 @@ import ConsultantRatingList from "./ConsultantRatingList";
 import roundimg from "../../../assets/img/roundimg.svg";
 import { style } from "@mui/system";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../components/date/calenderFormate";
 
 const ConsultantProfile = () => {
   const location = useLocation();
@@ -386,9 +387,7 @@ const ConsultantProfile = () => {
               !(userTypeId === userTypes?.Consultant) ? "Consultant" : null
             }
             path={
-              !(userTypeId === userTypes?.Consultant)
-                ? "/consultantList"
-                : null
+              !(userTypeId === userTypes?.Consultant) ? "/consultantList" : null
             }
           />
 
@@ -401,12 +400,13 @@ const ConsultantProfile = () => {
                       <div
                         className="bg-image-profile"
                         style={{
-                          backgroundImage: `url(${consultantData?.consultantCoverImageMedia
-                            ? rootUrl +
+                          backgroundImage: `url(${
                             consultantData?.consultantCoverImageMedia
-                              ?.fileUrl
-                            : uapploader2
-                            })`,
+                              ? rootUrl +
+                                consultantData?.consultantCoverImageMedia
+                                  ?.fileUrl
+                              : uapploader2
+                          })`,
                         }}
                       >
                         {/* {
@@ -566,7 +566,7 @@ const ConsultantProfile = () => {
                               <div className="text-left">
                                 <div className="profile-pic">
                                   {consultantData?.consultantProfileImageMedia ==
-                                    null ? (
+                                  null ? (
                                     <img
                                       className="empProfileImg bg-white"
                                       src={uapploader}
@@ -834,7 +834,7 @@ const ConsultantProfile = () => {
                                   color: "#d4d4d4",
                                 }}
                               >
-                                {consultantData?.createdOn}
+                                {dateFormate(consultantData?.createdOn)}
                               </span>
                             </div>
                             <ul className="uapp-ul text-right">
@@ -911,7 +911,7 @@ const ConsultantProfile = () => {
 
                       <h5>
                         {userTypeId == userTypes?.SystemAdmin ||
-                          userTypeId == userTypes?.Admin ? (
+                        userTypeId == userTypes?.Admin ? (
                           <span
                             onClick={redirectToParentConsultantProfile}
                             style={{ cursor: "pointer" }}
@@ -942,7 +942,7 @@ const ConsultantProfile = () => {
                       <div>
                         <ul className="uapp-ul text-center">
                           {userTypeId == userTypes?.SystemAdmin ||
-                            userTypeId == userTypes?.Admin ? (
+                          userTypeId == userTypes?.Admin ? (
                             <li>
                               {" "}
                               {
@@ -963,7 +963,7 @@ const ConsultantProfile = () => {
                             {consultantData?.parentConsultant?.email}{" "}
                           </li>
                           {consultantData?.parentConsultant?.phoneNumber ==
-                            null ? null : (
+                          null ? null : (
                             <li>
                               {" "}
                               <i className="fas fa-phone"></i>{" "}
@@ -1061,7 +1061,7 @@ const ConsultantProfile = () => {
                           fontSize: "14px",
                         }}
                       >
-                        Recommend to a friend {"      "} { }
+                        Recommend to a friend {"      "} {}
                       </span>
                     </div>
                   </CardBody>

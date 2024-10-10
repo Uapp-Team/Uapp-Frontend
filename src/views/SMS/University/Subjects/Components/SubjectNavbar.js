@@ -33,7 +33,7 @@ export default function SubjectNavbar({ title, activeTab, id, subjId }) {
       <BreadCrumb
         title={title}
         backTo="Course"
-        path={`/university-courses/${id}`}
+        path={id > 0 ? `/university-courses/${id}` : "/courses"}
       />
       <Nav tabs>
         <NavItem>

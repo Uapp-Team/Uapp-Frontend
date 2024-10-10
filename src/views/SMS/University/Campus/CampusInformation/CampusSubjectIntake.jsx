@@ -57,6 +57,7 @@ const CampusSubjectIntake = () => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
+    setDate(moment(new Date(label)).format("YYYY-MM-DD"));
 
     get(
       `CampusSubjectIntake/Get/${intakeValue}/${statusValue}/${campusId}`
@@ -248,9 +249,9 @@ const CampusSubjectIntake = () => {
                         onChange={(e) => handleSelectAll(e)}
                         type="checkbox"
                         name=""
-                      // checked={
-                      //   checked?.length === subjectIds?.length ? true : false
-                      // }
+                        // checked={
+                        //   checked?.length === subjectIds?.length ? true : false
+                        // }
                       />
                       <label className="form-check-label" htmlFor="">
                         Select All

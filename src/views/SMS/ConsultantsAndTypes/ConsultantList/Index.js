@@ -21,13 +21,36 @@ import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import { useParams } from "react-router";
 
 const Index = () => {
+  const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
   const { type } = useParams();
   const [empList, setEmpList] = useState([]);
-  const [empLabel, setEmpLabel] = useState("Select Consultant Type");
-  const [empValue, setEmpValue] = useState(0);
-  const [status, setStatus] = useState([]);
-  const [statusLabel, setStatusLabel] = useState("Select Branch");
-  const [statusValue, setStatusValue] = useState(0);
+  const [empLabel, setEmpLabel] = useState(
+    ConsultantPaging?.empLabel
+      ? ConsultantPaging?.empLabel
+      : "Select Consultant Type"
+  );
+  const [empValue, setEmpValue] = useState(
+    ConsultantPaging?.empValue ? ConsultantPaging?.empValue : 0
+  );
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState(
+    ConsultantPaging?.branchLabel
+      ? ConsultantPaging?.branchLabel
+      : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    ConsultantPaging?.branchValue ? ConsultantPaging?.branchValue : 0
+  );
+
+  const [statusType, setStatusType] = useState([]);
+  const [statusLabel, setStatusLabel] = useState(
+    ConsultantPaging?.statusLabel
+      ? ConsultantPaging?.statusLabel
+      : "Account Status"
+  );
+  const [statusValue, setStatusValue] = useState(
+    ConsultantPaging?.statusValue ? ConsultantPaging?.statusValue : 0
+  );
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userTypeId = localStorage.getItem("userType");
@@ -36,9 +59,13 @@ const Index = () => {
   const [callApi, setCallApi] = useState(false);
   const [serialNum, setSerialNum] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    ConsultantPaging?.currentPage ? ConsultantPaging?.currentPage : 1
+  );
   const [dataPerPage, setDataPerPage] = useState(15);
-  const [searchStr, setSearchStr] = useState("");
+  const [searchStr, setSearchStr] = useState(
+    ConsultantPaging?.searchStr ? ConsultantPaging?.searchStr : ""
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -52,20 +79,54 @@ const Index = () => {
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
   // for hide/unhide column
-  const [check, setCheck] = useState(true);
+  // const [check, setCheck] = useState(true);
   const [tableData, setTableData] = useState([]);
+  console.log(tableData, "table data");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const userType = localStorage.getItem("userType");
   const history = useHistory();
+  const [check, setCheck] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "consultant",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
+        empLabel: empLabel && empLabel,
+        empValue: empValue && empValue,
+        statusLabel: statusLabel && statusLabel,
+        statusValue: statusValue && statusValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    branchLabel,
+    branchValue,
+    empLabel,
+    empValue,
+    currentPage,
+    dataPerPage,
+    searchStr,
+    statusLabel,
+    statusValue,
+  ]);
 
   useEffect(() => {
     get("ConsultantTypeDD/Index").then((res) => {
-      console.log(res);
       setEmpList(res);
     });
+
     get(`BranchDD/Index`).then((res) => {
-      setStatus(res);
+      setBranch(res);
+    });
+
+    get("AccountStatusDD/index").then((res) => {
+      setStatusType(res);
     });
   }, []);
 
@@ -85,6 +146,7 @@ const Index = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -121,28 +183,29 @@ const Index = () => {
   };
 
   useEffect(() => {
-    get(
-      `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${statusValue}`
-    ).then((res) => {
-      setConsultantList(res?.models);
-      setSerialNum(res?.firstSerialNumber);
-      setEntity(res?.totalEntity);
-      setLoading(false);
-    });
-
-    get(`TableDefination/Index/${tableIdList?.Consultant_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
+    if (!isTyping) {
+      get(
+        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}`
+      ).then((res) => {
+        console.log(res?.models);
+        setConsultantList(res?.models);
+        setSerialNum(res?.firstSerialNumber);
+        setEntity(res?.totalEntity);
+        setLoading(false);
+      });
+    }
   }, [
     currentPage,
     dataPerPage,
     callApi,
     searchStr,
-    statusValue,
+    branchValue,
     empValue,
+    statusValue,
     loading,
     success,
+    check,
+    isTyping,
   ]);
 
   const handleDate = (e) => {
@@ -168,6 +231,15 @@ const Index = () => {
 
   const passValidate = (e) => {
     setPass(e.target.value);
+    if (e.target.value === "") {
+      setError("Provide a valid password");
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(e.target.value)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else {
+      setError("");
+    }
   };
 
   const verifyPass = (e) => {
@@ -176,6 +248,16 @@ const Index = () => {
 
   const confirmPassword = (e) => {
     setCPass(e.target.value);
+    if (e.target.value === "") {
+      setPassError("Confirm your password");
+    } else {
+      setPassError("");
+    }
+    if (pass && e.target.value !== pass) {
+      setPassError("Passwords doesn't match.");
+    } else {
+      setPassError("");
+    }
   };
 
   const handlePass = (data) => {
@@ -194,8 +276,10 @@ const Index = () => {
     const subData = new FormData(event.target);
     subData.append("id", passData?.id);
     subData.append("password", pass);
-    if (pass.length < 6) {
-      setError("Password length can not be less than six digits");
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
     } else if (pass !== cPass) {
       setPassError("Passwords do not match");
     } else {
@@ -255,16 +339,12 @@ const Index = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
 
-    put(
-      `TableDefination/Update/${tableIdList?.Consultant_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        setSuccess(!success);
-      }
-    });
+    localStorage.setItem("ColumnConsultant", JSON.stringify(values));
   };
 
   const redirectToConsultantDashboard = (consultantId) => {
@@ -300,52 +380,77 @@ const Index = () => {
     // handleSearch();
   };
 
-  const statusOptions = status?.map((br) => ({
+  const branchOptions = branch?.map((br) => ({
     label: br?.name,
     value: br?.id,
   }));
 
-  const selectStatus = (label, value) => {
+  const selectBranch = (label, value) => {
+    setBranchLabel(label);
+    setBranchValue(value);
+    // handleSearch();
+  };
+
+  const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
+    label: statusTypeOptions?.name,
+    value: statusTypeOptions?.id,
+  }));
+
+  const selectStatusType = (label, value) => {
     setStatusLabel(label);
     setStatusValue(value);
     // handleSearch();
   };
+
   const handleReset = () => {
-    setStatusLabel("Select Branch");
-    setStatusValue(0);
+    setBranchLabel("Select Branch");
+    setBranchValue(0);
     setEmpLabel("Select Consultant Type");
     setEmpValue(0);
+    setStatusLabel("Account Status");
+    setStatusValue(0);
     setSearchStr("");
     setCurrentPage(1);
     setCallApi((prev) => !prev);
   };
+
+  console.log("dataPerPage", dataPerPage);
+  console.log("entity", entity);
   return (
     <div>
+      <BreadCrumb title="Consultant List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <BreadCrumb title="Consultant List" backTo="" path="/" />
-
           {/* filter starts here */}
           <SelectAndClear
+            setCheck={setCheck}
+            check={check}
             empOptiopns={empOptiopns}
             empLabel={empLabel}
             empValue={empValue}
             selectEmployeeType={selectEmployeeType}
             type={type}
-            statusOptions={statusOptions}
-            statusLabel={statusLabel}
-            statusValue={statusValue}
-            selectStatus={selectStatus}
+            branchOptions={branchOptions}
+            branchLabel={branchLabel}
+            branchValue={branchValue}
+            selectBranch={selectBranch}
             searchStr={searchStr}
             setSearchStr={setSearchStr}
-            setStatusLabel={setStatusLabel}
-            setStatusValue={setStatusValue}
+            setBranchLabel={setBranchLabel}
+            setBranchValue={setBranchValue}
             setEmpLabel={setEmpLabel}
             setEmpValue={setEmpValue}
+            statusLabel={statusLabel}
+            statusValue={statusValue}
+            setStatusLabel={setStatusLabel}
+            setStatusValue={setStatusValue}
+            statusTypeMenu={statusTypeMenu}
+            selectStatusType={selectStatusType}
             handleKeyDown={handleKeyDown}
             handleReset={handleReset}
+            setIsTyping={setIsTyping}
           ></SelectAndClear>
           {/* filter starts here */}
 
@@ -376,7 +481,7 @@ const Index = () => {
                     <div className="mr-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}
@@ -397,6 +502,7 @@ const Index = () => {
                       dropdownOpen1={dropdownOpen1}
                       toggle1={toggle1}
                       tableData={tableData}
+                      setTableData={setTableData}
                       handleChecked={handleChecked}
                     ></ConsultantColumnHide>
                   </div>
@@ -405,47 +511,56 @@ const Index = () => {
 
               {permissions?.includes(permissionList?.View_Consultant_list) && (
                 <>
-                  {loading ? (
-                    <h2 className="text-center">Loading...</h2>
+                  {consultantList?.length === 0 ? (
+                    <h4 className="text-center">No Data Found</h4>
                   ) : (
-                    <ConsultantTable
-                      componentRef={componentRef}
-                      tableData={tableData}
-                      permissions={permissions}
-                      permissionList={permissionList}
-                      userTypeId={userTypeId}
-                      userTypes={userTypes}
-                      consultantList={consultantList}
-                      serialNum={serialNum}
-                      history={history}
-                      handlePass={handlePass}
-                      passModal={passModal}
-                      handleToggle={handleToggle}
-                      passData={passData}
-                      submitModalForm={submitModalForm}
-                      passValidate={passValidate}
-                      setError={setError}
-                      error={error}
-                      verifyPass={verifyPass}
-                      confirmPassword={confirmPassword}
-                      setPassModal={setPassModal}
-                      progress={progress}
-                      passError={passError}
-                      handleDate={handleDate}
-                      redirectToApplications={redirectToApplications}
-                      handleUpdate={handleUpdate}
-                      redirectToConsultantProfile={redirectToConsultantProfile}
-                      userType={userType}
-                      redirectToConsultantDashboard={
-                        redirectToConsultantDashboard
-                      }
-                      handleEdit={handleEdit}
-                      toggleDanger={toggleDanger}
-                      deleteModal={deleteModal}
-                      setDeleteModal={setDeleteModal}
-                      handleDeleteData={handleDeleteData}
-                      buttonStatus={buttonStatus}
-                    ></ConsultantTable>
+                    <>
+                      {" "}
+                      {loading ? (
+                        <h2 className="text-center">Loading...</h2>
+                      ) : (
+                        <ConsultantTable
+                          componentRef={componentRef}
+                          tableData={tableData}
+                          permissions={permissions}
+                          permissionList={permissionList}
+                          userTypeId={userTypeId}
+                          userTypes={userTypes}
+                          consultantList={consultantList}
+                          serialNum={serialNum}
+                          history={history}
+                          handlePass={handlePass}
+                          passModal={passModal}
+                          handleToggle={handleToggle}
+                          passData={passData}
+                          submitModalForm={submitModalForm}
+                          passValidate={passValidate}
+                          setError={setError}
+                          error={error}
+                          verifyPass={verifyPass}
+                          confirmPassword={confirmPassword}
+                          setPassModal={setPassModal}
+                          progress={progress}
+                          passError={passError}
+                          handleDate={handleDate}
+                          redirectToApplications={redirectToApplications}
+                          handleUpdate={handleUpdate}
+                          redirectToConsultantProfile={
+                            redirectToConsultantProfile
+                          }
+                          userType={userType}
+                          redirectToConsultantDashboard={
+                            redirectToConsultantDashboard
+                          }
+                          handleEdit={handleEdit}
+                          toggleDanger={toggleDanger}
+                          deleteModal={deleteModal}
+                          setDeleteModal={setDeleteModal}
+                          handleDeleteData={handleDeleteData}
+                          buttonStatus={buttonStatus}
+                        ></ConsultantTable>
+                      )}
+                    </>
                   )}
                 </>
               )}

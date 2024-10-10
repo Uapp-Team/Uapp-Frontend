@@ -30,7 +30,7 @@ const AgentReport = () => {
       setMonth(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsultant(res);
     });
 
@@ -44,7 +44,7 @@ const AgentReport = () => {
   useEffect(() => {
     if (consultantValue) {
       get(
-        `Report/ProgressReport/${consultantValue}/${intakeValue}/${date}/${monthValue}/${yearValue}`
+        `Report/ConsultantProgressReport/${consultantValue}/${intakeValue}/${date}/${monthValue}/${yearValue}`
       ).then((res) => {
         setProgress(res);
       });
@@ -105,10 +105,10 @@ const AgentReport = () => {
 
   return (
     <>
+      <BreadCrumb title="Consultant Report" backTo="" path="/" />
       <div className="animated fadeIn">
         <div className="uapp-dashboard">
           <div className="uapp-dashboard-activity">
-            <BreadCrumb title="Consultant Report" backTo="" path="/" />
             <Card className="uapp-employee-search">
               <CardBody className="search-card-body">
                 <Row className="mt-3">

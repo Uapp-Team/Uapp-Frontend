@@ -92,7 +92,7 @@ const AddUniversitySubject = () => {
         })
         .catch();
     } else {
-      get("UniversityDD/Index").then((res) => {
+      get("SearchFilter/Universities/0/0/0").then((res) => {
         console.log(res);
         setUniversityList(res);
       });
@@ -392,7 +392,7 @@ const AddUniversitySubject = () => {
       <BreadCrumb
         title="Course Information"
         backTo="Course"
-        path={`/university-courses/${id}`}
+        path={id > 0 ? `/university-courses/${id}` : "/courses"}
       />
 
       <Nav tabs>

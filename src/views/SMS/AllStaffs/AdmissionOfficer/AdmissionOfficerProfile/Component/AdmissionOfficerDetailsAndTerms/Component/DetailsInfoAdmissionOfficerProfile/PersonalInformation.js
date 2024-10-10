@@ -1,5 +1,6 @@
 import React from "react";
 import { Table } from "reactstrap";
+import { dateFormate } from "../../../../../../../../../components/date/calenderFormate";
 
 const PersonalInformation = ({ data }) => {
   return (
@@ -14,7 +15,7 @@ const PersonalInformation = ({ data }) => {
         <tr>
           <td width="40%">Date of Birth</td>
 
-          <td width="60%">{data?.dateOfBirth}</td>
+          <td width="60%">{dateFormate(data?.dateOfBirth)}</td>
         </tr>
         <tr>
           <td width="40%">Passport/Id</td>

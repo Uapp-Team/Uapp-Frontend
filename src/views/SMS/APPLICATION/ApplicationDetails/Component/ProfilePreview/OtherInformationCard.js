@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
 
-const OtherInformationCard = ({ sId }) => {
-  const [studentDetails, setStudentDetails] = useState({});
+const OtherInformationCard = ({ sId, othersDetails, setOthersDetails }) => {
   useEffect(() => {
     get(`OtherInformation/GetByStudentId/${sId}`).then((res) => {
-      setStudentDetails(res);
+      setOthersDetails(res);
     });
   }, [sId]);
   return (
@@ -27,8 +26,8 @@ const OtherInformationCard = ({ sId }) => {
           </span>
           <br />
           <span className="text-gray-70">
-            {studentDetails?.isHaveDisability
-              ? studentDetails?.disabilityDescription
+            {othersDetails?.isHaveDisability
+              ? othersDetails?.disabilityDescription
               : "No Disability"}
           </span>
         </div>
@@ -39,8 +38,8 @@ const OtherInformationCard = ({ sId }) => {
           </span>
           <br />
           <span className="text-gray-70">
-            {studentDetails?.isHaveCriminalConvictions
-              ? studentDetails?.criminalConvictionsDescription
+            {othersDetails?.isHaveCriminalConvictions
+              ? othersDetails?.criminalConvictionsDescription
               : "No Criminal conviction"}
           </span>
         </div>

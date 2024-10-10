@@ -31,6 +31,7 @@ import { userTypes } from "../../../constants/userTypeConstant";
 const AllLoginHistory = () => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [data, setData] = useState([]);
+  console.log(data, "data");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
@@ -64,6 +65,7 @@ const AllLoginHistory = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -228,7 +230,7 @@ const AllLoginHistory = () => {
             <Table id="table-to-xls" className="table-sm table-bordered my-4">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Name</th>
                   <th>Email</th>
                   <th>Date</th>
@@ -241,23 +243,27 @@ const AllLoginHistory = () => {
               <tbody>
                 {data?.map((d, i) => (
                   <tr key={i} style={{ textAlign: "center" }}>
-                    <th scope="row">{i + serialNum}</th>
+                    {/* <th scope="row">{i + serialNum}</th> */}
                     <td>{d?.fullName}</td>
                     <td>{d?.email}</td>
-                    <td>{handleDate1(d?.lastLoginDate)}</td>
+                    <td>{d?.lastLoginDate}</td>
                     <td>{d?.ipAddress}</td>
                     <td>{d?.geoLocationInfo}</td>
                     <td>
-                      {
-                        <ToggleSwitch
-                          defaultChecked={
-                            d?.isDeviceBlocked == false ? false : true
+                      {d?.ipAddress !== "Not found" && d?.ipAddress !== "" ? (
+                        <>
+                          {
+                            <ToggleSwitch
+                              defaultChecked={
+                                d?.isDeviceBlocked == false ? false : true
+                              }
+                              onChange={(e) => {
+                                handleAccountStatus(e, d?.ipAddress);
+                              }}
+                            />
                           }
-                          onChange={(e) => {
-                            handleAccountStatus(e, d?.ipAddress);
-                          }}
-                        />
-                      }
+                        </>
+                      ) : null}
 
                       {/* {d?.isDeviceBlocked ? "Yes" : "No"} */}
                     </td>
@@ -298,16 +304,6 @@ const AllLoginHistory = () => {
                     <Button onClick={closeDeleteModal}>NO</Button>
                   </ModalFooter>
                 </Modal> */}
-
-                <ConfirmModal
-                  // text="Do You Want To Delete This Subject ?"
-                  isOpen={deleteModal}
-                  toggle={closeDeleteModal}
-                  confirm={() => handleDelete()}
-                  cancel={closeDeleteModal}
-                  buttonStatus={buttonStatus}
-                  progress={progress}
-                />
               </tbody>
             </Table>
           </div>
@@ -320,6 +316,16 @@ const AllLoginHistory = () => {
           />
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        // text="Do You Want To Delete This Subject ?"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => handleDelete()}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+      />
     </div>
   );
 };

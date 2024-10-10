@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Table } from "reactstrap";
 import { rootUrl } from "../../../../../../constants/constants";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const EligibilityForm = ({ eligibilityInfo }) => {
   const handleDate = (e) => {
@@ -68,7 +69,7 @@ const EligibilityForm = ({ eligibilityInfo }) => {
                 }}
               >
                 <td width="40%">Expiry Date of Your BRP/TRP or Visa</td>
-                <td width="60%">{handleDate(eligibilityInfo?.expireDate)}</td>
+                <td width="60%">{dateFormate(eligibilityInfo?.expireDate)}</td>
               </tr>
               <tr
                 style={{
@@ -83,105 +84,97 @@ const EligibilityForm = ({ eligibilityInfo }) => {
             </>
           ) : null}
 
-          <tr
-            style={{
-              borderBottom: "1px solid #2525251F",
-            }}
-          >
-            {eligibilityInfo?.idOrPassport !== null ? (
-              <>
-                <td width="40%">Id or Passport</td>
+          {eligibilityInfo?.idOrPassport !== null ? (
+            <tr
+              style={{
+                borderBottom: "1px solid #2525251F",
+              }}
+            >
+              <td width="40%">Id or Passport</td>
 
-                <td width="60%" className="border-0">
-                  {eligibilityInfo === null ? (
-                    "-"
-                  ) : (
-                    <a
-                      href={rootUrl + eligibilityInfo?.idOrPassport?.fileUrl}
-                      target="blank"
-                    >
-                      {eligibilityInfo?.idOrPassport?.fileName}
-                    </a>
-                  )}
-                </td>
-              </>
-            ) : null}
-          </tr>
+              <td width="60%" className="border-0">
+                {eligibilityInfo === null ? (
+                  "-"
+                ) : (
+                  <a
+                    href={rootUrl + eligibilityInfo?.idOrPassport?.fileUrl}
+                    target="blank"
+                  >
+                    {eligibilityInfo?.idOrPassport?.fileName}
+                  </a>
+                )}
+              </td>
+            </tr>
+          ) : null}
 
-          <tr
-            style={{
-              borderBottom: "1px solid #2525251F",
-            }}
-          >
-            {eligibilityInfo?.proofOfAddress !== null ? (
-              <>
-                <td width="40%">Proof of Address</td>
+          {eligibilityInfo?.proofOfAddress !== null ? (
+            <tr
+              style={{
+                borderBottom: "1px solid #2525251F",
+              }}
+            >
+              <td width="40%">Proof of Address</td>
 
-                <td width="60%" className="border-0">
-                  {eligibilityInfo === null ? (
-                    "-"
-                  ) : (
-                    <a
-                      href={rootUrl + eligibilityInfo?.proofOfAddress?.fileUrl}
-                      target="blank"
-                    >
-                      {eligibilityInfo?.proofOfAddress?.fileName}
-                    </a>
-                  )}
-                </td>
-              </>
-            ) : null}
-          </tr>
+              <td width="60%" className="border-0">
+                {eligibilityInfo === null ? (
+                  "-"
+                ) : (
+                  <a
+                    href={rootUrl + eligibilityInfo?.proofOfAddress?.fileUrl}
+                    target="blank"
+                  >
+                    {eligibilityInfo?.proofOfAddress?.fileName}
+                  </a>
+                )}
+              </td>
+            </tr>
+          ) : null}
 
-          <tr
-            style={{
-              borderBottom: "1px solid #2525251F",
-            }}
-          >
-            {eligibilityInfo?.brp !== null ? (
-              <>
-                <td width="40%">BRP/TRP</td>
+          {eligibilityInfo?.brp !== null ? (
+            <tr
+              style={{
+                borderBottom: "1px solid #2525251F",
+              }}
+            >
+              <td width="40%">BRP/TRP</td>
 
-                <td width="60%" className="border-0">
-                  {eligibilityInfo === null ? (
-                    "-"
-                  ) : (
-                    <a
-                      href={rootUrl + eligibilityInfo?.brp?.fileUrl}
-                      target="blank"
-                    >
-                      {eligibilityInfo?.brp?.fileName}
-                    </a>
-                  )}
-                </td>
-              </>
-            ) : null}
-          </tr>
+              <td width="60%" className="border-0">
+                {eligibilityInfo === null ? (
+                  "-"
+                ) : (
+                  <a
+                    href={rootUrl + eligibilityInfo?.brp?.fileUrl}
+                    target="blank"
+                  >
+                    {eligibilityInfo?.brp?.fileName}
+                  </a>
+                )}
+              </td>
+            </tr>
+          ) : null}
 
-          <tr
-            style={{
-              borderBottom: "1px solid #2525251F",
-            }}
-          >
-            {eligibilityInfo?.cv !== null ? (
-              <>
-                <td width="40%">CV</td>
+          {eligibilityInfo?.cv !== null ? (
+            <tr
+              style={{
+                borderBottom: "1px solid #2525251F",
+              }}
+            >
+              <td width="40%">CV</td>
 
-                <td width="60%" className="border-0">
-                  {eligibilityInfo === null ? (
-                    "-"
-                  ) : (
-                    <a
-                      href={rootUrl + eligibilityInfo?.cv?.fileUrl}
-                      target="blank"
-                    >
-                      {eligibilityInfo?.cv?.fileName}
-                    </a>
-                  )}
-                </td>
-              </>
-            ) : null}
-          </tr>
+              <td width="60%" className="border-0">
+                {eligibilityInfo === null ? (
+                  "-"
+                ) : (
+                  <a
+                    href={rootUrl + eligibilityInfo?.cv?.fileUrl}
+                    target="blank"
+                  >
+                    {eligibilityInfo?.cv?.fileName}
+                  </a>
+                )}
+              </td>
+            </tr>
+          ) : null}
         </tbody>
       </Table>
     </Card>

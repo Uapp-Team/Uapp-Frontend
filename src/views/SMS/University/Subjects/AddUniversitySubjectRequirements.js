@@ -29,6 +29,7 @@ import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
+import post from "../../../../helpers/post";
 
 const AddUniversitySubjectRequirements = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -62,7 +63,19 @@ const AddUniversitySubjectRequirements = () => {
   const [delData, setDelData] = useState({});
   const [resultInPercent, setResultInPercent] = useState("");
   const [resultInPercentError, setResultInPercentError] = useState("");
+  const [homeAccept, setHomeAccept] = useState(false);
+  const [ukAccept, setUkAccept] = useState(false);
+  const [intAccept, setIntAccept] = useState(false);
+  const [acceptError, setAcceptError] = useState(false);
+  const [DocumentRequirement, setDocumentRequirement] = useState([]);
   console.log(checked);
+
+  useEffect(() => {
+    get(`SubjectDocumentRequirement/BySubject/${subjId}`).then((res) => {
+      setDocumentRequirement(res);
+      console.log(res, "document requirements");
+    });
+  }, [subjId]);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -141,9 +154,14 @@ const AddUniversitySubjectRequirements = () => {
   };
 
   const handleResultInPercent = (e) => {
-    setResultInPercent(e.target.value);
-    if (e.target.value === "") {
-      setResultInPercentError("Result In Percent is required");
+    const value = e.target.value;
+    setResultInPercent(value);
+    if (value === "") {
+      setResultInPercentError("Result in percentage is required");
+    } else if (value % 1 !== 0) {
+      setResultInPercentError("Floating number not allow");
+    } else if (value < 0 || value > 100) {
+      setResultInPercentError("Value must be 0 to 100");
     } else {
       setResultInPercentError("");
     }
@@ -156,9 +174,16 @@ const AddUniversitySubjectRequirements = () => {
         isFormValid = false;
         setEduError(true);
       }
+
       if (!resultInPercent) {
         isFormValid = false;
-        setResultInPercentError("Result In Percent is required");
+        setResultInPercentError("Result in percentage is required");
+      } else if (resultInPercent % 1 !== 0) {
+        isFormValid = false;
+        setResultInPercentError("Floating number not allow");
+      } else if (resultInPercent < 0 || resultInPercent > 100) {
+        isFormValid = false;
+        setResultInPercentError("Value must be 0 to 100");
       }
     }
 
@@ -229,54 +254,76 @@ const AddUniversitySubjectRequirements = () => {
     return isFormValid;
   };
 
-  const handleDocSubmit = (event) => {
-    event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("documents", checked);
-
-    for (var x of subdata.values()) {
-      console.log(x);
-    }
-
-    var formIsValid = validateRegisterForm3(subdata);
-
-    if (formIsValid) {
-      setButtonStatus(true);
-      setProgress2(true);
-      Axios.post(
-        `${rootUrl}SubjectDocumentRequirement/AssignDocuments`,
-        subdata,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: AuthStr,
-          },
-        }
-      ).then((res) => {
+  const handleDocSubmit = (e) => {
+    e.preventDefault();
+    setButtonStatus(true);
+    setProgress(true);
+    post(`SubjectDocumentRequirement/SaveDocuments`, DocumentRequirement).then(
+      (res) => {
         setButtonStatus(false);
-        setProgress2(false);
-
-        if (res.status === 200 && res.data.isSuccess === true) {
+        setProgress(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
           });
-          setSuccess(!success);
-          setChecked([]);
-          setAppliLabel("Select Application type");
-          setAppliValue(0);
         } else {
           addToast(res?.data?.message, {
-            appearance: "success",
+            appearance: "error",
             autoDismiss: true,
           });
-          setChecked([]);
-          setAppliLabel("Select Application type");
-          setAppliValue(0);
         }
-      });
-    }
+      }
+    );
   };
+  // const handleDocSubmit = (event) => {
+  //   event.preventDefault();
+  //   const subdata = new FormData(event.target);
+  //   subdata.append("documents", checked);
+
+  //   for (var x of subdata.values()) {
+  //     console.log(x);
+  //   }
+
+  //   var formIsValid = validateRegisterForm3(subdata);
+
+  //   if (formIsValid) {
+  //     setButtonStatus(true);
+  //     setProgress2(true);
+  //     Axios.post(
+  //       `${rootUrl}SubjectDocumentRequirement/AssignDocuments`,
+  //       subdata,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           authorization: AuthStr,
+  //         },
+  //       }
+  //     ).then((res) => {
+  //       setButtonStatus(false);
+  //       setProgress2(false);
+
+  //       if (res.status === 200 && res.data.isSuccess === true) {
+  //         addToast(res?.data?.message, {
+  //           appearance: "success",
+  //           autoDismiss: true,
+  //         });
+  //         setSuccess(!success);
+  //         setChecked([]);
+  //         setAppliLabel("Select Application type");
+  //         setAppliValue(0);
+  //       } else {
+  //         addToast(res?.data?.message, {
+  //           appearance: "success",
+  //           autoDismiss: true,
+  //         });
+  //         setChecked([]);
+  //         setAppliLabel("Select Application type");
+  //         setAppliValue(0);
+  //       }
+  //     });
+  //   }
+  // };
 
   const toggleDanger2 = (document) => {
     setDeleteModal2(true);
@@ -312,6 +359,22 @@ const AddUniversitySubjectRequirements = () => {
   };
   const handleNext = () => {
     history.push(`/add-university-course-assign-to-campus/${id}/${subjId}`);
+  };
+
+  const handleIsAcceptHome = (e, i) => {
+    const values = [...DocumentRequirement];
+    values[i].isForHome = e.target.checked;
+    setDocumentRequirement(values);
+  };
+  const handleIsAcceptEu = (e, i) => {
+    const values = [...DocumentRequirement];
+    values[i].isForEu = e.target.checked;
+    setDocumentRequirement(values);
+  };
+  const handleAcceptInternational = (e, i) => {
+    const values = [...DocumentRequirement];
+    values[i].isForInternational = e.target.checked;
+    setDocumentRequirement(values);
   };
 
   return (
@@ -379,7 +442,6 @@ const AddUniversitySubjectRequirements = () => {
                         </FormGroup>
                         <FormGroup>
                           <span>
-                            {" "}
                             <span className="text-danger">*</span> Required
                             Result In Percent
                           </span>
@@ -417,7 +479,7 @@ const AddUniversitySubjectRequirements = () => {
               </Form>
 
               <Form onSubmit={handleDocSubmit} className="mb-2">
-                <p className="section-title">Document requirement</p>
+                <p className="section-title">Document requirements</p>
                 <Input
                   type="hidden"
                   id="subjectId"
@@ -425,63 +487,159 @@ const AddUniversitySubjectRequirements = () => {
                   value={subjId}
                 />
 
-                <Row>
-                  <Col md="5">
-                    <FormGroup>
-                      <span>
-                        <span className="text-danger">*</span> Application Type
-                      </span>
-
-                      <Select
-                        options={ApplicationMenu}
-                        value={{ label: appliLabel, value: appliValue }}
-                        onChange={(opt) =>
-                          selectApplicationType(opt.label, opt.value)
-                        }
-                        name="typeId"
-                        id="typeId"
-                      />
-
-                      {appliError && (
-                        <span className="text-danger">
-                          Application type is required
-                        </span>
-                      )}
-                    </FormGroup>
-
-                    {document.length > 0 && (
-                      <FormGroup>
-                        <span>
-                          <span className="text-danger">*</span> Document
-                        </span>
-
-                        {document?.map((per) => (
-                          <Col xs="6" sm="4" md="3" lg="2" key={per?.id}>
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                onChange={(e) => handleCheck(e)}
-                                type="checkbox"
-                                name=""
-                                id={per.id}
-                                checked={
-                                  checked.includes(`${per.id}`) ? true : false
-                                }
-                              />
-                              <label className="form-check-label" htmlFor="">
-                                {per?.name}
-                              </label>
-                            </div>
-                          </Col>
-                        ))}
-                        <span className="text-danger">{docError}</span>
-                      </FormGroup>
-                    )}
-                  </Col>
-                </Row>
+                <div className="table-responsive mb-2">
+                  <Table className="table-sm table-bordered col-md-8">
+                    <thead className="tablehead">
+                      <tr>
+                        {/* <th>SL/NO</th> */}
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Required For</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {DocumentRequirement?.map((document, i) => (
+                        <tr key={i}>
+                          {/* <th scope="row">{i + 1}</th> */}
+                          <td>{document?.documentTitle}</td>
+                          <td>{document?.documentCategory}</td>
+                          <td>
+                            {document.isPrefixForHome ? (
+                              <div className="ml-3">
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    disabled
+                                    value={document.isPrefixForHome}
+                                    defaultChecked={
+                                      document.isPrefixForHome === true
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  <span className="mr-2">Home </span>
+                                </FormGroup>
+                              </div>
+                            ) : (
+                              <>
+                                <Col
+                                  xs="2"
+                                  sm="12"
+                                  md="2"
+                                  className="text-center mt-2"
+                                >
+                                  <FormGroup check inline>
+                                    <Input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      onChange={(e) => {
+                                        handleIsAcceptHome(e, i);
+                                      }}
+                                      value={document?.isForHome}
+                                      defaultChecked={
+                                        document?.isForHome === true
+                                          ? true
+                                          : false
+                                      }
+                                    />
+                                    <span className="mr-2">Home </span>
+                                  </FormGroup>
+                                </Col>
+                              </>
+                            )}
+                            {document.isPrefixForEu ? (
+                              <div className="ml-3">
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    disabled
+                                    type="checkbox"
+                                    value={document.isPrefixForEu}
+                                    defaultChecked={
+                                      document.isPrefixForEu === true
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  <span className="mr-2">EU/UK </span>
+                                </FormGroup>
+                              </div>
+                            ) : (
+                              <Col
+                                xs="2"
+                                sm="12"
+                                md="2"
+                                className="text-center mt-2"
+                              >
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    onChange={(e) => {
+                                      handleIsAcceptEu(e, i);
+                                    }}
+                                    value={document?.isForEu}
+                                    defaultChecked={
+                                      document?.isForEu === true ? true : false
+                                    }
+                                  />
+                                  <span className="mr-2">EU/UK </span>
+                                </FormGroup>
+                              </Col>
+                            )}
+                            {document.isPrefixForInternational ? (
+                              <div className="ml-3">
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    disabled
+                                    type="checkbox"
+                                    value={document?.isPrefixForInternational}
+                                    defaultChecked={
+                                      document?.isPrefixForInternational ===
+                                      true
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  <span className="mr-2">International </span>
+                                </FormGroup>
+                              </div>
+                            ) : (
+                              <Col
+                                xs="2"
+                                sm="12"
+                                md="2"
+                                className="text-center mt-2"
+                              >
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    onChange={(e) => {
+                                      handleAcceptInternational(e, i);
+                                    }}
+                                    value={document?.isForInternational}
+                                    defaultChecked={
+                                      document?.isForInternational === true
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                  <span className="mr-2">International </span>
+                                </FormGroup>
+                              </Col>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
 
                 <FormGroup row className="text-right">
-                  <Col md="5">
+                  <Col md="8">
                     {permissions?.includes(permissionList?.Edit_Subjects) && (
                       <SaveButton
                         progress={progress2}
@@ -492,56 +650,6 @@ const AddUniversitySubjectRequirements = () => {
                 </FormGroup>
               </Form>
 
-              {docList < 1 ? (
-                <div className="mb-3">No data available</div>
-              ) : (
-                <div className="table-responsive mb-2">
-                  <Table className="table-sm table-bordered col-md-10">
-                    <thead className="tablehead">
-                      <tr>
-                        <th>SL/NO</th>
-                        <th>Document</th>
-                        <th>Application Type</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {docList?.map((document, i) => (
-                        <tr key={document.id}>
-                          <th scope="row">{i + 1}</th>
-                          <td>{document?.document?.name}</td>
-                          <td>
-                            {document?.applicationTypeId === 1
-                              ? "Home"
-                              : document?.applicationTypeId === 2
-                              ? "EU/UK"
-                              : "International"}
-                          </td>
-                          <td>
-                            <span
-                              onClick={() => toggleDanger2(document)}
-                              permission={6}
-                              style={{ cursor: "pointer" }}
-                            >
-                              Delete
-                            </span>
-
-                            <ConfirmModal
-                              text="Do You Want To Delete This Information ?"
-                              isOpen={deleteModal2}
-                              toggle={closeDeleteModal2}
-                              confirm={() => handleDeleteDocuRequired2()}
-                              cancel={closeDeleteModal2}
-                              buttonStatus={buttonStatus}
-                              progress={progress}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              )}
               <div className="mt-5 d-flex justify-content-between">
                 <PreviousButton action={handlePrevious} />
                 <SaveButton text="Next" action={handleNext} />

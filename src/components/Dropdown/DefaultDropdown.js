@@ -15,7 +15,6 @@ const DefaultDropdown = ({
   action,
 }) => {
   const [data, setData] = useState([]);
-  console.log(data, "data");
 
   useEffect(() => {
     get(url).then((res) => {

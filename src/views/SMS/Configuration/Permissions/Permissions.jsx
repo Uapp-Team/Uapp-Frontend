@@ -119,15 +119,9 @@ const Permissions = (props) => {
     localStorage.removeItem("updatePermission");
   };
 
-
   return (
     <div>
-   
-      <BreadCrumb
-        title="Add Permissions"
-        backTo=""
-        path=""
-      />
+      <BreadCrumb title="Add Permissions" backTo="" path="" />
 
       <Card>
         <CardHeader>
@@ -201,7 +195,7 @@ const Permissions = (props) => {
           <Table>
             <thead className="tablehead">
               <tr>
-                <th>SL/NO</th>
+                {/* <th>SL/NO</th> */}
                 <th>Permissions Name</th>
                 <th>Action</th>
               </tr>
@@ -209,7 +203,7 @@ const Permissions = (props) => {
             <tbody>
               {permissionList?.map((permission, i) => (
                 <tr>
-                  <th scope="row">{i + 1}</th>
+                  {/* <th scope="row">{i + 1}</th> */}
                   <td>{permission.name}</td>
                   <td>
                     <Button

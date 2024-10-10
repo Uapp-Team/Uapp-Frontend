@@ -183,9 +183,10 @@ const PersonalForm = ({
               type="string"
               name="phoneNumber"
               id="phoneNumber"
-              country={"us"}
+              country={"gb"}
+              enableLongNumbers={true}
               onChange={handlePhoneNumber}
-              value={phoneNumber ? phoneNumber : "1"}
+              value={phoneNumber ? phoneNumber : ""}
               inputProps={{
                 required: true,
               }}
@@ -262,10 +263,9 @@ const PersonalForm = ({
                   <span className="text-danger">Profile photo is required</span>
                 )}
               </Col>
-              <Col md="4">
+              <Col md="4" className="pt-4">
                 <span className="text-gray">
-                  Recommanded resolution is 640*640 with file size less than
-                  2MB, keep visual elements centered
+                  File size less than 2MB, keep visual elements centered
                 </span>
               </Col>
             </FormGroup>
@@ -326,10 +326,9 @@ const PersonalForm = ({
                   </div>
                 </div>
               </Col>
-              <Col md="4">
+              <Col md="4" className="pt-4">
                 <span className="text-gray">
-                  Recommanded resolution is 1720*640 with file size less than
-                  2MB, keep visual elements centered
+                  File size less than 2MB, keep visual elements centered
                 </span>
               </Col>
             </FormGroup>

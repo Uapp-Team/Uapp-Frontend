@@ -48,7 +48,7 @@ const AssignedUniversities = ({ officerId, headData, setHeadData }) => {
           <>
             <Table borderless responsive>
               <thead className="tablehead">
-                <th className="border-0">SL/NO</th>
+                {/* <th className="border-0">SL/NO</th> */}
                 <th className="border-0">University</th>
                 <th className="border-0">EU/UK</th>
                 <th className="border-0">Home</th>
@@ -63,7 +63,7 @@ const AssignedUniversities = ({ officerId, headData, setHeadData }) => {
                       borderBottom: "1px solid #dee2e6",
                     }}
                   >
-                    <td className="border-0">{i + 1}</td>
+                    {/* <td className="border-0">{i + 1}</td> */}
                     <td className="border-0">
                       <Link
                         className="text-body"

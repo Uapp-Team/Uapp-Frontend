@@ -34,7 +34,7 @@ const Index = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
-
+  const [multiProvider, setMultiProvider] = useState([]);
   const userTypeId = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const [providerHelperId, setProviderHelperId] = useState(undefined);
@@ -53,6 +53,7 @@ const Index = () => {
       (res) => {
         setProviderValue(res?.providerId);
         setProviderLabel(res?.provider?.providerName);
+        setMultiProvider(res?.providerList);
         setTitleValue(res?.nameTittle?.id);
         setFirstName(res?.firstName);
         setLastName(res?.lastName);
@@ -62,14 +63,12 @@ const Index = () => {
   }, [admissionManagerId]);
 
   useEffect(() => {
-    if (userTypeId === userTypes?.ProviderAdmin.toString()) {
-      get(`ProviderHelper/GetProviderId/${userTypeId}/${userId}`).then(
-        (res) => {
-          console.log("providerId", res);
-          setProviderHelperId(res);
-        }
-      );
-    }
+    // if (userTypeId === userTypes?.ProviderAdmin.toString()) {
+    get(`ProviderHelper/GetProviderId/${userTypeId}/${userId}`).then((res) => {
+      console.log("providerId", res);
+      setProviderHelperId(res);
+    });
+    // }
   }, [userTypeId, userId, providerHelperId]);
 
   const providerOptions = provider?.map((b) => ({
@@ -93,8 +92,9 @@ const Index = () => {
     }
   };
   const handleLastName = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last name is required");
     } else {
       setLastNameError("");
@@ -203,7 +203,8 @@ const Index = () => {
                   )}
                 </FormGroup> */}
 
-                {userTypeId !== userTypes?.ProviderAdmin.toString() ? (
+                {userTypeId === userTypes?.SystemAdmin.toString() ||
+                userTypeId === userTypes?.Admin.toString() ? (
                   <FormGroup>
                     <span>
                       <span className="text-danger">*</span>
@@ -223,6 +224,18 @@ const Index = () => {
                     {providerError ? (
                       <span className="text-danger">Provider is required</span>
                     ) : null}
+
+                    <Select
+                      isMulti
+                      name="providerIds"
+                      id="providerIds"
+                      onChange={(e) => {
+                        setMultiProvider(e);
+                      }}
+                      options={providerOptions}
+                      value={multiProvider}
+                      className="mt-1"
+                    />
                   </FormGroup>
                 ) : (
                   <input

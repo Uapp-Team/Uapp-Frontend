@@ -46,6 +46,7 @@ import { permissionList } from "../../../constants/AuthorizationConstant";
 import ButtonLoader from "../Components/ButtonLoader";
 import { tableIdList } from "../../../constants/TableIdConstant";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import ColumnCampusCourse from "../TableColumn/ColumnCampusCourse.js";
 
 const CampusSubjectList = () => {
   const { camId } = useParams();
@@ -141,6 +142,19 @@ const CampusSubjectList = () => {
     value: dsn.value,
   }));
 
+
+  useEffect(() => {
+    const tableColumnCampusCourse = JSON.parse(localStorage.getItem("ColumnCampusCourse"));
+    tableColumnCampusCourse && setTableData(tableColumnCampusCourse);
+    !tableColumnCampusCourse &&
+      localStorage.setItem(
+        "ColumnCampusCourse",
+        JSON.stringify(ColumnCampusCourse)
+      );
+
+    !tableColumnCampusCourse && setTableData(ColumnCampusCourse)
+  }, []);
+
   const selectOrder = (label, value) => {
     //
     setLoading(true);
@@ -161,6 +175,7 @@ const CampusSubjectList = () => {
   };
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -171,13 +186,6 @@ const CampusSubjectList = () => {
     get(`UniversityCampusSubject/GetUnassigned/${camId}`).then((res) => {
       setSubListDD(res);
     });
-
-    get(`TableDefination/Index/${tableIdList?.Campus_Subject_List}`).then(
-      (res) => {
-        console.log("table data", res);
-        setTableData(res);
-      }
-    );
 
     get(
       `Subject/GetByCampusId?page=${currentPage}&pageSize=${dataPerPage}&CampusId=${camId}&search=${searchStr}&sortby=${orderValue}`
@@ -252,6 +260,7 @@ const CampusSubjectList = () => {
 
   // on clear
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setUniLabel("Select University");
     setUniValue(0);
     setCampLabel("Select Campus");
@@ -424,27 +433,13 @@ const CampusSubjectList = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck1(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Campus_Subject_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnCampusCourse", JSON.stringify(values));
   };
+
 
   return (
     <div>
@@ -501,7 +496,7 @@ const CampusSubjectList = () => {
           {campus?.name != undefined ? (
             <div className="test-score-div-1-style mt-1 mb-4">
               <span className="test-score-span-1-style">
-                Showing Course list of <b>{campus?.name}</b>{" "}
+                Showing Course list of <b>{campus?.name}</b>
               </span>
             </div>
           ) : null}
@@ -615,26 +610,58 @@ const CampusSubjectList = () => {
                     </DropdownToggle>
                     <DropdownMenu className="bg-dd-1">
                       {tableData.map((table, i) => (
-                        <div className="d-flex justify-content-between">
-                          <Col md="8" className="">
-                            <p className="">{table?.collumnName}</p>
-                          </Col>
+                        <div key={i}>
+                          {i === 6 ? (
+                            <>
+                              {permissions?.includes(
+                                permissionList.Edit_Subjects
+                              ) && (
+                                  <div className="d-flex justify-content-between">
+                                    <Col md="8" className="">
+                                      <p className="">{table?.title}</p>
+                                    </Col>
 
-                          <Col md="4" className="text-center">
-                            <FormGroup check inline>
-                              <Input
-                                className="form-check-input"
-                                type="checkbox"
-                                id=""
-                                name="isAcceptHome"
-                                onChange={(e) => {
-                                  handleChecked(e, table?.id);
-                                }}
-                                defaultChecked={table?.isActive}
-                              />
-                            </FormGroup>
-                          </Col>
+                                    <Col md="4" className="text-center">
+                                      <FormGroup check inline>
+                                        <Input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          id=""
+                                          name="check"
+                                          onChange={(e) => {
+                                            handleChecked(e, i);
+                                          }}
+                                          checked={table?.isActive}
+                                        />
+                                      </FormGroup>
+                                    </Col>
+                                  </div>
+                                )}
+                            </>
+                          ) : (
+                            <div className="d-flex justify-content-between">
+                              <Col md="8" className="">
+                                <p className="">{table?.title}</p>
+                              </Col>
+
+                              <Col md="4" className="text-center">
+                                <FormGroup check inline>
+                                  <Input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    id=""
+                                    name="check"
+                                    onChange={(e) => {
+                                      handleChecked(e, i);
+                                    }}
+                                    checked={table?.isActive}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </div>
+                          )}
                         </div>
+
                       ))}
                     </DropdownMenu>
                   </Dropdown>
@@ -652,24 +679,20 @@ const CampusSubjectList = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
-                    {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                    {tableData[1]?.isActive ? <th>Course</th> : null}
-                    {/* <th>Description</th>
-                    <th>Duration</th> */}
-                    {/* <th>University</th> */}
-                    {tableData[2]?.isActive ? <th>Accept Home</th> : null}
-                    {tableData[3]?.isActive ? <th>Accept EU/UK</th> : null}
-                    {tableData[4]?.isActive ? (
+
+                    {tableData[0]?.isActive ? <th>Course</th> : null}
+                    {tableData[1]?.isActive ? <th>Accept Home</th> : null}
+                    {tableData[2]?.isActive ? <th>Accept EU/UK</th> : null}
+                    {tableData[3]?.isActive ? (
                       <th>Accept International</th>
                     ) : null}
-                    {tableData[5]?.isActive ? <th>Education Level</th> : null}
-                    {tableData[6]?.isActive ? <th>Department</th> : null}
-                    {/* <th>Sub Department</th> */}
+                    {tableData[4]?.isActive ? <th>Education Level</th> : null}
+                    {tableData[5]?.isActive ? <th>Department</th> : null}
+
                     {permissions?.includes(permissionList.Edit_Subjects) ? (
-                      <>{tableData[7]?.isActive ? <th>Intake</th> : null}</>
+                      <>{tableData[6]?.isActive ? <th>Intake</th> : null}</>
                     ) : null}
-                    {/* <th>Intakes</th> */}
-                    {tableData[8]?.isActive ? (
+                    {tableData[7]?.isActive ? (
                       <th style={{ width: "8%" }} className="text-center">
                         Action
                       </th>
@@ -679,48 +702,34 @@ const CampusSubjectList = () => {
                 <tbody>
                   {subList?.map((sub, i) => (
                     <tr key={sub?.id} style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? (
-                        <th scope="row">{serialNum + i}</th>
-                      ) : null}
-                      {tableData[1]?.isActive ? <td>{sub?.name}</td> : null}
-                      {/* <td>{sub?.description}</td>
 
-                      <td>
-                        {sub?.duration}
-                      </td> */}
-
-                      {/* <td>
-                        {sub?.university?.name}
-                      </td> */}
-
-                      {tableData[2]?.isActive ? (
+                      {tableData[0]?.isActive ? <td>{sub?.name}</td> : null}
+                      {tableData[1]?.isActive ? (
                         <td>{sub?.isAcceptHome === false ? "No" : "Yes"}</td>
                       ) : null}
-                      {tableData[3]?.isActive ? (
+                      {tableData[2]?.isActive ? (
                         <td>{sub?.isAcceptEU_UK === false ? "No" : "Yes"}</td>
                       ) : null}
-                      {tableData[4]?.isActive ? (
+                      {tableData[3]?.isActive ? (
                         <td>
                           {sub?.isAcceptInternational === false ? "No" : "Yes"}
                         </td>
                       ) : null}
 
-                      {tableData[5]?.isActive ? (
+                      {tableData[4]?.isActive ? (
                         <td>{sub?.educationLevel?.name}</td>
                       ) : null}
 
-                      {tableData[6]?.isActive ? (
+                      {tableData[5]?.isActive ? (
                         <td>
                           {sub?.department?.name} ({sub?.subDepartment?.name})
                         </td>
                       ) : null}
 
-                      {/* <td>
-                        {sub?.subDepartment?.name}
-                      </td> */}
+
                       {permissions?.includes(permissionList.Edit_Subjects) ? (
                         <>
-                          {tableData[7]?.isActive ? (
+                          {tableData[6]?.isActive ? (
                             <td>
                               {" "}
                               <span
@@ -743,7 +752,7 @@ const CampusSubjectList = () => {
                         </>
                       ) : null}
 
-                      {tableData[8]?.isActive ? (
+                      {tableData[7]?.isActive ? (
                         <td style={{ width: "8%" }} className="text-center">
                           <ButtonGroup variant="text">
                             {/* <Link to= ""> */}

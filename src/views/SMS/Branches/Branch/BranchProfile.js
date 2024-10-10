@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Col, Row } from "reactstrap";
 
@@ -8,12 +8,18 @@ import BranchInfo from "./BranchInfo";
 import ConsultantListForBranch from "../../Dashboard/Pages/BranchManager/ConsultantListForBranch";
 import DashboardApplication from "../../../../components/ui/DashboardApplication";
 import DashboardReadyToApply from "../../../../components/ui/DashboardReadyToApply";
-import CountCard from "../../Dashboard/Pages/BranchManager/CountCard";
-import IncomeAmount from "../../Dashboard/Pages/BranchManager/IncomeAmount";
-import BranchEstimatedIncome from "../../Dashboard/Pages/BranchManager/BranchEstimatedIncome";
+import get from "../../../../helpers/get";
+import CountCard from "./CountCard";
 
 const BranchProfile = () => {
   const { id } = useParams();
+  const [intake, setIntake] = useState({});
+
+  useEffect(() => {
+    get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
+      setIntake(res);
+    });
+  }, []);
 
   return (
     <>
@@ -26,7 +32,7 @@ const BranchProfile = () => {
       <Row>
         <Col lg={8}>
           <BranchInfo id={id} />
-          <CountCard id={id} />
+          <CountCard id={id} intakeRngValue={intake.id} />
           <ConsultantListForBranch id={id} />
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}
 

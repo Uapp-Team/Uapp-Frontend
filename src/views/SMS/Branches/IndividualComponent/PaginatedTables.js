@@ -90,6 +90,7 @@ const PaginatedTables = (props) => {
   ]);
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -230,7 +231,7 @@ const PaginatedTables = (props) => {
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>UAPP ID</th>
                   <th>Full Name</th>
                   <th>Email</th>
@@ -248,7 +249,7 @@ const PaginatedTables = (props) => {
               <tbody>
                 {consultant?.map((con, i) => (
                   <tr key={i} style={{ textAlign: "center" }}>
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
                     <td>{con?.viewId}</td>
                     <td>
                       {con?.firstName} {con.lastName}

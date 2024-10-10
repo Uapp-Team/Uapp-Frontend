@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
 import { useHistory } from "react-router";
 
 import {
   Card,
   CardBody,
   CardHeader,
-  CardTitle,
   Button,
   Modal,
   ModalHeader,
@@ -283,12 +281,11 @@ const AddCountry = () => {
 
   return (
     <div>
+      <BreadCrumb title="Countries" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Countries" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList?.Manage_Core_Data) ? (
@@ -392,7 +389,7 @@ const AddCountry = () => {
                       </FormGroup>
 
                       <FormGroup className="d-flex justify-content-between mt-3">
-                        <CancelButton cancel={closeModal2} />
+                        <CancelButton cancel={closeModal} />
 
                         <SaveButton
                           text="Submit"
@@ -508,7 +505,7 @@ const AddCountry = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Action</th>
                     </tr>
@@ -516,7 +513,7 @@ const AddCountry = () => {
                   <tbody>
                     {countries?.map((country, i) => (
                       <tr key={country?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{country?.name}</td>
 
                         <td>

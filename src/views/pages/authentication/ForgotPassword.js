@@ -1,89 +1,158 @@
-import React from "react"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardBody,
-  Row,
-  Col,
-  FormGroup,
-  Form,
-  Input,
-  Button,
-  Label
-} from "reactstrap"
-import fgImg from "../../../assets/img/pages/forgot-password.png"
-import { history } from "../../../history"
-import "../../../assets/scss/pages/authentication.scss"
+import React, { useState } from "react";
+import { FormGroup, Form, Input, Button, Label } from "reactstrap";
+import { history } from "../../../history";
+import "../../../assets/scss/pages/authentication.scss";
+import "../../../assets/CoustomStyle/auth.css";
+import providerlogo from "../../../assets/img/providerlogo.svg";
+import AuthFooter from "./register/components/AuthFooter";
+import { useToasts } from "react-toast-notifications";
+import axios from "axios";
+import { rootUrl } from "../../../constants/constants";
 
-class ForgotPassword extends React.Component {
-  render() {
-    return (
-      <Row className="m-0 justify-content-center">
-        <Col
-          sm="8"
-          xl="7"
-          lg="10"
-          md="8"
-          className="d-flex justify-content-center"
-        >
-          <Card className="bg-authentication rounded-0 mb-0 w-100">
-            <Row className="m-0">
-              <Col
-                lg="6"
-                className="d-lg-block d-none text-center align-self-center"
-              >
-                <img src={fgImg} alt="fgImg" />
-              </Col>
-              <Col lg="6" md="12" className="p-0">
-                <Card className="rounded-0 mb-0 px-2 py-1">
-                  <CardHeader className="pb-1">
-                    <CardTitle>
-                      <h4 className="mb-0">Recover your password</h4>
-                    </CardTitle>
-                  </CardHeader>
-                  <p className="px-2 auth-title">
-                    Please enter your email address and we'll send you
-                    instructions on how to reset your password.
+const ForgotPassword = () => {
+  const { addToast } = useToasts();
+  const [email, setEmail] = useState("");
+  const [emailerror, setEmailError] = useState("");
+  const [send, setSend] = useState(false);
+  const [reSend, setReSend] = useState(false);
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+
+    if (e.target.value === "") {
+      setEmailError("Email is required");
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
+    ) {
+      setEmailError(" Email is not validate");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleReset = () => {
+    setTimeout(() => {
+      setReSend(true);
+    }, 30000);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (email === "") {
+      setEmailError("Email is required");
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      setEmailError("Email is not validate");
+    } else {
+      if (send === false) {
+        axios
+          .put(`${rootUrl}Account/ForgotPassword?email=${email}`)
+          .then((res) => {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+          });
+        setSend(true);
+      } else {
+        setReSend(false);
+        axios
+          .put(`${rootUrl}Account/ResendForgotEmail?email=${email}`)
+          .then((res) => {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+          });
+      }
+
+      handleReset();
+    }
+  };
+
+  return (
+    <>
+      <div className="auth-container">
+        <div className="left-illustration d-md-block d-lg-block d-none  ">
+          <div className="forgot-container">
+            <img src={providerlogo} className="auth-logo-fixed" alt="uapp" />
+          </div>
+        </div>
+        <div className="right-container">
+          <div className="form-container">
+            <div className="d-block d-sm-none my-4 text-center">
+              <img src={providerlogo} className="w-50" alt="" />
+            </div>
+            <div className="d-flex justify-content-center">
+              <div className="responsive-form my-5">
+                <div className="register-header mb-5">
+                  <h1> Recover your password </h1>
+                  <p>
+                    Enter your email to verify your identity in the recovery
+                    password
                   </p>
-                  <CardBody className="pt-1 pb-0">
-                    <Form>
-                      <FormGroup className="form-label-group">
-                        <Input type="text" placeholder="Email" required />
-                        <Label>Email</Label>
-                      </FormGroup>
-                      <div className="float-md-left d-block mb-1">
-                        <Button.Ripple
-                          color="primary"
-                          outline
-                          className="px-75 btn-block"
-                          onClick={() => history.push("/pages/login")}
-                        >
-                          Back to Login
-                        </Button.Ripple>
-                      </div>
-                      <div className="float-md-right d-block mb-1">
-                        <Button.Ripple
+                </div>
+                <div className="register-form">
+                  <Form onSubmit={handleSubmit}>
+                    <FormGroup className="form-label-group">
+                      <Input
+                        className="inside-placeholder"
+                        style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+                        type="text"
+                        placeholder="Email"
+                        onChange={(e) => handleEmail(e)}
+                      />
+                      <Label>Email</Label>
+                      <span className="text-danger">{emailerror}</span>
+                    </FormGroup>
+                    <div className="float-md-left d-block mb-1">
+                      <Button
+                        color="primary"
+                        outline
+                        className="px-75 btn-block py-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          history.push("/");
+                        }}
+                      >
+                        Back to Login
+                      </Button>
+                    </div>
+                    <div className="float-md-right d-block mb-1">
+                      {reSend === true ? (
+                        <Button
                           color="primary"
                           type="submit"
                           className="px-75 btn-block"
-                          onClick={e => {
-                            e.preventDefault()
-                            history.push("/")
-                          }}
                         >
-                          Recover Password
-                        </Button.Ripple>
-                      </div>
-                    </Form>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-      </Row>
-    )
-  }
-}
-export default ForgotPassword
+                          Resend Email
+                        </Button>
+                      ) : (
+                        <>
+                          {!send ? (
+                            <Button
+                              color="primary"
+                              type="submit"
+                              className="px-75 btn-block"
+                            >
+                              Send Email
+                            </Button>
+                          ) : (
+                            <span>Wait 30 Sec</span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </div>
+            <AuthFooter />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ForgotPassword;

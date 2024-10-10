@@ -313,9 +313,10 @@ const BranchManagerInformation = () => {
                     type="string"
                     name="phoneNumber"
                     id="phoneNumber"
-                    country={"us"}
+                    country={"gb"}
+                    enableLongNumbers={true}
                     onChange={handlePhoneNumber}
-                    value={phoneNumber ? phoneNumber : "1"}
+                    value={phoneNumber ? phoneNumber : ""}
                     inputProps={{
                       required: true,
                     }}

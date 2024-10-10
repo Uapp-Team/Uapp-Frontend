@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import { connect } from "react-redux";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
-import { rootUrl } from "../../../../constants/constants";
+import { cms, rootUrl } from "../../../../constants/constants";
 import { Link, useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import notify from "../../../../assets/img/notify.png";
+import Select from "react-select";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import Captcha from "../../../../components/Captcha";
 
 const ProviderRegisterForm = () => {
   const history = useHistory();
@@ -28,7 +32,27 @@ const ProviderRegisterForm = () => {
   const [names, setNames] = useState([]);
   const [checked, setChecked] = useState(null);
 
+  const [preferredCountries, setPreferredCountries] = useState([]);
+  const [preferredCountryLabel, setpreferredCountryLabel] =
+    useState("Select Country");
+  const [preferredCountryValue, setpreferredCountryValue] = useState(0);
+  const [preferredCountryError, setPreferredCountryError] = useState("");
+  const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [valid, setValid] = useState(true);
+  const [message, setMessage] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState(0);
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+
   useEffect(() => {
+    fetch(`${rootUrl}UniversityCountryDD/Index`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setPreferredCountries(data?.result);
+      });
+
     fetch(`${rootUrl}NameTittleDD/index`)
       .then((res) => res.json())
       .then((data) => {
@@ -36,6 +60,17 @@ const ProviderRegisterForm = () => {
         setNames(data?.result);
       });
   }, []);
+
+  const preferredCountryOptions = preferredCountries?.map((st) => ({
+    label: st?.name,
+    value: st?.id,
+  }));
+
+  const selectPreferredCountry = (label, value) => {
+    setPreferredCountryError("");
+    setpreferredCountryLabel(label);
+    setpreferredCountryValue(value);
+  };
 
   const SetNameTitleFromDD = (e) => {
     setTitle(parseInt(e.target.value));
@@ -78,30 +113,55 @@ const ProviderRegisterForm = () => {
     }
   };
 
-  const handlePassword = (e) => {
-    setPass(e.target.value);
-    if (e.target.value === "") {
-      setPasswordError("Provide a valid password");
-    } else {
-      setPasswordError("");
-    }
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+
+    return phoneNumberPattern.test(phoneNumber);
   };
-  const handleConfirmPassword = (e) => {
-    setConfirmPassword(e.target.value);
-    if (e.target.value === "") {
-      setConfirmPasswordError("Confirm your password");
+
+  const handlePhoneNumber = (value) => {
+    setphoneNumber(value);
+    if (value === "") {
+      setphoneNUmberError("Phone number is required");
+    } else if (value?.length < 9) {
+      setphoneNUmberError("Phone number required minimum 9 digit");
     } else {
-      setConfirmPasswordError("");
+      setphoneNUmberError("");
     }
-    if (pass && e.target.value !== pass) {
-      setConfirmPasswordError("Passwords doesn't match.");
-    } else {
-      setConfirmPasswordError("");
-    }
+    // setphoneNumber(value);
+    setValid(validatePhoneNumber(value));
   };
+
+  // const handlePassword = (e) => {
+  //   setPass(e.target.value);
+  //   if (e.target.value === "") {
+  //     setPasswordError("Provide a valid password");
+  //   } else {
+  //     setPasswordError("");
+  //   }
+  // };
+  // const handleConfirmPassword = (e) => {
+  //   setConfirmPassword(e.target.value);
+  //   if (e.target.value === "") {
+  //     setConfirmPasswordError("Confirm your password");
+  //   } else {
+  //     setConfirmPasswordError("");
+  //   }
+  //   if (pass && e.target.value !== pass) {
+  //     setConfirmPasswordError("Passwords doesn't match.");
+  //   } else {
+  //     setConfirmPasswordError("");
+  //   }
+  // };
 
   const validateRegisterForm = (subData) => {
     var isFormValid = true;
+
+    if (preferredCountryValue === 0) {
+      isFormValid = false;
+      setPreferredCountryError("Select country");
+    }
+
     if (subData.AdminFirstName === "") {
       isFormValid = false;
       setFirstNameError("First name is required");
@@ -110,26 +170,37 @@ const ProviderRegisterForm = () => {
       isFormValid = false;
       setLastNameError("Last name is required");
     }
+
+    if (!phoneNumber) {
+      isFormValid = false;
+      setphoneNUmberError("Phone number is required");
+    }
+
     if (subData.AdminEmail === "") {
       isFormValid = false;
       setEmailError("Email is required");
     }
-    if (subData.Password === "") {
-      isFormValid = false;
-      setPasswordError("Provide a valid password");
-    }
-    if (confirmPassword === "") {
-      isFormValid = false;
-      setConfirmPasswordError("Confirm your password");
-    }
-    if (confirmPassword !== pass) {
-      isFormValid = false;
-      setConfirmPasswordError("Password doesn't match");
-    }
+    // if (subData.Password === "") {
+    //   isFormValid = false;
+    //   setPasswordError("Provide a valid password");
+    // }
+    // if (confirmPassword === "") {
+    //   isFormValid = false;
+    //   setConfirmPasswordError("Confirm your password");
+    // }
+    // if (confirmPassword !== pass) {
+    //   isFormValid = false;
+    //   setConfirmPasswordError("Password doesn't match");
+    // }
     if (subData.ProviderName === "") {
       isFormValid = false;
       setProviderNameError("Company or institution name");
     }
+    if (parseInt(captchaInput) !== captchaAnswer) {
+      isFormValid = false;
+      setCaptchaError(true);
+    }
+
     return isFormValid;
   };
 
@@ -138,17 +209,21 @@ const ProviderRegisterForm = () => {
 
     const subData = {
       // ProviderTypeId: types,
+      Country: preferredCountryValue,
+      NameTittleId: title,
+      PhoneNumber: phoneNumber,
       ProviderName: name,
-      NameTitleId: title,
-      AdminEmail: adminEmail,
-      Password: pass,
-      AdminFirstName: firstName,
-      AdminLastName: lastName,
+      Email: adminEmail,
+      // Password: pass,
+      FirstName: firstName,
+      LastName: lastName,
+      AdditionalMessage: message,
     };
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
-      fetch(`${rootUrl}ProviderRegistration/Register`, {
+      // fetch(`${rootUrl}ProviderRegistration/Register`, {
+      fetch(`${cms}api/ProviderRegistration`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -157,7 +232,7 @@ const ProviderRegisterForm = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data?.isSuccess === true) {
+          if (data?.data === true) {
             addToast(data?.message, {
               appearance: "success",
               autoDismiss: true,
@@ -198,6 +273,39 @@ const ProviderRegisterForm = () => {
           <span className="text-danger">{providerNameError}</span>
         </div>
 
+        <div
+          className="mb-3"
+          style={{
+            fontWeight: "500",
+            color: "#252525",
+            fontSize: "13px",
+            marginBottom: "-8px",
+          }}
+        >
+          Country
+        </div>
+
+        <div
+          className="mb-3"
+          style={{
+            fontSize: "14px",
+            fontWeight: 400,
+            marginTop: "-9px",
+          }}
+        >
+          <Select
+            options={preferredCountryOptions}
+            value={{
+              label: preferredCountryLabel,
+              value: preferredCountryValue,
+            }}
+            onChange={(opt) => selectPreferredCountry(opt.label, opt.value)}
+            name="preferredCountryId"
+            id="preferredCountryId"
+          />
+          <span className="text-danger">{preferredCountryError}</span>
+        </div>
+
         <div className="mb-3">
           <h1
             style={{
@@ -208,7 +316,7 @@ const ProviderRegisterForm = () => {
               marginTop: "20px",
             }}
           >
-            Enter the details of the designated person
+            Point of Contact
           </h1>
         </div>
 
@@ -292,6 +400,31 @@ const ProviderRegisterForm = () => {
           <span className="text-danger">{lastNameError}</span>
         </FormGroup>
 
+        <div style={{ marginBottom: "3rem" }}>
+          <FormGroup style={{ marginBottom: "-6px" }}>
+            <div
+              className="phone-input-group"
+              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+            >
+              <span>Phone Number</span>
+              <PhoneInput
+                type="string"
+                name="phoneNumber"
+                id="phoneNumber"
+                country={"gb"}
+                enableLongNumbers={true}
+                onChange={handlePhoneNumber}
+                value={phoneNumber ? phoneNumber : ""}
+                inputProps={{
+                  required: true,
+                }}
+              />
+
+              <span className="text-danger">{phoneNUmberError}</span>
+            </div>
+          </FormGroup>
+        </div>
+
         <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"
@@ -326,7 +459,7 @@ const ProviderRegisterForm = () => {
           </span>
         </div>
 
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
@@ -356,8 +489,27 @@ const ProviderRegisterForm = () => {
             />
             <span className="text-danger">{confirmPasswordError}</span>
           </FormGroup>
-        </div>
+        </div> */}
 
+        <div className="mb-3">
+          <FormGroup className="form-label-group position-relative has-icon-left">
+            <Input
+              className="inside-placeholder"
+              type="textarea"
+              placeholder="Additional Message (optional)"
+              defaultValue={message}
+              onChange={(event) => setMessage(event.target.value)}
+            />
+          </FormGroup>
+        </div>
+        <Captcha
+          captchaAnswer={captchaAnswer}
+          captchaInput={captchaInput}
+          setCaptchaAnswer={setCaptchaAnswer}
+          setCaptchaInput={setCaptchaInput}
+          captchaError={captchaError}
+          setCaptchaError={setCaptchaError}
+        />
         <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"

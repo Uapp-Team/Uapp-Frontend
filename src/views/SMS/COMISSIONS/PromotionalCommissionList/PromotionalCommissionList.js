@@ -65,7 +65,7 @@ const PromotionalCommissionList = () => {
       setPromotion(res);
     });
 
-    get(`UniversityDD/Index`).then((res) => {
+    get(`SearchFilter/Universities/0/0/0`).then((res) => {
       setUniversity(res);
     });
 
@@ -288,6 +288,8 @@ const PromotionalCommissionList = () => {
 
   return (
     <div>
+      <BreadCrumb title="Promotional Commission List" backTo="" path="/" />
+
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
         <ModalHeader>Add Promotional Commission</ModalHeader>
         <ModalBody>
@@ -326,8 +328,6 @@ const PromotionalCommissionList = () => {
         </ModalBody>
       </Modal>
 
-      <BreadCrumb title="Promotional Commission List" backTo="" path="/" />
-
       <Card className="uapp-employee-search">
         <CardHeader>
           {/* <div className=''> */}
@@ -354,7 +354,7 @@ const PromotionalCommissionList = () => {
             <Table className="table-sm table-bordered">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Account Intake</th>
                   <th>University</th>
                   <th>Commission Amount</th>
@@ -365,7 +365,7 @@ const PromotionalCommissionList = () => {
               <tbody>
                 {promotion?.map((prom, i) => (
                   <tr key={i} style={{ textAlign: "center" }}>
-                    <th scope="row">{i + 1}</th>
+                    {/* <th scope="row">{i + 1}</th> */}
                     <td>{prom?.accountIntake?.intakeName}</td>
 
                     <td>{prom?.university?.name}</td>
@@ -396,13 +396,6 @@ const PromotionalCommissionList = () => {
                           func={() => toggleDanger(prom)}
                         />
                       </ButtonGroup>
-                      <ConfirmModal
-                        text="Do You Want To Delete This Promotional Commission ? Once Deleted it can't be Undone!"
-                        isOpen={deleteModal}
-                        toggle={() => setDeleteModal(!deleteModal)}
-                        confirm={handleDeleteData}
-                        cancel={() => setDeleteModal(false)}
-                      />
                     </td>
                   </tr>
                 ))}
@@ -411,6 +404,14 @@ const PromotionalCommissionList = () => {
           </div>
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Promotional Commission ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteData}
+        cancel={() => setDeleteModal(false)}
+      />
     </div>
   );
 };

@@ -388,12 +388,11 @@ const DocumentGroup = () => {
 
   return (
     <div>
+      <BreadCrumb title="Course Document Group" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Course Document Group" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList.Configure_Documents) ? (
@@ -554,7 +553,7 @@ const DocumentGroup = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Title</th>
                       <th>Details</th>
                       <th>Application type</th>
@@ -569,7 +568,7 @@ const DocumentGroup = () => {
                   <tbody>
                     {documentGroupData?.map((document, i) => (
                       <tr key={document?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{document?.title}</td>
                         <td className="text-center">{document?.details}</td>
                         <td className="text-center">
@@ -621,268 +620,235 @@ const DocumentGroup = () => {
                               />
                             ) : null}
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Course Document?"
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            confirm={() => {
-                              handleDeleteDocumentGroup(delDocuGroupId);
-                            }}
-                            cancel={closeDeleteModal}
-                          />
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </Table>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      )}
+      {/* Modal for view */}
+      <Modal
+        size="xl"
+        isOpen={viewModal}
+        toggle={closeViewModal}
+        className="pt-5"
+      >
+        <ModalHeader>Document Group</ModalHeader>
+        <ModalBody>
+          <div className="row container pt-5">
+            <div className="col-md-4 col-sm-12">
+              <div className="hedding-titel d-flex justify-content-between mb-4">
+                <div>
+                  <h5>
+                    {" "}
+                    <b>Document List</b>{" "}
+                  </h5>
 
-                    {/* Modal for view */}
-                    <Modal
-                      size="xl"
-                      isOpen={viewModal}
-                      toggle={closeViewModal}
-                      className="pt-5"
-                    >
-                      <ModalHeader>Document Group</ModalHeader>
-                      <ModalBody>
-                        <div className="row container pt-5">
-                          <div className="col-md-4 col-sm-12">
-                            <div className="hedding-titel d-flex justify-content-between mb-4">
-                              <div>
-                                <h5>
-                                  {" "}
-                                  <b>Document List</b>{" "}
-                                </h5>
+                  <div className="bg-h"></div>
+                </div>
+              </div>
 
-                                <div className="bg-h"></div>
-                              </div>
-                            </div>
+              {loading1 ? (
+                <div class="d-flex justify-content-center mb-5">
+                  <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="table-responsive">
+                  <Table borderless className="table-sm">
+                    <tbody>
+                      {documentGroupDocument.length < 1 ? (
+                        <span>There is no data added here.</span>
+                      ) : (
+                        <>
+                          {documentGroupDocument?.map((documentGrp, i) => (
+                            <tr key={documentGrp.id}>
+                              <td>
+                                <i className="fas fa-chevron-circle-right"></i>{" "}
+                                {documentGrp?.document?.name}
+                              </td>
 
-                            {loading1 ? (
-                              <div class="d-flex justify-content-center mb-5">
-                                <div class="spinner-border" role="status">
-                                  <span class="sr-only">Loading...</span>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="table-responsive">
-                                <Table borderless className="table-sm">
-                                  <tbody>
-                                    {documentGroupDocument.length < 1 ? (
-                                      <span>There is no data added here.</span>
-                                    ) : (
-                                      <>
-                                        {documentGroupDocument?.map(
-                                          (documentGrp, i) => (
-                                            <tr key={documentGrp.id}>
-                                              <td>
-                                                <i className="fas fa-chevron-circle-right"></i>{" "}
-                                                {documentGrp?.document?.name}
-                                              </td>
-
-                                              <td>
-                                                <ButtonForFunction
-                                                  className={"mx-1 btn-sm"}
-                                                  func={() =>
-                                                    toggleDangerView(
-                                                      documentGrp
-                                                    )
-                                                  }
-                                                  color={"danger"}
-                                                  icon={
-                                                    <i className="fas fa-trash-alt"></i>
-                                                  }
-                                                  permission={6}
-                                                />
-                                              </td>
-                                            </tr>
-                                          )
-                                        )}
-
-                                        <Modal
-                                          isOpen={deleteViewModal}
-                                          toggle={closeDeleteViewModal}
-                                          className="uapp-modal"
-                                        >
-                                          <ModalBody>
-                                            <p>
-                                              Are You Sure to Delete this{" "}
-                                              <b>{delDocuGroupDocuName}</b> ?
-                                              Once Deleted it can't be Undone!
-                                            </p>
-                                          </ModalBody>
-
-                                          <ModalFooter>
-                                            <Button
-                                              disabled={buttonStatus1}
-                                              color="danger"
-                                              onClick={() =>
-                                                handleDeleteViewDocu(
-                                                  delDocuGroupDocuId
-                                                )
-                                              }
-                                            >
-                                              {progress4 ? (
-                                                <ButtonLoader />
-                                              ) : (
-                                                "YES"
-                                              )}
-                                            </Button>
-                                            <Button
-                                              // color="primary"
-                                              onClick={closeDeleteViewModal}
-                                            >
-                                              NO
-                                            </Button>
-                                          </ModalFooter>
-                                        </Modal>
-                                      </>
-                                    )}
-                                  </tbody>
-                                </Table>
-                              </div>
-                            )}
-                          </div>
-                          <div className="col-md-8 col-sm-12">
-                            <Form onSubmit={handleViewSubmit} className="">
-                              <div className="hedding-titel d-flex justify-content-between mb-4">
-                                <div>
-                                  <h5>
-                                    {" "}
-                                    <b>Add to Group</b>{" "}
-                                  </h5>
-
-                                  <div className="bg-h"></div>
-                                </div>
-                              </div>
-
-                              <FormGroup
-                                row
-                                className="has-icon-left position-relative"
-                              >
-                                <Input
-                                  type="hidden"
-                                  id="documentGroupId"
-                                  name="documentGroupId"
-                                  value={documentId}
+                              <td>
+                                <ButtonForFunction
+                                  className={"mx-1 btn-sm"}
+                                  func={() => toggleDangerView(documentGrp)}
+                                  color={"danger"}
+                                  icon={<i className="fas fa-trash-alt"></i>}
+                                  permission={6}
                                 />
-                              </FormGroup>
+                              </td>
+                            </tr>
+                          ))}
 
-                              <FormGroup
-                                row
-                                className="has-icon-left position-relative"
+                          <Modal
+                            isOpen={deleteViewModal}
+                            toggle={closeDeleteViewModal}
+                            className="uapp-modal"
+                          >
+                            <ModalBody>
+                              <p>
+                                Are You Sure to Delete this{" "}
+                                <b>{delDocuGroupDocuName}</b> ? Once Deleted it
+                                can't be Undone!
+                              </p>
+                            </ModalBody>
+
+                            <ModalFooter>
+                              <Button
+                                disabled={buttonStatus1}
+                                color="danger"
+                                onClick={() =>
+                                  handleDeleteViewDocu(delDocuGroupDocuId)
+                                }
                               >
-                                <Col md="4">
-                                  <span>
-                                    Document{" "}
-                                    <span className="text-danger">*</span>{" "}
-                                  </span>
-                                </Col>
-                                <Col md="8">
-                                  <Select
-                                    options={documentOptions}
-                                    value={{
-                                      label: documentLabel,
-                                      value: documentValue,
-                                    }}
-                                    onChange={(opt) =>
-                                      selectDocument(opt.label, opt.value)
-                                    }
-                                    name="documentId"
-                                    id="documentId"
-                                  />
-
-                                  {documentError && (
-                                    <span className="text-danger">
-                                      Document is required.
-                                    </span>
-                                  )}
-                                </Col>
-                              </FormGroup>
-
-                              <FormGroup
-                                row
-                                className="has-icon-left position-relative"
+                                {progress4 ? <ButtonLoader /> : "YES"}
+                              </Button>
+                              <Button
+                                // color="primary"
+                                onClick={closeDeleteViewModal}
                               >
-                                <Col md="4">
-                                  <span>Is Mandatory </span>
-                                </Col>
-                                <Col md="8">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="radio"
-                                      id="isMandatory"
-                                      onChange={handleApplication}
-                                      name="isMandatory"
-                                      value="true"
-                                      checked={application == "true"}
-                                    />
-                                    <Label
-                                      className="form-check-label"
-                                      check
-                                      htmlFor="isMandatory"
-                                    >
-                                      Yes
-                                    </Label>
-                                  </FormGroup>
+                                NO
+                              </Button>
+                            </ModalFooter>
+                          </Modal>
+                        </>
+                      )}
+                    </tbody>
+                  </Table>
+                </div>
+              )}
+            </div>
+            <div className="col-md-8 col-sm-12">
+              <Form onSubmit={handleViewSubmit} className="">
+                <div className="hedding-titel d-flex justify-content-between mb-4">
+                  <div>
+                    <h5>
+                      {" "}
+                      <b>Add to Group</b>{" "}
+                    </h5>
 
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="radio"
-                                      id="isMandatory"
-                                      onChange={handleApplication}
-                                      name="isMandatory"
-                                      value="false"
-                                      checked={application == "false"}
-                                    />
-                                    <Label
-                                      className="form-check-label"
-                                      check
-                                      htmlFor="isMandatory"
-                                    >
-                                      No
-                                    </Label>
-                                  </FormGroup>
+                    <div className="bg-h"></div>
+                  </div>
+                </div>
 
-                                  <br />
+                <FormGroup row className="has-icon-left position-relative">
+                  <Input
+                    type="hidden"
+                    id="documentGroupId"
+                    name="documentGroupId"
+                    value={documentId}
+                  />
+                </FormGroup>
 
-                                  {/* {applicationError && (
+                <FormGroup row className="has-icon-left position-relative">
+                  <Col md="4">
+                    <span>
+                      Document <span className="text-danger">*</span>{" "}
+                    </span>
+                  </Col>
+                  <Col md="8">
+                    <Select
+                      options={documentOptions}
+                      value={{
+                        label: documentLabel,
+                        value: documentValue,
+                      }}
+                      onChange={(opt) => selectDocument(opt.label, opt.value)}
+                      name="documentId"
+                      id="documentId"
+                    />
+
+                    {documentError && (
+                      <span className="text-danger">Document is required.</span>
+                    )}
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row className="has-icon-left position-relative">
+                  <Col md="4">
+                    <span>Is Mandatory </span>
+                  </Col>
+                  <Col md="8">
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="isMandatory"
+                        onChange={handleApplication}
+                        name="isMandatory"
+                        value="true"
+                        checked={application == "true"}
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="isMandatory"
+                      >
+                        Yes
+                      </Label>
+                    </FormGroup>
+
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="isMandatory"
+                        onChange={handleApplication}
+                        name="isMandatory"
+                        value="false"
+                        checked={application == "false"}
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="isMandatory"
+                      >
+                        No
+                      </Label>
+                    </FormGroup>
+
+                    <br />
+
+                    {/* {applicationError && (
                                       <span className="text-danger">
                                         Is mandatory is required.
                                       </span>
                                     )} */}
-                                </Col>
-                              </FormGroup>
+                  </Col>
+                </FormGroup>
 
-                              <FormGroup className="has-icon-left position-relative">
-                                <>
-                                  <FormGroup
-                                    className="has-icon-left position-relative"
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "end",
-                                    }}
-                                  >
-                                    <ButtonForFunction
-                                      color={"primary"}
-                                      type={"submit"}
-                                      className={"ms-lg-3 ms-sm-1 mt-3"}
-                                      name={
-                                        progress2 ? <ButtonLoader /> : "Submit"
-                                      }
-                                      permission={6}
-                                      disable={buttonStatus3}
-                                    />
-                                  </FormGroup>
-                                </>
-                              </FormGroup>
-                            </Form>
-                          </div>
-                        </div>
-                      </ModalBody>
+                <FormGroup className="has-icon-left position-relative">
+                  <>
+                    <FormGroup
+                      className="has-icon-left position-relative"
+                      style={{
+                        display: "flex",
+                        justifyContent: "end",
+                      }}
+                    >
+                      <ButtonForFunction
+                        color={"primary"}
+                        type={"submit"}
+                        className={"ms-lg-3 ms-sm-1 mt-3"}
+                        name={progress2 ? <ButtonLoader /> : "Submit"}
+                        permission={6}
+                        disable={buttonStatus3}
+                      />
+                    </FormGroup>
+                  </>
+                </FormGroup>
+              </Form>
+            </div>
+          </div>
+        </ModalBody>
 
-                      <ModalFooter>
-                        {/* <Button
+        <ModalFooter>
+          {/* <Button
                               color="danger"
                               onClick={() =>
                                 handleDeleteDocumentGroup(
@@ -892,20 +858,22 @@ const DocumentGroup = () => {
                             >
                               YES
                             </Button> */}
-                        <Button color="danger" onClick={closeViewModal}>
-                          Close
-                        </Button>
-                      </ModalFooter>
-                    </Modal>
+          <Button color="danger" onClick={closeViewModal}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
 
-                    {/* modal for delete */}
-                  </tbody>
-                </Table>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      )}
+      {/* modal for delete */}
+      <ConfirmModal
+        text="Do You Want To Delete This Course Document?"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => {
+          handleDeleteDocumentGroup(delDocuGroupId);
+        }}
+        cancel={closeDeleteModal}
+      />
     </div>
   );
 };

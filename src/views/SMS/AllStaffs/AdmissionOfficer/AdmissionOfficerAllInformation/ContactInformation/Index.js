@@ -74,16 +74,18 @@ const Index = () => {
   };
 
   const handleCity = (e) => {
-    setCityN(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCityN(data);
+    if (data === "") {
       setCityError("City is required");
     } else {
       setCityError("");
     }
   };
   const handleHouse = (e) => {
-    setHouseNo(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setHouseNo(data);
+    if (data === "") {
       setHouseNoError("Address line 1 is required");
     } else {
       setHouseNoError("");
@@ -98,8 +100,9 @@ const Index = () => {
     // }
   };
   const handleZipCode = (e) => {
-    setZipCode(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode(data);
+    if (data === "") {
       setZipCodeError("Zip/post code is required");
     } else {
       setZipCodeError("");

@@ -64,6 +64,7 @@ const Index = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -173,7 +174,7 @@ const Index = (props) => {
   const handleDeleteStaff = () => {
     setButtonStatus(true);
     setProgress(true);
-    remove(`Employee/Delete/${data?.id}`).then((res) => {
+    remove(`ProviderCompliance/Delete/${data?.id}`).then((res) => {
       setProgress(false);
       addToast(res, {
         appearance: "error",
@@ -291,7 +292,7 @@ const Index = (props) => {
       setPassError("Passwords do not match");
     } else {
       setButtonStatus(true);
-      put(`Password/ChangePasswordForEmployee`, subData).then((res) => {
+      put(`ProviderCompliance/ChangePassword`, subData).then((res) => {
         setButtonStatus(false);
         if (res?.status === 200 && res.data?.isSuccess === true) {
           addToast(res?.data?.message, {
@@ -316,14 +317,13 @@ const Index = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="Provider Compliance  List" backTo="" path="/" />
       {loading ? (
         <div className="text-center">
           <img className="img-fluid" src={loader} alt="uapp_loader" />
         </div>
       ) : (
         <div>
-          <BreadCrumb title="Provider Compliance  List" backTo="" path="/" />
-
           <SelectAndClear
             empOptiopns={empOptiopns}
             empLabel={empLabel}

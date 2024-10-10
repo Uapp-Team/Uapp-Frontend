@@ -11,7 +11,7 @@ const AdmissionOfficer = ({ data }) => {
         {data?.length === 0 ? (
           <p className="text-center">No Admission Officer</p>
         ) : (
-          <>
+          <div className="overflowY-300px">
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
@@ -28,9 +28,12 @@ const AdmissionOfficer = ({ data }) => {
                       <span>{item?.viewId}</span>{" "}
                     </td>
                     <td>
-                      <span style={{ marginLeft: "5px" }}>
+                      <Link
+                        className="text-id hover"
+                        to={`/admissionOfficerDetails/${item?.id}`}
+                      >
                         {item?.fullName}
-                      </span>
+                      </Link>
                     </td>
                     <td>{item?.email}</td>
                     <td>{item?.applications}</td>
@@ -38,10 +41,10 @@ const AdmissionOfficer = ({ data }) => {
                 ))}
               </tbody>
             </Table>
-            <div className="text-center text-blue">
+            {/* <div className="text-center text-blue">
               <Link to="/admissionOfficerList">See All</Link>
-            </div>
-          </>
+            </div> */}
+          </div>
         )}
       </div>
     </>

@@ -150,7 +150,7 @@ const SubjectRequirement = () => {
             <Table className="table-bordered">
               <thead className="tablehead">
                 <tr>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Document Group</th>
                   <th>Documents</th>
                 </tr>
@@ -158,7 +158,7 @@ const SubjectRequirement = () => {
               <tbody>
                 {documentGrpList?.map((document, i) => (
                   <tr key={document.id}>
-                    <th scope="row">{i + 1}</th>
+                    {/* <th scope="row">{i + 1}</th> */}
                     <td>
                       {document?.documentGroup?.title} -{" "}
                       {document?.applicationTypeId === 1
@@ -186,7 +186,7 @@ const SubjectRequirement = () => {
           <Table className=" table-bordered">
             <thead className="tablehead">
               <tr>
-                <th>SL/NO</th>
+                {/* <th>SL/NO</th> */}
                 <th>Document</th>
                 <th>Application Type</th>
               </tr>
@@ -194,7 +194,7 @@ const SubjectRequirement = () => {
             <tbody>
               {docList?.map((document, i) => (
                 <tr key={document.id}>
-                  <th scope="row">{i + 1}</th>
+                  {/* <th scope="row">{i + 1}</th> */}
                   <td>{document?.document?.name}</td>
                   <td>
                     {document?.applicationTypeId === 1

@@ -46,27 +46,27 @@ const ProfileReview = ({ id }) => {
     setCallApi((prev) => !prev);
   };
 
-  // useEffect(() => {
-  //   if (id !== undefined) {
-  //     get(
-  //       `ConsultantRating/GetByConsultant?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${id}&orderby=${orderValue}`
-  //     ).then((res) => {
-  //       console.log("rating list", res);
-  //       setRatingValue(res?.rating);
-  //       setRatingList(res?.pagedModel?.models);
-  //       setEntity(res?.pagedModel?.totalEntity);
-  //     });
-  //   } else {
-  //     get(
-  //       `ConsultantRating/GetByConsultant?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${userId}&orderby=${orderValue}`
-  //     ).then((res) => {
-  //       console.log("rating list", res);
-  //       setRatingValue(res?.rating);
-  //       setRatingList(res?.pagedModel?.models);
-  //       setEntity(res?.pagedModel?.totalEntity);
-  //     });
-  //   }
-  // }, [currentPage, id, callApi]);
+  useEffect(() => {
+    if (id !== undefined) {
+      get(
+        `ConsultantRating/GetByConsultant?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${id}&orderby=${orderValue}`
+      ).then((res) => {
+        console.log("rating list", res);
+        setRatingValue(res?.rating);
+        setRatingList(res?.pagedModel?.models);
+        setEntity(res?.pagedModel?.totalEntity);
+      });
+    } else {
+      get(
+        `ConsultantRating/GetByConsultant?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${userId}&orderby=${orderValue}`
+      ).then((res) => {
+        console.log("rating list", res);
+        setRatingValue(res?.rating);
+        setRatingList(res?.pagedModel?.models);
+        setEntity(res?.pagedModel?.totalEntity);
+      });
+    }
+  }, [currentPage, id, callApi, orderValue, dataPerPage, userId]);
 
   return (
     <Card>
@@ -76,8 +76,8 @@ const ProfileReview = ({ id }) => {
             <h5 className="d-flex align-items-center mr-3">
               <span className="mr-4">Reviews for this consultant</span>
               <i className="fas fa-star" style={{ color: "#FFB33E" }}></i>
-              <span className="mx-1"> 5</span>
-              <span className="text-gray"> (0)</span>
+              {/* <span className="mx-1"> 5</span> */}
+              <span className="text-gray mx-1"> ({entity})</span>
             </h5>
           </div>
           {currentUser === userTypes?.Consultant.toString() ? null : (

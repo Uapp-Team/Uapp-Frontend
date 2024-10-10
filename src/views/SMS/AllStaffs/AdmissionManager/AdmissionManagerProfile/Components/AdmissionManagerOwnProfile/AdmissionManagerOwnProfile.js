@@ -1,48 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Table,
-  Button,
-  Modal,
-  ModalFooter,
-  ModalBody,
-  ModalHeader,
-} from "reactstrap";
-import { userTypes } from "../../../../../../../constants/userTypeConstant";
+import { useParams } from "react-router-dom";
+import { Card, Table } from "reactstrap";
 import get from "../../../../../../../helpers/get";
 import ProviderCard from "../../ProfileComponent/ProviderCard";
-import ProviderHeadForOwnProfile from "../../ProfileComponent/ProviderHeadForOwnProfile";
 import { rootUrl } from "../../../../../../../constants/constants";
-import ButtonForFunction from "../../../../../Components/ButtonForFunction";
-import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
 import ProfileHead from "../AdmissionManagerForAdministrator/Componet/ProfileHead";
 import BreadCrumb from "../../../../../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../../../../../components/date/calenderFormate";
 
 const AdmissionManagerOwnProfile = () => {
-  const userType = localStorage.getItem("userType");
-  const history = useHistory();
   const [headData, setHeadData] = useState({});
 
   const { admissionManagerId } = useParams();
 
-  const [priceRangeList, setPriceRangeList] = useState([]);
-  const [commissionGroupList, setCommissionGrouplist] = useState([]);
-  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userId = localStorage.getItem("referenceId");
-  const [consultantData, setConsultantData] = useState({});
-  const [contactInfo, setContactInfo] = useState({});
-
-  const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [viewModalOpen1, setViewModalOpen1] = useState(false);
-  const [viewModalOpen2, setViewModalOpen2] = useState(false);
-  const [viewModalOpen3, setViewModalOpen3] = useState(false);
   const [data, setData] = useState({});
 
   useEffect(() => {
-    if (admissionManagerId == undefined) {
+    if (admissionManagerId === undefined) {
       get(`AddmissionManagerProfile/Profile/${userId}`).then((res) => {
         console.log(res);
         setData(res);
@@ -55,7 +30,7 @@ const AdmissionManagerOwnProfile = () => {
         }
       );
     }
-  }, []);
+  }, [admissionManagerId, userId]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -141,7 +116,9 @@ const AdmissionManagerOwnProfile = () => {
                       <td width="40%">Date of Birth</td>
 
                       <td width="60%">
-                        {data?.admissionManagerPersonalInfo?.dateOfBirth}
+                        {dateFormate(
+                          data?.admissionManagerPersonalInfo?.dateOfBirth
+                        )}
                       </td>
                     </tr>
 
@@ -321,7 +298,7 @@ const AdmissionManagerOwnProfile = () => {
                     </tr>
 
                     {data?.admissionManagerEligibility?.countryOfCitizenShip
-                      ?.id ==
+                      ?.id ===
                     data?.admissionManagerEligibility?.countryOfResidence
                       ?.id ? null : (
                       <tr
@@ -343,7 +320,7 @@ const AdmissionManagerOwnProfile = () => {
                       ?.id !==
                       data?.admissionManagerEligibility?.countryOfResidence
                         ?.id &&
-                    data?.admissionManagerEligibility?.residencyStatus?.id ==
+                    data?.admissionManagerEligibility?.residencyStatus?.id ===
                       2 ? (
                       <>
                         <tr

@@ -161,7 +161,7 @@ const ProgressReport = ({ id }) => {
               }}
             >
               <h2 className="text-white">{progress?.totalRejected}</h2>
-              <p className="text-white">Total Rejected</p>
+              <p className="text-white">Total Rejected / cancelled</p>
             </Col>
           </Row>
           <Row>

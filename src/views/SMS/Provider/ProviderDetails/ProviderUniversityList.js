@@ -34,10 +34,7 @@ const ProviderUniversityList = ({ id, accountStatusId }) => {
                   <>
                     {" "}
                     {permissions?.includes(permissionList.Add_University) ? (
-                      <Link
-                        to={`/universityListFromProviderList/${id}`}
-                        className="mb-1"
-                      >
+                      <Link to={`/universityListFromProviderList/${id}`}>
                         <AddButton />
                       </Link>
                     ) : null}

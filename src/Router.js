@@ -5,21 +5,19 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Spinner from "./components/core/spinner/Loading-spinner";
 import { ContextLayout } from "./utility/context/Layout";
-
 import { ToastProvider } from "react-toast-notifications";
 import "./assets/CoustomStyle/style.css";
 import "./assets/CoustomStyle/pageView.css";
 import AdmissionGetData from "./views/Test/AdmissionGetData";
-
 import { permissionList } from "./constants/AuthorizationConstant";
 import { userTypes } from "./constants/userTypeConstant";
-
+import AssociateApplication from "./views/SMS/APPLICATION/Applications/Component/AssociateApplication.js";
+import Navigation from "./views/SMS/Affiliate/AffiliateInformations/NavigationAndRegistration/Navigation.js";
 // import CommissionSetting from "./views/SMS/Comission/CommisionSetting/CommissionSetting";
 
 // Authentication Checking
 const token = localStorage.getItem("token");
 const permissions = JSON.parse(localStorage.getItem("permissions"));
-
 const isAuth = token != null ? true : false;
 const permission = JSON.parse(localStorage.getItem("current_user"));
 const userTypeId = localStorage.getItem("userType");
@@ -209,6 +207,18 @@ const AddUniversityFeaturesGallery = lazy(() =>
 const UniversityList = lazy(() =>
   import("./views/SMS/University/UniversityList.js")
 );
+
+const UniversityListForSharingFAQ = lazy(() =>
+  import(
+    "./views/SMS/UniversityInformationSharing&FAQ/UniversityListForSharingFAQ.js"
+  )
+);
+const UniversityInformationDocumentsFAQ = lazy(() =>
+  import(
+    "./views/SMS/UniversityInformationSharing&FAQ/UniversityInformationDocumentsFAQ.js"
+  )
+);
+
 const UniversityDetails = lazy(() =>
   import("./views/SMS/University/UniversityDetails.jsx")
 );
@@ -293,6 +303,10 @@ const Viewlogs = lazy(() =>
   import("./views/SMS/Dashboard/Pages/Consultant/Overview/Viewlogs")
 );
 
+const ConsultantLevel = lazy(() =>
+  import("./views/SMS/ConsultantsAndTypes/ConsultantLevel/ConsultantLevel.js")
+);
+
 const GeneralInformationRegistration = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantAllInformation/NavigationAndRegistration/ConsultantRegistration"
@@ -328,25 +342,37 @@ const ConsultantBankDetails = lazy(() =>
     "./views/SMS/ConsultantsAndTypes/ConsultantAllInformation/ConsultantBankInformation/Index"
   )
 );
+
 const ConsultantRecruitmentInformation = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantAllInformation/RecruitmentInformation/Index"
   )
 );
+
 const ConsultantCommissionInfo = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantAllInformation/CommissionInformation/Index"
   )
 );
+
 const ConsultantTermsInformation = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantAllInformation/TermsAndCondition/Index"
   )
 );
 
+const ConsultantNewDeclaration = lazy(() =>
+  import("./views/SMS/ConsultantsAndTypes/ConsultantNewDeclaration.js")
+);
+
 const ConsultantList = lazy(() =>
   import("./views/SMS/ConsultantsAndTypes/ConsultantList/Index")
 );
+
+const BranchConsultantList = lazy(() =>
+  import("./views/SMS/Branches/Branch/BranchConsultantList/Index.js")
+);
+
 const ConsultantDashboard = lazy(() =>
   import("./views/SMS/Consultant/ConsultantDashboard")
 );
@@ -423,11 +449,23 @@ const AssociateInformation = lazy(() =>
 const AssociateList = lazy(() =>
   import("./views/SMS/Consultant/ConsultantByConsultant")
 );
+const ConsultantByAffiliate = lazy(() =>
+  import("./views/SMS/Consultant/ConsultantByAffiliate")
+);
+const ConsultantByCompanion = lazy(() =>
+  import("./views/SMS/Consultant/ConsultantByCompanion")
+);
 const AssociateAddSuccess = lazy(() =>
   import("./views/SMS/Consultant/AssociateAddSuccess")
 );
+const AffiliateAddSuccess = lazy(() =>
+  import("./views/SMS/Consultant/AffiliateAddSuccess.js")
+);
+const CompanionAddSuccess = lazy(() =>
+  import("./views/SMS/Consultant/CompanionAddSuccess.js")
+);
 
-// Document
+// Documentnp
 const DocumentList = lazy(() =>
   import("./views/SMS/SETTINGS/DocumentList/DocumentList.js")
 );
@@ -576,6 +614,16 @@ const FileUpload = lazy(() =>
 const Applications = lazy(() =>
   import("./views/SMS/APPLICATION/Applications/Applications.js")
 );
+const AssociatesApplications = lazy(() =>
+  import(
+    "./views/SMS/APPLICATION/Applications/Component/AssociateApplication.js"
+  )
+);
+
+const BranchApplications = lazy(() =>
+  import("./views/SMS/Branches/Branch/BranchApplicationList/Applications.js")
+);
+
 const ApplicationDetails = lazy(() =>
   import("./views/SMS/APPLICATION/ApplicationDetails/ApplicationDetails.js")
 );
@@ -590,15 +638,23 @@ const SessionTimeOut = lazy(() => import("./views/SMS/Error/SessionTimeOut"));
 const forgotPassword = lazy(() =>
   import("./views/pages/authentication/ForgotPassword")
 );
+
+const VerifyEmail = lazy(() =>
+  import("./views/pages/authentication/VerifyEmail.js")
+);
+
 const lockScreen = lazy(() =>
   import("./views/pages/authentication/LockScreen")
 );
+
 const resetPassword = lazy(() =>
-  import("./views/pages/authentication/ResetPassword")
+  import("./views/pages/authentication/ResetPassword.js")
 );
+
 const StudentRegister = lazy(() =>
   import("./views/pages/authentication/register/StudentRegister")
 );
+
 const StudentAccountCreateSuccessfully = lazy(() =>
   import(
     "./views/pages/authentication/register/StudentAccountCreateSuccessfully"
@@ -609,14 +665,35 @@ const ProviderAccountCreateSuccessfully = lazy(() =>
     "./views/pages/authentication/register/ProviderAccountCreateSuccessfully"
   )
 );
+
 const ConsultantAccountCreateSuccessfully = lazy(() =>
   import(
     "./views/pages/authentication/register/ConsultantAccountCreateSuccessfully"
   )
 );
+
+const AffiliateAccountCreateSuccessfully = lazy(() =>
+  import(
+    "./views/pages/authentication/register/AffiliateAccountCreateSuccessfully.js"
+  )
+);
+
+const CompanionAccountCreateSuccessfully = lazy(() =>
+  import(
+    "./views/pages/authentication/register/CompanionAccountCreateSuccessfully.js"
+  )
+);
+
 const ConsultantRegister = lazy(() =>
   import("./views/pages/authentication/register/ConsultantRegister")
 );
+const AffiliateRegister = lazy(() =>
+  import("./views/pages/authentication/register/AffiliateRegister.js")
+);
+const CompanionRegister = lazy(() =>
+  import("./views/pages/authentication/register/CompanionRegister.js")
+);
+
 const ProviderRegister = lazy(() =>
   import("./views/pages/authentication/register/ProviderRegister")
 );
@@ -675,9 +752,7 @@ const ProviderAdminTermsAndCondition = lazy(() =>
   )
 );
 
-const StudentLogin = lazy(() =>
-  import("./views/pages/authentication/login/StudentLogin")
-);
+const Login = lazy(() => import("./views/pages/authentication/login/Login"));
 
 // const SessionExpired = lazy(() =>
 //   import("./views/pages/authentication/login/SessionExpired")
@@ -856,11 +931,35 @@ const AdmissionManagerAssignedSubjects = lazy(() =>
   )
 );
 
+// Lead APP
+
+const LeadDashboard = lazy(() =>
+  import("./views/SMS/LeadApp/Dashboard/Dashboard.js")
+);
+const LeadList = lazy(() => import("./views/SMS/LeadApp/List/LeadList.js"));
+const LeadSettings = lazy(() =>
+  import("./views/SMS/LeadApp/Settings/Settings.js")
+);
+const LeadProfile = lazy(() =>
+  import("./views/SMS/LeadApp/Profile/Profile.js")
+);
+const LeadConsultant = lazy(() =>
+  import("./views/SMS/LeadApp/Consultant/Consultant.js")
+);
+
 // Student
 
 const StudentList = lazy(() =>
   import("./views/SMS/STUDENT/StudentList/StudentList")
 );
+const LeadStudentList = lazy(() =>
+  import("./views/SMS/LeadList/LeadStudentList.js")
+);
+
+const BranchStudentList = lazy(() =>
+  import("./views/SMS/Branches/Branch/BranchStudentList/StudentList.js")
+);
+
 const StudentProfile = lazy(() =>
   import("./views/SMS/STUDENT/StudentProfile/StudentProfile")
 );
@@ -917,11 +1016,20 @@ const AddOtherInformation = lazy(() =>
     "./views/SMS/STUDENT/StudentsAllInformation/StudentOtherInformation/OtherInformation"
   )
 );
+
 const AddTestScore = lazy(() =>
   import(
     "./views/SMS/STUDENT/StudentsAllInformation/StudentTestScore/TestScore"
   )
 );
+
+const StudentNewDeclaration = lazy(() =>
+  import("./views/SMS/STUDENT/StudentsAllInformation/StudentNewDeclaration.js")
+);
+const BulkCommissionGroup = lazy(() =>
+  import("./views/SMS/COMISSIONS/BulkCommisionGroup/BulkCommissionGroup.js")
+);
+
 const StudentByConsultant = lazy(() =>
   import("./views/SMS/STUDENT/ExtraInformation/StudentByConsultant")
 );
@@ -1245,6 +1353,13 @@ const UniversityTestScore = lazy(() =>
   import("./views/SMS/University/UniversityTestScore")
 );
 
+const TermsAndCondition = lazy(() =>
+  import("./views/SMS/TermsAndCondition/TermsAndCondition.js")
+);
+const TandCDetails = lazy(() =>
+  import("./views/SMS/TermsAndCondition/TandCDetails.js")
+);
+
 // All Notification Page
 const Notifications = lazy(() =>
   import("./views/SMS/Notifications/Notifications")
@@ -1268,6 +1383,7 @@ const Success = lazy(() =>
 
 // Login History
 const LoginHistory = lazy(() => import("./views/SMS/LoginHistory/Index"));
+
 const AllLoginHistory = lazy(() =>
   import("./views/SMS/LoginHistory/AllLoginHistory")
 );
@@ -1278,6 +1394,7 @@ const StudentTypeDocument = lazy(() =>
 );
 //Notice
 const Notice = lazy(() => import("./views/SMS/Dashboard/Notice/Notice.js"));
+
 const NoticeList = lazy(() =>
   import("./views/SMS/Dashboard/Notice/NoticeList")
 );
@@ -1290,6 +1407,249 @@ const NoticeDetails = lazy(() =>
 const UserNoticeDetails = lazy(() =>
   import("./views/SMS/Dashboard/Notice/UserNoticeDetails.js")
 );
+
+const UserContent = lazy(() =>
+  import("./views/SMS/ContentForUser/ContentIndex.js")
+);
+const UserContentHub = lazy(() =>
+  import("./views/SMS/ContentForUser/ContentHub.js")
+);
+
+// Affiliate path start
+const AffiliateTransation = lazy(() =>
+  import("./views/SMS/ACCOUNTS/Affiliate/AffiliateTransation.js")
+);
+
+const AffiliateInvitation = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateInvitation/AffiliateInvitation.js")
+);
+const AffiliateEarning = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateEarning/AffiliateEarning.js")
+);
+const AffiliateContent = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateContent/AffiliateContent.js")
+);
+
+const MyTeamList = lazy(() =>
+  import("./views/SMS/Affiliate/MyTeam/MyTeamList.js")
+);
+
+const AffiliateTeamMemberListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffilitateTeamMemberListForSystem/MyTeamList.js"
+  )
+);
+const AffiliateCommissionSetting = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateCommissionSetting/Index.js")
+);
+const AffiliateList = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateList/AffiliateList.js")
+);
+
+const AffiliateListRegistration = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/NavigationAndRegistration/Registration.js"
+  )
+);
+const AffiliateProfile = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateProfile/AffiliateProfile.js")
+);
+const AffiliateDashboard = lazy(() =>
+  import("./views/SMS/Dashboard/Pages/Affiliate/Index.js")
+);
+const AffiliatePersonalInfo = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/PersonalInformation/Index.js"
+  )
+);
+const AffiliateContactInfo = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/ContactInformation/Index.js"
+  )
+);
+const AffiliateEmergencyInfo = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/EmergencyInformation/Index.js"
+  )
+);
+const AffiliateEligibilityInfo = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/EligibilityInformation/EligibilityInformation.js"
+  )
+);
+const AffiliateBankInfo = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateInformations/BankInformation/Index.js")
+);
+const AffiliateCommission = lazy(() =>
+  import("./views/SMS/Affiliate/AffiliateInformations/Commission/Commission.js")
+);
+const AffiliateTerms = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/TermsAndCondition/Index.js"
+  )
+);
+
+const AffiliateNewDeclaration = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInformations/TermsAndCondition/AffiliateNewDeclaration.js"
+  )
+);
+// Affiliate path end
+
+// Companion path start
+const CompanionTransation = lazy(() =>
+  import("./views/SMS/ACCOUNTS/Companion/CompanionTransation.js")
+);
+
+const CompanionInvitation = lazy(() =>
+  import("./views/SMS/Companion/CompanionInvitation/CompanionInvitation.js")
+);
+
+const CompanionInvitationListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInvitationListForSystem/CompanionInvitation.js"
+  )
+);
+const AffiliateInvitationListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateInvitationListForSystem/AffiliateInvitation.js"
+  )
+);
+
+const CompanionEarning = lazy(() =>
+  import("./views/SMS/Companion/CompanionEarning/CompanionEarning.js")
+);
+const CompanionContent = lazy(() =>
+  import("./views/SMS/Companion/CompanionContent/CompanionContent.js")
+);
+
+const CompanionMyTeamList = lazy(() =>
+  import("./views/SMS/Companion/MyTeam/CompanionMyTeamList.js")
+);
+const CompanionTeamMemberListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionTeamMemberListForSystem/CompanionMyTeamList.js"
+  )
+);
+const CompanionCommissionSetting = lazy(() =>
+  import("./views/SMS/Companion/CompanionCommissionSetting/Index.js")
+);
+const CompanionList = lazy(() =>
+  import("./views/SMS/Companion/CompanionList/CompanionList.js")
+);
+
+const CompanionListRegistration = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/NavigationAndRegistration/Registration.js"
+  )
+);
+const CompanionProfile = lazy(() =>
+  import("./views/SMS/Companion/CompanionProfile/CompanionProfile.js")
+);
+const CompanionDashboard = lazy(() =>
+  import("./views/SMS/Dashboard/Pages/Companion/Index.js")
+);
+const CompanionPersonalInfo = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/PersonalInformation/Index.js"
+  )
+);
+const CompanionContactInfo = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/ContactInformation/Index.js"
+  )
+);
+const CompanionEmergencyInfo = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/EmergencyInformation/Index.js"
+  )
+);
+const CompanionEligibilityInfo = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/EligibilityInformation/EligibilityInformation.js"
+  )
+);
+const CompanionBankInfo = lazy(() =>
+  import("./views/SMS/Companion/CompanionInformations/BankInformation/Index.js")
+);
+const CompanionCommission = lazy(() =>
+  import("./views/SMS/Companion/CompanionInformations/Commission/Commission.js")
+);
+const CompanionTerms = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/TermsAndCondition/Index.js"
+  )
+);
+const CompanionNewDeclaration = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionInformations/TermsAndCondition/CompanionNewDeclaration.js"
+  )
+);
+// Companion path end
+
+//  Recycle Bin path
+const RecycleBin = lazy(() => import("./views/SMS/RecycleBin/RecycleBin.js"));
+const RecycleStudent = lazy(() => import("./views/SMS/RecycleBin/Student.js"));
+const RecycleConsultant = lazy(() =>
+  import("./views/SMS/RecycleBin/Consultant.js")
+);
+const RecycleAffiliate = lazy(() =>
+  import("./views/SMS/RecycleBin/Affiliate.js")
+);
+
+const RecycleCompanion = lazy(() =>
+  import("./views/SMS/RecycleBin/Companion.js")
+);
+const RecycleApplication = lazy(() =>
+  import("./views/SMS/RecycleBin/Application.js")
+);
+
+const RecycleUniversity = lazy(() =>
+  import("./views/SMS/RecycleBin/University.js")
+);
+const RecycleSubjects = lazy(() =>
+  import("./views/SMS/RecycleBin/Subjects.js")
+);
+
+const RecycleAccountsManager = lazy(() =>
+  import("./views/SMS/RecycleBin/AccountsManager.js")
+);
+const RecycleAccountsOfficer = lazy(() =>
+  import("./views/SMS/RecycleBin/AccountsOfficer.js")
+);
+const RecycleAdmin = lazy(() => import("./views/SMS/RecycleBin/Admin.js"));
+
+const RecycleAdmissionManager = lazy(() =>
+  import("./views/SMS/RecycleBin/AdmissionManager.js")
+);
+
+const RecycleAdmissionOfficer = lazy(() =>
+  import("./views/SMS/RecycleBin/AdmissionOfficer.js")
+);
+
+const RecycleBranchManager = lazy(() =>
+  import("./views/SMS/RecycleBin/BranchManager.js")
+);
+
+const RecycleComplianceManager = lazy(() =>
+  import("./views/SMS/RecycleBin/ComplianceManager.js")
+);
+
+const RecycleComplianceOfficer = lazy(() =>
+  import("./views/SMS/RecycleBin/ComplianceOfficer.js")
+);
+
+const RecycleEditor = lazy(() => import("./views/SMS/RecycleBin/Editor.js"));
+
+const RecycleFinanceManager = lazy(() =>
+  import("./views/SMS/RecycleBin/FinanceManager.js")
+);
+
+const RecycleProviderAdmin = lazy(() =>
+  import("./views/SMS/RecycleBin/ProviderAdmin.js")
+);
+
+//  Recycle Bin path
 
 const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
   <Route
@@ -1317,6 +1677,34 @@ const RouteConfig = ({ component: Component, fullLayout, ...rest }) => (
     }}
   />
 );
+
+const AffiliateConfig = ({ component: Component, fullLayout, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) => {
+      return (
+        <ContextLayout.Consumer>
+          {(context) => {
+            let LayoutTag =
+              fullLayout === true
+                ? context.fullLayout
+                : context.state.activeLayout === "horizontal"
+                ? context.horizontalLayout
+                : context.VerticalLayout;
+            return (
+              <LayoutTag {...props} permission={props.user}>
+                {/* <Navigation /> */}
+                <Suspense fallback={<Spinner />}>
+                  <Component {...props} />
+                </Suspense>
+              </LayoutTag>
+            );
+          }}
+        </ContextLayout.Consumer>
+      );
+    }}
+  />
+);
 const mapStateToProps = (state) => {
   return {
     user: state.auth.login.userRole,
@@ -1324,6 +1712,7 @@ const mapStateToProps = (state) => {
 };
 
 const AppRoute = connect(mapStateToProps)(RouteConfig);
+const AffiliateRoute = connect(mapStateToProps)(AffiliateConfig);
 
 class AppRouter extends React.Component {
   render() {
@@ -1337,6 +1726,351 @@ class AppRouter extends React.Component {
               <ToastProvider autoDismiss={true}>
                 <Switch>
                   <AppRoute exact path="/" component={analyticsDashboard} />
+
+                  <AppRoute path="/content" component={UserContent} />
+                  <AppRoute path="/contentHub" component={UserContentHub} />
+
+                  {/* Affiliate paths */}
+                  <AppRoute
+                    path="/affiliate-transation"
+                    component={AffiliateTransation}
+                  />
+
+                  <AppRoute
+                    path="/affiliate-Invitation"
+                    component={AffiliateInvitation}
+                  />
+
+                  <AppRoute
+                    path="/affiliate-earning"
+                    component={AffiliateEarning}
+                  />
+                  <AppRoute
+                    path="/affiliate-content"
+                    component={AffiliateContent}
+                  />
+                  <AppRoute
+                    path="/affiliate-team-List/:affiliateId"
+                    component={AffiliateTeamMemberListForSystem}
+                  />
+
+                  <AppRoute
+                    path="/affiliate-team-List"
+                    component={MyTeamList}
+                  />
+
+                  <AppRoute
+                    path="/affiliate-commission-setting"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateCommissionSetting
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/affiliate-List"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/affiliate-registration"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateListRegistration
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/affiliate-registrationby/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateListRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/affiliate-profile/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateProfile
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/affiliate-dashboard/:id"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateDashboard
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* <Route
+                    path="/"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? Navigation
+                        : NotAuthorized
+                    }
+                  >
+                    <Route
+                      path="/affiliatePersonalInfo/:id"
+                      component={
+                        permissions?.includes(permissionList?.View_Consultant)
+                          ? AffiliatePersonalInfo
+                          : NotAuthorized
+                      }
+                    />
+                    <Route
+                      path="/affiliateContactInfo/:id"
+                      component={
+                        permissions?.includes(permissionList?.View_Consultant)
+                          ? AffiliateContactInfo
+                          : NotAuthorized
+                      }
+                    />
+                  </Route> */}
+                  <AffiliateRoute
+                    path="/affiliatePersonalInfo/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliatePersonalInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateContactInfo/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateContactInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateEmergencyInfo/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateEmergencyInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateEligibilityInfo/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateEligibilityInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateBankInfo/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateBankInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateCommission/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateCommission
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/affiliateTerms/:affiliateId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AffiliateTerms
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/affiliate-declaration/:affiliateId?"
+                    component={AffiliateNewDeclaration}
+                  />
+
+                  {/* Companion paths */}
+
+                  <AppRoute
+                    path="/companion-transation"
+                    component={CompanionTransation}
+                  />
+
+                  <AppRoute
+                    path="/companion-Invitation"
+                    component={CompanionInvitation}
+                  />
+                  <AppRoute
+                    path="/companion-Invitation-list/:companionId"
+                    component={CompanionInvitationListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-Invitation-list/:affiliateId"
+                    component={AffiliateInvitationListForSystem}
+                  />
+
+                  <AppRoute
+                    path="/companion-earning"
+                    component={CompanionEarning}
+                  />
+                  <AppRoute
+                    path="/companion-content"
+                    component={CompanionContent}
+                  />
+
+                  <AppRoute
+                    path="/companion-team-List/:companionId"
+                    component={CompanionTeamMemberListForSystem}
+                  />
+                  <AppRoute
+                    path="/companion-team-List"
+                    component={CompanionMyTeamList}
+                  />
+
+                  <AppRoute
+                    path="/companion-commission-setting"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionCommissionSetting
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-List"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-registration"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionListRegistration
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-registrationby/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionListRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/companion-profile/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionProfile
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-dashboard/:id"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionDashboard
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* <Route
+                    path="/"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? Navigation
+                        : NotAuthorized
+                    }
+                  >
+                    <Route
+                      path="/affiliatePersonalInfo/:id"
+                      component={
+                        permissions?.includes(permissionList?.View_Consultant)
+                          ? AffiliatePersonalInfo
+                          : NotAuthorized
+                      }
+                    />
+                    <Route
+                      path="/affiliateContactInfo/:id"
+                      component={
+                        permissions?.includes(permissionList?.View_Consultant)
+                          ? AffiliateContactInfo
+                          : NotAuthorized
+                      }
+                    />
+                  </Route> */}
+                  <AffiliateRoute
+                    path="/companionPersonalInfo/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionPersonalInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionContactInfo/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionContactInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionEmergencyInfo/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionEmergencyInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionEligibilityInfo/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionEligibilityInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionBankInfo/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionBankInfo
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionCommission/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionCommission
+                        : NotAuthorized
+                    }
+                  />
+                  <AffiliateRoute
+                    path="/companionTerms/:companionId"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? CompanionTerms
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/companion-declaration/:companionId?"
+                    component={CompanionNewDeclaration}
+                  />
+
+                  {/* Companion paths */}
 
                   {/* Admission manager project deadline paths */}
 
@@ -1659,6 +2393,17 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
+                    path="/admissionOfficerListbyProvider/:providerId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_AdmissionOfficer_list
+                      )
+                        ? AdmissionOfficerList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
                     path="/admissionOfficerListFromAdmissionManagerList/:providerId/:managerId"
                     component={
                       permissions?.includes(
@@ -1784,6 +2529,15 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
+                  <AppRoute
+                    path="/staffRegistrationByType/:type"
+                    component={
+                      permissions.includes(permissionList?.Add_Employee)
+                        ? StaffRegistration
+                        : NotAuthorized
+                    }
+                  />
                   <AppRoute
                     path="/staffGeneralInformation/:staffId"
                     component={
@@ -1889,6 +2643,14 @@ class AppRouter extends React.Component {
                   />
                   <AppRoute
                     path="/addUniversity/:univerId?"
+                    component={
+                      permissions?.includes(permissionList?.Add_University)
+                        ? AddUniversity
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/addUniversityByprovideId/:provideId?"
                     component={
                       permissions?.includes(permissionList?.Add_University)
                         ? AddUniversity
@@ -2021,10 +2783,30 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
+                    path="/branch-consultantList/:id"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Consultant_list
+                      )
+                        ? BranchConsultantList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
                     path="/parentConsultantProfile/:id"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? ParentConsultantProfile
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/consultantProfile/:id/:slug"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? ConsultantProfile
                         : NotAuthorized
                     }
                   />
@@ -2128,9 +2910,43 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  <AppRoute
+                    path="/affiliate-registrationByCons/:id"
+                    component={
+                      permissions?.includes(permissionList?.Add_Associate)
+                        ? AffiliateListRegistration
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-registrationByCons/:id"
+                    component={
+                      permissions?.includes(permissionList?.Add_Associate)
+                        ? CompanionListRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/ConsultantLevel"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? ConsultantLevel
+                        : NotAuthorized
+                    }
+                  />
 
                   <AppRoute
                     path="/addConsultant"
+                    component={
+                      permissions?.includes(permissionList?.Add_Consultant)
+                        ? GeneralInformationRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/addConsultantByBranch/:branchId"
                     component={
                       permissions?.includes(permissionList?.Add_Consultant)
                         ? GeneralInformationRegistration
@@ -2274,6 +3090,10 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  <AppRoute
+                    path="/consultant-declaration/:consultantRegisterId?"
+                    component={ConsultantNewDeclaration}
+                  />
 
                   <AppRoute
                     path="/associateInformation/:consultantRegisterId"
@@ -2301,10 +3121,52 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  <AppRoute
+                    path="/ConsultantByAffiliate/:id"
+                    component={
+                      permissions?.includes(permissionList?.View_Associate)
+                        ? ConsultantByAffiliate
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/ConsultantByAffiliateList"
+                    component={
+                      permissions?.includes(permissionList?.View_Associate)
+                        ? ConsultantByAffiliate
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ConsultantByCompanion/:id"
+                    component={
+                      permissions?.includes(permissionList?.View_Associate)
+                        ? ConsultantByCompanion
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/ConsultantByCompanionList"
+                    component={
+                      permissions?.includes(permissionList?.View_Associate)
+                        ? ConsultantByCompanion
+                        : NotAuthorized
+                    }
+                  />
 
                   <AppRoute
                     path="/associateAddSuccess"
                     component={AssociateAddSuccess}
+                  />
+                  <AppRoute
+                    path="/affiliateAddSuccess"
+                    component={AffiliateAddSuccess}
+                  />
+                  <AppRoute
+                    path="/companionAddSuccess"
+                    component={CompanionAddSuccess}
                   />
 
                   <AppRoute
@@ -2495,6 +3357,18 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
+                  {/* University For Sharing & FAQ starts here */}
+                  <AppRoute
+                    path="/universityList-sharing-faq"
+                    component={UniversityListForSharingFAQ}
+                  />
+                  <AppRoute
+                    path="/university-information-doc-faq"
+                    component={UniversityInformationDocumentsFAQ}
+                  />
+
+                  {/* University For Sharing & FAQ starts here */}
 
                   {/* University Course starts here */}
                   <AppRoute
@@ -2759,7 +3633,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/applicationsByStatus/:status/:selector"
+                    path="/applicationsbyintake/:intake"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List
@@ -2770,7 +3644,72 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/applicationsFromConsultant/:consultantId"
+                    path="/applicationsbyprovider/:providerId/:intake"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/applicationsByStatus/:status/:selector/:intake"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* <AppRoute
+                    path="/applicationsByStatus/:status/:selector"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  /> */}
+
+                  <AppRoute
+                    path="/applicationsFromConsultant/:consultantId/:intake?"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/applicationsFromAssociate/:consultantId/:intake?"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? AssociateApplication
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/applicationsFromAssociates/:consultantId/:intake?"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? AssociatesApplications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/applicationsFromConsultantProfile/:consultantId/:status/:selector/:intake"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List
@@ -2791,7 +3730,83 @@ class AppRouter extends React.Component {
                     }
                   />
 
+                  <AppRoute
+                    path="/branch-applications/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/provider-applications/:providerId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/admission-manager-applications/:status/:selector/:admId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ApplicationListByAdmissionmanager/:admId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/applicationsbybranch/:branchId/:intake"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/applicationsByBranchStatus/:branchId/:status/:selector/:intake"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
                   {/* <AppRoute  path="/applicationsByConsultant/:cId" component={permissions?.includes(permissionList?.View_Application_List)? Applications : NotAuthorized} /> */}
+
+                  <AppRoute
+                    path="/applicationDetails/:id/:stdId/:tab"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? ApplicationDetails
+                        : NotAuthorized
+                    }
+                  />
 
                   <AppRoute
                     path="/applicationDetails/:id/:stdId"
@@ -3099,6 +4114,16 @@ class AppRouter extends React.Component {
                     }
                   />
 
+                  {/* Lead APP */}
+
+                  <AppRoute path="/LeadDashboard" component={LeadDashboard} />
+                  <AppRoute path="/LeadList" component={LeadList} />
+                  <AppRoute path="/LeadSettings" component={LeadSettings} />
+                  <AppRoute path="/lead/profile/:id" component={LeadProfile} />
+                  <AppRoute path="/LeadConsultant" component={LeadConsultant} />
+
+                  {/* Student  */}
+
                   <AppRoute
                     path="/studentList"
                     component={
@@ -3107,6 +4132,25 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
+                  <AppRoute
+                    path="/lead-student-List"
+                    component={
+                      permissions?.includes(permissionList?.View_Student_list)
+                        ? LeadStudentList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/branch-studentList/:id"
+                    component={
+                      permissions?.includes(permissionList?.View_Student_list)
+                        ? StudentList
+                        : NotAuthorized
+                    }
+                  />
+
                   <AppRoute
                     path="/studentListByType/:type"
                     component={
@@ -3131,17 +4175,6 @@ class AppRouter extends React.Component {
                         permissionList?.View_University_List
                       )
                         ? UniversityList
-                        : NotAuthorized
-                    }
-                  />
-
-                  <AppRoute
-                    path="/ApplicationListByAdmissionofficer/:consultantId"
-                    component={
-                      permissions?.includes(
-                        permissionList?.View_Application_List
-                      )
-                        ? Applications
                         : NotAuthorized
                     }
                   />
@@ -3788,6 +4821,15 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
+                    path="/student-declaration/:applicationStudentId?"
+                    component={StudentNewDeclaration}
+                  />
+                  <AppRoute
+                    path="/bulk-commission-group"
+                    component={BulkCommissionGroup}
+                  />
+
+                  <AppRoute
                     path="/addUniversityCommission/:univerId"
                     component={
                       permissions?.includes(permissionList.Edit_University)
@@ -3860,6 +4902,89 @@ class AppRouter extends React.Component {
 
                   {/* <AppRoute  path="/addProviderUniversityTestScore/:providerProfileId/:univerId" component={permissions?.includes(permissionList.Add_New_University_Test_Requirement) ? AddProviderUniversityTestScore : NotAuthorized} /> */}
 
+                  {/* Recycle Bin path */}
+
+                  <AppRoute
+                    path="/recycle/student"
+                    component={RecycleStudent}
+                  />
+                  <AppRoute
+                    path="/recycle/consultant"
+                    component={RecycleConsultant}
+                  />
+                  <AppRoute
+                    path="/recycle/affiliate"
+                    component={RecycleAffiliate}
+                  />
+                  <AppRoute
+                    path="/recycle/companion"
+                    component={RecycleCompanion}
+                  />
+
+                  <AppRoute
+                    path="/recycle/application"
+                    component={RecycleApplication}
+                  />
+
+                  <AppRoute
+                    path="/recycle/university"
+                    component={RecycleUniversity}
+                  />
+                  <AppRoute
+                    path="/recycle/subjects"
+                    component={RecycleSubjects}
+                  />
+
+                  <AppRoute
+                    path="/recycle/accountsManager"
+                    component={RecycleAccountsManager}
+                  />
+
+                  <AppRoute
+                    path="/recycle/accountsOfficer"
+                    component={RecycleAccountsOfficer}
+                  />
+
+                  <AppRoute path="/recycle/admin" component={RecycleAdmin} />
+
+                  <AppRoute
+                    path="/recycle/admissionManager"
+                    component={RecycleAdmissionManager}
+                  />
+
+                  <AppRoute
+                    path="/recycle/admissionOfficer"
+                    component={RecycleAdmissionOfficer}
+                  />
+
+                  <AppRoute
+                    path="/recycle/branchManager"
+                    component={RecycleBranchManager}
+                  />
+                  <AppRoute
+                    path="/recycle/complianceManager"
+                    component={RecycleComplianceManager}
+                  />
+                  <AppRoute
+                    path="/recycle/complianceOfficer"
+                    component={RecycleComplianceOfficer}
+                  />
+                  <AppRoute path="/recycle/editor" component={RecycleEditor} />
+
+                  <AppRoute
+                    path="/recycle/financeManager"
+                    component={RecycleFinanceManager}
+                  />
+
+                  <AppRoute
+                    path="/recycle/providerAdmin"
+                    component={RecycleProviderAdmin}
+                  />
+
+                  <AppRoute path="/recycle" component={RecycleBin} />
+
+                  {/* Recycle Bin path */}
+
                   {/* login history path */}
 
                   <AppRoute path="/loginHistory" component={LoginHistory} />
@@ -3878,6 +5003,14 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute path="/search" component={Search} />
+                  <AppRoute
+                    path="/searchByStudent/:student"
+                    component={Search}
+                  />
+                  <AppRoute
+                    path="/searchBydepartment/:departmentId"
+                    component={Search}
+                  />
 
                   {/* Seed Data path */}
                   <AppRoute path="/seedData" component={SeedData} />
@@ -3886,6 +5019,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/allNotifications"
                     component={Notifications}
+                  />
+                  <AppRoute
+                    path="/terms-condition"
+                    component={TermsAndCondition}
+                  />
+                  <AppRoute
+                    path="/terms-details/:id"
+                    component={TandCDetails}
                   />
 
                   {/* All Message Path */}
@@ -3911,6 +5052,18 @@ class AppRouter extends React.Component {
 
                   <AppRoute path="/400" component={BadRequest} fullLayout />
 
+                  <AppRoute
+                    path="/verifyEmail/:email"
+                    component={VerifyEmail}
+                    fullLayout
+                  />
+
+                  <AppRoute
+                    path="/pages/reset-password/:email"
+                    component={resetPassword}
+                    fullLayout
+                  />
+
                   {/* Session Expired  */}
                   {/* <AppRoute path='/sessionExpired' component={SessionExpired} fullLayout /> */}
 
@@ -3924,12 +5077,7 @@ class AppRouter extends React.Component {
             <Router history={history}>
               <ToastProvider autoDismiss={true}>
                 <Switch>
-                  <AppRoute
-                    exact
-                    path="/"
-                    component={StudentLogin}
-                    fullLayout
-                  />
+                  <AppRoute exact path="/" component={Login} fullLayout />
                   <AppRoute
                     path="/studentAccountCreated"
                     component={StudentAccountCreateSuccessfully}
@@ -3945,9 +5093,31 @@ class AppRouter extends React.Component {
                     component={ConsultantAccountCreateSuccessfully}
                     fullLayout
                   />
+
                   <AppRoute
-                    path="/studentRegister/:invitationcode?"
+                    path="/affiliateAccountCreated"
+                    component={AffiliateAccountCreateSuccessfully}
+                    fullLayout
+                  />
+                  <AppRoute
+                    path="/companionAccountCreated"
+                    component={CompanionAccountCreateSuccessfully}
+                    fullLayout
+                  />
+
+                  <AppRoute
+                    path="/studentRegister/:invitationcode?/:email?"
                     component={StudentRegister}
+                    fullLayout
+                  />
+                  <AppRoute
+                    path="/affiliate-Register/:invitationcode?"
+                    component={AffiliateRegister}
+                    fullLayout
+                  />
+                  <AppRoute
+                    path="/companion-Register/:invitationcode?"
+                    component={CompanionRegister}
                     fullLayout
                   />
                   <AppRoute
@@ -3966,13 +5136,20 @@ class AppRouter extends React.Component {
                     component={forgotPassword}
                     fullLayout
                   />
+
+                  <AppRoute
+                    path="/verifyEmail/:email"
+                    component={VerifyEmail}
+                    fullLayout
+                  />
+
                   <AppRoute
                     path="/pages/lock-screen"
                     component={lockScreen}
                     fullLayout
                   />
                   <AppRoute
-                    path="/pages/reset-password"
+                    path="/pages/reset-password/:email"
                     component={resetPassword}
                     fullLayout
                   />

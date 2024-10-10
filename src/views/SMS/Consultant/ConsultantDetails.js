@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import {
-  Card,
-  CardBody,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Table,
-  NavLink,
-  NavItem,
-  Nav,
-} from "reactstrap";
+import { Card, Table } from "reactstrap";
 import { useHistory, useLocation } from "react-router";
 import get from "../../../helpers/get";
 import { rootUrl } from "../../../constants/constants";
@@ -55,7 +43,7 @@ const ConsultantDetails = () => {
   useEffect(() => {
     get(`Consultant/Profile/${consultantRegisterId}`).then((res) => {
       setConsultantData(res);
-      console.log(consultantData, "res");
+      console.log(res, "res");
       setContactInfo(res?.consultantContact);
       setEligibility(res?.consultantProfileEligibility);
 
@@ -250,7 +238,7 @@ const ConsultantDetails = () => {
               <tr className="tr-border-bottom">
                 <td width="40%">Phone Number:</td>
 
-                <td width="60%">{contactInfo?.cellPhoneNumber}</td>
+                <td width="60%">{consultantData?.phoneNumber}</td>
               </tr>
 
               <tr className="tr-border-bottom">
@@ -364,7 +352,7 @@ const ConsultantDetails = () => {
             <Table id="table-to-xls">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>Sl/No</th>
+                  {/* <th>Sl/No</th> */}
                   <th>Price Range</th>
                   <th>Range From</th>
                   <th>Range To</th>
@@ -374,7 +362,7 @@ const ConsultantDetails = () => {
               <tbody>
                 {priceRangeList?.map((range, i) => (
                   <tr key={range.id} style={{ textAlign: "center" }}>
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
 
                     <td>{range?.priceRangeName}</td>
 

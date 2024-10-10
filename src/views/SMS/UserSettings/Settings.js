@@ -6,6 +6,7 @@ import put from "../../../helpers/put";
 import SaveButton from "../../../components/buttons/SaveButton";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { userTypes } from "../../../constants/userTypeConstant";
+import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -64,8 +65,9 @@ const Settings = () => {
           autoDismiss: "true",
         });
         setEmail("");
-        window.localStorage.clear();
-        window.location.reload();
+        logoutStorageHandler();
+        // window.localStorage.clear();
+        // window.location.reload();
       } else {
         addToast(res?.data?.message, {
           appearance: "error",
@@ -165,7 +167,9 @@ const Settings = () => {
                         : `/staffGeneralInformation/${current_user?.referenceId}`
                     }
                   >
-                    <i class="far fa-edit text-primary"></i>
+                    {userTypeId !== userTypes.SystemAdmin.toString() && (
+                      <i class="far fa-edit text-primary"></i>
+                    )}
                   </Link>
                 </div>
               </div>

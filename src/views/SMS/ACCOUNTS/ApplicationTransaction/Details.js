@@ -24,6 +24,7 @@ import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../Components/ButtonLoader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import ButtonForFunction from "../../Components/ButtonForFunction";
 
 const Details = () => {
   const { id } = useParams();
@@ -316,104 +317,100 @@ const Details = () => {
 
       <div className="row">
         <div className="col-md-7">
-          <Card>
-            <CardBody>
-              <p className="section-title">Basic Information</p>
+          <Card className="p-4">
+            <span
+              className="app-style-const p-2"
+              style={{ backgroundColor: "#DFEEEE" }}
+            >
+              Basic Information
+            </span>
 
-              <Table className="table-bordered mt-4">
-                <tbody>
-                  <tr>
-                    <td width="40%">
-                      <b>Student:</b>
-                    </td>
+            <Table borderless responsive className="mb-4">
+              <tbody>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Student:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.student}</>
-                      </div>
-                    </td>
-                  </tr>
+                  <td width="60%">{data?.student}</td>
+                </tr>
 
-                  <tr>
-                    <td width="40%">
-                      <b>University:</b>
-                    </td>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">University:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.unviersity}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Course:</b>
-                    </td>
+                  <td width="60%">{data?.unviersity}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Course:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.subject}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Consultant:</b>
-                    </td>
+                  <td width="60%">{data?.subject}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Consultant:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.consultant}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Registration Status:</b>
-                    </td>
+                  <td width="60%">{data?.consultant}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Registration Status:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.registrationStatus}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Transaction Status:</b>
-                    </td>
+                  <td width="60%">{data?.registrationStatus}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Transaction Status:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.transactionStatus}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Account Intake:</b>
-                    </td>
+                  <td width="60%">{data?.transactionStatus}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Intake:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.accountIntake}</>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td width="40%">
-                      <b>Amount:</b>
-                    </td>
+                  <td width="60%">{data?.intake}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Account Intake:</td>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        £{data?.amount}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            </CardBody>
+                  <td width="60%">{data?.accountIntake}</td>
+                </tr>
+                <tr
+                  style={{
+                    borderBottom: "1px solid #2525251F",
+                  }}
+                >
+                  <td width="40%">Amount:</td>
+
+                  <td width="60%">{data?.amount}</td>
+                </tr>
+              </tbody>
+            </Table>
           </Card>
 
           <Card>
@@ -472,19 +469,26 @@ const Details = () => {
                   {permissions?.includes(
                     permissionList.Add_Transaction_Note
                   ) ? (
-                    <Button color="primary" onClick={() => setOpenModal5(true)}>
-                      <i className="fas fa-plus"></i>{" "}
-                      <span className="ml-1">Add Note</span>
-                    </Button>
+                    <ButtonForFunction
+                      func={() => setOpenModal5(true)}
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      name={" Add Note"}
+                      permission={6}
+                    />
                   ) : null}
                 </>
               ) : (
                 <>
                   <div className="d-flex justify-content-between">
                     <div>
-                      <p className="section-title">Note</p>
+                      <p className="section-title" style={{ color: "#495057" }}>
+                        Note
+                      </p>
 
-                      <span>{data?.transactionNote}</span>
+                      <span style={{ color: "#878A99" }}>
+                        {data?.transactionNote}
+                      </span>
                     </div>
 
                     <div>
@@ -511,150 +515,139 @@ const Details = () => {
         </div>
 
         <div className="col-md-5">
-          <Card>
+          <Card className="p-2">
             <CardBody>
-              <p className="section-title">Payment Authorization</p>
-              <Table className="table-bordered mt-4">
-                <tbody>
-                  <tr>
-                    <td width="40%">
-                      <b>Transaction Status:</b>
-                    </td>
+              <p className="section-title" style={{ color: "#000" }}>
+                Payment Authorization
+              </p>
 
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.transactionStatus}</>
+              <div className="d-flex justify-content-between">
+                <p className="transaction-status">Transaction Status</p>
+                <div className="d-flex justify-content-between">
+                  {data?.transactionStatusId !== 2 && (
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Transaction_Status
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              style={{ cursor: "pointer" }}
+                              className="fas fa-pencil-alt pencil-style"
+                            ></i>
+                          }
+                          func={() => setOpenModal(true)}
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
-                        <div className="d-flex justify-content-between">
-                          {data?.transactionStatusId !== 2 && (
-                            <>
-                              {permissions?.includes(
-                                permissionList.Update_Transaction_Status
-                              ) ? (
-                                <SpanButton
-                                  icon={
-                                    <i
-                                      style={{ cursor: "pointer" }}
-                                      className="fas fa-pencil-alt pencil-style"
-                                    ></i>
-                                  }
-                                  func={() => setOpenModal(true)}
-                                  permission={6}
-                                />
-                              ) : null}
-                            </>
-                          )}
+                  {data?.transactionStatusId !== 2 && (
+                    <Modal
+                      isOpen={openModal}
+                      toggle={closeModal}
+                      className="uapp-modal2"
+                    >
+                      <ModalHeader>Update Transaction Status</ModalHeader>
+                      <ModalBody>
+                        <Form onSubmit={updateTransactionStatus}>
+                          <input
+                            type="hidden"
+                            name="applicationTransactionId"
+                            id="applicationTransactionId"
+                            value={data?.id}
+                          />
 
-                          {data?.transactionStatusId !== 2 && (
-                            <Modal
-                              isOpen={openModal}
-                              toggle={closeModal}
-                              className="uapp-modal2"
+                          <FormGroup
+                            row
+                            className="has-icon-left position-relative"
+                          >
+                            <Col md="5">
+                              <span>
+                                Transaction Status{" "}
+                                <span className="text-danger">*</span>{" "}
+                              </span>
+                            </Col>
+                            <Col md="7">
+                              <Select
+                                options={transactionOptions}
+                                value={{
+                                  label: transactionLabel,
+                                  value: transactionValue,
+                                }}
+                                onChange={(opt) =>
+                                  selectTransaction(opt.label, opt.value)
+                                }
+                                name="transactionStatusId"
+                                id="transactionStatusId"
+                              />
+                            </Col>
+                          </FormGroup>
+
+                          <FormGroup
+                            className="has-icon-left position-relative"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Button
+                              color="danger"
+                              className="mr-1 mt-3"
+                              onClick={closeModal}
                             >
-                              <ModalHeader>
-                                Update Transaction Status
-                              </ModalHeader>
-                              <ModalBody>
-                                <Form onSubmit={updateTransactionStatus}>
-                                  <input
-                                    type="hidden"
-                                    name="applicationTransactionId"
-                                    id="applicationTransactionId"
-                                    value={data?.id}
-                                  />
+                              Close
+                            </Button>
 
-                                  <FormGroup
-                                    row
-                                    className="has-icon-left position-relative"
-                                  >
-                                    <Col md="5">
-                                      <span>
-                                        Transaction Status{" "}
-                                        <span className="text-danger">*</span>{" "}
-                                      </span>
-                                    </Col>
-                                    <Col md="7">
-                                      <Select
-                                        options={transactionOptions}
-                                        value={{
-                                          label: transactionLabel,
-                                          value: transactionValue,
-                                        }}
-                                        onChange={(opt) =>
-                                          selectTransaction(
-                                            opt.label,
-                                            opt.value
-                                          )
-                                        }
-                                        name="transactionStatusId"
-                                        id="transactionStatusId"
-                                      />
-                                    </Col>
-                                  </FormGroup>
+                            <CustomButtonRipple
+                              color={"primary"}
+                              type={"submit"}
+                              className={"mr-1 mt-3"}
+                              name={progress1 ? <ButtonLoader /> : "Submit"}
+                              permission={6}
+                              isDisabled={buttonStatus}
+                            />
 
-                                  <FormGroup
-                                    className="has-icon-left position-relative"
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                    }}
-                                  >
-                                    <Button
-                                      color="danger"
-                                      className="mr-1 mt-3"
-                                      onClick={closeModal}
-                                    >
-                                      Close
-                                    </Button>
+                            {/* }  */}
+                          </FormGroup>
+                        </Form>
+                      </ModalBody>
+                    </Modal>
+                  )}
+                </div>
+              </div>
 
-                                    <CustomButtonRipple
-                                      color={"primary"}
-                                      type={"submit"}
-                                      className={"mr-1 mt-3"}
-                                      name={
-                                        progress1 ? <ButtonLoader /> : "Submit"
-                                      }
-                                      permission={6}
-                                      isDisabled={buttonStatus}
-                                    />
+              <p className="py-3 ">
+                <span
+                  className={
+                    data?.transactionStatusId === 2
+                      ? "transaction-status-button-authorized"
+                      : data?.transactionStatusId === 1
+                      ? "transaction-status-button-pending"
+                      : "transaction-status-button-rejected"
+                  }
+                >
+                  {data?.transactionStatus}
+                </span>
+              </p>
 
-                                    {/* }  */}
-                                  </FormGroup>
-                                </Form>
-                              </ModalBody>
-                            </Modal>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td width="40%">
-                      <b>Date:</b>
-                    </td>
-
-                    <td width="60%">
-                      <div className="d-flex justify-content-between">
-                        <>{data?.transactionDate}</>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
+              <p className="transaction-status-date">
+                Date: {data?.transactionDate}
+              </p>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody>
-              <p className="section-title">
-                <b>University Installment</b>
+              <p className="section-title" style={{ color: "#000" }}>
+                University Installment
               </p>
 
               {/* Installments */}
 
               <div className="hedding-titel d-flex justify-content-between mt-4">
-                <p className="section-title">1st Installment</p>
+                <p className="installment">1st Installment</p>
 
                 {/* <div className="text-right edit-style  p-3" >
                     <span> <i className="fas fa-pencil-alt pencil-style"></i> </span>
@@ -681,31 +674,38 @@ const Details = () => {
                 ) : null}
               </div>
 
-              <div className="mt-3">
+              <div className="mt-1 mb-5">
                 {installment?.firstInstallmentStatus == 1 ? null : (
                   <>
-                    {" "}
-                    <b>Date: </b>{" "}
-                    <span>
-                      {" "}
-                      {handleDate(installment?.firstInstallmentDate)}
-                    </span>
+                    <p className="transaction-status-date">
+                      Date: {handleDate(installment?.firstInstallmentDate)}
+                    </p>
                   </>
                 )}
-                <br />
-                <b>Note: </b> <span> {installment?.firstInstallmentNote}</span>
-                <br />
-                <b>Status: </b>{" "}
-                <span>
-                  {" "}
-                  {installment?.firstInstallmentStatus == 1
-                    ? "Pending"
-                    : installment?.firstInstallmentStatus == 2
-                    ? "Received"
-                    : installment?.firstInstallmentStatus == 3
-                    ? "Rejected"
-                    : null}
-                </span>
+                <p className="transaction-status-date">
+                  Note: {installment?.firstInstallmentNote}
+                </p>
+                <p>
+                  <span
+                    className="transaction-status-date mr-2"
+                    style={{ fontWeight: "600" }}
+                  >
+                    Status
+                  </span>
+                  {installment?.firstInstallmentStatus == 1 ? (
+                    <span className="transaction-status-button-pending">
+                      Pending
+                    </span>
+                  ) : installment?.firstInstallmentStatus == 2 ? (
+                    <span className="transaction-status-button-authorized">
+                      Received
+                    </span>
+                  ) : installment?.firstInstallmentStatus == 3 ? (
+                    <span className="transaction-status-button-rejected">
+                      Rejected
+                    </span>
+                  ) : null}
+                </p>
                 <Modal
                   isOpen={openModal2}
                   toggle={closeModal2}
@@ -800,12 +800,7 @@ const Details = () => {
                 <>
                   <div className="hedding-titel d-flex justify-content-between mt-4">
                     <div>
-                      <h6>
-                        {" "}
-                        <b>2nd Installment</b>{" "}
-                      </h6>
-
-                      <div className="bg-h"></div>
+                      <p className="installment">2nd Installment</p>
                     </div>
                     {/* <div className="text-right edit-style  p-3" >
                     <span> <i className="fas fa-pencil-alt pencil-style"></i> </span>
@@ -831,31 +826,39 @@ const Details = () => {
                     ) : null}
                   </div>
 
-                  <div className="mt-3">
+                  <div className="mt-3 mb-5">
                     {installment?.secondInstallmentStatus == 1 ? null : (
                       <>
-                        <b>Date: </b>{" "}
-                        <span>
-                          {" "}
-                          {handleDate(installment?.secondInstallmentDate)}
-                        </span>
+                        <p className="transaction-status-date">
+                          Date: {handleDate(installment?.secondInstallmentDate)}
+                        </p>
                       </>
                     )}
-                    <br />
-                    <b>Note: </b>{" "}
-                    <span> {installment?.secondInstallmentNote}</span>
-                    <br />
-                    <b>Status: </b>{" "}
-                    <span>
-                      {" "}
-                      {installment?.secondInstallmentStatus == 1
-                        ? "Pending"
-                        : installment?.firstInstallmentStatus == 2
-                        ? "Received"
-                        : installment?.secondInstallmentStatus == 3
-                        ? "Rejected"
-                        : null}
-                    </span>
+                    <p className="transaction-status-date">
+                      Note: {installment?.secondInstallmentNote}
+                    </p>
+                    <p>
+                      <span
+                        className="transaction-status-date mr-2"
+                        style={{ fontWeight: "600" }}
+                      >
+                        Status
+                      </span>
+                      {installment?.secondInstallmentStatus == 1 ? (
+                        <span className="transaction-status-button-pending">
+                          Pending
+                        </span>
+                      ) : installment?.firstInstallmentStatus == 2 ? (
+                        <span className="transaction-status-button-authorized">
+                          Received
+                        </span>
+                      ) : installment?.secondInstallmentStatus == 3 ? (
+                        <span className="transaction-status-button-rejected">
+                          Rejected
+                        </span>
+                      ) : null}
+                    </p>
+
                     <Modal
                       isOpen={openModal3}
                       toggle={closeModal3}
@@ -875,13 +878,13 @@ const Details = () => {
                             row
                             className="has-icon-left position-relative"
                           >
-                            <Col md="4">
+                            <Col md="5">
                               <span>
                                 Installment Status{" "}
                                 <span className="text-danger">*</span>{" "}
                               </span>
                             </Col>
-                            <Col md="8">
+                            <Col md="7">
                               <Select
                                 options={installmentOptions}
                                 value={{
@@ -901,12 +904,13 @@ const Details = () => {
                             row
                             className="has-icon-left position-relative"
                           >
-                            <Col md="4">
+                            <Col md="5">
                               <span>
-                                Note <span className="text-danger">*</span>{" "}
+                                Note
+                                {/* <span className="text-danger">*</span>{" "} */}
                               </span>
                             </Col>
-                            <Col md="8">
+                            <Col md="7">
                               <Input
                                 type="text"
                                 name="secondInstallmentNote"
@@ -915,7 +919,6 @@ const Details = () => {
                                 defaultValue={
                                   installment?.secondInstallmentNote
                                 }
-                                required
                               />
                             </Col>
                           </FormGroup>
@@ -956,14 +959,7 @@ const Details = () => {
               {installment?.secondInstallmentStatus == 2 ? (
                 <>
                   <div className="hedding-titel d-flex justify-content-between mt-4">
-                    <div>
-                      <h6>
-                        {" "}
-                        <b>3rd Installment</b>{" "}
-                      </h6>
-
-                      <div className="bg-h"></div>
-                    </div>
+                    <p className="installment">3rd Installment</p>
                     {/* <div className="text-right edit-style  p-3" >
                     <span> <i className="fas fa-pencil-alt pencil-style"></i> </span>
                   </div> */}
@@ -990,29 +986,37 @@ const Details = () => {
                   <div className="mt-3">
                     {installment?.thirdInstallmentStatus == 1 ? null : (
                       <>
-                        {" "}
-                        <b>Date: </b>{" "}
-                        <span>
-                          {" "}
-                          {handleDate(installment?.thirdInstallmentDate)}
-                        </span>
+                        <p className="transaction-status-date">
+                          Date: {handleDate(installment?.thirdInstallmentDate)}
+                        </p>{" "}
                       </>
                     )}
-                    <br />
-                    <b>Note: </b>{" "}
-                    <span> {installment?.thirdInstallmentNote}</span>
-                    <br />
-                    <b>Status: </b>{" "}
-                    <span>
-                      {" "}
-                      {installment?.thirdInstallmentStatus == 1
-                        ? "Pending"
-                        : installment?.thirdInstallmentStatus == 2
-                        ? "Received"
-                        : installment?.thirdInstallmentStatus == 3
-                        ? "Rejected"
-                        : null}
-                    </span>
+                    <p className="transaction-status-date">
+                      Note: {installment?.thirdInstallmentNote}
+                    </p>
+
+                    <p>
+                      <span
+                        className="transaction-status-date mr-2"
+                        style={{ fontWeight: "600" }}
+                      >
+                        Status
+                      </span>
+                      {installment?.thirdInstallmentStatus == 1 ? (
+                        <span className="transaction-status-button-pending">
+                          Pending
+                        </span>
+                      ) : installment?.thirdInstallmentStatus == 2 ? (
+                        <span className="transaction-status-button-authorized">
+                          Received
+                        </span>
+                      ) : installment?.thirdInstallmentStatus == 3 ? (
+                        <span className="transaction-status-button-rejected">
+                          Rejected
+                        </span>
+                      ) : null}
+                    </p>
+
                     <Modal
                       isOpen={openModal4}
                       toggle={closeModal4}
@@ -1032,13 +1036,13 @@ const Details = () => {
                             row
                             className="has-icon-left position-relative"
                           >
-                            <Col md="4">
+                            <Col md="5">
                               <span>
                                 Installment Status{" "}
                                 <span className="text-danger">*</span>{" "}
                               </span>
                             </Col>
-                            <Col md="8">
+                            <Col md="7">
                               <Select
                                 options={installmentOptions}
                                 value={{
@@ -1058,19 +1062,16 @@ const Details = () => {
                             row
                             className="has-icon-left position-relative"
                           >
-                            <Col md="4">
-                              <span>
-                                Note <span className="text-danger">*</span>{" "}
-                              </span>
+                            <Col md="5">
+                              <span>Note</span>
                             </Col>
-                            <Col md="8">
+                            <Col md="7">
                               <Input
                                 type="text"
                                 name="thirdInstallmentNote"
                                 id="thirdInstallmentNote"
                                 placeholder="Enter Note"
                                 defaultValue={installment?.thirdInstallmentNote}
-                                required
                               />
                             </Col>
                           </FormGroup>

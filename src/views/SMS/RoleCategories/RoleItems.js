@@ -206,7 +206,7 @@ const RoleItems = () => {
   };
 
   return (
-    <div className="">
+    <div>
       <BreadCrumb title=" Role Items" backTo="" path="" />
 
       <Card>
@@ -297,7 +297,7 @@ const RoleItems = () => {
           <Table className="table-sm table-bordered">
             <thead className="thead-uapp-bg">
               <tr style={{ textAlign: "center" }}>
-                <th>Serial</th>
+                {/* <th>Serial</th> */}
                 <th>Name</th>
                 <th>Parent</th>
                 <th>Action</th>
@@ -306,7 +306,7 @@ const RoleItems = () => {
             <tbody>
               {role.map((dept, index) => (
                 <tr key={index} style={{ textAlign: "center" }}>
-                  <th scope="row">{index + 1}</th>
+                  {/* <th scope="row">{index + 1}</th> */}
                   <td>{dept?.name}</td>
                   <td>{dept?.parentName}</td>
                   <td>
@@ -330,14 +330,6 @@ const RoleItems = () => {
                       )}
                     </ButtonGroup>
 
-                    <ConfirmModal
-                      text="Do You Want To Delete This Role?"
-                      isOpen={deleteModal}
-                      toggle={closeDeleteModal}
-                      confirm={handleDelete}
-                      cancel={closeDeleteModal}
-                    />
-
                     {/* modal for delete */}
                   </td>
                 </tr>
@@ -346,6 +338,14 @@ const RoleItems = () => {
           </Table>
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Role?"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={handleDelete}
+        cancel={closeDeleteModal}
+      />
     </div>
   );
 };

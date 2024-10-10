@@ -35,7 +35,7 @@ const StaffPersonalInformation = () => {
   const [maritalStatusValue, setMaritalStatusValue] = useState(0);
   const [maritalStatusError, setMaritalStatusError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [Dates, SetDate] = useState(currentDate);
+  const [Dates, SetDate] = useState(null);
   const [DatesError, SetDateError] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -65,9 +65,8 @@ const StaffPersonalInformation = () => {
         res?.maritalStatusId !== null ? res?.maritalStatusId : 0
       );
 
-      res?.dateOfBirth !== "0001-01-01T00:00:00"
-        ? SetDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"))
-        : SetDate(currentDate);
+      res?.dateOfBirth &&
+        SetDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
 
       setPhone(res?.phoneNumber);
       // SetDate(res?.dateOfBirth);
@@ -282,7 +281,16 @@ const StaffPersonalInformation = () => {
     <div>
       <BreadCrumb
         title="Staff Personal Information"
-        backTo="Staff"
+        backTo={
+          userType === userTypes?.Admin ||
+          userType === userTypes?.AccountManager ||
+          userType === userTypes?.ComplianceManager ||
+          userType === userTypes?.AccountOfficer ||
+          userType === userTypes?.FinanceManager ||
+          userType === userTypes?.Editor
+            ? null
+            : "Staff"
+        }
         path={`/staffList`}
       />
 

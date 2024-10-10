@@ -245,14 +245,13 @@ const AddNewAdmissionOfficerPage = () => {
 
   return (
     <div>
+      <BreadCrumb title="Admission Officer Information" backTo="" path="" />
       {loading ? (
         <div className="text-center">
           <img src={loader} alt="" className="img-fluid" />
         </div>
       ) : (
         <div>
-          <BreadCrumb title="Admission Officer Information" backTo="" path="" />
-
           <Card className="uapp-employee-search">
             <CardBody>
               <Form onSubmit={handleSubmit} className="mt-5">

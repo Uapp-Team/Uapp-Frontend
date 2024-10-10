@@ -20,6 +20,7 @@ const DesignationsCommissionList = () => {
   const [success, setSuccess] = useState(false);
   const { addToast } = useToasts();
   const [dataList, setDataList] = useState([]);
+  console.log(dataList, "dataList");
   const [currEditData, setCurrEditData] = useState({});
   const [currDeleteData, setCurrDeleteData] = useState({});
 
@@ -83,12 +84,12 @@ const DesignationsCommissionList = () => {
   return (
     <>
       <BreadCrumb title="Designations Commission List" backTo="" path="/" />
-      <Card>
-        <CardBody>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="row">
-                {filterbranch.length > 1 && (
+      {filterbranch.length > 1 && (
+        <Card>
+          <CardBody>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="row">
                   <div className="col-md-5 mb-3">
                     <Filter
                       data={filterbranch}
@@ -99,12 +100,12 @@ const DesignationsCommissionList = () => {
                       action={() => {}}
                     />
                   </div>
-                )}
+                </div>
               </div>
             </div>
-          </div>
-        </CardBody>
-      </Card>
+          </CardBody>
+        </Card>
+      )}
       <div className="custom-card-border p-4">
         <Row>
           <Col md={2} className="border-right">
@@ -136,7 +137,8 @@ const DesignationsCommissionList = () => {
                 <tr>
                   <th>Level</th>
                   <th>Designations</th>
-                  <th>Target </th>
+                  <th>Target For Bonus</th>
+                  <th>Target For Promotion</th>
                   <th>Bonus</th>
                   <th>Action</th>
                 </tr>
@@ -156,7 +158,11 @@ const DesignationsCommissionList = () => {
                           <b>{item?.personalStudentTarget}</b>
                         </li>
                         <li className="designation-commission-list">
-                          <span>Number Of Consultants</span>
+                          <span>
+                            {i === 4
+                              ? dataList[i]?.title
+                              : dataList[i + 1]?.title}
+                          </span>
                           <b>{item?.consultantTarget}</b>
                         </li>
                         <li className="designation-commission-list">
@@ -164,14 +170,52 @@ const DesignationsCommissionList = () => {
                           <b>{item?.studentFromTeam}</b>
                         </li>
                       </td>
+                      {/* 
+                      <td>
+                        {dataList?.map((item, i) => (
+                          <>
+                            <li className="designation-commission-list">
+                              <span>Direct sakib</span>
+                              <b>{item?.personalStudentTarget}</b>
+                            </li>
+                            <li className="designation-commission-list">
+                              <span>Number Of Consultants</span>
+                              <b>{item?.consultantTarget}</b>
+                            </li>
+                            <li className="designation-commission-list">
+                              <span>Students From Team</span>
+                              <b>{item?.studentFromTeam}</b>
+                            </li>
+                          </>
+                        ))}
+                      </td> */}
+
+                      <td>
+                        {dataList[i - 1] ? (
+                          <>
+                            <li className="designation-commission-list">
+                              <span>Direct Students</span>
+                              <b>{dataList[i - 1]?.personalStudentTarget}</b>
+                            </li>
+                            <li className="designation-commission-list">
+                              <span>{dataList[i]?.title}</span>
+                              <b>{dataList[i - 1]?.consultantTarget}</b>
+                            </li>
+                            <li className="designation-commission-list">
+                              <span>Students From Team</span>
+                              <b>{dataList[i - 1]?.studentFromTeam}</b>
+                            </li>
+                          </>
+                        ) : null}
+                      </td>
 
                       <td>
                         <li className="designation-commission-list">
-                          <span>For Team Target </span>
+                          <span>For Team </span>
                           <b>{item?.teamBonus}</b>
                         </li>
                         <li className="designation-commission-list">
-                          <span>Direct Student </span>
+                          <span>For Consultant </span>
                           <b>{item?.personalBonus}</b>
                         </li>
                       </td>
@@ -194,14 +238,6 @@ const DesignationsCommissionList = () => {
                         {/*>*/}
                         {/*  Delete*/}
                         {/*</span>*/}
-
-                        <ConfirmModal
-                          text="Do You Want To Delete This Promotional Commission ? Once Deleted it can't be Undone!"
-                          isOpen={deleteModal}
-                          toggle={() => setDeleteModal(!deleteModal)}
-                          confirm={handleDeleteData}
-                          cancel={() => setDeleteModal(false)}
-                        />
                       </td>
                     </tr>
                   ))}
@@ -220,6 +256,14 @@ const DesignationsCommissionList = () => {
           closeModal={closeModal}
         />
       </Modal>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Promotional Commission ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteData}
+        cancel={() => setDeleteModal(false)}
+      />
     </>
   );
 };

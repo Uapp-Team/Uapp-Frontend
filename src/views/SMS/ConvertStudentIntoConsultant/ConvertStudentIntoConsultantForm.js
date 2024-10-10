@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Select from "react-select";
 import {
   Card,
@@ -12,16 +12,14 @@ import {
   Label,
 } from "reactstrap";
 import { Upload, Modal } from "antd";
-import * as Icon from "react-feather";
 import get from "../../../helpers/get";
 import post from "../../../helpers/post";
-// import uploadBtn from "../../../../../../assets/img/upload.png";
-import uploadBtn from "../../../assets/img/upload.png";
 import { useToasts } from "react-toast-notifications";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
 import { currentDate } from "../../../components/date/calenderFormate";
+import UploadButton from "../../../components/buttons/UploadButton";
 
 const ConvertStudentIntoConsultantForm = () => {
   const referenceId = localStorage.getItem("referenceId");
@@ -385,11 +383,7 @@ const ConvertStudentIntoConsultantForm = () => {
                     return false;
                   }}
                 >
-                  {FileList3.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList3.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 <Modal
                   visible={previewVisible3}
@@ -424,11 +418,7 @@ const ConvertStudentIntoConsultantForm = () => {
                   }}
                   style={{ height: "32px" }}
                 >
-                  {FileList2.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList2.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 <Modal
                   visible={previewVisible2}
@@ -463,11 +453,7 @@ const ConvertStudentIntoConsultantForm = () => {
                   }}
                   style={{ height: "32px" }}
                 >
-                  {FileList.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 <Modal
                   visible={previewVisible}

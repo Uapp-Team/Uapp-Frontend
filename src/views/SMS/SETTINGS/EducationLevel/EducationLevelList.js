@@ -243,6 +243,7 @@ const EducationLevelList = () => {
 
   return (
     <div>
+      <BreadCrumb title="Education Levels" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
@@ -340,8 +341,6 @@ const EducationLevelList = () => {
             </ModalBody>
           </Modal>
 
-          <BreadCrumb title="Education Levels" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {/* <div className='mb-3'> */}
@@ -376,7 +375,7 @@ const EducationLevelList = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Decription</th>
                       <th>Level Value</th>
@@ -391,7 +390,7 @@ const EducationLevelList = () => {
                         key={educationInfo?.id}
                         style={{ textAlign: "center" }}
                       >
-                        <th scope="row">{serialNum + i}</th>
+                        {/* <th scope="row">{serialNum + i}</th> */}
                         <td>{educationInfo?.name}</td>
 
                         <td>{educationInfo?.description}</td>
@@ -429,13 +428,6 @@ const EducationLevelList = () => {
                               />
                             ) : null}
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Education Levels?"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={() => handleDeleteData(deleteData)}
-                            cancel={() => setDeleteModal(false)}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -446,6 +438,14 @@ const EducationLevelList = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Education Levels?"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={() => handleDeleteData(deleteData)}
+        cancel={() => setDeleteModal(false)}
+      />
     </div>
   );
 };

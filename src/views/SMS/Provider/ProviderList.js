@@ -30,28 +30,58 @@ import LinkButton from "../Components/LinkButton.js";
 import ButtonForFunction from "../Components/ButtonForFunction.js";
 import { permissionList } from "../../../constants/AuthorizationConstant.js";
 import Loader from "../Search/Loader/Loader.js";
-import ToggleSwitch from "../Components/ToggleSwitch";
 import put from "../../../helpers/put.js";
-import ButtonLoader from "../Components/ButtonLoader.js";
 import { userTypes } from "../../../constants/userTypeConstant.js";
 import { tableIdList } from "../../../constants/TableIdConstant.js";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
 import TagButton from "../../../components/buttons/TagButton.js";
 import ConfirmModal from "../../../components/modal/ConfirmModal.js";
+import PopOverText from "../../../components/PopOverText.js";
+import SaveButton from "../../../components/buttons/SaveButton.js";
+import CancelButton from "../../../components/buttons/CancelButton.js";
+import icon_info from "../../../assets/img/icons/icon_info.png";
+import Pagination from "../Pagination/Pagination.jsx";
+import ColumnProvider from "../TableColumn/ColumnProvider.js";
+import Typing from "../../../components/form/Typing.js";
 
 const ProviderList = () => {
+  const ProviderPaging = JSON.parse(sessionStorage.getItem("provider"));
   const history = useHistory();
-  const [providerList, setProviderList] = useState([]);
-  const [searchStr, setSearchStr] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [providerLabel, setProviderLabel] = useState("Provider Type");
-  const [providerValue, setProviderValue] = useState(0);
-  const [uappIdLabel, setUappIdLabel] = useState("UAPP ID");
-  const [uappIdValue, setUappIdValue] = useState(0);
-  const userType = localStorage.getItem("userType");
   // const [callApi, setCallApi] = useState(false);
+  const [providerList, setProviderList] = useState([]);
+  const [searchStr, setSearchStr] = useState(
+    ProviderPaging?.searchStr ? ProviderPaging?.searchStr : ""
+  );
+  const [currentPage, setCurrentPage] = useState(
+    ProviderPaging?.currentPage ? ProviderPaging?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    ProviderPaging?.dataPerPage ? ProviderPaging?.dataPerPage : 15
+  );
+  const [orderLabel, setOrderLabel] = useState(
+    ProviderPaging?.orderLabel ? ProviderPaging?.orderLabel : "Order By"
+  );
+  const [orderValue, setOrderValue] = useState(
+    ProviderPaging?.orderValue ? ProviderPaging?.orderValue : 0
+  );
+  const [providerLabel, setProviderLabel] = useState(
+    ProviderPaging?.providerLabel
+      ? ProviderPaging?.providerLabel
+      : "Provider Type"
+  );
+  const [providerValue, setProviderValue] = useState(
+    ProviderPaging?.providerValue ? ProviderPaging?.providerValue : 0
+  );
+  const [uappIdLabel, setUappIdLabel] = useState(
+    ProviderPaging?.uappIdLabel ? ProviderPaging?.uappIdLabel : "UAPP ID"
+  );
+  const [uappIdValue, setUappIdValue] = useState(
+    ProviderPaging?.uappIdValue ? ProviderPaging?.uappIdValue : 0
+  );
+  const userType = localStorage.getItem("userType");
+  const [callApi, setCallApi] = useState(false);
   // const [serialNum, setSerialNum] = useState(0);
-  // const [entity, setEntity] = useState(0);
+  const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -68,21 +98,72 @@ const ProviderList = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    const tableColumnProvider = JSON.parse(
+      localStorage.getItem("ColumnProvider")
+    );
+    tableColumnProvider && setTableData(tableColumnProvider);
+    !tableColumnProvider &&
+      localStorage.setItem("ColumnProvider", JSON.stringify(ColumnProvider));
+    !tableColumnProvider && setTableData(ColumnProvider);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "provider",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        providerLabel: providerLabel && providerLabel,
+        providerValue: providerValue && providerValue,
+        uappIdLabel: uappIdLabel && uappIdLabel,
+        uappIdValue: uappIdValue && uappIdValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+        orderLabel: orderLabel && orderLabel,
+        orderValue: orderValue && orderValue,
+      })
+    );
+  }, [
+    currentPage,
+    providerLabel,
+    providerValue,
+    uappIdLabel,
+    uappIdValue,
+    searchStr,
+    dataPerPage,
+    orderValue,
+    orderLabel,
+  ]);
 
   useEffect(() => {
     const providerTypeId = 0;
     // const pageSize = 15;
-    get(
-      `Provider/Index?providerTypeId=${
-        providerTypeId ? providerTypeId : providerValue
-      }&uappId=${uappIdValue}&searchstring=${searchStr}`
-    ).then((action) => {
-      console.log(action, "asif");
-      setProviderList(action?.models);
-      setLoading(false);
-      // setEntity(action?.totalEntity);
-      // setSerialNum(action?.firstSerialNumber);
-    });
+    if (!isTyping) {
+      get(
+        `Provider/Index?page=${currentPage}&pagesize=${dataPerPage}&providerTypeId=${
+          providerTypeId ? providerTypeId : providerValue
+        }&uappId=${uappIdValue}&searchstring=${searchStr}&sortby=${orderValue}`
+      ).then((action) => {
+        setProviderList(action?.models);
+        setLoading(false);
+        setEntity(action?.totalEntity);
+        // setSerialNum(action?.firstSerialNumber);
+      });
+    }
+
+    // get(
+    //   `Provider/Index?providerTypeId=${
+    //     providerTypeId ? providerTypeId : providerValue
+    //   }&uappId=${uappIdValue}&searchstring=${searchStr}`
+    // ).then((action) => {
+    //   setProviderList(action?.models);
+    //   setLoading(false);
+    //   // setEntity(action?.totalEntity);
+    //   // setSerialNum(action?.firstSerialNumber);
+    // });
 
     get(`ProviderType/GetAll`).then((res) => {
       setProviderType(res);
@@ -91,12 +172,17 @@ const ProviderList = () => {
     get(`ProviderDD/UappId`).then((res) => {
       setUappIdDD(res);
     });
-
-    get(`TableDefination/Index/${tableIdList?.Provider_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
-  }, [providerValue, uappIdValue, searchStr, currentPage, success]);
+  }, [
+    providerValue,
+    uappIdValue,
+    searchStr,
+    currentPage,
+    success,
+    callApi,
+    dataPerPage,
+    orderValue,
+    isTyping,
+  ]);
 
   const toggleDeleteProvider = (data) => {
     setDelData(data);
@@ -131,7 +217,7 @@ const ProviderList = () => {
   // search handler
   const handleSearch = () => {
     setCurrentPage(1);
-    // setCallApi((prev) => !prev);
+    setCallApi((prev) => !prev);
   };
 
   //
@@ -172,7 +258,7 @@ const ProviderList = () => {
     setProviderValue(0);
     setUappIdLabel("UAPP ID");
     setUappIdValue(0);
-    // setCallApi((prev) => !prev);
+    setCurrentPage(1);
   };
 
   // on enter press
@@ -181,6 +267,11 @@ const ProviderList = () => {
       setCurrentPage(1);
       // setCallApi((prev) => !prev);
     }
+  };
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    // setCallApi((prev) => !prev);
   };
 
   // toggle dropdown
@@ -230,25 +321,142 @@ const ProviderList = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheck(e.target.checked);
-    put(
-      `TableDefination/Update/${tableIdList?.Provider_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        setSuccess(!success);
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnProvider", JSON.stringify(values));
   };
-  console.log(providerList);
+
+  const userTypeId = localStorage.getItem("userType");
+  const [pass, setPass] = useState("");
+  const [cPass, setCPass] = useState("");
+  const [passData, setPassData] = useState({});
+  const [passModal, setPassModal] = useState(false);
+  const [passError, setPassError] = useState("");
+  const [error, setError] = useState("");
+  const [resetButtonStatus, setResetButtonStatus] = useState(false);
+
+  const handlePass = (data) => {
+    setPassData(data);
+    setPassModal(true);
+  };
+
+  const handleToggle = () => {
+    setPassError("");
+    setError("");
+    setPassModal(!passModal);
+  };
+
+  const passValidate = (e) => {
+    setPass(e.target.value);
+    if (e.target.value === "") {
+      setError("Provide a valid password");
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(e.target.value)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else {
+      setError("");
+    }
+  };
+
+  const confirmPassword = (e) => {
+    setCPass(e.target.value);
+    if (e.target.value === "") {
+      setPassError("Confirm your password");
+    } else {
+      setPassError("");
+    }
+    if (pass && e.target.value !== pass) {
+      setPassError("Passwords doesn't match.");
+    } else {
+      setPassError("");
+    }
+  };
+
+  const submitModalForm = (event) => {
+    event.preventDefault();
+
+    const subData = new FormData(event.target);
+
+    subData.append("id", passData?.id);
+    subData.append("password", pass);
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else if (pass !== cPass) {
+      setPassError("Passwords do not match");
+    } else {
+      setResetButtonStatus(true);
+      put(`Password/ChangePasswordForProviderAdmin`, subData).then((res) => {
+        setResetButtonStatus(false);
+        if (res?.status === 200 && res.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setPassData({});
+          setPassModal(false);
+          setPass("");
+          setCPass("");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
+    }
+  };
+  // user select data per page
+  const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
+  const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+
+  const selectDataSize = (value) => {
+    setCurrentPage(1);
+    setDataPerPage(value);
+    // setCallApi((prev) => !prev);
+  };
+
+  // user select order
+  const orderArr = [
+    {
+      label: "Newest",
+      value: 1,
+    },
+    {
+      label: "Oldest",
+      value: 2,
+    },
+    {
+      label: "A-Z",
+      value: 3,
+    },
+    {
+      label: "Z-A",
+      value: 4,
+    },
+  ];
+  const orderName = orderArr.map((dsn) => ({
+    label: dsn.label,
+    value: dsn.value,
+  }));
+
+  const selectOrder = (label, value) => {
+    setOrderLabel(label);
+    setOrderValue(value);
+    // setCallApi((prev) => !prev);
+  };
   return (
     <div>
+      <BreadCrumb title="Providers List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <BreadCrumb title="Providers List" backTo="" path="/" />
-          <Card className="uapp-employee-search">
+          <Card className="uapp-employee-search zindex-100">
             <CardBody>
               <Row>
                 <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
@@ -274,16 +482,22 @@ const ProviderList = () => {
                 </Col>
 
                 <Col lg="4" md="4" sm="12" xs="12">
-                  <Input
-                    style={{ height: "2.7rem" }}
-                    type="text"
+                  <Typing
                     name="searchstring"
-                    value={searchStr}
                     id="searchstring"
                     placeholder="Name, Email"
-                    onChange={searchValue}
+                    value={searchStr}
+                    setValue={setSearchStr}
+                    setIsTyping={setIsTyping}
                     onKeyDown={handleKeyDown}
                   />
+
+                  <div className="mt-1 d-flex justify-between">
+                    <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
+                    <div className="pl-2" style={{ paddingTop: "2px" }}>
+                      <span>Name should not include title.</span>
+                    </div>
+                  </div>
                 </Col>
               </Row>
 
@@ -358,6 +572,34 @@ const ProviderList = () => {
 
                 <Col lg="6" md="6" sm="12" xs="12">
                   <div className="d-flex justify-content-end">
+                    <div className="me-3 mb-2">
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">Order By :</div>
+                        <div className="ddzindex">
+                          <Select
+                            className="mr-2"
+                            options={orderName}
+                            value={{ label: orderLabel, value: orderValue }}
+                            onChange={(opt) =>
+                              selectOrder(opt.label, opt.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mr-3">
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">Showing :</div>
+                        <div className="ddzindex">
+                          <Select
+                            options={dataSizeName}
+                            value={{ label: dataPerPage, value: dataPerPage }}
+                            onChange={(opt) => selectDataSize(opt.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <div className="mr-3">
                       <Dropdown
                         className="uapp-dropdown"
@@ -410,14 +652,14 @@ const ProviderList = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData.map((table, i) => (
                             <div key={i}>
-                              {i === 6 ? (
+                              {i === 2 ? (
                                 <>
                                   {permissions?.includes(
-                                    permissionList.View_University_List
+                                    permissionList.Staff_Password_Change
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -428,7 +670,61 @@ const ProviderList = () => {
                                             id=""
                                             name="check"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
+                                            }}
+                                            defaultChecked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : i === 5 ? (
+                                <>
+                                  {permissions?.includes(
+                                    permissionList.View_Application_List
+                                  ) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
+
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            defaultChecked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : i === 6 ? (
+                                <>
+                                  {permissions?.includes(
+                                    permissionList.View_University_List
+                                  ) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
+
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -440,7 +736,7 @@ const ProviderList = () => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -451,7 +747,7 @@ const ProviderList = () => {
                                         id=""
                                         name="check"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -470,32 +766,65 @@ const ProviderList = () => {
                 </Col>
               </Row>
 
-              {loading ? (
-                <h2 className="text-center">Loading...</h2>
+              {providerList?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
               ) : (
-                <div className="table-responsive" ref={componentRef}>
-                  <Table id="table-to-xls" className="table-sm table-bordered">
-                    <thead className="tablehead">
-                      <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
-                        {tableData[1]?.isActive ? <th>Name</th> : null}
-                        {tableData[2]?.isActive ? <th>Email</th> : null}
-                        {tableData[3]?.isActive ? <th>Login Email</th> : null}
-
-                        {tableData[4]?.isActive ? <th>Phone No</th> : null}
-                        {tableData[5]?.isActive ? <th>Applications</th> : null}
-                        {permissions?.includes(
-                          permissionList.View_University_List
-                        ) ? (
-                          <>
-                            {" "}
-                            {tableData[6]?.isActive ? (
-                              <th>University Count</th>
+                <>
+                  {" "}
+                  {loading ? (
+                    <h2 className="text-center">Loading...</h2>
+                  ) : (
+                    <div
+                      className="table-responsive fixedhead"
+                      ref={componentRef}
+                    >
+                      <Table
+                        id="table-to-xls"
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="tablehead">
+                          <tr style={{ textAlign: "center" }}>
+                            {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
+                            {tableData[1]?.isActive ? <th>Name</th> : null}
+                            {permissions?.includes(
+                              permissionList.Staff_Password_Change
+                            ) ? (
+                              <>
+                                {userTypeId === userTypes?.SystemAdmin ||
+                                userTypeId === userTypes?.Admin ? (
+                                  <>
+                                    {tableData[2]?.isActive ? (
+                                      <th>Password</th>
+                                    ) : null}
+                                  </>
+                                ) : null}
+                              </>
                             ) : null}
-                          </>
-                        ) : null}
+                            {tableData[3]?.isActive ? <th>Email</th> : null}
+                            {tableData[4]?.isActive ? <th>Contact</th> : null}
+                            {permissions?.includes(
+                              permissionList.View_Application_List
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[5]?.isActive ? (
+                                  <th>Applications</th>
+                                ) : null}
+                              </>
+                            ) : null}
 
-                        {/* {permissions?.includes(
+                            {permissions?.includes(
+                              permissionList.View_University_List
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[6]?.isActive ? (
+                                  <th>University Count</th>
+                                ) : null}
+                              </>
+                            ) : null}
+
+                            {/* {permissions?.includes(
                           permissionList?.Change_Provider_Account_Status
                         ) ? (
                           <>
@@ -505,72 +834,141 @@ const ProviderList = () => {
                           </>
                         ) : null} */}
 
-                        {tableData[7]?.isActive ? (
-                          <th style={{ width: "8%" }} className="text-center">
-                            Action
-                          </th>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {providerList?.map((prov, i) => (
-                        <tr key={prov.id} style={{ textAlign: "center" }}>
-                          {tableData[0]?.isActive ? (
-                            <td className="cursor-pointer hyperlink-hover">
-                              {" "}
-                              <span
-                                onClick={() => {
-                                  history.push(`/providerDetails/${prov?.id}`);
-                                }}
+                            {tableData[7]?.isActive ? (
+                              <th
+                                style={{ width: "8%" }}
+                                className="text-center"
                               >
-                                {prov?.providerViewId}
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[1]?.isActive ? (
-                            <td className="cursor-pointer hyperlink-hover">
-                              <span
-                                onClick={() => {
-                                  history.push(`/providerDetails/${prov?.id}`);
-                                }}
-                              >
-                                {prov?.nameTittle?.name} {prov?.name}
-                              </span>
-                            </td>
-                          ) : null}
-                          {tableData[2]?.isActive ? (
-                            <td>{prov?.email}</td>
-                          ) : null}
-                          {tableData[3]?.isActive ? (
-                            <td>{prov?.loginEmail}</td>
-                          ) : null}
-
-                          {tableData[4]?.isActive ? (
-                            <td>{prov?.phoneNumber}</td>
-                          ) : null}
-
-                          {permissions?.includes(
-                            permissionList.View_Application_List
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[5]?.isActive ? (
-                                <td>
-                                  <span className="badge badge-secondary">
-                                    {prov?.applicationCount}
-                                  </span>
+                                Action
+                              </th>
+                            ) : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {providerList?.map((prov, i) => (
+                            <tr key={prov.id} style={{ textAlign: "center" }}>
+                              {tableData[0]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/providerDetails/${prov?.id}`}
+                                  >
+                                    {prov?.providerViewId}
+                                  </Link>
                                 </td>
                               ) : null}
-                            </>
-                          ) : null}
 
-                          {permissions?.includes(
-                            permissionList.View_University_List
-                          ) ? (
-                            <>
-                              {tableData[6]?.isActive ? (
+                              {tableData[1]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/providerDetails/${prov?.id}`}
+                                  >
+                                    {prov?.nameTittle?.name} {prov?.name}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {permissions?.includes(
+                                permissionList.Staff_Password_Change
+                              ) ? (
+                                <>
+                                  {userTypeId === userTypes?.SystemAdmin ||
+                                  userTypeId === userTypes?.Admin ? (
+                                    <>
+                                      {tableData[2]?.isActive ? (
+                                        <td>
+                                          <Link
+                                            onClick={() => handlePass(prov)}
+                                          >
+                                            Change
+                                          </Link>
+                                        </td>
+                                      ) : null}
+                                    </>
+                                  ) : null}
+                                </>
+                              ) : null}
+
+                              {tableData[3]?.isActive ? (
+                                <td>{prov?.loginEmail}</td>
+                              ) : null}
+                              {tableData[4]?.isActive ? (
                                 <td>
+                                  <div className="d-flex justify-content-center">
+                                    <PopOverText
+                                      value={
+                                        prov?.phoneNumber &&
+                                        prov?.phoneNumber.includes("+")
+                                          ? prov?.phoneNumber
+                                          : prov?.phoneNumber &&
+                                            !prov?.phoneNumber.includes("+")
+                                          ? "+" + prov?.phoneNumber
+                                          : null
+                                      }
+                                      // value={
+                                      //   prov?.phoneNumber
+                                      //     ? "+" + prov?.phoneNumber
+                                      //     : null
+                                      // }
+                                      btn={<i class="fas fa-phone"></i>}
+                                      popoverOpen={popoverOpen}
+                                      setPopoverOpen={setPopoverOpen}
+                                    />
+                                    <PopOverText
+                                      value={prov?.email}
+                                      btn={<i className="far fa-envelope"></i>}
+                                      popoverOpen={popoverOpen}
+                                      setPopoverOpen={setPopoverOpen}
+                                    />
+                                  </div>
+                                </td>
+                              ) : null}
+
+                              {permissions?.includes(
+                                permissionList.View_Application_List
+                              ) ? (
+                                <>
+                                  {" "}
+                                  {tableData[5]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() => {
+                                            history.push(
+                                              `/provider-applications/${prov?.id}`
+                                            );
+                                          }}
+                                          className="Count-first"
+                                        >
+                                          {prov?.applicationCount}
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+
+                              {permissions?.includes(
+                                permissionList.View_University_List
+                              ) ? (
+                                <>
+                                  {tableData[6]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() => {
+                                            history.push(
+                                              `/universityListFromProviderList/${prov?.id}`
+                                            );
+                                          }}
+                                          className="Count-second"
+                                        >
+                                          {prov?.universityCount}
+                                        </span>
+                                      </div>
+
+                                      {/* 
                                   <Link
                                     to={{
                                       pathname: `/universityListFromProviderList/${prov?.id}`,
@@ -583,13 +981,13 @@ const ProviderList = () => {
                                       {" "}
                                       {`View (${prov?.universityCount})`}{" "}
                                     </span>
-                                  </Link>
-                                </td>
+                                  </Link> */}
+                                    </td>
+                                  ) : null}
+                                </>
                               ) : null}
-                            </>
-                          ) : null}
 
-                          {/* {permissions?.includes(
+                              {/* {permissions?.includes(
                             permissionList?.Change_Provider_Account_Status
                           ) ? (
                             <>
@@ -608,101 +1006,172 @@ const ProviderList = () => {
                             </>
                           ) : null} */}
 
-                          {tableData[7]?.isActive ? (
-                            <td style={{ width: "8%" }} className="text-center">
-                              <ButtonGroup variant="text">
-                                {permissions?.includes(
-                                  permissionList?.View_Provider
-                                ) ? (
-                                  <ButtonForFunction
-                                    color={"primary"}
-                                    func={() =>
-                                      redirectToProviderDetails(prov?.id)
-                                    }
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-eye"></i>}
-                                    permission={6}
-                                  />
-                                ) : null}
-
-                                {userType ===
-                                  userTypes?.SystemAdmin.toString() ||
-                                userType === userTypes?.Admin.toString() ||
-                                userType ===
-                                  userTypes?.ComplianceManager.toString() ? (
-                                  <>
+                              {tableData[7]?.isActive ? (
+                                <td
+                                  style={{ width: "8%" }}
+                                  className="text-center"
+                                >
+                                  <ButtonGroup variant="text">
                                     {permissions?.includes(
                                       permissionList?.View_Provider
                                     ) ? (
                                       <ButtonForFunction
                                         color={"primary"}
                                         func={() =>
-                                          redirectToProviderDashboard(prov?.id)
+                                          redirectToProviderDetails(prov?.id)
                                         }
                                         className={"mx-1 btn-sm"}
-                                        icon={
-                                          <i className="fas fa-tachometer-alt-fast"></i>
-                                        }
+                                        icon={<i className="fas fa-eye"></i>}
                                         permission={6}
                                       />
                                     ) : null}
-                                  </>
-                                ) : null}
 
-                                {permissions?.includes(
-                                  permissionList.Edit_Provider
-                                ) ? (
-                                  <>
-                                    <ButtonForFunction
-                                      color={"warning"}
-                                      func={() =>
-                                        redirectToUpdateProvider(prov?.id)
-                                      }
-                                      className={"mx-1 btn-sm"}
-                                      icon={<i className="fas fa-edit"></i>}
-                                      permission={6}
-                                    />
-                                  </>
-                                ) : null}
+                                    {userType ===
+                                      userTypes?.SystemAdmin.toString() ||
+                                    userType === userTypes?.Admin.toString() ||
+                                    userType ===
+                                      userTypes?.ComplianceManager.toString() ? (
+                                      <>
+                                        {permissions?.includes(
+                                          permissionList?.View_Provider
+                                        ) ? (
+                                          <ButtonForFunction
+                                            color={"primary"}
+                                            func={() =>
+                                              redirectToProviderDashboard(
+                                                prov?.id
+                                              )
+                                            }
+                                            className={"mx-1 btn-sm"}
+                                            icon={
+                                              <i className="fas fa-tachometer-alt-fast"></i>
+                                            }
+                                            permission={6}
+                                          />
+                                        ) : null}
+                                      </>
+                                    ) : null}
 
-                                {permissions?.includes(
-                                  permissionList?.Delete_Provider
-                                ) ? (
-                                  <>
-                                    <ButtonForFunction
-                                      color={"danger"}
-                                      func={() => toggleDeleteProvider(prov)}
-                                      className={"mx-1 btn-sm"}
-                                      icon={
-                                        <i className="fas fa-trash-alt"></i>
-                                      }
-                                      permission={6}
-                                    />
-                                  </>
-                                ) : null}
-                              </ButtonGroup>
-                              <ConfirmModal
-                                text="Do You Want To Delete This Provider ? Once Deleted it can't be Undone!"
-                                isOpen={deleteModal}
-                                toggle={() => setDeleteModal(!deleteModal)}
-                                confirm={deleteProvider}
-                                cancel={() => setDeleteModal(false)}
-                              />
-                            </td>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                                    {permissions?.includes(
+                                      permissionList.Edit_Provider
+                                    ) ? (
+                                      <>
+                                        <ButtonForFunction
+                                          color={"warning"}
+                                          func={() =>
+                                            redirectToUpdateProvider(prov?.id)
+                                          }
+                                          className={"mx-1 btn-sm"}
+                                          icon={<i className="fas fa-edit"></i>}
+                                          permission={6}
+                                        />
+                                      </>
+                                    ) : null}
+
+                                    {permissions?.includes(
+                                      permissionList?.Delete_Provider
+                                    ) ? (
+                                      <>
+                                        <ButtonForFunction
+                                          color={"danger"}
+                                          func={() =>
+                                            toggleDeleteProvider(prov)
+                                          }
+                                          className={"mx-1 btn-sm"}
+                                          icon={
+                                            <i className="fas fa-trash-alt"></i>
+                                          }
+                                          permission={6}
+                                        />
+                                      </>
+                                    ) : null}
+                                  </ButtonGroup>
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  )}
+                </>
               )}
-              <div className="d-flex justify-content-end mt-3 mb-2">
+
+              <Pagination
+                dataPerPage={dataPerPage}
+                totalData={entity}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+              {/* <div className="d-flex justify-content-end mt-3 mb-2">
                 <h5>Total Results Found: {providerList.length}</h5>
-              </div>
+              </div> */}
             </CardBody>
           </Card>
         </>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Provider ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={deleteProvider}
+        cancel={() => setDeleteModal(false)}
+      />
+      <Modal
+        isOpen={passModal}
+        toggle={() => handleToggle}
+        className="uapp-modal2"
+      >
+        <ModalBody className="p-5">
+          <h5>
+            Change password for {passData?.nameTittle?.name} {passData?.name}
+          </h5>
+          <form onSubmit={submitModalForm} className="mt-3">
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    passValidate(e);
+                  }}
+                />
+                <span className="text-danger">{error}</span>
+              </Col>
+            </FormGroup>
+
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Confirm Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    confirmPassword(e);
+                  }}
+                />
+
+                <span className="text-danger">{passError}</span>
+              </Col>
+            </FormGroup>
+            <FormGroup className="d-flex justify-content-between mt-3">
+              <CancelButton cancel={() => handleToggle(false)} />
+
+              <SaveButton
+                text="Submit"
+                progress={progress}
+                buttonStatus={resetButtonStatus}
+              />
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
 
-const ReferenceCard = ({ sId }) => {
-  const [refList, setRefList] = useState([]);
-
+const ReferenceCard = ({ sId, refList, setRefList }) => {
   useEffect(() => {
     get(`Reference/GetByStudentId/${sId}`).then((res) => {
       setRefList(res);

@@ -38,6 +38,7 @@ import ReactToPrint from "react-to-print";
 import * as XLSX from "xlsx/xlsx.mjs";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import TagButton from "../../../components/buttons/TagButton";
 
 const Index = () => {
   const history = useHistory();
@@ -74,6 +75,7 @@ const Index = () => {
   const [checkAction, setCheckAction] = useState(true);
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -121,7 +123,7 @@ const Index = () => {
   const componentRef = useRef();
 
   useEffect(() => {
-    get(`ConsultantDD/index`).then((res) => {
+    get(`ConsultantDD/ByUser`).then((res) => {
       setConsultant(res);
     });
 
@@ -202,14 +204,23 @@ const Index = () => {
 
           {/* Clear Button */}
           <div className="row">
-            <div className="col-12 d-flex justify-content-end">
+            <div className="col-12 d-flex justify-content-start mt-1">
+              <div className="mt-1">
+                {consultantValue !== 0 && (
+                  <TagButton
+                    label={consultantLabel}
+                    setValue={() => setConsultantValue(0)}
+                    setLabel={() => setConsultantLabel("Select Consultant")}
+                  ></TagButton>
+                )}
+              </div>
               <div
                 className="mt-1 mx-1 d-flex btn-clear"
                 onClick={handleClearSearch}
               >
-                <span className="text-danger">
-                  <i className="fa fa-times"></i> Clear
-                </span>
+                {consultantValue !== 0 ? (
+                  <button className="tag-clear">Clear All</button>
+                ) : null}
               </div>
             </div>
           </div>
@@ -457,7 +468,7 @@ const Index = () => {
           <Table id="table-to-xls" className="table-sm table-bordered">
             <thead className="thead-uapp-bg">
               <tr style={{ textAlign: "center" }}>
-                {checkSlNo ? <th>SL/NO</th> : null}
+                {/* {checkSlNo ? <th>SL/NO</th> : null} */}
                 {checkTransDate ? <th>Transaction Date</th> : null}
                 {checkCons ? <th>Consultant Name</th> : null}
                 {checkTransCode ? <th>Transaction Code</th> : null}
@@ -470,7 +481,7 @@ const Index = () => {
             <tbody>
               {data.map((ls, i) => (
                 <tr key={i} style={{ textAlign: "center" }}>
-                  {checkSlNo ? <td>{i + 1}</td> : null}
+                  {/* {checkSlNo ? <td>{i + 1}</td> : null} */}
                   {checkTransDate ? <td>{ls?.transactionDate}</td> : null}
                   {checkCons ? <td>{ls?.consultant}</td> : null}
                   {checkTransCode ? <td>{ls?.transactionCode}</td> : null}

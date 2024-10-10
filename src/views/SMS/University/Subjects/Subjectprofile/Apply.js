@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Form, Input, Col, Row } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Form,
+  Input,
+  Col,
+  Row,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { rootUrl } from "../../../../../constants/constants";
 import { useToasts } from "react-toast-notifications";
@@ -32,11 +40,11 @@ const Apply = ({
 }) => {
   const userType = localStorage.getItem("userType");
   const history = useHistory();
-
+  const [isApply, setIsApply] = useState("");
   const [studentDataValue, setStudentDataValue] = useState(
     userType === userTypes?.Student.toString()
       ? localStorage.getItem("referenceId")
-      : "0"
+      : 0
   );
   const [elStatus, setElStatus] = useState({});
   const [fee, setFee] = useState({});
@@ -52,10 +60,19 @@ const Apply = ({
   const [message, setMessage] = useState("");
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
+  const [check, setCheck] = useState(false);
+
+  useEffect(() => {
+    if (modalCampusValue !== 0 && studentDataValue !== 0) {
+      get(
+        `CampusSubjects/CheckEligibility/${currentData?.id}/${modalCampusValue}/${studentDataValue}`
+      ).then((res) => {
+        setIsApply(res);
+      });
+    }
+  }, [currentData, modalCampusValue, studentDataValue]);
 
   const checkEligibilityWhileApplying = (student) => {
-    console.log(student);
-
     get(
       `Eligibility/ApplicationOverview/${currentData?.universityId}/${currentData?.id}/${student}`
     ).then((res) => {
@@ -258,384 +275,443 @@ const Apply = ({
 
   return (
     <>
-      <Row className="px-3">
-        <Col xs={10}>
-          <h3 className="text-dark-green">{currentData?.name}</h3>
-          <div className="d-flex">
-            <img
-              src={rootUrl + unInfo[0]}
-              className="apply-logo mr-2"
-              alt="logo-img"
-            />
-            <p className="text-gray-70 fw-500">{unInfo[1]}</p>
-          </div>
-        </Col>
-        <Col xs={2} className="text-right">
-          <i className="fas fa-times pointer" onClick={closeModal}></i>
-        </Col>
-        <hr />
-      </Row>
+      <ModalHeader toggle={closeModal}> Apply Course</ModalHeader>
 
       <Form className="px-3" onSubmit={submitModalForm}>
-        <Row>
-          <Col lg="6" className="applyborder applyright my-3">
-            {!elStatus?.englishWaiverAvailable &&
-            !elStatus?.moiAccepted ? null : (
-              <div className="mb-4">
-                {elStatus?.englishWaiverAvailable && (
-                  <span className="tag-key">English waiver available</span>
-                )}
-                {elStatus?.moiAccepted && (
-                  <span className="tag-key">MOI Accepted</span>
-                )}
+        <ModalBody className="overflowY-search-modal-630px">
+          {" "}
+          <Row className="px-3">
+            <Col xs={12}>
+              <h3 className="text-dark-green">{currentData?.name}</h3>
+              <div className="d-flex">
+                <img
+                  src={rootUrl + unInfo[0]}
+                  className="apply-logo mr-2"
+                  alt="logo-img"
+                />
+                <p className="text-gray-70 fw-500">{unInfo[1]}</p>
               </div>
-            )}
+            </Col>
+          </Row>
+          <Row className="px-3">
+            <Col className="applyright my-3">
+              <Row>
+                <Col lg="7">
+                  {" "}
+                  <div className="mb-4">
+                    <Student
+                      data={studentDataValue}
+                      setData={setStudentDataValue}
+                      name="student"
+                      error={() => {}}
+                      setError={() => {}}
+                      action={checkEligibilityWhileApplying}
+                    />
+                  </div>
+                </Col>
+              </Row>
 
-            <div className="mb-4">
-              <Student
-                data={studentDataValue}
-                setData={setStudentDataValue}
-                name="student"
-                error={() => {}}
-                setError={() => {}}
-                action={checkEligibilityWhileApplying}
-              />
-            </div>
-            <div className="mb-4">
-              <p>
-                <b>Admission Requirements</b>
-              </p>
-
-              {elStatus?.admissionRequirements?.length !== 0 ? (
-                <>
-                  {elStatus?.admissionRequirements?.map((data, i) => (
-                    <li key={i}>{data}</li>
-                  ))}
-                </>
-              ) : (
-                <span>No requirements found</span>
+              {!elStatus?.englishWaiverAvailable &&
+              !elStatus?.moiAccepted ? null : (
+                <div className="mb-4">
+                  {elStatus?.englishWaiverAvailable && (
+                    <span className="tag-key">English waiver available</span>
+                  )}
+                  {elStatus?.moiAccepted && (
+                    <span className="tag-key">MOI Accepted</span>
+                  )}
+                </div>
               )}
-            </div>
 
-            <div className="mb-4">
-              <p>
-                <b>Student Qualification</b>
-              </p>
-              {elStatus?.studentQualifications?.length !== 0 ? (
-                <>
-                  {elStatus?.studentQualifications?.map((data, i) => (
-                    <li key={i}>{data}</li>
-                  ))}
-                </>
-              ) : (
-                <span>No requirements found</span>
-              )}
-            </div>
+              <Row>
+                <Col lg="7">
+                  <div className="mb-4 p-4 Adm-Requirements-parts">
+                    <p>
+                      <b>Admission Requirements</b>
+                    </p>
 
-            {elStatus?.nonEligibilityKeys?.length !== 0 && (
-              <div className="mb-4">
-                {elStatus?.nonEligibilityKeys?.map((data, i) => (
-                  <li className="text-danger" key={i}>
-                    {data}
-                  </li>
-                ))}
-                <p>
-                  Considering your qualification there is a mismatch between
-                  your qualifications and admission requirements. <br />
-                  However you are still able to apply with less success
-                  possibility.
-                </p>
-              </div>
-            )}
-
-            <div className="my-4">
-              <span
-                className={
-                  elStatus?.isEligible ? "tag-key celg" : "tag-key celg2"
-                }
-              >
-                {elStatus?.isEligible
-                  ? "You are eligible to apply"
-                  : "You are not eligible to apply"}
-              </span>
-            </div>
-
-            <div className="my-4">
-              <h5>
-                <b>Application Fee : {fee?.applicationFee}</b>
-              </h5>
-            </div>
-          </Col>
-          <Col lg="6" className="applyleft my-3">
-            <div>
-              <>
-                {!(campusValue === 0) ? (
-                  <>
-                    <span className="my-2">
-                      You are appling at <b>{primaryCampus?.campusName}</b>{" "}
-                    </span>
-
-                    <input type="hidden" name="campusId" id="campusId" />
-                  </>
-                ) : (
-                  <>
-                    {modalCampusOptions.length === 0 ? (
-                      <p className="text-yellow">No Campus available</p>
-                    ) : modalCampusOptions.length === 1 ? (
+                    {elStatus?.admissionRequirements?.length !== 0 ? (
                       <>
-                        <p>
-                          <b>Where do you want to study?</b>
-                        </p>
-
-                        {modalCampusOptions?.map((data, i) => (
-                          <input
-                            key={i}
-                            type="button"
-                            name="campusId"
-                            id="campusId"
-                            value={data?.label}
-                            className={
-                              modalCampusValue === data?.value
-                                ? "btn-key-checked"
-                                : "btn-key"
-                            }
-                          />
+                        {elStatus?.admissionRequirements?.map((data, i) => (
+                          <ul className="list-unstyled for-all-li">
+                            <li className="pl-3" key={i}>
+                              {" "}
+                              <span className="mr-1">
+                                {data?.isEligible === true ? (
+                                  <i
+                                    class="fa-solid fa-check"
+                                    style={{ color: "#079455" }}
+                                  ></i>
+                                ) : (
+                                  <i
+                                    class="fa-solid fa-x"
+                                    style={{ color: "#D92D20" }}
+                                  ></i>
+                                )}
+                              </span>
+                              {data?.details}
+                            </li>
+                          </ul>
                         ))}
                       </>
                     ) : (
+                      <span>No requirements found</span>
+                    )}
+                  </div>
+                </Col>
+                <Col lg="5">
+                  {" "}
+                  <div className="mb-4 p-4 Std-Qualification">
+                    <p>
+                      <b>Student Qualification</b>
+                    </p>
+                    {elStatus?.studentQualifications?.length !== 0 ? (
                       <>
-                        <p>
-                          <b>Where do you want to study?</b>
-                        </p>
-
-                        {modalCampusOptions?.map((data, i) => (
-                          <input
-                            key={i}
-                            type="button"
-                            name="campusId"
-                            id="campusId"
-                            value={data?.label}
-                            onClick={() => {
-                              selectModalCampus(data.label, data.value);
-                            }}
-                            className={
-                              modalCampusValue === data?.value
-                                ? "btn-key-checked"
-                                : "btn-key"
-                            }
-                          />
+                        {elStatus?.studentQualifications?.map((data, i) => (
+                          <li className="pl-3 mb-2" key={i}>
+                            {data}
+                          </li>
                         ))}
+                      </>
+                    ) : (
+                      <span>No requirements found</span>
+                    )}
+                  </div>
+                </Col>
+              </Row>
 
-                        <br />
-                        {campusError ? (
-                          <span className="text-danger">
-                            Campus is required
-                          </span>
-                        ) : null}
+              <div className="my-4">
+                <span
+                  className={
+                    elStatus?.isEligible ? "tag-key celg" : "tag-key celg2"
+                  }
+                >
+                  {elStatus?.isEligible
+                    ? "You are eligible to apply"
+                    : "You are not eligible to apply"}
+                </span>
+              </div>
+
+              <>
+                {" "}
+                <div>
+                  <>
+                    {!(campusValue === 0) ? (
+                      <>
+                        <span className="my-2">
+                          You are appling at <b>{primaryCampus?.campusName}</b>{" "}
+                        </span>
+
+                        <input type="hidden" name="campusId" id="campusId" />
+                      </>
+                    ) : (
+                      <>
+                        {modalCampusOptions.length === 0 ? (
+                          <p className="text-yellow">No Campus available</p>
+                        ) : modalCampusOptions.length === 1 ? (
+                          <>
+                            <p>
+                              <b>Where do you want to study?</b>
+                            </p>
+
+                            {modalCampusOptions?.map((data, i) => (
+                              <input
+                                key={i}
+                                type="button"
+                                name="campusId"
+                                id="campusId"
+                                value={data?.label}
+                                className={
+                                  modalCampusValue === data?.value
+                                    ? "btn-key-checked"
+                                    : "btn-key"
+                                }
+                              />
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            <p>
+                              <b>Where do you want to study?</b>
+                            </p>
+
+                            {modalCampusOptions?.map((data, i) => (
+                              <input
+                                key={i}
+                                type="button"
+                                name="campusId"
+                                id="campusId"
+                                value={data?.label}
+                                onClick={() => {
+                                  selectModalCampus(data.label, data.value);
+                                }}
+                                className={
+                                  modalCampusValue === data?.value
+                                    ? "btn-key-checked"
+                                    : "btn-key"
+                                }
+                              />
+                            ))}
+
+                            <br />
+                            {campusError ? (
+                              <span className="text-danger">
+                                Campus is required
+                              </span>
+                            ) : null}
+                          </>
+                        )}
                       </>
                     )}
                   </>
-                )}
-              </>
-            </div>
-
-            {modalIntakeOptions.length === 0 ? (
-              <p className="text-yellow">No Intake available</p>
-            ) : modalIntakeOptions.length === 1 ? (
-              <>
-                <p>
-                  <b>When do you want to Start?</b>
-                </p>
-                {modalIntakeOptions?.map((data, i) => (
-                  <input
-                    key={i}
-                    type="button"
-                    name="inakeId"
-                    id="inakeId"
-                    value={data?.label}
-                    className={
-                      modalIntakeValue === data?.value
-                        ? "btn-key-checked"
-                        : "btn-key"
-                    }
-                  />
-                ))}
-              </>
-            ) : (
-              <div>
-                <p>
-                  <b>When do you want to Start?</b>
-                </p>
-
-                {modalIntakeOptions?.map((data, i) => (
+                </div>
+                {modalIntakeOptions.length === 0 ? (
+                  <p className="text-yellow">No Intake available</p>
+                ) : modalIntakeOptions.length === 1 ? (
                   <>
-                    <input
-                      key={i}
-                      type="button"
-                      name="inakeId"
-                      id="inakeId"
-                      value={data?.label}
-                      onClick={() => {
-                        selectModalIntake(data.label, data.value);
-                      }}
-                      className={
-                        modalIntakeValue === data?.value
-                          ? "btn-key-checked"
-                          : "btn-key"
-                      }
-                    />
+                    <p>
+                      <b>When do you want to Start?</b>
+                    </p>
+                    {modalIntakeOptions?.map((data, i) => (
+                      <input
+                        key={i}
+                        type="button"
+                        name="inakeId"
+                        id="inakeId"
+                        value={data?.label}
+                        className={
+                          modalIntakeValue === data?.value
+                            ? "btn-key-checked"
+                            : "btn-key"
+                        }
+                      />
+                    ))}
                   </>
-                ))}
-                <br />
-
-                {intakeError ? (
-                  <span className="text-danger">Intake Must be Selected</span>
-                ) : null}
-              </div>
-            )}
-
-            {modalDeliveryOptions.length === 0 ? (
-              <input
-                type="hidden"
-                name="deliveryPatternId"
-                id="deliveryPatternId"
-                value={3}
-              />
-            ) : modalDeliveryOptions.length === 1 ? (
-              <div>
-                <p>
-                  <b>Delivery pattern</b>
-                </p>
-                {modalDeliveryOptions?.map((data, i) => (
-                  <>
-                    <input
-                      key={i}
-                      type="button"
-                      name="deliveryPatternId"
-                      id="deliveryPatternId"
-                      value={data?.label}
-                      className={
-                        modalDeliveryPatternValue === data?.value
-                          ? "btn-key-checked"
-                          : "btn-key"
-                      }
-                    />
-                  </>
-                ))}
-              </div>
-            ) : (
-              <div>
-                <p>
-                  <b>Delivery pattern {modalDeliveryOptions.length}</b>
-                </p>
-                {modalDeliveryOptions?.map((data, i) => (
-                  <>
-                    <input
-                      key={i}
-                      type="button"
-                      name="deliveryPatternId"
-                      id="deliveryPatternId"
-                      value={data?.label}
-                      onClick={() => {
-                        selectModalDelivery(data.label, data.value);
-                      }}
-                      className={
-                        modalDeliveryPatternValue === data?.value
-                          ? "btn-key-checked"
-                          : "btn-key"
-                      }
-                    />
-                  </>
-                ))}
-                <br />
-                {deliveryError ? (
-                  <span className="text-danger">
-                    Delivery Pattern Must be Selected
-                  </span>
-                ) : null}
-              </div>
-            )}
-
-            {modalCampusOptions.length !== 0 &&
-              modalIntakeOptions.length !== 0 &&
-              modalDeliveryOptions.length !== 0 && (
-                <>
+                ) : (
                   <div>
                     <p>
-                      <b>Additional message</b>
+                      <b>When do you want to Start?</b>
                     </p>
 
-                    <Input
-                      type="textarea"
-                      name="additionalMessage"
-                      id="additionalMessage"
-                      rows={4}
-                      onChange={(e) => setMessage(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="mt-3">
-                    {fee?.isAlreadyApplied ? (
-                      <div className="text-center">
-                        <p>
-                          <strong>
-                            You have already applied to this Courses
-                          </strong>
-                        </p>
-                        <CancelButton cancel={closeModal} text={"Close"} />
-                      </div>
-                    ) : (
+                    {modalIntakeOptions?.map((data, i) => (
                       <>
-                        {fee?.activeApplications >= 3 ? (
+                        <input
+                          key={i}
+                          type="button"
+                          name="inakeId"
+                          id="inakeId"
+                          value={data?.label}
+                          onClick={() => {
+                            selectModalIntake(data.label, data.value);
+                          }}
+                          className={
+                            modalIntakeValue === data?.value
+                              ? "btn-key-checked"
+                              : "btn-key"
+                          }
+                        />
+                      </>
+                    ))}
+                    <br />
+
+                    {intakeError ? (
+                      <span className="text-danger">
+                        Intake Must be Selected
+                      </span>
+                    ) : null}
+                  </div>
+                )}
+                {modalDeliveryOptions.length === 0 ? (
+                  <input
+                    type="hidden"
+                    name="deliveryPatternId"
+                    id="deliveryPatternId"
+                    value={3}
+                  />
+                ) : modalDeliveryOptions.length === 1 ? (
+                  <div>
+                    <p>
+                      <b>Delivery pattern</b>
+                    </p>
+                    {modalDeliveryOptions?.map((data, i) => (
+                      <>
+                        <input
+                          key={i}
+                          type="button"
+                          name="deliveryPatternId"
+                          id="deliveryPatternId"
+                          value={data?.label}
+                          className={
+                            modalDeliveryPatternValue === data?.value
+                              ? "btn-key-checked"
+                              : "btn-key"
+                          }
+                        />
+                      </>
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <p>
+                      <b>Delivery pattern</b>
+                    </p>
+                    {modalDeliveryOptions?.map((data, i) => (
+                      <>
+                        <input
+                          key={i}
+                          type="button"
+                          name="deliveryPatternId"
+                          id="deliveryPatternId"
+                          value={data?.label}
+                          onClick={() => {
+                            selectModalDelivery(data.label, data.value);
+                          }}
+                          className={
+                            modalDeliveryPatternValue === data?.value
+                              ? "btn-key-checked"
+                              : "btn-key"
+                          }
+                        />
+                      </>
+                    ))}
+                    <br />
+                    {deliveryError ? (
+                      <span className="text-danger">
+                        Delivery Pattern Must be Selected
+                      </span>
+                    ) : null}
+                  </div>
+                )}
+                {isApply.canApply === false ? (
+                  <p className="text-danger">
+                    <b>{isApply?.message} </b>
+                  </p>
+                ) : (
+                  modalCampusOptions.length !== 0 &&
+                  modalIntakeOptions.length !== 0 &&
+                  modalDeliveryOptions.length !== 0 && (
+                    <>
+                      <div>
+                        <p>
+                          <b>Additional message</b>
+                        </p>
+
+                        <Input
+                          type="textarea"
+                          name="additionalMessage"
+                          id="additionalMessage"
+                          rows={4}
+                          onChange={(e) => setMessage(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="my-4">
+                        <h5>
+                          <b>Application Fee: £{fee?.applicationFee}</b>
+                        </h5>
+                      </div>
+
+                      <div>
+                        {studentDataValue === 0 ? (
+                          <span>
+                            <i class="fas fa-exclamation-circle"></i> Please
+                            Select Student
+                          </span>
+                        ) : modalCampusOptions.length === 0 ||
+                          modalIntakeOptions.length === 0 ||
+                          modalDeliveryOptions.length === 0 ? (
+                          <span className=" mt-1 mb-2 cardborder-for-apply-course">
+                            <i class="fas fa-exclamation-circle"></i> The course
+                            is currently not accepting applications. You can
+                            apply for similar courses in other universities
+                          </span>
+                        ) : fee?.activeApplications === 0 ? (
+                          <span className=" mt-1 mb-2 cardborder-for-apply-course">
+                            <i class="fas fa-exclamation-circle"></i> Please
+                            Provide Correct Information. You can have 3 active
+                            applications at a time.
+                          </span>
+                        ) : (
+                          <span className=" mt-1 mb-2 cardborder-for-apply-course">
+                            <i class="fas fa-exclamation-circle"></i> Please
+                            Provide Correct Information. You have{" "}
+                            {fee?.activeApplications} active application
+                            currently and have {3 - fee?.activeApplications}{" "}
+                            application left.
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-2">
+                        {fee?.isAlreadyApplied ? (
                           <div className="text-center">
                             <p>
                               <strong>
-                                You have {fee?.activeApplications} active
-                                application. You can not apply.
+                                You have already applied to this Courses
                               </strong>
                             </p>
                             <CancelButton cancel={closeModal} text={"Close"} />
                           </div>
                         ) : (
                           <>
-                            <p>
-                              <b>Are you sure want to apply this Course? </b>
-                            </p>
-                            <CancelButton cancel={closeModal} />
-
-                            {studentDataValue !== "0" ||
-                            userType === userTypes?.Student ? (
-                              <SaveButton
-                                text="Submit"
-                                progress={progress}
-                                buttonStatus={buttonStatus}
-                              />
-                            ) : null}
+                            {fee?.activeApplications >= 3 ? (
+                              <div className="text-center">
+                                <p>
+                                  <strong>
+                                    You have {fee?.activeApplications} active
+                                    application. You can not apply.
+                                  </strong>
+                                </p>
+                                <CancelButton
+                                  cancel={closeModal}
+                                  text={"Close"}
+                                />
+                              </div>
+                            ) : (
+                              <>
+                                <div className="mb-3">
+                                  <input
+                                    onChange={(e) => {
+                                      setCheck(e.target.checked);
+                                    }}
+                                    type="checkbox"
+                                    name=""
+                                    value=""
+                                    checked={check}
+                                  />{" "}
+                                  <b>
+                                    Are you sure want to apply this Course?{" "}
+                                  </b>
+                                </div>
+                              </>
+                            )}
                           </>
                         )}
-                      </>
-                    )}
-                  </div>
-                </>
-              )}
-          </Col>
-        </Row>
-      </Form>
+                      </div>
+                    </>
+                  )
+                )}
+              </>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter className="d-flex justify-content-end">
+          <CancelButton cancel={closeModal} />
 
-      <div className="p-3 text-yellow">
-        {fee?.activeApplications === 0 ? (
-          <span>
-            <i class="fas fa-exclamation-circle"></i> Please Provide Correct
-            Information. You can have 3 active applications at a time.
-          </span>
-        ) : (
-          <span>
-            <i class="fas fa-exclamation-circle"></i> Please Provide Correct
-            Information. You have {fee?.activeApplications} active application
-            currently and have {3 - fee?.activeApplications} application left.
-          </span>
-        )}
-      </div>
+          {check && (
+            <>
+              {" "}
+              {studentDataValue !== "0" || userType === userTypes?.Student ? (
+                <SaveButton
+                  text="Apply"
+                  progress={progress}
+                  buttonStatus={buttonStatus}
+                />
+              ) : null}
+            </>
+          )}
+        </ModalFooter>
+      </Form>
     </>
   );
 };

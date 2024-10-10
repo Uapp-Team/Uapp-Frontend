@@ -119,7 +119,7 @@ export default function EuUkApplicationInformation({
             handleDate(e);
           }}
           value={date}
-          min={minDate}
+          // min={minDate}
         />
         <span className="text-danger">{dateError}</span>
       </FormGroup>
@@ -196,9 +196,10 @@ export default function EuUkApplicationInformation({
         </span>
         <br />
 
-        <FormGroup check inline className="form-mt">
+        <FormGroup check className="form-mt">
           <input
             className="form-check-input"
+            id="IsHavePre_Settlementstatus1"
             type="radio"
             name="IsHavePre_Settlementstatus"
             value={true}
@@ -208,15 +209,18 @@ export default function EuUkApplicationInformation({
           <Label
             className="form-check-label"
             check
-            htmlFor="IsHavePre_Settlementstatus"
+            htmlFor="IsHavePre_Settlementstatus1"
           >
-            Yes
+            <span style={{ fontSize: "13px" }}>
+              I have Settled/Pre-settled Status
+            </span>
           </Label>
         </FormGroup>
 
         <FormGroup check inline>
           <input
             className="form-check-input"
+            id="IsHavePre_Settlementstatus2"
             type="radio"
             name="IsHavePre_Settlementstatus"
             value={false}
@@ -226,15 +230,69 @@ export default function EuUkApplicationInformation({
           <Label
             className="form-check-label"
             check
-            htmlFor="IsHavePre_Settlementstatus"
+            htmlFor="IsHavePre_Settlementstatus2"
           >
-            No
+            <span style={{ fontSize: "13px" }}>I have other status</span>
           </Label>
         </FormGroup>
       </FormGroup>
 
       {isSettlementStatus === true ? (
         <>
+          <FormGroup className="has-icon-left position-relative">
+            <span>
+              <span className="text-danger">*</span> What is Your Current
+              Residency Status in The UK?
+            </span>
+
+            <FormGroup check className="form-mt">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="CurrentResidencyStatusForEU"
+                id="settle"
+                value={`Settled`}
+                onChange={(e) => {
+                  handleresidencyStatusUK(e);
+                }}
+                checked={statusInUK === "Settled"}
+              />
+              <Label className="form-check-label" check htmlFor="settle">
+                <span style={{ fontSize: "13px" }}>Settled</span>
+              </Label>
+            </FormGroup>
+
+            <FormGroup check className="form-mt">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="CurrentResidencyStatusForEU"
+                id="Pre-settled"
+                value={`Pre-settled`}
+                onChange={(e) => {
+                  handleresidencyStatusUK(e);
+                }}
+                checked={statusInUK === "Pre-settled"}
+              />
+              <Label className="form-check-label" check htmlFor="Pre-settled">
+                <span style={{ fontSize: "13px" }}>Pre-settled</span>
+              </Label>
+            </FormGroup>
+
+            {/* <Input
+              className="form-mt"
+              type="text"
+              name="CurrentResidencyStatusForEU"
+              id="CurrentResidencyStatusForEU"
+              placeholder="Enter Residency Status"
+              value={statusInUK}
+              onChange={(e) => {
+                handleresidencyStatusUK(e);
+              }}
+            /> */}
+            <span className="text-danger">{statusInUKError}</span>
+          </FormGroup>
+
           <FormGroup className="has-icon-left position-relative">
             <span>
               <span className="text-danger">*</span> Please Provide The Valid

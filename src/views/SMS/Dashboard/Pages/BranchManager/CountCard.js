@@ -3,15 +3,16 @@ import { Col, Row } from "reactstrap";
 import DashboardCount from "../../../../../components/ui/DashboardCount";
 import get from "../../../../../helpers/get";
 
-const CountCard = ({ id }) => {
+const CountCard = ({ id, intakeRngValue }) => {
   const [count, setCount] = useState({});
 
   useEffect(() => {
-    get(`BranchManagerDashboard/counting?id=${id}`).then((res) => {
-      console.log(res);
+    get(
+      `BranchManagerDashboard/counting?id=${id}&rangeid=${intakeRngValue}`
+    ).then((res) => {
       setCount(res);
     });
-  }, [id]);
+  }, [id, intakeRngValue]);
 
   return (
     <Row>
@@ -19,7 +20,7 @@ const CountCard = ({ id }) => {
         <DashboardCount
           title="Total Application"
           value={count?.totalApplication}
-          link="/applications"
+          link={`/applicationsbyintake/${intakeRngValue}`}
           bgColor="#E1F5FC"
           borderColor="#24A1CD"
         />
@@ -28,7 +29,7 @@ const CountCard = ({ id }) => {
         <DashboardCount
           title="Applications in Process"
           value={count?.totalApplicationInProgress}
-          link={`/applicationsByStatus/${5}/${1}`}
+          // link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
           bgColor="#FBF5E8"
           borderColor="#FFBA08"
         />
@@ -37,7 +38,7 @@ const CountCard = ({ id }) => {
         <DashboardCount
           title="Unconditional Offer"
           value={count?.totalUnconditionalOffer}
-          link={`/applicationsByStatus/${2}/${2}`}
+          link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
           bgColor="#F8F3FF"
           borderColor="#AE75F8"
         />
@@ -46,16 +47,16 @@ const CountCard = ({ id }) => {
         <DashboardCount
           title="Total Registered"
           value={count?.totalRegistered}
-          link={`/applicationsByStatus/${2}/${3}`}
+          link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
           bgColor="#F0FFE0"
           borderColor="#70E000"
         />
       </Col>
       <Col md={3} xs={6} className="mb-30px">
         <DashboardCount
-          title="Total Rejected"
+          title="Total Rejected / cancelled"
           value={count?.totalRejected}
-          link={`/applicationsByStatus/${12}/${1}`}
+          // link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
           bgColor="#FEF6F5"
           borderColor="#F87675"
         />
@@ -64,7 +65,7 @@ const CountCard = ({ id }) => {
         <DashboardCount
           title="Withdrawn Application"
           value={count?.totalWithdrawn}
-          link={`/applicationsByStatus/${4}/${3}`}
+          link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
           bgColor="#EDF1F5"
           borderColor="#34495E"
         />

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Form, FormGroup, Label, Input } from "reactstrap";
+import { Form, FormGroup, Label, Input, Col } from "reactstrap";
 import { rootUrl } from "../../../../constants/constants";
+import { cms } from "../../../../constants/constants";
 import { Link, useHistory, useParams } from "react-router-dom";
-import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import notify from "../../../../assets/img/notify.png";
+import Select from "react-select";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import post from "../../../../helpers/post";
+import get from "../../../../helpers/get";
 
 const StudentRegisterForm = () => {
-  const { invitationcode } = useParams();
+  const { invitationcode, email } = useParams();
   const [checked, setChecked] = useState(null);
   const [preferredCountries, setPreferredCountries] = useState([]);
   const [names, setNames] = useState([]);
@@ -17,10 +22,8 @@ const StudentRegisterForm = () => {
   const [preferredCountryValue, setpreferredCountryValue] = useState(0);
   const [title, setTitle] = useState(1);
   const [firstName, setFirstName] = useState("");
-  const [radio, setRadio] = useState(false);
-  const [radioerror, setRadioErrro] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState(false);
+  const [userEmail, setuserEmail] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -32,10 +35,31 @@ const StudentRegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [valid, setValid] = useState(true);
+  const [emailExistError, setEmailExistError] = useState(true);
 
   useEffect(() => {
-    setReferCode(invitationcode);
-  }, [invitationcode]);
+    email && setuserEmail(email);
+    // invitationcode && setReferCode(invitationcode);
+    if (invitationcode) {
+      const splitcode = invitationcode.split("-");
+      // console.log(splitcode);
+      const uappId =
+        splitcode.length === 3
+          ? `${splitcode[0]}-${splitcode[1]}`
+          : splitcode[0];
+      const code = email
+        ? invitationcode
+        : splitcode.length === 3
+        ? uappId
+        : invitationcode;
+      // console.log(code);
+      setReferCode(code);
+      fetch(`${rootUrl}StudentRegistration/Track/${invitationcode}`);
+    }
+  }, [invitationcode, email]);
 
   useEffect(() => {
     fetch(`${rootUrl}UniversityCountryDD/Index`)
@@ -89,13 +113,48 @@ const StudentRegisterForm = () => {
   };
 
   const handleEmail = (e) => {
-    setEmail(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setuserEmail(data);
+    if (data === "") {
       setEmailError("Email is required");
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
+    ) {
+      setEmailError("Email is not valid");
     } else {
-      setEmailError("");
+      fetch(`${rootUrl}EmailCheck/EmailCheck/${e.target.value}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data, "sakib email");
+          setEmailExistError(data?.result);
+          if (!data?.result) {
+            setEmailError("Email already exists");
+          } else {
+            setEmailError("");
+          }
+        });
     }
   };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+
+    return phoneNumberPattern.test(phoneNumber);
+  };
+
+  const handlePhoneNumber = (value) => {
+    setphoneNumber(value);
+    if (value === "") {
+      setphoneNUmberError("Phone number is required");
+    } else if (value?.length < 9) {
+      setphoneNUmberError("Phone number required minimum 9 digit");
+    } else {
+      setphoneNUmberError("");
+    }
+    // setphoneNumber(value);
+    setValid(validatePhoneNumber(value));
+  };
+
   const handlePassword = (e) => {
     setPassword(e.target.value);
     if (e.target.value === "") {
@@ -133,26 +192,57 @@ const StudentRegisterForm = () => {
       isFormValid = false;
       setFirstNameError("First name is required");
     }
+
     if (subData.LastName === "") {
       isFormValid = false;
       setLastNameError("Last name is required");
     }
-    if (subData.Email === "") {
+
+    if (!phoneNumber) {
+      isFormValid = false;
+      setphoneNUmberError("Phone number is required");
+    }
+
+    if (phoneNumber?.length < 9) {
+      isFormValid = false;
+      setphoneNUmberError("Phone number required minimum 9 digit");
+    }
+
+    if (!subData.Email) {
       isFormValid = false;
       setEmailError("Email is required");
     }
+
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(subData.Email)) {
+      isFormValid = false;
+      setEmailError("Email is not Valid");
+    }
+
+    if (emailExistError === false) {
+      isFormValid = false;
+      setEmailExistError(emailExistError);
+    }
+
+    // if (email === "") {
+    //   isFormValid = false;
+    //   setEmailError("Email is required");
+    // }
+
     if (subData.PreferredCountry === 0) {
       isFormValid = false;
       setPreferredCountryError("Select preferred study destination");
     }
+
     if (subData.Password === "") {
       isFormValid = false;
       setPasswordError("Provide a valid password");
     }
+
     if (confirmPassword === "") {
       isFormValid = false;
       setConfirmPasswordError("Confirm your password");
     }
+
     if (confirmPassword !== password) {
       isFormValid = false;
       setConfirmPasswordError("Password doesn't match");
@@ -170,12 +260,11 @@ const StudentRegisterForm = () => {
       NameTittleId: title,
       FirstName: firstName,
       LastName: lastName,
-      Email: email,
+      Email: userEmail,
+      PhoneNumber: phoneNumber,
       Password: password,
       InvitationCode: referCode,
     };
-
-    console.log("register subdata", subData);
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
@@ -189,15 +278,13 @@ const StudentRegisterForm = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
-          if (data?.result === true) {
+          console.log("data naki", data);
+          if (data?.isSuccess === true) {
             addToast(data?.message, {
               appearance: "success",
               autoDismiss: true,
             });
             history.push("/studentAccountCreated");
-          } else {
-            setPasswordError(data?.message);
           }
         });
     }
@@ -324,23 +411,51 @@ const StudentRegisterForm = () => {
           <span className="text-danger">{lastNameError}</span>
         </FormGroup>
 
+        <div style={{ marginBottom: "3rem" }}>
+          <FormGroup row style={{ marginBottom: "-6px" }}>
+            <Col
+              className="phone-input-group"
+              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+            >
+              <span>Phone Number</span>
+              <PhoneInput
+                type="string"
+                name="phoneNumber"
+                id="phoneNumber"
+                country={"gb"}
+                enableLongNumbers={true}
+                onChange={handlePhoneNumber}
+                value={phoneNumber ? phoneNumber : ""}
+                inputProps={{
+                  required: true,
+                }}
+              />
+
+              <span className="text-danger">{phoneNUmberError}</span>
+            </Col>
+          </FormGroup>
+        </div>
+
         <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
             <Input
+              disabled={email}
               className="inside-placeholder"
               type="email"
               placeholder="Enter the email"
               onChange={(e) => {
                 handleEmail(e);
               }}
+              value={userEmail}
               style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
             />
             <span className="text-danger">{emailError}</span>
           </FormGroup>
         </div>
+
         <div className="mb-3">
           <img
             src={notify}
@@ -404,7 +519,7 @@ const StudentRegisterForm = () => {
               className="inside-placeholder"
               type="text"
               placeholder="Invitation code (optional)"
-              defaultValue={invitationcode}
+              defaultValue={referCode}
               onChange={(event) => setReferCode(event.target.value)}
               style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
             />

@@ -37,6 +37,7 @@ const Reference = () => {
   const [countryValue, setCountryValue] = useState(0);
   const [reference, setReference] = useState([]);
   const [referenceValue, setReferenceValue] = useState(0);
+
   const [refList, setRefList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [oneData, setOneData] = useState({});
@@ -58,6 +59,9 @@ const Reference = () => {
   const [addressLineError, setAddressLineError] = useState("");
   const [city, setCity] = useState("");
   const [cityError, setCityError] = useState("");
+  const [state, setState] = useState("");
+  const [stateError, setStateError] = useState("");
+
   const [valid, setValid] = useState(true);
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -75,6 +79,7 @@ const Reference = () => {
 
     get(`ReferenceTypeDD/Index`).then((res) => {
       setReference(res);
+      console.log(res, "reference");
     });
   }, [success, applicationStudentId]);
 
@@ -110,6 +115,24 @@ const Reference = () => {
         setRefList(res);
       });
     });
+    setOneData({});
+    setReferenceValue(0);
+    setCountryLabel("Select Country");
+    setCountryValue(0);
+    setReferenceName("");
+    setInstitute("");
+    setPhoneNumber("");
+    setEmail("");
+    setAddressLine("");
+    setCity("");
+    setCityError("");
+    setAddressLineError("");
+    setCountryError(false);
+    setEmailError("");
+    setPhoneNumberError("");
+    setInstituteError("");
+    setReferenceNameError("");
+    setReferenceError(false);
   };
 
   const handleUpdate = (id) => {
@@ -125,7 +148,28 @@ const Reference = () => {
       setEmail(res?.emailAddress);
       setAddressLine(res?.addressLine);
       setCity(res?.city);
+      setState(res?.stateName);
     });
+
+    setReferenceValue(0);
+    setCountryLabel("Select Country");
+    setCountryValue(0);
+    setReferenceName("");
+    setInstitute("");
+    setPhoneNumber("");
+    setEmail("");
+    setAddressLine("");
+    setCity("");
+    setCityError("");
+    setState("");
+    setStateError("");
+    setAddressLineError("");
+    setCountryError(false);
+    setEmailError("");
+    setPhoneNumberError("");
+    setInstituteError("");
+    setReferenceNameError("");
+    setReferenceError(false);
   };
 
   if (showForm) {
@@ -137,21 +181,45 @@ const Reference = () => {
 
   const onShow = () => {
     setShowForm(true);
+    setReferenceValue(0);
+    setCountryLabel("Select Country");
+    setCountryValue(0);
+    setReferenceName("");
+    setInstitute("");
+    setPhoneNumber("");
+    setEmail("");
+    setAddressLine("");
+    setCity("");
+    setCityError("");
+    setState("");
+    setStateError("");
+    setAddressLineError("");
+    setCountryError(false);
+    setEmailError("");
+    setPhoneNumberError("");
+    setInstituteError("");
+    setReferenceNameError("");
+    setReferenceError(false);
   };
+
   const offShow = () => {
     setShowForm(false);
   };
+
   const handleReferenceName = (e) => {
-    setReferenceName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setReferenceName(data);
+    if (data === "") {
       setReferenceNameError("Reference name is required");
     } else {
       setReferenceNameError("");
     }
   };
+
   const handleInstitute = (e) => {
-    setInstitute(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setInstitute(data);
+    if (data === "") {
       setInstituteError("Institute is required");
     } else {
       setInstituteError("");
@@ -198,8 +266,9 @@ const Reference = () => {
   };
 
   const handleAddressLine = (e) => {
-    setAddressLine(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setAddressLine(data);
+    if (data === "") {
       setAddressLineError("Address line is required");
     } else {
       setAddressLineError("");
@@ -207,11 +276,22 @@ const Reference = () => {
   };
 
   const handleCity = (e) => {
-    setCity(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCity(data);
+    if (data === "") {
       setCityError("City is required");
     } else {
       setCityError("");
+    }
+  };
+
+  const handleState = (e) => {
+    let data = e.target.value.trimStart();
+    setState(data);
+    if (data === "") {
+      setStateError("State is required");
+    } else {
+      setStateError("");
     }
   };
 
@@ -249,6 +329,7 @@ const Reference = () => {
       isFormValid = false;
       setEmailError("Email is not Valid");
     }
+
     if (!addressLine) {
       isFormValid = false;
       setAddressLineError("Address line is required");
@@ -256,6 +337,10 @@ const Reference = () => {
     if (!city) {
       isFormValid = false;
       setCityError("City is required");
+    }
+    if (!state) {
+      isFormValid = false;
+      setStateError("State is required");
     }
     if (countryValue === 0) {
       isFormValid = false;
@@ -382,12 +467,14 @@ const Reference = () => {
                       <td>{ref?.emailAddress}</td>
                       <td>
                         {permissions?.includes(permissionList?.Edit_Student) ? (
-                          <span
-                            style={{ cursor: "pointer" }}
-                            onClick={() => handleUpdate(ref.id)}
-                          >
-                            Edit
-                          </span>
+                          <a href="#reference-form">
+                            <span
+                              className="pointer text-body"
+                              onClick={() => handleUpdate(ref.id)}
+                            >
+                              Edit
+                            </span>
+                          </a>
                         ) : null}
                         |{" "}
                         {permissions?.includes(permissionList?.Edit_Student) ? (
@@ -413,239 +500,260 @@ const Reference = () => {
               progress={progress}
               cancel={() => setDeleteModal(false)}
               confirm={handleDeletePermission}
-            ></ConfirmModal>
+            />
           </div>
 
           {showForm || refList?.length < 1 ? (
-            <Form onSubmit={handleRegisterReference}>
-              <input
-                type="hidden"
-                name="studentId"
-                id="studentId"
-                value={applicationStudentId}
-              />
+            <div id="reference-form" className={showForm ? "form-top" : ""}>
+              <Form onSubmit={handleRegisterReference}>
+                <input
+                  type="hidden"
+                  name="studentId"
+                  id="studentId"
+                  value={applicationStudentId}
+                />
 
-              {oneData?.id ? (
-                <input type="hidden" name="id" id="id" value={oneData?.id} />
-              ) : null}
-              <Row>
-                <Col lg="4" md="6" sm="8">
-                  <FormGroup>
+                {oneData?.id ? (
+                  <input type="hidden" name="id" id="id" value={oneData?.id} />
+                ) : null}
+                <Row>
+                  <Col lg="4" md="6" sm="8">
+                    <FormGroup>
+                      <span>
+                        <span className="text-danger">*</span> Reference Type
+                      </span>
+
+                      <div>
+                        {reference?.map((tt) => (
+                          <>
+                            <input
+                              type="radio"
+                              name="referenceTypeId"
+                              id="referenceTypeId"
+                              value={tt?.id}
+                              onClick={() => {
+                                setReferenceValue(tt?.id);
+                                setReferenceError(false);
+                              }}
+                              checked={referenceValue === tt?.id ? true : false}
+                            />
+
+                            <label
+                              className="mr-3"
+                              style={{ fontWeight: 500, fontSize: "14px" }}
+                            >
+                              {tt?.name}
+                            </label>
+                          </>
+                        ))}
+                      </div>
+
+                      {referenceError && (
+                        <span className="text-danger">
+                          Reference type is required
+                        </span>
+                      )}
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
                     <span>
-                      <span className="text-danger">*</span> Reference Type
+                      <span className="text-danger">*</span> Reference Name
                     </span>
 
-                    <div>
-                      {reference?.map((tt) => (
-                        <>
-                          <input
-                            type="radio"
-                            name="referenceTypeId"
-                            id="referenceTypeId"
-                            value={tt?.id}
-                            onClick={() => {
-                              setReferenceValue(tt?.id);
-                              setReferenceError(false);
-                            }}
-                            checked={referenceValue === tt?.id ? true : false}
-                          />
+                    <Input
+                      type="text"
+                      name="referenceName"
+                      id="referenceName"
+                      placeholder="Enter Reference Name"
+                      onChange={(e) => {
+                        handleReferenceName(e);
+                      }}
+                      value={referenceName}
+                    />
+                    <span className="text-danger">{referenceNameError}</span>
+                  </Col>
+                </FormGroup>
 
-                          <label
-                            className="mr-3"
-                            style={{ fontWeight: 500, fontSize: "14px" }}
-                          >
-                            {tt?.name}
-                          </label>
-                        </>
-                      ))}
-                    </div>
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span>
+                      <>
+                        {referenceValue === 1
+                          ? " Institute"
+                          : " Institute/Company"}
+                      </>
+                    </span>
 
-                    {referenceError && (
-                      <span className="text-danger">
-                        Reference type is required
-                      </span>
+                    <Input
+                      type="text"
+                      name="institute_Company"
+                      id="institute_Company"
+                      placeholder="Enter Institute/Company"
+                      onChange={(e) => {
+                        handleInstitute(e);
+                      }}
+                      value={institute}
+                    />
+                    <span className="text-danger">{instituteError}</span>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8" className="phone-input-group">
+                    <span>
+                      <span className="text-danger">*</span>
+                      Phone Number
+                    </span>
+                    <PhoneInput
+                      className="w-100"
+                      type="string"
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      country={"gb"}
+                      enableLongNumbers={true}
+                      onChange={handlePhoneNumber}
+                      value={phoneNumber ? phoneNumber : ""}
+                      inputProps={{
+                        required: true,
+                      }}
+                    />
+
+                    <span className="text-danger">{phoneNumberError}</span>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span>
+                      Professional/Institutional Email
+                    </span>
+
+                    <Input
+                      type="text"
+                      name="emailAddress"
+                      id="emailAddress"
+                      placeholder="Enter Email"
+                      onChange={(e) => {
+                        handleEmailError(e);
+                      }}
+                      value={email}
+                    />
+                    <span className="text-danger">{emailError}</span>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    {" "}
+                    <span>
+                      <span className="text-danger">*</span> Country
+                    </span>
+                    <Select
+                      options={countryName}
+                      value={{ label: countryLabel, value: countryValue }}
+                      onChange={(opt) => selectCountry(opt.label, opt.value)}
+                      name="countryId"
+                      id="countryId"
+                      required
+                    />
+                    {countryError && (
+                      <span className="text-danger">Country is required</span>
                     )}
-                  </FormGroup>
-                </Col>
-              </Row>
+                  </Col>
+                </FormGroup>
 
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  <span>
-                    <span className="text-danger">*</span> Reference Name
-                  </span>
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span> Address Line
+                    </span>
 
-                  <Input
-                    type="text"
-                    name="referenceName"
-                    id="referenceName"
-                    placeholder="Enter Reference Name"
-                    onChange={(e) => {
-                      handleReferenceName(e);
-                    }}
-                    value={referenceName}
-                  />
-                  <span className="text-danger">{referenceNameError}</span>
-                </Col>
-              </FormGroup>
+                    <Input
+                      type="text"
+                      name="addressLine"
+                      id="addressLine"
+                      placeholder="Enter Address Line"
+                      onChange={(e) => {
+                        handleAddressLine(e);
+                      }}
+                      value={addressLine}
+                    />
+                    <span className="text-danger">{addressLineError}</span>
+                  </Col>
+                </FormGroup>
 
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  <span>
-                    <span className="text-danger">*</span> Institute/Company
-                  </span>
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span> City
+                    </span>
 
-                  <Input
-                    type="text"
-                    name="institute_Company"
-                    id="institute_Company"
-                    placeholder="Enter Institute/Company"
-                    onChange={(e) => {
-                      handleInstitute(e);
-                    }}
-                    value={institute}
-                  />
-                  <span className="text-danger">{instituteError}</span>
-                </Col>
-              </FormGroup>
+                    <Input
+                      type="text"
+                      name="city"
+                      id="city"
+                      placeholder="Enter City"
+                      onChange={(e) => {
+                        handleCity(e);
+                      }}
+                      value={city}
+                    />
+                    <span className="text-danger">{cityError}</span>
+                  </Col>
+                </FormGroup>
 
-              <FormGroup row>
-                <Col lg="6" md="8" className="phone-input-group">
-                  <span>
-                    <span className="text-danger">*</span>
-                    Phone Number
-                  </span>
-                  <PhoneInput
-                    className="w-100"
-                    type="string"
-                    name="phoneNumber"
-                    id="phoneNumber"
-                    country={"us"}
-                    onChange={handlePhoneNumber}
-                    value={phoneNumber ? phoneNumber : "1"}
-                    inputProps={{
-                      required: true,
-                    }}
-                  />
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    {" "}
+                    <span>
+                      <span className="text-danger">*</span>State/County
+                    </span>
+                    <Input
+                      type="text"
+                      name="stateName"
+                      id="stateName"
+                      placeholder="Enter State/County"
+                      onChange={(e) => {
+                        handleState(e);
+                      }}
+                      value={state}
+                    />
+                    <span className="text-danger">{stateError}</span>
+                  </Col>
+                </FormGroup>
 
-                  <span className="text-danger">{phoneNumberError}</span>
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  <span>
-                    <span className="text-danger">*</span> Email
-                  </span>
-
-                  <Input
-                    type="text"
-                    name="emailAddress"
-                    id="emailAddress"
-                    placeholder="Enter Email"
-                    onChange={(e) => {
-                      handleEmailError(e);
-                    }}
-                    value={email}
-                  />
-                  <span className="text-danger">{emailError}</span>
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  {" "}
-                  <span>
-                    <span className="text-danger">*</span> Country
-                  </span>
-                  <Select
-                    options={countryName}
-                    value={{ label: countryLabel, value: countryValue }}
-                    onChange={(opt) => selectCountry(opt.label, opt.value)}
-                    name="countryId"
-                    id="countryId"
-                    required
-                  />
-                  {countryError && (
-                    <span className="text-danger">Country is required</span>
-                  )}
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  <span>
-                    <span className="text-danger">*</span> Address Line
-                  </span>
-
-                  <Input
-                    type="text"
-                    name="addressLine"
-                    id="addressLine"
-                    placeholder="Enter Address Line"
-                    onChange={(e) => {
-                      handleAddressLine(e);
-                    }}
-                    defaultValue={oneData?.addressLine}
-                  />
-                  <span className="text-danger">{addressLineError}</span>
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  <span>
-                    <span className="text-danger">*</span> City
-                  </span>
-
-                  <Input
-                    type="text"
-                    name="city"
-                    id="city"
-                    placeholder="Enter City"
-                    onChange={(e) => {
-                      handleCity(e);
-                    }}
-                    defaultValue={oneData?.city}
-                  />
-                  <span className="text-danger">{cityError}</span>
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Col lg="6" md="8">
-                  {" "}
-                  <span>State/County</span>
-                  <Input
-                    type="text"
-                    name="stateName"
-                    id="stateName"
-                    placeholder="Enter State/County"
-                    defaultValue={oneData?.stateName}
-                  />
-                </Col>
-              </FormGroup>
-
-              <Row className="text-right">
-                <Col lg="6" md="8">
-                  <FormGroup className="mt-2">
-                    {refList.length > 0 && <CancelButton cancel={offShow} />}
-                    {permissions?.includes(permissionList?.Edit_Student) ? (
-                      <SaveButton
-                        progress={progress}
-                        buttonStatus={buttonStatus}
-                      />
-                    ) : null}
-                  </FormGroup>
-                </Col>
-              </Row>
-            </Form>
+                <Row className="text-right">
+                  <Col lg="6" md="8">
+                    <FormGroup className="mt-2">
+                      {refList.length > 0 && <CancelButton cancel={offShow} />}
+                      {permissions?.includes(permissionList?.Edit_Student) ? (
+                        <SaveButton
+                          progress={progress}
+                          buttonStatus={buttonStatus}
+                        />
+                      ) : null}
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
           ) : (
             <FormGroup>
               {permissions?.includes(permissionList?.Edit_Student) ? (
-                <button className="add-button" onClick={onShow} permission={6}>
-                  Add Another
-                </button>
+                <a href="#reference-form" className="text-decoration-none">
+                  <button
+                    className="add-button"
+                    onClick={onShow}
+                    permission={6}
+                  >
+                    Add Another
+                  </button>
+                </a>
               ) : null}
             </FormGroup>
           )}

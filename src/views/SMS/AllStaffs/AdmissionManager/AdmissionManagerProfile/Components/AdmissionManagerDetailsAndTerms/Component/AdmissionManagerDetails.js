@@ -7,6 +7,7 @@ import { rootUrl } from "../../../../../../../../constants/constants";
 import BreadCrumb from "../../../../../../../../components/breadCrumb/BreadCrumb";
 import EmergencyContactForm from "./EmergencyContactForm";
 import get from "../../../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../../../components/date/calenderFormate";
 
 const AdmissionManagerDetails = () => {
   const { admissionManagerId } = useParams();
@@ -106,7 +107,7 @@ const AdmissionManagerDetails = () => {
                 <td width="40%">Date of Birth</td>
 
                 <td width="60%">
-                  {data?.admissionManagerPersonalInfo?.dateOfBirth}
+                  {dateFormate(data?.admissionManagerPersonalInfo?.dateOfBirth)}
                 </td>
               </tr>
 

@@ -95,10 +95,10 @@ const DocumentCategoryList = () => {
       isFormValid = false;
       setCategoryNameError("Category Name is required");
     }
-    if (!categoryDescription) {
-      isFormValid = false;
-      setCategoryDescriptionError("Description is required");
-    }
+    // if (!categoryDescription) {
+    //   isFormValid = false;
+    //   setCategoryDescriptionError("Description is required");
+    // }
 
     return isFormValid;
   };
@@ -308,7 +308,7 @@ const DocumentCategoryList = () => {
                         </Col>
                       </FormGroup>
 
-                      <FormGroup
+                      {/* <FormGroup
                         row
                         className="has-icon-left position-relative"
                       >
@@ -333,7 +333,7 @@ const DocumentCategoryList = () => {
                             {categoryDescriptionError}
                           </span>
                         </Col>
-                      </FormGroup>
+                      </FormGroup> */}
                       <FormGroup className="d-flex justify-content-between mt-3">
                         <CancelButton cancel={closeModal} />
 
@@ -353,19 +353,25 @@ const DocumentCategoryList = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Category Name</th>
-                      <th>Description</th>
+                      {/* <th>Description</th> */}
                       {/* <th className="text-center" >Count</th> */}
-                      <th>Action</th>
+                      {permissions?.includes(
+                        permissionList.Configure_Documents
+                      ) ? (
+                        <>
+                          <th>Action</th>
+                        </>
+                      ) : null}
                     </tr>
                   </thead>
                   <tbody>
                     {docuList?.map((docu, i) => (
                       <tr key={docu?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{docu?.name}</td>
-                        <td>{docu?.description}</td>
+                        {/* <td>{docu?.description}</td> */}
                         {/* <td className="text-center" >               
 
                     <LinkSpanButton
@@ -382,41 +388,40 @@ const DocumentCategoryList = () => {
                     />
 
                   </td> */}
-                        <td>
-                          <ButtonGroup>
-                            {permissions?.includes(
-                              permissionList.Configure_Documents
-                            ) ? (
-                              <ButtonForFunction
-                                func={() => handleUpdate(docu)}
-                                className={"mx-1 btn-sm"}
-                                color={"warning"}
-                                icon={<i className="fas fa-edit"></i>}
-                                permission={6}
-                              />
-                            ) : null}
 
-                            {permissions?.includes(
-                              permissionList.Configure_Documents
-                            ) ? (
-                              <ButtonForFunction
-                                className={"mx-1 btn-sm"}
-                                func={() => toggleDanger(docu?.name, docu?.id)}
-                                color={"danger"}
-                                icon={<i className="fas fa-trash-alt"></i>}
-                                permission={6}
-                              />
-                            ) : null}
-                          </ButtonGroup>
+                        {permissions?.includes(
+                          permissionList.Configure_Documents
+                        ) && (
+                          <td>
+                            <ButtonGroup>
+                              {permissions?.includes(
+                                permissionList.Configure_Documents
+                              ) ? (
+                                <ButtonForFunction
+                                  func={() => handleUpdate(docu)}
+                                  className={"mx-1 btn-sm"}
+                                  color={"warning"}
+                                  icon={<i className="fas fa-edit"></i>}
+                                  permission={6}
+                                />
+                              ) : null}
 
-                          <ConfirmModal
-                            text="Do You Want To Delete This Document Category? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            confirm={() => handleDeleteCategory(docuId)}
-                            cancel={closeDeleteModal}
-                          />
-                        </td>
+                              {permissions?.includes(
+                                permissionList.Configure_Documents
+                              ) ? (
+                                <ButtonForFunction
+                                  className={"mx-1 btn-sm"}
+                                  func={() =>
+                                    toggleDanger(docu?.name, docu?.id)
+                                  }
+                                  color={"danger"}
+                                  icon={<i className="fas fa-trash-alt"></i>}
+                                  permission={6}
+                                />
+                              ) : null}
+                            </ButtonGroup>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -426,6 +431,14 @@ const DocumentCategoryList = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Document Category? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => handleDeleteCategory(docuId)}
+        cancel={closeDeleteModal}
+      />
     </div>
   );
 };

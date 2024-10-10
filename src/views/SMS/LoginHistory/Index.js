@@ -29,7 +29,7 @@ const Index = () => {
     ).then((res) => {
       setEntity(res?.totalEntity);
       setData(res?.models);
-
+      console.log(res);
       setSerialNum(res?.firstSerialNumber);
     });
   }, [currentPage, dataPerPage, callApi, success]);
@@ -38,6 +38,7 @@ const Index = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -101,7 +102,7 @@ const Index = () => {
             <Table id="table-to-xls" className="table-sm table-bordered my-4">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Date</th>
                   <th>IP Address</th>
                   <th>Geolocation</th>
@@ -111,23 +112,25 @@ const Index = () => {
               <tbody>
                 {data?.map((d, i) => (
                   <tr key={i} style={{ textAlign: "center" }}>
-                    <th scope="row">{i + serialNum}</th>
-                    <td>{handleDate1(d?.lastLoginDate)}</td>
+                    {/* <th scope="row">{i + serialNum}</th> */}
+                    <td>{d?.lastLoginDate}</td>
                     <td>{d?.ipAddress}</td>
                     <td>{d?.geoLocationInfo}</td>
                     <td>
-                      {
-                        <ToggleSwitch
-                          defaultChecked={
-                            d?.isDeviceBlocked == false ? false : true
+                      {d?.ipAddress !== "Not found" && d?.ipAddress !== "" ? (
+                        <>
+                          {
+                            <ToggleSwitch
+                              defaultChecked={
+                                d?.isDeviceBlocked == false ? false : true
+                              }
+                              onChange={(e) => {
+                                handleAccountStatus(e, d?.ipAddress);
+                              }}
+                            />
                           }
-                          onChange={(e) => {
-                            handleAccountStatus(e, d?.ipAddress);
-                          }}
-                        />
-                      }
-
-                      {/* {d?.isDeviceBlocked ? "Yes" : "No"} */}
+                        </>
+                      ) : null}
                     </td>
                   </tr>
                 ))}

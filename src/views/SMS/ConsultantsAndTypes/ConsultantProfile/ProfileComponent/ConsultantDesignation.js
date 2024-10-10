@@ -21,10 +21,7 @@ const ConsultantDesignation = ({ id }) => {
     <>
       {bonusList ? (
         <>
-          <div
-            className="mt-1 mb-4 d-flex justify-content-between cardborder"
-            style={{ backgroundColor: "#DFEEEE" }}
-          >
+          <div className="mt-1 mb-4 d-flex justify-content-between cardborder bg-white">
             <div className="Designation">
               <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
               <span>{bonusList?.designationName}</span>

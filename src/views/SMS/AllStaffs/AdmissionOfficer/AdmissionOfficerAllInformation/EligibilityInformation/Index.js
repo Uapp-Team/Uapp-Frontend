@@ -323,6 +323,14 @@ const Index = () => {
       isFormValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
+    if (
+      residencyValue === 2 &&
+      FileList3.length === 0 &&
+      eligibilityData?.idOrPassport?.fileUrl == null
+    ) {
+      isFormValid = false;
+      setIdPassportError(true);
+    }
 
     return isFormValid;
   };

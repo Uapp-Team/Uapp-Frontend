@@ -362,7 +362,7 @@ const UniversityRecquiredDocument = () => {
                   <Table className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        <th>SL/NO</th>
+                        {/* <th>SL/NO</th> */}
                         <th>Name</th>
                         <th>Description</th>
                         {/* <th>Status</th> */}
@@ -372,7 +372,7 @@ const UniversityRecquiredDocument = () => {
                     <tbody>
                       {documentData?.map((document, i) => (
                         <tr key={document?.id} style={{ textAlign: "center" }}>
-                          <th scope="row">{i + 1}</th>
+                          {/* <th scope="row">{i + 1}</th> */}
                           <td>{document?.document?.name}</td>
                           <td>{document?.document?.description}</td>
                           {/* <td>{application?.documentRequirementStatus?.name}</td> */}

@@ -6,26 +6,26 @@ import Loader from "../../Search/Loader/Loader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 
 const Details = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const history = useHistory();
 
   useEffect(() => {
     get(`WithdrawTransaction/Get/${id}`).then((res) => {
+      console.log(res);
       setData(res);
       setLoading(false);
     });
-  }, [loading]);
+  }, [id]);
 
   return (
     <>
+      <BreadCrumb title="Withdraw Transaction Details" backTo="" path="" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Withdraw Transaction Details" backTo="" path="" />
-
           <Card>
             <CardBody>
               <Table className="table-bordered mt-4">

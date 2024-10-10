@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Table } from "reactstrap";
 import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
-const OtherInformationCard = ({ sId }) => {
-  const [studentDetails, setStudentDetails] = useState({});
+const OtherInformationCard = ({
+  sId,
+  otherInformation,
+  setOtherInformation,
+  activity,
+}) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   useEffect(() => {
     get(`OtherInformation/GetByStudentId/${sId}`).then((res) => {
-      setStudentDetails(res);
+      setOtherInformation(res);
     });
-  }, [sId]);
+  }, [sId, setOtherInformation]);
   return (
     <>
       <Table>
@@ -20,7 +24,7 @@ const OtherInformationCard = ({ sId }) => {
             <b>Other Information</b>
           </td>
           <td className="border-0 text-right">
-            {permissions?.includes(permissionList?.Edit_Student) ? (
+            {permissions?.includes(permissionList?.Edit_Student) && activity ? (
               <Link to={`/addOtherinformation/${sId}/${1}`}> Edit</Link>
             ) : null}
           </td>
@@ -34,8 +38,8 @@ const OtherInformationCard = ({ sId }) => {
           </span>
           <br />
           <span className="text-gray-70">
-            {studentDetails?.isHaveDisability
-              ? studentDetails?.disabilityDescription
+            {otherInformation?.isHaveDisability
+              ? otherInformation?.disabilityDescription
               : "No Disability"}
           </span>
         </div>
@@ -46,8 +50,8 @@ const OtherInformationCard = ({ sId }) => {
           </span>
           <br />
           <span className="text-gray-70">
-            {studentDetails?.isHaveCriminalConvictions
-              ? studentDetails?.criminalConvictionsDescription
+            {otherInformation?.isHaveCriminalConvictions
+              ? otherInformation?.criminalConvictionsDescription
               : "No Criminal conviction"}
           </span>
         </div>

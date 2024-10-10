@@ -1,6 +1,5 @@
 import React from "react";
 import { Table } from "reactstrap";
-import ButtonForFunction from "../../../../Components/ButtonForFunction";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 
 const CurrentCommissionGroup = ({
@@ -39,17 +38,17 @@ const CurrentCommissionGroup = ({
           <Table>
             <thead className="tablehead">
               <tr>
-                <th>SL/No</th>
+                {/* <th>SL/No</th> */}
                 <th>Price Range</th>
                 <th>Range From</th>
                 <th>Range To</th>
-                <th>Commission Amount</th>
+                <th>Standard Commission Rate </th>
               </tr>
             </thead>
             <tbody>
               {priceRangeList?.map((range, i) => (
                 <tr key={range.id}>
-                  <th scope="row">{1 + i}</th>
+                  {/* <th scope="row">{1 + i}</th> */}
                   <td>{range?.priceRangeName}</td>
                   <td>{range?.rangeFrom}</td>
                   <td>{range?.rangeTo}</td>

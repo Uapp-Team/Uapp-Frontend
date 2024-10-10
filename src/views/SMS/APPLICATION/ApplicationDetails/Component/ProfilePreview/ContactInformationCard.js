@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
 
-const ContactInformationCard = ({ sId }) => {
-  const [contactData, setContactData] = useState([]);
-
+const ContactInformationCard = ({ sId, contactData, setContactData }) => {
   useEffect(() => {
     get(`StudentAddress/GetByStudentId/${sId}`).then((res) => {
       setContactData(res);
+      console.log(res, "contact");
     });
-  }, [sId]);
+  }, [sId, setContactData]);
   return (
     <>
       <Table>

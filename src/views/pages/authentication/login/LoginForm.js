@@ -6,6 +6,10 @@ import axios from "axios";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { rootUrl } from "../../../../constants/constants";
+import SetStorage from "../../../SMS/TableColumn/SetStorage";
+import get from "../../../../helpers/get";
+import { userTypes } from "../../../../constants/userTypeConstant";
+import ConfirmModal from "../../../../components/modal/ConfirmModal";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +20,8 @@ const LoginForm = () => {
   const [progress, setProgress] = useState(false);
   const [IpAddress, setIpAddress] = useState("");
   const [GeoLocationInfo, setGeoLocationInfo] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
 
   useEffect(() => {
     try {
@@ -59,62 +65,115 @@ const LoginForm = () => {
     }
   };
 
+  const ValidateForm = () => {
+    var isValid = true;
+
+    if (!email) {
+      isValid = false;
+      setEmailError("Email is required");
+    }
+
+    if (!password) {
+      isValid = false;
+      setPasswordError("Provide a valid password");
+    }
+
+    return isValid;
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    setProgress(true);
-    axios
-      .post(`${rootUrl}Account/Login`, {
-        email: email,
-        password: password,
-        IpAddress: IpAddress,
-        GeoLocationInfo: GeoLocationInfo,
-      })
-      .then((response) => {
-        setProgress(false);
-        if (response?.status === 200) {
-          if (response?.data?.isSuccess === true) {
-            seterror("");
-            localStorage.removeItem("date");
-            localStorage.setItem("token", "Bearer " + response?.data?.message);
-            localStorage.setItem("date", response?.data?.expireDate);
-            localStorage.setItem(
-              "permissions",
-              JSON.stringify(response?.data?.permissions)
-            );
-            const AuthStr = "Bearer " + response?.data?.message;
-            axios
-              .get(`${rootUrl}Account/GetCurrentUser`, {
-                headers: {
-                  authorization: AuthStr,
-                },
-              })
-              .then((res) => {
-                if (res?.status === 200) {
-                  if (res?.data?.isActive === true) {
-                    localStorage.setItem(
-                      "current_user",
-                      JSON.stringify(res?.data)
-                    );
-                    localStorage.setItem("userType", res?.data?.userTypeId);
-                    localStorage.setItem("referenceId", res?.data?.referenceId);
-                    window.location.reload();
-                  } else {
-                    seterror("User is blocked");
-                    // setcanNavigate(false);
-                  }
-                }
-              });
+    if (ValidateForm()) {
+      setProgress(true);
 
-            history.push("/");
-          } else {
-            seterror(response?.data?.message);
+      axios
+        .post(`${rootUrl}Account/Login`, {
+          email: email,
+          password: password,
+          IpAddress: IpAddress,
+          GeoLocationInfo: GeoLocationInfo,
+        })
+        .then((response) => {
+          setProgress(false);
+          if (response?.status === 200) {
+            if (response?.data?.isSuccess === true) {
+              seterror("");
+              localStorage.removeItem("date");
+              localStorage.setItem(
+                "token",
+                "Bearer " + response?.data?.message
+              );
+              localStorage.setItem("date", response?.data?.expireDate);
+              localStorage.setItem(
+                "permissions",
+                JSON.stringify(response?.data?.permissions)
+              );
+              const AuthStr = "Bearer " + response?.data?.message;
+              axios
+                .get(`${rootUrl}Account/GetCurrentUser`, {
+                  headers: {
+                    authorization: AuthStr,
+                  },
+                })
+                .then((res) => {
+                  if (res?.status === 200) {
+                    if (res?.data?.isActive === true) {
+                      localStorage.setItem(
+                        "current_user",
+                        JSON.stringify(res?.data)
+                      );
+                      localStorage.setItem("userType", res?.data?.userTypeId);
+                      localStorage.setItem(
+                        "referenceId",
+                        res?.data?.referenceId
+                      );
+
+                      if (res?.data?.userTypeId === 6) {
+                        axios
+                          .get(
+                            `${rootUrl}Student/CheckIsLead/${res?.data?.referenceId}`,
+                            {
+                              headers: {
+                                authorization: AuthStr,
+                              },
+                            }
+                          )
+                          .then((res) => {
+                            if (res?.status === 200) {
+                              localStorage.setItem("IsLead", res?.data?.result);
+                              window.location.reload();
+                            } else {
+                              seterror(res?.data?.message);
+                            }
+                          });
+                      } else {
+                        window.location.reload();
+                      }
+                    } else {
+                      seterror("User is blocked");
+                      // setcanNavigate(false);
+                    }
+                  }
+                });
+
+              // history.push("/");
+            } else {
+              seterror(response?.data?.message);
+            }
           }
-        }
-      })
-      .catch();
+        })
+        .catch();
+    }
+    SetStorage();
   };
+
+  const sendRequest = () => {
+    // history.push(`/admissionManagerPersonalInformation/${0}`);
+  };
+
   return (
     <>
+      {/* <p onClick={() => setIsModalOpen(!isModalOpen)}>Open Modal</p> */}
       <Form action="/" onSubmit={handleLogin} className="form-items">
         <FormGroup className="form-label-group position-relative has-icon-left">
           <Input
@@ -151,7 +210,7 @@ const LoginForm = () => {
           <span>{error}</span>
         </div>
         <div className="row d-flex justify-content-space-between">
-          <div className="col-md-6">
+          <div className="col-md-5">
             <div>
               <button className="btn-register-lg" type="submit">
                 {progress ? <Spin indicator={antIcon} /> : "Sign In"}
@@ -159,8 +218,8 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <div className="col-md-6">
-            <div className="mt-2 ">
+          <div className="col-md-7">
+            <div className="mt-2">
               <Link to="/pages/forgot-password" className="Forgot-Password">
                 Forgot Password?
               </Link>
@@ -168,6 +227,17 @@ const LoginForm = () => {
           </div>
         </div>
       </Form>
+      {/* <div className="register-links-section">
+        <div className="d-flex">
+          <div className="mr-3">
+            <img src={maintenance} width={45} alt="" />
+          </div>
+          <p className="maintenance-text">
+            The UAPP Portal is now fully updated and live. Meanwhile, get ready
+            for the full website launch very soon!
+          </p>
+        </div>
+      </div> */}
       <div className="register-links-section">
         <h1 className="mb-4">Don't have any account yet?</h1>
         <h1>Register as</h1>
@@ -176,15 +246,26 @@ const LoginForm = () => {
             Student
           </Link>
           <Link to="/consultantRegister" className="register-button-hover">
-            {" "}
             Consultant
           </Link>
           <Link to="/providerRegister" className="register-button-hover">
-            {" "}
             Provider
           </Link>
         </div>
       </div>
+
+      <ConfirmModal
+        text="Your account has been deleted."
+        text2="Would you like to recover your account? please get in touch with the admin by email."
+        isOpen={isModalOpen}
+        toggle={() => setIsModalOpen(!isModalOpen)}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        noText="Cancel"
+        yesText="Send Request"
+        cancel={() => setIsModalOpen(false)}
+        confirm={() => setIsModalOpen(false)}
+      />
     </>
   );
 };

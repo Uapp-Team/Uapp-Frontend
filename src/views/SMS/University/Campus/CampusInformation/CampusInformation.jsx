@@ -362,7 +362,7 @@ const CampusInformation = () => {
                         rows="4"
                         name="EmbededMap"
                         id="EmbededMap"
-                        value={embededMap}
+                        defaultValue={embededMap}
                         placeholder="example.com"
                       />
                     </InputGroup>
@@ -419,8 +419,8 @@ const CampusInformation = () => {
                       currencyId={avarageTutionFeeCurrencyId}
                       setCurrencyId={setAvarageTutionFeeCurrencyId}
                       name="avarageTutionFeeCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
                     <Input
                       type="number"
@@ -444,8 +444,8 @@ const CampusInformation = () => {
                       currencyId={avarageLivingCostCurrencyId}
                       setCurrencyId={setAvarageLivingCostCurrencyId}
                       name="avarageLivingCostCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
                     <Input
                       type="number"
@@ -469,8 +469,8 @@ const CampusInformation = () => {
                       currencyId={avarageApplicationFeeCurrencyId}
                       setCurrencyId={setAvarageApplicationFeeCurrencyId}
                       name="avarageApplicationFeeCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
 
                     <Input
@@ -495,8 +495,8 @@ const CampusInformation = () => {
                       currencyId={estimatedTotalCostCurrencyId}
                       setCurrencyId={setEstimatedTotalCostCurrencyId}
                       name="estimatedTotalCostCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
 
                     <Input

@@ -22,6 +22,7 @@ const Preview = ({ file }) => {
       {file.split(".")[1] === "jpeg" ||
       file.split(".")[1] === "jpg" ||
       file.split(".")[1] === "png" ||
+      file.split(".")[1] === "webp" ||
       file.split(".")[1] === "gif" ? (
         <>
           <i
@@ -55,7 +56,12 @@ const Preview = ({ file }) => {
             ></i>
           </Modal>
         </>
-      ) : null}
+      ) : (
+        <a href={rootUrl + file}>
+          <i class="fas fa-eye text-info fs-24px"></i>
+          {/* <i class="fas fa-eye text-info fs-24px invisible"></i> */}
+        </a>
+      )}
     </div>
   );
 };

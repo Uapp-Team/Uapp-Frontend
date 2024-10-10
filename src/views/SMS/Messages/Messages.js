@@ -19,6 +19,7 @@ import remove from "../../../helpers/remove";
 import loader from "../../../assets/img/uappLoader.gif";
 import Loader from "../Search/Loader/Loader";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import { dateFormate } from "../../../components/date/calenderFormate";
 
 const Messages = () => {
   const history = useHistory();
@@ -51,6 +52,7 @@ const Messages = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -135,6 +137,7 @@ const Messages = () => {
 
   return (
     <>
+      <BreadCrumb title="All Messages" backTo="" path="" />
       {data?.length < 1 ? (
         <Loader />
       ) : (
@@ -161,8 +164,6 @@ const Messages = () => {
               <Button onClick={() => setDeleteModal(false)}>NO</Button>
             </ModalFooter>
           </Modal>
-
-          <BreadCrumb title="All Messages" backTo="" path="" />
 
           {/* <Card>
 
@@ -219,7 +220,7 @@ const Messages = () => {
                           bottom: "5px",
                         }}
                       >
-                        {handleDate(list?.createdOn)}
+                        {dateFormate(list?.createdOn)}
                       </span>
                     </div>
                     <span className="description">{list?.messageBody}</span>

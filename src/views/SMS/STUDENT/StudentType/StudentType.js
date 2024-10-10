@@ -184,7 +184,7 @@ const StudentType = () => {
             <Table className="table-sm table-bordered text-center">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th> Name</th>
                   <th> Student Count</th>
                 </tr>
@@ -192,7 +192,7 @@ const StudentType = () => {
               <tbody>
                 {studentTypeInfo.map((type, index) => (
                   <tr key={index} type={type}>
-                    <th scope="row">{index + 1}</th>
+                    {/* <th scope="row">{index + 1}</th> */}
                     <td>{type?.name}</td>
                     <td>
                       <span

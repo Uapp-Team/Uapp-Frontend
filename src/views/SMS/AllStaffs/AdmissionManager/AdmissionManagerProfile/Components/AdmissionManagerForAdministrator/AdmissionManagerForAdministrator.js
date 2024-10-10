@@ -12,8 +12,8 @@ import BreadCrumb from "../../../../../../../components/breadCrumb/BreadCrumb";
 import DashboardApplication from "../../../../../../../components/ui/DashboardApplication";
 import DashboardReadyToApply from "../../../../../../../components/ui/DashboardReadyToApply";
 import AdmissionOfficer from "../../../../../Dashboard/Pages/AdmissionManager/AdmissionOfficer";
-import DashboardProgressReport from "../../../../../../../components/ui/DashboardProgressReport";
 import get from "../../../../../../../helpers/get";
+import DashboardProgressChart from "../../../../../../../components/ui/DashboardProgressChart";
 
 const AdmissionManagerForAdministrator = () => {
   const [headData, setHeadData] = useState({});
@@ -58,13 +58,14 @@ const AdmissionManagerForAdministrator = () => {
           /> */}
           <>
             <DashboardApplication
+              admissionManagerId={admissionManagerId}
               url={`AddmissionManagerProfile/NewApplications/${admissionManagerId}`}
             />
             <DashboardReadyToApply
               url={`AddmissionManagerProfile/ReadyToApplyApplications/${admissionManagerId}`}
             />
             <AdmissionOfficer data={addMissionOfficers} />
-            <DashboardProgressReport />
+            <DashboardProgressChart />
           </>
         </div>
 

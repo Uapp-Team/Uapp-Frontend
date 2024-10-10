@@ -131,7 +131,8 @@ const StudentExperience = () => {
             <FormGroup row className="has-icon-left position-relative">
               <Col md="2">
                 <span>
-                  Employment Details <span className="text-danger">*</span>{" "}
+                  Duties and Responsibilities{" "}
+                  <span className="text-danger">*</span>{" "}
                 </span>
               </Col>
               <Col md="6">
@@ -139,7 +140,7 @@ const StudentExperience = () => {
                   type="textarea"
                   name="employeementDetails"
                   id="employeementDetails"
-                  placeholder="Enter Employment Details"
+                  placeholder="Enter Duties and Responsibilities"
                   required
                   row={4}
                 />

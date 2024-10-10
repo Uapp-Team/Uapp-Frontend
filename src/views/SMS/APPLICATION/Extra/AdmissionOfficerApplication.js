@@ -32,6 +32,7 @@ import LinkSpanButton from "../../Components/LinkSpanButton.js";
 import { permissionList } from "../../../../constants/AuthorizationConstant.js";
 import ButtonLoader from "../../Components/ButtonLoader.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
+import { dateFormate } from "../../../../components/date/calenderFormate.js";
 
 const AdmissionOfficerApplication = ({ currentUser }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -264,6 +265,7 @@ const AdmissionOfficerApplication = ({ currentUser }) => {
     setManagerUniValue(0);
     setManagerPhnLabel("Phone No.");
     setManagerPhnValue(0);
+    setCurrentPage(1);
   };
 
   // user select order
@@ -295,6 +297,7 @@ const AdmissionOfficerApplication = ({ currentUser }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     // setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -1387,7 +1390,7 @@ const AdmissionOfficerApplication = ({ currentUser }) => {
                       {checkDate ? (
                         <td style={{ verticalAlign: "middle" }}>
                           {app?.applicationDate ? (
-                            <>{handleDate(app?.applicationDate)}</>
+                            <>{dateFormate(app?.applicationDate)}</>
                           ) : null}
                         </td>
                       ) : null}

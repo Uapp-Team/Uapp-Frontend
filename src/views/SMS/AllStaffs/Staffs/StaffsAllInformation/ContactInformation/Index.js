@@ -7,9 +7,11 @@ import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
 import post from "../../../../../../helpers/post";
 import ContactInformationForm from "./Component/ContactInformationForm";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
+import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const StaffContactInformation = () => {
   const { staffId } = useParams();
+  const userType = localStorage.getItem("userType");
   const activetab = "3";
   const history = useHistory();
   const [country, setCountry] = useState([]);
@@ -161,7 +163,16 @@ const StaffContactInformation = () => {
     <div>
       <BreadCrumb
         title="Staff Contact Information"
-        backTo="Staff"
+        backTo={
+          userType === userTypes?.Admin ||
+          userType === userTypes?.AccountManager ||
+          userType === userTypes?.ComplianceManager ||
+          userType === userTypes?.AccountOfficer ||
+          userType === userTypes?.FinanceManager ||
+          userType === userTypes?.Editor
+            ? null
+            : "Staff"
+        }
         path={`/staffList`}
       />
 

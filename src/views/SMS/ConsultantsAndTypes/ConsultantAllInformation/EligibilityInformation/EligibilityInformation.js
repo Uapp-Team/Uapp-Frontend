@@ -70,8 +70,6 @@ const EligibilityInformation = () => {
     get(
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
-      //
-      console.log("eligibilitydata", res);
       setEligibilityData(res);
       setUniCountryLabel(
         res !== null
@@ -279,8 +277,9 @@ const EligibilityInformation = () => {
   };
 
   const handlevisaType = (e) => {
-    setVisa(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setVisa(data);
+    if (data === "") {
       setVisaError("Visa type is required");
     } else {
       setVisaError("");
@@ -317,6 +316,14 @@ const EligibilityInformation = () => {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
+    if (
+      residencyValue === 2 &&
+      FileList3.length === 0 &&
+      eligibilityData?.idOrPassport?.fileUrl == null
+    ) {
+      isValid = false;
+      setIdPassportError(true);
+    }
     return isValid;
   };
 
@@ -340,10 +347,6 @@ const EligibilityInformation = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
-
-    for (var value of subData) {
-      console.log(value);
-    }
 
     if (ValidateForm()) {
       setButtonStatus(true);

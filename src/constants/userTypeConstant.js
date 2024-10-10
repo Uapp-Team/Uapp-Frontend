@@ -14,4 +14,8 @@ export const userTypes = {
   Consultant: "13",
   AdmissionOfficer: "14",
   ComplianceOfficer: "15",
+  ProviderCompliance: "16",
+  AdmissionCompliance: "17",
+  Affiliate: "18",
+  Companion: "19",
 };

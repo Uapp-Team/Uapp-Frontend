@@ -35,7 +35,15 @@ const ApplicationTransactions = () => {
                 {data?.map((item, i) => (
                   <tr key={i} className="border-buttom">
                     <td>{item?.transactionDate}</td>
-                    <td>{item?.consultantName}</td>
+                    <td>
+                      {" "}
+                      <Link
+                        className="text-body"
+                        to={`consultantProfile/${item?.consultantId}`}
+                      >
+                        {item?.consultantName}
+                      </Link>
+                    </td>
                     <td>{item?.university}</td>
                     <td>{item?.accountIntake}</td>
                     <td>{item?.amount}</td>

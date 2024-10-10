@@ -142,48 +142,54 @@ const ContactInformation = () => {
     }
   };
   const handleCity = (e) => {
-    setCity(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCity(data);
+    if (data === "") {
       setCityError("City is required");
     } else {
       setCityError("");
     }
   };
   const handleCityN2 = (e) => {
-    setCityN2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCityN2(data);
+    if (data === "") {
       setCityError2("City is required");
     } else {
       setCityError2("");
     }
   };
   const handleState = (e) => {
-    setState(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setState(data);
+    if (data === "") {
       setStateError("State/County is required");
     } else {
       setStateError("");
     }
   };
   const handleState2 = (e) => {
-    setState2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setState2(data);
+    if (data === "") {
       setStateError2("State/County is required");
     } else {
       setStateError2("");
     }
   };
   const handleZipCode = (e) => {
-    setZipCode(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode(data);
+    if (data === "") {
       setZipCodeError("Zip code is required");
     } else {
       setZipCodeError("");
     }
   };
   const handleZipCode2 = (e) => {
-    setZipCode2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode2(data);
+    if (data === "") {
       setZipCodeError2("Zip code is required");
     } else {
       setZipCodeError2("");
@@ -472,7 +478,7 @@ const ContactInformation = () => {
               {contactList.length > 0 ? (
                 <>
                   <p className="section-title">Addresses</p>
-                  <div className="row mx-0 mb-3">
+                  <div className="row mx-0 mb-3" id="permanentAdd">
                     {livingdata !== null ? (
                       <div
                         className="col-12 border p-2 rounded"
@@ -489,17 +495,19 @@ const ContactInformation = () => {
                               ) ? (
                                 <>
                                   {!showMailingForm && (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          livingdata?.id,
-                                          "mailing"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#mailing-address">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            livingdata?.id,
+                                            "mailing"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   )}
                                 </>
                               ) : null}
@@ -592,7 +600,10 @@ const ContactInformation = () => {
                       >
                         <Card>
                           <CardBody>
-                            <div className="d-flex justify-content-between">
+                            <div
+                              className="d-flex justify-content-between"
+                              id="permanentAdd"
+                            >
                               <span className="card-heading">
                                 Permanent Address
                               </span>
@@ -603,17 +614,19 @@ const ContactInformation = () => {
                                 <>
                                   {" "}
                                   {!showPermanentForm && (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          permanentData?.id,
-                                          "parmanent"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#permanentAdd">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            permanentData?.id,
+                                            "parmanent"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   )}
                                 </>
                               ) : null}

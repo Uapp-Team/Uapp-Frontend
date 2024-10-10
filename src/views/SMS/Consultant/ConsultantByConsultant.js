@@ -2,89 +2,99 @@ import React, { useEffect, useRef } from "react";
 import {
   Card,
   CardBody,
-  CardHeader,
   ButtonGroup,
-  Button,
   Input,
   Col,
   Row,
   Table,
   Dropdown,
   FormGroup,
-  DropdownItem,
   DropdownMenu,
   DropdownToggle,
   Modal,
   ModalBody,
-  ModalFooter,
   Form,
   ModalHeader,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import Select from "react-select";
 import Pagination from "../../SMS/Pagination/Pagination.jsx";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
-
 import get from "../../../helpers/get.js";
-import { rootUrl } from "../../../constants/constants.js";
 import { useState } from "react";
-
 import ReactTableConvertToXl from "../ReactTableConvertToXl/ReactTableConvertToXl";
-import * as XLSX from "xlsx/xlsx.mjs";
 import ReactToPrint from "react-to-print";
-import remove from "../../../helpers/remove.js";
-import LinkButton from "../Components/LinkButton.js";
 import ButtonForFunction from "../Components/ButtonForFunction.js";
 import { permissionList } from "../../../constants/AuthorizationConstant.js";
-import ButtonLoader from "../Components/ButtonLoader.js";
 import Loader from "../Search/Loader/Loader.js";
 import { userTypes } from "../../../constants/userTypeConstant.js";
-import { tableIdList } from "../../../constants/TableIdConstant.js";
-import put from "../../../helpers/put.js";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
-import CustomButtonRipple from "../Components/CustomButtonRipple.js";
 import post from "../../../helpers/post.js";
 import CancelButton from "../../../components/buttons/CancelButton.js";
 import SaveButton from "../../../components/buttons/SaveButton.js";
+import PopOverText from "../../../components/PopOverText.js";
+import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 
 const ConsultantByConsultant = () => {
+  const associates = JSON.parse(sessionStorage.getItem("associates"));
   const { id } = useParams();
-
   const [consultantList, setConsultantList] = useState([]);
-
   const [entity, setEntity] = useState(0);
   const [callApi, setCallApi] = useState(false);
-  const [serialNum, setSerialNum] = useState(0);
+
   const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
-
+  const [currentPage, setCurrentPage] = useState(
+    associates?.currentPage ? associates?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    associates?.dataPerPage ? associates?.dataPerPage : 15
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  // const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const { addToast } = useToasts();
   const history = useHistory();
-  const [delData, setDelData] = useState({});
+  // const [delData, setDelData] = useState({});
 
   // for hide/unhide column
-  const [check, setCheck] = useState(true);
   const [tableData, setTableData] = useState([]);
-
   const [buttonStatus, setButtonStatus] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [progress, setProgress] = useState(false);
-
   const referenceId = localStorage.getItem("referenceId");
   const userTypeId = localStorage.getItem("userType");
   const userType = localStorage.getItem("userType");
   const [modalOpen, setModalOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailInvitation, setEmailInvitation] = useState("");
-  const [InvitationList, setInvitationList] = useState([]);
-  const [date, setDate] = useState("");
+  // const [InvitationList, setInvitationList] = useState([]);
+  const [LevelReportList, setLevelReportList] = useState({});
+  const [emailError, setEmailError] = useState("");
+  const [popoverOpen, setPopoverOpen] = useState("");
+
+  useEffect(() => {
+    const tableColumnAssociates = JSON.parse(
+      localStorage.getItem("ColumnAssociates")
+    );
+    tableColumnAssociates && setTableData(tableColumnAssociates);
+    !tableColumnAssociates &&
+      localStorage.setItem(
+        "ColumnAssociates",
+        JSON.stringify(ColumnAssociates)
+      );
+    !tableColumnAssociates && setTableData(ColumnAssociates);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "associates",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [currentPage, dataPerPage]);
 
   useEffect(() => {
     if (id === undefined) {
@@ -94,7 +104,6 @@ const ConsultantByConsultant = () => {
         console.log("Response", res);
         setConsultantList(res?.models);
         setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
 
         setLoading(false);
         setPageLoad(false);
@@ -106,32 +115,27 @@ const ConsultantByConsultant = () => {
         console.log(res);
         setConsultantList(res?.models);
         setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
 
         setLoading(false);
         setPageLoad(false);
       });
     }
-
-    get(`TableDefination/Index/${tableIdList?.Associates_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
-  }, [currentPage, dataPerPage, callApi, loading, success]);
+  }, [currentPage, dataPerPage, callApi, loading, success, id, referenceId]);
 
   useEffect(() => {
-    get(`Invitation/Index/${referenceId}`).then((action) => {
-      setInvitationList(action);
+    get(`LevelReport/Get/${id ? id : referenceId}`).then((action) => {
+      setLevelReportList(action);
 
-      console.log(action, "emergency");
+      console.log(action, "Level Report");
     });
-  }, [success]);
+  }, [id, referenceId, success]);
 
   // user select data per page
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -153,50 +157,19 @@ const ConsultantByConsultant = () => {
     setCallApi((prev) => !prev);
   };
 
-  const toggleDanger = (p) => {
-    setDelData(p);
-
-    setDeleteModal(true);
-  };
-
-  const handleDeleteData = () => {
-    setProgress(true);
-    remove(`Consultant/Delete/${delData?.id}`).then((res) => {
-      setProgress(false);
-      //
-      addToast(res, {
-        appearance: "error",
-        autoDismiss: true,
-      });
-      setDeleteModal(false);
-      setSuccess(!success);
-    });
-  };
-
-  // redirect to dashboard
-  const backToDashboard = () => {
-    if (id == undefined) {
-      history.push("/");
-    } else {
-      history.push("/consultantList");
-    }
-  };
-
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
-
-  const handleExportXLSX = () => {
-    var wb = XLSX.utils.book_new(),
-      ws = XLSX.utils.json_to_sheet(consultantList);
-    XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
-
-    XLSX.writeFile(wb, "MyExcel.xlsx");
-  };
+  // const handleDeleteData = () => {
+  //   setProgress(true);
+  //   remove(`Consultant/Delete/${delData?.id}`).then((res) => {
+  //     setProgress(false);
+  //     //
+  //     addToast(res, {
+  //       appearance: "error",
+  //       autoDismiss: true,
+  //     });
+  //     setDeleteModal(false);
+  //     setSuccess(!success);
+  //   });
+  // };
 
   const handleEdit = (data) => {
     history.push(`/consultantInformation/${data?.id}`);
@@ -206,7 +179,7 @@ const ConsultantByConsultant = () => {
 
   const handleView = (consultantId) => {
     console.log(consultantId);
-    if (userTypeId == userTypes?.Consultant) {
+    if (userTypeId === userTypes?.Consultant.toString()) {
       history.push(`/associateDetails/${consultantId}`);
     } else {
       history.push(`/consultantProfile/${consultantId}`);
@@ -215,26 +188,11 @@ const ConsultantByConsultant = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Associates_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnAssociates", JSON.stringify(values));
   };
 
   const handleAddAssociate = () => {
@@ -243,6 +201,8 @@ const ConsultantByConsultant = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    setEmail("");
+    setEmailError("");
     // setTitle("");
   };
 
@@ -250,23 +210,43 @@ const ConsultantByConsultant = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
 
-    setButtonStatus(true);
-    setProgress(true);
-    post(
-      `Invitation/Send?${referenceId}=1& ${email}=asdfs@mial.com`,
-      subData
-    ).then((action) => {
-      setButtonStatus(false);
-      setProgress(false);
-      setSuccess(!success);
-      setModalOpen(false);
-      addToast(action?.data?.message, {
-        appearance: "success",
-        autoDismiss: true,
-      });
+    if (!email) {
+      setEmailError("Email is required");
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      setEmailError("Email is not Valid");
+    } else {
+      setButtonStatus(true);
+      setProgress(true);
+      post(
+        `Invitation/Send?${referenceId}=1& ${email}=asdfs@mial.com`,
+        subData
+      ).then((action) => {
+        setButtonStatus(false);
+        setProgress(false);
+        setSuccess(!success);
+        setModalOpen(false);
+        setEmail("");
+        addToast(action?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
 
-      // setTitle("");
-    });
+        // setTitle("");
+      });
+    }
+  };
+
+  const handleEmailError = (e) => {
+    setEmail(e.target.value);
+    if (e.target.value === "") {
+      setEmailError("Email is required");
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
+    ) {
+      setEmailError("Email is not valid");
+    } else {
+      setEmailError("");
+    }
   };
 
   return (
@@ -276,14 +256,13 @@ const ConsultantByConsultant = () => {
       ) : (
         <>
           <BreadCrumb
-            title="Associates"
+            title="My Team"
             backTo={id === undefined ? "" : "Consultant"}
             path={id === undefined ? "" : "/consultantList"}
           />
 
-          <Card className="uapp-employee-search">
+          <Card className="uapp-employee-search zindex-100">
             <CardBody>
-              {/* new */}
               <Row className="mb-3">
                 <Col lg="5" md="5" sm="12" xs="12">
                   <div className="d-flex">
@@ -298,6 +277,7 @@ const ConsultantByConsultant = () => {
                         />
                       ) : null}
                     </div>
+
                     <div className="mx-3">
                       {permissions?.includes(permissionList?.Add_Associate) ? (
                         <ButtonForFunction
@@ -331,7 +311,7 @@ const ConsultantByConsultant = () => {
                     <div className="mr-2">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}
@@ -406,7 +386,7 @@ const ConsultantByConsultant = () => {
                           {tableData.map((table, i) => (
                             <div className="d-flex justify-content-between">
                               <Col md="8" className="">
-                                <p className="">{table?.collumnName}</p>
+                                <p className="">{table?.title}</p>
                               </Col>
 
                               <Col md="4" className="text-center">
@@ -417,7 +397,7 @@ const ConsultantByConsultant = () => {
                                     id=""
                                     name="isAcceptHome"
                                     onChange={(e) => {
-                                      handleChecked(e, table?.id);
+                                      handleChecked(e, i);
                                     }}
                                     defaultChecked={table?.isActive}
                                   />
@@ -487,20 +467,22 @@ const ConsultantByConsultant = () => {
                         className="has-icon-left position-relative"
                       >
                         <Col md="4">
-                          <span>Email</span>
+                          <span>
+                            <span className="text-danger">*</span>Email
+                          </span>
                         </Col>
                         <Col md="8">
                           <Input
                             type="text"
                             name="email"
                             id="email"
-                            defaultValue={email}
+                            value={email}
                             placeholder="Write Email"
-                            // onChange={(e) => {
-                            //   handleTitle(e);
-                            // }}
+                            onChange={(e) => {
+                              handleEmailError(e);
+                            }}
                           />
-                          {/* <span className="text-danger">{TitleError}</span> */}
+                          <span className="text-danger">{emailError}</span>
                         </Col>
                       </FormGroup>
                       <FormGroup className="d-flex justify-content-between mt-3">
@@ -520,20 +502,21 @@ const ConsultantByConsultant = () => {
               {loading ? (
                 <h2 className="text-center">Loading...</h2>
               ) : (
-                <div className="table-responsive my-4" ref={componentRef}>
+                <div
+                  className="table-responsive my-4 fixedhead"
+                  ref={componentRef}
+                >
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>Sl/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>Name</th> : null}
-                        {tableData[2]?.isActive ? <th>Email</th> : null}
-                        {tableData[3]?.isActive ? <th>Phone</th> : null}
-                        {tableData[4]?.isActive ? <th>Designation</th> : null}
-                        {tableData[5]?.isActive ? <th>C.Type</th> : null}
-                        {tableData[6]?.isActive ? <th>Student</th> : null}
-                        {tableData[7]?.isActive ? <th>Applications</th> : null}
-                        {tableData[8]?.isActive ? <th>Associates</th> : null}
-                        {tableData[9]?.isActive ? <th>Action</th> : null}
+                        {tableData[0]?.isActive ? <th>Name</th> : null}
+                        {tableData[1]?.isActive ? <th>Contact</th> : null}
+                        {tableData[2]?.isActive ? <th>Designation</th> : null}
+                        {tableData[3]?.isActive ? <th>C.Type</th> : null}
+                        {tableData[4]?.isActive ? <th>Student</th> : null}
+                        {tableData[5]?.isActive ? <th>Applications</th> : null}
+                        {tableData[6]?.isActive ? <th>Associates</th> : null}
+                        {tableData[7]?.isActive ? <th>Action</th> : null}
                       </tr>
                     </thead>
                     <tbody>
@@ -543,29 +526,55 @@ const ConsultantByConsultant = () => {
                           style={{ textAlign: "center" }}
                         >
                           {tableData[0]?.isActive ? (
-                            <th scope="row">{serialNum + i}</th>
-                          ) : null}
-                          {tableData[1]?.isActive ? (
-                            <td
-                              className="cursor-pointer hyperlink-hover"
-                              onClick={() => handleView(consultant?.viewId)}
-                            >
-                              <span> {consultant?.fullName}</span>
+                            <td className="cursor-pointer hyperlink-hover">
+                              <span
+                                onClick={() => {
+                                  history.push(
+                                    userTypeId === userTypes?.Consultant
+                                      ? `/associateDetails/${consultant?.id}`
+                                      : `/consultantProfile/${consultant?.id}`
+                                  );
+                                }}
+                              >
+                                {consultant?.fullName}
+                              </span>
                             </td>
                           ) : null}
+                          {tableData[1]?.isActive ? (
+                            <td>
+                              <div className="d-flex justify-content-center">
+                                <PopOverText
+                                  value={
+                                    consultant?.phoneNumber &&
+                                    consultant?.phoneNumber.includes("+")
+                                      ? consultant?.phoneNumber
+                                      : consultant?.phoneNumber &&
+                                        !consultant?.phoneNumber.includes("+")
+                                      ? "+" + consultant?.phoneNumber
+                                      : null
+                                  }
+                                  // value={consultant?.phoneNumber}
+                                  btn={<i class="fas fa-phone"></i>}
+                                  popoverOpen={popoverOpen}
+                                  setPopoverOpen={setPopoverOpen}
+                                />
+                                <PopOverText
+                                  value={consultant?.email}
+                                  btn={<i className="far fa-envelope"></i>}
+                                  popoverOpen={popoverOpen}
+                                  setPopoverOpen={setPopoverOpen}
+                                />
+                              </div>
+                            </td>
+                          ) : null}
+
                           {tableData[2]?.isActive ? (
-                            <td>{consultant?.email}</td>
-                          ) : null}
-                          {tableData[3]?.isActive ? (
-                            <td>{consultant?.phoneNumber}</td>
-                          ) : null}
-                          {tableData[4]?.isActive ? (
                             <td>{consultant?.designation}</td>
                           ) : null}
-                          {tableData[5]?.isActive ? (
+                          {tableData[3]?.isActive ? (
                             <td>{consultant?.typeName}</td>
                           ) : null}
-                          {tableData[6]?.isActive ? (
+                          {tableData[4]?.isActive ? (
                             <>
                               {" "}
                               {userType !== userTypes?.Consultant ? (
@@ -576,74 +585,91 @@ const ConsultantByConsultant = () => {
                                   ) ? (
                                     <>
                                       <td>
-                                        <span
-                                          className="badge badge-secondary"
-                                          style={{ cursor: "pointer" }}
-                                        >
-                                          <Link
-                                            style={{ textDecoration: "none" }}
-                                            to={`/studentByConsultant/${consultant?.id}`}
+                                        <div style={{ marginTop: "5px" }}>
+                                          <span
+                                            onClick={() => {
+                                              history.push(
+                                                `/studentByConsultant/${consultant?.id}`
+                                              );
+                                            }}
+                                            className="Count-first"
                                           >
-                                            {`View (${consultant?.studentCount})`}
-                                          </Link>
-                                        </span>
+                                            {consultant?.studentCount}
+                                          </span>
+                                        </div>
                                       </td>
                                     </>
                                   ) : null}
                                 </>
                               ) : (
                                 <td>
-                                  {" "}
-                                  <span className="badge badge-secondary">
-                                    {consultant?.studentCount}
-                                  </span>
+                                  <div style={{ marginTop: "5px" }}>
+                                    <span
+                                      className="Count-first"
+                                      onClick={() => {
+                                        history.push(
+                                          `/studentByConsultant/${consultant?.id}`
+                                        );
+                                      }}
+                                    >
+                                      {consultant?.studentCount}
+                                    </span>
+                                  </div>
                                 </td>
                               )}
                             </>
                           ) : null}
 
-                          {tableData[7]?.isActive ? (
+                          {tableData[5]?.isActive ? (
                             <>
                               {" "}
-                              {userType !== userTypes?.Consultant ? (
+                              {userType === userTypes?.Consultant ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.View_Application_List
                                   ) ? (
                                     <>
                                       <td>
-                                        {consultant?.applicationCount > 0 ? (
+                                        <div style={{ marginTop: "5px" }}>
                                           <span
                                             onClick={() => {
                                               history.push(
-                                                `/applicationsFromConsultant/${consultant?.id}`
+                                                `/applicationsFromAssociate/${consultant?.id}`
                                               );
                                             }}
-                                            className="badge badge-secondary pointer"
+                                            className="Count-second"
                                           >
-                                            {`View (${consultant?.applicationCount})`}
-                                          </span>
-                                        ) : (
-                                          <span className="badge badge-secondary">
                                             {consultant?.applicationCount}
                                           </span>
-                                        )}
+                                        </div>
                                       </td>
                                     </>
                                   ) : null}
                                 </>
                               ) : (
                                 <td>
-                                  {" "}
-                                  <span className="badge badge-secondary">
-                                    {consultant?.applicationCount}
-                                  </span>
+                                  <div style={{ marginTop: "5px" }}>
+                                    <span className="Count-second-no-pointer">
+                                      {consultant?.applicationCount}
+                                    </span>
+                                  </div>
                                 </td>
                               )}
                             </>
                           ) : null}
 
-                          {tableData[8]?.isActive ? (
+                          {/* <span
+                            className="Count-second"
+                            onClick={() => {
+                              history.push(
+                                `/applicationsFromAssociates/${consultant?.id}`
+                              );
+                            }}
+                          >
+                            {consultant?.applicationCount}
+                          </span> */}
+
+                          {tableData[6]?.isActive ? (
                             <>
                               {" "}
                               {userType !== userTypes?.Consultant ? (
@@ -654,37 +680,42 @@ const ConsultantByConsultant = () => {
                                   ) ? (
                                     <>
                                       <td>
-                                        {" "}
-                                        <span
-                                          className="badge badge-secondary"
-                                          style={{
-                                            cursor: "pointer",
-                                            textDecoration: "none",
-                                          }}
-                                        >
-                                          <Link
-                                            style={{ textDecoration: "none" }}
-                                            to={`/associates/${consultant?.id}`}
+                                        <div style={{ marginTop: "5px" }}>
+                                          <span
+                                            onClick={() => {
+                                              history.push(
+                                                `/associates/${consultant?.id}`
+                                              );
+                                            }}
+                                            className="Count-third"
                                           >
-                                            {`View (${consultant?.associateCount})`}
-                                          </Link>
-                                        </span>{" "}
+                                            {consultant?.associateCount}
+                                          </span>
+                                        </div>
                                       </td>
                                     </>
                                   ) : null}{" "}
                                 </>
                               ) : (
                                 <td>
-                                  {" "}
-                                  <span className="badge badge-secondary">
-                                    {consultant?.associateCount}
-                                  </span>
+                                  <div style={{ marginTop: "5px" }}>
+                                    <span
+                                      className="Count-third"
+                                      onClick={() => {
+                                        history.push(
+                                          `/associates/${consultant?.id}`
+                                        );
+                                      }}
+                                    >
+                                      {consultant?.associateCount}
+                                    </span>
+                                  </div>
                                 </td>
                               )}
                             </>
                           ) : null}
 
-                          {tableData[9]?.isActive ? (
+                          {tableData[7]?.isActive ? (
                             <>
                               {" "}
                               <td
@@ -735,7 +766,7 @@ const ConsultantByConsultant = () => {
                                   </>
                                 ) : null} */}
                                 </ButtonGroup>
-                                <Modal
+                                {/* <Modal
                                   isOpen={deleteModal}
                                   toggle={() => setDeleteModal(!deleteModal)}
                                   className="uapp-modal"
@@ -760,7 +791,7 @@ const ConsultantByConsultant = () => {
                                       NO
                                     </Button>
                                   </ModalFooter>
-                                </Modal>
+                                </Modal> */}
                               </td>
                             </>
                           ) : null}
@@ -779,34 +810,62 @@ const ConsultantByConsultant = () => {
               />
             </CardBody>
           </Card>
+
           <Card>
             <CardBody>
-              <h5>Sent Invitations</h5>
+              <h5>Level Report</h5>
 
               <div className="table-responsive  mt-3">
                 <Table id="table-to-xls">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>Sl/No</th>
-                      <th>Date</th>
-                      <th>Email</th>
-                      <th>Status</th>
+                      <th>Designation</th>
+                      <th>Total Associates</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {InvitationList?.map((range, i) => (
-                      <tr key={range.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{1 + i}</th>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>Business Development Manager</td>
 
-                        <td>{range?.createdOn}</td>
-                        <td>{range?.email}</td>
-                        <td>
-                          {range?.isAccepted === true
-                            ? " Accepted"
-                            : "Waiting For Response"}
-                        </td>
-                      </tr>
-                    ))}
+                      <td>
+                        {LevelReportList?.result?.businessDevelopmentManager}
+                      </td>
+                    </tr>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>Executive Director</td>
+
+                      <td>{LevelReportList?.result?.executiveDirector}</td>
+                    </tr>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>Senior Business Development Manager</td>
+
+                      <td>
+                        {
+                          LevelReportList?.result
+                            ?.seniorBusinessDevelopmentManager
+                        }
+                      </td>
+                    </tr>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>Senior Executive Marketing Officer</td>
+
+                      <td>
+                        {
+                          LevelReportList?.result
+                            ?.seniorExecutiveMarketingOfficer
+                        }
+                      </td>
+                    </tr>
+                    <tr style={{ textAlign: "center" }}>
+                      <td>Student Advisor Marketing Officer</td>
+
+                      <td>
+                        {
+                          LevelReportList?.result
+                            ?.studentAdvisorMarketingOfficer
+                        }
+                      </td>
+                    </tr>
                   </tbody>
                 </Table>
               </div>

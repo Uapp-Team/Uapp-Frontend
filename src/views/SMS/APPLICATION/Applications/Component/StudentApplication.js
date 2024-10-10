@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Card,
   CardBody,
-  CardHeader,
   Modal,
   ModalBody,
   ModalFooter,
@@ -16,7 +15,7 @@ import {
   DropdownMenu,
   DropdownToggle,
 } from "reactstrap";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
@@ -29,8 +28,14 @@ import ButtonLoader from "../../../Components/ButtonLoader.js";
 import { tableIdList } from "../../../../../constants/TableIdConstant.js";
 import put from "../../../../../helpers/put.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
+import { Link } from "react-router-dom";
+import ColumnApplicationStudent from "../../../TableColumn/ColumnApplicationStudent.js";
 
 const StudentApplication = ({ currentUser }) => {
+  const history = useHistory();
+  const { addToast } = useToasts();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [callApi, setCallApi] = useState(false);
@@ -85,15 +90,33 @@ const StudentApplication = ({ currentUser }) => {
 
   // for hide/unhide column
   const [check, setCheck] = useState(true);
-  const [tableData, setTableData] = useState([]);
 
   const [delData, setDelData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [isHide, setIsHide] = useState(false);
 
-  const history = useHistory();
-  const { addToast } = useToasts();
-  const location = useLocation();
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatapp, setchatapp] = useState(null);
+
+  const isChatOpen = () => {
+    setChatOpen(!chatOpen);
+  };
+
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    const tableColumnApplicationStudent = JSON.parse(
+      localStorage.getItem("ColumnApplicationStudent")
+    );
+    tableColumnApplicationStudent &&
+      setTableData(tableColumnApplicationStudent);
+    !tableColumnApplicationStudent &&
+      localStorage.setItem(
+        "ColumnApplicationStudent",
+        JSON.stringify(ColumnApplicationStudent)
+      );
+    !tableColumnApplicationStudent && setTableData(ColumnApplicationStudent);
+  }, []);
 
   // for all dropdown
   const applicationMenu = applicationDD.map((application) => ({
@@ -210,6 +233,7 @@ const StudentApplication = ({ currentUser }) => {
     setStudentUniValue(0);
     setStudentConsLabel("Consultant");
     setStudentConsValue(0);
+    setCurrentPage(1);
   };
 
   // user select order
@@ -241,6 +265,7 @@ const StudentApplication = ({ currentUser }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     // setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -256,13 +281,6 @@ const StudentApplication = ({ currentUser }) => {
         // setSerialNumber(res?.firstSerialNumber);
       });
     }
-
-    get(`TableDefination/Index/${tableIdList?.Student_Application_List}`).then(
-      (res) => {
-        console.log("table data", res);
-        setTableData(res);
-      }
-    );
   }, [success]);
 
   const toggleDanger = (data) => {
@@ -330,26 +348,11 @@ const StudentApplication = ({ currentUser }) => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Student_Application_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnApplicationStudent", JSON.stringify(values));
   };
 
   return (
@@ -376,13 +379,9 @@ const StudentApplication = ({ currentUser }) => {
         <CardBody>
           <Row className="mb-3">
             <Col lg="5" md="5" sm="12" xs="12">
-              {/* <ButtonForFunction
-                func={handleAddUniversity}
-                className={"btn btn-uapp-add "}
-                icon={<i className="fas fa-plus"></i>}
-                name={" Add New"}
-                permission={6}
-              /> */}
+              <h5 className="text-orange fw-700">
+                Total {applicationList.length} items
+              </h5>
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -439,7 +438,7 @@ const StudentApplication = ({ currentUser }) => {
                       {tableData.map((table, i) => (
                         <div className="d-flex justify-content-between">
                           <Col md="8" className="">
-                            <p className="">{table?.collumnName}</p>
+                            <p className="">{table?.title}</p>
                           </Col>
 
                           <Col md="4" className="text-center">
@@ -450,7 +449,7 @@ const StudentApplication = ({ currentUser }) => {
                                 id=""
                                 name="isAcceptHome"
                                 onChange={(e) => {
-                                  handleChecked(e, table?.id);
+                                  handleChecked(e, i);
                                 }}
                                 defaultChecked={table?.isActive}
                               />
@@ -469,106 +468,119 @@ const StudentApplication = ({ currentUser }) => {
 
           {permissions?.includes(permissionList.View_Application_List) && (
             <>
-              {loading ? (
-                <div className="d-flex justify-content-center mb-5">
-                  <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
+              {applicationList?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
               ) : (
-                <div className="table-responsive mb-3" ref={componentRef}>
-                  <Table
-                    id="table-to-xls"
-                    style={{ verticalAlign: "middle" }}
-                    className="table-sm table-bordered"
-                  >
-                    <thead className="thead-uapp-bg">
-                      <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>APP ID</th>
-                        ) : null}
-                        {/* {checkId ? (
+                <>
+                  {loading ? (
+                    <div className="d-flex justify-content-center mb-5">
+                      <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="table-responsive mb-3" ref={componentRef}>
+                      <Table
+                        id="table-to-xls"
+                        style={{ verticalAlign: "middle" }}
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="thead-uapp-bg">
+                          <tr style={{ textAlign: "center" }}>
+                            {tableData[0]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                APP ID
+                              </th>
+                            ) : null}
+                            {/* {checkId ? (
                       <th style={{ verticalAlign: "middle" }}>UAPP ID</th>
                     ) : null} */}
-                        {/* {checkApplic ? (
+                            {/* {checkApplic ? (
                       <th style={{ verticalAlign: "middle" }}>Applicant</th>
                     ) : null} */}
-                        {/* {checkContact ? (
+                            {/* {checkContact ? (
                       <th style={{ verticalAlign: "middle" }}>Contact</th>
                     ) : null} */}
-                        {tableData[1]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            University
-                          </th>
-                        ) : null}
-                        {tableData[2]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Campus</th>
-                        ) : null}
-                        {tableData[3]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Course</th>
-                        ) : null}
-                        {tableData[4]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Intake</th>
-                        ) : null}
-                        {tableData[5]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            Application Date
-                          </th>
-                        ) : null}
-                        {tableData[6]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Status</th>
-                        ) : null}
-                        {tableData[7]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Offer</th>
-                        ) : null}
-                        {tableData[8]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Interview</th>
-                        ) : null}
-                        {tableData[9]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>ELPT</th>
-                        ) : null}
-                        {tableData[10]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            Enrolment Status
-                          </th>
-                        ) : null}
-                        {tableData[11]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>SLCs</th>
-                        ) : null}
-                        {/* {checkCons ? (
+                            {tableData[1]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                University
+                              </th>
+                            ) : null}
+                            {tableData[2]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Campus
+                              </th>
+                            ) : null}
+                            {tableData[3]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Course
+                              </th>
+                            ) : null}
+                            {tableData[4]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Intake
+                              </th>
+                            ) : null}
+                            {tableData[5]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Application Date
+                              </th>
+                            ) : null}
+                            {tableData[6]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Status
+                              </th>
+                            ) : null}
+                            {tableData[7]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>Offer</th>
+                            ) : null}
+                            {tableData[8]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Interview
+                              </th>
+                            ) : null}
+                            {tableData[9]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>ELPT</th>
+                            ) : null}
+                            {tableData[10]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Enrolment Status
+                              </th>
+                            ) : null}
+                            {tableData[11]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>SLCs</th>
+                            ) : null}
+                            {/* {checkCons ? (
                       <th style={{ verticalAlign: "middle" }}>Consultant</th>
                     ) : null} */}
-                        {tableData[12]?.isActive ? (
-                          <th
-                            style={{ verticalAlign: "middle" }}
-                            className="text-center"
-                          >
-                            Action
-                          </th>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applicationList?.map((app, i) => (
-                        <tr key={i}>
-                          {tableData[0]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `/applicationDetails/${app?.id}/${app?.studentId}`
-                                  );
-                                }}
+                            {tableData[12]?.isActive ? (
+                              <th
+                                style={{ verticalAlign: "middle" }}
+                                className="text-center"
                               >
-                                {app?.applicationViewId}
-                              </span>
-                            </td>
-                          ) : null}
+                                Action
+                              </th>
+                            ) : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {applicationList?.map((app, i) => (
+                            <tr key={i}>
+                              {tableData[0]?.isActive ? (
+                                <td
+                                  style={{ verticalAlign: "middle" }}
+                                  className="cursor-pointer hyperlink-hover"
+                                >
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                  >
+                                    {app?.applicationViewId}
+                                  </Link>
+                                </td>
+                              ) : null}
 
-                          {/* {checkId ? (
+                              {/* {checkId ? (
                         
                          <td style={{ verticalAlign: "middle" }} className='cursor-pointer hyperlink-hover'>
                          <span onClick={()=>{
@@ -579,7 +591,7 @@ const StudentApplication = ({ currentUser }) => {
                        </td>
                       ) : null} */}
 
-                          {/* {checkApplic ? (
+                              {/* {checkApplic ? (
                         
                         <td style={{ verticalAlign: "middle" }} className='cursor-pointer hyperlink-hover'>
                         <span onClick={()=>{
@@ -590,171 +602,196 @@ const StudentApplication = ({ currentUser }) => {
                       </td>
                       ) : null} */}
 
-                          {/* {checkContact ? (
+                              {/* {checkContact ? (
                         <td style={{ verticalAlign: "middle" }}>
                           {app?.studentPhone} <br />
                           {app?.studentEmail}
                         </td>
                       ) : null} */}
 
-                          {tableData[1]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `/universityDetails/${app?.universityId}`
-                                  );
-                                }}
-                              >
-                                {app?.universityName}
-                              </span>
-                            </td>
-                          ) : null}
+                              {tableData[1]?.isActive ? (
+                                <td
+                                  style={{ verticalAlign: "middle" }}
+                                  className="cursor-pointer hyperlink-hover"
+                                >
+                                  <span
+                                    onClick={() => {
+                                      history.push(
+                                        `/universityDetails/${app?.universityId}`
+                                      );
+                                    }}
+                                  >
+                                    {app?.universityName}
+                                  </span>
+                                </td>
+                              ) : null}
 
-                          {tableData[2]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.campusName}
-                            </td>
-                          ) : null}
+                              {tableData[2]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.campusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[3]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.subjectName}
-                            </td>
-                          ) : null}
+                              {tableData[3]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.subjectName}
+                                </td>
+                              ) : null}
 
-                          {tableData[4]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.intakeName}
-                            </td>
-                          ) : null}
+                              {tableData[4]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.intakeName}
+                                </td>
+                              ) : null}
 
-                          {tableData[5]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.createdOn}
-                            </td>
-                          ) : null}
+                              {tableData[5]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.createdOn}
+                                </td>
+                              ) : null}
 
-                          {tableData[6]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.applicationStatusName}
-                            </td>
-                          ) : null}
+                              {tableData[6]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.applicationStatusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[7]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.offerStatusName}
-                            </td>
-                          ) : null}
+                              {tableData[7]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.offerStatusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[8]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.interviewStatusName}
-                            </td>
-                          ) : null}
+                              {tableData[8]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.interviewStatusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[9]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.elptStatusName}
-                            </td>
-                          ) : null}
+                              {tableData[9]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.elptStatusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[10]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.enrollmentStatusName}
-                            </td>
-                          ) : null}
+                              {tableData[10]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.enrollmentStatusName}
+                                </td>
+                              ) : null}
 
-                          {tableData[11]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.studentFinanceName}
-                            </td>
-                          ) : null}
+                              {tableData[11]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.studentFinanceName}
+                                </td>
+                              ) : null}
 
-                          {/* {checkCons ? (
+                              {/* {checkCons ? (
                         <td style={{ verticalAlign: "middle" }}>
                           {app?.consultantName}
                         </td>
                       ) : null} */}
 
-                          {tableData[12]?.isActive ? (
-                            <td style={{ width: "8%" }} className="text-center">
-                              {/* <ButtonGroup variant="text"> */}
+                              {tableData[12]?.isActive ? (
+                                <td
+                                  style={{ width: "8%" }}
+                                  className="text-center"
+                                >
+                                  {/* <ButtonGroup variant="text"> */}
 
-                              <div className="d-flex">
-                                {permissions?.includes(
-                                  permissionList.View_Application_Details
-                                ) ? (
-                                  <LinkButton
-                                    url={`/applicationDetails/${app?.id}/${app?.studentId}`}
-                                    color="primary"
-                                    className={"mx-1 btn-sm mt-2"}
-                                    icon={<i className="fas fa-eye"></i>}
-                                  />
-                                ) : null}
+                                  <div className="d-flex">
+                                    {permissions?.includes(
+                                      permissionList.View_Application_Details
+                                    ) ? (
+                                      <LinkButton
+                                        url={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                        color="primary"
+                                        className={"mx-1 btn-sm mt-2"}
+                                        icon={<i className="fas fa-eye"></i>}
+                                      />
+                                    ) : null}
 
-                                {permissions?.includes(
-                                  permissionList.Delete_Application_Details
-                                ) ? (
-                                  <ButtonForFunction
-                                    icon={
-                                      <i
-                                        className="fas fa-trash-alt"
-                                        style={{
-                                          paddingLeft: "1.8px",
-                                          paddingRight: "1.8px",
-                                        }}
-                                      ></i>
-                                    }
-                                    color={"danger"}
-                                    className={"mx-1 btn-sm mt-2"}
-                                    func={() => toggleDanger(app)}
-                                  />
-                                ) : null}
-                              </div>
+                                    <ButtonForFunction
+                                      icon={
+                                        <i
+                                          className="fas fa-comment"
+                                          style={{
+                                            paddingLeft: "1.8px",
+                                            paddingRight: "1.8px",
+                                          }}
+                                        ></i>
+                                      }
+                                      color={"info"}
+                                      className={"mx-1 btn-sm mt-2"}
+                                      func={() => {
+                                        setChatOpen(true);
+                                        setchatapp(app);
+                                      }}
+                                    />
 
-                              {/* </ButtonGroup> */}
+                                    {permissions?.includes(
+                                      permissionList.Delete_Application_Details
+                                    ) ? (
+                                      <ButtonForFunction
+                                        icon={
+                                          <i
+                                            className="fas fa-trash-alt"
+                                            style={{
+                                              paddingLeft: "1.8px",
+                                              paddingRight: "1.8px",
+                                            }}
+                                          ></i>
+                                        }
+                                        color={"danger"}
+                                        className={"mx-1 btn-sm mt-2"}
+                                        func={() => toggleDanger(app)}
+                                      />
+                                    ) : null}
+                                  </div>
 
-                              <Modal
-                                isOpen={deleteModal}
-                                toggle={() => setDeleteModal(!deleteModal)}
-                                className="uapp-modal"
-                              >
-                                <ModalBody>
-                                  <p>
-                                    Are You Sure to Delete this ? Once Deleted
-                                    it can't be Undone!
-                                  </p>
-                                </ModalBody>
+                                  {/* </ButtonGroup> */}
 
-                                <ModalFooter>
-                                  <Button
-                                    color="danger"
-                                    onClick={handleDeleteData}
+                                  <Modal
+                                    isOpen={deleteModal}
+                                    toggle={() => setDeleteModal(!deleteModal)}
+                                    className="uapp-modal"
                                   >
-                                    {progress ? <ButtonLoader /> : "YES"}
-                                  </Button>
-                                  <Button onClick={() => setDeleteModal(false)}>
-                                    NO
-                                  </Button>
-                                </ModalFooter>
-                              </Modal>
-                            </td>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                                    <ModalBody>
+                                      <p>
+                                        Are You Sure to Delete this ? Once
+                                        Deleted it can't be Undone!
+                                      </p>
+                                    </ModalBody>
+
+                                    <ModalFooter>
+                                      <Button
+                                        color="danger"
+                                        onClick={handleDeleteData}
+                                      >
+                                        {progress ? <ButtonLoader /> : "YES"}
+                                      </Button>
+                                      <Button
+                                        onClick={() => setDeleteModal(false)}
+                                      >
+                                        NO
+                                      </Button>
+                                    </ModalFooter>
+                                  </Modal>
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
-          <div className="d-flex justify-content-end mt-3">
+          {/* <div className="d-flex justify-content-end mt-3">
             <h5>Total Results Found: {applicationList.length}</h5>
-          </div>
+          </div> */}
 
           {/* <Pagination
             dataPerPage={dataPerPage}
@@ -764,6 +801,23 @@ const StudentApplication = ({ currentUser }) => {
           /> */}
         </CardBody>
       </Card>
+
+      {chatOpen === true && (
+        <div className="messanger">
+          <MessageHistoryCardApplicationDetailsPage
+            applicationStatusId={chatapp.applicationStatusId}
+            applicationId={`${chatapp.id}`}
+            viewId={`${chatapp.applicationViewId}`}
+            chatOpen={chatOpen}
+            close={() => {
+              isChatOpen();
+              setchatapp(null);
+            }}
+            attach={false}
+            user={false}
+          />
+        </div>
+      )}
     </div>
   );
 };
