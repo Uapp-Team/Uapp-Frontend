@@ -12,7 +12,7 @@ switch (environment) {
         etest = process.env.REACT_APP_ROOT_URL_ETEST_DEV;
         cms = process.env.REACT_APP_ROOT_URL_CMS_DEV;
         leadlink = process.env.REACT_APP_ROOT_URL_LEADLINK_DEV;
-        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_DEV;
+        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_PROD;
         leadApi = process.env.REACT_APP_ROOT_URL_LEADAPI;
         break;
     case 'local':
