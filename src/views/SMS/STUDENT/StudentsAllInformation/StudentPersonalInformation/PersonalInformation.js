@@ -282,6 +282,9 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
+  const handleDelete = () => {
+
+  }
 
   const countryResidenceName = countryResidence?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -467,7 +470,7 @@ const PersonalInformation = () => {
         activetab={"1"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -483,8 +486,8 @@ const PersonalInformation = () => {
                 />
 
                 {userType === userTypes?.SystemAdmin.toString() ||
-                userType === userTypes?.Admin.toString() ||
-                userType === userTypes?.ComplianceManager.toString() ? (
+                  userType === userTypes?.Admin.toString() ||
+                  userType === userTypes?.ComplianceManager.toString() ? (
                   <FormGroup row>
                     <Col lg="6" md="8">
                       <span>
@@ -618,7 +621,7 @@ const PersonalInformation = () => {
                         handleDate(e);
                       }}
                       value={birthDate}
-                      // min={minDate}
+                    // min={minDate}
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
@@ -641,7 +644,7 @@ const PersonalInformation = () => {
                     <span className="text-danger">{passportError}</span>
                   </Col>
                 </FormGroup>
-                <FormGroup row>
+                {/* <FormGroup row>
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>Issue Date
@@ -678,7 +681,7 @@ const PersonalInformation = () => {
                     />
                     <span className="text-danger">{expireDateError}</span>
                   </Col>
-                </FormGroup>
+                </FormGroup> */}
 
                 <FormGroup row>
                   <Col lg="6" md="8">
@@ -910,6 +913,7 @@ const PersonalInformation = () => {
                               fileList={FileList}
                               onPreview={handlePreview}
                               onChange={handleChange}
+                              onDelete={handleDelete}
                               beforeUpload={(file) => {
                                 return false;
                               }}

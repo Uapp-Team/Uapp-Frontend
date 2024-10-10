@@ -53,8 +53,8 @@ const StudentRegisterForm = () => {
       const code = email
         ? invitationcode
         : splitcode.length === 3
-        ? uappId
-        : invitationcode;
+          ? uappId
+          : invitationcode;
       // console.log(code);
       setReferCode(code);
       fetch(`${rootUrl}StudentRegistration/Track/${invitationcode}`);
@@ -253,7 +253,7 @@ const StudentRegisterForm = () => {
     // }
     return isFormValid;
   }
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     const subData = {
       PreferredCountry: preferredCountryValue,
@@ -269,24 +269,35 @@ const StudentRegisterForm = () => {
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
       clearAllErrors();
-      fetch(`${rootUrl}StudentRegistration/Register`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(subData),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("data naki", data);
-          if (data?.isSuccess === true) {
-            addToast(data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            history.push("/studentAccountCreated");
-          }
+      try {
+        const response = await fetch(`${rootUrl}StudentRegistration/Register`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(subData),
         });
+        const data = await response.json();
+        if (data?.isSuccess === true) {
+          addToast(data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          history.push('/studentAccountCreated')
+        } else {
+          addToast(data?.message || "Registration Failed", {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      } catch (error) {
+        addToast("An error occurred while registering. Please try again later.", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+        return;
+      }
+
     }
   };
 

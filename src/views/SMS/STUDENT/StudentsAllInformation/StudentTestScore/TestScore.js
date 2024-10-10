@@ -538,8 +538,8 @@ const TestScore = () => {
       setDuoLingoProduction(res?.production ? res?.production : 10);
       res?.examDate
         ? setDuolingoExamDate(
-            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+        )
         : setDuolingoExamDate(currentDate);
       setDuolingoOverall(res?.overall ? res?.overall : 10);
       setDuolingoEquivalentScore(res?.ieltsEquivalent);
@@ -572,8 +572,8 @@ const TestScore = () => {
       setFunctionSkillsListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setFunctionSkillsExamDate(
-            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+        )
         : setFunctionSkillsExamDate(currentDate);
       setLoading(false);
       setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
@@ -1566,7 +1566,7 @@ const TestScore = () => {
         studentid={applicationStudentId}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       {loading ? (
         <div className="text-center">
@@ -1854,7 +1854,7 @@ const TestScore = () => {
                               )}
                             </FormGroup>
 
-                            <FormGroup className="has-icon-left position-relative">
+                            {/* <FormGroup className="has-icon-left position-relative">
                               <span>
                                 {" "}
                                 Exam Date
@@ -1878,7 +1878,7 @@ const TestScore = () => {
                                   </span>
                                 )}
                               </span>
-                            </FormGroup>
+                            </FormGroup> */}
 
                             <FormGroup className="has-icon-left position-relative">
                               <span>
