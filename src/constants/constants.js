@@ -17,6 +17,11 @@ switch (environment) {
         break;
     case 'local':
         rootUrl = process.env.REACT_APP_ROOT_URL_LOCAL;
+        etest = process.env.REACT_APP_ROOT_URL_ETEST_LOCAL;
+        cms = process.env.REACT_APP_ROOT_URL_CMS_LOCAL;
+        leadlink = process.env.REACT_APP_ROOT_URL_LEADLINK_LOCAL;
+        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_PROD;
+        leadApi = process.env.REACT_APP_ROOT_URL_LEADAPI;
         break;
     case 'prod':
         rootUrl = process.env.REACT_APP_ROOT_URL_PROD;
