@@ -294,7 +294,6 @@ const EducationalInformation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("mannavai");
     const subData = new FormData(event.target);
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
@@ -405,14 +404,14 @@ const EducationalInformation = () => {
 
       res?.attendedInstitutionFrom
         ? setAttendedFrom(
-            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
+        )
         : setAttendedFrom(currentDate);
 
       res?.attendedInstitutionTo
         ? setAttendedTo(
-            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
+        )
         : setAttendedTo(currentDate);
 
       // setAttendedFrom(
@@ -480,7 +479,7 @@ const EducationalInformation = () => {
         activetab={"5"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -567,7 +566,7 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.nameOfInstitution}
+                                {edu?.educationLevel?.name}
                               </span>
 
                               <span>
@@ -800,9 +799,9 @@ const EducationalInformation = () => {
               )}
 
               {showDeleteOption === false &&
-              forms === false &&
-              showForm === false &&
-              eduDetails?.length === 0 ? (
+                forms === false &&
+                showForm === false &&
+                eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) ? (
