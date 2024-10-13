@@ -38,7 +38,6 @@ class SideMenuContent extends React.Component {
     // var usertype = JSON.parse(localStorage.getItem("userType"));
     // console.log("usertype", usertype);
     // this.setState({ userType: usertype });
-    console.log("useghrtype", this.state.userType);
 
     const valueObj = JSON.parse(localStorage.getItem("menu"));
 
@@ -161,7 +160,6 @@ class SideMenuContent extends React.Component {
     const navigationConfig = this.state.menu;
     // Loop over sidebar items
     // eslint-disable-next-line
-    console.log("navigationConfig", navigationConfig);
     const menuItems = navigationConfig?.map((item) => {
       const CustomAnchorTag = item.type === "external-link" ? `a` : Link;
       // checks if item has groupheader
@@ -184,8 +182,7 @@ class SideMenuContent extends React.Component {
           {" "}
           <li
             className={classnames(
-              `nav-item uapp-nav-item ${
-                this.state.activeGroups[0] === item.id ? "open" : ""
+              `nav-item uapp-nav-item ${this.state.activeGroups[0] === item.id ? "open" : ""
               }`,
               {
                 "has-sub": item.type === "collapse",
@@ -221,15 +218,14 @@ class SideMenuContent extends React.Component {
                 item.filterBase
                   ? item.filterBase
                   : item.navLink && item.type === "item"
-                  ? item.navLink
-                  : ""
+                    ? item.navLink
+                    : ""
               }
               href={item.type === "external-link" ? item.navLink : ""}
-              className={`d-flex ${
-                item.badgeText
-                  ? "justify-content-between"
-                  : "justify-content-start"
-              }`}
+              className={`d-flex ${item.badgeText
+                ? "justify-content-between"
+                : "justify-content-start"
+                }`}
               onMouseEnter={() => {
                 this.props.handleSidebarMouseEnter(item.id);
               }}
@@ -359,10 +355,10 @@ class SideMenuContent extends React.Component {
                   usersType !== userTypes?.SystemAdmin &&
                   usersType !== userTypes?.Admin &&
                   usersType !== userTypes?.BranchManager) || (
-                  <button className="login-to-lead" onClick={handleLeadLogon}>
-                    Login To Lead
-                  </button>
-                )}
+                    <button className="login-to-lead" onClick={handleLeadLogon}>
+                      Login To Lead
+                    </button>
+                  )}
               </>
             )}
           </>

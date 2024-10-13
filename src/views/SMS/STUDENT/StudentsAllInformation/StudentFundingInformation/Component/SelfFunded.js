@@ -1,7 +1,7 @@
-import { Upload } from "antd";
+import { Upload, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, FormGroup, Form, Row } from "reactstrap";
-
+import * as Icon from "react-feather";
 import { rootUrl } from "../../../../../../constants/constants";
 import post from "../../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
@@ -21,6 +21,9 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
   const [selfFunding, setSelfFunding] = useState({});
   const [check, setCheck] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState("");
 
   //  Dynamic1  COde Start
 
@@ -32,9 +35,34 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
     });
   }, [success, studentid]);
 
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
   const handleChange1 = ({ fileList }) => {
     setFileList1(fileList);
     setSelfError("");
+  };
+
+  const handlePreview1 = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleCancel = () => {
+    setPreviewVisible(false);
   };
 
   const handleSubmit = (event) => {
@@ -96,6 +124,8 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
               </Col>
               <Col sm="4">
                 <Upload
+                  listType="picture-card"
+                  onPreview={handlePreview1}
                   multiple={false}
                   fileList={FileList1}
                   onChange={handleChange1}
@@ -103,9 +133,24 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                     return false;
                   }}
                 >
-                  {FileList1.length < 1 ? <UploadButton /> : ""}
+                  {FileList1.length < 1 ? (
+                    <div className="text-danger" style={{ marginTop: 8 }}>
+                      <Icon.Upload />
+                    </div>
+                  ) : ""}
                 </Upload>
-
+                <Modal
+                  visible={previewVisible}
+                  title={previewTitle}
+                  footer={null}
+                  onCancel={handleCancel}
+                >
+                  <img
+                    alt="example"
+                    style={{ width: "100%" }}
+                    src={previewImage}
+                  />
+                </Modal>
                 <div className="text-danger d-block">{selfError}</div>
               </Col>
 

@@ -101,6 +101,20 @@ const PersonalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
 
+
+  useEffect(() => {
+    if (oneData?.profileImage?.fileUrl) {
+      setFileList([
+        {
+          uid: '-1',
+          name: 'Profile Image',
+          status: 'done',
+          url: rootUrl + oneData.profileImage.fileUrl,
+        },
+      ]);
+    }
+  }, [oneData, rootUrl])
+
   useEffect(() => {
     get(`RecruitmentFrom/ByConsultant/${consultantValue}`).then((res) => {
       setNationality(res);
@@ -127,13 +141,11 @@ const PersonalInformation = () => {
     });
 
     get("ConsultantDD/ByUser").then((res) => {
-      console.log(res);
       setConsultant(res);
     });
 
     if (applicationStudentId) {
       get(`Student/Get/${applicationStudentId}`).then((res) => {
-        console.log("Response", res);
         setConsultantLabel(
           res?.consultant?.firstName + " " + res?.consultant?.lastName
         );
@@ -408,9 +420,18 @@ const PersonalInformation = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
-    subData.append("profileImageFile", FileList[0]?.originFileObj);
+    if (FileList.length === 0) {
+      subData.append("profileImageFile", null);
+    } else {
+      subData.append("profileImageFile", FileList[0]?.originFileObj);
+    }
+
     subData.append("phoneNumber", phoneNumber);
+
     var formIsValid = validateRegisterForm(subData);
+    for (let [key, value] of subData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
@@ -896,16 +917,6 @@ const PersonalInformation = () => {
                       </Col>
                       <Col md="5">
                         <div className="row">
-                          {oneData?.profileImage !== null ? (
-                            <div className="col-md-6 pb-2 pr-3">
-                              <Image
-                                width={104}
-                                height={104}
-                                src={rootUrl + oneData?.profileImage?.fileUrl}
-                              />
-                            </div>
-                          ) : null}
-
                           <div className="col-md-6 pb-2 pr-3">
                             <Upload
                               listType="picture-card"
@@ -913,7 +924,6 @@ const PersonalInformation = () => {
                               fileList={FileList}
                               onPreview={handlePreview}
                               onChange={handleChange}
-                              onDelete={handleDelete}
                               beforeUpload={(file) => {
                                 return false;
                               }}
