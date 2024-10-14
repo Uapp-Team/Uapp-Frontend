@@ -23,7 +23,6 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
   // const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const [check, setCheck] = useState(false);
-  const [FileList1, setFileList1] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
@@ -135,7 +134,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
             </FormGroup>
             <FormGroup row>
               <Col sm="4">
-                <span>Upload Image:</span>
+                <span>Upload Document:</span>
               </Col>
               <Col sm="4">
                 <Upload
