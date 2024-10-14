@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import UploadButton from "../../../../../../components/buttons/UploadButton";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
+import { EyeOutlined } from '@ant-design/icons';
 const SelfFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState([]);
@@ -24,6 +25,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
+  const [previewFileType, setPreviewFileType] = useState("");
 
   //  Dynamic1  COde Start
 
@@ -50,15 +52,33 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
   };
 
   const handlePreview1 = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+    if (file.type.startsWith('image')) {
+      file.preview = await getBase64(file.originFileObj)
+      setPreviewImage(file.preview || file.url);
+      setPreviewFileType(file.type);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+    } else if (file.type === 'application/pdf') {
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage(pdfPreview); // You can use this in an iframe in the modal
+      setPreviewVisible(true);
+      setPreviewFileType(file.type);
+      setPreviewTitle(file.name);
+    } else if (
+      file.type === 'application/msword' ||
+      file.type ===
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ) {
+      // For DOC or DOCX files, use Google Docs Viewer
+      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
+      setPreviewImage(googleViewer);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+      setPreviewFileType(file.type);
+    } else {
+      // Handle other file types or show an alert for unsupported types
+      alert('Preview not available for this file type');
     }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
   };
 
   const handleCancel = () => {
@@ -123,34 +143,43 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                 <span>Upload Document:</span>
               </Col>
               <Col sm="4">
-                {/* <Upload
-                  listType="picture-card"
+                <Upload
                   onPreview={handlePreview1}
                   multiple={false}
                   fileList={FileList1}
                   onChange={handleChange1}
-                  beforeUpload={(file) => {
-                    return false;
-                  }}
-                >
-                  {FileList1.length < 1 ? (
-                    <div className="text-danger" style={{ marginTop: 8 }}>
-                      <Icon.Upload />
+                  beforeUpload={(file) => false}
+                  itemRender={(originNode, file) => (
+                    <div style={{ display: 'flex', alignItems: 'baseLine' }}>
+                      {originNode}
+                      <EyeOutlined
+                        style={{ marginLeft: '8px', cursor: 'pointer' }}
+                        onClick={() => handlePreview1(file)}
+                      />
                     </div>
-                  ) : ""}
-                </Upload>
-                <Modal
-                  visible={previewVisible}
-                  title={previewTitle}
-                  footer={null}
-                  onCancel={handleCancel}
+                  )}
                 >
-                  <img
-                    alt="example"
-                    style={{ width: "100%" }}
-                    src={previewImage}
-                  />
-                </Modal> */}
+                  {FileList1.length < 1 ? <UploadButton /> : ""}
+                </Upload>
+
+                {previewVisible && (
+                  <Modal
+                    title={previewTitle}
+                    visible={previewVisible}
+                    footer={null}
+                    onCancel={() => setPreviewVisible(false)}
+                  >
+                    {previewFileType === 'application/pdf' ? (
+                      <iframe
+                        src={previewImage}
+                        style={{ width: '100%', height: '80vh' }}
+                        frameBorder="0"
+                      ></iframe>
+                    ) : (
+                      <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
+                    )}
+                  </Modal>
+                )}
 
                 <div className="text-danger d-block">{selfError}</div>
               </Col>
