@@ -186,10 +186,10 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        res?.dateOfBirth &&
-          setBirthDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
-        setIssueDate(moment(new Date(res?.issueDate)).format("YYYY-MM-DD"));
-        setexpireDate(moment(new Date(res?.expireDate)).format("YYYY-MM-DD"));
+        setBirthDate(res?.dateOfBirth ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD") : null);
+        setIssueDate(res?.issueDate ? moment(new Date(res.issueDate)).format("YYYY-MM-DD") : null);
+        setexpireDate(res?.expireDate ? moment(new Date(res.expireDate)).format("YYYY-MM-DD") : null);
+
       });
     }
   }, [success, applicationStudentId]);
@@ -665,7 +665,7 @@ const PersonalInformation = () => {
                     <span className="text-danger">{passportError}</span>
                   </Col>
                 </FormGroup>
-                {/* <FormGroup row>
+                <FormGroup row>
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>Issue Date
@@ -702,7 +702,7 @@ const PersonalInformation = () => {
                     />
                     <span className="text-danger">{expireDateError}</span>
                   </Col>
-                </FormGroup> */}
+                </FormGroup>
 
                 <FormGroup row>
                   <Col lg="6" md="8">

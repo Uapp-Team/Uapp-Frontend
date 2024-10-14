@@ -120,10 +120,10 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
             </FormGroup>
             <FormGroup row className="has-icon-left position-relative">
               <Col sm="4">
-                <span>Upload Image:</span>
+                <span>Upload Document:</span>
               </Col>
               <Col sm="4">
-                <Upload
+                {/* <Upload
                   listType="picture-card"
                   onPreview={handlePreview1}
                   multiple={false}
@@ -150,7 +150,8 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                     style={{ width: "100%" }}
                     src={previewImage}
                   />
-                </Modal>
+                </Modal> */}
+
                 <div className="text-danger d-block">{selfError}</div>
               </Col>
 
