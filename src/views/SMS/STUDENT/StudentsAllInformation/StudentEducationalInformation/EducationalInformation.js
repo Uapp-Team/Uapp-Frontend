@@ -63,7 +63,7 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState(currentDate);
+  const [attendedFrom, setAttendedFrom] = useState('');
   const [attendedFromError, setAttendedFromError] = useState("");
   const [attendedTo, setAttendedTo] = useState(currentDate);
   const [attendedToError, setAttendedToError] = useState("");

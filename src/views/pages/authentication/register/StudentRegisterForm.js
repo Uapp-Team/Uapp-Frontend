@@ -10,6 +10,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import post from "../../../../helpers/post";
 import get from "../../../../helpers/get";
+import containsDigit from '../../../../helpers/nameContainDigit';
 
 const StudentRegisterForm = () => {
   const { invitationcode, email } = useParams();
@@ -93,17 +94,24 @@ const StudentRegisterForm = () => {
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
+    const value = e.target.value;
+    setLastName(value);
     if (e.target.value === "") {
       setLastNameError("Last name is required");
-    } else {
+    } else if (containsDigit(value)) {
+      setLastNameError("Last name cannot contain digits");
+    }
+    else {
       setLastNameError("");
     }
   };
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
+    const value = e.target.value;
+    setFirstName(value);
     if (e.target.value === "") {
       setFirstNameError("First name is required");
+    } else if (containsDigit(value)) {
+      setFirstNameError("First name cannot contain digits");
     } else {
       setFirstNameError("");
     }
