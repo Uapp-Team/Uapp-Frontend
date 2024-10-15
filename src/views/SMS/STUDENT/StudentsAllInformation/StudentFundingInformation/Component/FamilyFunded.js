@@ -40,6 +40,19 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
     });
   }, [success, studentid]);
 
+  useEffect(() => {
+    if (familyFunding?.attachement) {
+      setFileList2([
+        {
+          uid: familyFunding?.id,
+          name: 'Attachement',
+          status: 'done',
+          url: rootUrl + familyFunding?.attachement,
+        }
+      ]);
+    }
+  }, [familyFunding]);
+
   const handleChange1 = ({ fileList }) => {
     setFileList2(fileList);
     setSelfError("");
@@ -55,31 +68,53 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
   }
 
   const handlePreview1 = async (file) => {
-    if (file.type.startsWith('image')) {
-      file.preview = await getBase64(file.originFileObj)
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
+      switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+        case 'gif':
+          return 'image/jpeg';
+        case 'pdf':
+          return 'application/pdf';
+        case 'doc':
+          return 'application/msword';
+        case 'docx':
+          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        default:
+          return 'unknown';
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith('image')) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
       setPreviewImage(file.preview || file.url);
-      setPreviewFileType(file.type);
+      setPreviewFileType(fileType);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
-    } else if (file.type === 'application/pdf') {
+    } else if (fileType === 'application/pdf') {
+      // If it's a PDF
       const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview); // You can use this in an iframe in the modal
+      setPreviewImage(pdfPreview);
       setPreviewVisible(true);
-      setPreviewFileType(file.type);
+      setPreviewFileType(fileType);
       setPreviewTitle(file.name);
     } else if (
-      file.type === 'application/msword' ||
-      file.type ===
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      fileType === 'application/msword' ||
+      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
-      // For DOC or DOCX files, use Google Docs Viewer
+      // For DOC or DOCX files
       const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
       setPreviewImage(googleViewer);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
-      setPreviewFileType(file.type);
+      setPreviewFileType(fileType);
     } else {
-      // Handle other file types or show an alert for unsupported types
+      // Handle unsupported file types
       alert('Preview not available for this file type');
     }
   };
