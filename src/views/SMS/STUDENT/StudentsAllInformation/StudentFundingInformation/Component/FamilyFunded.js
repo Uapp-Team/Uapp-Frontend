@@ -214,7 +214,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
               </Col>
 
               <Col sm="4">
-                {familyFunding?.attachement ? (
+                {FileList2.length > 0 && familyFunding?.attachement ? (
                   <a href={rootUrl + familyFunding?.attachement} target="blank">
                     <DownloadButton />
                   </a>

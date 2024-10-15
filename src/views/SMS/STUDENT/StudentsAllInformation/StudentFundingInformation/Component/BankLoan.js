@@ -215,7 +215,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
               </Col>
 
               <Col sm="4">
-                {bankFunding?.attachement ? (
+                {FileList1.length > 0 && bankFunding?.attachement ? (
                   <a href={rootUrl + bankFunding?.attachement} target="blank">
                     <DownloadButton />
                   </a>

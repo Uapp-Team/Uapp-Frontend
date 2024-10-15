@@ -230,7 +230,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
               </Col>
 
               <Col sm="4">
-                {scholarshipFunding?.attachement ? (
+                {FileList1.length > 0 && scholarshipFunding?.attachement ? (
                   <a
                     href={rootUrl + scholarshipFunding?.attachement}
                     target="blank"
