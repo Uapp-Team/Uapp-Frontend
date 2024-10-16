@@ -16,7 +16,6 @@ const EmergencyContactCard = ({
       setEmergencyContactList(res);
     });
   }, [sId, setEmergencyContactList]);
-
   return (
     <>
       <div
@@ -71,7 +70,7 @@ const EmergencyContactCard = ({
                 <p>
                   <span>Country</span>
                   <br />
-                  <b> {emergencyContactList?.state}</b>
+                  <b> {emergencyContactList?.country?.name}</b>
                 </p>
               </Col>
             </Row>
