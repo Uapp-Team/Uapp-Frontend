@@ -43,7 +43,6 @@ const EducationalInformation = () => {
   const [educationLevelValue, setEducationLevelValue] = useState(0);
   const [progress, setProgress] = useState(false);
   const [deleteData, setDeleteData] = useState({});
-  console.log(deleteData, "deleteData");
   const [forms, setForms] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
