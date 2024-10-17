@@ -77,10 +77,10 @@ const TestScore = () => {
   const [loading, setLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [isQualification, setIsQualifiacation] = useState(false);
-  const [ieltsExamDate, setIeltsExamDate] = useState(currentDate);
-  const [ieltsExamDateError, setIeltsExamDateError] = useState(false);
-  const [duolingoExamDate, setDuolingoExamDate] = useState(currentDate);
-  const [duolingoExamDateError, setDuolingoExamDateError] = useState("");
+  const [ieltsExamDate, setIeltsExamDate] = useState(null);
+  const [ieltsExamDateError, setIeltsExamDateError] = useState(null);
+  const [duolingoExamDate, setDuolingoExamDate] = useState(null);
+  const [duolingoExamDateError, setDuolingoExamDateError] = useState(null);
   const [duolingoEquivalentScore, setDuolingoEquivalentScore] = useState(0);
   const [duolingoEquivalentScoreError, setDuolingoEquivalentScoreError] =
     useState(false);
@@ -94,8 +94,8 @@ const TestScore = () => {
   const [ToeflListeningError, setToeflListeningError] = useState(false);
   const [ToeflOverall, setToeflOverall] = useState(0);
   const [ToeflOverallError, setToeflOverallError] = useState(false);
-  const [ToeflExamDate, setToeflExamDate] = useState(currentDate);
-  const [ToeflExamDateError, setToeflExamDateError] = useState(false);
+  const [ToeflExamDate, setToeflExamDate] = useState(null);
+  const [ToeflExamDateError, setToeflExamDateError] = useState(null);
   const [ToeflEquivalentScore, setToeflEquivalentScore] = useState(0);
   const [ToeflEquivalentScoreError, setToeflEquivalentScoreError] =
     useState(false);
@@ -116,9 +116,9 @@ const TestScore = () => {
   const [FunctionSkillsOverallError, setFunctionSkillsOverallError] =
     useState(false);
   const [FunctionSkillsExamDate, setFunctionSkillsExamDate] =
-    useState(currentDate);
+    useState(null);
   const [FunctionSkillsExamDateError, setFunctionSkillsExamDateError] =
-    useState(false);
+    useState(null);
   const [FunctionSkillsEquivalentScore, setFunctionSkillsEquivalentScore] =
     useState(0);
   const [
@@ -196,11 +196,14 @@ const TestScore = () => {
   };
 
   const handleIeltsExamDate = (e) => {
-    setIeltsExamDate(e.target.value);
-    if (e.target.value === "") {
-      setIeltsExamDateError(true);
+    const value = e.target.value;
+    setIeltsExamDate(value);
+    if (value === null) {
+      setIeltsExamDateError("Date is required");
+    } else if (currentDate < value) {
+      setIeltsExamDateError("Invalid Date");
     } else {
-      setIeltsExamDateError(false);
+      setIeltsExamDateError(null);
     }
   };
   // Ielts validation
@@ -244,11 +247,15 @@ const TestScore = () => {
   };
 
   const handleDuolingoExamDate = (e) => {
-    setDuolingoExamDate(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    setDuolingoExamDate(value);
+    if (value === null) {
       setDuolingoExamDateError("Date of Exam is required");
-    } else {
-      setDuolingoExamDateError("");
+    } else if (currentDate < value) {
+      setDuolingoExamDateError("Invalid Date");
+    }
+    else {
+      setDuolingoExamDateError(null);
     }
   };
 
@@ -318,11 +325,15 @@ const TestScore = () => {
   };
 
   const handleToeflExamDate = (e) => {
-    setToeflExamDate(e.target.value);
-    if (e.target.value === "") {
-      setToeflExamDateError(true);
-    } else {
-      setToeflExamDateError(false);
+    const value = e.target.value;
+    setToeflExamDate(value);
+    if (value === null) {
+      setToeflExamDateError("Exam date are required");
+    } else if (currentDate < value) {
+      setToeflExamDateError("Invalid Date")
+    }
+    else {
+      setToeflExamDateError(null);
     }
   };
 
@@ -384,11 +395,15 @@ const TestScore = () => {
   };
 
   const handleFunctionSkillsExamDate = (e) => {
-    setFunctionSkillsExamDate(e.target.value);
-    if (e.target.value === "") {
-      setFunctionSkillsExamDateError(true);
-    } else {
-      setFunctionSkillsExamDateError(false);
+    const value = e.target.value;
+    setFunctionSkillsExamDate(value);
+    if (value === null) {
+      setFunctionSkillsExamDateError("Exam date are required");
+    } else if (currentDate < value) {
+      setFunctionSkillsExamDateError("Invalid date");
+    }
+    else {
+      setFunctionSkillsExamDateError(null);
     }
   };
 
@@ -522,11 +537,10 @@ const TestScore = () => {
       setIeltsListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setIeltsExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setIeltsExamDate(currentDate);
+        : setIeltsExamDate('');
       setLoading(false);
       setIeltsOverall(res?.overall ? res?.overall : 0);
       // setScoreInfo(res);
-      console.log(res, "tai");
     });
 
     get(`Duolingo/Index/${applicationStudentId}`).then((res) => {
@@ -540,7 +554,7 @@ const TestScore = () => {
         ? setDuolingoExamDate(
           moment(new Date(res?.examDate)).format("YYYY-MM-DD")
         )
-        : setDuolingoExamDate(currentDate);
+        : setDuolingoExamDate(null);
       setDuolingoOverall(res?.overall ? res?.overall : 10);
       setDuolingoEquivalentScore(res?.ieltsEquivalent);
       // setScoreInfo(res);
@@ -556,7 +570,7 @@ const TestScore = () => {
       setToeflListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setToeflExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setToeflExamDate(currentDate);
+        : setToeflExamDate(null);
       setLoading(false);
       setToeflOverall(res?.overall ? res?.overall : 0);
       setToeflEquivalentScore(res?.ieltsEquivalent);
@@ -574,7 +588,7 @@ const TestScore = () => {
         ? setFunctionSkillsExamDate(
           moment(new Date(res?.examDate)).format("YYYY-MM-DD")
         )
-        : setFunctionSkillsExamDate(currentDate);
+        : setFunctionSkillsExamDate(null);
       setLoading(false);
       setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
       setFunctionSkillsEquivalentScore(res?.ieltsEquivalent);
@@ -934,7 +948,6 @@ const TestScore = () => {
 
   const FormIELTSValid = () => {
     var validation = true;
-    console.log(ieltsExamDate);
     if (ieltsSpeaking === "" || ieltsSpeaking < 0 || ieltsSpeaking > 9) {
       validation = false;
       setIeltsSpeakingError(true);
@@ -954,7 +967,7 @@ const TestScore = () => {
 
     if (!new Date(ieltsExamDate).getDate()) {
       validation = false;
-      setIeltsExamDateError(true);
+      setIeltsExamDateError("Exam Date is required");
     }
 
     if (ieltsOverall === "" || ieltsOverall < 0 || ieltsOverall > 9) {
@@ -1021,7 +1034,7 @@ const TestScore = () => {
 
     if (!new Date(ToeflExamDate).getDate()) {
       validation = false;
-      setToeflExamDateError(true);
+      setToeflExamDateError("Exam Date are required");
     }
 
     if (ToeflOverall < 0 || ToeflOverall > 120) {
@@ -1059,7 +1072,7 @@ const TestScore = () => {
 
     if (!new Date(FunctionSkillsExamDate).getDate()) {
       validation = false;
-      setFunctionSkillsExamDateError(true);
+      setFunctionSkillsExamDateError(null);
     }
 
     if (FunctionSkillsOverall < 0 || FunctionSkillsOverall > 90) {
@@ -1854,7 +1867,7 @@ const TestScore = () => {
                               )}
                             </FormGroup>
 
-                            {/* <FormGroup className="has-icon-left position-relative">
+                            <FormGroup className="has-icon-left position-relative">
                               <span>
                                 {" "}
                                 Exam Date
@@ -1874,11 +1887,11 @@ const TestScore = () => {
                               <span className="text-danger">
                                 {ieltsExamDateError && (
                                   <span className="text-danger">
-                                    Exam Date is required
+                                    {ieltsExamDateError}
                                   </span>
                                 )}
                               </span>
-                            </FormGroup> */}
+                            </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
                               <span>
@@ -2054,7 +2067,7 @@ const TestScore = () => {
                               <span className="text-danger">
                                 {ToeflExamDateError && (
                                   <span className="text-danger">
-                                    Exam Date is required
+                                    {ToeflExamDateError}
                                   </span>
                                 )}
                               </span>
@@ -2262,7 +2275,7 @@ const TestScore = () => {
                               />
                               {FunctionSkillsExamDateError && (
                                 <span className="text-danger">
-                                  Exam Date is required.
+                                  {FunctionSkillsExamDateError}
                                 </span>
                               )}
                             </FormGroup>
@@ -2626,7 +2639,7 @@ const TestScore = () => {
                                 onChange={(e) => {
                                   handleDuolingoExamDate(e);
                                 }}
-                                value={duolingoExamDate}
+                                defaultValue={duolingoExamDate}
                               />
                               <span className="text-danger">
                                 {duolingoExamDateError}
