@@ -65,7 +65,7 @@ const EducationalInformation = () => {
     useState("");
   const [attendedFrom, setAttendedFrom] = useState('');
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState(currentDate);
+  const [attendedTo, setAttendedTo] = useState('');
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -184,17 +184,26 @@ const EducationalInformation = () => {
     }
   };
   const handleAttendedFrom = (e) => {
-    setAttendedFrom(e.target.value);
+    const value = e.target.value;
+    setAttendedFrom(value);
     if (e.target.value === "") {
       setAttendedFromError("Date is required");
-    } else {
+    } else if (currentDate < value) {
+      setAttendedFromError("Invalid Date");
+    }
+    else {
       setAttendedFromError("");
     }
   };
   const handleAttendedTo = (e) => {
-    setAttendedTo(e.target.value);
+    const value = e.target.value;
+    setAttendedTo(value);
     if (e.target.value === "") {
       setAttendedToError("Date is required");
+    } else if (currentDate < value) {
+      setAttendedToError("Invalid Date");
+    } else if (attendedFrom > value) {
+      setAttendedToError("Attended to date should be greater than Attended from date");
     } else {
       setAttendedToError("");
     }
