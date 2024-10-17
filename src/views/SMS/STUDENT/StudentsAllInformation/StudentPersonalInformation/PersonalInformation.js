@@ -231,10 +231,17 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    setBirthDate(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    setBirthDate(value);
+    const current = new Date(currentDate).getFullYear();
+    const selected = new Date(value).getFullYear();
+    const calculateBirthDate = current - selected;
+    if (value === "") {
       setDateError("Date of birth is required");
-    } else {
+    } else if (calculateBirthDate < 15) {
+      setDateError("Age must be more than 15 years");
+    }
+    else {
       setDateError("");
     }
   };
