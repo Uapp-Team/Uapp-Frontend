@@ -64,7 +64,7 @@ const EmergencyContactCard = ({
                   <span>Address</span>
                   <br />
                   <b>
-                    {emergencyContactList?.city},{emergencyContactList?.state}
+                    {emergencyContactList?.city && emergencyContactList?.city + " ," + emergencyContactList?.state}
                   </b>
                 </p>
                 <p>

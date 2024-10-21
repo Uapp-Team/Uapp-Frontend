@@ -563,9 +563,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{livingdata?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {livingdata?.houseNo}</b>
                                   </p>
@@ -682,9 +685,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{permanentData?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {permanentData?.houseNo}</b>
                                   </p>
