@@ -197,10 +197,13 @@ const TestScore = () => {
 
   const handleIeltsExamDate = (e) => {
     const value = e.target.value;
+    const yearValue = value.split('-')[0]
     setIeltsExamDate(value);
     if (value === null) {
       setIeltsExamDateError("Date is required");
     } else if (currentDate < value) {
+      setIeltsExamDateError("Invalid Date");
+    } else if (yearValue.length > 4) {
       setIeltsExamDateError("Invalid Date");
     } else {
       setIeltsExamDateError(null);
@@ -248,9 +251,12 @@ const TestScore = () => {
 
   const handleDuolingoExamDate = (e) => {
     const value = e.target.value;
+    const yearValue = value.split('-')[0]
     setDuolingoExamDate(value);
     if (value === null) {
       setDuolingoExamDateError("Date of Exam is required");
+    } else if (yearValue.length > 4) {
+      setDuolingoExamDateError("Invalid Date");
     } else if (currentDate < value) {
       setDuolingoExamDateError("Invalid Date");
     }
@@ -326,9 +332,12 @@ const TestScore = () => {
 
   const handleToeflExamDate = (e) => {
     const value = e.target.value;
+    const yearValue = value.split('-')[0]
     setToeflExamDate(value);
     if (value === null) {
       setToeflExamDateError("Exam date are required");
+    } else if (yearValue.length > 4) {
+      setToeflExamDateError("Invalid Date")
     } else if (currentDate < value) {
       setToeflExamDateError("Invalid Date")
     }
@@ -396,9 +405,12 @@ const TestScore = () => {
 
   const handleFunctionSkillsExamDate = (e) => {
     const value = e.target.value;
+    const yearValue = value.split('-')[0]
     setFunctionSkillsExamDate(value);
     if (value === null) {
       setFunctionSkillsExamDateError("Exam date are required");
+    } else if (yearValue.length > 4) {
+      setFunctionSkillsExamDateError("Invalid date");
     } else if (currentDate < value) {
       setFunctionSkillsExamDateError("Invalid date");
     }
