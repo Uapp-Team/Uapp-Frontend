@@ -20,7 +20,6 @@ import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
 import Uget from "../../../../helpers/Uget";
 import Uremove from "../../../../helpers/Uremove";
-import Loader from "../../Search/Loader/Loader";
 
 const AffiliateList = () => {
   const userType = localStorage.getItem("userType");
@@ -459,7 +458,7 @@ const AffiliateList = () => {
               ) : (
                 <>
                   {loading ? (
-                    <Loader />
+                    <h2 className="text-center">Loading...</h2>
                   ) : (
                     <AffiliateTable
                       componentRef={componentRef}

@@ -20,7 +20,6 @@ import Uget from "../../../../helpers/Uget";
 import CompanionColumnHide from "./CompanionColumnHide";
 import CompanionTable from "./CompanionTable";
 import Uremove from "../../../../helpers/Uremove";
-import Loader from "../../Search/Loader/Loader";
 
 const CompanionList = () => {
   const userType = localStorage.getItem("userType");
@@ -471,7 +470,7 @@ const CompanionList = () => {
               ) : (
                 <>
                   {loading ? (
-                    <Loader />
+                    <h2 className="text-center">Loading...</h2>
                   ) : (
                     <CompanionTable
                       componentRef={componentRef}

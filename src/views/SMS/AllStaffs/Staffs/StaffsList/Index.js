@@ -19,7 +19,6 @@ import SelectAndClear from "./Component/SelectAndClear.js";
 import StuffColumnHide from "./Component/StuffColumnHide.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
 import ColumnStaff from "../../../TableColumn/ColumnStaff.js";
-import Loader from "../../../Search/Loader/Loader.js";
 
 const Index = (props) => {
   const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
@@ -74,11 +73,7 @@ const Index = (props) => {
     StaffPaging?.branchLabel ? StaffPaging?.branchLabel : "Select Branch"
   );
   const [branchValue, setBranchValue] = useState(
-    branchId
-      ? branchId
-      : StaffPaging?.branchValue
-      ? StaffPaging?.branchValue
-      : 0
+    StaffPaging?.branchValue ? StaffPaging?.branchValue : 0
   );
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -128,10 +123,6 @@ const Index = (props) => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
-      if (branchId) {
-        const result = res?.find((ans) => ans?.id == branchId);
-        setBranchLabel(result?.name);
-      }
     });
     if (!isTyping) {
       type
@@ -178,7 +169,6 @@ const Index = (props) => {
     success,
     branchValue,
     isTyping,
-    branchId,
   ]);
 
   const branchOptions = branch?.map((br) => ({
@@ -382,137 +372,142 @@ const Index = (props) => {
   return (
     <div>
       <BreadCrumb title="Staff List" backTo="" path="/" />
-      <div>
-        <SelectAndClear
-          empOptiopns={empOptiopns}
-          empLabel={empLabel}
-          empValue={empValue}
-          selectEmployeeType={selectEmployeeType}
-          type={type}
-          branchId={branchId}
-          branchOptions={branchOptions}
-          branchLabel={branchLabel}
-          branchValue={branchValue}
-          selectBranch={selectBranch}
-          searchStr={searchStr}
-          setSearchStr={setSearchStr}
-          setBranchLabel={setBranchLabel}
-          setBranchValue={setBranchValue}
-          setEmpLabel={setEmpLabel}
-          setEmpValue={setEmpValue}
-          handleKeyDown={handleKeyDown}
-          handleReset={handleReset}
-          setIsTyping={setIsTyping}
-        ></SelectAndClear>
+      {loading ? (
+        <div className="text-center">
+          <img className="img-fluid" src={loader} alt="uapp_loader" />
+        </div>
+      ) : (
+        <div>
+          <SelectAndClear
+            empOptiopns={empOptiopns}
+            empLabel={empLabel}
+            empValue={empValue}
+            selectEmployeeType={selectEmployeeType}
+            type={type}
+            branchOptions={branchOptions}
+            branchLabel={branchLabel}
+            branchValue={branchValue}
+            selectBranch={selectBranch}
+            searchStr={searchStr}
+            setSearchStr={setSearchStr}
+            setBranchLabel={setBranchLabel}
+            setBranchValue={setBranchValue}
+            setEmpLabel={setEmpLabel}
+            setEmpValue={setEmpValue}
+            handleKeyDown={handleKeyDown}
+            handleReset={handleReset}
+            setIsTyping={setIsTyping}
+          ></SelectAndClear>
 
-        <Card className="uapp-employee-search">
-          <CardBody>
-            {/* new */}
-            <Row className="mb-3">
-              <Col
-                lg="5"
-                md="5"
-                sm="12"
-                xs="12"
-                style={{ marginBottom: "10px" }}
-              >
-                {permissions?.includes(permissionList?.Add_Employee) ? (
-                  <ButtonForFunction
-                    func={handleAddStaff}
-                    className={"btn btn-uapp-add "}
-                    icon={<i className="fas fa-plus"></i>}
-                    name={"Add Staff"}
-                  />
-                ) : null}
-              </Col>
+          <Card className="uapp-employee-search">
+            <CardBody>
+              {/* new */}
+              <Row className="mb-3">
+                <Col
+                  lg="5"
+                  md="5"
+                  sm="12"
+                  xs="12"
+                  style={{ marginBottom: "10px" }}
+                >
+                  {permissions?.includes(permissionList?.Add_Employee) ? (
+                    <ButtonForFunction
+                      func={handleAddStaff}
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      name={"Add Staff"}
+                    />
+                  ) : null}
+                </Col>
 
-              <Col lg="7" md="7" sm="12" xs="12">
-                <div className="d-flex justify-content-end">
-                  <div className="mr-3">
-                    <div className="d-flex align-items-center">
-                      <div className="mr-2">Showing :</div>
-                      <div>
-                        <Select
-                          options={dataSizeName}
-                          value={{ label: dataPerPage, value: dataPerPage }}
-                          onChange={(opt) => selectDataSize(opt.value)}
-                        />
+                <Col lg="7" md="7" sm="12" xs="12">
+                  <div className="d-flex justify-content-end">
+                    <div className="mr-3">
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">Showing :</div>
+                        <div>
+                          <Select
+                            options={dataSizeName}
+                            value={{ label: dataPerPage, value: dataPerPage }}
+                            onChange={(opt) => selectDataSize(opt.value)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mr-3">
-                    <DropDownNumber
-                      dropdownOpen={dropdownOpen}
-                      toggle={toggle}
+                    <div className="mr-3">
+                      <DropDownNumber
+                        dropdownOpen={dropdownOpen}
+                        toggle={toggle}
+                        componentRef={componentRef}
+                      ></DropDownNumber>
+                    </div>
+
+                    {/* column hide unhide starts here */}
+
+                    <StuffColumnHide
+                      dropdownOpen1={dropdownOpen1}
+                      toggle1={toggle1}
+                      tableData={tableData}
+                      setTableData={setTableData}
+                      handleChecked={handleChecked}
+                    ></StuffColumnHide>
+
+                    {/* column hide unhide ends here */}
+                  </div>
+                </Col>
+              </Row>
+
+              {permissions?.includes(permissionList?.View_Employee_list) && (
+                <>
+                  {loading ? (
+                    <h2 className="text-center">Loading...</h2>
+                  ) : (
+                    <StaffTable
                       componentRef={componentRef}
-                    ></DropDownNumber>
-                  </div>
+                      tableData={tableData}
+                      permissions={permissions}
+                      permissionList={permissionList}
+                      data={data}
+                      toggleDanger={toggleDanger}
+                      deleteModal={deleteModal}
+                      closeDeleteModal={closeDeleteModal}
+                      buttonStatus={buttonStatus}
+                      progress={progress}
+                      userTypeId={userTypeId}
+                      employeeList={employeeList}
+                      handleEmpClick={handleEmpClick}
+                      handlePass={handlePass}
+                      serialNum={serialNum}
+                      passModal={passModal}
+                      handleToggle={handleToggle}
+                      passData={passData}
+                      submitModalForm={submitModalForm}
+                      passValidate={passValidate}
+                      setError={setError}
+                      error={error}
+                      verifyPass={verifyPass}
+                      confirmPassword={confirmPassword}
+                      passError={passError}
+                      setPassModal={setPassModal}
+                      redirectToStaffProfile={redirectToStaffProfile}
+                      redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
+                      handleDeleteStaff={handleDeleteStaff}
+                    />
+                  )}
+                </>
+              )}
 
-                  {/* column hide unhide starts here */}
-
-                  <StuffColumnHide
-                    dropdownOpen1={dropdownOpen1}
-                    toggle1={toggle1}
-                    tableData={tableData}
-                    setTableData={setTableData}
-                    handleChecked={handleChecked}
-                  ></StuffColumnHide>
-
-                  {/* column hide unhide ends here */}
-                </div>
-              </Col>
-            </Row>
-
-            {permissions?.includes(permissionList?.View_Employee_list) && (
-              <>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <StaffTable
-                    componentRef={componentRef}
-                    tableData={tableData}
-                    permissions={permissions}
-                    permissionList={permissionList}
-                    data={data}
-                    toggleDanger={toggleDanger}
-                    deleteModal={deleteModal}
-                    closeDeleteModal={closeDeleteModal}
-                    buttonStatus={buttonStatus}
-                    progress={progress}
-                    userTypeId={userTypeId}
-                    employeeList={employeeList}
-                    handleEmpClick={handleEmpClick}
-                    handlePass={handlePass}
-                    serialNum={serialNum}
-                    passModal={passModal}
-                    handleToggle={handleToggle}
-                    passData={passData}
-                    submitModalForm={submitModalForm}
-                    passValidate={passValidate}
-                    setError={setError}
-                    error={error}
-                    verifyPass={verifyPass}
-                    confirmPassword={confirmPassword}
-                    passError={passError}
-                    setPassModal={setPassModal}
-                    redirectToStaffProfile={redirectToStaffProfile}
-                    redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
-                    handleDeleteStaff={handleDeleteStaff}
-                  />
-                )}
-              </>
-            )}
-
-            <Pagination
-              dataPerPage={dataPerPage}
-              totalData={entity}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          </CardBody>
-        </Card>
-      </div>
+              <Pagination
+                dataPerPage={dataPerPage}
+                totalData={entity}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            </CardBody>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };

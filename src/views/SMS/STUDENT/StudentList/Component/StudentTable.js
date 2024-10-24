@@ -268,7 +268,7 @@ const StudentTable = ({
                       <br />
                       <span
                         className="link-color pointer"
-                        onClick={(e) => reSendLoginEmail(e, student?.userId)}
+                        onClick={(e) => reSendLoginEmail(e, student?.userid)}
                       >
                         Resend Login
                       </span>

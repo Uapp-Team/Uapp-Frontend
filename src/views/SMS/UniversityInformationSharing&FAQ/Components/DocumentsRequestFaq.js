@@ -12,7 +12,7 @@ import { useHistory, useParams } from "react-router-dom";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import Select from "react-select";
-import QueForm from "../Questions/QueForm";
+import SingleTitle from "../Questions/SingleTitle";
 import TopicDivider from "../../Components/TopicDivider";
 import Filter from "../../../../components/Dropdown/Filter";
 import get from "../../../../helpers/get";
@@ -24,43 +24,29 @@ import { userTypes } from "../../../../constants/userTypeConstant";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { Upload } from "antd";
 import UploadButton from "../../../../components/buttons/UploadButton";
-import Preview from "../../../../components/ui/Preview";
-import Uremove from "../../../../helpers/Uremove";
-import PreviewUniDocu from "../../../../components/ui/PreviewUniDocu";
-import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const DocumentsRequestFaq = ({ Uid }) => {
+const DocumentsRequestFaq = () => {
   const [faqRequestModalOpen, setFaqRequestModalOpen] = useState(false);
   const [faqUploadModalOpen, setFaqUploadModalOpen] = useState(false);
   const [sopList, setSopList] = useState([]);
   const [sopLabel, setSopLabel] = useState("Select Document Category");
   const [sopValue, setSopValue] = useState(0);
-  const [sopError, setSopError] = useState(false);
   const [check, setCheck] = useState(false);
   const [universityList, setUniversityList] = useState([]);
   const [universityListLabel, setUniversityListLabel] =
     useState("Select University");
   const [universityListValue, setUniversityListValue] = useState(0);
-  const [universityListError, setUniversityListError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [multiUniversity, setMultiUniversity] = useState([]);
-  console.log(multiUniversity.length, "multiuniversity");
-
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const history = useHistory();
   const { addToast } = useToasts();
   const [title, setTitle] = useState("");
-  const [titleError, setTitleError] = useState("");
   const [note, setNote] = useState("");
-  const [noteError, setNoteError] = useState("");
   const [documentRequest, setDocumentRequest] = useState([]);
-  // const [documentRequestByUni, setDocumentRequestByUni] = useState([]);
-  const [updateDocumentRequest, setUpdateDocumentRequest] = useState(0);
+  const [updateDocument, setUpdateDocument] = useState(0);
   const userType = localStorage.getItem("userType");
-  const [FileList3, setFileList3] = useState([]);
-  const [idPassportError, setIdPassportError] = useState(false);
-  const [uploadDocumentId, setUploadDocumentId] = useState(0);
 
   useEffect(() => {
     get("DocumentCategoryDD/Index").then((res) => {
@@ -74,24 +60,11 @@ const DocumentsRequestFaq = ({ Uid }) => {
   }, [success]);
 
   useEffect(() => {
-    if (Uid) {
-      Uget(
-        `UniversityDocument/get-paginated?universityId=${Uid}&index=${1}&size=${15}&searchText=${""}`
-      ).then((res) => {
-        setDocumentRequest(res?.items);
-        console.log(res, "request LIst");
-      });
-      // Uget(`UniversityDocument/get-by-university/${Uid}`).then((res) => {
-      //   setDocumentRequest(res?.data);
-      //   console.log(res?.data, "request LIst");
-      // });
-    } else {
-      Uget(`UniversityDocument/get-requests`).then((res) => {
-        setDocumentRequest(res?.data);
-        console.log(res?.data, "request LIst");
-      });
-    }
-  }, [Uid, success]);
+    Uget(`UniversityDocument/get-requests`).then((res) => {
+      setDocumentRequest(res?.data);
+      console.log(res?.data, "request LIst");
+    });
+  }, [success]);
 
   useEffect(() => {
     if (check === false) {
@@ -99,55 +72,19 @@ const DocumentsRequestFaq = ({ Uid }) => {
     }
   }, [check]);
 
-  const handleChange3 = ({ fileList }) => {
-    setFileList3(fileList);
-    setIdPassportError(false);
-  };
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-    if (e.target.value === "") {
-      setTitleError("Title is required");
-    } else {
-      setTitleError("");
-    }
-  };
-  const handleNoteChange = (e) => {
-    setNote(e.target.value);
-    if (e.target.value === "") {
-      setNoteError("Note is required");
-    } else {
-      setNoteError("");
-    }
-  };
-
-  const handleUniversityChange = (e) => {
-    setMultiUniversity(e);
-    if (multiUniversity.length === 0) {
-      setUniversityListError(false);
-    } else {
-      setUniversityListError(true);
-    }
-  };
-
   const closeFaqRequestModal = () => {
     setFaqRequestModalOpen(false);
     setNote("");
-    setNoteError("");
     setTitle("");
-    setTitleError("");
     setSopLabel("Select Document Category");
     setSopValue(0);
-    setSopError(false);
     setUniversityListLabel("Select University");
     setUniversityListValue(0);
-    setUniversityListError(false);
     setMultiUniversity([]);
   };
 
   const closeFaqUploadModal = () => {
     setFaqUploadModalOpen(false);
-    setFileList3([]);
     // setUpdateDocument(0);
   };
 
@@ -159,7 +96,6 @@ const DocumentsRequestFaq = ({ Uid }) => {
   const selectSopName = (label, value) => {
     setSopLabel(label);
     setSopValue(value);
-    setSopError(false);
   };
 
   const UniversityName = universityList?.map((uni) => ({
@@ -194,7 +130,7 @@ const DocumentsRequestFaq = ({ Uid }) => {
     // }
   };
 
-  const handleRequestEdit = (item) => {
+  const handleUpdate = (item) => {
     setFaqRequestModalOpen(true);
     setNote(item?.note);
     setTitle(item?.title);
@@ -205,80 +141,7 @@ const DocumentsRequestFaq = ({ Uid }) => {
     // setUniversityListValue(item?.universities?.value);
 
     setMultiUniversity(item?.universities);
-    setUpdateDocumentRequest(item?.id);
-  };
-
-  const handleUploadDocu = (item) => {
-    setFaqUploadModalOpen(true);
-    setUploadDocumentId(item?.id);
-  };
-
-  const handleDocuUpload = (event) => {
-    event.preventDefault();
-    const subData = new FormData(event.target);
-    subData.append("id", uploadDocumentId);
-    subData.append("universityId", Uid);
-    subData.append(
-      "document",
-      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
-    );
-
-    setButtonStatus(true);
-    setProgress(true);
-    post(`UniversityDocument/upload`, subData).then((res) => {
-      setProgress(false);
-      setButtonStatus(false);
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
-        setSuccess(!success);
-        setFileList3([]);
-        setFaqUploadModalOpen(false);
-      } else {
-        addToast(res?.data?.message, {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      }
-      // history.push(`/consultantBankInformation/${consultantRegisterId}`);
-    });
-  };
-
-  const handleDeleteDocumentReq = (item) => {
-    post(`UniversityDocument/delete/${item?.id}`).then((res) => {
-      addToast(res?.data?.title, {
-        appearance: "error",
-        autoDismiss: true,
-      });
-      // setDetailsModal(false);
-      // setEdit(false);
-      // setDropdownOpen(false);
-      setSuccess(!success);
-    });
-  };
-
-  const validateForm = () => {
-    var isFormValid = true;
-    if (!title) {
-      isFormValid = false;
-      setTitleError("Title is required");
-    }
-    if (!note) {
-      isFormValid = false;
-      setNoteError("Note is required");
-    }
-    if (sopValue === 0) {
-      isFormValid = false;
-      setSopError(true);
-    }
-    if (check === false && multiUniversity.length === 0) {
-      isFormValid = false;
-      setUniversityListError(true);
-    }
-
-    return isFormValid;
+    setUpdateDocument(item?.id);
   };
 
   const handleSubmitFaqRequest = (event) => {
@@ -292,65 +155,62 @@ const DocumentsRequestFaq = ({ Uid }) => {
       note: note,
       isMandatoryForAll: check,
       universityIds: valuesArray,
-      id: updateDocumentRequest !== 0 ? updateDocumentRequest : 0,
+      id: updateDocument !== 0 ? updateDocument : 0,
     };
 
-    var formIsValid = validateForm(subData);
-    if (formIsValid) {
-      if (updateDocumentRequest !== 0) {
+    if (updateDocument !== 0) {
+      setButtonStatus(true);
+      setProgress(true);
+      put("UniversityDocument/update-request", subData).then((res) => {
+        setProgress(false);
         setButtonStatus(true);
-        setProgress(true);
-        put("UniversityDocument/update-request", subData).then((res) => {
-          setProgress(false);
-          setButtonStatus(true);
 
-          addToast(res?.data?.message, {
-            appearance: res?.data?.isSuccess === true ? "success" : "error",
-            autoDismiss: true,
-          });
-          setFaqRequestModalOpen(false);
-          setButtonStatus(false);
-          setNote("");
-          setTitle("");
-          setSopLabel("Select Document Category");
-          setSopValue(0);
-          setUniversityListLabel("Select University");
-          setUniversityListValue(0);
-          setMultiUniversity([]);
-          setSuccess(!success);
-          setUpdateDocumentRequest(0);
-
-          // history.push(
-          //   `/admissionManagerPersonalInformation/${admissionManagerId}`
-          // );
+        addToast(res?.data?.message, {
+          appearance: res?.data?.isSuccess === true ? "success" : "error",
+          autoDismiss: true,
         });
-      } else {
-        setUpdateDocumentRequest(0);
-        setButtonStatus(true);
-        setProgress(true);
-        post("UniversityDocument/request", subData).then((res) => {
-          setProgress(false);
+        setFaqRequestModalOpen(false);
+        setButtonStatus(false);
+        setNote("");
+        setTitle("");
+        setSopLabel("Select Document Category");
+        setSopValue(0);
+        setUniversityListLabel("Select University");
+        setUniversityListValue(0);
+        setMultiUniversity([]);
+        setSuccess(!success);
+        setUpdateDocument(0);
 
-          addToast(res?.data?.message, {
-            appearance: res?.data?.isSuccess === true ? "success" : "error",
-            autoDismiss: true,
-          });
-          setFaqRequestModalOpen(false);
-          setButtonStatus(false);
-          setNote("");
-          setTitle("");
-          setSopLabel("Select Document Category");
-          setSopValue(0);
-          setUniversityListLabel("Select University");
-          setUniversityListValue(0);
-          setMultiUniversity([]);
-          setSuccess(!success);
+        // history.push(
+        //   `/admissionManagerPersonalInformation/${admissionManagerId}`
+        // );
+      });
+    } else {
+      setUpdateDocument(0);
+      setButtonStatus(true);
+      setProgress(true);
+      post("UniversityDocument/request", subData).then((res) => {
+        setProgress(false);
 
-          // history.push(
-          //   `/admissionManagerPersonalInformation/${admissionManagerId}`
-          // );
+        addToast(res?.data?.message, {
+          appearance: res?.data?.isSuccess === true ? "success" : "error",
+          autoDismiss: true,
         });
-      }
+        setFaqRequestModalOpen(false);
+        setButtonStatus(false);
+        setNote("");
+        setTitle("");
+        setSopLabel("Select Document Category");
+        setSopValue(0);
+        setUniversityListLabel("Select University");
+        setUniversityListValue(0);
+        setMultiUniversity([]);
+        setSuccess(!success);
+
+        // history.push(
+        //   `/admissionManagerPersonalInformation/${admissionManagerId}`
+        // );
+      });
     }
   };
 
@@ -358,7 +218,7 @@ const DocumentsRequestFaq = ({ Uid }) => {
     <div>
       <div className="px-3 pt-3 mt-3 d-flex justify-content-between">
         <p className="section-title mt-2">Documents</p>
-        {Uid ? null : (
+        {userType === userTypes?.AdmissionManager ? null : (
           <button
             className="btn-documents-request"
             onClick={() => setFaqRequestModalOpen(true)}
@@ -372,34 +232,19 @@ const DocumentsRequestFaq = ({ Uid }) => {
         <div key={i} className="px-3 mt-4 d-flex justify-content-between">
           <div className="d-flex">
             <i class="far fa-file-alt" style={{ marginTop: "3px" }}></i>
-            <h5 className="ml-2">{item?.name}</h5>
+            <h5 className="ml-2">{item?.title}</h5>
           </div>
-          {/* userType === userTypes?.AdmissionManager */}
-          {Uid ? (
+          {userType === userTypes?.AdmissionManager ? (
             <>
-              {item?.url === null ? (
-                <MdOutlineFileUpload
-                  size={20}
-                  onClick={() => handleUploadDocu(item)}
-                  className="document-upload-icon"
-                />
-              ) : (
-                <div className="d-flex">
-                  <div className="mr-3">
-                    <PreviewUniDocu file={item?.url} />
-                  </div>
-
-                  <div>
-                    <DeleteOutlined
-                      className="fs-24px pointer"
-                      onClick={() => handleDeleteDocumentReq(item)}
-                    ></DeleteOutlined>
-                  </div>
-                </div>
-              )}
+              {" "}
+              <MdOutlineFileUpload
+                size={20}
+                onClick={() => setFaqUploadModalOpen(true)}
+                className="document-upload-icon"
+              />
             </>
           ) : (
-            <span className="pointer" onClick={() => handleRequestEdit(item)}>
+            <span className="pointer" onClick={() => handleUpdate(item)}>
               <i class="far fa-edit"></i>
             </span>
           )}
@@ -426,38 +271,39 @@ const DocumentsRequestFaq = ({ Uid }) => {
                   name="documentCategoryId"
                   id="documentCategoryId"
                 />
-                {sopError ? (
-                  <span className="text-danger">Document is required.</span>
-                ) : null}
+                {/* {departmentError ? (
+    <span className="text-danger">Department is required.</span>
+  ) : null} */}
               </Col>
               <Col md="7">
                 <Input
                   type="text"
                   // name="title"
                   // id="title"
-                  placeholder="Title here *"
+                  placeholder="Title here"
                   onChange={(e) => {
-                    handleTitleChange(e);
+                    handleTitle(e);
                   }}
                   value={title}
                 />
-                <span className="text-danger">{titleError}</span>
+                {/* <span className="text-danger">
+                                    {firstNameError}
+                                  </span> */}
               </Col>
             </FormGroup>
             <FormGroup row className="has-icon-left position-relative mb-5">
               <Col md="12">
                 <Input
                   type="textarea"
-                  placeholder="Add Note *"
+                  placeholder="Add Note"
                   Row={6}
                   value={note}
                   onChange={(e) => {
-                    handleNoteChange(e);
+                    handleNote(e);
                   }}
                   name="note"
                   id="note"
                 />
-                <span className="text-danger">{noteError}</span>
               </Col>
             </FormGroup>
             <div className="ml-2 my-4">
@@ -474,29 +320,20 @@ const DocumentsRequestFaq = ({ Uid }) => {
 
             <TopicDivider text="Or" />
 
-            {check === true ? null : (
-              <FormGroup row className="my-4">
-                <Col lg="6" md="6">
-                  <Select
-                    isMulti
-                    onChange={(e) => {
-                      handleUniversityChange(e);
-                    }}
-                    // onChange={(e) => {
-                    //   setMultiUniversity(e);
-                    // }}
-
-                    options={UniversityName}
-                    value={multiUniversity}
-                    className="mt-1"
-                    isDisabled={check === true ? true : false}
-                  />
-                  {universityListError ? (
-                    <span className="text-danger">University is required.</span>
-                  ) : null}
-                </Col>
-              </FormGroup>
-            )}
+            <FormGroup row className="my-4">
+              <Col lg="6" md="6">
+                <Select
+                  isMulti
+                  onChange={(e) => {
+                    setMultiUniversity(e);
+                  }}
+                  options={UniversityName}
+                  value={multiUniversity}
+                  className="mt-1"
+                  isDisabled={check === true ? true : false}
+                />
+              </Col>
+            </FormGroup>
 
             <FormGroup className="d-flex mt-3">
               <CancelButton cancel={closeFaqRequestModal} />
@@ -518,36 +355,29 @@ const DocumentsRequestFaq = ({ Uid }) => {
       >
         <ModalHeader>Documents Upload</ModalHeader>
         <ModalBody>
-          <Form onSubmit={handleDocuUpload}>
+          <Form onSubmit={handleSubmitFaqRequest}>
             <FormGroup row className="has-icon-left position-relative mb-4">
               <Col md="12">
                 <p className="bold-text">Document Title</p>
                 <div className="document-upload-btn text-center mb-4">
                   <Upload
                     multiple={false}
-                    fileList={FileList3}
-                    onChange={handleChange3}
+                    // fileList={FileList6}
+                    // onChange={handleChange6}
                     beforeUpload={(file) => {
                       return false;
                     }}
                   >
-                    {FileList3.length < 1 ? (
-                      <>
-                        {" "}
-                        <p
-                          style={{
-                            color: "##045D5E",
-                            fontWeight: 600,
-                            textDecoration: "underlined",
-                          }}
-                        >
-                          {" "}
-                          Upload documents
-                        </p>
-                      </>
-                    ) : (
-                      ""
-                    )}
+                    <p
+                      style={{
+                        color: "##045D5E",
+                        fontWeight: 600,
+                        textDecoration: "underlined",
+                      }}
+                    >
+                      {" "}
+                      Upload documents
+                    </p>
                   </Upload>
                 </div>
                 <span style={{ color: "rgba(0, 0, 0, 0.45)" }}>

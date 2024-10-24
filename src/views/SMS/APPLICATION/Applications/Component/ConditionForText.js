@@ -73,10 +73,6 @@ const ConditionForText = ({
   setCommonStdValue,
   consultantId,
   setApplicationId,
-  documentStatusLabel,
-  setdocumentStatusLabel,
-  documentStatusValue,
-  setdocumentStatusValue,
 }) => {
   return (
     <>
@@ -225,16 +221,6 @@ const ConditionForText = ({
             label={proLabel}
             setValue={() => setProValue(0)}
             setLabel={() => setProLabel("Select Provider")}
-          ></TagButton>
-        ) : (
-          ""
-        )}
-
-        {documentStatusValue !== 0 ? (
-          <TagButton
-            label={documentStatusLabel}
-            setValue={() => setdocumentStatusValue(0)}
-            setLabel={() => setdocumentStatusLabel("Select Document Status")}
           ></TagButton>
         ) : (
           ""

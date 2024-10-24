@@ -39,14 +39,14 @@ const ContactInformationCard = ({ sId, contactData, setContactData }) => {
               <Row className="text-gray">
                 <Col md="4">
                   <p>
-                    <span>House No</span>
-                    <br />
-                    <b>{contact?.houseNo}</b>
-                  </p>
-                  <p>
-                    <span>Address Line</span>
+                    <span>Address Line 1</span>
                     <br />
                     <b>{contact?.addressLine}</b>
+                  </p>
+                  <p>
+                    <span>Address Line 2</span>
+                    <br />
+                    <b>{contact?.houseNo}</b>
                   </p>
                 </Col>
                 <Col md="4">

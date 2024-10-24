@@ -70,6 +70,7 @@ const ConsultantTable = ({
             ) : null}
             {tableData[2]?.isActive ? <th>Name</th> : null}
             {tableData[2]?.isActive ? <th>Contact</th> : null}
+
             {permissions?.includes(
               permissionList.Consultant_Password_Change
             ) ? (

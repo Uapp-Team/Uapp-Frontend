@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
+// import LeadAssign from "../lead/LeadAssign";
+// import EditBtn from "../../components/buttons/EditBtn";
 import ProfileEdit from "./ProfileEdit";
 import { LiaUserCircle } from "react-icons/lia";
+// import Loading from "../../components/ui/Loading";
+// import ErrorText from "../../components/ui/ErrorText";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { AiOutlinePhone } from "react-icons/ai";
 import ConvertStudent from "./convertStudent/ConvertStudent";
+import get from "../../../../helpers/get";
 import { Consultant } from "../../../../components/core/User";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import EditBtn from "../../../../components/buttons/EditBtn";
 import CardHeading from "../../../../components/ui/CardHeading";
 import TextBeside from "../Common/TextBeside";
 import LeadAssign from "../Common/LeadAssign";
-import { rootUrl } from "../../../../constants/constants";
-import Lget from "../../../../helpers/Lget";
 
 const ProfileInfo = ({ pageData, convertData, refetch, convertRefetch }) => {
   const [modalData, setModalData] = useState();
@@ -22,12 +25,12 @@ const ProfileInfo = ({ pageData, convertData, refetch, convertRefetch }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    Lget(
-      `${rootUrl}event/ConsultantApi/details?id=${pageData?.consultantId}`
-    ).then((res) => {
-      console.log(res);
-      setData(res);
-    });
+    get(`event/ConsultantApi/details?id=${pageData?.consultantId}`).then(
+      (res) => {
+        console.log(res);
+        setData(res);
+      }
+    );
   }, [pageData]);
 
   const consultant = data?.data;

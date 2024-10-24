@@ -21,12 +21,12 @@ import { userTypes } from "../../../../../constants/userTypeConstant";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import put from "../../../../../helpers/put";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import ButtonLoader from "../../../Components/ButtonLoader";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import doc from "../../../../../assets/icon/doc.png";
 import Preview from "../../../../../components/ui/Preview";
 import Download from "../../../../../components/ui/Download";
-import CancelButton from "../../../../../components/buttons/CancelButton";
 
 const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
   console.log(applicationInfo);
@@ -343,9 +343,17 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                               "No files"
                             ) : (
                               <div>
-                                {permissions?.includes(
-                                  permissionList?.Update_Application_Document_Status
-                                ) ? (
+                                {userType ===
+                                  userTypes?.AdmissionManager.toString() ||
+                                userType ===
+                                  userTypes?.AdmissionOfficer.toString() ||
+                                userType === userTypes?.Admin.toString() ||
+                                userType ===
+                                  userTypes?.SystemAdmin.toString() ||
+                                userType ===
+                                  userTypes?.ProviderAdmin.toString() ||
+                                userType ===
+                                  userTypes?.ComplianceManager.toString() ? (
                                   <>
                                     <span>
                                       {docu?.applicationDocumentStatusId === 1
@@ -633,16 +641,24 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
             <FormGroup row>
               <Col md="9">
                 <div className="d-flex justify-content-end">
-                  <CancelButton cancel={closeStatusModal11} />
+                  <Button
+                    color="danger"
+                    onClick={closeStatusModal11}
+                    className="mr-1 mt-3"
+                  >
+                    Cancel
+                  </Button>
 
                   {permissions?.includes(
-                    permissionList?.Update_Application_Document_Status
+                    permissionList.Edit_Student_Document_Level
                   ) ? (
-                    <SaveButton
-                      text="Update"
-                      progress={progress13}
-                      buttonStatus={progress13}
-                    />
+                    <Button
+                      className="ml-1 mt-3"
+                      color="primary"
+                      // disabled={buttonStatus}
+                    >
+                      {progress13 ? <ButtonLoader /> : "Update"}
+                    </Button>
                   ) : null}
                 </div>
               </Col>

@@ -24,9 +24,9 @@ const DashboardCount = ({
           <Link to={link}>
             <p className="dashboard-count-value consultant-dashboard-count-value">
               {value}
-              {secondValue > 0 && (
+              {secondValue && (
                 <span
-                  className="fs-12px fw-500 rounded nopointer d-inline-block"
+                  className="fs-12px fw-500 rounded nopointer"
                   style={{
                     padding: "4px 6px",
                     marginLeft: "16px",
@@ -49,9 +49,9 @@ const DashboardCount = ({
         <>
           <p className="dashboard-count-value consultant-dashboard-count-value">
             {value}
-            {secondValue > 0 && (
+            {secondValue && (
               <span
-                className="fs-12px fw-500 rounded nopointer d-inline-block"
+                className="fs-12px fw-500 rounded nopointer"
                 style={{
                   padding: "4px 6px",
                   marginLeft: "16px",

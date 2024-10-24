@@ -7,8 +7,7 @@ const AuthStr = localStorage.getItem("token");
 async function Lget(url) {
   try {
     expireDateHandler();
-    const route = url.includes("http") ? url : `${leadApi}${url}`;
-    const res = await Axios.get(route, {
+    const res = await Axios.get(`${leadApi}${url}`, {
       headers: {
         authorization: AuthStr,
       },
