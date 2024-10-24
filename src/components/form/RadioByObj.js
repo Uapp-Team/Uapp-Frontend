@@ -21,7 +21,7 @@ const RadioByObj = ({
       <Form.Group className="mb-3">
         {label && <Form.Label className="me-4">{label}</Form.Label>}
         <br />
-        {list.map((item, i) => (
+        {list?.map((item, i) => (
           <span key={i} className="d-inline-block" value={defaultValue}>
             {/* <span key={i} className="d-inline-block"> */}
             <input

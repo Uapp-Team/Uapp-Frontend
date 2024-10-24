@@ -112,6 +112,8 @@ const Registration = () => {
     setFirstName(data);
     if (data === "") {
       setFirstNameError("First Name is required");
+    } else if (/[^a-zA-Z\s]/g.test(data)) {
+      setFirstNameError("Number can not be allowed in the First Name");
     } else {
       setFirstNameError("");
     }
@@ -122,6 +124,8 @@ const Registration = () => {
     setLastName(data);
     if (data === "") {
       setLastNameError("Last Name is required");
+    } else if (/[^a-zA-Z\s]/g.test(data)) {
+      setLastNameError("Number can not be allowed in the Last Name");
     } else {
       setLastNameError("");
     }
@@ -184,9 +188,17 @@ const Registration = () => {
       isValid = false;
       setFirstNameError("First Name is required");
     }
+    if (/[^a-zA-Z\s]/g.test(firstName)) {
+      isValid = false;
+      setFirstNameError("Number can not be allowed in the First Name");
+    }
     if (!lastName) {
       isValid = false;
       setLastNameError("Last Name is required");
+    }
+    if (/[^a-zA-Z\s]/g.test(lastName)) {
+      isValid = false;
+      setLastNameError("Number can not be allowed in the Last Name");
     }
     if (!email) {
       isValid = false;
@@ -310,7 +322,7 @@ const Registration = () => {
                       />
                     ) : (
                       <>
-                        {userType !== userTypes?.Affiliate && (
+                        {userType !== userTypes?.Companion && (
                           <FormGroup>
                             <span>Consultant</span>
 
@@ -342,31 +354,32 @@ const Registration = () => {
                   />
                 ) : (
                   <>
-                    {userType !== userTypes?.Companion && (
-                      <FormGroup>
-                        <span>Parent Companion</span>
-                        <Select
-                          className="form-mt"
-                          options={companionParentMenu}
-                          value={{
-                            label: companionParentLabel,
-                            value: companionParentValue,
-                          }}
-                          onChange={(opt) =>
-                            selectParentCompanion(opt.label, opt.value)
-                          }
-                          name="parentCompanionId"
-                          id="parentCompanionId"
-                          isDisabled={companionId ? true : false}
-                        />
+                    {userType !== userTypes?.Companion &&
+                      userType !== userTypes?.Consultant && (
+                        <FormGroup>
+                          <span>Parent Companion</span>
+                          <Select
+                            className="form-mt"
+                            options={companionParentMenu}
+                            value={{
+                              label: companionParentLabel,
+                              value: companionParentValue,
+                            }}
+                            onChange={(opt) =>
+                              selectParentCompanion(opt.label, opt.value)
+                            }
+                            name="parentCompanionId"
+                            id="parentCompanionId"
+                            isDisabled={companionId ? true : false}
+                          />
 
-                        {parentError && (
-                          <span className="text-danger">
-                            Parent Companion is required.
-                          </span>
-                        )}
-                      </FormGroup>
-                    )}
+                          {parentError && (
+                            <span className="text-danger">
+                              Parent Companion is required.
+                            </span>
+                          )}
+                        </FormGroup>
+                      )}
                   </>
                 )}
 

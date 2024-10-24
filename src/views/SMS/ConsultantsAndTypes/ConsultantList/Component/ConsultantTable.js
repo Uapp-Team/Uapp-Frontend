@@ -68,7 +68,13 @@ const ConsultantTable = ({
               </th>
             ) : null}
             {tableData[1]?.isActive ? <th>Name</th> : null}
-            {tableData[2]?.isActive ? <th>Contact</th> : null}
+            {tableData[2]?.isActive ? (
+              <th className="d-print-none">Contact</th>
+            ) : null}
+
+            <th className="d-none d-print-block">Number</th>
+
+            <th className="d-none d-print-block">Email</th>
 
             {permissions?.includes(
               permissionList.Consultant_Password_Change
@@ -136,7 +142,7 @@ const ConsultantTable = ({
               ) : null}
               {tableData[2]?.isActive ? (
                 <td>
-                  <div className=" d-flex">
+                  <div className="d-flex d-print-none">
                     <PopOverText
                       value={
                         consultant?.phoneNumberr &&
@@ -147,11 +153,6 @@ const ConsultantTable = ({
                           ? "+" + consultant?.phoneNumber
                           : null
                       }
-                      // value={
-                      //   consultant?.phoneNumber
-                      //     ? "+" + consultant?.phoneNumber
-                      //     : null
-                      // }
                       btn={<i class="fas fa-phone"></i>}
                       popoverOpen={popoverOpen}
                       setPopoverOpen={setPopoverOpen}
@@ -165,6 +166,18 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
+
+              <td className="d-none d-print-block">
+                {consultant?.phoneNumberr &&
+                consultant?.phoneNumber.includes("+")
+                  ? consultant?.phoneNumber
+                  : consultant?.phoneNumber &&
+                    !consultant?.phoneNumber.includes("+")
+                  ? "+" + consultant?.phoneNumber
+                  : null}
+              </td>
+
+              <td className="d-none d-print-block">{consultant?.email}</td>
 
               {permissions?.includes(
                 permissionList.Consultant_Password_Change

@@ -25,6 +25,9 @@ const ProviderCountingCard = ({ id, intakeRngValue }) => {
             link={`/applicationsbyprovider/${id}/${intakeRngValue}`}
             bgColor="#E1F5FC"
             borderColor="#24A1CD"
+            secondValue={data?.totalApplicant}
+            secondColor="#176682"
+            secondBgColor="#BAE7F7"
           />
         </Col>
         <Col lg={2} md={4} xs={6} className="mb-30px">

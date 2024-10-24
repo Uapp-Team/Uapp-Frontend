@@ -101,20 +101,6 @@ const PersonalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
 
-
-  useEffect(() => {
-    if (oneData?.profileImage?.fileUrl) {
-      setFileList([
-        {
-          uid: '-1',
-          name: 'Profile Image',
-          status: 'done',
-          url: rootUrl + oneData.profileImage.fileUrl,
-        },
-      ]);
-    }
-  }, [oneData, rootUrl])
-
   useEffect(() => {
     get(`RecruitmentFrom/ByConsultant/${consultantValue}`).then((res) => {
       setNationality(res);
@@ -141,11 +127,13 @@ const PersonalInformation = () => {
     });
 
     get("ConsultantDD/ByUser").then((res) => {
+      console.log(res);
       setConsultant(res);
     });
 
     if (applicationStudentId) {
       get(`Student/Get/${applicationStudentId}`).then((res) => {
+        console.log("Response", res);
         setConsultantLabel(
           res?.consultant?.firstName + " " + res?.consultant?.lastName
         );
@@ -186,10 +174,10 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        setBirthDate(res?.dateOfBirth ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD") : null);
-        setIssueDate(res?.issueDate ? moment(new Date(res.issueDate)).format("YYYY-MM-DD") : null);
-        setexpireDate(res?.expireDate ? moment(new Date(res.expireDate)).format("YYYY-MM-DD") : null);
-
+        res?.dateOfBirth &&
+          setBirthDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
+        setIssueDate(moment(new Date(res?.issueDate)).format("YYYY-MM-DD"));
+        setexpireDate(moment(new Date(res?.expireDate)).format("YYYY-MM-DD"));
       });
     }
   }, [success, applicationStudentId]);
@@ -231,17 +219,10 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    const value = e.target.value;
-    setBirthDate(value);
-    const current = new Date(currentDate).getFullYear();
-    const selected = new Date(value).getFullYear();
-    const calculateBirthDate = current - selected;
-    if (value === "") {
+    setBirthDate(e.target.value);
+    if (e.target.value === "") {
       setDateError("Date of birth is required");
-    } else if (calculateBirthDate < 15) {
-      setDateError("Age must be more than 15 years");
-    }
-    else {
+    } else {
       setDateError("");
     }
   };
@@ -301,9 +282,6 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
-  const handleDelete = () => {
-
-  }
 
   const countryResidenceName = countryResidence?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -427,18 +405,9 @@ const PersonalInformation = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
-    if (FileList.length === 0) {
-      subData.append("profileImageFile", null);
-    } else {
-      subData.append("profileImageFile", FileList[0]?.originFileObj);
-    }
-
+    subData.append("profileImageFile", FileList[0]?.originFileObj);
     subData.append("phoneNumber", phoneNumber);
-
     var formIsValid = validateRegisterForm(subData);
-    for (let [key, value] of subData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
@@ -498,7 +467,7 @@ const PersonalInformation = () => {
         activetab={"1"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -514,8 +483,8 @@ const PersonalInformation = () => {
                 />
 
                 {userType === userTypes?.SystemAdmin.toString() ||
-                  userType === userTypes?.Admin.toString() ||
-                  userType === userTypes?.ComplianceManager.toString() ? (
+                userType === userTypes?.Admin.toString() ||
+                userType === userTypes?.ComplianceManager.toString() ? (
                   <FormGroup row>
                     <Col lg="6" md="8">
                       <span>
@@ -649,7 +618,7 @@ const PersonalInformation = () => {
                         handleDate(e);
                       }}
                       value={birthDate}
-                    // min={minDate}
+                      // min={minDate}
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
@@ -924,6 +893,16 @@ const PersonalInformation = () => {
                       </Col>
                       <Col md="5">
                         <div className="row">
+                          {oneData?.profileImage !== null ? (
+                            <div className="col-md-6 pb-2 pr-3">
+                              <Image
+                                width={104}
+                                height={104}
+                                src={rootUrl + oneData?.profileImage?.fileUrl}
+                              />
+                            </div>
+                          ) : null}
+
                           <div className="col-md-6 pb-2 pr-3">
                             <Upload
                               listType="picture-card"

@@ -10,7 +10,7 @@ import {
   Form,
   FormGroup,
 } from "reactstrap";
-import loader from "../../../../../assets/img/load.gif";
+import loader from "../../../../../assets/img/Optimized.gif";
 import { Image, Upload } from "antd";
 import * as Icon from "react-feather";
 import Select from "react-select";

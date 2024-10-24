@@ -219,6 +219,12 @@ const UniversityInformationDocumentsFAQ = lazy(() =>
   )
 );
 
+const UsersAnswerForFAQ = lazy(() =>
+  import(
+    "./views/SMS/UniversityInformationSharing&FAQ/UsersAnswerForFaq/UsersAnswerForFAQ.js"
+  )
+);
+
 const UniversityDetails = lazy(() =>
   import("./views/SMS/University/UniversityDetails.jsx")
 );
@@ -2600,6 +2606,15 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
+                  <AppRoute
+                    path="/staffListByBranchType/:branchId/:type"
+                    component={
+                      permissions?.includes(permissionList?.View_Employee_list)
+                        ? EmployeeList
+                        : NotAuthorized
+                    }
+                  />
                   <AppRoute
                     exact
                     path="/staffList"
@@ -3363,9 +3378,18 @@ class AppRouter extends React.Component {
                     path="/universityList-sharing-faq"
                     component={UniversityListForSharingFAQ}
                   />
+
                   <AppRoute
                     path="/university-information-doc-faq"
                     component={UniversityInformationDocumentsFAQ}
+                  />
+                  <AppRoute
+                    path="/university-information-doc-faq-by-id/:Uid"
+                    component={UniversityInformationDocumentsFAQ}
+                  />
+                  <AppRoute
+                    path="/users-answer-for-fAQ/:Uid"
+                    component={UsersAnswerForFAQ}
                   />
 
                   {/* University For Sharing & FAQ starts here */}

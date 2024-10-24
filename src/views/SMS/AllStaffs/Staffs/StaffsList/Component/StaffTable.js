@@ -92,17 +92,12 @@ const StaffTable = ({
               {tableData[1]?.isActive ? <td>{emp?.staffType}</td> : null}
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>
-                  {userTypeId === userTypes?.SystemAdmin ||
-                  userTypeId === userTypes?.Admin ? (
-                    <>
-                      {tableData[2]?.isActive ? (
-                        <td>
-                          <Link to="/staffList" onClick={() => handlePass(emp)}>
-                            Change
-                          </Link>
-                        </td>
-                      ) : null}
-                    </>
+                  {tableData[2]?.isActive ? (
+                    <td>
+                      <Link to="/staffList" onClick={() => handlePass(emp)}>
+                        Change
+                      </Link>
+                    </td>
                   ) : null}
                 </>
               ) : null}

@@ -11,11 +11,13 @@ const EmergencyContactCard = ({
   activity,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+
   useEffect(() => {
     get(`StudentEmergency/GetByStudentId/${sId}`).then((res) => {
       setEmergencyContactList(res);
     });
   }, [sId, setEmergencyContactList]);
+
   return (
     <>
       <div
@@ -27,7 +29,7 @@ const EmergencyContactCard = ({
             <div className="d-flex justify-content-between">
               <span className="card-heading">Emergency Contact</span>
               {permissions?.includes(permissionList?.Edit_Student) &&
-                activity ? (
+              activity ? (
                 <Link to={`/addStudentEmergencyInformation/${sId}/${1}`}>
                   Edit
                 </Link>
@@ -64,7 +66,7 @@ const EmergencyContactCard = ({
                   <span>Address</span>
                   <br />
                   <b>
-                    {emergencyContactList?.city && emergencyContactList?.city + " ," + emergencyContactList?.state}
+                    {emergencyContactList?.state} {emergencyContactList?.city}
                   </b>
                 </p>
                 <p>

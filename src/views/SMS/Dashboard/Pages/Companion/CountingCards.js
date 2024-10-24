@@ -20,7 +20,7 @@ const CountingCards = ({ id, count, setCount }) => {
           </Col>
           <Col lg={4} sm={6} className="pb-4">
             <DashboardCount
-              title="Not Response "
+              title="No Response "
               value={count?.notResponsed}
               bgColor="#FEF6F5"
               borderColor="#F87675"

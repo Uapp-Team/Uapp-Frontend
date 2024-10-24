@@ -1,38 +1,21 @@
-const environment = process.env.REACT_APP_ENV;
+// export const rootUrl = `https://api.uapp.uk/`;
+// export const rootUrl = `http://localtest.uapp.uk/`;
+// export const rootUrl = `https://lostaquaapple55.conveyor.cloud/`;
+// export const rootUrl = `https://localhost:44357/`;
+export const rootUrl = `http://192.168.68.101:45455/`;
 
-let rootUrl;
-let etest;
-let cms;
-let leadlink;
-let leadUrl;
-let leadApi;
-switch (environment) {
-    case 'dev':
-        rootUrl = process.env.REACT_APP_ROOT_URL_DEV;
-        etest = process.env.REACT_APP_ROOT_URL_ETEST_DEV;
-        cms = process.env.REACT_APP_ROOT_URL_CMS_DEV;
-        leadlink = process.env.REACT_APP_ROOT_URL_LEADLINK_DEV;
-        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_PROD;
-        leadApi = process.env.REACT_APP_ROOT_URL_LEADAPI;
-        break;
-    case 'local':
-        rootUrl = process.env.REACT_APP_ROOT_URL_LOCAL;
-        etest = process.env.REACT_APP_ROOT_URL_ETEST_LOCAL;
-        cms = process.env.REACT_APP_ROOT_URL_CMS_LOCAL;
-        leadlink = process.env.REACT_APP_ROOT_URL_LEADLINK_LOCAL;
-        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_PROD;
-        leadApi = process.env.REACT_APP_ROOT_URL_LEADAPI;
-        break;
-    case 'prod':
-        rootUrl = process.env.REACT_APP_ROOT_URL_PROD;
-        etest = process.env.REACT_APP_ROOT_URL_ETEST_PROD;
-        cms = process.env.REACT_APP_ROOT_URL_CMS_PROD;
-        leadlink = process.env.REACT_APP_ROOT_URL_LEADLINK_PROD;
-        leadUrl = process.env.REACT_APP_ROOT_URL_LEADURL_PROD;
-        leadApi = process.env.REACT_APP_ROOT_URL_LEADAPI;
-        break;
-    default:
-        rootUrl = process.env.REACT_APP_ROOT_URL;
-}
+export const etest = `https://etest.uapp.uk/`;
+//export const etest = `https://192.168.0.138:45455/`;
 
-export { rootUrl, etest, cms, leadApi, leadUrl, leadlink };
+export const cms = `https://webapi.uapp.uk/`;
+// export const cms = `http://192.168.0.188:45456/`;
+
+export const leadlink = `https://lead.uapp.uk/`;
+// export const leadlink = `http://localhost:3001/`;
+
+export const leadUrl = `https://leadapi.uapp.uk/`;
+// export const rootUrl = `https://earlytealphone48.conveyor.cloud/`;
+// export const rootUrl = `https://localhost:44359/`;
+// export const rootUrl = `http://192.168.68.122:45457/`;
+
+export const leadApi = `${leadUrl}api/v1/`;

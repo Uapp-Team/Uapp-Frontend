@@ -10,7 +10,7 @@ import get from "../../../../../helpers/get.js";
 import remove from "../../../../../helpers/remove.js";
 import ButtonForFunction from "../../../Components/ButtonForFunction.js";
 import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
-import loader from "../../../../../assets/img/load.gif";
+import loader from "../../../../../assets/img/Optimized.gif";
 import put from "../../../../../helpers/put.js";
 import { tableIdList } from "../../../../../constants/TableIdConstant.js";
 import StaffTable from "./Component/StaffTable.js";

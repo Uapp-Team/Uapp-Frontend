@@ -153,85 +153,6 @@ const ApplicationDetails = () => {
             }
           />
 
-          {/* <div className="d-flex justify-content-between">
-            <Nav tabs>
-              <NavItem>
-                <NavLink
-                  active={activetab === "1"}
-                  onClick={() => setActivetab("1")}
-                >
-                  Application Details
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  active={activetab === "2"}
-                  onClick={() => setActivetab("2")}
-                >
-                  Student Details
-                </NavLink>
-              </NavItem>
-              {userType === userTypes?.AdmissionManager ||
-              userType === userTypes?.SystemAdmin ||
-              userType === userTypes?.Admin ||
-              userType === userTypes?.Student ? (
-                <NavItem>
-                  <NavLink
-                    active={activetab === "3"}
-                    onClick={() => setActivetab("3")}
-                  >
-                    Internal Assessment
-                  </NavLink>
-                </NavItem>
-              ) : null}
-              <NavItem>
-                <NavLink
-                  active={activetab === "4"}
-                  onClick={() => setActivetab("4")}
-                >
-                  Statement Of Purpose
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  active={activetab === "5"}
-                  onClick={() => setActivetab("5")}
-                >
-                  Documents
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <div
-              className="d-flex justify-content-end align-items-center"
-              style={{ fontSize: "16px" }}
-            >
-              <button
-                className="d-flex align-items-center ml-4 btn-no-style"
-                onClick={isChatOpen}
-              >
-                <i className="far fa-comment-dots relative">
-                  <span className="bg-orange text-white p-1 rounded-circle chat-icon">
-                    5
-                  </span>
-                </i>
-                <span className="ml-2">Chat</span>
-              </button>
-
-              {permissions?.includes(permissionList?.Add_ApplicationNote) ? (
-                <a
-                  className="d-flex align-items-center ml-4 text-body"
-                  href="#notelist"
-                >
-                  <i className="far fa-file relative">
-                    <span className="bg-orange text-white p-1 rounded-circle chat-icon">
-                      {noteCount}
-                    </span>
-                  </i>
-                  <span className="ml-2">Notes</span>
-                </a>
-              ) : null}
-            </div>
-          </div> */}
           <Row className="mb-3">
             <Col lg={8} md="7" className="mb-3 overflow">
               <div
@@ -255,10 +176,9 @@ const ApplicationDetails = () => {
                 >
                   Student Details
                 </button>
-                {userType === userTypes?.AdmissionManager ||
-                userType === userTypes?.SystemAdmin ||
-                userType === userTypes?.Admin ||
-                userType === userTypes?.Student ? (
+                {permissions?.includes(
+                  permissionList?.View_Internal_Assesment
+                ) ? (
                   <button
                     className={`btn border p-2 fw-600 ${
                       activetab === "3" ? "bg-orange text-white" : "bg-white"

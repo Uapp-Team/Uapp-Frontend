@@ -22,6 +22,9 @@ export const permissionList = {
   Change_Admission_Officer: 114,
   Update_Application_Status: 115,
   Add_Application: 116,
+  Update_Application_Document_Status: 117,
+  View_Internal_Assesment: 118,
+  Update_Internal_Assesment_Status: 119,
 
   ////// Associate //////
 

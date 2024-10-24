@@ -10,6 +10,7 @@ import {
   CardBody,
   Col,
   Form,
+  Modal,
   ModalHeader,
   ModalBody,
   FormGroup,
@@ -21,7 +22,7 @@ import Select from "react-select";
 import * as Icon from "react-feather";
 import get from "../../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
-import { Upload, Modal as AntdModal, Modal } from "antd";
+import { Upload, Modal as AntdModal } from "antd";
 import post from "../../../../../helpers/post";
 import { rootUrl } from "../../../../../constants/constants";
 import remove from "../../../../../helpers/remove";
@@ -37,9 +38,6 @@ import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import Preview from "../../../../../components/ui/Preview";
 import Download from "../../../../../components/ui/Download";
-import UploadButton from "../../../../../components/buttons/UploadButton";
-import { EyeOutlined } from '@ant-design/icons';
-
 
 const DocumentUpload = () => {
   const history = useHistory();
@@ -55,7 +53,7 @@ const DocumentUpload = () => {
   const [docutypeError, setDocuTypeError] = useState(false);
   const [FileList1, setFileList1] = useState([]);
   const [uploadError, setUploadError] = useState(false);
-  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewVisible1, setPreviewVisible1] = useState(false);
   const [previewImage1, setPreviewImage1] = useState("");
   const [previewTitle1, setPreviewTitle1] = useState("");
   const [uploadedDocuData, setUploadedDocuData] = useState([]);
@@ -81,16 +79,13 @@ const DocumentUpload = () => {
   const [documentTitle, setDocumentTitle] = useState("");
   const [documentTitleError, setDocumentTitleError] = useState("");
   const [addDoc, setAddDoc] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [previewFileType, setPreviewFileType] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
 
   const handleChange1 = ({ fileList }) => {
     setUploadError(false);
     setFileList1(fileList);
   };
 
-  function getBase64(file) {
+  function getBase641(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -99,60 +94,19 @@ const DocumentUpload = () => {
     });
   }
 
-  const handleCancel = () => {
-    setPreviewVisible(false);
+  const handleCancel1 = () => {
+    setPreviewVisible1(false);
   };
 
   const handlePreview1 = async (file) => {
-    // Infer file type if it's not provided
-    const inferFileType = (file) => {
-      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
-      switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-          return 'image/jpeg';
-        case 'pdf':
-          return 'application/pdf';
-        case 'doc':
-          return 'application/msword';
-        case 'docx':
-          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        default:
-          return 'unknown';
-      }
-    };
-
-    const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith('image')) {
-      // If it's an image
-      file.preview = await getBase64(file.originFileObj || file.url);
-      setPreviewImage(file.preview || file.url);
-      setPreviewFileType(fileType);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-    } else if (fileType === 'application/pdf') {
-      // If it's a PDF
-      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview);
-      setPreviewVisible(true);
-      setPreviewFileType(fileType);
-      setPreviewTitle(file.name);
-    } else if (
-      fileType === 'application/msword' ||
-      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ) {
-      // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
-      setPreviewImage(googleViewer);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-      setPreviewFileType(fileType);
-    } else {
-      // Handle unsupported file types
-      alert('Preview not available for this file type');
+    if (!file.url && !file.preview) {
+      file.preview = await getBase641(file.originFileObj);
     }
+    setPreviewImage1(file.url || file.preview);
+    setPreviewVisible1(true);
+    setPreviewTitle1(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
   };
 
   useEffect(() => {
@@ -235,7 +189,6 @@ const DocumentUpload = () => {
           setDocumentTitle("");
           setDocuTypeLabel("Select Document Type");
           setDocuTypeValue(0);
-          setAddDoc(!addDoc)
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -440,7 +393,7 @@ const DocumentUpload = () => {
         activetab={"11"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card className="">
         <CardBody>
@@ -521,17 +474,17 @@ const DocumentUpload = () => {
                               <div>
                                 {(userType === userTypes?.SystemAdmin ||
                                   userType === userTypes?.Admin) && (
-                                    <>
-                                      {permissions?.includes(
-                                        permissionList?.Delete_Student_Document
-                                      ) ? (
-                                        <i
-                                          class="fas fa-trash pointer text-danger "
-                                          onClick={() => toggleDanger(docu)}
-                                        ></i>
-                                      ) : null}
-                                    </>
-                                  )}
+                                  <>
+                                    {permissions?.includes(
+                                      permissionList?.Delete_Student_Document
+                                    ) ? (
+                                      <i
+                                        class="fas fa-trash pointer text-danger "
+                                        onClick={() => toggleDanger(docu)}
+                                      ></i>
+                                    ) : null}
+                                  </>
+                                )}
                               </div>
                             </div>
                           </Col>
@@ -550,7 +503,7 @@ const DocumentUpload = () => {
 
                               <span className="text-gray">
                                 {docu?.createdBy} at{" "}
-                                {handleDate(docu?.createdOn)} { }
+                                {handleDate(docu?.createdOn)} {}
                               </span>
 
                               {permissions?.includes(
@@ -770,46 +723,49 @@ const DocumentUpload = () => {
                         </span>
                       </Col>
 
-                      <Col sm="4">
-                        <Upload
-                          onPreview={handlePreview1}
-                          multiple={false}
-                          fileList={FileList1}
-                          onChange={handleChange1}
-                          beforeUpload={(file) => false}
-                          itemRender={(originNode, file) => (
-                            <div style={{ display: 'flex', alignItems: 'baseLine' }}>
-                              {originNode}
-                              <EyeOutlined
-                                style={{ marginLeft: '8px', cursor: 'pointer' }}
-                                onClick={() => handlePreview1(file)}
-                              />
-                            </div>
-                          )}
-                        >
-                          {FileList1.length < 1 ? <UploadButton /> : ""}
-                        </Upload>
-
-                        {previewVisible && (
-                          <Modal
-                            title={previewTitle}
-                            visible={previewVisible}
-                            footer={null}
-                            onCancel={() => setPreviewVisible(false)}
+                      <Col>
+                        <div>
+                          <Upload
+                            listType="picture-card"
+                            multiple={false}
+                            fileList={FileList1}
+                            onPreview={handlePreview1}
+                            onChange={handleChange1}
+                            beforeUpload={(file) => {
+                              return false;
+                            }}
                           >
-                            {previewFileType === 'application/pdf' ? (
-                              <iframe
-                                src={previewImage}
-                                style={{ width: '100%', height: '80vh' }}
-                                frameBorder="0"
-                              ></iframe>
+                            {FileList1.length < 1 ? (
+                              <div
+                                className="text-danger"
+                                style={{ marginTop: 8 }}
+                              >
+                                <Icon.Upload />
+                                {/* <br /> */}
+                                {/* <span>Upload Here</span> */}
+                              </div>
                             ) : (
-                              <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
+                              ""
                             )}
-                          </Modal>
-                        )}
-
-                        <div className="text-danger d-block">{uploadError}</div>
+                          </Upload>
+                          <AntdModal
+                            visible={previewVisible1}
+                            title={previewTitle1}
+                            footer={null}
+                            onCancel={handleCancel1}
+                          >
+                            <img
+                              alt="example"
+                              style={{ width: "100%" }}
+                              src={previewImage1}
+                            />
+                          </AntdModal>
+                          {uploadError && (
+                            <span className="text-danger">
+                              File is required{" "}
+                            </span>
+                          )}
+                        </div>
                       </Col>
                       <Col>
                         {/* <span className="text-gray">

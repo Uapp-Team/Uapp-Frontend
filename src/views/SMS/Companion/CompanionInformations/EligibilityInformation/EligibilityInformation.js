@@ -11,6 +11,7 @@ import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import Uget from "../../../../../helpers/Uget";
+import { EyeOutlined } from "@ant-design/icons";
 
 const EligibilityInformation = () => {
   const activetab = "5";
@@ -51,6 +52,10 @@ const EligibilityInformation = () => {
   const [dateError, setDateError] = useState("");
   const history = useHistory();
   const userType = localStorage.getItem("userType");
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewFileType, setPreviewFileType] = useState("");
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -174,6 +179,73 @@ const EligibilityInformation = () => {
     setFileList3(fileList);
     setIdPassportError(false);
   };
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  const handlePreview3 = async (file) => {
+    console.log(file, "siam");
+
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage(file.preview || file.url);
+      setPreviewFileType(fileType);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage(pdfPreview);
+      setPreviewVisible(true);
+      setPreviewFileType(fileType);
+      setPreviewTitle(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage(googleViewer);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+      setPreviewFileType(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
+
   // Id or Passport Code End
 
   // Proof of Address Code Start
@@ -417,15 +489,19 @@ const EligibilityInformation = () => {
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
                 FileList3={FileList3}
+                setFileList3={setFileList3}
                 handleChange3={handleChange3}
                 idPassportError={idPassportError}
                 FileList4={FileList4}
+                setFileList4={setFileList4}
                 handleChange4={handleChange4}
                 proofOfAddressError={proofOfAddressError}
                 FileList5={FileList5}
+                setFileList5={setFileList5}
                 handleChange5={handleChange5}
                 proofOfRightError={proofOfRightError}
                 FileList6={FileList6}
+                setFileList6={setFileList6}
                 handleChange6={handleChange6}
                 cvError={cvError}
                 progress={progress}
