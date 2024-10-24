@@ -172,7 +172,6 @@ const StudentRegisterForm = () => {
     } else {
       setphoneNUmberError("");
     }
-    // setphoneNumber(value);
     setValid(validatePhoneNumber(value));
   };
 
