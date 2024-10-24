@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import get from "../../helpers/get";
 
-const Currency = ({
-  currencyId,
-  setCurrencyId,
-  name,
-  error,
-  setError,
-  isDisabled = false,
-}) => {
+const Currency = ({ currencyId, setCurrencyId, name, error, setError }) => {
   const [currencyDD, setCurrencyDD] = useState([]);
   const [currencyValue, setCurrencyValue] = useState("Select");
 
@@ -49,7 +42,6 @@ const Currency = ({
         onChange={(opt) => selectCurrency(opt.label, opt.value)}
         name={name}
         id={name}
-        isDisabled={isDisabled}
       />
       {error === true ? (
         <span className="text-danger">Currency is required</span>

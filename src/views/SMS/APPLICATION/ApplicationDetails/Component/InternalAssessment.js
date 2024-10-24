@@ -126,9 +126,9 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
             {applicationInfo?.student?.firstName}{" "}
             {applicationInfo?.student?.lastName}
           </h3>
-          {permissions?.includes(
-            permissionList?.Update_Internal_Assesment_Status
-          ) ? (
+          {userType === userTypes.Admin ||
+          userType === userTypes.SystemAdmin ||
+          userType === userTypes.AdmissionManager ? (
             <>
               {assessment?.answers?.length > 0 && (
                 <Select

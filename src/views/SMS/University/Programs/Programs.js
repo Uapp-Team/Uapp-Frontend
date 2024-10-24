@@ -44,7 +44,6 @@ import ReactHTMLTableToExcel from "../Subjects/ReactTableToXl";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import ColumnCourse from "../../TableColumn/ColumnCourse.js";
 import Typing from "../../../../components/form/Typing.js";
-import Loader from "../../Search/Loader/Loader.js";
 
 const Programs = (props) => {
   const CoursePaging = JSON.parse(sessionStorage.getItem("Course"));
@@ -738,7 +737,11 @@ const Programs = (props) => {
           </Row>
 
           {loading ? (
-            <Loader />
+            <div class="d-flex justify-content-center mb-5">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : (
             <div className="table-responsive fixedhead" ref={componentRef}>
               <Table id="table-to-xls" className="table-sm table-bordered">

@@ -19,7 +19,6 @@ import put from "../../../../../../helpers/put";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import Loader from "../../../../Search/Loader/Loader";
 
 const AddmissionOfficerTable = ({
   componentRef,
@@ -40,7 +39,6 @@ const AddmissionOfficerTable = ({
   handleDelete,
   buttonStatus,
   progress,
-  loading,
 }) => {
   const history = useHistory();
   const { addToast } = useToasts();
@@ -133,8 +131,8 @@ const AddmissionOfficerTable = ({
 
   return (
     <>
-      {loading ? (
-        <Loader />
+      {officerList?.length === 0 ? (
+        <h4 className="text-center">No Data Found</h4>
       ) : (
         <>
           <div className="table-responsive fixedhead" ref={componentRef}>

@@ -35,7 +35,6 @@ import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import CheckOne from "../../../../components/form/CheckOne";
 
 const AddUniversityTemplateDocument = () => {
   const { addToast } = useToasts();
@@ -58,7 +57,6 @@ const AddUniversityTemplateDocument = () => {
   );
   const [applicationTypeValue, setApplicationTypeValue] = useState(0);
   const [applicationTypeId, setApplicationTypeId] = useState([]);
-  const [check, setCheck] = useState(false);
 
   // image upload starts here
   const [previewVisible1, setPreviewVisible1] = useState(false);
@@ -199,7 +197,6 @@ const AddUniversityTemplateDocument = () => {
       "template",
       FileList1.length === 0 ? null : FileList1[0]?.originFileObj
     );
-    subData.append("isRequiredForApplication", check);
 
     // for(var i of subData){
     //
@@ -303,7 +300,6 @@ const AddUniversityTemplateDocument = () => {
     setShowForm(false);
 
     get(`UniversityTemplateDocument/Get/${id}`).then((action) => {
-      console.log(action?.isRequiredForApplication);
       setApplicationObject(action);
       setName(action?.name);
       setApplicationTypeLabel(
@@ -315,7 +311,6 @@ const AddUniversityTemplateDocument = () => {
       );
       setApplicationTypeValue(action?.applicationTypeId);
       setSelectedId(action?.id);
-      setCheck(action?.isRequiredForApplication);
     });
   };
 
@@ -556,7 +551,6 @@ const AddUniversityTemplateDocument = () => {
                                               applicationObject?.templateFile
                                                 ?.thumbnailUrl
                                             }
-                                            className="pr-2"
                                           />
                                         </div>
                                       ) : null}
@@ -616,17 +610,6 @@ const AddUniversityTemplateDocument = () => {
                                   </Col>
                                 </FormGroup>
 
-                                <FormGroup className="has-icon-left position-relative text-right">
-                                  <CheckOne
-                                    name="isRequiredForApplication"
-                                    label="Is Required For Application"
-                                    defaultValue={check}
-                                    onChange={(e) => {
-                                      setCheck(e.target.checked);
-                                    }}
-                                    className="mb-3"
-                                  />
-                                </FormGroup>
                                 <FormGroup className="has-icon-left position-relative text-right">
                                   {templateList.length > 0 && (
                                     <button

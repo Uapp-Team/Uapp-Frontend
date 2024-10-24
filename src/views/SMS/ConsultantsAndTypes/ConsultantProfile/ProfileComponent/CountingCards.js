@@ -36,9 +36,6 @@ const CountingCards = ({ id }) => {
               link={`/applicationsFromConsultant/${id}/${intake?.id}`}
               bgColor="#E1F5FC"
               borderColor="#24A1CD"
-              secondValue={count?.totalApplicant}
-              secondColor="#176682"
-              secondBgColor="#BAE7F7"
             />
           </Col>
           <Col lg={3} sm={6} className="pb-4">
@@ -61,9 +58,6 @@ const CountingCards = ({ id }) => {
               }`}
               bgColor="#F8F3FF"
               borderColor="#AE75F8"
-              secondValue={count?.totalUnconditionalStudent}
-              secondColor="#451782"
-              secondBgColor="#E3D1FA"
             />
           </Col>
           <Col lg={3} sm={6} className="pb-4">

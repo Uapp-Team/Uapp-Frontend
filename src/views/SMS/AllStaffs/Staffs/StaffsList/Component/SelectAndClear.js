@@ -12,7 +12,6 @@ const SelectAndClear = ({
   empValue,
   selectEmployeeType,
   type,
-  branchId,
   branchOptions,
   branchLabel,
   branchValue,
@@ -52,7 +51,7 @@ const SelectAndClear = ({
                 onChange={(opt) => selectBranch(opt.label, opt.value)}
                 name="branchId"
                 id="branchId"
-                isDisabled={branchId ? true : false}
+                // isDisabled={type ? true : false}
               />
             </Col>
           )}
@@ -91,7 +90,7 @@ const SelectAndClear = ({
                   ""
                 )}{" "}
                 {empValue !== 0 && branchValue !== 0 ? "" : ""}
-                {!branchId && branchValue !== 0 ? (
+                {branchValue !== 0 ? (
                   <TagButton
                     label={branchLabel}
                     setValue={() => setBranchValue(0)}
@@ -103,7 +102,7 @@ const SelectAndClear = ({
               </div>
 
               <div className="mt-1 mx-0 d-flex btn-clear mb-2">
-                {empValue !== 0 || (!branchId && branchValue !== 0) ? (
+                {empValue !== 0 || branchValue !== 0 ? (
                   <button className="tag-clear" onClick={handleReset}>
                     Clear All
                   </button>

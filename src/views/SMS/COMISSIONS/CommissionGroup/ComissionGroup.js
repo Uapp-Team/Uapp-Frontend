@@ -179,164 +179,164 @@ const ComissionGroup = () => {
   return (
     <div>
       <BreadCrumb title="Commission Groups" backTo="" path="/" />
-      <div>
-        <Modal isOpen={openModal} toggle={modalOff} className="uapp-modal">
-          <ModalHeader> Add Commission Groups </ModalHeader>
-          <ModalBody>
-            <form onSubmit={submitModalForm} className="mt-3">
-              {edit ? (
-                <input type="hidden" name="id" id="id" value={data?.id} />
-              ) : null}
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
+          <Modal isOpen={openModal} toggle={modalOff} className="uapp-modal">
+            <ModalHeader> Add Commission Groups </ModalHeader>
+            <ModalBody>
+              <form onSubmit={submitModalForm} className="mt-3">
+                {edit ? (
+                  <input type="hidden" name="id" id="id" value={data?.id} />
+                ) : null}
 
-              <FormGroup row>
-                <Col md="4">
-                  <span>
-                    Name <span className="text-danger">*</span>{" "}
-                  </span>
-                </Col>
-                <Col md="8">
-                  <Input
-                    type="text"
-                    name="name"
-                    id="name"
-                    value={name}
-                    onChange={(e) => {
-                      handleName(e);
-                    }}
-                  />
-                  <span className="text-danger">{nameError}</span>
-                </Col>
-              </FormGroup>
-
-              {userType === userTypes?.SystemAdmin ||
-              userType === userTypes?.Admin ? (
                 <FormGroup row>
                   <Col md="4">
                     <span>
-                      Branch <span className="text-danger">*</span>{" "}
+                      Name <span className="text-danger">*</span>{" "}
                     </span>
                   </Col>
                   <Col md="8">
-                    <DefaultDropdown
-                      label={branchLable}
-                      setLabel={setBranchLable}
-                      value={branchValue}
-                      setValue={setBranchValue}
-                      url="BranchDD/Index"
-                      name="branchId"
-                      error={branchError}
-                      setError={setBranchError}
-                      errorText="Branch is required"
-                      action={() => {}}
+                    <Input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={name}
+                      onChange={(e) => {
+                        handleName(e);
+                      }}
                     />
+                    <span className="text-danger">{nameError}</span>
                   </Col>
                 </FormGroup>
-              ) : (
-                <input
-                  type="hidden"
-                  name="branchId"
-                  id="branchId"
-                  value={branchValue}
-                />
-              )}
 
-              <FormGroup row>
-                <Col md="12">
-                  <div className="d-flex justify-content-between">
-                    <CancelButton cancel={modalOff} />
-                    <SaveButton text="Submit" buttonStatus={buttonStatus} />
-                  </div>
-                </Col>
-              </FormGroup>
-            </form>
-          </ModalBody>
-        </Modal>
-
-        {filterbranch.length > 1 && (
-          <Card>
-            <CardBody>
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="row">
-                    <div className="col-md-5 mb-3">
-                      <Filter
-                        data={filterbranch}
-                        label={filterbranchLabel}
-                        setLabel={setFilterBranchLabel}
-                        value={filterbranchValue}
-                        setValue={setFilterBranchValue}
+                {userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.Admin ? (
+                  <FormGroup row>
+                    <Col md="4">
+                      <span>
+                        Branch <span className="text-danger">*</span>{" "}
+                      </span>
+                    </Col>
+                    <Col md="8">
+                      <DefaultDropdown
+                        label={branchLable}
+                        setLabel={setBranchLable}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        url="BranchDD/Index"
+                        name="branchId"
+                        error={branchError}
+                        setError={setBranchError}
+                        errorText="Branch is required"
                         action={() => {}}
                       />
+                    </Col>
+                  </FormGroup>
+                ) : (
+                  <input
+                    type="hidden"
+                    name="branchId"
+                    id="branchId"
+                    value={branchValue}
+                  />
+                )}
+
+                <FormGroup row>
+                  <Col md="12">
+                    <div className="d-flex justify-content-between">
+                      <CancelButton cancel={modalOff} />
+                      <SaveButton text="Submit" buttonStatus={buttonStatus} />
+                    </div>
+                  </Col>
+                </FormGroup>
+              </form>
+            </ModalBody>
+          </Modal>
+
+          {filterbranch.length > 1 && (
+            <Card>
+              <CardBody>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="row">
+                      <div className="col-md-5 mb-3">
+                        <Filter
+                          data={filterbranch}
+                          label={filterbranchLabel}
+                          setLabel={setFilterBranchLabel}
+                          value={filterbranchValue}
+                          setValue={setFilterBranchValue}
+                          action={() => {}}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="row">
-                <div className="col-12 d-flex justify-content-start">
-                  <div className="d-flex mt-1">
-                    {filterbranchValue !== 0 ? (
-                      <TagButton
-                        label={filterbranchLabel}
-                        setValue={() => setFilterBranchValue(0)}
-                        setLabel={() => setFilterBranchLabel("Select Branch")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="mt-1 mx-1 d-flex btn-clear">
-                    {filterbranchValue !== 0 ? (
-                      <button
-                        className="tag-clear"
-                        onClick={() => {
-                          setFilterBranchValue(0);
-                          setFilterBranchLabel("Select Branch");
-                        }}
-                      >
-                        Clear All
-                      </button>
-                    ) : (
-                      ""
-                    )}
+                <div className="row">
+                  <div className="col-12 d-flex justify-content-start">
+                    <div className="d-flex mt-1">
+                      {filterbranchValue !== 0 ? (
+                        <TagButton
+                          label={filterbranchLabel}
+                          setValue={() => setFilterBranchValue(0)}
+                          setLabel={() => setFilterBranchLabel("Select Branch")}
+                        ></TagButton>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="mt-1 mx-1 d-flex btn-clear">
+                      {filterbranchValue !== 0 ? (
+                        <button
+                          className="tag-clear"
+                          onClick={() => {
+                            setFilterBranchValue(0);
+                            setFilterBranchLabel("Select Branch");
+                          }}
+                        >
+                          Clear All
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardBody>
-          </Card>
-        )}
-        <Card className="uapp-employee-search">
-          <CardHeader>
-            {permissions?.includes(
-              permissionList.Configure_CommissionStucture
-            ) ? (
-              <div className="">
-                <Button
-                  className="btn btn-uapp-add"
-                  onClick={() => setOpenModal(true)}
-                >
-                  <i className="fas fa-plus"></i> Add Commission Group
-                </Button>
-              </div>
-            ) : null}
+              </CardBody>
+            </Card>
+          )}
+          <Card className="uapp-employee-search">
+            <CardHeader>
+              {permissions?.includes(
+                permissionList.Configure_CommissionStucture
+              ) ? (
+                <div className="">
+                  <Button
+                    className="btn btn-uapp-add"
+                    onClick={() => setOpenModal(true)}
+                  >
+                    <i className="fas fa-plus"></i> Add Commission Group
+                  </Button>
+                </div>
+              ) : null}
 
-            <div>
-              {" "}
-              <b>
+              <div>
                 {" "}
-                Total{" "}
-                <span className="badge badge-primary">
-                  {commission?.length}
-                </span>{" "}
-                Commission Group Found{" "}
-              </b>
-            </div>
-          </CardHeader>
+                <b>
+                  {" "}
+                  Total{" "}
+                  <span className="badge badge-primary">
+                    {commission?.length}
+                  </span>{" "}
+                  Commission Group Found{" "}
+                </b>
+              </div>
+            </CardHeader>
 
-          <CardBody className="search-card-body">
-            {loading ? (
-              <Loader />
-            ) : (
+            <CardBody className="search-card-body">
               <div className="table-responsive">
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
@@ -405,10 +405,10 @@ const ComissionGroup = () => {
                   </tbody>
                 </Table>
               </div>
-            )}
-          </CardBody>
-        </Card>
-      </div>
+            </CardBody>
+          </Card>
+        </div>
+      )}
 
       <ConfirmModal
         text="Do You Want To Delete This Commission Group ? Once Deleted it can't be Undone!"

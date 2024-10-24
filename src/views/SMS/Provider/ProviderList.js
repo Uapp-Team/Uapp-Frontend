@@ -452,371 +452,379 @@ const ProviderList = () => {
   return (
     <div>
       <BreadCrumb title="Providers List" backTo="" path="/" />
-      <>
-        <Card className="uapp-employee-search zindex-100">
-          <CardBody>
-            <Row>
-              <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
-                <Select
-                  options={providertype}
-                  value={{ label: providerLabel, value: providerValue }}
-                  onChange={(opt) =>
-                    selectProviderTypeState(opt.label, opt.value)
-                  }
-                  name="providerTypeId"
-                  id="providerTypeId"
-                />
-              </Col>
-
-              <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
-                <Select
-                  options={uappIdOptions}
-                  value={{ label: uappIdLabel, value: uappIdValue }}
-                  onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
-                  name="uappId"
-                  id="uappId"
-                />
-              </Col>
-
-              <Col lg="4" md="4" sm="12" xs="12">
-                <Typing
-                  name="searchstring"
-                  id="searchstring"
-                  placeholder="Name, Email"
-                  value={searchStr}
-                  setValue={setSearchStr}
-                  setIsTyping={setIsTyping}
-                  onKeyDown={handleKeyDown}
-                />
-
-                <div className="mt-1 d-flex justify-between">
-                  <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
-                  <div className="pl-2" style={{ paddingTop: "2px" }}>
-                    <span>Name should not include title.</span>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-
-            <Row className="">
-              <Col lg="12" md="12" sm="12" xs="12">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "start",
-                  }}
-                >
-                  <div className="d-flex mt-1">
-                    {providerValue !== 0 || uappIdValue !== 0 ? "" : ""}
-                    {providerValue !== 0 ? (
-                      <TagButton
-                        label={providerLabel}
-                        setValue={() => setProviderValue(0)}
-                        setLabel={() => setProviderLabel("Provider Type")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {providerValue !== 0 && uappIdValue !== 0 ? "" : ""}
-                    {uappIdValue !== 0 ? (
-                      <TagButton
-                        label={uappIdLabel}
-                        setValue={() => setUappIdValue(0)}
-                        setLabel={() => setUappIdLabel("UAPP ID")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="mt-1 mx-1 d-flex btn-clear">
-                    {providerValue !== 0 || uappIdValue !== 0 ? (
-                      <button className="tag-clear" onClick={handleClearSearch}>
-                        Clear All
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-
-        <Card className="uapp-employee-search">
-          <CardBody>
-            <Row className="mb-3">
-              <Col
-                lg="6"
-                md="6"
-                sm="12"
-                xs="12"
-                style={{ marginBottom: "10px" }}
-              >
-                {permissions?.includes(permissionList?.Add_Provider) ? (
-                  <LinkButton
-                    url={"/providerForm"}
-                    className={"btn btn-uapp-add "}
-                    icon={<i className="fas fa-plus"></i>}
-                    name={" Add Provider"}
-                    permission={6}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Card className="uapp-employee-search zindex-100">
+            <CardBody>
+              <Row>
+                <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
+                  <Select
+                    options={providertype}
+                    value={{ label: providerLabel, value: providerValue }}
+                    onChange={(opt) =>
+                      selectProviderTypeState(opt.label, opt.value)
+                    }
+                    name="providerTypeId"
+                    id="providerTypeId"
                   />
-                ) : null}
-              </Col>
+                </Col>
 
-              <Col lg="6" md="6" sm="12" xs="12">
-                <div className="d-flex justify-content-end">
-                  <div className="me-3 mb-2">
-                    <div className="d-flex align-items-center">
-                      <div className="mr-2">Order By :</div>
-                      <div className="ddzindex">
-                        <Select
-                          className="mr-2"
-                          options={orderName}
-                          value={{ label: orderLabel, value: orderValue }}
-                          onChange={(opt) => selectOrder(opt.label, opt.value)}
-                        />
-                      </div>
+                <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
+                  <Select
+                    options={uappIdOptions}
+                    value={{ label: uappIdLabel, value: uappIdValue }}
+                    onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
+                    name="uappId"
+                    id="uappId"
+                  />
+                </Col>
+
+                <Col lg="4" md="4" sm="12" xs="12">
+                  <Typing
+                    name="searchstring"
+                    id="searchstring"
+                    placeholder="Name, Email"
+                    value={searchStr}
+                    setValue={setSearchStr}
+                    setIsTyping={setIsTyping}
+                    onKeyDown={handleKeyDown}
+                  />
+
+                  <div className="mt-1 d-flex justify-between">
+                    <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
+                    <div className="pl-2" style={{ paddingTop: "2px" }}>
+                      <span>Name should not include title.</span>
                     </div>
                   </div>
+                </Col>
+              </Row>
 
-                  <div className="mr-3">
-                    <div className="d-flex align-items-center">
-                      <div className="mr-2">Showing :</div>
-                      <div className="ddzindex">
-                        <Select
-                          options={dataSizeName}
-                          value={{ label: dataPerPage, value: dataPerPage }}
-                          onChange={(opt) => selectDataSize(opt.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mr-3">
-                    <Dropdown
-                      className="uapp-dropdown"
-                      style={{ float: "right" }}
-                      isOpen={dropdownOpen}
-                      toggle={toggle}
-                    >
-                      <DropdownToggle caret>
-                        <i className="fas fa-print fs-7"></i>
-                      </DropdownToggle>
-                      <DropdownMenu className="bg-dd-4">
-                        {/* <DropdownItem> */}
-                        <div className="d-flex justify-content-around align-items-center mt-2">
-                          <div className="cursor-pointer">
-                            <ReactTableConvertToXl
-                              id="test-table-xls-button"
-                              table="table-to-xls"
-                              filename="tablexls"
-                              sheet="tablexls"
-                              icon={<i className="fas fa-file-excel"></i>}
-                            />
-                          </div>
-                          <div className="cursor-pointer">
-                            <ReactToPrint
-                              trigger={() => (
-                                <p>
-                                  <i className="fas fa-file-pdf"></i>
-                                </p>
-                              )}
-                              content={() => componentRef.current}
-                            />
-                          </div>
-                        </div>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-
-                  {/* column hide unhide starts here */}
-
-                  <div className="">
-                    <Dropdown
-                      className="uapp-dropdown"
-                      style={{ float: "right" }}
-                      isOpen={dropdownOpen1}
-                      toggle={toggle1}
-                    >
-                      <DropdownToggle caret>
-                        <i className="fas fa-bars"></i>
-                      </DropdownToggle>
-                      <DropdownMenu className="bg-dd-1">
-                        {tableData.map((table, i) => (
-                          <div key={i}>
-                            {i === 2 ? (
-                              <>
-                                {permissions?.includes(
-                                  permissionList.Staff_Password_Change
-                                ) && (
-                                  <div className="d-flex justify-content-between">
-                                    <Col md="8" className="">
-                                      <p className="">{table?.title}</p>
-                                    </Col>
-
-                                    <Col md="4" className="text-center">
-                                      <FormGroup check inline>
-                                        <Input
-                                          className="form-check-input"
-                                          type="checkbox"
-                                          id=""
-                                          name="check"
-                                          onChange={(e) => {
-                                            handleChecked(e, i);
-                                          }}
-                                          defaultChecked={table?.isActive}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </div>
-                                )}
-                              </>
-                            ) : i === 5 ? (
-                              <>
-                                {permissions?.includes(
-                                  permissionList.View_Application_List
-                                ) && (
-                                  <div className="d-flex justify-content-between">
-                                    <Col md="8" className="">
-                                      <p className="">{table?.title}</p>
-                                    </Col>
-
-                                    <Col md="4" className="text-center">
-                                      <FormGroup check inline>
-                                        <Input
-                                          className="form-check-input"
-                                          type="checkbox"
-                                          id=""
-                                          name="check"
-                                          onChange={(e) => {
-                                            handleChecked(e, i);
-                                          }}
-                                          defaultChecked={table?.isActive}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </div>
-                                )}
-                              </>
-                            ) : i === 6 ? (
-                              <>
-                                {permissions?.includes(
-                                  permissionList.View_University_List
-                                ) && (
-                                  <div className="d-flex justify-content-between">
-                                    <Col md="8" className="">
-                                      <p className="">{table?.title}</p>
-                                    </Col>
-
-                                    <Col md="4" className="text-center">
-                                      <FormGroup check inline>
-                                        <Input
-                                          className="form-check-input"
-                                          type="checkbox"
-                                          id=""
-                                          name="check"
-                                          onChange={(e) => {
-                                            handleChecked(e, i);
-                                          }}
-                                          defaultChecked={table?.isActive}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </div>
-                                )}
-                              </>
-                            ) : (
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
-
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="check"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            )}
-                          </div>
-                        ))}{" "}
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-
-                  {/* column hide unhide ends here */}
-                </div>
-              </Col>
-            </Row>
-
-            {providerList?.length === 0 ? (
-              <Loader />
-            ) : (
-              <>
-                {" "}
-                {loading ? (
-                  <h2 className="text-center">Loading...</h2>
-                ) : (
+              <Row className="">
+                <Col lg="12" md="12" sm="12" xs="12">
                   <div
-                    className="table-responsive fixedhead"
-                    ref={componentRef}
+                    style={{
+                      display: "flex",
+                      justifyContent: "start",
+                    }}
                   >
-                    <Table
-                      id="table-to-xls"
-                      className="table-sm table-bordered"
-                    >
-                      <thead className="tablehead">
-                        <tr style={{ textAlign: "center" }}>
-                          {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
-                          {tableData[1]?.isActive ? <th>Name</th> : null}
-                          {permissions?.includes(
-                            permissionList.Staff_Password_Change
-                          ) ? (
-                            <>
-                              {userTypeId === userTypes?.SystemAdmin ||
-                              userTypeId === userTypes?.Admin ? (
+                    <div className="d-flex mt-1">
+                      {providerValue !== 0 || uappIdValue !== 0 ? "" : ""}
+                      {providerValue !== 0 ? (
+                        <TagButton
+                          label={providerLabel}
+                          setValue={() => setProviderValue(0)}
+                          setLabel={() => setProviderLabel("Provider Type")}
+                        ></TagButton>
+                      ) : (
+                        ""
+                      )}
+                      {providerValue !== 0 && uappIdValue !== 0 ? "" : ""}
+                      {uappIdValue !== 0 ? (
+                        <TagButton
+                          label={uappIdLabel}
+                          setValue={() => setUappIdValue(0)}
+                          setLabel={() => setUappIdLabel("UAPP ID")}
+                        ></TagButton>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                    <div className="mt-1 mx-1 d-flex btn-clear">
+                      {providerValue !== 0 || uappIdValue !== 0 ? (
+                        <button
+                          className="tag-clear"
+                          onClick={handleClearSearch}
+                        >
+                          Clear All
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+
+          <Card className="uapp-employee-search">
+            <CardBody>
+              <Row className="mb-3">
+                <Col
+                  lg="6"
+                  md="6"
+                  sm="12"
+                  xs="12"
+                  style={{ marginBottom: "10px" }}
+                >
+                  {permissions?.includes(permissionList?.Add_Provider) ? (
+                    <LinkButton
+                      url={"/providerForm"}
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      name={" Add Provider"}
+                      permission={6}
+                    />
+                  ) : null}
+                </Col>
+
+                <Col lg="6" md="6" sm="12" xs="12">
+                  <div className="d-flex justify-content-end">
+                    <div className="me-3 mb-2">
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">Order By :</div>
+                        <div className="ddzindex">
+                          <Select
+                            className="mr-2"
+                            options={orderName}
+                            value={{ label: orderLabel, value: orderValue }}
+                            onChange={(opt) =>
+                              selectOrder(opt.label, opt.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mr-3">
+                      <div className="d-flex align-items-center">
+                        <div className="mr-2">Showing :</div>
+                        <div className="ddzindex">
+                          <Select
+                            options={dataSizeName}
+                            value={{ label: dataPerPage, value: dataPerPage }}
+                            onChange={(opt) => selectDataSize(opt.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mr-3">
+                      <Dropdown
+                        className="uapp-dropdown"
+                        style={{ float: "right" }}
+                        isOpen={dropdownOpen}
+                        toggle={toggle}
+                      >
+                        <DropdownToggle caret>
+                          <i className="fas fa-print fs-7"></i>
+                        </DropdownToggle>
+                        <DropdownMenu className="bg-dd-4">
+                          {/* <DropdownItem> */}
+                          <div className="d-flex justify-content-around align-items-center mt-2">
+                            <div className="cursor-pointer">
+                              <ReactTableConvertToXl
+                                id="test-table-xls-button"
+                                table="table-to-xls"
+                                filename="tablexls"
+                                sheet="tablexls"
+                                icon={<i className="fas fa-file-excel"></i>}
+                              />
+                            </div>
+                            <div className="cursor-pointer">
+                              <ReactToPrint
+                                trigger={() => (
+                                  <p>
+                                    <i className="fas fa-file-pdf"></i>
+                                  </p>
+                                )}
+                                content={() => componentRef.current}
+                              />
+                            </div>
+                          </div>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+
+                    {/* column hide unhide starts here */}
+
+                    <div className="">
+                      <Dropdown
+                        className="uapp-dropdown"
+                        style={{ float: "right" }}
+                        isOpen={dropdownOpen1}
+                        toggle={toggle1}
+                      >
+                        <DropdownToggle caret>
+                          <i className="fas fa-bars"></i>
+                        </DropdownToggle>
+                        <DropdownMenu className="bg-dd-1">
+                          {tableData.map((table, i) => (
+                            <div key={i}>
+                              {i === 2 ? (
                                 <>
-                                  {tableData[2]?.isActive ? (
-                                    <th>Password</th>
-                                  ) : null}
+                                  {permissions?.includes(
+                                    permissionList.Staff_Password_Change
+                                  ) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
+
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            defaultChecked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
                                 </>
-                              ) : null}
-                            </>
-                          ) : null}
-                          {tableData[3]?.isActive ? <th>Email</th> : null}
-                          {tableData[4]?.isActive ? <th>Contact</th> : null}
-                          {permissions?.includes(
-                            permissionList.View_Application_List
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[5]?.isActive ? (
-                                <th>Applications</th>
-                              ) : null}
-                            </>
-                          ) : null}
+                              ) : i === 5 ? (
+                                <>
+                                  {permissions?.includes(
+                                    permissionList.View_Application_List
+                                  ) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
 
-                          {permissions?.includes(
-                            permissionList.View_University_List
-                          ) ? (
-                            <>
-                              {" "}
-                              {tableData[6]?.isActive ? (
-                                <th>University Count</th>
-                              ) : null}
-                            </>
-                          ) : null}
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            defaultChecked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : i === 6 ? (
+                                <>
+                                  {permissions?.includes(
+                                    permissionList.View_University_List
+                                  ) && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
 
-                          {/* {permissions?.includes(
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            defaultChecked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : (
+                                <div className="d-flex justify-content-between">
+                                  <Col md="8" className="">
+                                    <p className="">{table?.title}</p>
+                                  </Col>
+
+                                  <Col md="4" className="text-center">
+                                    <FormGroup check inline>
+                                      <Input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id=""
+                                        name="check"
+                                        onChange={(e) => {
+                                          handleChecked(e, i);
+                                        }}
+                                        defaultChecked={table?.isActive}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </div>
+                              )}
+                            </div>
+                          ))}{" "}
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+
+                    {/* column hide unhide ends here */}
+                  </div>
+                </Col>
+              </Row>
+
+              {providerList?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
+              ) : (
+                <>
+                  {" "}
+                  {loading ? (
+                    <h2 className="text-center">Loading...</h2>
+                  ) : (
+                    <div
+                      className="table-responsive fixedhead"
+                      ref={componentRef}
+                    >
+                      <Table
+                        id="table-to-xls"
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="tablehead">
+                          <tr style={{ textAlign: "center" }}>
+                            {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
+                            {tableData[1]?.isActive ? <th>Name</th> : null}
+                            {permissions?.includes(
+                              permissionList.Staff_Password_Change
+                            ) ? (
+                              <>
+                                {userTypeId === userTypes?.SystemAdmin ||
+                                userTypeId === userTypes?.Admin ? (
+                                  <>
+                                    {tableData[2]?.isActive ? (
+                                      <th>Password</th>
+                                    ) : null}
+                                  </>
+                                ) : null}
+                              </>
+                            ) : null}
+                            {tableData[3]?.isActive ? <th>Email</th> : null}
+                            {tableData[4]?.isActive ? <th>Contact</th> : null}
+                            {permissions?.includes(
+                              permissionList.View_Application_List
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[5]?.isActive ? (
+                                  <th>Applications</th>
+                                ) : null}
+                              </>
+                            ) : null}
+
+                            {permissions?.includes(
+                              permissionList.View_University_List
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[6]?.isActive ? (
+                                  <th>University Count</th>
+                                ) : null}
+                              </>
+                            ) : null}
+
+                            {/* {permissions?.includes(
                           permissionList?.Change_Provider_Account_Status
                         ) ? (
                           <>
@@ -826,136 +834,141 @@ const ProviderList = () => {
                           </>
                         ) : null} */}
 
-                          {tableData[7]?.isActive ? (
-                            <th style={{ width: "8%" }} className="text-center">
-                              Action
-                            </th>
-                          ) : null}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {providerList?.map((prov, i) => (
-                          <tr key={prov.id} style={{ textAlign: "center" }}>
-                            {tableData[0]?.isActive ? (
-                              <td className="cursor-pointer hyperlink-hover">
-                                <Link
-                                  className="text-id hover"
-                                  to={`/providerDetails/${prov?.id}`}
-                                >
-                                  {prov?.providerViewId}
-                                </Link>
-                              </td>
+                            {tableData[7]?.isActive ? (
+                              <th
+                                style={{ width: "8%" }}
+                                className="text-center"
+                              >
+                                Action
+                              </th>
                             ) : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {providerList?.map((prov, i) => (
+                            <tr key={prov.id} style={{ textAlign: "center" }}>
+                              {tableData[0]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/providerDetails/${prov?.id}`}
+                                  >
+                                    {prov?.providerViewId}
+                                  </Link>
+                                </td>
+                              ) : null}
 
-                            {tableData[1]?.isActive ? (
-                              <td className="cursor-pointer hyperlink-hover">
-                                <Link
-                                  className="text-id hover"
-                                  to={`/providerDetails/${prov?.id}`}
-                                >
-                                  {prov?.nameTittle?.name} {prov?.name}
-                                </Link>
-                              </td>
-                            ) : null}
+                              {tableData[1]?.isActive ? (
+                                <td className="cursor-pointer hyperlink-hover">
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/providerDetails/${prov?.id}`}
+                                  >
+                                    {prov?.nameTittle?.name} {prov?.name}
+                                  </Link>
+                                </td>
+                              ) : null}
 
-                            {permissions?.includes(
-                              permissionList.Staff_Password_Change
-                            ) ? (
-                              <>
-                                {userTypeId === userTypes?.SystemAdmin ||
-                                userTypeId === userTypes?.Admin ? (
-                                  <>
-                                    {tableData[2]?.isActive ? (
-                                      <td>
-                                        <Link onClick={() => handlePass(prov)}>
-                                          Change
-                                        </Link>
-                                      </td>
-                                    ) : null}
-                                  </>
-                                ) : null}
-                              </>
-                            ) : null}
+                              {permissions?.includes(
+                                permissionList.Staff_Password_Change
+                              ) ? (
+                                <>
+                                  {userTypeId === userTypes?.SystemAdmin ||
+                                  userTypeId === userTypes?.Admin ? (
+                                    <>
+                                      {tableData[2]?.isActive ? (
+                                        <td>
+                                          <Link
+                                            onClick={() => handlePass(prov)}
+                                          >
+                                            Change
+                                          </Link>
+                                        </td>
+                                      ) : null}
+                                    </>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                            {tableData[3]?.isActive ? (
-                              <td>{prov?.loginEmail}</td>
-                            ) : null}
-                            {tableData[4]?.isActive ? (
-                              <td>
-                                <div className="d-flex justify-content-center">
-                                  <PopOverText
-                                    value={
-                                      prov?.phoneNumber &&
-                                      prov?.phoneNumber.includes("+")
-                                        ? prov?.phoneNumber
-                                        : prov?.phoneNumber &&
-                                          !prov?.phoneNumber.includes("+")
-                                        ? "+" + prov?.phoneNumber
-                                        : null
-                                    }
-                                    // value={
-                                    //   prov?.phoneNumber
-                                    //     ? "+" + prov?.phoneNumber
-                                    //     : null
-                                    // }
-                                    btn={<i class="fas fa-phone"></i>}
-                                    popoverOpen={popoverOpen}
-                                    setPopoverOpen={setPopoverOpen}
-                                  />
-                                  <PopOverText
-                                    value={prov?.email}
-                                    btn={<i className="far fa-envelope"></i>}
-                                    popoverOpen={popoverOpen}
-                                    setPopoverOpen={setPopoverOpen}
-                                  />
-                                </div>
-                              </td>
-                            ) : null}
+                              {tableData[3]?.isActive ? (
+                                <td>{prov?.loginEmail}</td>
+                              ) : null}
+                              {tableData[4]?.isActive ? (
+                                <td>
+                                  <div className="d-flex justify-content-center">
+                                    <PopOverText
+                                      value={
+                                        prov?.phoneNumber &&
+                                        prov?.phoneNumber.includes("+")
+                                          ? prov?.phoneNumber
+                                          : prov?.phoneNumber &&
+                                            !prov?.phoneNumber.includes("+")
+                                          ? "+" + prov?.phoneNumber
+                                          : null
+                                      }
+                                      // value={
+                                      //   prov?.phoneNumber
+                                      //     ? "+" + prov?.phoneNumber
+                                      //     : null
+                                      // }
+                                      btn={<i class="fas fa-phone"></i>}
+                                      popoverOpen={popoverOpen}
+                                      setPopoverOpen={setPopoverOpen}
+                                    />
+                                    <PopOverText
+                                      value={prov?.email}
+                                      btn={<i className="far fa-envelope"></i>}
+                                      popoverOpen={popoverOpen}
+                                      setPopoverOpen={setPopoverOpen}
+                                    />
+                                  </div>
+                                </td>
+                              ) : null}
 
-                            {permissions?.includes(
-                              permissionList.View_Application_List
-                            ) ? (
-                              <>
-                                {" "}
-                                {tableData[5]?.isActive ? (
-                                  <td>
-                                    <div style={{ marginTop: "5px" }}>
-                                      <span
-                                        onClick={() => {
-                                          history.push(
-                                            `/provider-applications/${prov?.id}`
-                                          );
-                                        }}
-                                        className="Count-first"
-                                      >
-                                        {prov?.applicationCount}
-                                      </span>
-                                    </div>
-                                  </td>
-                                ) : null}
-                              </>
-                            ) : null}
+                              {permissions?.includes(
+                                permissionList.View_Application_List
+                              ) ? (
+                                <>
+                                  {" "}
+                                  {tableData[5]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() => {
+                                            history.push(
+                                              `/provider-applications/${prov?.id}`
+                                            );
+                                          }}
+                                          className="Count-first"
+                                        >
+                                          {prov?.applicationCount}
+                                        </span>
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                            {permissions?.includes(
-                              permissionList.View_University_List
-                            ) ? (
-                              <>
-                                {tableData[6]?.isActive ? (
-                                  <td>
-                                    <div style={{ marginTop: "5px" }}>
-                                      <span
-                                        onClick={() => {
-                                          history.push(
-                                            `/universityListFromProviderList/${prov?.id}`
-                                          );
-                                        }}
-                                        className="Count-second"
-                                      >
-                                        {prov?.universityCount}
-                                      </span>
-                                    </div>
+                              {permissions?.includes(
+                                permissionList.View_University_List
+                              ) ? (
+                                <>
+                                  {tableData[6]?.isActive ? (
+                                    <td>
+                                      <div style={{ marginTop: "5px" }}>
+                                        <span
+                                          onClick={() => {
+                                            history.push(
+                                              `/universityListFromProviderList/${prov?.id}`
+                                            );
+                                          }}
+                                          className="Count-second"
+                                        >
+                                          {prov?.universityCount}
+                                        </span>
+                                      </div>
 
-                                    {/* 
+                                      {/* 
                                   <Link
                                     to={{
                                       pathname: `/universityListFromProviderList/${prov?.id}`,
@@ -969,12 +982,12 @@ const ProviderList = () => {
                                       {`View (${prov?.universityCount})`}{" "}
                                     </span>
                                   </Link> */}
-                                  </td>
-                                ) : null}
-                              </>
-                            ) : null}
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
 
-                            {/* {permissions?.includes(
+                              {/* {permissions?.includes(
                             permissionList?.Change_Provider_Account_Status
                           ) ? (
                             <>
@@ -993,107 +1006,110 @@ const ProviderList = () => {
                             </>
                           ) : null} */}
 
-                            {tableData[7]?.isActive ? (
-                              <td
-                                style={{ width: "8%" }}
-                                className="text-center"
-                              >
-                                <ButtonGroup variant="text">
-                                  {permissions?.includes(
-                                    permissionList?.View_Provider
-                                  ) ? (
-                                    <ButtonForFunction
-                                      color={"primary"}
-                                      func={() =>
-                                        redirectToProviderDetails(prov?.id)
-                                      }
-                                      className={"mx-1 btn-sm"}
-                                      icon={<i className="fas fa-eye"></i>}
-                                      permission={6}
-                                    />
-                                  ) : null}
+                              {tableData[7]?.isActive ? (
+                                <td
+                                  style={{ width: "8%" }}
+                                  className="text-center"
+                                >
+                                  <ButtonGroup variant="text">
+                                    {permissions?.includes(
+                                      permissionList?.View_Provider
+                                    ) ? (
+                                      <ButtonForFunction
+                                        color={"primary"}
+                                        func={() =>
+                                          redirectToProviderDetails(prov?.id)
+                                        }
+                                        className={"mx-1 btn-sm"}
+                                        icon={<i className="fas fa-eye"></i>}
+                                        permission={6}
+                                      />
+                                    ) : null}
 
-                                  {userType ===
-                                    userTypes?.SystemAdmin.toString() ||
-                                  userType === userTypes?.Admin.toString() ||
-                                  userType ===
-                                    userTypes?.ComplianceManager.toString() ? (
-                                    <>
-                                      {permissions?.includes(
-                                        permissionList?.View_Provider
-                                      ) ? (
+                                    {userType ===
+                                      userTypes?.SystemAdmin.toString() ||
+                                    userType === userTypes?.Admin.toString() ||
+                                    userType ===
+                                      userTypes?.ComplianceManager.toString() ? (
+                                      <>
+                                        {permissions?.includes(
+                                          permissionList?.View_Provider
+                                        ) ? (
+                                          <ButtonForFunction
+                                            color={"primary"}
+                                            func={() =>
+                                              redirectToProviderDashboard(
+                                                prov?.id
+                                              )
+                                            }
+                                            className={"mx-1 btn-sm"}
+                                            icon={
+                                              <i className="fas fa-tachometer-alt-fast"></i>
+                                            }
+                                            permission={6}
+                                          />
+                                        ) : null}
+                                      </>
+                                    ) : null}
+
+                                    {permissions?.includes(
+                                      permissionList.Edit_Provider
+                                    ) ? (
+                                      <>
                                         <ButtonForFunction
-                                          color={"primary"}
+                                          color={"warning"}
                                           func={() =>
-                                            redirectToProviderDashboard(
-                                              prov?.id
-                                            )
+                                            redirectToUpdateProvider(prov?.id)
+                                          }
+                                          className={"mx-1 btn-sm"}
+                                          icon={<i className="fas fa-edit"></i>}
+                                          permission={6}
+                                        />
+                                      </>
+                                    ) : null}
+
+                                    {permissions?.includes(
+                                      permissionList?.Delete_Provider
+                                    ) ? (
+                                      <>
+                                        <ButtonForFunction
+                                          color={"danger"}
+                                          func={() =>
+                                            toggleDeleteProvider(prov)
                                           }
                                           className={"mx-1 btn-sm"}
                                           icon={
-                                            <i className="fas fa-tachometer-alt-fast"></i>
+                                            <i className="fas fa-trash-alt"></i>
                                           }
                                           permission={6}
                                         />
-                                      ) : null}
-                                    </>
-                                  ) : null}
+                                      </>
+                                    ) : null}
+                                  </ButtonGroup>
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  )}
+                </>
+              )}
 
-                                  {permissions?.includes(
-                                    permissionList.Edit_Provider
-                                  ) ? (
-                                    <>
-                                      <ButtonForFunction
-                                        color={"warning"}
-                                        func={() =>
-                                          redirectToUpdateProvider(prov?.id)
-                                        }
-                                        className={"mx-1 btn-sm"}
-                                        icon={<i className="fas fa-edit"></i>}
-                                        permission={6}
-                                      />
-                                    </>
-                                  ) : null}
-
-                                  {permissions?.includes(
-                                    permissionList?.Delete_Provider
-                                  ) ? (
-                                    <>
-                                      <ButtonForFunction
-                                        color={"danger"}
-                                        func={() => toggleDeleteProvider(prov)}
-                                        className={"mx-1 btn-sm"}
-                                        icon={
-                                          <i className="fas fa-trash-alt"></i>
-                                        }
-                                        permission={6}
-                                      />
-                                    </>
-                                  ) : null}
-                                </ButtonGroup>
-                              </td>
-                            ) : null}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
-                )}
-              </>
-            )}
-
-            <Pagination
-              dataPerPage={dataPerPage}
-              totalData={entity}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-            {/* <div className="d-flex justify-content-end mt-3 mb-2">
+              <Pagination
+                dataPerPage={dataPerPage}
+                totalData={entity}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+              {/* <div className="d-flex justify-content-end mt-3 mb-2">
                 <h5>Total Results Found: {providerList.length}</h5>
               </div> */}
-          </CardBody>
-        </Card>
-      </>
+            </CardBody>
+          </Card>
+        </>
+      )}
 
       <ConfirmModal
         text="Do You Want To Delete This Provider ? Once Deleted it can't be Undone!"
