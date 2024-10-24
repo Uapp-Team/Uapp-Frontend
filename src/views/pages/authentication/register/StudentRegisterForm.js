@@ -53,8 +53,8 @@ const StudentRegisterForm = () => {
       const code = email
         ? invitationcode
         : splitcode.length === 3
-        ? uappId
-        : invitationcode;
+          ? uappId
+          : invitationcode;
       // console.log(code);
       setReferCode(code);
       fetch(`${rootUrl}StudentRegistration/Track/${invitationcode}`);
@@ -222,11 +222,6 @@ const StudentRegisterForm = () => {
       isFormValid = false;
       setEmailExistError(emailExistError);
     }
-
-    // if (email === "") {
-    //   isFormValid = false;
-    //   setEmailError("Email is required");
-    // }
 
     if (subData.PreferredCountry === 0) {
       isFormValid = false;
