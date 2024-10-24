@@ -938,6 +938,7 @@ border- .bg-orange-light {
   border-radius: 10px;
   border: 0.5px solid rgba(37, 37, 37, 0.12) !important;
   background: #fff;
+  z-index: -1 !important;
   /* padding: 20px; */
 }
 
@@ -5189,7 +5190,7 @@ span.ant-upload-list-item-name {
   border-bottom-left-radius: 19px;
   border-top-left-radius: 19px;
   padding: 8px 14px;
-  cursor: none !important;
+  cursor: auto !important;
 }
 
 .hide-details-student-dashboard {

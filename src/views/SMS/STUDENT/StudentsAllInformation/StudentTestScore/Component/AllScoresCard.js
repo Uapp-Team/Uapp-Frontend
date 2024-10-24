@@ -85,7 +85,7 @@ const AllScoresCard = ({
                 </Col>
                 <Col lg="3">
                   <p>
-                    <span> reading</span>
+                    <span> Reading</span>
                     <br />
                     <b> {ielts?.reading}</b>
                   </p>
@@ -662,7 +662,7 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-      isQualification === false ? (
+        isQualification === false ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (

@@ -23,6 +23,7 @@ import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import containsDigit from "../../../../../helpers/nameContainDigit";
 
 const ContactInformation = () => {
   const { addToast } = useToasts();
@@ -92,15 +93,15 @@ const ContactInformation = () => {
         res[0]?.addressTypeId === 1
           ? res[0]
           : res[1]?.addressTypeId === 1
-          ? res[1]
-          : null
+            ? res[1]
+            : null
       );
       setPermanentData(
         res[0]?.addressTypeId === 2
           ? res[0]
           : res[1]?.addressTypeId === 2
-          ? res[1]
-          : null
+            ? res[1]
+            : null
       );
     });
   }, [success, applicationStudentId]);
@@ -142,20 +143,26 @@ const ContactInformation = () => {
     }
   };
   const handleCity = (e) => {
-    let data = e.target.value.trimStart();
+    let data = e.target.value;
     setCity(data);
     if (data === "") {
       setCityError("City is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setCityError("City should not contain digits");
+    }
+    else {
       setCityError("");
     }
   };
   const handleCityN2 = (e) => {
-    let data = e.target.value.trimStart();
+    let data = e.target.value;
     setCityN2(data);
     if (data === "") {
       setCityError2("City is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setCityError2("City should not contain digits");
+    }
+    else {
       setCityError2("");
     }
   };
@@ -169,11 +176,14 @@ const ContactInformation = () => {
     }
   };
   const handleState2 = (e) => {
-    let data = e.target.value.trimStart();
+    let data = e.target.value;
     setState2(data);
     if (data === "") {
       setStateError2("State/County is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setStateError2('state should not contain digit');
+    }
+    else {
       setStateError2("");
     }
   };
@@ -469,7 +479,7 @@ const ContactInformation = () => {
         activetab={"2"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -553,9 +563,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{livingdata?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {livingdata?.houseNo}</b>
                                   </p>
@@ -672,9 +685,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{permanentData?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {permanentData?.houseNo}</b>
                                   </p>

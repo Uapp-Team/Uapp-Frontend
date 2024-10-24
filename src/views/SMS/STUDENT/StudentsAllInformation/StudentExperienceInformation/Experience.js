@@ -65,9 +65,9 @@ const Experience = () => {
   const [employmentError, setEmploymentError] = useState("");
   const [company, setCompany] = useState("");
   const [companyError, setCompanyError] = useState("");
-  const [startDate, setStartDate] = useState(currentDate);
+  const [startDate, setStartDate] = useState('');
   const [startDateError, setStartDateError] = useState("");
-  const [endDate, setEndDate] = useState(currentDate);
+  const [endDate, setEndDate] = useState('');
   const [endDateError, setEndDateError] = useState("");
   const minDate = "1950-01-01";
   const userType = localStorage.getItem("userType");
