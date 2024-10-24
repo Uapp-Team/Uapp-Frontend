@@ -11,7 +11,8 @@ import "react-phone-input-2/lib/style.css";
 import post from "../../../../helpers/post";
 import get from "../../../../helpers/get";
 import containsDigit from '../../../../helpers/nameContainDigit';
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Spin } from "antd";
 
 
 const StudentRegisterForm = () => {
@@ -44,6 +45,7 @@ const StudentRegisterForm = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [progress, setProgress] = useState(false);
 
   useEffect(() => {
     email && setuserEmail(email);
@@ -96,6 +98,13 @@ const StudentRegisterForm = () => {
   const SetNameTitleFromDD = (e) => {
     setTitle(parseInt(e.target.value));
   };
+
+  const antIcon = (
+    <LoadingOutlined
+      style={{ fontSize: 35, color: "white", fontWeight: "bold" }}
+      spin
+    />
+  );
 
   const handleLastNameChange = (e) => {
     const value = e.target.value;
@@ -306,6 +315,7 @@ const StudentRegisterForm = () => {
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
       clearAllErrors();
+      setProgress(true);
       try {
         const response = await fetch(`${rootUrl}StudentRegistration/Register`, {
           method: "POST",
@@ -333,6 +343,8 @@ const StudentRegisterForm = () => {
           autoDismiss: true,
         });
         return;
+      } finally {
+        setProgress(false);
       }
 
     }
@@ -608,7 +620,7 @@ const StudentRegisterForm = () => {
         <div className="mb-3">
           <div></div>
           <button className="btn-register-lg" type="submit" disabled={!checked}>
-            Register Now
+            {progress ? <Spin indicator={antIcon} /> : "Register Now"}
           </button>
         </div>
 
