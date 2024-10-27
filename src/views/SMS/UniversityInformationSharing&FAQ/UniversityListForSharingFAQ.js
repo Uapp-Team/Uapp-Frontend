@@ -1,29 +1,41 @@
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import { userTypes } from "../../../constants/userTypeConstant";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import manageQueries from "../../../assets/icon/MangageQuerries.svg";
 import ButtonForFunction from "../Components/ButtonForFunction";
 import Typing from "../../../components/form/Typing";
-import faqUniversityImg from "../../../assets/img/faq-university-img.svg";
-import { useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
 import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
+import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 
 const UniversityListForSharingFAQ = () => {
-  const [searchStr, setSearchStr] = useState("");
   const [universityList, setUniversityList] = useState([]);
+  const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    Uget(`University/get?&searchText=${searchStr}`).then((res) => {
-      setUniversityList(res?.data);
-    });
-  }, [searchStr]);
+    if (!isTyping) {
+      Uget(`University/get?&searchText=${searchStr}`).then((res) => {
+        setUniversityList(res?.data);
+      });
+    }
+  }, [isTyping, searchStr]);
 
   const handleManageQueries = () => {
     history.push("/university-information-doc-faq");
+  };
+
+  const redirectRoute = (item) => {
+    if (AdminUsers() || AdmissionUsers()) {
+      history.push(`/university-information-doc-faq-by-id/${item?.id}`, {
+        state: { name: item?.universityFullName, id: item?.id },
+      });
+    } else {
+      history.push(`/users-answer-for-fAQ/${item?.id}`, {
+        state: { name: item?.universityFullName, id: item?.id },
+      });
+    }
   };
 
   return (
@@ -36,17 +48,19 @@ const UniversityListForSharingFAQ = () => {
 
       <Card>
         <CardBody>
-          <div className="d-flex justify-content-between University-information-list-text mb-4">
-            <p className="d-flex align-items-center mr-3">
-              Manage Queries for University information manage
-            </p>
-            <ButtonForFunction
-              func={handleManageQueries}
-              className={"btn btn-uapp-add "}
-              icon={<i class="fas fa-list-ul"></i>}
-              name={"Manage Queries"}
-            />
-          </div>
+          {(AdminUsers() || AdmissionUsers()) && (
+            <div className="d-flex justify-content-between University-information-list-text mb-4">
+              <p className="d-flex align-items-center mr-3">
+                Manage Queries for University information manage
+              </p>
+              <ButtonForFunction
+                func={handleManageQueries}
+                className={"btn btn-uapp-add "}
+                icon={<i class="fas fa-list-ul"></i>}
+                name={"Manage Queries"}
+              />
+            </div>
+          )}
           <div className="d-flex justify-content-between align-items-center px-4">
             <h5 className="Universities-text-faq">Universities</h5>
             <div>
@@ -64,7 +78,7 @@ const UniversityListForSharingFAQ = () => {
           <Row>
             {universityList?.map((item, i) => (
               <Col key={i} lg={2} sm={6} className="pb-4 click-faq">
-                <a href="affiliate-List" target="">
+                <div onClick={() => redirectRoute(item)} className="pointer">
                   {" "}
                   <div className="university-card-faq">
                     {/* <div className="university-card-faq" onClick={setIsTyping}> */}
@@ -84,7 +98,7 @@ const UniversityListForSharingFAQ = () => {
                       {item?.universityFullName}
                     </h6>
                   </div>
-                </a>
+                </div>
               </Col>
             ))}
           </Row>

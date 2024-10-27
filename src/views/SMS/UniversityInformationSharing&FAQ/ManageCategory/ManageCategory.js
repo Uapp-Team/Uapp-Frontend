@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import CategoryAdd from "./ManageCategory/CategoryAdd";
-import CategoryEdit from "./ManageCategory/CategoryEdit";
+import CategoryAdd from "./CategoryAdd";
+import CategoryEdit from "./CategoryEdit";
 
-const SideCategoryFaq = ({ content, closeModal, refetch }) => {
+const ManageCategory = ({ content, closeModal, refetch }) => {
   const [openIndex, setOpenIndex] = useState(1);
 
   const toggleAccordion = (index) => {
@@ -46,4 +46,4 @@ const SideCategoryFaq = ({ content, closeModal, refetch }) => {
   );
 };
 
-export default SideCategoryFaq;
+export default ManageCategory;

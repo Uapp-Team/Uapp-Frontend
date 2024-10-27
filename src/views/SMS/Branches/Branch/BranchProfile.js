@@ -10,6 +10,8 @@ import DashboardApplication from "../../../../components/ui/DashboardApplication
 import DashboardReadyToApply from "../../../../components/ui/DashboardReadyToApply";
 import get from "../../../../helpers/get";
 import CountCard from "./CountCard";
+import BranchAdmin from "../IndividualComponent/BranchAdmin";
+import StaffListForBranch from "../../Dashboard/Pages/BranchManager/StaffListForBranch";
 
 const BranchProfile = () => {
   const { id } = useParams();
@@ -33,6 +35,7 @@ const BranchProfile = () => {
         <Col lg={8}>
           <BranchInfo id={id} />
           <CountCard id={id} intakeRngValue={intake.id} />
+          {/* <StaffListForBranch id={id} /> */}
           <ConsultantListForBranch id={id} />
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}
 
@@ -44,7 +47,8 @@ const BranchProfile = () => {
           />
         </Col>
         <Col lg={4}>
-          <BranchManager id={id} />
+          <BranchAdmin id={id} />
+          {/* <BranchManager id={id} /> */}
 
           {/* <IncomeAmount
             title="Revenue"

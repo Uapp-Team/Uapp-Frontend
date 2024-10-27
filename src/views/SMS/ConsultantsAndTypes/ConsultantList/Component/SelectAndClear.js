@@ -5,6 +5,8 @@ import TagButton from "../../../../../components/buttons/TagButton";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../components/form/Typing";
+import Filter from "../../../../../components/Dropdown/Filter";
+import { consultantTier } from "../../../../../constants/presetData";
 
 const SelectAndClear = ({
   empOptiopns,
@@ -32,6 +34,10 @@ const SelectAndClear = ({
   handleReset,
   check,
   setCheck,
+  tierLabel,
+  setTierLabel,
+  tierValue,
+  setTierValue,
   setIsTyping,
 }) => {
   const userType = localStorage.getItem("userType");
@@ -74,6 +80,22 @@ const SelectAndClear = ({
               name="consultantTypeId"
               id="consultantTypeId"
               // isDisabled={type ? true : false}
+            />
+          </Col>
+
+          <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Filter
+              data={[
+                {
+                  id: 0,
+                  name: "All Tier",
+                },
+                ...consultantTier,
+              ]}
+              label={tierLabel}
+              setLabel={setTierLabel}
+              value={tierValue}
+              setValue={setTierValue}
             />
           </Col>
 

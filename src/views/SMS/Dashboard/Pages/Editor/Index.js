@@ -83,6 +83,9 @@ const Editor = () => {
             // link={`/applicationsbyintake/${intake?.id}`}
             bgColor="#E1F5FC"
             borderColor="#24A1CD"
+            secondValue={count?.totalApplicant}
+            secondColor="#176682"
+            secondBgColor="#BAE7F7"
           />
         </Col>
         <Col lg={2} md={4} xs={6} className="mb-30px">
@@ -101,6 +104,9 @@ const Editor = () => {
             // link={`/applicationsByStatus/${2}/${2}/${intake?.id}`}
             bgColor="#F8F3FF"
             borderColor="#AE75F8"
+            secondValue={count?.totalUnconditionalStudent}
+            secondColor="#451782"
+            secondBgColor="#E3D1FA"
           />
         </Col>
         <Col lg={2} md={4} xs={6} className="mb-30px">

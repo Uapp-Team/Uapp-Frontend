@@ -4,7 +4,14 @@ import ErrorText from "./ErrorText";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const RichTextArea = ({ label, value, setValue, error, className }) => {
+const RichTextArea = ({
+  label,
+  defaultValue,
+  onChange,
+  error,
+  className,
+  action,
+}) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -22,17 +29,24 @@ const RichTextArea = ({ label, value, setValue, error, className }) => {
     ],
   };
 
+  const hangleChange = (value) => {
+    onChange(value);
+    action && action();
+  };
+
   return (
     <Form.Group className={`mb-3 ${className}`}>
       {label && <span>{label}</span>}
+      <div className="h-300px">
+        <ReactQuill
+          theme="snow"
+          value={defaultValue}
+          modules={modules}
+          className="h-75"
+          onChange={hangleChange}
+        />
+      </div>
 
-      <ReactQuill
-        theme="snow"
-        value={value}
-        modules={modules}
-        className="editor-input"
-        onChange={setValue}
-      />
       <ErrorText error={error} />
     </Form.Group>
   );

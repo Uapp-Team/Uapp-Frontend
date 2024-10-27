@@ -22,29 +22,30 @@ const SourceOfFund = ({ destination }) => {
   const [fundValue, setFundValue] = useState(0);
   const [success, setSuccess] = useState(false);
   const userType = localStorage.getItem("userType");
-  console.log("userType", userType);
+  console.log(userType);
 
   useEffect(() => {
     get(`SourceOfFundDD/Index`).then((res) => {
       setFund(res);
     });
     get(`StudentFunding/Get/${applicationStudentId}`).then((res) => {
+      console.log(res);
       setFundValue(res?.fundingType);
 
       setFundLabel(
         res?.fundingType === 1
           ? "Self Funded"
           : res?.fundingType === 2
-            ? "Family Funded"
-            : res?.fundingType === 3
-              ? "Student Loan Company"
-              : res?.fundingType === 4
-                ? "Bank Loan"
-                : res?.fundingType === 5
-                  ? "Government Loan/Fund"
-                  : res?.fundingType === 6
-                    ? "Scholarship"
-                    : "Select Fund Type"
+          ? "Family Funded"
+          : res?.fundingType === 3
+          ? "Student Loan Company"
+          : res?.fundingType === 4
+          ? "Bank Loan"
+          : res?.fundingType === 5
+          ? "Government Loan/Fund"
+          : res?.fundingType === 6
+          ? "Scholarship"
+          : "Select Fund Type"
       );
     });
   }, [success, applicationStudentId]);
@@ -84,7 +85,7 @@ const SourceOfFund = ({ destination }) => {
         activetab={"4"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -156,9 +157,6 @@ const SourceOfFund = ({ destination }) => {
               <Row className="mt-4">
                 <Col className=" d-flex justify-content-between">
                   <PreviousButton action={goPrevious} />
-                  {fund.length < 1 &&
-                    <SaveButton text="Skip" action={goForward} />
-                  }
                   {userType !== userTypes?.Student.toString() ? (
                     <SaveButton text="Next" action={goForward} />
                   ) : null}

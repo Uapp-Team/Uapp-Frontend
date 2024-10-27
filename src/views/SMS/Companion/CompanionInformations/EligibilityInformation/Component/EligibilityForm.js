@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FormGroup, Form, Col, Input, Label, Row } from "reactstrap";
 import Select from "react-select";
-import { Upload } from "antd";
+import { Modal, Upload } from "antd";
 import { rootUrl } from "../../../../../../constants/constants";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import UploadButton from "../../../../../../components/buttons/UploadButton";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
+import { EyeOutlined } from "@ant-design/icons";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -32,6 +33,7 @@ const EligibilityForm = ({
   onRadioValueChange,
   rightToWork,
   FileList3,
+  setFileList3,
   // handlePreview3,
   handleChange3,
   // previewVisible3,
@@ -40,6 +42,7 @@ const EligibilityForm = ({
   // previewImage3,
   idPassportError,
   FileList4,
+  setFileList4,
   // handlePreview4,
   handleChange4,
   // previewVisible4,
@@ -48,6 +51,7 @@ const EligibilityForm = ({
   // previewImage4,
   proofOfAddressError,
   FileList5,
+  setFileList5,
   // handlePreview5,
   handleChange5,
   // previewVisible5,
@@ -56,6 +60,7 @@ const EligibilityForm = ({
   // previewImage5,
   proofOfRightError,
   FileList6,
+  setFileList6,
   // handlePreview6,
   // previewVisible6,
   // previewTitle6,
@@ -71,8 +76,316 @@ const EligibilityForm = ({
   handleDate,
   handlePrevious,
 }) => {
-  console.log(companionId, "sakib paico");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+
+  const [previewImage3, setPreviewImage3] = useState("");
+  const [previewVisible3, setPreviewVisible3] = useState(false);
+  const [previewTitle3, setPreviewTitle3] = useState("");
+  const [previewFileType3, setPreviewFileType3] = useState("");
+
+  const [previewImage4, setPreviewImage4] = useState("");
+  const [previewVisible4, setPreviewVisible4] = useState(false);
+  const [previewTitle4, setPreviewTitle4] = useState("");
+  const [previewFileType4, setPreviewFileType4] = useState("");
+
+  const [previewImage5, setPreviewImage5] = useState("");
+  const [previewVisible5, setPreviewVisible5] = useState(false);
+  const [previewTitle5, setPreviewTitle5] = useState("");
+  const [previewFileType5, setPreviewFileType5] = useState("");
+
+  const [previewImage6, setPreviewImage6] = useState("");
+  const [previewVisible6, setPreviewVisible6] = useState(false);
+  const [previewTitle6, setPreviewTitle6] = useState("");
+  const [previewFileType6, setPreviewFileType6] = useState("");
+
+  useEffect(() => {
+    if (eligibilityData?.idOrPassport?.fileUrl) {
+      setFileList3([
+        {
+          uid: eligibilityData?.idOrPassportId,
+          name: "Attachement",
+          status: "done",
+          url: rootUrl + eligibilityData?.idOrPassport?.fileUrl,
+        },
+      ]);
+    }
+  }, [eligibilityData, setFileList3]);
+
+  useEffect(() => {
+    if (eligibilityData?.proofOfAddress?.fileUrl) {
+      setFileList4([
+        {
+          uid: eligibilityData?.proofOfAddressId,
+          name: "Attachement",
+          status: "done",
+          url: rootUrl + eligibilityData?.proofOfAddress?.fileUrl,
+        },
+      ]);
+    }
+  }, [eligibilityData, setFileList4]);
+
+  useEffect(() => {
+    if (eligibilityData?.brp?.fileUrl) {
+      setFileList5([
+        {
+          uid: eligibilityData?.brpId,
+          name: "Attachement",
+          status: "done",
+          url: rootUrl + eligibilityData?.brp?.fileUrl,
+        },
+      ]);
+    }
+  }, [eligibilityData, setFileList5]);
+
+  useEffect(() => {
+    if (eligibilityData?.cv?.fileUrl) {
+      setFileList6([
+        {
+          uid: eligibilityData?.cvId,
+          name: "Attachement",
+          status: "done",
+          url: rootUrl + eligibilityData?.cv?.fileUrl,
+        },
+      ]);
+    }
+  }, [eligibilityData, setFileList6]);
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  const handlePreview3 = async (file) => {
+    console.log(file, "siam");
+
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage3(file.preview || file.url);
+      setPreviewFileType3(fileType);
+      setPreviewVisible3(true);
+      setPreviewTitle3(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage3(pdfPreview);
+      setPreviewVisible3(true);
+      setPreviewFileType3(fileType);
+      setPreviewTitle3(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage3(googleViewer);
+      setPreviewVisible3(true);
+      setPreviewTitle3(file.name);
+      setPreviewFileType3(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
+
+  const handlePreview4 = async (file) => {
+    console.log(file, "siam");
+
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage4(file.preview || file.url);
+      setPreviewFileType4(fileType);
+      setPreviewVisible4(true);
+      setPreviewTitle4(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage4(pdfPreview);
+      setPreviewVisible4(true);
+      setPreviewFileType4(fileType);
+      setPreviewTitle4(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage4(googleViewer);
+      setPreviewVisible4(true);
+      setPreviewTitle4(file.name);
+      setPreviewFileType4(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
+
+  const handlePreview5 = async (file) => {
+    console.log(file, "siam");
+
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage5(file.preview || file.url);
+      setPreviewFileType5(fileType);
+      setPreviewVisible5(true);
+      setPreviewTitle5(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage5(pdfPreview);
+      setPreviewVisible5(true);
+      setPreviewFileType5(fileType);
+      setPreviewTitle5(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage5(googleViewer);
+      setPreviewVisible5(true);
+      setPreviewTitle5(file.name);
+      setPreviewFileType5(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
+
+  const handlePreview6 = async (file) => {
+    console.log(file, "siam");
+
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage6(file.preview || file.url);
+      setPreviewFileType6(fileType);
+      setPreviewVisible6(true);
+      setPreviewTitle6(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage6(pdfPreview);
+      setPreviewVisible6(true);
+      setPreviewFileType6(fileType);
+      setPreviewTitle6(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage6(googleViewer);
+      setPreviewVisible6(true);
+      setPreviewTitle6(file.name);
+      setPreviewFileType6(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -248,19 +561,50 @@ const EligibilityForm = ({
                 multiple={false}
                 fileList={FileList3}
                 onChange={handleChange3}
-                beforeUpload={(file) => {
-                  return false;
-                }}
-                style={{ height: "32px" }}
+                beforeUpload={(file) => false}
+                itemRender={(originNode, file) => (
+                  <div style={{ display: "flex", alignItems: "baseLine" }}>
+                    {originNode}
+                    <EyeOutlined
+                      style={{ marginLeft: "8px", cursor: "pointer" }}
+                      onClick={() => handlePreview3(file)}
+                    />
+                  </div>
+                )}
               >
                 {FileList3.length < 1 ? <UploadButton /> : ""}
               </Upload>
+
+              {previewVisible3 && (
+                <Modal
+                  title={previewTitle3}
+                  visible={previewVisible3}
+                  footer={null}
+                  onCancel={() => setPreviewVisible3(false)}
+                >
+                  {previewFileType3 === "application/pdf" ? (
+                    <iframe
+                      src={previewImage3}
+                      style={{ width: "100%", height: "80vh" }}
+                      frameBorder="0"
+                    ></iframe>
+                  ) : (
+                    <img
+                      alt={previewTitle3}
+                      src={previewImage3}
+                      style={{ width: "100%" }}
+                    />
+                  )}
+                </Modal>
+              )}
+
               {idPassportError && (
                 <span className="text-danger">File is required </span>
               )}
             </Col>
             <Col md="4">
-              {eligibilityData?.idOrPassport?.fileUrl != null ? (
+              {FileList3.length > 0 &&
+              eligibilityData?.idOrPassport?.fileUrl ? (
                 <a href={rootUrl + eligibilityData?.idOrPassport?.fileUrl}>
                   <DownloadButton />
                 </a>
@@ -277,19 +621,50 @@ const EligibilityForm = ({
                 multiple={false}
                 fileList={FileList4}
                 onChange={handleChange4}
-                beforeUpload={(file) => {
-                  return false;
-                }}
+                beforeUpload={(file) => false}
+                itemRender={(originNode, file) => (
+                  <div style={{ display: "flex", alignItems: "baseLine" }}>
+                    {originNode}
+                    <EyeOutlined
+                      style={{ marginLeft: "8px", cursor: "pointer" }}
+                      onClick={() => handlePreview4(file)}
+                    />
+                  </div>
+                )}
               >
                 {FileList4.length < 1 ? <UploadButton /> : ""}
               </Upload>
+
+              {previewVisible4 && (
+                <Modal
+                  title={previewTitle4}
+                  visible={previewVisible4}
+                  footer={null}
+                  onCancel={() => setPreviewVisible4(false)}
+                >
+                  {previewFileType4 === "application/pdf" ? (
+                    <iframe
+                      src={previewImage4}
+                      style={{ width: "100%", height: "80vh" }}
+                      frameBorder="0"
+                    ></iframe>
+                  ) : (
+                    <img
+                      alt={previewTitle4}
+                      src={previewImage4}
+                      style={{ width: "100%" }}
+                    />
+                  )}
+                </Modal>
+              )}
 
               {proofOfAddressError && (
                 <span className="text-danger">File is required</span>
               )}
             </Col>
             <Col md="4">
-              {eligibilityData?.proofOfAddress?.fileUrl ? (
+              {FileList4.length > 0 &&
+              eligibilityData?.proofOfAddress?.fileUrl ? (
                 <a href={rootUrl + eligibilityData?.proofOfAddress?.fileUrl}>
                   <DownloadButton />
                 </a>
@@ -307,16 +682,47 @@ const EligibilityForm = ({
                   multiple={false}
                   fileList={FileList5}
                   onChange={handleChange5}
-                  beforeUpload={(file) => {
-                    return false;
-                  }}
+                  beforeUpload={(file) => false}
+                  itemRender={(originNode, file) => (
+                    <div style={{ display: "flex", alignItems: "baseLine" }}>
+                      {originNode}
+                      <EyeOutlined
+                        style={{ marginLeft: "8px", cursor: "pointer" }}
+                        onClick={() => handlePreview5(file)}
+                      />
+                    </div>
+                  )}
                 >
                   {FileList5.length < 1 ? <UploadButton /> : ""}
                 </Upload>
+
+                {previewVisible5 && (
+                  <Modal
+                    title={previewTitle5}
+                    visible={previewVisible5}
+                    footer={null}
+                    onCancel={() => setPreviewVisible5(false)}
+                  >
+                    {previewFileType5 === "application/pdf" ? (
+                      <iframe
+                        src={previewImage5}
+                        style={{ width: "100%", height: "80vh" }}
+                        frameBorder="0"
+                      ></iframe>
+                    ) : (
+                      <img
+                        alt={previewTitle5}
+                        src={previewImage5}
+                        style={{ width: "100%" }}
+                      />
+                    )}
+                  </Modal>
+                )}
+
                 <span className="text-danger">{proofOfRightError}</span>
               </Col>
               <Col md="4">
-                {eligibilityData?.brp?.fileUrl ? (
+                {FileList5.length > 0 && eligibilityData?.brp?.fileUrl ? (
                   <a href={rootUrl + eligibilityData?.brp?.fileUrl}>
                     <DownloadButton />
                   </a>
@@ -333,17 +739,47 @@ const EligibilityForm = ({
                 multiple={false}
                 fileList={FileList6}
                 onChange={handleChange6}
-                beforeUpload={(file) => {
-                  return false;
-                }}
+                beforeUpload={(file) => false}
+                itemRender={(originNode, file) => (
+                  <div style={{ display: "flex", alignItems: "baseLine" }}>
+                    {originNode}
+                    <EyeOutlined
+                      style={{ marginLeft: "8px", cursor: "pointer" }}
+                      onClick={() => handlePreview6(file)}
+                    />
+                  </div>
+                )}
               >
                 {FileList6.length < 1 ? <UploadButton /> : ""}
               </Upload>
 
+              {previewVisible6 && (
+                <Modal
+                  title={previewTitle6}
+                  visible={previewVisible6}
+                  footer={null}
+                  onCancel={() => setPreviewVisible6(false)}
+                >
+                  {previewFileType6 === "application/pdf" ? (
+                    <iframe
+                      src={previewImage6}
+                      style={{ width: "100%", height: "80vh" }}
+                      frameBorder="0"
+                    ></iframe>
+                  ) : (
+                    <img
+                      alt={previewTitle6}
+                      src={previewImage6}
+                      style={{ width: "100%" }}
+                    />
+                  )}
+                </Modal>
+              )}
+
               <span className="text-danger">{cvError}</span>
             </Col>
             <Col md="4">
-              {eligibilityData?.cv?.fileUrl ? (
+              {FileList6.length > 0 && eligibilityData?.cv?.fileUrl ? (
                 <a href={rootUrl + eligibilityData?.cv?.fileUrl}>
                   <DownloadButton />
                 </a>

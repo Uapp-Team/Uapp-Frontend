@@ -56,6 +56,10 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
+    title: "Tier",
+    isActive: true,
+  },
+  {
     title: "BlackList",
     isActive: true,
   },

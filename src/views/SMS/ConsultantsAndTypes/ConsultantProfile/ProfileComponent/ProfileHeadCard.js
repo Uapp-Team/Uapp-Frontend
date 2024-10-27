@@ -28,6 +28,10 @@ import roundimg from "../../../../../assets/img/roundimg.svg";
 import Loader from "../../../Search/Loader/Loader";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
 import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCrop";
+import { AdminUsers } from "../../../../../components/core/User";
+import Filter from "../../../../../components/Dropdown/Filter";
+import { consultantTier } from "../../../../../constants/presetData";
+import post from "../../../../../helpers/post";
 
 const ProfileHeadCard = ({ id, status = false }) => {
   const userType = localStorage.getItem("userType");
@@ -59,12 +63,18 @@ const ProfileHeadCard = ({ id, status = false }) => {
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
   const [croppedImage, setCroppedImage] = useState(null);
+
+  const [tierLabel, setTierLabel] = useState("Select Tier");
+  const [tierValue, setTierValue] = useState(0);
+
   console.log(id);
   useEffect(() => {
     if (id !== undefined) {
       get(`ConsultantProfile/ProfileHead/${id}`).then((res) => {
         setHeadData(res);
         setStatusLabel(res?.accountStatus?.statusName);
+        setTierValue(res?.tireStatusValue);
+        setTierLabel(res?.tireStatus);
       });
 
       get(`AccountStatusDD/index/${id}`).then((res) => {
@@ -83,6 +93,8 @@ const ProfileHeadCard = ({ id, status = false }) => {
       });
     }
   }, [success, id, userId]);
+
+  console.log(headData);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
@@ -104,6 +116,20 @@ const ProfileHeadCard = ({ id, status = false }) => {
         autoDismiss: true,
       });
       setSuccess(!success);
+    });
+  };
+
+  const handleTier = (e) => {
+    console.log(e);
+    const accountStatusData = {
+      id: parseInt(id),
+      tireStatus: e,
+    };
+    put("consultant/change-tire-status", accountStatusData).then((res) => {
+      addToast(res?.data?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
     });
   };
 
@@ -727,14 +753,15 @@ const ProfileHeadCard = ({ id, status = false }) => {
                     <span className="text-gray">{headData?.createdOn}</span>
                     <br />
                     {/* <span>{headData?.branchName}</span> */}
-                    <br />
+                    <p className="text-gray">{headData?.consultantTypeName}</p>
+
                     <ul className="uapp-ul text-md-right">
                       {permissions?.includes(
                         permissionList?.Change_Consultant_AccountStatus
                       ) ? (
                         <div className="d-flex justify-content-md-end mb-2">
                           <Select
-                            className=" w-50"
+                            className="w-50"
                             options={statusTypeMenu}
                             value={{
                               label: statusLabel,
@@ -750,8 +777,24 @@ const ProfileHeadCard = ({ id, status = false }) => {
                       ) : (
                         statusLabel
                       )}
+                      <div className="d-flex justify-content-md-end mb-2">
+                        {permissions?.includes(
+                          permissionList.Change_Consultant_TireStatus
+                        ) ? (
+                          <Filter
+                            className="w-50"
+                            data={consultantTier}
+                            label={tierLabel}
+                            setLabel={setTierLabel}
+                            value={tierValue}
+                            setValue={setTierValue}
+                            onChange={(l, v) => handleTier(v)}
+                          />
+                        ) : (
+                          <span>{tierLabel !== "No Tier" && tierLabel}</span>
+                        )}
+                      </div>
                     </ul>
-                    <p className="text-gray">{headData?.consultantTypeName}</p>
                   </Col>
                 </Row>
               </div>

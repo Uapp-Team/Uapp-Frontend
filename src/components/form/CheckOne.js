@@ -32,12 +32,15 @@ const CheckOne = ({
               type="checkbox"
               id={`${label}-${id}`}
               onChange={onChange}
-              defaultChecked={defaultValue}
+              checked={defaultValue}
               value={defaultValue}
             />
           )}
 
-          <label htmlFor={`${label}-${id}`} className="mx-2 pointer mb-0">
+          <label
+            htmlFor={`${label}-${id}`}
+            className="mx-2 pointer mb-0 fs-14px"
+          >
             {label}
           </label>
         </span>

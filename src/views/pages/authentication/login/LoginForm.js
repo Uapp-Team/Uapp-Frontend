@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FormGroup, Form, Input, InputGroup, InputGroupText } from "reactstrap";
+import { FormGroup, Form, Input } from "reactstrap";
 import { history } from "../../../../history";
 import axios from "axios";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -10,7 +10,6 @@ import SetStorage from "../../../SMS/TableColumn/SetStorage";
 import get from "../../../../helpers/get";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +22,6 @@ const LoginForm = () => {
   const [GeoLocationInfo, setGeoLocationInfo] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   useEffect(() => {
     try {
@@ -65,10 +63,6 @@ const LoginForm = () => {
     } else {
       setPasswordError("");
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevState) => !prevState);
   };
 
   const ValidateForm = () => {
@@ -199,18 +193,13 @@ const LoginForm = () => {
           className="form-label-group position-relative has-icon-left"
           style={{ marginTop: "30px" }}
         >
-          <InputGroup>
-            <Input
-              type={isPasswordVisible ? 'text' : 'password'}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => handlePassword(e)}
-              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            />
-            <InputGroupText onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
-              {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-            </InputGroupText>
-          </InputGroup>
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => handlePassword(e)}
+            style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+          />
           <div className="form-control-position"></div>
 
           {passwordError && (

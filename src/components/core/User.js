@@ -14,8 +14,6 @@ export const Admin = () => {
   return result;
 };
 
-export const AdminUsers = () => SystemAdmin() || Admin();
-
 export const AdmissionManager = () => {
   const result = userType === userTypes?.AdmissionManager;
   return result;
@@ -90,3 +88,7 @@ export const AdmissionCompliance = () => {
   const result = userType === userTypes?.AdmissionCompliance;
   return result;
 };
+
+export const AdminUsers = () => SystemAdmin() || Admin();
+export const AdmissionUsers = () =>
+  Provider() || ProviderAdmin() || AdmissionManager() || AdmissionOfficer();

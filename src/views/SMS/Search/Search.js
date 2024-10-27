@@ -15,7 +15,7 @@ import {
 import Select from "react-select";
 import Pagination from "../../SMS/Pagination/Pagination";
 import { userTypes } from "../../../constants/userTypeConstant";
-import loader from "../../../assets/img/load.gif";
+import loader from "../../../assets/img/Optimized.gif";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 import { Drawer } from "antd";
 import University from "./University";
@@ -25,6 +25,7 @@ import Apply from "./Apply";
 import { useParams } from "react-router-dom";
 import get from "../../../helpers/get";
 import TagButton from "../../../components/buttons/TagButton";
+import Loader from "./Loader/Loader";
 
 const Search = () => {
   const { student, departmentId } = useParams();
@@ -789,12 +790,7 @@ const Search = () => {
               }
             >
               {loading ? (
-                <>
-                  {" "}
-                  <div className="text-center">
-                    <img className="img-fluid" src={loader} alt="loader" />
-                  </div>
-                </>
+                <Loader />
               ) : (
                 <>
                   {checkActiveTab ? (
