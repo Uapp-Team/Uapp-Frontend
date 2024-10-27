@@ -57,7 +57,7 @@ const Branch = () => {
   const [branchCodeError, setbranchCodeError] = useState(false);
   const [stateNameError, setstateNameError] = useState(false);
 
-  const [branchCurrencyId, setBranchCurrencyId] = useState(0);
+  const [branchCurrencyId, setBranchCurrencyId] = useState(2);
   const [branchCurrencyIdError, setBranchCurrencyIdError] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -503,6 +503,7 @@ const Branch = () => {
                         name="currencyId"
                         error={branchCurrencyIdError}
                         setError={setBranchCurrencyIdError}
+                        isDisabled={true}
                       />
                     </FormGroup>
 

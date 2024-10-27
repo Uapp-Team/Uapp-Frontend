@@ -310,6 +310,17 @@ const PersonalInformation = () => {
         isValid = false;
         setMaritalStatusError(true);
       }
+
+      if (/[^a-zA-Z\s]/g.test(firstName)) {
+        isValid = false;
+        setFirstNameError("Number can not be allowed in the First Name");
+      }
+
+      if (/[^a-zA-Z\s]/g.test(lastName)) {
+        isValid = false;
+        setLastNameError("Number can not be allowed in the Last Name");
+      }
+
       if (!phoneNumber) {
         isValid = false;
         setphoneNUmberError("Phone number is required");
@@ -356,6 +367,8 @@ const PersonalInformation = () => {
     setFirstName(data);
     if (data === "") {
       setFirstNameError("First Name is required");
+    } else if (/[^a-zA-Z\s]/g.test(data)) {
+      setFirstNameError("Number can not be allowed in the First Name");
     } else {
       setFirstNameError("");
     }
@@ -366,6 +379,8 @@ const PersonalInformation = () => {
     setLastName(data);
     if (data === "") {
       setLastNameError("Last Name is required");
+    } else if (/[^a-zA-Z\s]/g.test(data)) {
+      setLastNameError("Number can not be allowed in the Last Name");
     } else {
       setLastNameError("");
     }

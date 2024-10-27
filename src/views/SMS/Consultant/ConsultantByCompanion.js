@@ -212,31 +212,28 @@ const ConsultantByCompanion = () => {
 
   return (
     <div>
-      {pageLoad ? (
-        <Loader />
-      ) : (
-        <>
-          <BreadCrumb
-            title="Companions"
-            backTo={id === undefined ? "" : "Consultant"}
-            path={id === undefined ? "" : "/consultantList"}
-          />
+      <>
+        <BreadCrumb
+          title="Companions"
+          backTo={id === undefined ? "" : "Consultant"}
+          path={id === undefined ? "" : "/consultantList"}
+        />
 
-          <Card className="uapp-employee-search zindex-100">
-            <CardBody>
-              <Row className="mb-3">
-                <Col lg="5" md="5" sm="12" xs="12">
-                  <div className="d-flex">
-                    <div>
-                      <ButtonForFunction
-                        func={handleAddCompanion}
-                        className={"btn btn-uapp-add "}
-                        icon={<i className="fas fa-plus"></i>}
-                        name={" Add Companion"}
-                        permission={6}
-                      />
-                    </div>
-                    <div className="mx-3">
+        <Card className="uapp-employee-search zindex-100">
+          <CardBody>
+            <Row className="mb-3">
+              <Col lg="5" md="5" sm="12" xs="12">
+                <div className="d-flex">
+                  <div>
+                    <ButtonForFunction
+                      func={handleAddCompanion}
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      name={" Add Companion"}
+                      permission={6}
+                    />
+                  </div>
+                  {/* <div className="mx-3">
                       <ButtonForFunction
                         func={() => setModalOpenCompanion(true)}
                         className={"btn btn-uapp-add "}
@@ -244,43 +241,43 @@ const ConsultantByCompanion = () => {
                         name={"Invite Companion"}
                         permission={6}
                       />
-                    </div>
-                  </div>
-                </Col>
+                    </div> */}
+                </div>
+              </Col>
 
-                <Col lg="7" md="7" sm="12" xs="12">
-                  <div className="d-flex justify-content-end">
-                    <div className="mr-2">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div className="ddzindex">
-                          <Select
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
+              <Col lg="7" md="7" sm="12" xs="12">
+                <div className="d-flex justify-content-end">
+                  <div className="mr-2">
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">Showing :</div>
+                      <div className="ddzindex">
+                        <Select
+                          options={dataSizeName}
+                          value={{ label: dataPerPage, value: dataPerPage }}
+                          onChange={(opt) => selectDataSize(opt.value)}
+                        />
                       </div>
                     </div>
+                  </div>
 
-                    <div className="mr-2">
-                      <Dropdown
-                        className="uapp-dropdown"
-                        style={{ float: "right" }}
-                        isOpen={dropdownOpen}
-                        toggle={toggle}
-                      >
-                        <DropdownToggle caret>
-                          <i className="fas fa-print fs-7"></i>
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dd-4">
-                          <div className="d-flex justify-content-around align-items-center mt-2">
-                            <div className="cursor-pointer">
-                              {/* <p onClick={handleExportXLSX}>
+                  <div className="mr-2">
+                    <Dropdown
+                      className="uapp-dropdown"
+                      style={{ float: "right" }}
+                      isOpen={dropdownOpen}
+                      toggle={toggle}
+                    >
+                      <DropdownToggle caret>
+                        <i className="fas fa-print fs-7"></i>
+                      </DropdownToggle>
+                      <DropdownMenu className="bg-dd-4">
+                        <div className="d-flex justify-content-around align-items-center mt-2">
+                          <div className="cursor-pointer">
+                            {/* <p onClick={handleExportXLSX}>
                             <i className="fas fa-file-excel"></i>
                           </p> */}
 
-                              {/* <ReactHTMLTableToExcel
+                            {/* <ReactHTMLTableToExcel
                             id="test-table-xls-button"
                             className="download-table-xls-button"
                             table="table-to-xls"
@@ -289,71 +286,71 @@ const ConsultantByCompanion = () => {
                             buttonText="Download as XLS"
                             /> */}
 
-                              <ReactTableConvertToXl
-                                id="test-table-xls-button"
-                                table="table-to-xls"
-                                filename="tablexls"
-                                sheet="tablexls"
-                                icon={<i className="fas fa-file-excel"></i>}
-                              />
-                            </div>
-                            <div className="cursor-pointer">
-                              <ReactToPrint
-                                trigger={() => (
-                                  <p>
-                                    <i className="fas fa-file-pdf"></i>
-                                  </p>
-                                )}
-                                content={() => componentRef.current}
-                              />
-                            </div>
+                            <ReactTableConvertToXl
+                              id="test-table-xls-button"
+                              table="table-to-xls"
+                              filename="tablexls"
+                              sheet="tablexls"
+                              icon={<i className="fas fa-file-excel"></i>}
+                            />
                           </div>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
+                          <div className="cursor-pointer">
+                            <ReactToPrint
+                              trigger={() => (
+                                <p>
+                                  <i className="fas fa-file-pdf"></i>
+                                </p>
+                              )}
+                              content={() => componentRef.current}
+                            />
+                          </div>
+                        </div>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
 
-                    {/* column hide unhide starts here */}
+                  {/* column hide unhide starts here */}
 
-                    <div className="">
-                      <Dropdown
-                        className="uapp-dropdown"
-                        style={{ float: "right" }}
-                        isOpen={dropdownOpen1}
-                        toggle={toggle1}
-                      >
-                        <DropdownToggle caret>
-                          <i className="fas fa-bars"></i>
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dd-1">
-                          {tableData.map((table, i) => (
-                            <div className="d-flex justify-content-between">
-                              <Col md="8" className="">
-                                <p className="">{table?.title}</p>
-                              </Col>
+                  <div className="">
+                    <Dropdown
+                      className="uapp-dropdown"
+                      style={{ float: "right" }}
+                      isOpen={dropdownOpen1}
+                      toggle={toggle1}
+                    >
+                      <DropdownToggle caret>
+                        <i className="fas fa-bars"></i>
+                      </DropdownToggle>
+                      <DropdownMenu className="bg-dd-1">
+                        {tableData.map((table, i) => (
+                          <div className="d-flex justify-content-between">
+                            <Col md="8" className="">
+                              <p className="">{table?.title}</p>
+                            </Col>
 
-                              <Col md="4" className="text-center">
-                                <FormGroup check inline>
-                                  <Input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id=""
-                                    name="isAcceptHome"
-                                    onChange={(e) => {
-                                      handleChecked(e, i);
-                                    }}
-                                    defaultChecked={table?.isActive}
-                                  />
-                                </FormGroup>
-                              </Col>
-                            </div>
-                          ))}
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
+                            <Col md="4" className="text-center">
+                              <FormGroup check inline>
+                                <Input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id=""
+                                  name="isAcceptHome"
+                                  onChange={(e) => {
+                                    handleChecked(e, i);
+                                  }}
+                                  defaultChecked={table?.isActive}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </div>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
 
-                    {/* column hide unhide ends here */}
+                  {/* column hide unhide ends here */}
 
-                    {/* <div className="me-3">
+                  {/* <div className="me-3">
                   <Dropdown
                     className="uapp-dropdown"
                     style={{ float: "right" }}
@@ -384,211 +381,205 @@ const ConsultantByCompanion = () => {
                     </DropdownMenu>
                   </Dropdown>
                 </div> */}
-                  </div>
-                </Col>
-              </Row>
+                </div>
+              </Col>
+            </Row>
 
-              <div>
-                <Modal
-                  isOpen={modalOpenCompanion}
-                  toggle={closeModalCompanion}
-                  className="uapp-modal2"
-                >
-                  <ModalHeader>Send Invitation to email</ModalHeader>
-                  <ModalBody>
-                    <Form onSubmit={handleCompanionSubmit}>
-                      <input
-                        type="hidden"
-                        name="consultantId"
-                        id="consultantId"
-                        value={referenceId}
-                      />
+            <div>
+              <Modal
+                isOpen={modalOpenCompanion}
+                toggle={closeModalCompanion}
+                className="uapp-modal2"
+              >
+                <ModalHeader>Send Invitation to email</ModalHeader>
+                <ModalBody>
+                  <Form onSubmit={handleCompanionSubmit}>
+                    <input
+                      type="hidden"
+                      name="consultantId"
+                      id="consultantId"
+                      value={referenceId}
+                    />
 
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            <span className="text-danger">*</span>Email
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Input
-                            type="text"
-                            name="email"
-                            id="email"
-                            value={emailCompanion}
-                            placeholder="Write Email"
-                            onChange={(e) => {
-                              handleEmailCompanionError(e);
-                            }}
-                          />
-                          <span className="text-danger">
-                            {emailCompanionError}
-                          </span>
-                        </Col>
-                      </FormGroup>
-                      <FormGroup className="d-flex justify-content-between mt-3">
-                        <CancelButton cancel={closeModalCompanion} />
-
-                        <SaveButton
-                          text="Send Email"
-                          progress={progress}
-                          buttonStatus={buttonStatus}
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          <span className="text-danger">*</span>Email
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Input
+                          type="text"
+                          name="email"
+                          id="email"
+                          value={emailCompanion}
+                          placeholder="Write Email"
+                          onChange={(e) => {
+                            handleEmailCompanionError(e);
+                          }}
                         />
-                      </FormGroup>
-                    </Form>
-                  </ModalBody>
-                </Modal>
-              </div>
+                        <span className="text-danger">
+                          {emailCompanionError}
+                        </span>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup className="d-flex justify-content-between mt-3">
+                      <CancelButton cancel={closeModalCompanion} />
 
-              {loading ? (
-                <h2 className="text-center">Loading...</h2>
-              ) : (
-                <div
-                  className="table-responsive my-4 fixedhead"
-                  ref={componentRef}
-                >
-                  <Table id="table-to-xls" className="table-sm table-bordered">
-                    <thead className="thead-uapp-bg">
-                      <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
-                        {tableData[1]?.isActive ? <th>Full Name</th> : null}
-                        {tableData[2]?.isActive ? <th>Contact</th> : null}
-                        {tableData[3]?.isActive ? <th>Started</th> : null}
-                        {tableData[4]?.isActive ? <th>Invitation</th> : null}
-                        {tableData[5]?.isActive ? <th>Team Member</th> : null}
-                        {tableData[6]?.isActive ? <th>Action</th> : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {companionList?.map((companion, i) => (
-                        <tr key={companion?.id} style={{ textAlign: "center" }}>
-                          {tableData[0]?.isActive ? (
-                            <td className="cursor-pointer hyperlink-hover">
+                      <SaveButton
+                        text="Send Email"
+                        progress={progress}
+                        buttonStatus={buttonStatus}
+                      />
+                    </FormGroup>
+                  </Form>
+                </ModalBody>
+              </Modal>
+            </div>
+
+            {loading ? (
+              <Loader />
+            ) : (
+              <div
+                className="table-responsive my-4 fixedhead"
+                ref={componentRef}
+              >
+                <Table id="table-to-xls" className="table-sm table-bordered">
+                  <thead className="thead-uapp-bg">
+                    <tr style={{ textAlign: "center" }}>
+                      {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
+                      {tableData[1]?.isActive ? <th>Full Name</th> : null}
+                      {tableData[2]?.isActive ? <th>Contact</th> : null}
+                      {tableData[3]?.isActive ? <th>Started</th> : null}
+                      {tableData[4]?.isActive ? <th>Invitation</th> : null}
+                      {tableData[5]?.isActive ? <th>Team Member</th> : null}
+                      {tableData[6]?.isActive ? <th>Action</th> : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {companionList?.map((companion, i) => (
+                      <tr key={companion?.id} style={{ textAlign: "center" }}>
+                        {tableData[0]?.isActive ? (
+                          <td className="cursor-pointer hyperlink-hover">
+                            <Link
+                              className="text-id hover"
+                              to={`/companion-profile/${companion?.id}`}
+                            >
+                              {companion?.viewId}
+                            </Link>
+                          </td>
+                        ) : null}
+                        {tableData[1]?.isActive ? (
+                          <td>
+                            <div className="cursor-pointer hyperlink-hover">
                               <Link
                                 className="text-id hover"
                                 to={`/companion-profile/${companion?.id}`}
                               >
-                                {companion?.viewId}
+                                {companion?.name}
                               </Link>
-                            </td>
-                          ) : null}
-                          {tableData[1]?.isActive ? (
-                            <td>
-                              <div className="cursor-pointer hyperlink-hover">
-                                <Link
-                                  className="text-id hover"
-                                  to={`/companion-profile/${companion?.id}`}
-                                >
-                                  {companion?.name}
-                                </Link>
-                              </div>
-                            </td>
-                          ) : null}
+                            </div>
+                          </td>
+                        ) : null}
 
-                          {tableData[2]?.isActive ? (
-                            <td>
-                              <div className="d-flex justify-content-center">
-                                <PopOverText
-                                  value={
-                                    companion?.phone &&
-                                    companion?.phone.includes("+")
-                                      ? companion?.phone
-                                      : companion?.phone &&
-                                        !companion?.phone.includes("+")
-                                      ? "+" + companion?.phone
-                                      : null
-                                  }
-                                  btn={<i class="fas fa-phone"></i>}
-                                  popoverOpen={popoverOpen}
-                                  setPopoverOpen={setPopoverOpen}
-                                />
-                                <PopOverText
-                                  value={companion?.email}
-                                  btn={<i className="far fa-envelope"></i>}
-                                  popoverOpen={popoverOpen}
-                                  setPopoverOpen={setPopoverOpen}
-                                />
-                              </div>
-                            </td>
-                          ) : null}
-                          {tableData[3]?.isActive ? (
-                            <td>{dateFormate(companion?.createdOn)}</td>
-                          ) : null}
-                          {tableData[4]?.isActive ? (
-                            <td>
-                              <div style={{ marginTop: "5px" }}>
-                                <span
-                                  className="Count-first"
-                                  onClick={() => {
-                                    history.push(
-                                      `/companion-Invitation-list/${companion?.id}`
-                                    );
-                                  }}
-                                >
-                                  {companion?.invitationCount}
-                                </span>
-                              </div>
-                            </td>
-                          ) : null}
-
-                          {tableData[5]?.isActive ? (
-                            <td>
-                              <div style={{ marginTop: "5px" }}>
-                                <span
-                                  className="Count-second"
-                                  onClick={() => {
-                                    history.push(
-                                      `/companion-team-List/${companion?.id}`
-                                    );
-                                  }}
-                                >
-                                  {companion?.teamMembersCount}
-                                </span>
-                              </div>
-                            </td>
-                          ) : null}
-
-                          {tableData[7]?.isActive ? (
-                            <>
-                              {" "}
-                              <td
-                                style={{ width: "8%" }}
-                                className="text-center"
+                        {tableData[2]?.isActive ? (
+                          <td>
+                            <div className="d-flex justify-content-center">
+                              <PopOverText
+                                value={
+                                  companion?.phone &&
+                                  companion?.phone.includes("+")
+                                    ? companion?.phone
+                                    : companion?.phone &&
+                                      !companion?.phone.includes("+")
+                                    ? "+" + companion?.phone
+                                    : null
+                                }
+                                btn={<i class="fas fa-phone"></i>}
+                                popoverOpen={popoverOpen}
+                                setPopoverOpen={setPopoverOpen}
+                              />
+                              <PopOverText
+                                value={companion?.email}
+                                btn={<i className="far fa-envelope"></i>}
+                                popoverOpen={popoverOpen}
+                                setPopoverOpen={setPopoverOpen}
+                              />
+                            </div>
+                          </td>
+                        ) : null}
+                        {tableData[3]?.isActive ? (
+                          <td>{dateFormate(companion?.createdOn)}</td>
+                        ) : null}
+                        {tableData[4]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-first"
+                                onClick={() => {
+                                  history.push(
+                                    `/companion-Invitation-list/${companion?.id}`
+                                  );
+                                }}
                               >
-                                <ButtonGroup variant="text">
-                                  <ButtonForFunction
-                                    func={() =>
-                                      handleCompanionView(companion?.id)
-                                    }
-                                    color={"primary"}
-                                    className={"mx-1 btn-sm"}
-                                    icon={<i className="fas fa-eye"></i>}
-                                    permission={6}
-                                  />
-                                </ButtonGroup>
-                              </td>
-                            </>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-              )}
+                                {companion?.invitationCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
 
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={companionEntity}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </CardBody>
-          </Card>
+                        {tableData[5]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-second"
+                                onClick={() => {
+                                  history.push(
+                                    `/companion-team-List/${companion?.id}`
+                                  );
+                                }}
+                              >
+                                {companion?.teamMembersCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
 
-          <Card>
+                        {tableData[7]?.isActive ? (
+                          <>
+                            {" "}
+                            <td style={{ width: "8%" }} className="text-center">
+                              <ButtonGroup variant="text">
+                                <ButtonForFunction
+                                  func={() =>
+                                    handleCompanionView(companion?.id)
+                                  }
+                                  color={"primary"}
+                                  className={"mx-1 btn-sm"}
+                                  icon={<i className="fas fa-eye"></i>}
+                                  permission={6}
+                                />
+                              </ButtonGroup>
+                            </td>
+                          </>
+                        ) : null}
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            )}
+
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={companionEntity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </CardBody>
+        </Card>
+
+        {/* <Card>
             <CardBody>
               <h5>Sent Invitations</h5>
 
@@ -617,9 +608,8 @@ const ConsultantByCompanion = () => {
                 </Table>
               </div>
             </CardBody>
-          </Card>
-        </>
-      )}
+          </Card> */}
+      </>
     </div>
   );
 };

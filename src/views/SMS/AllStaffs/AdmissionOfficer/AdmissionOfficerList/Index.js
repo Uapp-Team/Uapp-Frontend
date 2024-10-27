@@ -428,142 +428,135 @@ const Index = () => {
         path="/admissionManagerList"
       />
 
-      {loading ? (
-        <div className="text-center">
-          <img src={loader} alt="" className="img-fluid" />
-        </div>
-      ) : (
-        <div>
-          <SelectAndClear
-            userType={userType}
-            providerMenu={providerMenu}
-            proLabel={proLabel}
-            proValue={proValue}
-            selectProviders={selectProviders}
-            providerId={providerId}
-            managerMenu={managerMenu}
-            managerLabel={managerLabel}
-            managerValue={managerValue}
-            selectManager={selectManager}
-            managerId={managerId}
-            searchStr={searchStr}
-            searchValue={searchValue}
-            handleKeyDown={handleKeyDown}
-            handleClearSearch={handleClearSearch}
-            setManagerLabel={setManagerLabel}
-            setManagerValue={setManagerValue}
-            setProLabel={setProLabel}
-            setProValue={setProValue}
-            setIsTyping={setIsTyping}
-            setSearchStr={setSearchStr}
-          ></SelectAndClear>
+      <div>
+        <SelectAndClear
+          userType={userType}
+          providerMenu={providerMenu}
+          proLabel={proLabel}
+          proValue={proValue}
+          selectProviders={selectProviders}
+          providerId={providerId}
+          managerMenu={managerMenu}
+          managerLabel={managerLabel}
+          managerValue={managerValue}
+          selectManager={selectManager}
+          managerId={managerId}
+          searchStr={searchStr}
+          searchValue={searchValue}
+          handleKeyDown={handleKeyDown}
+          handleClearSearch={handleClearSearch}
+          setManagerLabel={setManagerLabel}
+          setManagerValue={setManagerValue}
+          setProLabel={setProLabel}
+          setProValue={setProValue}
+          setIsTyping={setIsTyping}
+          setSearchStr={setSearchStr}
+        ></SelectAndClear>
 
-          <Card className="uapp-employee-search">
-            <CardBody>
-              {/* new */}
-              <Row className="mb-3">
-                <Col
-                  lg="5"
-                  md="5"
-                  sm="12"
-                  xs="12"
-                  style={{ marginBottom: "10px" }}
-                >
-                  {permissions?.includes(
-                    permissionList.Add_AdmissionOfficer
-                  ) ? (
-                    <ButtonForFunction
-                      func={handleAddNewOfficer}
-                      className={"btn btn-uapp-add "}
-                      icon={<i className="fas fa-plus"></i>}
-                      name={" Add Admission Officer"}
-                      permission={6}
-                    />
-                  ) : null}
+        <Card className="uapp-employee-search">
+          <CardBody>
+            {/* new */}
+            <Row className="mb-3">
+              <Col
+                lg="5"
+                md="5"
+                sm="12"
+                xs="12"
+                style={{ marginBottom: "10px" }}
+              >
+                {permissions?.includes(permissionList.Add_AdmissionOfficer) ? (
+                  <ButtonForFunction
+                    func={handleAddNewOfficer}
+                    className={"btn btn-uapp-add "}
+                    icon={<i className="fas fa-plus"></i>}
+                    name={" Add Admission Officer"}
+                    permission={6}
+                  />
+                ) : null}
 
-                  {managerId !== undefined ? (
-                    <>
-                      {permissions?.includes(
-                        permissionList.AdmissionManager_Assign_AdmissionOfficer
-                      ) ? (
-                        <ButtonForFunction
-                          func={handleAssignAdmissionOffer}
-                          className={"ml-3 btn btn-uapp-add "}
-                          icon={<i className="fas fa-plus"></i>}
-                          name={" Assign Admission Officer"}
-                          permission={6}
+                {managerId !== undefined ? (
+                  <>
+                    {permissions?.includes(
+                      permissionList.AdmissionManager_Assign_AdmissionOfficer
+                    ) ? (
+                      <ButtonForFunction
+                        func={handleAssignAdmissionOffer}
+                        className={"ml-3 btn btn-uapp-add "}
+                        icon={<i className="fas fa-plus"></i>}
+                        name={" Assign Admission Officer"}
+                        permission={6}
+                      />
+                    ) : null}
+                  </>
+                ) : null}
+              </Col>
+
+              <Col lg="7" md="7" sm="12" xs="12" className="mt-md-0 mt-sm-3">
+                <div className="d-flex justify-content-md-end justify-content-sm-start">
+                  {/* Dropdown number start */}
+                  <div className="mr-3">
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">Showing :</div>
+                      <div className="mr-2 ddzindex">
+                        <Select
+                          options={dataSizeName}
+                          value={{ label: dataPerPage, value: dataPerPage }}
+                          onChange={(opt) => selectDataSize(opt.value)}
                         />
-                      ) : null}
-                    </>
-                  ) : null}
-                </Col>
-
-                <Col lg="7" md="7" sm="12" xs="12" className="mt-md-0 mt-sm-3">
-                  <div className="d-flex justify-content-md-end justify-content-sm-start">
-                    {/* Dropdown number start */}
-                    <div className="mr-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div className="mr-2 ddzindex">
-                          <Select
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
                       </div>
                     </div>
-                    {/* Dropdown number end */}
-
-                    <PrintCard
-                      dropdownOpen={dropdownOpen}
-                      toggle={toggle}
-                      componentRef={componentRef}
-                    ></PrintCard>
-
-                    <AdmissionOfficerColumnHide
-                      dropdownOpen1={dropdownOpen1}
-                      toggle1={toggle1}
-                      tableData={tableData}
-                      handleChecked={handleChecked}
-                    ></AdmissionOfficerColumnHide>
                   </div>
-                </Col>
-              </Row>
+                  {/* Dropdown number end */}
 
-              <AddmissionOfficerTable
-                componentRef={componentRef}
-                tableData={tableData}
-                permissions={permissions}
-                permissionList={permissionList}
-                officerList={officerList}
-                history={history}
-                redirectToAssignPage={redirectToAssignPage}
-                redirectToSubjectPage={redirectToSubjectPage}
-                handleAccountStatus={handleAccountStatus}
-                handlRedirectToAdmissionofficerDetails={
-                  handlRedirectToAdmissionofficerDetails
-                }
-                redirectEdit={redirectEdit}
-                toggleDanger={toggleDanger}
-                deleteModal={deleteModal}
-                closeDeleteModal={closeDeleteModal}
-                officerName={officerName}
-                handleDelete={handleDelete}
-                buttonStatus={buttonStatus}
-                progress={progress}
-              />
+                  <PrintCard
+                    dropdownOpen={dropdownOpen}
+                    toggle={toggle}
+                    componentRef={componentRef}
+                  ></PrintCard>
 
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={entity}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </CardBody>
-          </Card>
-        </div>
-      )}
+                  <AdmissionOfficerColumnHide
+                    dropdownOpen1={dropdownOpen1}
+                    toggle1={toggle1}
+                    tableData={tableData}
+                    handleChecked={handleChecked}
+                  ></AdmissionOfficerColumnHide>
+                </div>
+              </Col>
+            </Row>
+
+            <AddmissionOfficerTable
+              componentRef={componentRef}
+              tableData={tableData}
+              permissions={permissions}
+              permissionList={permissionList}
+              officerList={officerList}
+              history={history}
+              redirectToAssignPage={redirectToAssignPage}
+              redirectToSubjectPage={redirectToSubjectPage}
+              handleAccountStatus={handleAccountStatus}
+              handlRedirectToAdmissionofficerDetails={
+                handlRedirectToAdmissionofficerDetails
+              }
+              redirectEdit={redirectEdit}
+              toggleDanger={toggleDanger}
+              deleteModal={deleteModal}
+              closeDeleteModal={closeDeleteModal}
+              officerName={officerName}
+              handleDelete={handleDelete}
+              buttonStatus={buttonStatus}
+              progress={progress}
+              loading={loading}
+            />
+
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 };

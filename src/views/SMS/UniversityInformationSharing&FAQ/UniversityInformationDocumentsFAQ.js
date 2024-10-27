@@ -2,13 +2,20 @@ import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import ButtonForFunction from "../Components/ButtonForFunction";
-import SideCategoryFaq from "./SideCategoryFaq";
+import ManageCategory from "./ManageCategory/ManageCategory";
 import AccordionForFaqCategory from "./Components/AccordionForFaqCategory";
 import Uget from "../../../helpers/Uget";
 import DocumentsRequestFaq from "./Components/DocumentsRequestFaq";
 import Questions from "./Questions/Questions";
+import { useHistory, useParams } from "react-router";
+import { AdminUsers } from "../../../components/core/User";
+import QuestionsAdmin from "./Questions/QuestionsAdmin";
 
 const UniversityInformationDocumentsFAQ = () => {
+  const { Uid } = useParams();
+
+  const history = useHistory();
+  const data = history?.location?.state?.state;
   const [openIndex, setOpenIndex] = useState(1);
   const [categoryModal, setCategoryModal] = useState(false);
   const toggleAccordion = (index) => {
@@ -36,17 +43,21 @@ const UniversityInformationDocumentsFAQ = () => {
       <Card>
         <CardBody>
           <p className="section-title">
-            University Information Documents & FAQ
+            {data?.name ? data?.name : "University Information Documents & FAQ"}
           </p>
           <div className="custom-card-border pr-3">
             <Row>
-              <Col lg={3} sm={6} className="p-3">
-                <ButtonForFunction
-                  func={() => setCategoryModal(!categoryModal)}
-                  className={"btn btn-uapp-add py-3 ml-3 mr-3 w-100"}
-                  icon={<i class="fas fa-search"></i>}
-                  name={"Manage Category"}
-                />
+              <Col lg={3} sm={4} className="p-3">
+                {AdminUsers() && (
+                  <div className="ml-3">
+                    <ButtonForFunction
+                      func={() => setCategoryModal(!categoryModal)}
+                      className={"btn btn-uapp-add py-3 w-100"}
+                      icon={<i class="fas fa-search"></i>}
+                      name={"Manage Category"}
+                    />
+                  </div>
+                )}
 
                 <div className="mt-4 ml-4">
                   {content?.map((item, i) => (
@@ -61,19 +72,24 @@ const UniversityInformationDocumentsFAQ = () => {
                   ))}
                 </div>
               </Col>
-              <Col lg={6} sm={6} className="border-left border-right p-0">
-                <Questions />
+              <Col lg={6} sm={8} className="border-left p-0">
+                {!Uid ? (
+                  <QuestionsAdmin categoryId={categoryId} />
+                ) : (
+                  <Questions categoryId={categoryId} Uid={Uid} />
+                )}
               </Col>
-              <Col lg={3} sm={6} className="p-0">
-                <DocumentsRequestFaq />
-              </Col>
+              {Uid && (
+                <Col lg={3} sm={4} className="border-left p-0">
+                  <DocumentsRequestFaq Uid={Uid} />
+                </Col>
+              )}
             </Row>
           </div>
-          <div></div>
         </CardBody>
       </Card>
       {categoryModal && (
-        <SideCategoryFaq
+        <ManageCategory
           closeModal={() => setCategoryModal(false)}
           content={content}
           refetch={() => setCategoryFetch(!categoryFetch)}

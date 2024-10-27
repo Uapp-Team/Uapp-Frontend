@@ -112,6 +112,9 @@ const ForOtherUser = () => {
               //   link={`/applicationsbyintake/${intakeRngValue}`}
               bgColor="#E1F5FC"
               borderColor="#24A1CD"
+              secondValue={count?.totalApplicant}
+              secondColor="#176682"
+              secondBgColor="#BAE7F7"
             />
           </Col>
           <Col lg={3} sm={6} className="mb-30px">
@@ -123,6 +126,20 @@ const ForOtherUser = () => {
               borderColor="#FFBA08"
             />
           </Col>
+
+          <Col lg={3} sm={6} className="mb-30px">
+            <DashboardCount
+              title="Unconditional Offer"
+              value={`${count?.totalUnconditionalOffer}`}
+              //   link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
+              bgColor="#FDF5E7"
+              borderColor="#9E6F21"
+              secondValue={count?.totalUnconditionalStudent}
+              secondColor="#451782"
+              secondBgColor="#E3D1FA"
+            />
+          </Col>
+
           <Col lg={3} sm={6} className="mb-30px">
             <DashboardCount
               title="Total Registered"
@@ -141,6 +158,7 @@ const ForOtherUser = () => {
               borderColor="#F87675"
             />
           </Col>
+
           <Col lg={3} sm={6} className="mb-30px">
             <DashboardCount
               title="Withdrawn Application"
@@ -153,11 +171,10 @@ const ForOtherUser = () => {
 
           <Col lg={3} sm={6} className="mb-30px">
             <DashboardCount
-              title="Unconditional Offer"
-              value={`${count?.totalUnconditionalOffer}`}
-              //   link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
-              bgColor="#FDF5E7"
-              borderColor="#9E6F21"
+              title="New Consultants"
+              value={count?.totalNewConsultant}
+              bgColor="#E8FAF5"
+              borderColor="#5B9A8B"
             />
           </Col>
 

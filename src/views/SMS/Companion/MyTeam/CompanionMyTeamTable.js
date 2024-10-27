@@ -63,22 +63,16 @@ const CompanionMyTeamTable = ({
             {tableData[1]?.isActive ? <th>Full Name</th> : null}
             {tableData[2]?.isActive ? <th>Contact</th> : null}
 
-            {/* {permissions?.includes(
-              permissionList.Consultant_Password_Change
-            ) ? (
-              <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
-            ) : null} */}
+            {tableData[3]?.isActive ? <th>Parent</th> : null}
 
-            {tableData[7]?.isActive ? <th>Started</th> : null}
-            {tableData[11]?.isActive ? <th>Status</th> : null}
+            {tableData[4]?.isActive ? <th>Started</th> : null}
+            {tableData[5]?.isActive ? <th>Invitation</th> : null}
+            {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[7]?.isActive ? <th>Team Member</th> : null}
+            {tableData[8]?.isActive ? <th>Application</th> : null}
+            {tableData[9]?.isActive ? <th>Registered</th> : null}
 
-            {permissions?.includes(
-              permissionList?.Change_Consultant_AccountStatus
-            ) ? (
-              <>{tableData[12]?.isActive ? <th>BlackList</th> : null}</>
-            ) : null}
-
-            {tableData[13]?.isActive ? (
+            {tableData[10]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -137,84 +131,108 @@ const CompanionMyTeamTable = ({
                   </div>
                 </td>
               ) : null}
-              {/* 
-              {permissions?.includes(
-                permissionList.Consultant_Password_Change
-              ) ? (
-                <>
-                  {tableData[3]?.isActive ? (
-                    <td>
-                      <span
-                        className="passwordChangeStyle"
-                        onClick={() => handlePass(consultant)}
-                      >
-                        Change
-                      </span>
-                    </td>
-                  ) : null}
-                </>
-              ) : null} */}
+
+              {tableData[3]?.isActive ? (
+                <td>{companionTeam?.parentName}</td>
+              ) : null}
+
+              {tableData[4]?.isActive ? (
+                <td>{dateFormate(companionTeam?.createdOn)}</td>
+              ) : null}
+              {tableData[5]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-first"
+                      onClick={() => {
+                        history.push(
+                          `/companion-Invitation-list/${companionTeam?.id}`
+                        );
+                      }}
+                    >
+                      {companionTeam?.invitationCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-fifth-no-pointer"
+                      // onClick={() => {
+                      //   history.push(
+                      //     `/companion-Invitation-list/${companion?.id}`
+                      //   );
+                      // }}
+                    >
+                      {companionTeam?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
 
               {tableData[7]?.isActive ? (
-                <td>{dateFormate(companionTeam?.started)}</td>
-              ) : null}
-              {tableData[11]?.isActive ? (
-                <td>{companionTeam?.accountStatus}</td>
-              ) : null}
-              {permissions?.includes(
-                permissionList?.Change_Consultant_AccountStatus
-              ) ? (
-                <>
-                  {tableData[12]?.isActive ? (
-                    <td>
-                      <ToggleSwitch
-                        defaultChecked={!companionTeam?.isActive}
-                        onChange={() => handleUpdate(companionTeam)}
-                      />
-                    </td>
-                  ) : null}
-                </>
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-second"
+                      onClick={() => {
+                        history.push(
+                          `/companion-team-List/${companionTeam?.id}`
+                        );
+                      }}
+                    >
+                      {companionTeam?.teammembersCount}
+                    </span>
+                  </div>
+                </td>
               ) : null}
 
-              {tableData[13]?.isActive ? (
+              {tableData[8]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-third-no-pointer"
+                      // onClick={() => {
+                      //   history.push(`/companion-team-List/${affiliate?.id}`);
+                      // }}
+                    >
+                      {companionTeam?.totalApplicationCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[9]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-fourth-no-pointer"
+                      // onClick={() => {
+                      //   history.push(`/companion-team-List/${affiliate?.id}`);
+                      // }}
+                    >
+                      {companionTeam?.totalRegisterApplicationCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[10]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
-                    {permissions?.includes(permissionList.View_Consultant) ? (
-                      <>
-                        <button
-                          onClick={() =>
-                            redirectToConsultantProfile(companionTeam?.id)
-                          }
-                          className="mx-1 btn-sm consultant-eye-button"
-                        >
-                          <i className="fas fa-eye"></i>
-                        </button>
-                      </>
-                    ) : null}
-
-                    {permissions?.includes(
-                      permissionList.View_Consultant_Dashboard
-                    ) ? (
-                      <>
-                        {userType === userTypes?.SystemAdmin ||
-                        userType === userTypes?.Admin ||
-                        userType === userTypes?.ComplianceManager ? (
-                          <>
-                            <ButtonForFunction
-                              color={"primary"}
-                              func={() =>
-                                redirectToConsultantDashboard(companionTeam?.id)
-                              }
-                              className={"mx-1 btn-sm"}
-                              icon={
-                                <i className="fas fa-tachometer-alt-fast"></i>
-                              }
-                              permission={6}
-                            />
-                          </>
-                        ) : null}
-                      </>
-                    ) : null}
+                    {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}
+                    <>
+                      <button
+                        onClick={() =>
+                          redirectToConsultantProfile(companionTeam?.id)
+                        }
+                        className="mx-1 btn-sm consultant-eye-button"
+                      >
+                        <i className="fas fa-eye"></i>
+                      </button>
+                    </>
                   </ButtonGroup>
                 </td>
               ) : null}

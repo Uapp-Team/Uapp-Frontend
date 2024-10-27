@@ -57,12 +57,7 @@ const StaffTable = ({
             {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
             {tableData[1]?.isActive ? <th>Staff Type</th> : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
-              <>
-                {userTypeId === userTypes?.SystemAdmin ||
-                userTypeId === userTypes?.Admin ? (
-                  <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
-                ) : null}
-              </>
+              <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
             ) : null}
             {tableData[3]?.isActive ? <th>Full Name</th> : null}
             {tableData[4]?.isActive ? <th>Branch</th> : null}
@@ -92,17 +87,12 @@ const StaffTable = ({
               {tableData[1]?.isActive ? <td>{emp?.staffType}</td> : null}
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>
-                  {userTypeId === userTypes?.SystemAdmin ||
-                  userTypeId === userTypes?.Admin ? (
-                    <>
-                      {tableData[2]?.isActive ? (
-                        <td>
-                          <Link to="/staffList" onClick={() => handlePass(emp)}>
-                            Change
-                          </Link>
-                        </td>
-                      ) : null}
-                    </>
+                  {tableData[2]?.isActive ? (
+                    <td>
+                      <Link to="/staffList" onClick={() => handlePass(emp)}>
+                        Change
+                      </Link>
+                    </td>
                   ) : null}
                 </>
               ) : null}

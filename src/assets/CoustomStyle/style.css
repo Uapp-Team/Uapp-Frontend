@@ -467,6 +467,15 @@ tbody tr:hover {
   display: inline-block;
 }
 
+.multiple-single-choice {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: #edf2f2;
+  color: #495057;
+  margin: 0 8px 8px 0;
+  display: inline-block;
+}
+
 .btn-key {
   color: #495057;
   font-weight: 500;
@@ -891,10 +900,6 @@ border- .bg-orange-light {
   border-radius: 7px;
 }
 
-.label {
-  color: initial;
-}
-
 .tablehead {
   background: #dfeeee;
   font-weight: 600;
@@ -938,7 +943,6 @@ border- .bg-orange-light {
   border-radius: 10px;
   border: 0.5px solid rgba(37, 37, 37, 0.12) !important;
   background: #fff;
-  z-index: -1 !important;
   /* padding: 20px; */
 }
 
@@ -1480,11 +1484,6 @@ footer.footer {
 /* uapp-modal */
 .uapp-modal .modal-content {
   margin-top: 30%;
-}
-
-.university-faq-modal .modal-content {
-  margin-top: 30%;
-  width: 800px;
 }
 
 .uapp-modal2 {
@@ -4166,11 +4165,10 @@ target-app-styless {
 }
 
 .document-upload-btn {
-  border: 1px dotted #367D7E;
-  background: #E6EFEF;
+  border: 1px dotted #367d7e;
+  background: #e6efef;
   padding: 11px;
   border-radius: 5px;
-
 }
 
 .upload-button {
@@ -4992,6 +4990,14 @@ label.ant-radio-button-wrapper {
   border-radius: 4px;
 }
 
+.react-tiny-popover-container {
+  background-color: #40a9ff;
+  color: white;
+  font-size: 14px;
+  padding: 5px 6px;
+  border-radius: 4px;
+}
+
 .consultant-eye-button {
   background-color: #019088;
   color: white;
@@ -5190,7 +5196,7 @@ span.ant-upload-list-item-name {
   border-bottom-left-radius: 19px;
   border-top-left-radius: 19px;
   padding: 8px 14px;
-  cursor: auto !important;
+  cursor: none !important;
 }
 
 .hide-details-student-dashboard {
@@ -5475,11 +5481,10 @@ span.ant-upload-list-item-name {
   width: 40px;
   height: 40px;
   padding: 7px;
-  background: #E6EFEF;
+  background: #e6efef;
   border-radius: 50%;
   cursor: pointer;
   transition: 0.2s;
-
 }
 
 .green-count-answer {
@@ -5508,6 +5513,10 @@ span.ant-upload-list-item-name {
   list-style: none;
 }
 
+.information-updated-on {
+  font-size: 11px;
+}
+
 .faq-category {
   color: #252525;
   font-weight: 600;
@@ -5532,4 +5541,20 @@ span.ant-upload-list-item-name {
 
 .arrow-faq {
   margin: 16px;
+}
+
+.ql-toolbar.ql-snow {
+  max-height: 70px;
+  overflow: auto;
+}
+
+/* .label {
+  color: initial;
+  font-size: 1rem !important;
+} */
+
+.date-for-users-ans-faq {
+  color: #000000;
+  font-weight: 500;
+  font-size: 16px;
 }
