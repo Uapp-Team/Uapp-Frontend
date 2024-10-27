@@ -1,4 +1,4 @@
-import { Modal, Upload } from "antd";
+import { Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, FormGroup, Form, Row } from "reactstrap";
 import { rootUrl } from "../../../../../../constants/constants";
@@ -11,11 +11,10 @@ import { useHistory } from "react-router-dom";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import UploadButton from "../../../../../../components/buttons/UploadButton";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
-import { EyeOutlined } from '@ant-design/icons';
 
 const BankLoan = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
-  const [FileList1, setFileList1] = useState([]);
+  const [FileList4, setFileList4] = useState([]);
   const [bLoanError, setBLoanError] = useState("");
   const { addToast } = useToasts();
   const [bankFunding, setBankFunding] = useState({});
@@ -23,11 +22,6 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
   const [progress, setProgress] = useState(false);
   const [check, setCheck] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [previewFileType, setPreviewFileType] = useState("");
-  const [selfError, setSelfError] = useState("");
 
   //  Dynamic4  COde Start
 
@@ -39,82 +33,8 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
     });
   }, [success, studentid]);
 
-  useEffect(() => {
-    if (bankFunding?.attachement) {
-      setFileList1([
-        {
-          uid: bankFunding?.id,
-          name: 'Attachement',
-          status: 'done',
-          url: rootUrl + bankFunding?.attachement,
-        }
-      ]);
-    }
-  }, [bankFunding]);
-
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
-
-  const handlePreview1 = async (file) => {
-    // Infer file type if it's not provided
-    const inferFileType = (file) => {
-      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
-      switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-          return 'image/jpeg';
-        case 'pdf':
-          return 'application/pdf';
-        case 'doc':
-          return 'application/msword';
-        case 'docx':
-          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        default:
-          return 'unknown';
-      }
-    };
-
-    const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith('image')) {
-      // If it's an image
-      file.preview = await getBase64(file.originFileObj || file.url);
-      setPreviewImage(file.preview || file.url);
-      setPreviewFileType(fileType);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-    } else if (fileType === 'application/pdf') {
-      // If it's a PDF
-      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview);
-      setPreviewVisible(true);
-      setPreviewFileType(fileType);
-      setPreviewTitle(file.name);
-    } else if (
-      fileType === 'application/msword' ||
-      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ) {
-      // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
-      setPreviewImage(googleViewer);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-      setPreviewFileType(fileType);
-    } else {
-      // Handle unsupported file types
-      alert('Preview not available for this file type');
-    }
-  };
-
-  const handleChange1 = ({ fileList }) => {
-    setFileList1(fileList);
+  const handleChange4 = ({ fileList }) => {
+    setFileList4(fileList);
     setBLoanError("");
   };
 
@@ -123,7 +43,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
 
     const subData = new FormData(event.target);
 
-    subData.append("bankLoanFile", FileList1[0]?.originFileObj);
+    subData.append("bankLoanFile", FileList4[0]?.originFileObj);
 
     // setButtonStatus(true);
     setProgress(true);
@@ -170,52 +90,25 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
             </FormGroup>
             <FormGroup row>
               <Col sm="4">
-                <span>Upload Document:</span>
+                <span>Upload Image:</span>
               </Col>
               <Col sm="4">
                 <Upload
-                  onPreview={handlePreview1}
                   multiple={false}
-                  fileList={FileList1}
-                  onChange={handleChange1}
-                  beforeUpload={(file) => false}
-                  itemRender={(originNode, file) => (
-                    <div style={{ display: 'flex', alignItems: 'baseLine' }}>
-                      {originNode}
-                      <EyeOutlined
-                        style={{ marginLeft: '8px', cursor: 'pointer' }}
-                        onClick={() => handlePreview1(file)}
-                      />
-                    </div>
-                  )}
+                  fileList={FileList4}
+                  onChange={handleChange4}
+                  beforeUpload={(file) => {
+                    return false;
+                  }}
                 >
-                  {FileList1.length < 1 ? <UploadButton /> : ""}
+                  {FileList4.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
-                {previewVisible && (
-                  <Modal
-                    title={previewTitle}
-                    visible={previewVisible}
-                    footer={null}
-                    onCancel={() => setPreviewVisible(false)}
-                  >
-                    {previewFileType === 'application/pdf' ? (
-                      <iframe
-                        src={previewImage}
-                        style={{ width: '100%', height: '80vh' }}
-                        frameBorder="0"
-                      ></iframe>
-                    ) : (
-                      <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
-                    )}
-                  </Modal>
-                )}
-
-                <div className="text-danger d-block">{selfError}</div>
+                <div className="text-danger d-block">{bLoanError}</div>
               </Col>
 
               <Col sm="4">
-                {FileList1.length > 0 && bankFunding?.attachement ? (
+                {bankFunding?.attachement ? (
                   <a href={rootUrl + bankFunding?.attachement} target="blank">
                     <DownloadButton />
                   </a>

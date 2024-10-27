@@ -54,7 +54,7 @@ const EducationalInformationCard = ({
           >
             <Card>
               <CardBody>
-                <span className="card-heading">{edu?.educationLevel?.name}</span>
+                <span className="card-heading">{edu?.nameOfInstitution}</span>
                 <div className="d-flex text-gray-70">
                   <span className="pr-4">
                     <i className="fas fa-map-marker-alt pr-2"></i>
@@ -86,7 +86,7 @@ const EducationalInformationCard = ({
                     <p>
                       <span>Education Level</span>
                       <br />
-                      <b>{edu?.nameOfInstitution}</b>
+                      <b>{edu?.educationLevel?.name}</b>
                     </p>
                     <p>
                       <span>Qualification Course</span>
