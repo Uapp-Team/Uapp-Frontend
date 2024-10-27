@@ -16,6 +16,7 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import PopOverText from "../../../../../components/PopOverText";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import ConsultantActive from "./ConsultantActive";
 
 const ConsultantTable = ({
   componentRef,
@@ -42,7 +43,6 @@ const ConsultantTable = ({
   passError,
   handleDate,
   redirectToApplications,
-  handleUpdate,
   redirectToConsultantProfile,
   userType,
   redirectToConsultantDashboard,
@@ -351,10 +351,14 @@ const ConsultantTable = ({
                 <>
                   {tableData[15]?.isActive ? (
                     <td>
-                      <ToggleSwitch
+                      <ConsultantActive
+                        isActive={!consultant?.isActive}
+                        item={consultant}
+                      />
+                      {/* <ToggleSwitch
                         defaultChecked={!consultant?.isActive}
                         onChange={() => handleUpdate(consultant)}
-                      />
+                      /> */}
                     </td>
                   ) : null}
                 </>

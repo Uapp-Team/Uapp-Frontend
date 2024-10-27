@@ -1,5 +1,13 @@
 import React, { useEffect, useRef } from "react";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Modal,
+  ModalBody,
+  Row,
+} from "reactstrap";
 import Select from "react-select";
 import Pagination from "../../Pagination/Pagination.jsx";
 import { useHistory } from "react-router";
@@ -19,6 +27,7 @@ import SelectAndClear from "./Component/SelectAndClear.js";
 import PrintFile from "./Component/PrintFile.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import { useParams } from "react-router";
+import ConsultantStatus from "./Component/ConsultantStatus.js";
 
 const Index = () => {
   const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
@@ -354,23 +363,24 @@ const Index = () => {
   };
 
   const handleUpdate = (data) => {
-    put(`Consultant/UpdateAccountStatus/${data?.id}`).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "success",
-        });
-        setSuccess(!success);
-      } else {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "error",
-        });
-      }
-    });
+    // setModalData(data);
+    // setModalForStatus(true);
+    // put(`Consultant/UpdateAccountStatus/${data?.id}`).then((res) => {
+    //   if (res?.status == 200 && res?.data?.isSuccess == true) {
+    //     addToast(res?.data?.message, {
+    //       autoDismiss: true,
+    //       appearance: "success",
+    //     });
+    //     setSuccess(!success);
+    //   } else {
+    //     addToast(res?.data?.message, {
+    //       autoDismiss: true,
+    //       appearance: "error",
+    //     });
+    //   }
+    // });
   };
 
-  ///////////////////////////
   const empOptiopns = empList?.map((emp) => ({
     label: emp?.name,
     value: emp?.id,
@@ -416,8 +426,6 @@ const Index = () => {
     setCallApi((prev) => !prev);
   };
 
-  console.log("dataPerPage", dataPerPage);
-  console.log("entity", entity);
   return (
     <div>
       <BreadCrumb title="Consultant List" backTo="" path="/" />
