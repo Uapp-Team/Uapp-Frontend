@@ -121,7 +121,7 @@ const PersonalForm = ({
         {userType !== userTypes?.Companion ? (
           <FormGroup row>
             <Col lg="6" md="8">
-              <span>Parent Affiliate</span>
+              <span>Parent Companion</span>
               <Select
                 className="form-mt"
                 options={companionParentMenu}
@@ -456,7 +456,7 @@ const PersonalForm = ({
                       buttonStatus={buttonStatus}
                       action={() =>
                         addLink({
-                          affiliateLink: 0,
+                          companionLink: 0,
                           title: linkTitle,
                           link: linkUrl,
                           companionId: companionId,

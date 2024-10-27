@@ -165,7 +165,7 @@ const CompanionMyTeamList = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnConsultant", JSON.stringify(values));
+    localStorage.setItem("ColumnCompanionsTeam", JSON.stringify(values));
   };
 
   const handlePass = (data) => {
@@ -559,7 +559,7 @@ const CompanionMyTeamList = () => {
         </CardBody>
       </Card>
 
-      <Card>
+      {/* <Card>
         <CardBody>
           <h5>Sent Invitations</h5>
           <Row className="mb-3 mt-3">
@@ -657,7 +657,7 @@ const CompanionMyTeamList = () => {
             </Table>
           </div>
         </CardBody>
-      </Card>
+      </Card> */}
     </div>
   );
 };

@@ -32,6 +32,8 @@ import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
 import { Link } from "react-router-dom";
 import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
 import Typing from "../../../../../components/form/Typing.js";
+import Loader from "../../../Search/Loader/Loader";
+import Download from "../../../../../components/buttons/Download.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
@@ -225,10 +227,30 @@ const ApplicationsCommon = () => {
     providerId ? providerId : application?.proValue ? application?.proValue : 0
   );
 
+  const [documentStatusLabel, setdocumentStatusLabel] = useState(
+    application?.documentStatusLabel
+      ? application?.documentStatusLabel
+      : "Select Document Status"
+  );
+  const [documentStatusValue, setdocumentStatusValue] = useState(
+    application?.documentStatusValue ? application?.documentStatusValue : 0
+  );
+
+  const [percentageLabel, setPercentageLabel] = useState(
+    application?.percentageLabel
+      ? application?.percentageLabel
+      : "Assesment percentage"
+  );
+  const [percentageValue, setPercentageValue] = useState(
+    application?.percentageValue
+      ? application?.percentageValue
+      : 0
+  );
+
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(false);
 
   const [delData, setDelData] = useState({});
@@ -297,6 +319,10 @@ const ApplicationsCommon = () => {
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
+        documentStatusLabel: documentStatusLabel && documentStatusLabel,
+        documentStatusValue: documentStatusValue && documentStatusValue,
+        percentageLabel: percentageLabel && percentageLabel,
+        percentageValue: percentageValue && percentageValue,
       })
     );
   }, [
@@ -340,6 +366,10 @@ const ApplicationsCommon = () => {
     providerId,
     admId,
     branchId,
+    documentStatusLabel,
+    documentStatusValue,
+    percentageLabel,
+    percentageValue
   ]);
 
   // for all dropdown
@@ -626,9 +656,10 @@ const ApplicationsCommon = () => {
   // Api calling for Application List
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       consultantId !== undefined
         ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -636,7 +667,7 @@ const ApplicationsCommon = () => {
           })
         : universityId !== undefined
         ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -644,7 +675,7 @@ const ApplicationsCommon = () => {
           })
         : selector === "1"
         ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -652,14 +683,14 @@ const ApplicationsCommon = () => {
           })
         : selector === "2"
         ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
             setEntity(res?.totalEntity);
           })
         : get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -692,7 +723,9 @@ const ApplicationsCommon = () => {
     branchManagerValue,
     admissionManagerValue,
     proValue,
+    documentStatusValue,
     isTyping,
+    percentageValue
   ]);
 
   // Delete Button Click Action
@@ -766,9 +799,11 @@ const ApplicationsCommon = () => {
     !providerId && setProValue(0);
     !admId && setAdmissionManagerLabel("Admission Manager");
     !admId && setAdmissionManagerValue(0);
+    setdocumentStatusValue(0);
+    setdocumentStatusLabel("Select Document Status");
     setCurrentPage(1);
-    document.getElementById("app").placeholder = "Application Id";
-    document.getElementById("app").value = null;
+    // document.getElementById("app").placeholder = "Application Id";
+    // document.getElementById("app").value = null;
   };
 
   // table column data update localStorage for next time use
@@ -869,7 +904,7 @@ const ApplicationsCommon = () => {
 
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Typing
-                id="app"
+                // id="app"
                 name="search"
                 placeholder="Application Id"
                 value={applicationId}
@@ -1049,6 +1084,69 @@ const ApplicationsCommon = () => {
                     />
                   </Col>
                 ) : null}
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 1,
+                        name: "Approved",
+                      },
+                      {
+                        id: 2,
+                        name: "In Review",
+                      },
+                      {
+                        id: 3,
+                        name: "Missing",
+                      },
+                    ]}
+                    label={documentStatusLabel}
+                    setLabel={setdocumentStatusLabel}
+                    value={documentStatusValue}
+                    setValue={setdocumentStatusValue}
+                    action={() => {}}
+                  />
+                </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                         name: "All",
+                      },
+                      {
+                        id: 20,
+                        name: '20%'
+                      },
+                      {
+                        id : 40,
+                        name: '40%'
+                      },
+                      {
+                        id :60,
+                        name: '60%'
+                      },
+                      {
+                        id :80,
+                        name: '80%'
+                      },
+                      {
+                        id :100,
+                        name: '100%'
+                      },
+                    ]}
+                    label={percentageLabel}
+                    setLabel={setPercentageLabel}
+                    value={percentageValue}
+                    setValue={setPercentageValue}
+                    action={() => { }}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -1128,6 +1226,10 @@ const ApplicationsCommon = () => {
                   setCommonStdLabel={setCommonStdLabel}
                   setCommonStdValue={setCommonStdValue}
                   setApplicationId={setApplicationId}
+                  documentStatusLabel={documentStatusLabel}
+                  setdocumentStatusLabel={setdocumentStatusLabel}
+                  documentStatusValue={documentStatusValue}
+                  setdocumentStatusValue={setdocumentStatusValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
@@ -1144,6 +1246,7 @@ const ApplicationsCommon = () => {
                   (!branchId && branchValue !== 0) ||
                   commonUniValue !== 0 ||
                   branchManagerValue !== 0 ||
+                  documentStatusValue !== 0 ||
                   (!providerId && proValue !== 0) ||
                   (!admId && admissionManagerValue !== 0) ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
@@ -1164,8 +1267,13 @@ const ApplicationsCommon = () => {
         <CardBody>
           {/* Filter Page number and column hide Area starts here*/}
           <Row className="mb-3 align-items-center">
-            <Col lg="5" md="5" sm="12" xs="12">
+            <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
+              <Download
+                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}`}
+                className="mx-2"
+                fileName="Applications.xlsx"
+              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1280,307 +1388,331 @@ const ApplicationsCommon = () => {
           {/* Table Data Showing Area starts here*/}
           {permissions?.includes(permissionList.View_Application_List) && (
             <>
-              {applicationList?.length === 0 ? (
-                <h4 className="text-center">No Data Found</h4>
+              {loading ? (
+                <Loader />
               ) : (
                 <>
-                  {loading ? (
-                    <div className="d-flex justify-content-center mb-5">
-                      <div className="spinner-border" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    </div>
+                  {applicationList?.length === 0 ? (
+                    <h4 className="text-center">No Data Found</h4>
                   ) : (
-                    <div
-                      className="table-responsive fixedhead mb-3"
-                      style={{ fontSize: "12px" }}
-                      ref={componentRef}
-                    >
-                      <Table
-                        id="table-to-xls"
-                        style={{ verticalAlign: "middle" }}
-                        className="table-sm table-bordered-application"
-                      >
-                        <thead className="tablehead">
-                          <tr style={{ textAlign: "center" }}>
-                            {tableData[0]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                APP ID
-                              </th>
-                            ) : null}
-                            {tableData[1]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                UAPP ID
-                              </th>
-                            ) : null}
-                            {tableData[2]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Applicant
-                              </th>
-                            ) : null}
-                            {tableData[3]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Contact
-                              </th>
-                            ) : null}
-                            {tableData[4]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Branch
-                              </th>
-                            ) : null}
-                            {tableData[5]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                University
-                              </th>
-                            ) : null}
-                            {tableData[6]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Campus
-                              </th>
-                            ) : null}
-                            {tableData[7]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Courses
-                              </th>
-                            ) : null}
-                            {tableData[8]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Intake
-                              </th>
-                            ) : null}
-                            {tableData[9]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Application Date
-                              </th>
-                            ) : null}
-                            {tableData[10]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Status
-                              </th>
-                            ) : null}
-                            {tableData[11]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Assessment
-                              </th>
-                            ) : null}
-                            {tableData[12]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null}
-                            {tableData[13]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Interview
-                              </th>
-                            ) : null}
-                            {tableData[14]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Manager
-                              </th>
-                            ) : null}
-                            {tableData[15]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Enrolment Status
-                              </th>
-                            ) : null}
-                            {tableData[16]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>SLCs</th>
-                            ) : null}
+                    <>
+                      {loading ? (
+                        <div className="d-flex justify-content-center mb-5">
+                          <div className="spinner-border" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="table-responsive fixedhead mb-3"
+                          style={{ fontSize: "12px" }}
+                          ref={componentRef}
+                        >
+                          <Table
+                            id="table-to-xls"
+                            style={{ verticalAlign: "middle" }}
+                            className="table-sm table-bordered-application"
+                          >
+                            <thead className="tablehead">
+                              <tr style={{ textAlign: "center" }}>
+                                {tableData[0]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    APP ID
+                                  </th>
+                                ) : null}
+                                {tableData[1]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    UAPP ID
+                                  </th>
+                                ) : null}
+                                {tableData[2]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Applicant
+                                  </th>
+                                ) : null}
+                                {tableData[3]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Contact
+                                  </th>
+                                ) : null}
+                                {tableData[4]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Branch
+                                  </th>
+                                ) : null}
+                                {tableData[5]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    University
+                                  </th>
+                                ) : null}
+                                {tableData[6]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Campus
+                                  </th>
+                                ) : null}
+                                {tableData[7]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Courses
+                                  </th>
+                                ) : null}
+                                {tableData[8]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Intake
+                                  </th>
+                                ) : null}
+                                {tableData[9]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Application Date
+                                  </th>
+                                ) : null}
+                                {tableData[10]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Status
+                                  </th>
+                                ) : null}
 
-                            {tableData[17]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Consultant
-                              </th>
-                            ) : null}
-                            {tableData[18]?.isActive ? (
-                              <th
-                                style={{ verticalAlign: "middle" }}
-                                className="text-center"
-                              >
-                                Action
-                              </th>
-                            ) : null}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {applicationList?.map((app, i) => (
-                            <tr key={i}>
-                              {tableData[0]?.isActive ? (
-                                <td
-                                  className="cursor-pointer hyperlink-hover"
-                                  style={{ verticalAlign: "middle" }}
-                                >
-                                  <Link
-                                    className="text-id hover"
-                                    to={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                {tableData[11]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Document Status
+                                  </th>
+                                ) : null}
+
+                                {tableData[12]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Assessment
+                                  </th>
+                                ) : null}
+                                {tableData[13]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Offer
+                                  </th>
+                                ) : null}
+                                {tableData[14]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Interview
+                                  </th>
+                                ) : null}
+                                {tableData[15]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Manager
+                                  </th>
+                                ) : null}
+                                {tableData[16]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Enrolment Status
+                                  </th>
+                                ) : null}
+                                {tableData[17]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    SLCs
+                                  </th>
+                                ) : null}
+
+                                {tableData[18]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Consultant
+                                  </th>
+                                ) : null}
+                                {tableData[19]?.isActive ? (
+                                  <th
+                                    style={{ verticalAlign: "middle" }}
+                                    className="text-center"
                                   >
-                                    {app?.applicationViewId}
-                                  </Link>
-                                </td>
-                              ) : null}
-
-                              {tableData[1]?.isActive ? (
-                                <td
-                                  style={{ verticalAlign: "middle" }}
-                                  className="cursor-pointer hyperlink-hover"
-                                >
-                                  <Link
-                                    className="text-id hover"
-                                    to={`/studentProfile/${app?.studentId}`}
-                                  >
-                                    {app?.uappId}
-                                  </Link>
-                                </td>
-                              ) : null}
-
-                              {tableData[2]?.isActive ? (
-                                <td
-                                  style={{ verticalAlign: "middle" }}
-                                  className="cursor-pointer hyperlink-hover"
-                                >
-                                  <Link
-                                    className="text-id hover"
-                                    to={`/studentProfile/${app?.studentId}`}
-                                  >
-                                    {app?.studentName}
-                                  </Link>
-                                </td>
-                              ) : null}
-
-                              {tableData[3]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentPhone} <br />
-                                  {app?.studentEmail}
-                                </td>
-                              ) : null}
-                              {tableData[4]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.branchName}
-                                </td>
-                              ) : null}
-
-                              {tableData[5]?.isActive ? (
-                                <td
-                                  style={{ verticalAlign: "middle" }}
-                                  className="cursor-pointer hyperlink-hover"
-                                >
-                                  <Link
-                                    className="text-id hover"
-                                    to={`/universityDetails/${app?.universityId}`}
-                                  >
-                                    {app?.universityName}
-                                  </Link>
-                                </td>
-                              ) : null}
-
-                              {tableData[6]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.campusName}
-                                </td>
-                              ) : null}
-
-                              {tableData[7]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.subjectName}
-                                </td>
-                              ) : null}
-
-                              {tableData[8]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.intakeName}
-                                </td>
-                              ) : null}
-
-                              {tableData[9]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.createdOn}
-                                </td>
-                              ) : null}
-
-                              {tableData[10]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
-                                </td>
-                              ) : null}
-                              {tableData[11]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.assesmentPercentage}%
-                                </td>
-                              ) : null}
-
-                              {tableData[12]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.offerStatusName}
-                                </td>
-                              ) : null}
-
-                              {tableData[13]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.interviewStatusName}
-                                </td>
-                              ) : null}
-
-                              {tableData[14]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.managerName}
-                                </td>
-                              ) : null}
-
-                              {tableData[15]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.enrollmentStatusName}
-                                </td>
-                              ) : null}
-
-                              {tableData[16]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentFinanceName}
-                                </td>
-                              ) : null}
-
-                              {tableData[17]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.consultantName}
-                                </td>
-                              ) : null}
-
-                              {tableData[18]?.isActive ? (
-                                <td
-                                  style={{ width: "8%" }}
-                                  className="text-center my-auto"
-                                >
-                                  <div>
-                                    {/* Application Details page link Button */}
-                                    {permissions?.includes(
-                                      permissionList.View_Application_Details
-                                    ) ? (
-                                      <LinkButton
-                                        url={`/applicationDetails/${app?.id}/${app?.studentId}`}
-                                        color="primary"
-                                        className={"mx-1 btn-sm mt-2"}
-                                        icon={<i className="fas fa-eye"></i>}
-                                      />
-                                    ) : null}
-
-                                    {/* Chat Button */}
-                                    <Button
-                                      onClick={() => {
-                                        setChatOpen(true);
-                                        setchatapp(app);
-                                      }}
-                                      className="button-chat mx-1 btn-sm mt-2"
+                                    Action
+                                  </th>
+                                ) : null}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {applicationList?.map((app, i) => (
+                                <tr key={i}>
+                                  {tableData[0]?.isActive ? (
+                                    <td
+                                      className="cursor-pointer hyperlink-hover"
+                                      style={{ verticalAlign: "middle" }}
                                     >
-                                      <i
-                                        className="fas fa-comment"
-                                        style={{
-                                          paddingLeft: "1.8px",
-                                          paddingRight: "1.8px",
-                                        }}
+                                      <Link
+                                        className="text-id hover"
+                                        to={`/applicationDetails/${app?.id}/${app?.studentId}`}
                                       >
-                                        <span className="badge-chat py-1 px-1">
-                                          {app?.messageCount}
-                                        </span>
-                                      </i>
-                                    </Button>
-                                    {/* <ButtonForFunction
+                                        {app?.applicationViewId}
+                                      </Link>
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[1]?.isActive ? (
+                                    <td
+                                      style={{ verticalAlign: "middle" }}
+                                      className="cursor-pointer hyperlink-hover"
+                                    >
+                                      <Link
+                                        className="text-id hover"
+                                        to={`/studentProfile/${app?.studentId}`}
+                                      >
+                                        {app?.uappId}
+                                      </Link>
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[2]?.isActive ? (
+                                    <td
+                                      style={{ verticalAlign: "middle" }}
+                                      className="cursor-pointer hyperlink-hover"
+                                    >
+                                      <Link
+                                        className="text-id hover"
+                                        to={`/studentProfile/${app?.studentId}`}
+                                      >
+                                        {app?.studentName}
+                                      </Link>
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[3]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.studentPhone} <br />
+                                      {app?.studentEmail}
+                                    </td>
+                                  ) : null}
+                                  {tableData[4]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.branchName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[5]?.isActive ? (
+                                    <td
+                                      style={{ verticalAlign: "middle" }}
+                                      className="cursor-pointer hyperlink-hover"
+                                    >
+                                      <Link
+                                        className="text-id hover"
+                                        to={`/universityDetails/${app?.universityId}`}
+                                      >
+                                        {app?.universityName}
+                                      </Link>
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[6]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.campusName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[7]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.subjectName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[8]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.intakeName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[9]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.createdOn}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[10]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.applicationStatusName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[11]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.documentStatus}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[12]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.assesmentPercentage}%
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[13]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.offerStatusName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[14]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.interviewStatusName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[15]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.managerName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[16]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.enrollmentStatusName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[17]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.studentFinanceName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[18]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.consultantName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[19]?.isActive ? (
+                                    <td
+                                      style={{ width: "8%" }}
+                                      className="text-center my-auto"
+                                    >
+                                      <div>
+                                        {/* Application Details page link Button */}
+                                        {permissions?.includes(
+                                          permissionList.View_Application_Details
+                                        ) ? (
+                                          <LinkButton
+                                            url={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                            color="primary"
+                                            className={"mx-1 btn-sm mt-2"}
+                                            icon={
+                                              <i className="fas fa-eye"></i>
+                                            }
+                                          />
+                                        ) : null}
+
+                                        {/* Chat Button */}
+                                        <Button
+                                          onClick={() => {
+                                            setChatOpen(true);
+                                            setchatapp(app);
+                                          }}
+                                          className="button-chat mx-1 btn-sm mt-2"
+                                        >
+                                          <i
+                                            className="fas fa-comment"
+                                            style={{
+                                              paddingLeft: "1.8px",
+                                              paddingRight: "1.8px",
+                                            }}
+                                          >
+                                            <span className="badge-chat py-1 px-1">
+                                              {app?.messageCount}
+                                            </span>
+                                          </i>
+                                        </Button>
+                                        {/* <ButtonForFunction
                                       icon={
                                         <i
                                           className="fas fa-comment"
@@ -1598,33 +1730,35 @@ const ApplicationsCommon = () => {
                                       }}
                                     /> */}
 
-                                    {/* Delete Button */}
-                                    {permissions.includes(
-                                      permissionList.Delete_Application_Details
-                                    ) ? (
-                                      <ButtonForFunction
-                                        icon={
-                                          <i
-                                            className="fas fa-trash-alt"
-                                            style={{
-                                              paddingLeft: "1.8px",
-                                              paddingRight: "1.8px",
-                                            }}
-                                          ></i>
-                                        }
-                                        color={"danger"}
-                                        className={"mx-1 btn-sm mt-2"}
-                                        func={() => toggleDanger(app)}
-                                      />
-                                    ) : null}
-                                  </div>
-                                </td>
-                              ) : null}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </div>
+                                        {/* Delete Button */}
+                                        {permissions.includes(
+                                          permissionList.Delete_Application_Details
+                                        ) ? (
+                                          <ButtonForFunction
+                                            icon={
+                                              <i
+                                                className="fas fa-trash-alt"
+                                                style={{
+                                                  paddingLeft: "1.8px",
+                                                  paddingRight: "1.8px",
+                                                }}
+                                              ></i>
+                                            }
+                                            color={"danger"}
+                                            className={"mx-1 btn-sm mt-2"}
+                                            func={() => toggleDanger(app)}
+                                          />
+                                        ) : null}
+                                      </div>
+                                    </td>
+                                  ) : null}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}

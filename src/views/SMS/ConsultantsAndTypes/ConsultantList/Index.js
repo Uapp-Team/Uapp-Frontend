@@ -87,6 +87,8 @@ const Index = () => {
   const userType = localStorage.getItem("userType");
   const history = useHistory();
   const [check, setCheck] = useState(false);
+  const [tierLabel, setTierLabel] = useState("Select Tier");
+  const [tierValue, setTierValue] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
@@ -147,7 +149,6 @@ const Index = () => {
 
   const selectDataSize = (value) => {
     setCurrentPage(1);
-    setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -184,8 +185,9 @@ const Index = () => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       get(
-        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}`
+        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}`
       ).then((res) => {
         console.log(res?.models);
         setConsultantList(res?.models);
@@ -202,10 +204,10 @@ const Index = () => {
     branchValue,
     empValue,
     statusValue,
-    loading,
     success,
     check,
     isTyping,
+    tierValue,
   ]);
 
   const handleDate = (e) => {
@@ -419,162 +421,157 @@ const Index = () => {
   return (
     <div>
       <BreadCrumb title="Consultant List" backTo="" path="/" />
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {/* filter starts here */}
-          <SelectAndClear
-            setCheck={setCheck}
-            check={check}
-            empOptiopns={empOptiopns}
-            empLabel={empLabel}
-            empValue={empValue}
-            selectEmployeeType={selectEmployeeType}
-            type={type}
-            branchOptions={branchOptions}
-            branchLabel={branchLabel}
-            branchValue={branchValue}
-            selectBranch={selectBranch}
-            searchStr={searchStr}
-            setSearchStr={setSearchStr}
-            setBranchLabel={setBranchLabel}
-            setBranchValue={setBranchValue}
-            setEmpLabel={setEmpLabel}
-            setEmpValue={setEmpValue}
-            statusLabel={statusLabel}
-            statusValue={statusValue}
-            setStatusLabel={setStatusLabel}
-            setStatusValue={setStatusValue}
-            statusTypeMenu={statusTypeMenu}
-            selectStatusType={selectStatusType}
-            handleKeyDown={handleKeyDown}
-            handleReset={handleReset}
-            setIsTyping={setIsTyping}
-          ></SelectAndClear>
-          {/* filter starts here */}
+      <>
+        {/* filter starts here */}
+        <SelectAndClear
+          setCheck={setCheck}
+          check={check}
+          empOptiopns={empOptiopns}
+          empLabel={empLabel}
+          empValue={empValue}
+          selectEmployeeType={selectEmployeeType}
+          type={type}
+          branchOptions={branchOptions}
+          branchLabel={branchLabel}
+          branchValue={branchValue}
+          selectBranch={selectBranch}
+          searchStr={searchStr}
+          setSearchStr={setSearchStr}
+          setBranchLabel={setBranchLabel}
+          setBranchValue={setBranchValue}
+          setEmpLabel={setEmpLabel}
+          setEmpValue={setEmpValue}
+          statusLabel={statusLabel}
+          statusValue={statusValue}
+          setStatusLabel={setStatusLabel}
+          setStatusValue={setStatusValue}
+          statusTypeMenu={statusTypeMenu}
+          selectStatusType={selectStatusType}
+          handleKeyDown={handleKeyDown}
+          handleReset={handleReset}
+          tierLabel={tierLabel}
+          setTierLabel={setTierLabel}
+          tierValue={tierValue}
+          setTierValue={setTierValue}
+          setIsTyping={setIsTyping}
+        ></SelectAndClear>
+        {/* filter starts here */}
 
-          <Card className="uapp-employee-search">
-            <CardBody>
-              {/* new */}
-              <Row className="mb-3">
-                <Col
-                  lg="5"
-                  md="5"
-                  sm="12"
-                  xs="12"
-                  style={{ marginBottom: "10px" }}
-                >
-                  {permissions?.includes(permissionList?.Add_Consultant) ? (
-                    <LinkButton
-                      url={"/addConsultant"}
-                      className={"btn btn-uapp-add "}
-                      name={"Add Consultant"}
-                      icon={<i className="fas fa-plus"></i>}
-                    />
-                  ) : null}
-                </Col>
+        <Card className="uapp-employee-search">
+          <CardBody>
+            {/* new */}
+            <Row className="mb-3">
+              <Col
+                lg="5"
+                md="5"
+                sm="12"
+                xs="12"
+                style={{ marginBottom: "10px" }}
+              >
+                {permissions?.includes(permissionList?.Add_Consultant) ? (
+                  <LinkButton
+                    url={"/addConsultant"}
+                    className={"btn btn-uapp-add "}
+                    name={"Add Consultant"}
+                    icon={<i className="fas fa-plus"></i>}
+                  />
+                ) : null}
+              </Col>
 
-                <Col lg="7" md="7" sm="12" xs="12">
-                  <div className="d-flex justify-content-end">
-                    {/* Dropdown number start */}
-                    <div className="mr-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div className="ddzindex">
-                          <Select
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
+              <Col lg="7" md="7" sm="12" xs="12">
+                <div className="d-flex justify-content-end">
+                  {/* Dropdown number start */}
+                  <div className="mr-3">
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">Showing :</div>
+                      <div className="ddzindex">
+                        <Select
+                          options={dataSizeName}
+                          value={{ label: dataPerPage, value: dataPerPage }}
+                          onChange={(opt) => selectDataSize(opt.value)}
+                        />
                       </div>
                     </div>
-                    {/* Dropdown number end */}
-
-                    <PrintFile
-                      dropdownOpen={dropdownOpen}
-                      toggle={toggle}
-                      componentRef={componentRef}
-                    ></PrintFile>
-
-                    <ConsultantColumnHide
-                      dropdownOpen1={dropdownOpen1}
-                      toggle1={toggle1}
-                      tableData={tableData}
-                      setTableData={setTableData}
-                      handleChecked={handleChecked}
-                    ></ConsultantColumnHide>
                   </div>
-                </Col>
-              </Row>
+                  {/* Dropdown number end */}
 
-              {permissions?.includes(permissionList?.View_Consultant_list) && (
-                <>
-                  {consultantList?.length === 0 ? (
-                    <h4 className="text-center">No Data Found</h4>
-                  ) : (
-                    <>
-                      {" "}
-                      {loading ? (
-                        <h2 className="text-center">Loading...</h2>
-                      ) : (
-                        <ConsultantTable
-                          componentRef={componentRef}
-                          tableData={tableData}
-                          permissions={permissions}
-                          permissionList={permissionList}
-                          userTypeId={userTypeId}
-                          userTypes={userTypes}
-                          consultantList={consultantList}
-                          serialNum={serialNum}
-                          history={history}
-                          handlePass={handlePass}
-                          passModal={passModal}
-                          handleToggle={handleToggle}
-                          passData={passData}
-                          submitModalForm={submitModalForm}
-                          passValidate={passValidate}
-                          setError={setError}
-                          error={error}
-                          verifyPass={verifyPass}
-                          confirmPassword={confirmPassword}
-                          setPassModal={setPassModal}
-                          progress={progress}
-                          passError={passError}
-                          handleDate={handleDate}
-                          redirectToApplications={redirectToApplications}
-                          handleUpdate={handleUpdate}
-                          redirectToConsultantProfile={
-                            redirectToConsultantProfile
-                          }
-                          userType={userType}
-                          redirectToConsultantDashboard={
-                            redirectToConsultantDashboard
-                          }
-                          handleEdit={handleEdit}
-                          toggleDanger={toggleDanger}
-                          deleteModal={deleteModal}
-                          setDeleteModal={setDeleteModal}
-                          handleDeleteData={handleDeleteData}
-                          buttonStatus={buttonStatus}
-                        ></ConsultantTable>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
+                  <PrintFile
+                    dropdownOpen={dropdownOpen}
+                    toggle={toggle}
+                    componentRef={componentRef}
+                  ></PrintFile>
 
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={entity}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </CardBody>
-          </Card>
-        </>
-      )}
+                  <ConsultantColumnHide
+                    dropdownOpen1={dropdownOpen1}
+                    toggle1={toggle1}
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    handleChecked={handleChecked}
+                  ></ConsultantColumnHide>
+                </div>
+              </Col>
+            </Row>
+
+            {permissions?.includes(permissionList?.View_Consultant_list) && (
+              <>
+                {loading ? (
+                  <Loader />
+                ) : consultantList?.length === 0 ? (
+                  <p className="text-center">No Consultant Found</p>
+                ) : (
+                  <>
+                    <ConsultantTable
+                      componentRef={componentRef}
+                      tableData={tableData}
+                      permissions={permissions}
+                      permissionList={permissionList}
+                      userTypeId={userTypeId}
+                      userTypes={userTypes}
+                      consultantList={consultantList}
+                      serialNum={serialNum}
+                      history={history}
+                      handlePass={handlePass}
+                      passModal={passModal}
+                      handleToggle={handleToggle}
+                      passData={passData}
+                      submitModalForm={submitModalForm}
+                      passValidate={passValidate}
+                      setError={setError}
+                      error={error}
+                      verifyPass={verifyPass}
+                      confirmPassword={confirmPassword}
+                      setPassModal={setPassModal}
+                      progress={progress}
+                      passError={passError}
+                      handleDate={handleDate}
+                      redirectToApplications={redirectToApplications}
+                      handleUpdate={handleUpdate}
+                      redirectToConsultantProfile={redirectToConsultantProfile}
+                      userType={userType}
+                      redirectToConsultantDashboard={
+                        redirectToConsultantDashboard
+                      }
+                      handleEdit={handleEdit}
+                      toggleDanger={toggleDanger}
+                      deleteModal={deleteModal}
+                      setDeleteModal={setDeleteModal}
+                      handleDeleteData={handleDeleteData}
+                      buttonStatus={buttonStatus}
+                    ></ConsultantTable>
+                  </>
+                )}
+              </>
+            )}
+
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </CardBody>
+        </Card>
+      </>
     </div>
   );
 };

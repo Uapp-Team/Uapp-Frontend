@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col } from "reactstrap";
+import { Form, FormGroup, Label, Input, Col } from "reactstrap";
 import { rootUrl } from "../../../../constants/constants";
 import { cms } from "../../../../constants/constants";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -10,10 +10,6 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import post from "../../../../helpers/post";
 import get from "../../../../helpers/get";
-import containsDigit from '../../../../helpers/nameContainDigit';
-import { EyeOutlined, EyeInvisibleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Spin } from "antd";
-
 
 const StudentRegisterForm = () => {
   const { invitationcode, email } = useParams();
@@ -43,9 +39,6 @@ const StudentRegisterForm = () => {
   const [phoneNumber, setphoneNumber] = useState("");
   const [valid, setValid] = useState(true);
   const [emailExistError, setEmailExistError] = useState(true);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-  const [progress, setProgress] = useState(false);
 
   useEffect(() => {
     email && setuserEmail(email);
@@ -60,8 +53,8 @@ const StudentRegisterForm = () => {
       const code = email
         ? invitationcode
         : splitcode.length === 3
-          ? uappId
-          : invitationcode;
+        ? uappId
+        : invitationcode;
       // console.log(code);
       setReferCode(code);
       fetch(`${rootUrl}StudentRegistration/Track/${invitationcode}`);
@@ -99,32 +92,18 @@ const StudentRegisterForm = () => {
     setTitle(parseInt(e.target.value));
   };
 
-  const antIcon = (
-    <LoadingOutlined
-      style={{ fontSize: 35, color: "white", fontWeight: "bold" }}
-      spin
-    />
-  );
-
   const handleLastNameChange = (e) => {
-    const value = e.target.value;
-    setLastName(value);
+    setLastName(e.target.value);
     if (e.target.value === "") {
       setLastNameError("Last name is required");
-    } else if (containsDigit(value)) {
-      setLastNameError("Last name cannot contain digits");
-    }
-    else {
+    } else {
       setLastNameError("");
     }
   };
   const handleFirstNameChange = (e) => {
-    const value = e.target.value;
-    setFirstName(value);
+    setFirstName(e.target.value);
     if (e.target.value === "") {
       setFirstNameError("First name is required");
-    } else if (containsDigit(value)) {
-      setFirstNameError("First name cannot contain digits");
     } else {
       setFirstNameError("");
     }
@@ -172,47 +151,23 @@ const StudentRegisterForm = () => {
     } else {
       setphoneNUmberError("");
     }
+    // setphoneNumber(value);
     setValid(validatePhoneNumber(value));
   };
 
   const handlePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-
-    // Separate regex checks for each condition
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[@$!%*?&]/.test(password);
-    const isValidLength = password.length >= 8;
-
-    // Set error messages for specific cases
-    if (password === "") {
+    setPassword(e.target.value);
+    if (e.target.value === "") {
       setPasswordError("Provide a valid password");
-    } else if (!isValidLength) {
-      setPasswordError("Password must be at least 8 characters long");
-    } else if (!hasUpperCase) {
-      setPasswordError("Password must contain at least one uppercase letter");
-    } else if (!hasLowerCase) {
-      setPasswordError("Password must contain at least one lowercase letter");
-    } else if (!hasNumber) {
-      setPasswordError("Password must contain at least one number");
-    } else if (!hasSpecialChar) {
-      setPasswordError("Password must contain at least one special character (@, $, !, %, *, ?, &)");
     } else {
-      setPasswordError(""); // Clear the error if everything is valid
+      setPasswordError("");
     }
+    // if (confirmPassword && e.target.value !== confirmPassword) {
+    //   setPasswordError("Password doesn't match");
+    // } else {
+    //   setPasswordError("");
+    // }
   };
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevState) => !prevState);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible((prevState) => !prevState);
-  }
-
-
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
     if (e.target.value === "") {
@@ -298,7 +253,7 @@ const StudentRegisterForm = () => {
     // }
     return isFormValid;
   }
-  const handleRegister = async (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     const subData = {
       PreferredCountry: preferredCountryValue,
@@ -314,38 +269,24 @@ const StudentRegisterForm = () => {
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
       clearAllErrors();
-      setProgress(true);
-      try {
-        const response = await fetch(`${rootUrl}StudentRegistration/Register`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(subData),
+      fetch(`${rootUrl}StudentRegistration/Register`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(subData),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("data naki", data);
+          if (data?.isSuccess === true) {
+            addToast(data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            history.push("/studentAccountCreated");
+          }
         });
-        const data = await response.json();
-        if (data?.isSuccess === true) {
-          addToast(data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          history.push('/studentAccountCreated')
-        } else {
-          addToast(data?.message || "Registration Failed", {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      } catch (error) {
-        addToast("An error occurred while registering. Please try again later.", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-        return;
-      } finally {
-        setProgress(false);
-      }
-
     }
   };
 
@@ -538,18 +479,16 @@ const StudentRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <InputGroup>
-              <Input
-                type={isPasswordVisible ? 'text' : 'password'}
-                placeholder="Enter Password"
-                value={password}
-                onChange={handlePassword}
-                style={{ height: 'calc(1.5em + 1.3rem + 2px)' }}
-              />
-              <InputGroupText onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
-                {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-              </InputGroupText>
-            </InputGroup>
+            <Input
+              className="inside-placeholder"
+              type="password"
+              placeholder="Enter Password"
+              value={password}
+              onChange={(e) => {
+                handlePassword(e);
+              }}
+              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+            />
             <span className="text-danger">{passwordError}</span>
           </FormGroup>
         </div>
@@ -558,21 +497,16 @@ const StudentRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <InputGroup>
-              <Input
-                className="inside-placeholder"
-                type={isConfirmPasswordVisible ? 'text' : 'password'}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => {
-                  handleConfirmPassword(e);
-                }}
-                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-              />
-              <InputGroupText onClick={toggleConfirmPasswordVisibility} style={{ cursor: 'pointer' }}>
-                {isConfirmPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-              </InputGroupText>
-            </InputGroup>
+            <Input
+              className="inside-placeholder"
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => {
+                handleConfirmPassword(e);
+              }}
+              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+            />
             <span className="text-danger">{confirmPasswordError}</span>
 
             <div className="form-control-position"></div>
@@ -619,7 +553,7 @@ const StudentRegisterForm = () => {
         <div className="mb-3">
           <div></div>
           <button className="btn-register-lg" type="submit" disabled={!checked}>
-            {progress ? <Spin indicator={antIcon} /> : "Register Now"}
+            Register Now
           </button>
         </div>
 

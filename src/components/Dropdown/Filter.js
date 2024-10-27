@@ -8,6 +8,8 @@ const Filter = ({
   value,
   setValue,
   action,
+  onChange,
+  className,
   isDisabled,
 }) => {
   const options = data?.map((item) => ({
@@ -19,11 +21,13 @@ const Filter = ({
     setLabel(label);
     setValue(value);
     action && action();
+    onChange && onChange(label, value);
   };
 
   return (
     <>
       <Select
+        className={className}
         options={options}
         value={{
           label: label,

@@ -29,6 +29,7 @@ import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/C
 import { Link } from "react-router-dom";
 import ColumnApplicationManager from "../../../TableColumn/ColumnApplicationManager.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import Download from "../../../../../components/buttons/Download.js";
 
 const AdmissionManagerApplication = ({ currentUser }) => {
   const componentRef = useRef();
@@ -146,6 +147,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : 0
   );
 
+  const [documentStatusLabel, setdocumentStatusLabel] = useState(
+    AdmissionManagerApplicationPaging?.documentStatusLabel
+      ? AdmissionManagerApplicationPaging?.documentStatusLabel
+      : "Select Document Status"
+  );
+  const [documentStatusValue, setdocumentStatusValue] = useState(
+    AdmissionManagerApplicationPaging?.documentStatusValue
+      ? AdmissionManagerApplicationPaging?.documentStatusValue
+      : 0
+  );
+
   // states for all common state
   const [applicationLabel, setApplicationLabel] = useState(
     AdmissionManagerApplicationPaging?.applicationLabel
@@ -236,6 +248,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : 0
   );
 
+  const [percentageLabel,setPercentageLabel] = useState(
+    AdmissionManagerApplicationPaging?.percentageLabel
+      ? AdmissionManagerApplicationPaging?.percentageLabel
+      : "Assesment percentage"
+  );
+  const [percentageValue, setPercentageValue] = useState(
+    AdmissionManagerApplicationPaging?.percentageValue
+      ? AdmissionManagerApplicationPaging?.percentageValue
+      : 0
+  );
+
   // application list
   const [applicationList, setApplicationList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -297,6 +320,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
+        documentStatusLabel: documentStatusLabel && documentStatusLabel,
+        documentStatusValue: documentStatusValue && documentStatusValue,
+        percentageLabel: percentageLabel && percentageLabel,
+        percentageValue: percentageValue && percentageValue,
       })
     );
   }, [
@@ -330,6 +357,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     orderValue,
     selector,
     intake,
+    documentStatusLabel,
+    documentStatusValue,
+    percentageLabel,
+    percentageValue
   ]);
 
   // for all dropdown
@@ -462,6 +493,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setManagerUniValue(0);
     setManagerPhnLabel("Phone No.");
     setManagerPhnValue(0);
+    setdocumentStatusValue(0);
+    setdocumentStatusLabel("Select Document Status");
   };
 
   // user select order
@@ -585,7 +618,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     if (currentUser !== undefined) {
       if (universityId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -595,7 +628,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         });
       } else if (consultantId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -605,7 +638,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         });
       } else {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -639,6 +672,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     status,
     selector,
     intakeRngValue,
+    documentStatusValue,
+    percentageValue
   ]);
 
   // Function for open delete modal
@@ -870,6 +905,69 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     id="id"
                   />
                 </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 1,
+                        name: "Approved",
+                      },
+                      {
+                        id: 2,
+                        name: "In Review",
+                      },
+                      {
+                        id: 3,
+                        name: "Missing",
+                      },
+                    ]}
+                    label={documentStatusLabel}
+                    setLabel={setdocumentStatusLabel}
+                    value={documentStatusValue}
+                    setValue={setdocumentStatusValue}
+                    action={() => {}}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 20,
+                        name: '20%'
+                      },
+                      {
+                        id: 40,
+                        name: '40%'
+                      },
+                      {
+                        id: 60,
+                        name: '60%'
+                      },
+                      {
+                        id: 80,
+                        name: '80%'
+                      },
+                      {
+                        id: 100,
+                        name: '100%'
+                      },
+                
+                    ]}
+                    label={percentageLabel}
+                    setLabel={setPercentageLabel}
+                    value={percentageValue}
+                    setValue={setPercentageValue}
+                    action={() => { }}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -936,6 +1034,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   branchManagerValue={0}
                   admissionManagerValue={0}
                   proValue={0}
+                  documentStatusValue={documentStatusValue}
+                  setdocumentStatusValue={setdocumentStatusValue}
+                  documentStatusLabel={documentStatusLabel}
+                  setdocumentStatusLabel={setdocumentStatusLabel}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {managerUappIdValue !== 0 ||
@@ -949,6 +1051,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   interviewValue !== 0 ||
                   elptValue !== 0 ||
                   financeValue !== 0 ||
+                  documentStatusValue !== 0 ||
                   managerUniValue !== 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
@@ -968,8 +1071,13 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         <CardBody>
           {/* Filter Page number and column hide Area starts here*/}
           <Row className="mb-3">
-            <Col lg="5" md="5" sm="12" xs="12">
+            <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
+              <Download
+                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`}
+                className="mx-2"
+                fileName="Applications.xlsx"
+              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1154,31 +1262,44 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                                 Status
                               </th>
                             ) : null}
+
                             {tableData[10]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Document Status
+                              </th>
+                            ) : null}
+
+                            {tableData[11]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Assessment
+                              </th>
+                            ) : null}
+
+                            {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>Offer</th>
                             ) : null}
-                            {tableData[11]?.isActive ? (
+                            {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
                               </th>
                             ) : null}
-                            {tableData[12]?.isActive ? (
+                            {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {tableData[13]?.isActive ? (
+                            {tableData[15]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
                             ) : null}
-                            {tableData[14]?.isActive ? (
+                            {tableData[16]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
-                            {tableData[15]?.isActive ? (
+                            {tableData[17]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Consultant
                               </th>
                             ) : null}
-                            {tableData[16]?.isActive ? (
+                            {tableData[18]?.isActive ? (
                               <th
                                 style={{ verticalAlign: "middle" }}
                                 className="text-center"
@@ -1271,44 +1392,54 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                                   {app?.applicationStatusName}
                                 </td>
                               ) : null}
-
                               {tableData[10]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.offerStatusName}
+                                  {app?.documentStatus}
                                 </td>
                               ) : null}
-
                               {tableData[11]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.interviewStatusName}
+                                  {app?.assesmentPercentage}%
                                 </td>
                               ) : null}
 
                               {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.elptStatusName}
+                                  {app?.offerStatusName}
                                 </td>
                               ) : null}
 
                               {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.enrollmentStatusName}
+                                  {app?.interviewStatusName}
                                 </td>
                               ) : null}
 
                               {tableData[14]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentFinanceName}
+                                  {app?.elptStatusName}
                                 </td>
                               ) : null}
 
                               {tableData[15]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.consultantName}
+                                  {app?.enrollmentStatusName}
                                 </td>
                               ) : null}
 
                               {tableData[16]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.studentFinanceName}
+                                </td>
+                              ) : null}
+
+                              {tableData[17]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.consultantName}
+                                </td>
+                              ) : null}
+
+                              {tableData[18]?.isActive ? (
                                 <td
                                   style={{
                                     width: "8%",

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "reactstrap";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 import profileImage from "../../../../assets/img/profile/user-uploads/user-07.jpg";
 import get from "../../../../helpers/get";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import AddButton from "../../../../components/buttons/AddButton";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { rootUrl } from "../../../../constants/constants";
+import ChangeManager from "../ChangeManager/ChangeManager";
 
 const BranchManager = ({ id }) => {
+  const [success, setSuccess] = useState(false);
   const [branchManager, setBranchManager] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
@@ -16,7 +19,7 @@ const BranchManager = ({ id }) => {
       console.log("kire vai", res);
       setBranchManager(res);
     });
-  }, [id]);
+  }, [id, success]);
 
   return (
     <>
@@ -61,7 +64,9 @@ const BranchManager = ({ id }) => {
                 </p>
               </div>
             </div>
-            <Link to={`/branchManager/${branchManager?.branchId}`}>Edit</Link>
+            <span className="pointer" onClick={() => setModalOpen(!modalOpen)}>
+              Change
+            </span>
           </div>
 
           <Row>
@@ -100,6 +105,20 @@ const BranchManager = ({ id }) => {
           )}
         </div>
       )}
+
+      <Modal
+        isOpen={modalOpen}
+        toggle={() => setModalOpen(!modalOpen)}
+        className="modal-md"
+      >
+        <ModalBody className="p-4">
+          <ChangeManager
+            branchId={id}
+            modalClose={() => setModalOpen(!modalOpen)}
+            refetch={() => setSuccess(!success)}
+          />
+        </ModalBody>
+      </Modal>
     </>
   );
 };

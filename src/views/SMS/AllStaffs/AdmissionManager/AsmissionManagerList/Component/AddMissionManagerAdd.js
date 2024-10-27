@@ -28,6 +28,7 @@ import SaveButton from "../../../../../../components/buttons/SaveButton";
 import put from "../../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import Loader from "../../../../Search/Loader/Loader";
 
 const AddMissionManagerAdd = ({
   permissions,
@@ -405,11 +406,7 @@ const AddMissionManagerAdd = ({
           {permissions?.includes(permissionList?.View_AdmissionManager_list) ? (
             <>
               {loading ? (
-                <div class="d-flex justify-content-center mb-5">
-                  <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </div>
+                <Loader />
               ) : (
                 <div className="table-responsive fixedhead" ref={componentRef}>
                   <Table id="table-to-xls" className="table-sm table-bordered">

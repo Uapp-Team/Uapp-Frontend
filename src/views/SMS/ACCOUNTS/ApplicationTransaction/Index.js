@@ -363,508 +363,495 @@ const Index = () => {
   return (
     <div>
       <BreadCrumb title="Application Transaction List" backTo="" path="/" />
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Card className="zindex-100">
-            <CardBody>
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="row">
-                    {userType !== userTypes?.Consultant ? (
-                      <div className="col-md-3 mb-3">
-                        <Select
-                          options={consultantTypeOptions}
-                          value={{
-                            label: consultantTypeLabel,
-                            value: consultantTypeValue,
-                          }}
-                          onChange={(opt) =>
-                            selectConsultantType(opt.label, opt.value)
-                          }
-                          isDisabled={consultantId !== undefined ? true : false}
-                        />
-                      </div>
-                    ) : null}
-                    {userType !== userTypes?.Consultant ? (
-                      <div className="col-md-3 mb-3">
-                        <Select
-                          options={consultantOptions}
-                          value={{
-                            label: consultantLabel,
-                            value: consultantValue,
-                          }}
-                          onChange={(opt) =>
-                            selectConsultant(opt.label, opt.value)
-                          }
-                          isDisabled={consultantId !== undefined ? true : false}
-                        />
-                      </div>
-                    ) : null}
-                    {branch.length > 1 && (
-                      <div className="col-md-3 mb-3">
-                        <Filter
-                          data={branch}
-                          label={branchLabel}
-                          setLabel={setBranchLabel}
-                          value={branchValue}
-                          setValue={setBranchValue}
-                          action={() => {}}
-                        />
-                      </div>
-                    )}
+      <>
+        <Card className="zindex-100">
+          <CardBody>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="row">
+                  {userType !== userTypes?.Consultant ? (
                     <div className="col-md-3 mb-3">
                       <Select
-                        options={uappOptions}
-                        value={{ label: uappLabel, value: uappValue }}
-                        onChange={(opt) => selectUapp(opt.label, opt.value)}
-                      />
-                    </div>
-                    <div className="col-md-3 mb-3">
-                      <Select
-                        options={studentOptions}
-                        value={{ label: studentLabel, value: studentValue }}
-                        onChange={(opt) => selectStudent(opt.label, opt.value)}
-                      />
-                    </div>{" "}
-                    <div className="col-md-3 mb-3">
-                      <Select
-                        options={intakeOptions}
-                        value={{ label: intakeLabel, value: intakeValue }}
-                        onChange={(opt) => selectIntake(opt.label, opt.value)}
-                      />
-                    </div>
-                    <div className="col-md-3 md-3">
-                      <Select
-                        options={TransactionOptions}
+                        options={consultantTypeOptions}
                         value={{
-                          label: transactionLabel,
-                          value: transactionValue,
+                          label: consultantTypeLabel,
+                          value: consultantTypeValue,
                         }}
                         onChange={(opt) =>
-                          selectTransaction(opt.label, opt.value)
+                          selectConsultantType(opt.label, opt.value)
                         }
+                        isDisabled={consultantId !== undefined ? true : false}
                       />
                     </div>
+                  ) : null}
+                  {userType !== userTypes?.Consultant ? (
+                    <div className="col-md-3 mb-3">
+                      <Select
+                        options={consultantOptions}
+                        value={{
+                          label: consultantLabel,
+                          value: consultantValue,
+                        }}
+                        onChange={(opt) =>
+                          selectConsultant(opt.label, opt.value)
+                        }
+                        isDisabled={consultantId !== undefined ? true : false}
+                      />
+                    </div>
+                  ) : null}
+                  {branch.length > 1 && (
+                    <div className="col-md-3 mb-3">
+                      <Filter
+                        data={branch}
+                        label={branchLabel}
+                        setLabel={setBranchLabel}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        action={() => {}}
+                      />
+                    </div>
+                  )}
+                  <div className="col-md-3 mb-3">
+                    <Select
+                      options={uappOptions}
+                      value={{ label: uappLabel, value: uappValue }}
+                      onChange={(opt) => selectUapp(opt.label, opt.value)}
+                    />
+                  </div>
+                  <div className="col-md-3 mb-3">
+                    <Select
+                      options={studentOptions}
+                      value={{ label: studentLabel, value: studentValue }}
+                      onChange={(opt) => selectStudent(opt.label, opt.value)}
+                    />
+                  </div>{" "}
+                  <div className="col-md-3 mb-3">
+                    <Select
+                      options={intakeOptions}
+                      value={{ label: intakeLabel, value: intakeValue }}
+                      onChange={(opt) => selectIntake(opt.label, opt.value)}
+                    />
+                  </div>
+                  <div className="col-md-3 md-3">
+                    <Select
+                      options={TransactionOptions}
+                      value={{
+                        label: transactionLabel,
+                        value: transactionValue,
+                      }}
+                      onChange={(opt) =>
+                        selectTransaction(opt.label, opt.value)
+                      }
+                    />
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="row">
-                <div className="col-12 d-flex justify-content-start">
-                  <div className="d-flex mt-1">
-                    {consultantTypeValue !== 0 ? (
-                      <TagButton
-                        label={consultantTypeLabel}
-                        setValue={() => setConsultantTypeValue(0)}
-                        setLabel={() =>
-                          setConsultantTypeLabel("Consultant Type")
-                        }
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
+            <div className="row">
+              <div className="col-12 d-flex justify-content-start">
+                <div className="d-flex mt-1">
+                  {consultantTypeValue !== 0 ? (
+                    <TagButton
+                      label={consultantTypeLabel}
+                      setValue={() => setConsultantTypeValue(0)}
+                      setLabel={() => setConsultantTypeLabel("Consultant Type")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
 
-                    {consultantTypeValue !== 0 &&
-                    (uappValue !== 0 ||
-                      studentValue !== 0 ||
-                      consultantValue !== 0 ||
-                      transactionValue !== 0 ||
-                      intakeValue !== 0)
-                      ? ""
-                      : ""}
-
-                    {uappValue !== 0 ? (
-                      <TagButton
-                        label={uappLabel}
-                        setValue={() => setUappValue(0)}
-                        setLabel={() => setUappLabel("UAPP ID")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {uappValue !== 0 &&
-                    (studentValue !== 0 ||
-                      consultantValue !== 0 ||
-                      transactionValue !== 0 ||
-                      intakeValue !== 0)
-                      ? ""
-                      : ""}
-                    {studentValue !== 0 ? (
-                      <TagButton
-                        label={studentLabel}
-                        setValue={() => setStudentValue(0)}
-                        setLabel={() => setStudentLabel("Student")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {studentValue !== 0 &&
-                    (consultantValue !== 0 ||
-                      intakeValue !== 0 ||
-                      transactionValue !== 0)
-                      ? ""
-                      : ""}
-                    {consultantValue !== 0 ? (
-                      <TagButton
-                        label={consultantLabel}
-                        setValue={() => setConsultantValue(0)}
-                        setLabel={() => setConsultantLabel("Consultant")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {consultantValue !== 0 &&
-                    (intakeValue !== 0 || transactionValue !== 0)
-                      ? ""
-                      : ""}
-                    {intakeValue !== 0 ? (
-                      <TagButton
-                        label={intakeLabel}
-                        setValue={() => setIntakeValue(0)}
-                        setLabel={() => setIntakeLabel("Intake Range")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {branchValue !== 0 ? (
-                      <TagButton
-                        label={branchLabel}
-                        setValue={() => setBranchValue(0)}
-                        setLabel={() => setBranchLabel("Select Branch")}
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                    {transactionValue !== 0 ? (
-                      <TagButton
-                        label={transactionLabel}
-                        setValue={() => setTransactionValue(0)}
-                        setLabel={() =>
-                          setTransactionLabel("Transaction Status")
-                        }
-                      ></TagButton>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div
-                    className="mt-1 mx-1 d-flex btn-clear"
-                    onClick={handleReset}
-                  >
-                    {consultantTypeValue !== 0 ||
-                    uappValue !== 0 ||
+                  {consultantTypeValue !== 0 &&
+                  (uappValue !== 0 ||
                     studentValue !== 0 ||
                     consultantValue !== 0 ||
-                    branchValue !== 0 ||
+                    transactionValue !== 0 ||
+                    intakeValue !== 0)
+                    ? ""
+                    : ""}
+
+                  {uappValue !== 0 ? (
+                    <TagButton
+                      label={uappLabel}
+                      setValue={() => setUappValue(0)}
+                      setLabel={() => setUappLabel("UAPP ID")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {uappValue !== 0 &&
+                  (studentValue !== 0 ||
+                    consultantValue !== 0 ||
+                    transactionValue !== 0 ||
+                    intakeValue !== 0)
+                    ? ""
+                    : ""}
+                  {studentValue !== 0 ? (
+                    <TagButton
+                      label={studentLabel}
+                      setValue={() => setStudentValue(0)}
+                      setLabel={() => setStudentLabel("Student")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {studentValue !== 0 &&
+                  (consultantValue !== 0 ||
                     intakeValue !== 0 ||
-                    transactionValue !== 0 ? (
-                      <button className="tag-clear" onClick={handleReset}>
-                        Clear All
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+                    transactionValue !== 0)
+                    ? ""
+                    : ""}
+                  {consultantValue !== 0 ? (
+                    <TagButton
+                      label={consultantLabel}
+                      setValue={() => setConsultantValue(0)}
+                      setLabel={() => setConsultantLabel("Consultant")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {consultantValue !== 0 &&
+                  (intakeValue !== 0 || transactionValue !== 0)
+                    ? ""
+                    : ""}
+                  {intakeValue !== 0 ? (
+                    <TagButton
+                      label={intakeLabel}
+                      setValue={() => setIntakeValue(0)}
+                      setLabel={() => setIntakeLabel("Intake Range")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select Branch")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {transactionValue !== 0 ? (
+                    <TagButton
+                      label={transactionLabel}
+                      setValue={() => setTransactionValue(0)}
+                      setLabel={() => setTransactionLabel("Transaction Status")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div
+                  className="mt-1 mx-1 d-flex btn-clear"
+                  onClick={handleReset}
+                >
+                  {consultantTypeValue !== 0 ||
+                  uappValue !== 0 ||
+                  studentValue !== 0 ||
+                  consultantValue !== 0 ||
+                  branchValue !== 0 ||
+                  intakeValue !== 0 ||
+                  transactionValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleReset}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
-            </CardBody>
-          </Card>
+            </div>
+          </CardBody>
+        </Card>
 
-          <Card className="uapp-employee-search">
-            <CardBody>
-              {/* new */}
-              <Row className="mb-3">
-                <Col lg="5" md="5" sm="12" xs="12"></Col>
+        <Card className="uapp-employee-search">
+          <CardBody>
+            {/* new */}
+            <Row className="mb-3">
+              <Col lg="5" md="5" sm="12" xs="12"></Col>
 
-                <Col lg="7" md="7" sm="12" xs="12">
-                  <div className="d-flex justify-content-end">
-                    <div className="mr-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div className="ddzindex">
-                          <Select
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
+              <Col lg="7" md="7" sm="12" xs="12">
+                <div className="d-flex justify-content-end">
+                  <div className="mr-3">
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">Showing :</div>
+                      <div className="ddzindex">
+                        <Select
+                          options={dataSizeName}
+                          value={{ label: dataPerPage, value: dataPerPage }}
+                          onChange={(opt) => selectDataSize(opt.value)}
+                        />
                       </div>
                     </div>
+                  </div>
 
-                    <div className="mr-3">
-                      <Dropdown
-                        className="uapp-dropdown"
-                        style={{ float: "right" }}
-                        isOpen={dropdownOpen}
-                        toggle={toggle}
-                      >
-                        <DropdownToggle caret>
-                          <i className="fas fa-print fs-7"></i>
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dd-4">
-                          <div className="d-flex justify-content-around align-items-center mt-2">
-                            <div className="cursor-pointer">
-                              {/* <p onClick={handleExportXLSX}>
+                  <div className="mr-3">
+                    <Dropdown
+                      className="uapp-dropdown"
+                      style={{ float: "right" }}
+                      isOpen={dropdownOpen}
+                      toggle={toggle}
+                    >
+                      <DropdownToggle caret>
+                        <i className="fas fa-print fs-7"></i>
+                      </DropdownToggle>
+                      <DropdownMenu className="bg-dd-4">
+                        <div className="d-flex justify-content-around align-items-center mt-2">
+                          <div className="cursor-pointer">
+                            {/* <p onClick={handleExportXLSX}>
                             <i className="fas fa-file-excel"></i>
                           </p> */}
-                              <ReactTableConvertToXl
-                                id="test-table-xls-button"
-                                table="table-to-xls"
-                                filename="tablexls"
-                                sheet="tablexls"
-                                icon={<i className="fas fa-file-excel"></i>}
-                              />
-                            </div>
-                            <div className="cursor-pointer">
-                              <ReactToPrint
-                                trigger={() => (
-                                  <p>
-                                    <i className="fas fa-file-pdf"></i>
-                                  </p>
-                                )}
-                                content={() => componentRef.current}
-                              />
-                            </div>
+                            <ReactTableConvertToXl
+                              id="test-table-xls-button"
+                              table="table-to-xls"
+                              filename="tablexls"
+                              sheet="tablexls"
+                              icon={<i className="fas fa-file-excel"></i>}
+                            />
                           </div>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-
-                    <div className="">
-                      <Dropdown
-                        className="uapp-dropdown"
-                        style={{ float: "right" }}
-                        isOpen={dropdownOpen1}
-                        toggle={toggle1}
-                      >
-                        <DropdownToggle caret>
-                          <i className="fas fa-bars"></i>
-                        </DropdownToggle>
-                        <DropdownMenu className="bg-dd-1">
-                          {tableData.map((table, i) => (
-                            <div key={i}>
-                              {i === 12 ? (
-                                <>
-                                  {" "}
-                                  {permissions?.includes(
-                                    permissionList?.View_Application_Transactions
-                                  ) && (
-                                    <div className="d-flex justify-content-between">
-                                      <Col md="8" className="">
-                                        <p className="">{table?.title}</p>
-                                      </Col>
-
-                                      <Col md="4" className="text-center">
-                                        <FormGroup check inline>
-                                          <Input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id=""
-                                            name="isAcceptHome"
-                                            onChange={(e) => {
-                                              handleChecked(e, i);
-                                            }}
-                                            defaultChecked={table?.isActive}
-                                          />
-                                        </FormGroup>
-                                      </Col>
-                                    </div>
-                                  )}
-                                </>
-                              ) : (
-                                <div className="d-flex justify-content-between">
-                                  <Col md="8" className="">
-                                    <p className="">{table?.title}</p>
-                                  </Col>
-
-                                  <Col md="4" className="text-center">
-                                    <FormGroup check inline>
-                                      <Input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id=""
-                                        name="isAcceptHome"
-                                        onChange={(e) => {
-                                          handleChecked(e, i);
-                                        }}
-                                        defaultChecked={table?.isActive}
-                                      />
-                                    </FormGroup>
-                                  </Col>
-                                </div>
+                          <div className="cursor-pointer">
+                            <ReactToPrint
+                              trigger={() => (
+                                <p>
+                                  <i className="fas fa-file-pdf"></i>
+                                </p>
                               )}
-                            </div>
-                          ))}
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
+                              content={() => componentRef.current}
+                            />
+                          </div>
+                        </div>
+                      </DropdownMenu>
+                    </Dropdown>
                   </div>
-                </Col>
-              </Row>
 
-              {data?.length === 0 ? (
-                <h4 className="text-center">No Data Found</h4>
-              ) : (
-                <>
-                  <div className="table-responsive fixedhead">
-                    <Table
-                      id="table-to-xls"
-                      className="table-sm table-bordered"
+                  <div className="">
+                    <Dropdown
+                      className="uapp-dropdown"
+                      style={{ float: "right" }}
+                      isOpen={dropdownOpen1}
+                      toggle={toggle1}
                     >
-                      <thead className="tablehead">
-                        <tr className="text-center">
-                          {tableData[0]?.isActive ? <th>Id</th> : null}
-                          {tableData[1]?.isActive ? <th>Intake</th> : null}
+                      <DropdownToggle caret>
+                        <i className="fas fa-bars"></i>
+                      </DropdownToggle>
+                      <DropdownMenu className="bg-dd-1">
+                        {tableData.map((table, i) => (
+                          <div key={i}>
+                            {i === 12 ? (
+                              <>
+                                {" "}
+                                {permissions?.includes(
+                                  permissionList?.View_Application_Transactions
+                                ) && (
+                                  <div className="d-flex justify-content-between">
+                                    <Col md="8" className="">
+                                      <p className="">{table?.title}</p>
+                                    </Col>
+
+                                    <Col md="4" className="text-center">
+                                      <FormGroup check inline>
+                                        <Input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          id=""
+                                          name="isAcceptHome"
+                                          onChange={(e) => {
+                                            handleChecked(e, i);
+                                          }}
+                                          defaultChecked={table?.isActive}
+                                        />
+                                      </FormGroup>
+                                    </Col>
+                                  </div>
+                                )}
+                              </>
+                            ) : (
+                              <div className="d-flex justify-content-between">
+                                <Col md="8" className="">
+                                  <p className="">{table?.title}</p>
+                                </Col>
+
+                                <Col md="4" className="text-center">
+                                  <FormGroup check inline>
+                                    <Input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      id=""
+                                      name="isAcceptHome"
+                                      onChange={(e) => {
+                                        handleChecked(e, i);
+                                      }}
+                                      defaultChecked={table?.isActive}
+                                    />
+                                  </FormGroup>
+                                </Col>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+
+            {data?.length === 0 ? (
+              <Loader />
+            ) : (
+              <>
+                <div className="table-responsive fixedhead">
+                  <Table id="table-to-xls" className="table-sm table-bordered">
+                    <thead className="tablehead">
+                      <tr className="text-center">
+                        {tableData[0]?.isActive ? <th>Id</th> : null}
+                        {tableData[1]?.isActive ? <th>Intake</th> : null}
+                        {userType !== userTypes?.Consultant &&
+                        tableData[2]?.isActive ? (
+                          <th>Consultant</th>
+                        ) : null}
+                        {tableData[3]?.isActive ? <th>Student</th> : null}
+                        {tableData[4]?.isActive ? <th>University</th> : null}
+                        {tableData[5]?.isActive ? <th>Courses</th> : null}
+                        {tableData[6]?.isActive ? <th>Intake Range</th> : null}
+                        {tableData[7]?.isActive ? <th>Amount</th> : null}
+                        {tableData[8]?.isActive ? <th>Reg. Status</th> : null}
+
+                        {tableData[9]?.isActive ? (
+                          <th>Transaction Date</th>
+                        ) : null}
+                        {tableData[10]?.isActive ? <th>Status</th> : null}
+                        {tableData[11]?.isActive ? <th>Branch</th> : null}
+                        {permissions?.includes(
+                          permissionList?.View_Application_Transactions
+                        ) ? (
+                          <>
+                            {tableData[12]?.isActive ? <th>Action</th> : null}
+                          </>
+                        ) : null}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data?.map((ls, i) => (
+                        <tr key={i} className="text-center">
+                          {tableData[0]?.isActive ? <td>{ls?.id}</td> : null}
+                          {tableData[1]?.isActive ? (
+                            <td>{ls?.intake}</td>
+                          ) : null}
                           {userType !== userTypes?.Consultant &&
                           tableData[2]?.isActive ? (
-                            <th>Consultant</th>
+                            <td>
+                              {permissions?.includes(
+                                permissionList?.View_Consultant
+                              ) ? (
+                                <Link
+                                  className="text-body"
+                                  to={`consultantProfile/${ls?.consultantId}`}
+                                >
+                                  {ls?.consultant}
+                                </Link>
+                              ) : (
+                                <>{ls?.consultant}</>
+                              )}
+                            </td>
                           ) : null}
-                          {tableData[3]?.isActive ? <th>Student</th> : null}
-                          {tableData[4]?.isActive ? <th>University</th> : null}
-                          {tableData[5]?.isActive ? <th>Courses</th> : null}
+                          {tableData[3]?.isActive ? (
+                            <td>
+                              {" "}
+                              {permissions?.includes(
+                                permissionList?.View_Student
+                              ) ? (
+                                <Link
+                                  className="text-body"
+                                  to={`studentProfile/${ls?.studentId}`}
+                                >
+                                  {ls?.student}
+                                </Link>
+                              ) : (
+                                <>{ls?.student}</>
+                              )}
+                            </td>
+                          ) : null}
+                          {tableData[4]?.isActive ? (
+                            <td>
+                              {" "}
+                              {permissions?.includes(
+                                permissionList?.View_University
+                              ) ? (
+                                <Link
+                                  className="text-body"
+                                  to={`universityDetails/${ls?.universityId}`}
+                                >
+                                  {ls?.unviersity}
+                                </Link>
+                              ) : (
+                                <>{ls?.unviersity}</>
+                              )}
+                            </td>
+                          ) : null}
+                          {tableData[5]?.isActive ? (
+                            <td>{ls?.subject}</td>
+                          ) : null}
                           {tableData[6]?.isActive ? (
-                            <th>Intake Range</th>
+                            <td>{ls?.accountIntake}</td>
                           ) : null}
-                          {tableData[7]?.isActive ? <th>Amount</th> : null}
-                          {tableData[8]?.isActive ? <th>Reg. Status</th> : null}
+                          {tableData[7]?.isActive ? (
+                            <td>£{ls?.amount}</td>
+                          ) : null}
+                          {tableData[8]?.isActive ? (
+                            <td> {ls?.registrationStatus}</td>
+                          ) : null}
 
                           {tableData[9]?.isActive ? (
-                            <th>Transaction Date</th>
+                            <td>{ls?.transactionDate}</td>
                           ) : null}
-                          {tableData[10]?.isActive ? <th>Status</th> : null}
-                          {tableData[11]?.isActive ? <th>Branch</th> : null}
-                          {permissions?.includes(
-                            permissionList?.View_Application_Transactions
-                          ) ? (
-                            <>
-                              {tableData[12]?.isActive ? <th>Action</th> : null}
-                            </>
+                          {tableData[10]?.isActive ? (
+                            <td>{ls?.transactionStatus}</td>
                           ) : null}
+                          {tableData[11]?.isActive ? (
+                            <td>{ls?.branchName}</td>
+                          ) : null}
+
+                          <>
+                            {permissions?.includes(
+                              permissionList?.View_Application_Transactions
+                            ) ? (
+                              <>
+                                {" "}
+                                {tableData[12]?.isActive ? (
+                                  <td className="text-center">
+                                    <ButtonGroup variant="text">
+                                      <LinkButton
+                                        url={`/applicationTransactionDetails/${ls?.id}`}
+                                        color="primary"
+                                        className={"mx-1 btn-sm mt-2"}
+                                        icon={<i className="fas fa-eye"></i>}
+                                      />
+                                    </ButtonGroup>
+                                  </td>
+                                ) : null}
+                              </>
+                            ) : null}
+                          </>
+                          {/* ) : null} */}
                         </tr>
-                      </thead>
-                      <tbody>
-                        {data?.map((ls, i) => (
-                          <tr key={i} className="text-center">
-                            {tableData[0]?.isActive ? <td>{ls?.id}</td> : null}
-                            {tableData[1]?.isActive ? (
-                              <td>{ls?.intake}</td>
-                            ) : null}
-                            {userType !== userTypes?.Consultant &&
-                            tableData[2]?.isActive ? (
-                              <td>
-                                {permissions?.includes(
-                                  permissionList?.View_Consultant
-                                ) ? (
-                                  <Link
-                                    className="text-body"
-                                    to={`consultantProfile/${ls?.consultantId}`}
-                                  >
-                                    {ls?.consultant}
-                                  </Link>
-                                ) : (
-                                  <>{ls?.consultant}</>
-                                )}
-                              </td>
-                            ) : null}
-                            {tableData[3]?.isActive ? (
-                              <td>
-                                {" "}
-                                {permissions?.includes(
-                                  permissionList?.View_Student
-                                ) ? (
-                                  <Link
-                                    className="text-body"
-                                    to={`studentProfile/${ls?.studentId}`}
-                                  >
-                                    {ls?.student}
-                                  </Link>
-                                ) : (
-                                  <>{ls?.student}</>
-                                )}
-                              </td>
-                            ) : null}
-                            {tableData[4]?.isActive ? (
-                              <td>
-                                {" "}
-                                {permissions?.includes(
-                                  permissionList?.View_University
-                                ) ? (
-                                  <Link
-                                    className="text-body"
-                                    to={`universityDetails/${ls?.universityId}`}
-                                  >
-                                    {ls?.unviersity}
-                                  </Link>
-                                ) : (
-                                  <>{ls?.unviersity}</>
-                                )}
-                              </td>
-                            ) : null}
-                            {tableData[5]?.isActive ? (
-                              <td>{ls?.subject}</td>
-                            ) : null}
-                            {tableData[6]?.isActive ? (
-                              <td>{ls?.accountIntake}</td>
-                            ) : null}
-                            {tableData[7]?.isActive ? (
-                              <td>£{ls?.amount}</td>
-                            ) : null}
-                            {tableData[8]?.isActive ? (
-                              <td> {ls?.registrationStatus}</td>
-                            ) : null}
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              </>
+            )}
 
-                            {tableData[9]?.isActive ? (
-                              <td>{ls?.transactionDate}</td>
-                            ) : null}
-                            {tableData[10]?.isActive ? (
-                              <td>{ls?.transactionStatus}</td>
-                            ) : null}
-                            {tableData[11]?.isActive ? (
-                              <td>{ls?.branchName}</td>
-                            ) : null}
-
-                            <>
-                              {permissions?.includes(
-                                permissionList?.View_Application_Transactions
-                              ) ? (
-                                <>
-                                  {" "}
-                                  {tableData[12]?.isActive ? (
-                                    <td className="text-center">
-                                      <ButtonGroup variant="text">
-                                        <LinkButton
-                                          url={`/applicationTransactionDetails/${ls?.id}`}
-                                          color="primary"
-                                          className={"mx-1 btn-sm mt-2"}
-                                          icon={<i className="fas fa-eye"></i>}
-                                        />
-                                      </ButtonGroup>
-                                    </td>
-                                  ) : null}
-                                </>
-                              ) : null}
-                            </>
-                            {/* ) : null} */}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </div>
-                </>
-              )}
-
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={entity}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </CardBody>
-          </Card>
-        </>
-      )}
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </CardBody>
+        </Card>
+      </>
     </div>
   );
 };

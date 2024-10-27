@@ -68,7 +68,13 @@ const ConsultantTable = ({
               </th>
             ) : null}
             {tableData[1]?.isActive ? <th>Name</th> : null}
-            {tableData[2]?.isActive ? <th>Contact</th> : null}
+            {tableData[2]?.isActive ? (
+              <th className="d-print-none">Contact</th>
+            ) : null}
+
+            <th className="d-none d-print-block">Number</th>
+
+            <th className="d-none d-print-block">Email</th>
 
             {permissions?.includes(
               permissionList.Consultant_Password_Change
@@ -90,14 +96,15 @@ const ConsultantTable = ({
             ) ? (
               <>{tableData[13]?.isActive ? <th>Status</th> : null}</>
             ) : null} */}
-            {tableData[11]?.isActive ? <th>Status</th> : null}
+            {tableData[13]?.isActive ? <th>Status</th> : null}
+            {tableData[14]?.isActive ? <th>Tier</th> : null}
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[12]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[15]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[13]?.isActive ? (
+            {tableData[16]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -136,7 +143,7 @@ const ConsultantTable = ({
               ) : null}
               {tableData[2]?.isActive ? (
                 <td>
-                  <div className=" d-flex">
+                  <div className="d-flex d-print-none">
                     <PopOverText
                       value={
                         consultant?.phoneNumberr &&
@@ -147,11 +154,6 @@ const ConsultantTable = ({
                           ? "+" + consultant?.phoneNumber
                           : null
                       }
-                      // value={
-                      //   consultant?.phoneNumber
-                      //     ? "+" + consultant?.phoneNumber
-                      //     : null
-                      // }
                       btn={<i class="fas fa-phone"></i>}
                       popoverOpen={popoverOpen}
                       setPopoverOpen={setPopoverOpen}
@@ -165,6 +167,18 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
+
+              <td className="d-none d-print-block">
+                {consultant?.phoneNumberr &&
+                consultant?.phoneNumber.includes("+")
+                  ? consultant?.phoneNumber
+                  : consultant?.phoneNumber &&
+                    !consultant?.phoneNumber.includes("+")
+                  ? "+" + consultant?.phoneNumber
+                  : null}
+              </td>
+
+              <td className="d-none d-print-block">{consultant?.email}</td>
 
               {permissions?.includes(
                 permissionList.Consultant_Password_Change
@@ -307,6 +321,7 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
+
               {tableData[12]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
@@ -323,15 +338,18 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[11]?.isActive ? (
+              {tableData[13]?.isActive ? (
                 <td>{consultant?.accountStatus?.statusName}</td>
+              ) : null}
+              {tableData[14]?.isActive ? (
+                <td>{consultant?.tier !== "No Tier" && consultant?.tier}</td>
               ) : null}
 
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[12]?.isActive ? (
+                  {tableData[15]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!consultant?.isActive}
@@ -342,7 +360,7 @@ const ConsultantTable = ({
                 </>
               ) : null}
 
-              {tableData[13]?.isActive ? (
+              {tableData[16]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Consultant) ? (

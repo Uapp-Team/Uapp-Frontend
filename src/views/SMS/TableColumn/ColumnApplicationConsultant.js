@@ -40,6 +40,14 @@ const ColumnApplicationConsultant = [
     isActive: true,
   },
   {
+    title: "Document Status",
+    isActive: true,
+  },
+  {
+    title: "Assessment",
+    isActive: true,
+  },
+  {
     title: "Offer",
     isActive: true,
   },

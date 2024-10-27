@@ -21,6 +21,7 @@ import { useToasts } from "react-toast-notifications";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import Loader from "../../../../Search/Loader/Loader";
 
 const Index = () => {
   const [navItem, setNavItem] = useState("");
@@ -93,11 +94,7 @@ const Index = () => {
           <TabContent activeTab={activetab}>
             <TabPane tabId="6">
               {loading ? (
-                <>
-                  <div className="text-center">
-                    <img src={loader} className="img-fluid" alt="uapp_loader" />
-                  </div>
-                </>
+                <Loader />
               ) : (
                 <>
                   <p className="section-title">Admission officers</p>

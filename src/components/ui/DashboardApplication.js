@@ -52,6 +52,7 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                       : "Manager"}
                   </td>
 
+                  <td className="border-0">Document Status</td>
                   <td className="border-0">Assessment</td>
                   <td className="border-0">Date </td>
                 </tr>
@@ -132,6 +133,7 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                       </td>
                     )}
 
+                    <td>{item?.documentStatus}</td>
                     <td>{item?.assesment}%</td>
                     <td>{item?.applicationDate}</td>
                   </tr>
