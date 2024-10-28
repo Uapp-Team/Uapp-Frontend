@@ -15,6 +15,7 @@ import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ProfileRecruitingForFrom from "./ProfileComponent/ProfileRecruitingForFrom";
 import ProfileRatingsBreakdown from "./ProfileComponent/ProfileRatingsBreakdown";
 import get from "../../../../helpers/get";
+import Note from "./ProfileComponent/Note";
 
 const ConsultantProfile = () => {
   const userId = localStorage.getItem("referenceId");
@@ -62,6 +63,7 @@ const ConsultantProfile = () => {
           <ProfileRecruitingForFrom id={userId} />
 
           <Consent id={userId} />
+          <Note id={id} />
           <ProfileRatingsBreakdown id={id} />
           {/* <ProfileReview id={userId} /> */}
         </div>

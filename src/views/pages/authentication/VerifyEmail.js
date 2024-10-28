@@ -10,36 +10,56 @@ const VerifyEmail = () => {
   const { email } = useParams();
   const history = useHistory();
   const [verify, setVerify] = useState(false);
+  const [loading, setLoading] = useState(true); // Add loading state for the timeout
   const current_user = JSON.parse(localStorage.getItem("current_user"));
 
   useEffect(() => {
     if (!current_user) {
-      Axios.put(`${rootUrl}Account/verify-email?email=${email}`).then((res) => {
-        setVerify(res);
-      });
+      // Simulate loading with setTimeout for 2 seconds
+      setTimeout(() => {
+        Axios.put(`${rootUrl}Account/verify-email?email=${email}`)
+          .then((res) => {
+            setVerify(res);
+          })
+          .catch((err) => {
+            console.error("Email verification failed", err);
+          })
+          .finally(() => {
+            setLoading(false); // Stop loading after verification
+          });
+      }, 1000); // Set timeout for 2 seconds before making API call
+    } else {
+      setLoading(false); // Stop loading if user is already logged in
     }
   }, [email, current_user]);
 
   const handleLogOut = (e) => {
     e.preventDefault();
     logoutStorageHandler();
-    // window.localStorage.clear();
-    // window.location.reload();
     // history.push("/");
   };
 
   return (
     <div className="text-center" style={{ paddingTop: "250px" }}>
-      <img height={30} src={logoLg} alt="" />
+      <img height={30} src={logoLg} alt="Logo" />
 
-      {current_user ? (
+      {loading ? (
+        // Loader content displayed during the 2-second timeout and API call
+        <div>
+          <h1 className="mt-3">Verifying your email...</h1>
+          {/* You can replace the text below with a spinner or a loader component */}
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      ) : current_user ? (
         <>
           <div>
             <h3 className="mt-3">
-              You are already login as {current_user?.displayName}
+              You are already logged in as {current_user?.displayName}
             </h3>
             <p>
-              Please logout first before verify <b>{email}</b>
+              Please log out first before verifying <b>{email}</b>
             </p>
             <div className="text-center mt-3">
               <button
@@ -52,23 +72,21 @@ const VerifyEmail = () => {
                   fontWeight: "400",
                   border: "0",
                 }}
-                onClick={(e) => {
-                  handleLogOut(e);
-                }}
+                onClick={(e) => handleLogOut(e)}
               >
                 Log Out
               </button>
             </div>
           </div>
         </>
-      ) : !current_user && verify !== false ? (
+      ) : verify ? (
         <>
           <div>
             <h1 className="mt-3">Email is verified</h1>
             <p>
-              Congratulations! Your <b>{email}</b> is verified successfully.{" "}
-              <br />
-              Now you can log into your account.-details
+              Congratulations! Your <b>{email}</b> has been verified
+              successfully. <br />
+              Now you can log into your account.
             </p>
             <Link to="/" className="text-center mt-3">
               <button
@@ -85,15 +103,15 @@ const VerifyEmail = () => {
                 Log In
               </button>
             </Link>
-          </div>{" "}
+          </div>
         </>
       ) : (
         <>
           <div>
             <h1 className="mt-3">Failed to verify</h1>
             <p>
-              The email verification process failed. Try with different email or
-              contact UAPP helpline.
+              The email verification process failed. Try a different email or
+              contact support.
             </p>
           </div>
         </>

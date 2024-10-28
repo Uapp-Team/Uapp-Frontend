@@ -257,7 +257,7 @@ export default function ApplicationList({
                       {appinfo?.enrollmentStatusId === 2 ? (
                         <>
                           {appinfo?.enrollmentStatusId === 2 &&
-                          appinfo?.alreadyReviewed === true ? (
+                            appinfo?.alreadyReviewed === true ? (
                             <>
                               <span
                                 className="std-dashboard-style7
@@ -283,9 +283,9 @@ export default function ApplicationList({
                         <span
                           color="primary"
                           onClick={() => setIsCheckDetails(!isCheckDetails)}
-                          // onClick={() =>
-                          //   gotoApplicationDetails(appinfo?.applicationId)
-                          // }
+                        // onClick={() =>
+                        //   gotoApplicationDetails(appinfo?.applicationId)
+                        // }
                         >
                           {isCheckDetails ? (
                             <button
@@ -310,9 +310,9 @@ export default function ApplicationList({
                                   onClick={() =>
                                     setIsCheckDetails(!isCheckDetails)
                                   }
-                                  // onClick={() =>
-                                  //   gotoApplicationDetails(appinfo?.applicationId)
-                                  // }
+                                // onClick={() =>
+                                //   gotoApplicationDetails(appinfo?.applicationId)
+                                // }
                                 >
                                   Check Details{" "}
                                   <span className="ml-1">
@@ -578,14 +578,13 @@ export default function ApplicationList({
                             <div class="stepper-wrapper">
                               {appinfo?.timeLines.map((timeline) => (
                                 <div
-                                  class={`stepper-item ${
-                                    timeline?.isCompleted || timeline?.isCurrent
+                                  class={`stepper-item ${timeline?.isCompleted || timeline?.isCurrent
                                       ? "completed"
                                       : ""
-                                  }`}
+                                    }`}
                                 >
                                   {timeline?.isCompleted ||
-                                  timeline?.isCurrent ? (
+                                    timeline?.isCurrent ? (
                                     <div class="step-counter">
                                       <img
                                         src={tick}
@@ -875,7 +874,7 @@ export default function ApplicationList({
 
                 <div className="mt-5">
                   <div className="std-dashboard-style1 mb-4">
-                    Get started by completing your profile first
+                    Complete your profile information to get started
                   </div>
                   <ButtonForFunction
                     className="mb-4"
