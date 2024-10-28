@@ -37,6 +37,7 @@ import Address from "./ProfileComponent/ConsultantDetails/Address";
 import Rightwork from "./ProfileComponent/ConsultantDetails/Rightwork";
 import BankDetails from "./ProfileComponent/ConsultantDetails/BankDetails";
 import Recruitment from "./ProfileComponent/ConsultantDetails/Recruitment";
+import Note from "./ProfileComponent/Note";
 
 const ConsultantProfileForAdministrator = () => {
   const { id } = useParams();
@@ -103,6 +104,7 @@ const ConsultantProfileForAdministrator = () => {
           <ProfileImportantLinks id={id} />
           <EstimatedIncome id={id} />
           <TargetApplications id={id} />
+          <Note id={id} />
           {/* <ProfileRecruitingType id={id} /> */}
           <ProfileRatingsBreakdown id={id} />
           {/* <ProfileNotice id={id} /> */}
