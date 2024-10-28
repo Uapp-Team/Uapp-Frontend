@@ -355,10 +355,6 @@ const ConsultantTable = ({
                         isActive={!consultant?.isActive}
                         item={consultant}
                       />
-                      {/* <ToggleSwitch
-                        defaultChecked={!consultant?.isActive}
-                        onChange={() => handleUpdate(consultant)}
-                      /> */}
                     </td>
                   ) : null}
                 </>

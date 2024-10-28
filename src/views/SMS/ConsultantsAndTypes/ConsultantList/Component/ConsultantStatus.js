@@ -70,7 +70,7 @@ const ConsultantStatus = ({ data, close, action }) => {
     <div className={!action && "custom-card-border p-4 mb-3"}>
       <div className="d-flex justify-content-between mb-3">
         {/* <CardHeading text="Change Status" /> */}
-        <h3>Change Status</h3>
+        <h3>Write a note </h3>
         <CloseBtn action={action} />
       </div>
 
@@ -83,7 +83,7 @@ const ConsultantStatus = ({ data, close, action }) => {
         />
 
         <TextArea
-          label="Note"
+          // label="Note"
           register={register}
           name="message"
           placeholder="Write an short note"

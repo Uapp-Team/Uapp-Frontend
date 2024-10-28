@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import get from "../../../../../helpers/get";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 
 const Note = ({ id }) => {
   const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   get(`ConsultantDashboard/TargetOverview?id=${id}`).then((res) => {
-  //     setData(res);
-  //   });
-  // }, [id]);
+  useEffect(() => {
+    get(`Consultant/get-notes/${id}`).then((res) => {
+      console.log(res);
+      setData(res);
+    });
+  }, [id]);
 
   return (
     <>
@@ -16,11 +18,10 @@ const Note = ({ id }) => {
         <div className="overflowY-300px mb-3" id="scroll-note">
           {data?.map((chat, i) => (
             <div className="my-4" key={i}>
-              <p className="mb-0" style={{ color: "black", fontWeight: "500" }}>
-                {chat?.createdBy}createdBy
-              </p>
-              <span className="text-gray"> {chat?.createdon}createdon</span>
-              {/* <p className="bg-note bg-note-border pt-1 px-3 pb-3 mr-1 mt-2"> */}
+              <span className="text-gray">
+                {dateFormate(chat?.createdDate)}
+              </span>
+
               <p className="bg-note bg-note-border p-12px mr-1 mt-2">
                 <div
                   className="chat-note-naki"
