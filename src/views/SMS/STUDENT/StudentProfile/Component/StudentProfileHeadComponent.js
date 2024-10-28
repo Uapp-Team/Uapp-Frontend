@@ -80,8 +80,6 @@ export default function StudentProfileHeadComponent({ studentid }) {
 
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
-    console.log("croppedImage", croppedImage);
-
     // const subData = new FormData(event.target);
 
     // subData.append("id", studentid);
@@ -256,11 +254,10 @@ export default function StudentProfileHeadComponent({ studentid }) {
             <div
               className="bg-image-profile"
               style={{
-                backgroundImage: `url(${
-                  studentDetails?.coverImage
-                    ? rootUrl + studentDetails?.coverImage?.fileUrl
-                    : profileCover
-                })`,
+                backgroundImage: `url(${studentDetails?.coverImage
+                  ? rootUrl + studentDetails?.coverImage?.fileUrl
+                  : profileCover
+                  })`,
               }}
             >
               {/* <img
@@ -607,7 +604,7 @@ export default function StudentProfileHeadComponent({ studentid }) {
                   <span>UAPP Registration Date</span>
                   <br />
                   <span className="text-gray mb-1">
-                    {dateFormate(studentDetails?.registrationDate)}
+                    {studentDetails?.registrationDate}
                   </span>
                   <br />
                   <br />
@@ -626,8 +623,8 @@ export default function StudentProfileHeadComponent({ studentid }) {
                               blackList === null
                                 ? false
                                 : blackList === false
-                                ? false
-                                : true
+                                  ? false
+                                  : true
                             }
                             onChange={(e) => {
                               handleBlacklist(e, studentDetails?.id);
