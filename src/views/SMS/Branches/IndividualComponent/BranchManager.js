@@ -16,7 +16,6 @@ const BranchManager = ({ id }) => {
 
   useEffect(() => {
     get(`BranchManager/GetbyBranch/${id}`).then((res) => {
-      console.log("kire vai", res);
       setBranchManager(res);
     });
   }, [id, success]);
@@ -31,7 +30,7 @@ const BranchManager = ({ id }) => {
                 {branchManager?.managerImageMedia === null ? (
                   <img
                     src={profileImage}
-                    alt="profile_img"
+                    alt="img"
                     style={{
                       width: "50px",
                       height: "50px",
@@ -43,7 +42,7 @@ const BranchManager = ({ id }) => {
                     src={
                       rootUrl + branchManager?.managerImageMedia?.thumbnailUrl
                     }
-                    alt="profile_img"
+                    alt="img"
                     style={{
                       width: "50px",
                       height: "50px",
@@ -96,12 +95,12 @@ const BranchManager = ({ id }) => {
             <center>
               <div className="container py-3">
                 <Link to={`/branchManager/${id}`}>
-                  <AddButton text="Add Branch Manager" />
+                  <AddButton text="Add Branch Admin" />
                 </Link>
               </div>
             </center>
           ) : (
-            <p className="text-center">No Branch Manager</p>
+            <p className="text-center">No Branch Admin</p>
           )}
         </div>
       )}

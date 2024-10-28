@@ -200,14 +200,14 @@ const BranchManagerInformation = () => {
   return (
     <div>
       <BreadCrumb
-        title="Branch Manager Information"
+        title="Branch Admin Information"
         // backTo="Branch Profile"
         // path={`/branchProfile/${branchId}`}
       />
 
       <Card>
         <CardBody>
-          <p className="section-title">Update Manager Information</p>
+          <p className="section-title">Update Admin Information</p>
           <Form className="mt-4" onSubmit={handleUpdateManagerInformation}>
             <input
               type="hidden"

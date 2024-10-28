@@ -8,6 +8,7 @@ import remove from "../../../../../helpers/remove";
 import put from "../../../../../helpers/put";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import ConsultantActive from "../../../ConsultantsAndTypes/ConsultantList/Component/ConsultantActive";
 
 const ConsultantListForBranch = ({ id }) => {
   const [data, setData] = useState([]);
@@ -100,14 +101,10 @@ const ConsultantListForBranch = ({ id }) => {
                     <td>{item?.contact}</td>
                     <td>{item?.typeName}</td>
                     <td>
-                      {
-                        <ToggleSwitch
-                          defaultChecked={
-                            item?.isActive === false ? false : true
-                          }
-                          onChange={() => handleUpdate(item?.consultantId)}
-                        />
-                      }
+                      <ConsultantActive
+                        id={item?.consultantId}
+                        isActive={!item?.isActive}
+                      />
                     </td>
                     <td>
                       <span

@@ -15,15 +15,15 @@ const schema = yup.object({
   message: yup.string().required("Note is required"),
 });
 
-const ConsultantStatus = ({ data, close, action }) => {
+const ConsultantStatus = ({ id, close, action }) => {
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
 
   const defaultData = {
-    id: data.id,
+    id: id,
     message: "",
   };
-  console.log(data.id);
+  console.log(id);
   const {
     register,
     handleSubmit,
@@ -37,7 +37,7 @@ const ConsultantStatus = ({ data, close, action }) => {
   const onSubmit = (formData) => {
     console.log(formData);
     const submitData = {
-      id: data.id,
+      id: id,
       message: formData.message,
     };
 

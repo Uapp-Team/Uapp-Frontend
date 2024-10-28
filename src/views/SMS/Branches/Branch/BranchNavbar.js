@@ -39,7 +39,7 @@ const BranchNavbar = ({ title, activeTab, branchId }) => {
             onClick={() => toggle("2")}
             disabled={branchId ? false : true}
           >
-            Branch Manager
+            Branch Admin
           </NavLink>
         </NavItem>
 

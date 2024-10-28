@@ -201,8 +201,7 @@ const ApplicationsCommon = () => {
   const [financeValue, setFinanceValue] = useState(
     application?.financeValue ? application?.financeValue : 0
   );
-  const [branchManagerLabel, setBranchManagerLabel] =
-    useState("Branch Manager");
+  const [branchManagerLabel, setBranchManagerLabel] = useState("Branch Admin");
   const [branchManagerValue, setBranchManagerValue] = useState(0);
   const [admissionManagerDD, setAdmissionManagerDD] = useState([]);
   const [admissionManagerLabel, setAdmissionManagerLabel] = useState(
@@ -242,9 +241,7 @@ const ApplicationsCommon = () => {
       : "Assesment percentage"
   );
   const [percentageValue, setPercentageValue] = useState(
-    application?.percentageValue
-      ? application?.percentageValue
-      : 0
+    application?.percentageValue ? application?.percentageValue : 0
   );
 
   // state for  application list
@@ -369,7 +366,7 @@ const ApplicationsCommon = () => {
     documentStatusLabel,
     documentStatusValue,
     percentageLabel,
-    percentageValue
+    percentageValue,
   ]);
 
   // for all dropdown
@@ -659,7 +656,7 @@ const ApplicationsCommon = () => {
       setLoading(true);
       consultantId !== undefined
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -667,7 +664,7 @@ const ApplicationsCommon = () => {
           })
         : universityId !== undefined
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -675,7 +672,7 @@ const ApplicationsCommon = () => {
           })
         : selector === "1"
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -683,14 +680,14 @@ const ApplicationsCommon = () => {
           })
         : selector === "2"
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
             setEntity(res?.totalEntity);
           })
         : get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -725,7 +722,7 @@ const ApplicationsCommon = () => {
     proValue,
     documentStatusValue,
     isTyping,
-    percentageValue
+    percentageValue,
   ]);
 
   // Delete Button Click Action
@@ -793,7 +790,7 @@ const ApplicationsCommon = () => {
     setApplicationId("");
     !branchId && setBranchLabel("Select Branch");
     !branchId && setBranchValue(0);
-    setBranchManagerLabel("Branch Manager");
+    setBranchManagerLabel("Branch Admin");
     setBranchManagerValue(0);
     !providerId && setProLabel("Select Provider");
     !providerId && setProValue(0);
@@ -1117,34 +1114,34 @@ const ApplicationsCommon = () => {
                     data={[
                       {
                         id: 0,
-                         name: "All",
+                        name: "All",
                       },
                       {
                         id: 20,
-                        name: '20%'
+                        name: "20%",
                       },
                       {
-                        id : 40,
-                        name: '40%'
+                        id: 40,
+                        name: "40%",
                       },
                       {
-                        id :60,
-                        name: '60%'
+                        id: 60,
+                        name: "60%",
                       },
                       {
-                        id :80,
-                        name: '80%'
+                        id: 80,
+                        name: "80%",
                       },
                       {
-                        id :100,
-                        name: '100%'
+                        id: 100,
+                        name: "100%",
                       },
                     ]}
                     label={percentageLabel}
                     setLabel={setPercentageLabel}
                     value={percentageValue}
                     setValue={setPercentageValue}
-                    action={() => { }}
+                    action={() => {}}
                   />
                 </Col>
               </>
