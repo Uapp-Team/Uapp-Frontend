@@ -3787,7 +3787,28 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
+                    path="/admission-officer-applications/:status/:selector/:adoId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
                     path="/ApplicationListByAdmissionmanager/:admId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ApplicationListByAdmissionOfficer/:adoId"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List

@@ -41,6 +41,7 @@ const ApplicationsCommon = () => {
   const location = useLocation();
   const {
     admId,
+    adoId,
     branchId,
     consultantId,
     universityId,
@@ -220,6 +221,16 @@ const ApplicationsCommon = () => {
   const [admissionManagerValue, setAdmissionManagerValue] = useState(
     admId ? admId : 0
   );
+  const [admissionOfficerDD, setAdmissionOfficerDD] = useState([]);
+  const [admissionOfficerLabel, setAdmissionOfficerLabel] = useState(
+    application?.admissionManagerLabel
+      ? application?.admissionManagerLabel
+      : "Admission Officer"
+  );
+
+  const [admissionOfficerValue, setAdmissionOfficerValue] = useState(
+    adoId ? adoId : 0
+  );
   const [proLabel, setProLabel] = useState(
     application?.proLabel ? application?.proLabel : "Select Provider"
   );
@@ -242,9 +253,7 @@ const ApplicationsCommon = () => {
       : "Assesment percentage"
   );
   const [percentageValue, setPercentageValue] = useState(
-    application?.percentageValue
-      ? application?.percentageValue
-      : 0
+    application?.percentageValue ? application?.percentageValue : 0
   );
 
   // state for  application list
@@ -314,6 +323,10 @@ const ApplicationsCommon = () => {
           !admId && admissionManagerLabel && admissionManagerLabel,
         admissionManagerValue:
           !admId && admissionManagerValue && admissionManagerValue,
+        admissionOfficerLabel:
+          !adoId && admissionOfficerLabel && admissionOfficerLabel,
+        admissionOfficerValue:
+          !adoId && admissionOfficerValue && admissionOfficerValue,
         branchLabel: !branchId && branchLabel && branchLabel,
         branchValue: !branchId && branchValue && branchValue,
         dataPerPage: dataPerPage && dataPerPage,
@@ -356,6 +369,8 @@ const ApplicationsCommon = () => {
     proValue,
     admissionManagerLabel,
     admissionManagerValue,
+    admissionOfficerLabel,
+    admissionOfficerValue,
     branchLabel,
     branchValue,
     dataPerPage,
@@ -365,11 +380,12 @@ const ApplicationsCommon = () => {
     intake,
     providerId,
     admId,
+    adoId,
     branchId,
     documentStatusLabel,
     documentStatusValue,
     percentageLabel,
-    percentageValue
+    percentageValue,
   ]);
 
   // for all dropdown
@@ -403,6 +419,11 @@ const ApplicationsCommon = () => {
   const admissionManagerMenu = admissionManagerDD.map((admissionManager) => ({
     label: admissionManager?.name,
     value: admissionManager?.id,
+  }));
+
+  const admissionOfficerMenu = admissionOfficerDD.map((admissionOfficer) => ({
+    label: admissionOfficer?.name,
+    value: admissionOfficer?.id,
   }));
 
   const financeMenu = financeDD.map((finance) => ({
@@ -496,6 +517,10 @@ const ApplicationsCommon = () => {
     setAdmissionManagerLabel(label);
     setAdmissionManagerValue(value);
   };
+  const selectAdmissionOfficerDD = (label, value) => {
+    setAdmissionOfficerLabel(label);
+    setAdmissionOfficerValue(value);
+  };
 
   const selectProviders = (label, value) => {
     setProLabel(label);
@@ -553,6 +578,13 @@ const ApplicationsCommon = () => {
       if (admId) {
         const result = res?.find((ans) => ans.id.toString() === admId);
         setAdmissionManagerLabel(result?.name);
+      }
+    });
+    get(`AdmissionOfficerDD/Index`).then((res) => {
+      setAdmissionOfficerDD(res);
+      if (adoId) {
+        const result = res?.find((ans) => ans.id.toString() === adoId);
+        setAdmissionOfficerLabel(result?.name);
       }
     });
 
@@ -638,6 +670,7 @@ const ApplicationsCommon = () => {
     status,
     selector,
     admId,
+    adoId,
     success,
     providerId,
   ]);
@@ -659,7 +692,7 @@ const ApplicationsCommon = () => {
       setLoading(true);
       consultantId !== undefined
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -667,7 +700,7 @@ const ApplicationsCommon = () => {
           })
         : universityId !== undefined
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -675,7 +708,7 @@ const ApplicationsCommon = () => {
           })
         : selector === "1"
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -683,14 +716,14 @@ const ApplicationsCommon = () => {
           })
         : selector === "2"
         ? get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
             setEntity(res?.totalEntity);
           })
         : get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&adoId=${admissionOfficerValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -722,10 +755,11 @@ const ApplicationsCommon = () => {
     branchValue,
     branchManagerValue,
     admissionManagerValue,
+    admissionOfficerValue,
     proValue,
     documentStatusValue,
     isTyping,
-    percentageValue
+    percentageValue,
   ]);
 
   // Delete Button Click Action
@@ -799,6 +833,8 @@ const ApplicationsCommon = () => {
     !providerId && setProValue(0);
     !admId && setAdmissionManagerLabel("Admission Manager");
     !admId && setAdmissionManagerValue(0);
+    !adoId && setAdmissionOfficerLabel("Admission Officer");
+    !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
     setCurrentPage(1);
@@ -1068,22 +1104,41 @@ const ApplicationsCommon = () => {
                 {userType === userTypes?.SystemAdmin ||
                 userType === userTypes?.Admin ||
                 userType === userTypes?.ProviderAdmin ? (
-                  <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                    <Select
-                      options={admissionManagerMenu}
-                      value={{
-                        label: admissionManagerLabel,
-                        value: admissionManagerValue,
-                      }}
-                      onChange={(opt) =>
-                        selectAdmissionManagerDD(opt.label, opt.value)
-                      }
-                      name="name"
-                      id="id"
-                      isDisabled={admId ? true : false}
-                    />
-                  </Col>
+                  <>
+                    {" "}
+                    <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                      <Select
+                        options={admissionManagerMenu}
+                        value={{
+                          label: admissionManagerLabel,
+                          value: admissionManagerValue,
+                        }}
+                        onChange={(opt) =>
+                          selectAdmissionManagerDD(opt.label, opt.value)
+                        }
+                        name="name"
+                        id="id"
+                        isDisabled={admId ? true : false}
+                      />
+                    </Col>
+                    <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                      <Select
+                        options={admissionOfficerMenu}
+                        value={{
+                          label: admissionOfficerLabel,
+                          value: admissionOfficerValue,
+                        }}
+                        onChange={(opt) =>
+                          selectAdmissionOfficerDD(opt.label, opt.value)
+                        }
+                        name="name"
+                        id="id"
+                        isDisabled={adoId ? true : false}
+                      />
+                    </Col>
+                  </>
                 ) : null}
+
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Filter
                     data={[
@@ -1117,34 +1172,34 @@ const ApplicationsCommon = () => {
                     data={[
                       {
                         id: 0,
-                         name: "All",
+                        name: "All",
                       },
                       {
                         id: 20,
-                        name: '20%'
+                        name: "20%",
                       },
                       {
-                        id : 40,
-                        name: '40%'
+                        id: 40,
+                        name: "40%",
                       },
                       {
-                        id :60,
-                        name: '60%'
+                        id: 60,
+                        name: "60%",
                       },
                       {
-                        id :80,
-                        name: '80%'
+                        id: 80,
+                        name: "80%",
                       },
                       {
-                        id :100,
-                        name: '100%'
+                        id: 100,
+                        name: "100%",
                       },
                     ]}
                     label={percentageLabel}
                     setLabel={setPercentageLabel}
                     value={percentageValue}
                     setValue={setPercentageValue}
-                    action={() => { }}
+                    action={() => {}}
                   />
                 </Col>
               </>
