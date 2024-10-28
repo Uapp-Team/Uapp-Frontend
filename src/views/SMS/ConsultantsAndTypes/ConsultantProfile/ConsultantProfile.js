@@ -35,7 +35,7 @@ const ConsultantProfile = () => {
         <CardHeader className="page-header">
           <h3 className="text-white">Consultant Profile</h3>
           {userType == userTypes?.SystemAdmin ||
-          userType == userTypes?.BranchManager ||
+          userType == userTypes?.BranchAdmin ||
           userType == userTypes?.Admin ||
           userType == userTypes?.ComplianceManager ? (
             <div className="page-header-back-to-home">

@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 // import { toast } from "react-toastify";
 import {
   AdminUsers,
-  BranchManager,
+  BranchAdmin,
   Consultant,
   referenceId,
 } from "../../../../components/core/User";
@@ -47,7 +47,7 @@ const LeadAdd = ({ refetch, action }) => {
   const [isSubmit, setIsSubmit] = useState(false);
   // const { mutateAsync } = Post();
   // const [branchId, setBranchId] = useState(
-  //   BranchManager()
+  //   BranchAdmin()
   //     ? value.user.referenceId
   //     : 0
   // );
@@ -59,7 +59,7 @@ const LeadAdd = ({ refetch, action }) => {
   // const [consultantError, setConsultantError] = useState("");
   // const [countryError, setCountryError] = useState("");
   const defaultData = {
-    branchId: BranchManager() ? referenceId : 0,
+    branchId: BranchAdmin() ? referenceId : 0,
     consultantId: Consultant() ? referenceId : 0,
     countryId: 0,
     name: "",
@@ -162,7 +162,7 @@ const LeadAdd = ({ refetch, action }) => {
               defaultValue={branchId}
             />
           )} */}
-          {AdminUsers() || BranchManager() ? (
+          {AdminUsers() || BranchAdmin() ? (
             <DDFilterByUrl
               register={register}
               label="Select Consultant"

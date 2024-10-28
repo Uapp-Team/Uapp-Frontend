@@ -135,7 +135,7 @@ const StaffRegister = () => {
       isFormValid = false;
       setConsultantError(true);
     }
-    if (userTypeId !== userTypes?.BranchManager && branchValue === 0) {
+    if (userTypeId !== userTypes?.BranchAdmin && branchValue === 0) {
       isFormValid = false;
       setBranchError(true);
     }
@@ -224,7 +224,7 @@ const StaffRegister = () => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md="6">
-                {userTypeId !== userTypes?.BranchManager ? (
+                {userTypeId !== userTypes?.BranchAdmin ? (
                   <FormGroup>
                     <span>
                       Branch <span className="text-danger">*</span>

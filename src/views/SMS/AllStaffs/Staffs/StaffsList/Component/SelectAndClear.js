@@ -44,7 +44,7 @@ const SelectAndClear = ({
             />
           </Col>
 
-          {userTypeId !== userTypes?.BranchManager && (
+          {userTypeId !== userTypes?.BranchAdmin && (
             <Col className="uapp-mb" md="4" sm="12">
               <Select
                 options={branchOptions}

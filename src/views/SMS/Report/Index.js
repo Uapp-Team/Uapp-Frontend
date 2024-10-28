@@ -11,7 +11,7 @@ const Index = () => {
       {userType == userTypes?.SystemAdmin ||
       userType == userTypes?.AdmissionCompliance ||
       userType == userTypes?.Admin ||
-      userType == userTypes?.BranchManager ? (
+      userType == userTypes?.BranchAdmin ? (
         <IntakeRangeReportForAdministrator />
       ) : userType == userTypes?.ProviderAdmin ? (
         <IntakeRangeReportForProviderAdmin />

@@ -29,7 +29,7 @@ const CommonProfile = () => {
         <AdmissionManagerNewProfile />
       )}
 
-      {currentUser === userTypes?.BranchManager.toString() && (
+      {currentUser === userTypes?.BranchAdmin.toString() && (
         <BranchManagerNewProfile />
       )}
       {currentUser === userTypes?.Student.toString() && (
