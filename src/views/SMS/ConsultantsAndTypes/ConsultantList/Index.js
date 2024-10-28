@@ -362,25 +362,6 @@ const Index = () => {
     history.push(`/consultantDashboard/${consultantId}`);
   };
 
-  const handleUpdate = (data) => {
-    // setModalData(data);
-    // setModalForStatus(true);
-    // put(`Consultant/UpdateAccountStatus/${data?.id}`).then((res) => {
-    //   if (res?.status == 200 && res?.data?.isSuccess == true) {
-    //     addToast(res?.data?.message, {
-    //       autoDismiss: true,
-    //       appearance: "success",
-    //     });
-    //     setSuccess(!success);
-    //   } else {
-    //     addToast(res?.data?.message, {
-    //       autoDismiss: true,
-    //       appearance: "error",
-    //     });
-    //   }
-    // });
-  };
-
   const empOptiopns = empList?.map((emp) => ({
     label: emp?.name,
     value: emp?.id,
@@ -553,7 +534,6 @@ const Index = () => {
                       passError={passError}
                       handleDate={handleDate}
                       redirectToApplications={redirectToApplications}
-                      handleUpdate={handleUpdate}
                       redirectToConsultantProfile={redirectToConsultantProfile}
                       userType={userType}
                       redirectToConsultantDashboard={

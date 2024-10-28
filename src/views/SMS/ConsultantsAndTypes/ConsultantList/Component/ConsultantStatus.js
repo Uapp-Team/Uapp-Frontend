@@ -40,10 +40,7 @@ const ConsultantStatus = ({ data, close, action }) => {
       id: data.id,
       message: formData.message,
     };
-    // if (statusId === "1" && !check) {
-    //   setCheckError("Required");
-    // } else {
-    //   setCheckError("");
+
     setIsSubmit(true);
 
     put(`consultant/block-with-note`, submitData).then((res) => {
