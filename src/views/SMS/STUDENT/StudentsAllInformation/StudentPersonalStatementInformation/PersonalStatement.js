@@ -143,7 +143,7 @@ const PersonalStatement = () => {
         activetab={"9"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -181,7 +181,7 @@ const PersonalStatement = () => {
                           id="inputImage"
                           onChange={(e) => handleFileChange(e)}
                         />
-                        <p>Only .txt file is allow</p>
+                        {/* <p>Only .txt file is allow</p> */}
                       </Col>
                     </Row>
                   </FormGroup>
@@ -198,7 +198,7 @@ const PersonalStatement = () => {
                       rows={12}
                       value={statement}
                       onChange={(e) => handleStringData(e)}
-                      // onBlur={checkPlagiarism}
+                    // onBlur={checkPlagiarism}
                     />
 
                     <div className="d-flex justify-content-between">
@@ -255,8 +255,8 @@ const PersonalStatement = () => {
                               result?.score?.aggregatedScore < 25
                                 ? `text-success fw-600`
                                 : result?.score?.aggregatedScore < 50
-                                ? `text-warning fw-600`
-                                : `text-danger fw-600`
+                                  ? `text-warning fw-600`
+                                  : `text-danger fw-600`
                             }
                           >
                             {result?.score?.aggregatedScore}%
@@ -266,8 +266,8 @@ const PersonalStatement = () => {
                               result?.score?.aggregatedScore < 25
                                 ? `text-success fw-600`
                                 : result?.score?.aggregatedScore < 50
-                                ? `text-warning fw-600`
-                                : `text-danger fw-600`
+                                  ? `text-warning fw-600`
+                                  : `text-danger fw-600`
                             }
                           >
                             Plagiarism
@@ -329,7 +329,7 @@ const PersonalStatement = () => {
               ) : (
                 <div className="custom-card-border px-4 text-center py-5">
                   <h4 className="my-5">
-                    Upload txt file or write on the textbox and save it
+                    Upload file and write on the text box then save it
                   </h4>
                 </div>
               )}

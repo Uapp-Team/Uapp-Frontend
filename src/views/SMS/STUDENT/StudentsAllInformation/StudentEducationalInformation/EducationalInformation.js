@@ -43,7 +43,6 @@ const EducationalInformation = () => {
   const [educationLevelValue, setEducationLevelValue] = useState(0);
   const [progress, setProgress] = useState(false);
   const [deleteData, setDeleteData] = useState({});
-  console.log(deleteData, "deleteData");
   const [forms, setForms] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -63,9 +62,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState(currentDate);
+  const [attendedFrom, setAttendedFrom] = useState('');
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState(currentDate);
+  const [attendedTo, setAttendedTo] = useState('');
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -184,17 +183,26 @@ const EducationalInformation = () => {
     }
   };
   const handleAttendedFrom = (e) => {
-    setAttendedFrom(e.target.value);
+    const value = e.target.value;
+    setAttendedFrom(value);
     if (e.target.value === "") {
       setAttendedFromError("Date is required");
-    } else {
+    } else if (currentDate < value) {
+      setAttendedFromError("Invalid Date");
+    }
+    else {
       setAttendedFromError("");
     }
   };
   const handleAttendedTo = (e) => {
-    setAttendedTo(e.target.value);
+    const value = e.target.value;
+    setAttendedTo(value);
     if (e.target.value === "") {
       setAttendedToError("Date is required");
+    } else if (currentDate < value) {
+      setAttendedToError("Invalid Date");
+    } else if (attendedFrom > value) {
+      setAttendedToError("Attended to date should be greater than Attended from date");
     } else {
       setAttendedToError("");
     }
@@ -294,7 +302,6 @@ const EducationalInformation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("mannavai");
     const subData = new FormData(event.target);
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
@@ -405,14 +412,14 @@ const EducationalInformation = () => {
 
       res?.attendedInstitutionFrom
         ? setAttendedFrom(
-            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
+        )
         : setAttendedFrom(currentDate);
 
       res?.attendedInstitutionTo
         ? setAttendedTo(
-            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
+        )
         : setAttendedTo(currentDate);
 
       // setAttendedFrom(
@@ -480,7 +487,7 @@ const EducationalInformation = () => {
         activetab={"5"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -567,7 +574,7 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.nameOfInstitution}
+                                {edu?.educationLevel?.name}
                               </span>
 
                               <span>
@@ -619,7 +626,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.educationLevel?.name}</b>
+                                  <b>{edu?.nameOfInstitution}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
@@ -800,9 +807,9 @@ const EducationalInformation = () => {
               )}
 
               {showDeleteOption === false &&
-              forms === false &&
-              showForm === false &&
-              eduDetails?.length === 0 ? (
+                forms === false &&
+                showForm === false &&
+                eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) ? (

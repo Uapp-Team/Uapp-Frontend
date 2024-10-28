@@ -57,7 +57,6 @@ const UpdateContactInformation = ({
     function fillInAddress() {
       // Get the place details from the autocomplete object.
       const place = autocomplete.getPlace();
-      console.log(place);
       setStreet("");
       setRoute("");
       for (const component of place.address_components) {
@@ -108,7 +107,6 @@ const UpdateContactInformation = ({
     setStreet,
     setRoute,
   ]);
-  console.log(addressLine2);
   return (
     <>
       <Form id="scrollDown" onSubmit={handleSubmitIndividual}>
