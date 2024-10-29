@@ -1,10 +1,10 @@
 import React from "react";
-import { Card, CardBody, Col, Input, Row } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import Select from "react-select";
 import TagButton from "../../../../../../components/buttons/TagButton";
-import { userTypes } from "../../../../../../constants/userTypeConstant";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../../components/form/Typing";
+import { AdminUsers } from "../../../../../../components/core/User";
 
 const SelectAndClear = ({
   empOptiopns,
@@ -27,8 +27,6 @@ const SelectAndClear = ({
   handleReset,
   setIsTyping,
 }) => {
-  const userTypeId = localStorage.getItem("userType");
-
   return (
     <Card className="uapp-employee-search">
       <CardBody className="search-card-body">
@@ -44,7 +42,7 @@ const SelectAndClear = ({
             />
           </Col>
 
-          {userTypeId !== userTypes?.BranchAdmin && (
+          {AdminUsers() && (
             <Col className="uapp-mb" md="4" sm="12">
               <Select
                 options={branchOptions}

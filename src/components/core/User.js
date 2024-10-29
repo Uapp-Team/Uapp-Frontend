@@ -95,5 +95,6 @@ export const AdmissionCompliance = () => {
 };
 
 export const AdminUsers = () => SystemAdmin() || Admin();
+export const BranchUsers = () => BranchAdmin() || BranchManager();
 export const AdmissionUsers = () =>
   Provider() || ProviderAdmin() || AdmissionManager() || AdmissionOfficer();

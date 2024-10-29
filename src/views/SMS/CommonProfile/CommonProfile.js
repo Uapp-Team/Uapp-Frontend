@@ -37,6 +37,7 @@ const CommonProfile = () => {
       )}
       {(currentUser === userTypes?.AccountManager.toString() ||
         currentUser === userTypes?.Editor.toString() ||
+        currentUser === userTypes?.BranchManager.toString() ||
         currentUser === userTypes?.AccountOfficer.toString() ||
         currentUser === userTypes?.ComplianceManager.toString() ||
         currentUser === userTypes?.FinanceManager.toString()) && (
