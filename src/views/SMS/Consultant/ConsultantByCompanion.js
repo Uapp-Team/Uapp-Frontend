@@ -31,7 +31,7 @@ import put from "../../../helpers/put.js";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
 import CancelButton from "../../../components/buttons/CancelButton.js";
 import SaveButton from "../../../components/buttons/SaveButton.js";
-import PopOverText from "../../../components/PopOverText.js";
+import PopOverText from "../../../components/PopOverText";
 import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 import Uget from "../../../helpers/Uget.js";
 import { dateFormate } from "../../../components/date/calenderFormate.js";
@@ -90,8 +90,7 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
-        id ? id : referenceId
+      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${id ? id : referenceId
       }`
     ).then((res) => {
       console.log(res);
@@ -441,19 +440,24 @@ const ConsultantByCompanion = () => {
               <Loader />
             ) : (
               <div
-                className="table-responsive my-4 fixedhead"
+                className="table-responsive my-4 fixedhead mb-2"
                 ref={componentRef}
               >
                 <Table id="table-to-xls" className="table-sm table-bordered">
-                  <thead className="thead-uapp-bg">
+                  <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
                       {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
                       {tableData[1]?.isActive ? <th>Full Name</th> : null}
                       {tableData[2]?.isActive ? <th>Contact</th> : null}
-                      {tableData[3]?.isActive ? <th>Started</th> : null}
-                      {tableData[4]?.isActive ? <th>Invitation</th> : null}
-                      {tableData[5]?.isActive ? <th>Team Member</th> : null}
-                      {tableData[6]?.isActive ? <th>Action</th> : null}
+                      {tableData[3]?.isActive ? <th>Parent</th> : null}
+                      {tableData[4]?.isActive ? <th>Started</th> : null}
+                      {tableData[5]?.isActive ? <th>Invitation</th> : null}
+                      {tableData[6]?.isActive ? <th>Leads</th> : null}
+                      {tableData[7]?.isActive ? <th>Team Member</th> : null}
+                      {tableData[8]?.isActive ? <th>Application</th> : null}
+                      {tableData[9]?.isActive ? <th>Registered</th> : null}
+                      {tableData[10]?.isActive ? <th>Status</th> : null}
+                      {tableData[11]?.isActive ? <th>Action</th> : null}
                     </tr>
                   </thead>
                   <tbody>
@@ -469,6 +473,7 @@ const ConsultantByCompanion = () => {
                             </Link>
                           </td>
                         ) : null}
+
                         {tableData[1]?.isActive ? (
                           <td>
                             <div className="cursor-pointer hyperlink-hover">
@@ -488,12 +493,12 @@ const ConsultantByCompanion = () => {
                               <PopOverText
                                 value={
                                   companion?.phone &&
-                                  companion?.phone.includes("+")
+                                    companion?.phone.includes("+")
                                     ? companion?.phone
                                     : companion?.phone &&
                                       !companion?.phone.includes("+")
-                                    ? "+" + companion?.phone
-                                    : null
+                                      ? "+" + companion?.phone
+                                      : null
                                 }
                                 btn={<i class="fas fa-phone"></i>}
                                 popoverOpen={popoverOpen}
@@ -508,10 +513,16 @@ const ConsultantByCompanion = () => {
                             </div>
                           </td>
                         ) : null}
+
                         {tableData[3]?.isActive ? (
+                          <td>{companion?.parentName}</td>
+                        ) : null}
+
+                        {tableData[4]?.isActive ? (
                           <td>{dateFormate(companion?.createdOn)}</td>
                         ) : null}
-                        {tableData[4]?.isActive ? (
+
+                        {tableData[5]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -528,7 +539,24 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[5]?.isActive ? (
+                        {tableData[6]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-fifth-no-pointer"
+                              // onClick={() => {
+                              //   history.push(
+                              //     `/companion-team-List/${companion?.id}`
+                              //   );
+                              // }}
+                              >
+                                {companion?.leadCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
+
+                        {tableData[7]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -545,7 +573,45 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[7]?.isActive ? (
+                        {tableData[8]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-third-no-pointer"
+                              // onClick={() => {
+                              //   history.push(
+                              //     `/companion-team-List/${companion?.id}`
+                              //   );
+                              // }}
+                              >
+                                {companion?.totalApplicationCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
+
+                        {tableData[9]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-fourth-no-pointer"
+                              // onClick={() => {
+                              //   history.push(
+                              //     `/companion-team-List/${companion?.id}`
+                              //   );
+                              // }}
+                              >
+                                {companion?.totalRegisteredApplicationCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
+
+                        {tableData[10]?.isActive ? (
+                          <td>{companion?.accountStatus}</td>
+                        ) : null}
+
+                        {tableData[11]?.isActive ? (
                           <>
                             {" "}
                             <td style={{ width: "8%" }} className="text-center">

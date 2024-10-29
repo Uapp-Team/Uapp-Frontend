@@ -4998,6 +4998,7 @@ label.ant-radio-button-wrapper {
   font-size: 14px;
   padding: 5px 6px;
   border-radius: 4px;
+  z-index: 9999999999999999999;
 }
 
 .consultant-eye-button {
