@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import get from "../../../helpers/get";
 import user from "../../../assets/img/Uapp_fav.png";
 import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
+import { BranchManager, Consultant } from "../../../components/core/User";
 
 const NavbarUser = () => {
   // const [navbarSearch, setnavbarSearch] = useState(false);
@@ -25,10 +26,23 @@ const NavbarUser = () => {
   // const [connection, setconnection] = useState([]);
   // const [chat, setchat] = useState("");
   const [notificationCount, setnotificationCount] = useState();
-
   const [notificationData, setnotificationData] = useState([]);
-
   const [newNotificationData, setNewNotification] = useState([]);
+  const [canSwitch, setcanSwitch] = useState(false);
+  const [message, setmessage] = useState([]);
+  const [messageCount, setmessageCount] = useState();
+
+  const userInfo = JSON.parse(localStorage.getItem("current_user"));
+  const AuthStr = localStorage.getItem("token");
+
+  const [data, setData] = useState({});
+  useEffect(() => {
+    (Consultant() || BranchManager()) &&
+      get(`ConsultantProfile/check/${userInfo?.referenceId}`).then((res) => {
+        console.log(res);
+        setData(res);
+      });
+  }, [userInfo]);
 
   useEffect(() => {
     if (newNotificationData.length > 0) {
@@ -38,13 +52,6 @@ const NavbarUser = () => {
       setNewNotification([]);
     }
   }, [newNotificationData, notificationData]);
-
-  const [canSwitch, setcanSwitch] = useState(false);
-  const [message, setmessage] = useState([]);
-  const [messageCount, setmessageCount] = useState();
-
-  const userInfo = JSON.parse(localStorage.getItem("current_user"));
-  const AuthStr = localStorage.getItem("token");
 
   const handleLogOut = (e) => {
     e.preventDefault();
@@ -144,6 +151,52 @@ const NavbarUser = () => {
       .catch();
   };
 
+  const convertToBranchManager = (e) => {
+    axios
+      .get(`${rootUrl}AccountSwitch/branch-manager`, {
+        headers: {
+          authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        if (response?.status === 200) {
+          if (response?.data?.isSuccess === true) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("permissions");
+
+            localStorage.setItem("token", "Bearer " + response?.data?.message);
+            localStorage.setItem(
+              "permissions",
+              JSON.stringify(response?.data?.permissions)
+            );
+            const AuthStr = "Bearer " + response?.data?.message;
+            axios
+              .get(`${rootUrl}Account/GetCurrentUser`, {
+                headers: {
+                  authorization: AuthStr,
+                },
+              })
+              .then((res) => {
+                if (res?.status === 200) {
+                  if (res?.data?.isActive === true) {
+                    localStorage.setItem(
+                      "current_user",
+                      JSON.stringify(res?.data)
+                    );
+                    localStorage.setItem("userType", res?.data?.userTypeId);
+                    localStorage.setItem("referenceId", res?.data?.referenceId);
+                    window.location.reload();
+                  }
+                }
+              });
+
+            history.push("/");
+          }
+        }
+      })
+      .catch();
+  };
+
   const goToLoginHistory = () => {
     history.push("/loginHistory");
   };
@@ -157,15 +210,15 @@ const NavbarUser = () => {
   };
 
   const UserDropdown = (props) => {
-    useEffect(() => { }, [props]);
+    useEffect(() => {}, [props]);
     return (
       <DropdownMenu right>
         {userInfo?.userTypeId === userTypes?.SystemAdmin ? null : (
           <Link style={{ textDecoration: "none" }} to="/profile">
             <DropdownItem
               tag="a"
-            // href="#"
-            // onClick={redirectToProfile}
+              // href="#"
+              // onClick={redirectToProfile}
             >
               <Icon.User size={14} className="mr-1 align-middle" />
               <span className="align-middle">Profile</span>
@@ -175,11 +228,11 @@ const NavbarUser = () => {
 
         {(userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
           userInfo?.userTypeId.toString() === userTypes?.Admin) && (
-            <DropdownItem tag="a" onClick={goToBin}>
-              <i className="fas fa-recycle mr-1 align-middle"></i>
-              <span className="align-middle">Recycle Bin</span>
-            </DropdownItem>
-          )}
+          <DropdownItem tag="a" onClick={goToBin}>
+            <i className="fas fa-recycle mr-1 align-middle"></i>
+            <span className="align-middle">Recycle Bin</span>
+          </DropdownItem>
+        )}
 
         <DropdownItem tag="a" onClick={goToSettings}>
           <Icon.Settings size={14} className="mr-1 align-middle" />
@@ -222,6 +275,18 @@ const NavbarUser = () => {
             ) : null}
           </>
         ) : null}
+        {(Consultant() || BranchManager()) &&
+          (data?.isBranchManager ? (
+            <DropdownItem
+              tag="a"
+              onClick={(e) => {
+                convertToBranchManager(e);
+              }}
+            >
+              <Icon.Repeat size={14} className="mr-1 align-middle" />
+              <span className="align-middle">Switch To Branch Manager</span>
+            </DropdownItem>
+          ) : null)}
 
         <DropdownItem
           tag="a"
@@ -249,7 +314,7 @@ const NavbarUser = () => {
       });
   };
 
-  const messageFunction = () => { };
+  const messageFunction = () => {};
 
   const countMessage = () => {
     axios
@@ -258,7 +323,7 @@ const NavbarUser = () => {
           authorization: AuthStr,
         },
       })
-      .then((res) => { });
+      .then((res) => {});
   };
 
   const allNotifications = () => {
@@ -276,7 +341,7 @@ const NavbarUser = () => {
           authorization: AuthStr,
         },
       })
-      .then((res) => { });
+      .then((res) => {});
   };
 
   const redirect = (data) => {
@@ -391,7 +456,7 @@ const NavbarUser = () => {
               }
             });
           });
-        } catch (error) { }
+        } catch (error) {}
       }
     }
 
@@ -426,11 +491,11 @@ const NavbarUser = () => {
           {/* Message Dropdown */}
 
           {userInfo?.userTypeId.toString() === userTypes?.Consultant ||
-            userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
-            userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
-            userInfo?.userTypeId.toString() === userTypes?.Admin ||
-            userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
-            userInfo?.userTypeId.toString() === userTypes?.Student ? (
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+          userInfo?.userTypeId.toString() === userTypes?.Admin ||
+          userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+          userInfo?.userTypeId.toString() === userTypes?.Student ? (
             <UncontrolledDropdown
               tag="li"
               className="dropdown-notification nav-item"

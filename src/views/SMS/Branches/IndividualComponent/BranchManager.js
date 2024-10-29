@@ -15,19 +15,19 @@ const BranchManager = ({ id }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
-    get(`BranchManager/GetbyBranch/${id}`).then((res) => {
+    get(`Branch/get-by-manager/${id}`).then((res) => {
       setBranchManager(res);
     });
   }, [id, success]);
 
   return (
     <>
-      {branchManager?.id && (
+      {branchManager?.name ? (
         <div className="custom-card-border p-4 mb-30px">
           <div className="d-flex justify-content-between">
             <div className="d-flex justify-between-start">
               <div className="pr-3">
-                {branchManager?.managerImageMedia === null ? (
+                {!branchManager?.pictureUrl ? (
                   <img
                     src={profileImage}
                     alt="img"
@@ -39,9 +39,7 @@ const BranchManager = ({ id }) => {
                   />
                 ) : (
                   <img
-                    src={
-                      rootUrl + branchManager?.managerImageMedia?.thumbnailUrl
-                    }
+                    src={rootUrl + branchManager?.pictureUrl}
                     alt="img"
                     style={{
                       width: "50px",
@@ -54,18 +52,12 @@ const BranchManager = ({ id }) => {
               <div>
                 <h5>Branch Manager</h5>
 
-                <p>
-                  <span className="pr-1">
-                    {branchManager?.nameTittle?.name}
-                  </span>
-                  <span className="pr-1">{branchManager?.firstName}</span>
-                  <span className=" pl-1">{branchManager?.lastName}</span>
-                </p>
+                <p>{branchManager?.name}</p>
               </div>
             </div>
-            <span className="pointer" onClick={() => setModalOpen(!modalOpen)}>
+            {/* <span className="pointer" onClick={() => setModalOpen(!modalOpen)}>
               Change
-            </span>
+            </span> */}
           </div>
 
           <Row>
@@ -76,20 +68,22 @@ const BranchManager = ({ id }) => {
                   <i className="far fa-envelope pr-2"></i>
                   {branchManager?.email}
                 </li>
-                {branchManager?.consultant?.phoneNumber === null ? null : (
+                {!branchManager?.phone ? null : (
                   <li>
-                    {" "}
-                    <i className="fas fa-phone pr-2"></i>{" "}
-                    {branchManager?.phoneNumber}
+                    <i className="fas fa-phone pr-2"></i> {branchManager?.phone}
                   </li>
                 )}
               </ul>
             </Col>
           </Row>
         </div>
+      ) : (
+        <div className="custom-card-border p-4 mb-30px">
+          <p className="text-center">No Branch Manager</p>
+        </div>
       )}
 
-      {!branchManager?.id && (
+      {/* {!branchManager?.id && (
         <div className="custom-card-border p-4 mb-30px">
           {permissions?.includes(permissionList.Add_New_Branch_Manager) ? (
             <center>
@@ -100,10 +94,10 @@ const BranchManager = ({ id }) => {
               </div>
             </center>
           ) : (
-            <p className="text-center">No Branch Admin</p>
+            <p className="text-center">No Branch Manager</p>
           )}
         </div>
-      )}
+      )} */}
 
       <Modal
         isOpen={modalOpen}
