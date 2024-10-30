@@ -81,6 +81,7 @@ const CompanionTable = ({
             {tableData[5]?.isActive ? <th>Started</th> : null}
             {tableData[6]?.isActive ? <th>Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
             {tableData[7]?.isActive ? <th>Application</th> : null}
             {tableData[7]?.isActive ? <th>Registered</th> : null}
@@ -207,6 +208,22 @@ const CompanionTable = ({
                       // }}
                     >
                       {companion?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-sixth-no-pointer"
+                      // onClick={() => {
+                      //   history.push(
+                      //     `/companion-Invitation-list/${companion?.id}`
+                      //   );
+                      // }}
+                    >
+                      {companion?.studentCount}
                     </span>
                   </div>
                 </td>
