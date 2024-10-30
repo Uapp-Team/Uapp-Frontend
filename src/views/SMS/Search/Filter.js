@@ -474,7 +474,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={universityOptions}
-              value={{ label: universityLabel, value: universityValue }}
+              value={universityOptions.filter(function (otp) {
+                return otp.value === universityValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectUniversity(opt.label, opt.value)}
@@ -507,10 +509,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={uniTypeOptions}
-              value={{
-                label: universityTypeLabel,
-                value: universityTypeValue,
-              }}
+              value={uniTypeOptions.filter(function (opt) {
+                return opt.value === universityTypeValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectUniversityType(opt.label, opt.value)}
@@ -519,10 +520,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={countryOptions}
-              value={{
-                label: universityCountryLabel,
-                value: universityCountryValue,
-              }}
+              value={countryOptions.filter(function (opt) {
+                return opt.value === universityCountryValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectCountry(opt.label, opt.value)}
@@ -531,7 +531,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={stateOptions}
-              value={{ label: cityLabel, value: cityValue }}
+              value={stateOptions.filter(function (opt) {
+                return opt.value === cityValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectState(opt.label, opt.value)}
@@ -540,7 +542,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={campusOptions}
-              value={{ label: campusLabel, value: campusValue }}
+              value={campusOptions.filter(function (opt) {
+                return opt.value === campusValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectCampus(opt.label, opt.value)}
@@ -559,7 +563,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={intakeOptions}
-              value={{ label: intakeLabel, value: intakeValue }}
+              value={intakeOptions.filter(function (opt) {
+                return opt.value === intakeValue;
+              })}
               onChange={(opt) => selectIntake(opt.label, opt.value)}
               name="providerTypeId"
               id="providerTypeId"
@@ -568,7 +574,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={programLevelOptions}
-              value={{ label: programLabel, value: programValue }}
+              value={programLevelOptions.filter(function (opt) {
+                return opt.value === programValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectProgramLevel(opt.label, opt.value)}
@@ -577,7 +585,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={departmentOptions}
-              value={{ label: departmentLabel, value: departmentValue }}
+              value={departmentOptions.filter(function (opt) {
+                return opt.value === departmentValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectDepartment(opt.label, opt.value)}
@@ -587,7 +597,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={subDepartmentOptions}
-              value={{ label: subLabel, value: subValue }}
+              value={subDepartmentOptions.filter(function (opt) {
+                return opt.value === subValue;
+              })}
               onChange={(opt) => selectSubDepartment(opt.label, opt.value)}
               name="providerTypeId"
               id="providerTypeId"
