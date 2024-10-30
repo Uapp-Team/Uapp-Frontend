@@ -1,5 +1,9 @@
 const ColumnAssociates = [
   {
+    title: "UApp Id",
+    isActive: true,
+  },
+  {
     title: "Name",
     isActive: true,
   },
@@ -8,15 +12,23 @@ const ColumnAssociates = [
     isActive: true,
   },
   {
-    title: "Designation",
+    title: "Parent",
     isActive: true,
   },
   {
-    title: "C.Type",
+    title: "Started",
     isActive: true,
   },
   {
-    title: "Student",
+    title: "Invitation",
+    isActive: true,
+  },
+  {
+    title: "Leads",
+    isActive: true,
+  },
+  {
+    title: "Team Member",
     isActive: true,
   },
   {
@@ -24,7 +36,11 @@ const ColumnAssociates = [
     isActive: true,
   },
   {
-    title: "Associates",
+    title: "Registered",
+    isActive: true,
+  },
+  {
+    title: "Status",
     isActive: true,
   },
   {
