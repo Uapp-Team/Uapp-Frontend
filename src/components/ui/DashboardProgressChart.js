@@ -175,7 +175,7 @@ const DashboardProgressChart = () => {
                   bar: {
                     distributed: true,
                     horizontal: true,
-                    barHeight: "90",
+                    barHeight: "90%",
                   },
                 },
                 xaxis: {
