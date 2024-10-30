@@ -35,10 +35,10 @@ const NavbarUser = () => {
   const userInfo = JSON.parse(localStorage.getItem("current_user"));
   const AuthStr = localStorage.getItem("token");
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState(false);
   useEffect(() => {
     (Consultant() || BranchManager()) &&
-      get(`ConsultantProfile/check/${userInfo?.referenceId}`).then((res) => {
+      get(`consultant/is-switchable/${userInfo?.referenceId}`).then((res) => {
         console.log(res);
         setData(res);
       });
@@ -59,101 +59,9 @@ const NavbarUser = () => {
     logoutStorageHandler();
   };
 
-  const convertAccount = (e) => {
+  const convertAccount = (e, url) => {
     axios
-      .get(`${rootUrl}AccountSwitch/SwitchToConsultant`, {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        if (response?.status === 200) {
-          if (response?.data?.isSuccess === true) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("permissions");
-
-            localStorage.setItem("token", "Bearer " + response?.data?.message);
-            localStorage.setItem(
-              "permissions",
-              JSON.stringify(response?.data?.permissions)
-            );
-            const AuthStr = "Bearer " + response?.data?.message;
-            axios
-              .get(`${rootUrl}Account/GetCurrentUser`, {
-                headers: {
-                  authorization: AuthStr,
-                },
-              })
-              .then((res) => {
-                if (res?.status === 200) {
-                  if (res?.data?.isActive === true) {
-                    localStorage.setItem(
-                      "current_user",
-                      JSON.stringify(res?.data)
-                    );
-                    localStorage.setItem("userType", res?.data?.userTypeId);
-                    localStorage.setItem("referenceId", res?.data?.referenceId);
-                    window.location.reload();
-                  }
-                }
-              });
-
-            history.push("/");
-          }
-        }
-      })
-      .catch();
-  };
-
-  const convertToConsultantAccount = (e) => {
-    axios
-      .get(`${rootUrl}AccountSwitch/SwitchToStudent`, {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        if (response?.status === 200) {
-          if (response?.data?.isSuccess === true) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("permissions");
-
-            localStorage.setItem("token", "Bearer " + response?.data?.message);
-            localStorage.setItem(
-              "permissions",
-              JSON.stringify(response?.data?.permissions)
-            );
-            const AuthStr = "Bearer " + response?.data?.message;
-            axios
-              .get(`${rootUrl}Account/GetCurrentUser`, {
-                headers: {
-                  authorization: AuthStr,
-                },
-              })
-              .then((res) => {
-                if (res?.status === 200) {
-                  if (res?.data?.isActive === true) {
-                    localStorage.setItem(
-                      "current_user",
-                      JSON.stringify(res?.data)
-                    );
-                    localStorage.setItem("userType", res?.data?.userTypeId);
-                    localStorage.setItem("referenceId", res?.data?.referenceId);
-                    window.location.reload();
-                  }
-                }
-              });
-
-            history.push("/");
-          }
-        }
-      })
-      .catch();
-  };
-
-  const convertToBranchManager = (e) => {
-    axios
-      .get(`${rootUrl}AccountSwitch/branch-manager`, {
+      .get(`${rootUrl + url}`, {
         headers: {
           authorization: localStorage.getItem("token"),
         },
@@ -252,7 +160,7 @@ const NavbarUser = () => {
               <DropdownItem
                 tag="a"
                 onClick={(e) => {
-                  convertAccount(e);
+                  convertAccount(e, "AccountSwitch/SwitchToConsultant");
                 }}
               >
                 <Icon.Repeat size={14} className="mr-1 align-middle" />
@@ -266,7 +174,7 @@ const NavbarUser = () => {
               <DropdownItem
                 tag="a"
                 onClick={(e) => {
-                  convertToConsultantAccount(e);
+                  convertAccount(e, "AccountSwitch/SwitchToStudent");
                 }}
               >
                 <Icon.Repeat size={14} className="mr-1 align-middle" />
@@ -275,16 +183,26 @@ const NavbarUser = () => {
             ) : null}
           </>
         ) : null}
-        {(Consultant() || BranchManager()) &&
-          (data?.isBranchManager ? (
+        {data === true &&
+          (Consultant() ? (
             <DropdownItem
               tag="a"
               onClick={(e) => {
-                convertToBranchManager(e);
+                convertAccount(e, "AccountSwitch/branch-manager");
               }}
             >
               <Icon.Repeat size={14} className="mr-1 align-middle" />
               <span className="align-middle">Switch To Branch Manager</span>
+            </DropdownItem>
+          ) : BranchManager() ? (
+            <DropdownItem
+              tag="a"
+              onClick={(e) => {
+                convertAccount(e, "AccountSwitch/consultant");
+              }}
+            >
+              <Icon.Repeat size={14} className="mr-1 align-middle" />
+              <span className="align-middle">Switch To Consultant</span>
             </DropdownItem>
           ) : null)}
 
