@@ -11,7 +11,6 @@ const DailyReport = () => {
 
   useEffect(() => {
     get(`DailyReport/Report?dateTime=${date}`).then((res) => {
-      console.log(res);
       const dataArray = [
         res?.totalApplication,
         res?.submittedToUniversity,
@@ -60,7 +59,7 @@ const DailyReport = () => {
                           bar: {
                             distributed: true,
                             horizontal: true,
-                            barHeight: "60",
+                            barHeight: "90%",
                           },
                         },
                         xaxis: {
