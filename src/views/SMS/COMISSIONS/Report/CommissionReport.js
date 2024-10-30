@@ -425,7 +425,7 @@ const CommissionReport = () => {
           </div>
           <div className="d-flex justify-content-start mt-3">
             <div className="d-flex mt-1">
-              {branch.length > 1 && branchValue !== 0 ? (
+              {AdminUsers() && branch.length > 1 && branchValue !== 0 ? (
                 <TagButton
                   label={branchLabel}
                   setValue={() => setBranchValue(0)}
@@ -464,7 +464,7 @@ const CommissionReport = () => {
               )}
             </div>
             <div className="mt-1 mx-1 d-flex btn-clear">
-              {(branch.length > 1 && branchValue !== 0) ||
+              {(AdminUsers() && branch.length > 1 && branchValue !== 0) ||
               intakeValue !== 0 ||
               conTypeValue !== 0 ||
               designationValue !== 0 ? (

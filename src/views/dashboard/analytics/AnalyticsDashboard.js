@@ -40,7 +40,8 @@ const AnalyticsDashboard = () => {
         <AdmissionManager />
       ) : currentUser.userTypeId.toString() === userTypes?.Provider ? (
         <Provider />
-      ) : currentUser.userTypeId.toString() === userTypes?.BranchAdmin ? (
+      ) : currentUser.userTypeId.toString() === userTypes?.BranchAdmin ||
+        currentUser.userTypeId.toString() === userTypes?.BranchManager ? (
         <BranchManager />
       ) : currentUser.userTypeId.toString() === userTypes?.Student ? (
         <Student />
