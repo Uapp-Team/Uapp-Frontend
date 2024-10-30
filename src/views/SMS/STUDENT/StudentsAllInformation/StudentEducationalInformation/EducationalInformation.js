@@ -78,8 +78,7 @@ const EducationalInformation = () => {
   const [instituteLanguage, setInstituteLanguage] = useState("");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
-
-  console.log(attendedFrom);
+  const [studentType, setStudentType] = useState(null);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -100,6 +99,16 @@ const EducationalInformation = () => {
         }
       }
     );
+    get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
+      (res) => {
+        setStudentType(res?.studentTypeId)
+        if (res?.studentTypeId == 3) {
+          setShowForm(true);
+        } else {
+          setShowForm(false);
+        }
+      }
+    )
   }, [success, applicationStudentId]);
 
   // date handling
@@ -495,53 +504,55 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              <Row>
-                <Col md="4">
-                  <FormGroup>
-                    <span>
-                      {" "}
-                      <span className="text-danger"> *</span>
-                      Have You Ever Studied?{" "}
-                    </span>
+              {studentType != 3 &&
+                <Row>
+                  <Col md="4">
+                    <FormGroup>
+                      <span>
+                        {" "}
+                        <span className="text-danger"> *</span>
+                        Have You Ever Studied?{" "}
+                      </span>
 
-                    <div
-                      className="d-flex flex-wrap form-mt"
-                      style={{ marginLeft: "17px" }}
-                    >
-                      <div>
-                        <Input
-                          type="radio"
-                          name="radioYes"
-                          id="radioYes"
-                          onClick={() => {
-                            setForms(true);
-                          }}
-                          checked={forms === true}
-                        />
-                        <span>
-                          <label style={{ fontSize: "14px" }} for="radioYes">
-                            Yes
-                          </label>
-                        </span>
+                      <div
+                        className="d-flex flex-wrap form-mt"
+                        style={{ marginLeft: "17px" }}
+                      >
+                        <div>
+                          <Input
+                            type="radio"
+                            name="radioYes"
+                            id="radioYes"
+                            onClick={() => {
+                              setForms(true);
+                            }}
+                            checked={forms === true}
+                          />
+                          <span>
+                            <label style={{ fontSize: "14px" }} for="radioYes">
+                              Yes
+                            </label>
+                          </span>
+                        </div>
+                        <div className="ml-5">
+                          <Input
+                            checked={forms === false}
+                            type="radio"
+                            name="radioNo"
+                            id="radioNo"
+                            onClick={deleteCheckFunction}
+                          />
+                          <span>
+                            <label style={{ fontSize: "14px" }} for="radioNo">
+                              No
+                            </label>
+                          </span>
+                        </div>
                       </div>
-                      <div className="ml-5">
-                        <Input
-                          checked={forms === false}
-                          type="radio"
-                          name="radioNo"
-                          id="radioNo"
-                          onClick={deleteCheckFunction}
-                        />
-                        <span>
-                          <label style={{ fontSize: "14px" }} for="radioNo">
-                            No
-                          </label>
-                        </span>
-                      </div>
-                    </div>
-                  </FormGroup>
-                </Col>
-              </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              }
               {showDeleteOption === true ? (
                 <>
                   <FormGroup row>
