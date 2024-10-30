@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import get from "../../../../../../helpers/get";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import { Link } from "react-router-dom";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const Address = ({ id }) => {
   const [data, setData] = useState({});
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   useEffect(() => {
     get(`ConsultantAddress/GetByConsultant/${id}`).then((res) => {
       setData(res);
@@ -18,7 +20,9 @@ const Address = ({ id }) => {
           <CardBody>
             <div className="d-flex justify-content-between">
               <span className="card-heading">Consultant Address</span>
-              <Link to={`/consultantContactInformation/${id}`}> Edit</Link>
+              {permissions?.includes(permissionList.Edit_Consultant) ? (
+                <Link to={`/consultantContactInformation/${id}`}> Edit</Link>
+              ) : null}
             </div>
             <hr />
             <Row className="text-gray">

@@ -41,13 +41,11 @@ const ContactInformation = () => {
     });
 
     get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
-      console.log("consNav", res);
       setNavVisibility(res);
     });
 
     get(`ConsultantAddress/GetByConsultant/${consultantRegisterId}`).then(
       (res) => {
-        console.log("address", res);
         setAddressData(res);
         setCountryLabel(
           res?.country?.name == null ? "Select Country" : res?.country?.name
@@ -79,16 +77,18 @@ const ContactInformation = () => {
   };
 
   const handleCity = (e) => {
-    setCityN(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCityN(data);
+    if (data === "") {
       setCityError("City is required");
     } else {
       setCityError("");
     }
   };
   const handleHouse = (e) => {
-    setHouseNo(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setHouseNo(data);
+    if (data === "") {
       setHouseNoError("Address line 1 is required");
     } else {
       setHouseNoError("");
@@ -103,8 +103,9 @@ const ContactInformation = () => {
     // }
   };
   const handleZipCode = (e) => {
-    setZipCode(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode(data);
+    if (data === "") {
       setZipCodeError("Zip/post code is required");
     } else {
       setZipCodeError("");

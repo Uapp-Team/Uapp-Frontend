@@ -5,13 +5,15 @@ import "../../../../../../assets/CoustomStyle/dashboard.css";
 import { Col, Row } from "reactstrap";
 import DashboardCount from "../../../../../../components/ui/DashboardCount";
 
-const ProviderCountingCard = ({ id }) => {
+const ProviderCountingCard = ({ id, intakeRngValue }) => {
   const [data, setData] = useState({});
   useEffect(() => {
-    get(`ProviderDashboard/Cards?id=${id}`).then((res) => {
-      setData(res);
-    });
-  }, [id]);
+    get(`ProviderDashboard/Cards?id=${id}&rangeid=${intakeRngValue}`).then(
+      (res) => {
+        setData(res);
+      }
+    );
+  }, [id, intakeRngValue]);
 
   return (
     <>
@@ -20,16 +22,19 @@ const ProviderCountingCard = ({ id }) => {
           <DashboardCount
             title="Total Application"
             value={data?.totalApplication}
-            link="/applications"
+            link={`/applicationsbyprovider/${id}/${intakeRngValue}`}
             bgColor="#E1F5FC"
             borderColor="#24A1CD"
+            secondValue={data?.totalApplicant}
+            secondColor="#176682"
+            secondBgColor="#BAE7F7"
           />
         </Col>
         <Col lg={2} md={4} xs={6} className="mb-30px">
           <DashboardCount
             title="Universities"
             value={data?.universities}
-            link="/universityList"
+            link={`/universityListFromProviderList/${id}`}
             bgColor="#F4F9E4"
             borderColor="#9CA777"
           />
@@ -38,7 +43,7 @@ const ProviderCountingCard = ({ id }) => {
           <DashboardCount
             title="Admission Managers"
             value={data?.admissionManagers}
-            link="/admissionManagerList"
+            link={`/admissionManagerList/${id}`}
             bgColor="#DDFBFF"
             borderColor="#24A1CD"
           />
@@ -47,7 +52,7 @@ const ProviderCountingCard = ({ id }) => {
           <DashboardCount
             title="Admission Officers"
             value={data?.admissionOfficers}
-            link="/admissionOfficerList"
+            link={`/admissionOfficerListbyProvider/${id}`}
             bgColor="#FEF7F2"
             borderColor="#C38154"
           />

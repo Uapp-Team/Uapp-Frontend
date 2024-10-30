@@ -5,14 +5,14 @@ import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import downloadBtn from "../../../../assets/img/download.png";
-import uploadBtn from "../../../../assets/img/upload.png";
 import { Upload } from "antd";
 import { rootUrl } from "../../../../constants/constants";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
 import { useHistory, useParams } from "react-router-dom";
+import UploadButton from "../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../components/buttons/DownloadButton";
 
 const Notice = () => {
   const [FileList6, setFileList6] = useState([]);
@@ -68,6 +68,7 @@ const Notice = () => {
     setAttachmentError("");
   };
 
+  console.log(working, "ronaldo");
   const handleChange = (e, id) => {
     let isChecked = e.target.checked;
 
@@ -75,7 +76,7 @@ const Notice = () => {
       setWorking([...working, id]);
     } else {
       const res = working.filter((c) => c !== id);
-      setWorking([res]);
+      setWorking(res);
     }
   };
 
@@ -172,11 +173,7 @@ const Notice = () => {
                         return false;
                       }}
                     >
-                      {FileList6.length < 1 ? (
-                        <img className="mb-1" src={uploadBtn} alt="" />
-                      ) : (
-                        ""
-                      )}
+                      {FileList6.length < 1 ? <UploadButton /> : ""}
                     </Upload>
 
                     <span className="text-danger">{attachmentError}</span>
@@ -184,7 +181,7 @@ const Notice = () => {
                   <Col md="4">
                     {noticeData?.cv?.fileUrl ? (
                       <a href={rootUrl + noticeData?.cv?.fileUrl}>
-                        <img className="mb-1" src={downloadBtn} alt="" />
+                        <DownloadButton />
                       </a>
                     ) : null}
                   </Col>

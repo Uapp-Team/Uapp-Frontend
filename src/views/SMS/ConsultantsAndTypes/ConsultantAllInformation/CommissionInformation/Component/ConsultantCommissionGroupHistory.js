@@ -11,6 +11,7 @@ import ButtonForFunction from "../../../../Components/ButtonForFunction";
 import ButtonLoader from "../../../../Components/ButtonLoader";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const ConsultantCommissionGroupHistory = ({
   userTypeId,
@@ -46,7 +47,7 @@ const ConsultantCommissionGroupHistory = ({
         <Table>
           <thead className="tablehead">
             <tr>
-              <th>SL/No</th>
+              {/* <th>SL/No</th> */}
               <th>Name</th>
               <th>Applications</th>
               <th>Status</th>
@@ -57,16 +58,16 @@ const ConsultantCommissionGroupHistory = ({
           <tbody>
             {commissionGroupList?.map((commission, i) => (
               <tr key={commission?.id}>
-                <th scope="row">{1 + i}</th>
+                {/* <th scope="row">{1 + i}</th> */}
                 <td>{commission?.commissionGroup?.name}</td>
                 <td>{commission?.applicationCount}</td>
                 <td>
                   {commission?.isActive == false ? "Deactivated" : "Active"}
                 </td>
                 <td>
-                  {handleDate(commission?.createdOn)}
+                  {dateFormate(commission?.createdOn)}
                   {" to "}
-                  {handleDate(commission?.updatedOn)}
+                  {dateFormate(commission?.updatedOn)}
                 </td>
                 {userTypeId == userTypes?.Consultant ? null : (
                   <td style={{ width: "20%" }} className="text-center">

@@ -124,6 +124,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -674,7 +675,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
 
                   <th>Name</th>
                   <th>Email</th>
@@ -695,7 +696,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
               <tbody>
                 {complianceOficers?.map((comp, i) => (
                   <tr key={comp?.id} style={{ textAlign: "center" }}>
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
 
                     <td>
                       {comp?.nameTittle?.name} {comp?.firstName}{" "}

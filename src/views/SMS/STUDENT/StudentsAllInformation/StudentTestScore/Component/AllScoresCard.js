@@ -16,6 +16,7 @@ import { permissionList } from "../../../../../../constants/AuthorizationConstan
 
 const AllScoresCard = ({
   addNewScore,
+  eltName,
   isQualification,
   ielts,
   handleEditDuolingo,
@@ -66,7 +67,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(ielts, 1)}
+                      onClick={() => toggleDanger(ielts, "IELTS", 1)}
                     >
                       Delete
                     </span>
@@ -84,7 +85,7 @@ const AllScoresCard = ({
                 </Col>
                 <Col lg="3">
                   <p>
-                    <span> reading</span>
+                    <span> Reading</span>
                     <br />
                     <b> {ielts?.reading}</b>
                   </p>
@@ -123,16 +124,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete IELTS SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -159,7 +150,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(duolingo, 2)}
+                      onClick={() => toggleDanger(duolingo, "Duolingo", 2)}
                     >
                       Delete
                     </span>
@@ -216,16 +207,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete DUOLINGO SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -252,7 +233,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(toefl, 3)}
+                      onClick={() => toggleDanger(toefl, "Toefl", 3)}
                     >
                       Delete
                     </span>
@@ -315,16 +296,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete TOEFL SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -350,7 +321,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(functions, 4)}
+                      onClick={() => toggleDanger(functions, "Functions", 4)}
                     >
                       Delete
                     </span>
@@ -413,16 +384,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete FUNCTION SKILLS SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -449,7 +410,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(gcse, 5)}
+                      onClick={() => toggleDanger(gcse, "Gcse", 5)}
                     >
                       Delete
                     </span>
@@ -482,16 +443,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete GCSE SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -518,7 +469,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(pearson, 6)}
+                      onClick={() => toggleDanger(pearson, "Pearson", 6)}
                     >
                       Delete
                     </span>
@@ -551,16 +502,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete PEARSON SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -587,7 +528,7 @@ const AllScoresCard = ({
                   {permissions?.includes(permissionList?.Edit_Student) ? (
                     <span
                       style={{ cursor: "pointer" }}
-                      onClick={() => toggleDanger(others, 7)}
+                      onClick={() => toggleDanger(others, "Others", 7)}
                     >
                       Delete
                     </span>
@@ -626,16 +567,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-
-            <ConfirmModal
-              text="Do You Want To Delete OTHER SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -710,15 +641,6 @@ const AllScoresCard = ({
                 <Col lg="3"></Col>
               </Row>
             </CardBody>
-            <ConfirmModal
-              text="Do You Want To Delete PTE SCORE ?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              confirm={deleteEnglishTestScore}
-              cancel={() => setDeleteModal(false)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-            ></ConfirmModal>
           </Card>
         </div>
       ) : null}
@@ -740,7 +662,7 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-      isQualification === false ? (
+        isQualification === false ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (
@@ -755,6 +677,16 @@ const AllScoresCard = ({
           ) : null}
         </>
       ) : null}
+
+      <ConfirmModal
+        text={`Do You Want To Delete ${eltName} SCORE ?`}
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={deleteEnglishTestScore}
+        cancel={() => setDeleteModal(false)}
+        buttonStatus={buttonStatus}
+        progress={progress}
+      />
     </div>
   );
 };

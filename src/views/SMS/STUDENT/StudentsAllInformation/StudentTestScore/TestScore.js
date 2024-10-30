@@ -30,6 +30,7 @@ const TestScore = () => {
   const { applicationStudentId } = useParams();
   const [success, setSuccess] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [eltName, setEltName] = useState("");
   const [progress, setProgress] = useState(false);
   // English Course Names
   const [ielts, setIelts] = useState({});
@@ -76,10 +77,10 @@ const TestScore = () => {
   const [loading, setLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [isQualification, setIsQualifiacation] = useState(false);
-  const [ieltsExamDate, setIeltsExamDate] = useState(currentDate);
-  const [ieltsExamDateError, setIeltsExamDateError] = useState(false);
-  const [duolingoExamDate, setDuolingoExamDate] = useState(currentDate);
-  const [duolingoExamDateError, setDuolingoExamDateError] = useState("");
+  const [ieltsExamDate, setIeltsExamDate] = useState(null);
+  const [ieltsExamDateError, setIeltsExamDateError] = useState(null);
+  const [duolingoExamDate, setDuolingoExamDate] = useState(null);
+  const [duolingoExamDateError, setDuolingoExamDateError] = useState(null);
   const [duolingoEquivalentScore, setDuolingoEquivalentScore] = useState(0);
   const [duolingoEquivalentScoreError, setDuolingoEquivalentScoreError] =
     useState(false);
@@ -93,11 +94,39 @@ const TestScore = () => {
   const [ToeflListeningError, setToeflListeningError] = useState(false);
   const [ToeflOverall, setToeflOverall] = useState(0);
   const [ToeflOverallError, setToeflOverallError] = useState(false);
-  const [ToeflExamDate, setToeflExamDate] = useState(currentDate);
-  const [ToeflExamDateError, setToeflExamDateError] = useState(false);
+  const [ToeflExamDate, setToeflExamDate] = useState(null);
+  const [ToeflExamDateError, setToeflExamDateError] = useState(null);
   const [ToeflEquivalentScore, setToeflEquivalentScore] = useState(0);
   const [ToeflEquivalentScoreError, setToeflEquivalentScoreError] =
     useState(false);
+  ///////////
+  const [FunctionSkillsSpeaking, setFunctionSkillsSpeaking] = useState(0);
+  const [FunctionSkillsSpeakingError, setFunctionSkillsSpeakingError] =
+    useState(false);
+  const [FunctionSkillsReading, setFunctionSkillsReading] = useState(0);
+  const [FunctionSkillsReadingError, setFunctionSkillsReadingError] =
+    useState(false);
+  const [FunctionSkillsWriting, setFunctionSkillsWriting] = useState(0);
+  const [FunctionSkillsWritingError, setFunctionSkillsWritingError] =
+    useState(false);
+  const [FunctionSkillsListening, setFunctionSkillsListening] = useState(0);
+  const [FunctionSkillsListeningError, setFunctionSkillsListeningError] =
+    useState(false);
+  const [FunctionSkillsOverall, setFunctionSkillsOverall] = useState(0);
+  const [FunctionSkillsOverallError, setFunctionSkillsOverallError] =
+    useState(false);
+  const [FunctionSkillsExamDate, setFunctionSkillsExamDate] =
+    useState(null);
+  const [FunctionSkillsExamDateError, setFunctionSkillsExamDateError] =
+    useState(null);
+  const [FunctionSkillsEquivalentScore, setFunctionSkillsEquivalentScore] =
+    useState(0);
+  const [
+    FunctionSkillsEquivalentScoreError,
+    setFunctionSkillsEquivalentScoreError,
+  ] = useState(false);
+
+  //////////////
   const [GCSEResult, setGCSEResult] = useState(1);
   const [GCSEResultError, setGCSEResultError] = useState(false);
   const [GCSEEquivalentScore, setGCSEEquivalentScore] = useState(0);
@@ -156,6 +185,7 @@ const TestScore = () => {
       setIeltsListeningError(false);
     }
   };
+
   const handleIeltsOverall = (e) => {
     setIeltsOverall(e.target.value);
     if (e.target.value > 9 || e.target.value === "") {
@@ -166,11 +196,17 @@ const TestScore = () => {
   };
 
   const handleIeltsExamDate = (e) => {
-    setIeltsExamDate(e.target.value);
-    if (e.target.value === "") {
-      setIeltsExamDateError(true);
+    const value = e.target.value;
+    const yearValue = value.split('-')[0]
+    setIeltsExamDate(value);
+    if (value === null) {
+      setIeltsExamDateError("Date is required");
+    } else if (currentDate < value) {
+      setIeltsExamDateError("Invalid Date");
+    } else if (yearValue.length > 4) {
+      setIeltsExamDateError("Invalid Date");
     } else {
-      setIeltsExamDateError(false);
+      setIeltsExamDateError(null);
     }
   };
   // Ielts validation
@@ -214,11 +250,18 @@ const TestScore = () => {
   };
 
   const handleDuolingoExamDate = (e) => {
-    setDuolingoExamDate(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    const yearValue = value.split('-')[0]
+    setDuolingoExamDate(value);
+    if (value === null) {
       setDuolingoExamDateError("Date of Exam is required");
-    } else {
-      setDuolingoExamDateError("");
+    } else if (yearValue.length > 4) {
+      setDuolingoExamDateError("Invalid Date");
+    } else if (currentDate < value) {
+      setDuolingoExamDateError("Invalid Date");
+    }
+    else {
+      setDuolingoExamDateError(null);
     }
   };
 
@@ -230,6 +273,7 @@ const TestScore = () => {
       setDuolingoOverallError(false);
     }
   };
+
   const handleDuolingoEquivalentScore = (e) => {
     setDuolingoEquivalentScore(e.target.value);
     if (e.target.value === "") {
@@ -276,6 +320,7 @@ const TestScore = () => {
       setToeflListeningError(false);
     }
   };
+
   const handleToeflOverall = (e) => {
     setToeflOverall(e.target.value);
     if (e.target.value > 120 || e.target.value === "") {
@@ -286,13 +331,21 @@ const TestScore = () => {
   };
 
   const handleToeflExamDate = (e) => {
-    setToeflExamDate(e.target.value);
-    if (e.target.value === "") {
-      setToeflExamDateError(true);
-    } else {
-      setToeflExamDateError(false);
+    const value = e.target.value;
+    const yearValue = value.split('-')[0]
+    setToeflExamDate(value);
+    if (value === null) {
+      setToeflExamDateError("Exam date are required");
+    } else if (yearValue.length > 4) {
+      setToeflExamDateError("Invalid Date")
+    } else if (currentDate < value) {
+      setToeflExamDateError("Invalid Date")
+    }
+    else {
+      setToeflExamDateError(null);
     }
   };
+
   const handleToeflEquivalentScore = (e) => {
     setToeflEquivalentScore(e.target.value);
     if (e.target.value === "") {
@@ -303,6 +356,80 @@ const TestScore = () => {
   };
   // Toefl validation
 
+  // FUNCTION SKILLS validation
+
+  const handFunctionSkillsSpeaking = (e) => {
+    setFunctionSkillsSpeaking(e.target.value);
+    if (e.target.value > 90 || e.target.value === "") {
+      setFunctionSkillsSpeakingError(true);
+    } else {
+      setFunctionSkillsSpeakingError(false);
+    }
+  };
+
+  const handleFunctionSkillsReading = (e) => {
+    setFunctionSkillsReading(e.target.value);
+    if (e.target.value > 90 || e.target.value === "") {
+      setFunctionSkillsReadingError(true);
+    } else {
+      setFunctionSkillsReadingError(false);
+    }
+  };
+
+  const handleFunctionSkillsWriting = (e) => {
+    setFunctionSkillsWriting(e.target.value);
+    if (e.target.value > 90 || e.target.value === "") {
+      setFunctionSkillsWritingError(true);
+    } else {
+      setFunctionSkillsWritingError(false);
+    }
+  };
+
+  const handleFunctionSkillsListening = (e) => {
+    setFunctionSkillsListening(e.target.value);
+    if (e.target.value > 90 || e.target.value === "") {
+      setFunctionSkillsListeningError(true);
+    } else {
+      setFunctionSkillsListeningError(false);
+    }
+  };
+
+  const handleFunctionSkillsOverall = (e) => {
+    setFunctionSkillsOverall(e.target.value);
+    if (e.target.value > 90 || e.target.value === "") {
+      setFunctionSkillsOverallError(true);
+    } else {
+      setFunctionSkillsOverallError(false);
+    }
+  };
+
+  const handleFunctionSkillsExamDate = (e) => {
+    const value = e.target.value;
+    const yearValue = value.split('-')[0]
+    setFunctionSkillsExamDate(value);
+    if (value === null) {
+      setFunctionSkillsExamDateError("Exam date are required");
+    } else if (yearValue.length > 4) {
+      setFunctionSkillsExamDateError("Invalid date");
+    } else if (currentDate < value) {
+      setFunctionSkillsExamDateError("Invalid date");
+    }
+    else {
+      setFunctionSkillsExamDateError(null);
+    }
+  };
+
+  const handleFunctionSkillsEquivalentScore = (e) => {
+    setFunctionSkillsEquivalentScore(e.target.value);
+    if (e.target.value === "") {
+      setFunctionSkillsEquivalentScoreError(true);
+    } else {
+      setFunctionSkillsEquivalentScoreError(false);
+    }
+  };
+
+  // FUNCTION SKILLS validation
+
   // GCSE validation
   const handleGCSEResult = (e) => {
     setGCSEResult(e.target.value);
@@ -312,6 +439,7 @@ const TestScore = () => {
       setGCSEResultError(false);
     }
   };
+
   const handleGCSEEquivalentScore = (e) => {
     setGCSEEquivalentScore(e.target.value);
     if (e.target.value === "") {
@@ -332,6 +460,7 @@ const TestScore = () => {
       setPEARSONResultError(false);
     }
   };
+
   const handlePEARSONEquivalentScore = (e) => {
     setPEARSONEquivalentScore(e.target.value);
     if (e.target.value === "") {
@@ -420,11 +549,10 @@ const TestScore = () => {
       setIeltsListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setIeltsExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setIeltsExamDate(currentDate);
+        : setIeltsExamDate('');
       setLoading(false);
       setIeltsOverall(res?.overall ? res?.overall : 0);
       // setScoreInfo(res);
-      console.log(res, "tai");
     });
 
     get(`Duolingo/Index/${applicationStudentId}`).then((res) => {
@@ -436,9 +564,9 @@ const TestScore = () => {
       setDuoLingoProduction(res?.production ? res?.production : 10);
       res?.examDate
         ? setDuolingoExamDate(
-            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-          )
-        : setDuolingoExamDate(currentDate);
+          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+        )
+        : setDuolingoExamDate(null);
       setDuolingoOverall(res?.overall ? res?.overall : 10);
       setDuolingoEquivalentScore(res?.ieltsEquivalent);
       // setScoreInfo(res);
@@ -454,7 +582,7 @@ const TestScore = () => {
       setToeflListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setToeflExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setToeflExamDate(currentDate);
+        : setToeflExamDate(null);
       setLoading(false);
       setToeflOverall(res?.overall ? res?.overall : 0);
       setToeflEquivalentScore(res?.ieltsEquivalent);
@@ -464,7 +592,18 @@ const TestScore = () => {
     get(`FunctionalSkill/Index/${applicationStudentId}`).then((res) => {
       setFunctions(res);
       setLoading(false);
-      // setScoreInfo(res);
+      setFunctionSkillsSpeaking(res?.speaking ? res?.speaking : 0);
+      setFunctionSkillsReading(res?.reading ? res?.reading : 0);
+      setFunctionSkillsWriting(res?.writing ? res?.writing : 0);
+      setFunctionSkillsListening(res?.listening ? res?.listening : 0);
+      res?.examDate
+        ? setFunctionSkillsExamDate(
+          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+        )
+        : setFunctionSkillsExamDate(null);
+      setLoading(false);
+      setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
+      setFunctionSkillsEquivalentScore(res?.ieltsEquivalent);
     });
 
     get(`Gcse/Index/${applicationStudentId}`).then((res) => {
@@ -495,34 +634,60 @@ const TestScore = () => {
 
   const deleteEnglishTestScore = () => {
     if (value === 1) {
+      setIelts({});
       setButtonStatus(true);
       setProgress(true);
       remove(`Ielts/Delete/${data?.id}`).then((res) => {
         setButtonStatus(false);
         setProgress(false);
+        setSuccess(!success);
         addToast(res, {
           appearance: "error",
           autoDismiss: true,
         });
         setData({});
         setValue(0);
+        setUpdateIelts(false);
+        setIelts({});
+        setIeltsSpeaking(0);
+        setIeltsSpeakingError(false);
+        setIeltsReading(0);
+        setIeltsReadingError(false);
+        setIeltsWriting(0);
+        setIeltsWritingError(false);
+        setIeltsListening(0);
+        setIeltsListeningError(false);
+        setIeltsOverall(0);
+        setIeltsOverallError(false);
         setDeleteModal(false);
-        setSuccess(!success);
       });
     } else if (value === 2) {
       setButtonStatus(true);
       setProgress(true);
+      setDuolingo({});
       remove(`Duolingo/Delete/${data?.id}`).then((res) => {
         setButtonStatus(false);
         setProgress(false);
+        setSuccess(!success);
         addToast(res, {
           appearance: "error",
           autoDismiss: true,
         });
         setData({});
         setValue(0);
+        setDuolingo({});
+        setUpdateDuolingo(false);
+        setDuoLingoLiteracy(10);
+        setDuoLingoLiteracyError(false);
+        setDuoLingoComprehension(10);
+        setDuoLingoComprehensionError(false);
+        setDuoLingoConversation(10);
+        setDuoLingoConversationError(false);
+        setDuoLingoProduction(10);
+        setDuoLingoProductionError(false);
+        setDuolingoOverall(10);
+        setDuolingoOverallError(false);
         setDeleteModal(false);
-        setSuccess(!success);
       });
     } else if (value === 3) {
       setProgress(true);
@@ -536,8 +701,20 @@ const TestScore = () => {
         });
         setData({});
         setValue(0);
+        setToefl({});
+        setUpdateToefl(false);
         setDeleteModal(false);
         setSuccess(!success);
+        setToeflSpeaking(0);
+        setToeflSpeakingError(false);
+        setToeflReading(0);
+        setToeflReadingError(false);
+        setToeflWriting(0);
+        setToeflWritingError(false);
+        setToeflListening(0);
+        setToeflListeningError(false);
+        setToeflOverall(0);
+        setToeflOverallError(false);
       });
     } else if (value === 4) {
       setButtonStatus(true);
@@ -553,6 +730,18 @@ const TestScore = () => {
         setValue(0);
         setDeleteModal(false);
         setSuccess(!success);
+        setFunctions({});
+        setUpdateFunctions(false);
+        setFunctionSkillsSpeaking(0);
+        setFunctionSkillsSpeakingError(false);
+        setFunctionSkillsReading(0);
+        setFunctionSkillsReadingError(false);
+        setFunctionSkillsWriting(0);
+        setFunctionSkillsWritingError(false);
+        setFunctionSkillsListening(0);
+        setFunctionSkillsListeningError(false);
+        setFunctionSkillsOverall(0);
+        setFunctionSkillsOverallError(false);
       });
     } else if (value === 5) {
       setProgress(true);
@@ -566,6 +755,12 @@ const TestScore = () => {
         });
         setData({});
         setValue(0);
+        setGcse({});
+        setUpdateGcse(false);
+        setGCSEResult(1);
+        setGCSEResultError(false);
+        setGCSEEquivalentScore(0);
+        setGCSEEquivalentScoreError(false);
         setDeleteModal(false);
         setSuccess(!success);
       });
@@ -581,6 +776,12 @@ const TestScore = () => {
         });
         setData({});
         setValue(0);
+        setPearson({});
+        setUpdatePearson(false);
+        setPEARSONResult(10);
+        setPEARSONResultError(false);
+        setPEARSONEquivalentScore(0);
+        setPEARSONEquivalentScoreError(false);
         setDeleteModal(false);
         setSuccess(!success);
       });
@@ -596,6 +797,14 @@ const TestScore = () => {
         });
         setData({});
         setValue(0);
+        setOthers({});
+        setUpdateOther(false);
+        setOthersTestName("");
+        setOthersTestNameError(false);
+        setOthersScoreOverall(0);
+        setOthersScoreOverallError(false);
+        setOthersEquivalentScore(0);
+        setOthersEquivalentScoreError(false);
         setDeleteModal(false);
         setSuccess(!success);
       });
@@ -610,13 +819,72 @@ const TestScore = () => {
   // on Close Modal
   const closeModal = () => {
     setModalOpen(false);
+    setSuccess(!success);
     setIsQualifiacation(false);
+    setIeltsSpeaking(0);
+    setIeltsSpeakingError(false);
+    setIeltsReading(0);
+    setIeltsReadingError(false);
+    setIeltsWriting(0);
+    setIeltsWritingError(false);
+    setIeltsListening(0);
+    setIeltsListeningError(false);
+    setIeltsOverall(0);
+    setIeltsOverallError(false);
+    setDuoLingoLiteracy(10);
+    setDuoLingoLiteracyError(false);
+    setDuoLingoComprehension(10);
+    setDuoLingoComprehensionError(false);
+    setDuoLingoConversation(10);
+    setDuoLingoConversationError(false);
+    setDuoLingoProduction(10);
+    setDuoLingoProductionError(false);
+    setDuolingoOverall(10);
+    setDuolingoOverallError(false);
+    setToeflSpeaking(0);
+    setToeflSpeakingError(false);
+    setToeflReading(0);
+    setToeflReadingError(false);
+    setToeflWriting(0);
+    setToeflWritingError(false);
+    setToeflListening(0);
+    setToeflListeningError(false);
+    setToeflOverall(0);
+    setToeflOverallError(false);
+    setFunctionSkillsSpeaking(0);
+    setFunctionSkillsSpeakingError(false);
+    setFunctionSkillsReading(0);
+    setFunctionSkillsReadingError(false);
+    setFunctionSkillsWriting(0);
+    setFunctionSkillsWritingError(false);
+    setFunctionSkillsListening(0);
+    setFunctionSkillsListeningError(false);
+    setFunctionSkillsOverall(0);
+    setFunctionSkillsOverallError(false);
+    setGCSEResult(1);
+    setGCSEResultError(false);
+    setGCSEEquivalentScore(0);
+    setGCSEEquivalentScoreError(false);
+    setPEARSONResult(10);
+    setPEARSONResultError(false);
+    setPEARSONEquivalentScore(0);
+    setPEARSONEquivalentScoreError(false);
+    setOthersTestName("");
+    setOthersTestNameError(false);
+    setOthersScoreOverall(0);
+    setOthersScoreOverallError(false);
+    setOthersEquivalentScore(0);
+    setOthersEquivalentScoreError(false);
   };
 
-  const toggleDanger = (info, number) => {
+  const toggleDanger = (info, elt, number) => {
     setValue(number);
+    console.log(number);
+    console.log(info);
     setData(info);
+    setEltName(elt);
     setDeleteModal(true);
+    setModalOpen(false);
   };
 
   // const toggleDanger2 = (p) => {
@@ -692,30 +960,29 @@ const TestScore = () => {
 
   const FormIELTSValid = () => {
     var validation = true;
-    console.log(ieltsExamDate);
-    if (ieltsSpeaking < 0 || ieltsSpeaking > 9) {
+    if (ieltsSpeaking === "" || ieltsSpeaking < 0 || ieltsSpeaking > 9) {
       validation = false;
       setIeltsSpeakingError(true);
     }
-    if (ieltsReading < 0 || ieltsReading > 9) {
+    if (ieltsReading === "" || ieltsReading < 0 || ieltsReading > 9) {
       validation = false;
       setIeltsReadingError(true);
     }
-    if (ieltsWriting < 0 || ieltsWriting > 9) {
+    if (ieltsWriting === "" || ieltsWriting < 0 || ieltsWriting > 9) {
       validation = false;
       setIeltsWritingError(true);
     }
-    if (ieltsListening < 0 || ieltsListening > 9) {
+    if (ieltsListening === "" || ieltsListening < 0 || ieltsListening > 9) {
       validation = false;
       setIeltsListeningError(true);
     }
 
     if (!new Date(ieltsExamDate).getDate()) {
       validation = false;
-      setIeltsExamDateError(true);
+      setIeltsExamDateError("Exam Date is required");
     }
 
-    if (ieltsOverall < 0 || ieltsOverall > 9) {
+    if (ieltsOverall === "" || ieltsOverall < 0 || ieltsOverall > 9) {
       validation = false;
       setIeltsOverallError(true);
     }
@@ -779,7 +1046,7 @@ const TestScore = () => {
 
     if (!new Date(ToeflExamDate).getDate()) {
       validation = false;
-      setToeflExamDateError(true);
+      setToeflExamDateError("Exam Date are required");
     }
 
     if (ToeflOverall < 0 || ToeflOverall > 120) {
@@ -794,6 +1061,45 @@ const TestScore = () => {
 
     return validation;
   };
+
+  const FormFunctionSkillsValid = () => {
+    var validation = true;
+
+    if (FunctionSkillsSpeaking < 0 || FunctionSkillsSpeaking > 90) {
+      validation = false;
+      setFunctionSkillsSpeakingError(true);
+    }
+    if (FunctionSkillsReading < 0 || FunctionSkillsReading > 90) {
+      validation = false;
+      setFunctionSkillsReadingError(true);
+    }
+    if (FunctionSkillsWriting < 0 || FunctionSkillsWriting > 90) {
+      validation = false;
+      setFunctionSkillsWritingError(true);
+    }
+    if (FunctionSkillsListening < 0 || FunctionSkillsListening > 90) {
+      validation = false;
+      setToeflListeningError(true);
+    }
+
+    if (!new Date(FunctionSkillsExamDate).getDate()) {
+      validation = false;
+      setFunctionSkillsExamDateError(null);
+    }
+
+    if (FunctionSkillsOverall < 0 || FunctionSkillsOverall > 90) {
+      validation = false;
+      setFunctionSkillsOverallError(true);
+    }
+
+    if (!FunctionSkillsEquivalentScore) {
+      validation = false;
+      setFunctionSkillsEquivalentScoreError(true);
+    }
+
+    return validation;
+  };
+
   const FormGCSEValid = () => {
     var validation = true;
 
@@ -808,6 +1114,7 @@ const TestScore = () => {
 
     return validation;
   };
+
   const FormPEARSONValid = () => {
     var validation = true;
 
@@ -822,6 +1129,7 @@ const TestScore = () => {
 
     return validation;
   };
+
   const FormOthersValid = () => {
     var validation = true;
 
@@ -1021,59 +1329,62 @@ const TestScore = () => {
         }
       }
     } else if (ELqualificationLabel === "FUNCTION SKILLS") {
-      if (!updateFunctions) {
-        setButtonStatus(true);
-        setProgress(true);
-        post("FunctionalSkill/Create", subData).then((res) => {
-          setButtonStatus(false);
-          setProgress(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setSuccess(!success);
-            // setAdd(false);
-            setELQualificationLabel("Select");
-            // setQualificationValue(0);
-            // setQualificationLabel("NO");
-            // setQualificationValue(0);
-            setModalOpen(false);
-            setIsQualifiacation(false);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
-      } else {
-        setButtonStatus(true);
-        setProgress(true);
-        put("FunctionalSkill/Update", subData).then((res) => {
-          setButtonStatus(false);
-          setProgress(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setSuccess(!success);
-            // setAdd(false);
-            setELQualificationLabel("Select");
-            // setQualificationValue(0);
-            // setQualificationLabel("NO");
-            // setQualificationValue(0);
-            setModalOpen(false);
-            setIsQualifiacation(false);
-            setUpdateFunctions(false);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
+      const isValid = FormFunctionSkillsValid();
+      if (isValid === true) {
+        if (!updateFunctions) {
+          setButtonStatus(true);
+          setProgress(true);
+          post("FunctionalSkill/Create", subData).then((res) => {
+            setButtonStatus(false);
+            setProgress(false);
+            if (res?.status === 200 && res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+              setSuccess(!success);
+              // setAdd(false);
+              setELQualificationLabel("Select");
+              // setQualificationValue(0);
+              // setQualificationLabel("NO");
+              // setQualificationValue(0);
+              setModalOpen(false);
+              setIsQualifiacation(false);
+            } else {
+              addToast(res?.data?.message, {
+                appearance: "error",
+                autoDismiss: true,
+              });
+            }
+          });
+        } else {
+          setButtonStatus(true);
+          setProgress(true);
+          put("FunctionalSkill/Update", subData).then((res) => {
+            setButtonStatus(false);
+            setProgress(false);
+            if (res?.status === 200 && res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+              setSuccess(!success);
+              // setAdd(false);
+              setELQualificationLabel("Select");
+              // setQualificationValue(0);
+              // setQualificationLabel("NO");
+              // setQualificationValue(0);
+              setModalOpen(false);
+              setIsQualifiacation(false);
+              setUpdateFunctions(false);
+            } else {
+              addToast(res?.data?.message, {
+                appearance: "error",
+                autoDismiss: true,
+              });
+            }
+          });
+        }
       }
     } else if (ELqualificationLabel === "GCSE") {
       const isValid = FormGCSEValid();
@@ -1275,20 +1586,19 @@ const TestScore = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
-
+      <StudentNavigation
+        activetab={"6"}
+        studentid={applicationStudentId}
+        success={success}
+        setSuccess={setSuccess}
+        action={() => { }}
+      />
       {loading ? (
         <div className="text-center">
           <img src={loadingImages} alt="" />
         </div>
       ) : (
         <>
-          <StudentNavigation
-            activetab={"6"}
-            studentid={applicationStudentId}
-            success={success}
-            setSuccess={setSuccess}
-            action={() => {}}
-          />
           <Card>
             <CardBody>
               <p className="section-title">English Test Score</p>
@@ -1342,6 +1652,7 @@ const TestScore = () => {
 
               <AllScoresCard
                 addNewScore={addNewScore}
+                eltName={eltName}
                 isQualification={isQualification}
                 ielts={ielts}
                 handleEditDuolingo={handleEditDuolingo}
@@ -1588,7 +1899,7 @@ const TestScore = () => {
                               <span className="text-danger">
                                 {ieltsExamDateError && (
                                   <span className="text-danger">
-                                    Exam Date is required
+                                    {ieltsExamDateError}
                                   </span>
                                 )}
                               </span>
@@ -1768,7 +2079,7 @@ const TestScore = () => {
                               <span className="text-danger">
                                 {ToeflExamDateError && (
                                   <span className="text-danger">
-                                    Exam Date is required
+                                    {ToeflExamDateError}
                                   </span>
                                 )}
                               </span>
@@ -1866,11 +2177,18 @@ const TestScore = () => {
                                 name="speaking"
                                 id="speaking"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions ? functions?.speaking : ""
-                                }
+                                onChange={(e) => {
+                                  handFunctionSkillsSpeaking(e);
+                                }}
+                                value={FunctionSkillsSpeaking}
                                 min="0"
                               />
+                              {FunctionSkillsSpeakingError && (
+                                <span className="text-danger">
+                                  Function Skills Speaking is required. Must be
+                                  0 to 90
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1885,11 +2203,18 @@ const TestScore = () => {
                                 name="reading"
                                 id="reading"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions ? functions?.reading : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsReading(e);
+                                }}
+                                value={FunctionSkillsReading}
                                 min="0"
                               />
+                              {FunctionSkillsReadingError && (
+                                <span className="text-danger">
+                                  Function Skills Reading is required. Must be 0
+                                  to 90
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1904,11 +2229,18 @@ const TestScore = () => {
                                 name="writing"
                                 id="writing"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions ? functions?.writing : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsWriting(e);
+                                }}
+                                value={FunctionSkillsWriting}
                                 min="0"
                               />
+                              {FunctionSkillsWritingError && (
+                                <span className="text-danger">
+                                  Function Skills Writing is required. Must be 0
+                                  to 90
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1923,11 +2255,18 @@ const TestScore = () => {
                                 name="listening"
                                 id="listening"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions ? functions?.listening : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsListening(e);
+                                }}
+                                value={FunctionSkillsListening}
                                 min="0"
                               />
+                              {FunctionSkillsListeningError && (
+                                <span className="text-danger">
+                                  Function Skills Listening is required. Must be
+                                  0 to 90
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1941,14 +2280,16 @@ const TestScore = () => {
                                 type="date"
                                 name="examDate"
                                 id="examDate"
-                                defaultValue={
-                                  updateFunctions
-                                    ? moment(
-                                        new Date(functions?.examDate)
-                                      ).format("YYYY-MM-DD")
-                                    : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsExamDate(e);
+                                }}
+                                value={FunctionSkillsExamDate}
                               />
+                              {FunctionSkillsExamDateError && (
+                                <span className="text-danger">
+                                  {FunctionSkillsExamDateError}
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1963,11 +2304,18 @@ const TestScore = () => {
                                 name="overall"
                                 id="overall"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions ? functions?.overall : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsOverall(e);
+                                }}
+                                value={FunctionSkillsOverall}
                                 min="0"
                               />
+                              {FunctionSkillsOverallError && (
+                                <span className="text-danger">
+                                  Function Skills Overall is required. Must be 0
+                                  to 90
+                                </span>
+                              )}
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -1982,13 +2330,17 @@ const TestScore = () => {
                                 name="ieltsEquivalent"
                                 id="ieltsEquivalent"
                                 step="any"
-                                defaultValue={
-                                  updateFunctions
-                                    ? functions?.ieltsEquivalent
-                                    : ""
-                                }
+                                onChange={(e) => {
+                                  handleFunctionSkillsEquivalentScore(e);
+                                }}
+                                value={FunctionSkillsEquivalentScore}
                                 min="0"
                               />
+                              {FunctionSkillsEquivalentScoreError && (
+                                <span className="text-danger">
+                                  IELTS Equivalent Score is required.
+                                </span>
+                              )}
                             </FormGroup>
                             <FormGroup className="text-right">
                               <CancelButton cancel={closeModal} />
@@ -2299,7 +2651,7 @@ const TestScore = () => {
                                 onChange={(e) => {
                                   handleDuolingoExamDate(e);
                                 }}
-                                value={duolingoExamDate}
+                                defaultValue={duolingoExamDate}
                               />
                               <span className="text-danger">
                                 {duolingoExamDateError}

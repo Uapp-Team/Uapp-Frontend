@@ -51,7 +51,7 @@ const StaffTable = ({
       <Table id="table-to-xls" className="table-sm table-bordered">
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
-            {tableData[0]?.isActive ? <th>SL/NO</th> : null}
+            {/* {tableData[0]?.isActive ? <th>SL/NO</th> : null} */}
             {/* {tableData[1]?.isActive ? <th>UAPP Id</th> : null} */}
             {tableData[2]?.isActive ? <th>Provider</th> : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
@@ -75,9 +75,9 @@ const StaffTable = ({
         <tbody>
           {employeeList?.map((emp, i) => (
             <tr key={emp.id} style={{ textAlign: "center" }}>
-              {tableData[0]?.isActive ? (
+              {/* {tableData[0]?.isActive ? (
                 <th scope="row">{serialNum + i}</th>
-              ) : null}
+              ) : null} */}
               {/* {tableData[1]?.isActive ? (
                 <td
                   className="cursor-pointer hyperlink-hover"
@@ -96,7 +96,7 @@ const StaffTable = ({
                       {tableData[3]?.isActive ? (
                         <td>
                           <Link
-                            to="/providerComplianceList"
+                            // to="/providerComplianceList"
                             onClick={() => handlePass(emp)}
                           >
                             Change
@@ -106,14 +106,6 @@ const StaffTable = ({
                             toggle={() => handleToggle}
                             className="uapp-modal2"
                           >
-                            {/* <ModalHeader>
-                              <div className="text-center mt-3">
-                                <span>
-                                  Change password for {passData?.firstName}{" "}
-                                  {passData?.lastName}{" "}
-                                </span>
-                              </div>
-                            </ModalHeader> */}
                             <ModalBody className="p-5">
                               <h5>Change password for {passData?.fullName}</h5>
                               <form onSubmit={submitModalForm} className="mt-3">
@@ -228,29 +220,6 @@ const StaffTable = ({
                     buttonStatus={buttonStatus}
                     progress={progress}
                   />
-
-                  {/* <Modal
-                    isOpen={deleteModal}
-                    toggle={closeDeleteModal}
-                    className="uapp-modal"
-                  >
-                    <ModalBody>
-                      <p>
-                        Are You Sure to Delete this? Once Deleted it can't be
-                        Undone!
-                      </p>
-                    </ModalBody>
-
-                    <ModalFooter>
-                      <Button
-                        color="danger"
-                        onClick={() => handleDeleteStaff(emp?.id)}
-                      >
-                        {progress ? <ButtonLoader /> : "Yes"}
-                      </Button>
-                      <Button onClick={closeDeleteModal}>NO</Button>
-                    </ModalFooter>
-                  </Modal> */}
                 </td>
               ) : null}
             </tr>

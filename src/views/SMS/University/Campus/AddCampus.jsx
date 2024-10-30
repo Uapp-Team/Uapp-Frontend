@@ -363,7 +363,7 @@ const AddCampus = () => {
 
                 <FormGroup>
                   <Col>
-                    <span>University on map</span>
+                    <span>University on map 2</span>
                   </Col>
                   <Col>
                     <InputGroup>
@@ -430,8 +430,8 @@ const AddCampus = () => {
                       currencyId={avarageTutionFeeCurrencyId}
                       setCurrencyId={setAvarageTutionFeeCurrencyId}
                       name="avarageTutionFeeCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
                     <Input
                       type="number"
@@ -455,8 +455,8 @@ const AddCampus = () => {
                       currencyId={avarageLivingCostCurrencyId}
                       setCurrencyId={setAvarageLivingCostCurrencyId}
                       name="avarageLivingCostCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
                     <Input
                       type="number"
@@ -480,8 +480,8 @@ const AddCampus = () => {
                       currencyId={avarageApplicationFeeCurrencyId}
                       setCurrencyId={setAvarageApplicationFeeCurrencyId}
                       name="avarageApplicationFeeCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
 
                     <Input
@@ -506,8 +506,8 @@ const AddCampus = () => {
                       currencyId={estimatedTotalCostCurrencyId}
                       setCurrencyId={setEstimatedTotalCostCurrencyId}
                       name="estimatedTotalCostCurrency"
-                      error={() => {}}
-                      setError={() => {}}
+                      error={() => { }}
+                      setError={() => { }}
                     />
 
                     <Input

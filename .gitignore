@@ -45,6 +45,9 @@ Generated\ Files/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# ignore env
+.env
+
 # NUnit
 *.VisualState.xml
 TestResult.xml
@@ -203,8 +206,8 @@ PublishScripts/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
-*.nuget.props
-*.nuget.targets
+*.nuGet.props
+*.nuGet.targets
 
 # Microsoft Azure Build Output
 csx/

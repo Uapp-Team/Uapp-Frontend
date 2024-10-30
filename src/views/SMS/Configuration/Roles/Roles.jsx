@@ -27,12 +27,7 @@ const Roles = (props) => {
 
   return (
     <div>
-    
-      <BreadCrumb
-        title="User Roles"
-        backTo=""
-        path=""
-      />
+      <BreadCrumb title="User Roles" backTo="" path="" />
       <Card>
         <CardHeader className="d-flex justify-content-end">
           <div>
@@ -54,7 +49,7 @@ const Roles = (props) => {
             <Table className="table-bordered text-center">
               <thead className="tablehead">
                 <tr>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Role Name</th>
                   <th className="text-center">Permissions</th>
                 </tr>
@@ -62,7 +57,7 @@ const Roles = (props) => {
               <tbody>
                 {props.roleList[0]?.map((role, i) => (
                   <tr key={role.id}>
-                    <th scope="row">{i + 1}</th>
+                    {/* <th scope="row">{i + 1}</th> */}
                     <td>{role.name}</td>
                     <td className="text-center">
                       <span className="badge badge-pill badge-primary">

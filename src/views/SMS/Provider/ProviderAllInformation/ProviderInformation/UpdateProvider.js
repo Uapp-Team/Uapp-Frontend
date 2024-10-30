@@ -11,13 +11,13 @@ import * as Icon from "react-feather";
 import { rootUrl } from "../../../../../constants/constants";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import uploadBtn from "../../../../../assets/img/upload.png";
-import downloadBtn from "../../../../../assets/img/download.png";
 import ProviderNavigation from "../ProviderRegistrationAndNavigation/ProviderNavigation";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../components/buttons/DownloadButton";
 
 const UpdateProvider = () => {
   const { id } = useParams();
@@ -415,9 +415,10 @@ const UpdateProvider = () => {
                   type="string"
                   name="officialPhoneNumber"
                   id="officialPhoneNumber"
-                  country={"us"}
+                  country={"gb"}
+                  enableLongNumbers={true}
                   onChange={handlePhoneNumber}
-                  value={phoneNumber ? phoneNumber : "1"}
+                  value={phoneNumber ? phoneNumber : ""}
                   inputProps={{
                     required: true,
                   }}
@@ -498,11 +499,7 @@ const UpdateProvider = () => {
                         return false;
                       }}
                     >
-                      {FileList2.length < 1 ? (
-                        <img className="mb-1" src={uploadBtn} alt="" />
-                      ) : (
-                        ""
-                      )}
+                      {FileList2.length < 1 ? <UploadButton /> : ""}
                     </Upload>
 
                     <div className="text-danger d-block">{familyError}</div>
@@ -514,7 +511,7 @@ const UpdateProvider = () => {
                         href={rootUrl + providerInfo?.companyLisence?.fileUrl}
                         target="blank"
                       >
-                        <img className="mb-1" src={downloadBtn} alt="" />
+                        <DownloadButton />
                       </a>
                     ) : null}
                   </Col>
@@ -610,10 +607,9 @@ const UpdateProvider = () => {
                       <span className="text-danger">Logo is required</span>
                     ) : null}
                   </Col>
-                  <Col md="4">
+                  <Col md="4" className="pt-4">
                     <span className="text-gray">
-                      Recommanded resolution is 640*640 with file size less than
-                      2MB, keep visual elements centered
+                      File size less than 2MB, keep visual elements centered
                     </span>
                   </Col>
                 </FormGroup>

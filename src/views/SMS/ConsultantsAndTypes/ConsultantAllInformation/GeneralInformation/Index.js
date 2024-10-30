@@ -56,7 +56,7 @@ const GeneralInformation = () => {
       setTitle(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsParent(res);
     });
 
@@ -70,8 +70,6 @@ const GeneralInformation = () => {
     });
 
     get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
-      //
-      console.log("consNav", res);
       setNavVisibility(res);
     });
 
@@ -145,8 +143,9 @@ const GeneralInformation = () => {
   };
 
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFirstName(data);
+    if (data === "") {
       setFirstNameError("First Name is required");
     } else {
       setFirstNameError("");
@@ -154,8 +153,9 @@ const GeneralInformation = () => {
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last Name is required");
     } else {
       setLastNameError("");

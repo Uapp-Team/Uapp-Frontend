@@ -94,7 +94,7 @@ const Consultant = ({ progress, estimate }) => {
           ></div>
           <Row className="align-items-center w-100">
             <Col xs={8}>
-              <p className="pl-3 mb-0"> Total Rejected</p>
+              <p className="pl-3 mb-0"> Total Rejected / cancelled</p>
             </Col>
             <Col xs={4}>
               <h3 className="mb-0">{progress?.totalRejected}</h3>

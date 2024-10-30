@@ -22,7 +22,7 @@ const BreadCrumb = ({ title, backTo, path }) => {
 
   return (
     <>
-      <Card className="uapp-card-bg">
+      <Card className="uapp-card-bg zindex-100">
         <CardHeader className="page-header">
           <div className="d-md-flex p-2">
             <h5 className="page-header-left-nav" onClick={backTodashboard}>

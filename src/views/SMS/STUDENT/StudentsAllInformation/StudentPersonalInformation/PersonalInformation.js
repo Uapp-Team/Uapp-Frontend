@@ -25,10 +25,10 @@ import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation
 import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import validateText from "../../../../../helpers/validations/validations";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import PhoneInput from "react-phone-input-2";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import InputDate from "../../../../../components/date/InputDate";
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -37,13 +37,24 @@ const PersonalInformation = () => {
   const { addToast } = useToasts();
   const [success, setSuccess] = useState(false);
   const [oneData, setOneData] = useState({});
-  console.log(oneData, "onedata");
+
   const activetab = "1";
   const [title, setTitle] = useState([]);
   const [titleValue, setTitleValue] = useState(0);
-  const [country, setCountry] = useState([]);
-  const [countryLabel, setCountryLabel] = useState("Select Country");
-  const [countryValue, setCountryValue] = useState(0);
+
+  const [countryBirth, setCountryBirth] = useState([]);
+  const [countryBirthLabel, setCountryBirthLabel] = useState(
+    "Select Birth Country"
+  );
+  const [countryBirthValue, setCountryBirthValue] = useState(0);
+
+  const [countryResidence, setCountryResidence] = useState([]);
+
+  const [countryResidenceLabel, setCountryResidenceLabel] = useState(
+    "Select Residence Country"
+  );
+
+  const [countryResidenceValue, setCountryResidenceValue] = useState(0);
   const [gender, setGender] = useState([]);
   const [genderValue, setGenderValue] = useState(0);
   const [maritalStatus, setMaritalStatus] = useState([]);
@@ -57,8 +68,9 @@ const PersonalInformation = () => {
   const [consultantValue, setConsultantValue] = useState(0);
   const [email, setEmail] = useState("");
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState("");
   const [titleError, setTitleError] = useState(false);
-  const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+  const [countryOfResidenceError, setCountryOfResidenceError] = useState(false);
   const [genderError, setGenderError] = useState(false);
   const [maritalStatusError, setMaritalStatusError] = useState(false);
   const [nationalityError, setNationalityError] = useState(false);
@@ -75,10 +87,10 @@ const PersonalInformation = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("");
-  const [birthDate, setBirthDate] = useState(currentDate);
-  const [issueDate, setIssueDate] = useState(currentDate);
+  const [birthDate, setBirthDate] = useState("");
+  const [issueDate, setIssueDate] = useState(null);
   const [issueDateError, setIssueDateError] = useState("");
-  const [expireDate, setexpireDate] = useState(currentDate);
+  const [expireDate, setexpireDate] = useState(null);
   const [expireDateError, setexpireDateError] = useState("");
   const [dateError, setDateError] = useState("");
   const minDate = "1950-01-01";
@@ -87,6 +99,27 @@ const PersonalInformation = () => {
   const [phoneNumber, setphoneNumber] = useState("");
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+
+
+  useEffect(() => {
+    if (oneData?.profileImage?.fileUrl) {
+      setFileList([
+        {
+          uid: '-1',
+          name: 'Profile Image',
+          status: 'done',
+          url: rootUrl + oneData.profileImage.fileUrl,
+        },
+      ]);
+    }
+  }, [oneData, rootUrl])
+
+  useEffect(() => {
+    get(`RecruitmentFrom/ByConsultant/${consultantValue}`).then((res) => {
+      setNationality(res);
+    });
+  }, [consultantValue]);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -102,22 +135,17 @@ const PersonalInformation = () => {
     });
 
     get("CountryDD/index").then((res) => {
-      setCountry(res);
-      setNationality(res);
+      setCountryBirth(res);
+      setCountryResidence(res);
+      // setNationality(res);
     });
 
-    // get("NationalityDD/Index").then((res) => {
-    //   setNationality(res);
-    // });
-
-    get("ConsultantDD/index").then((res) => {
-      console.log(res);
+    get("ConsultantDD/ByUser").then((res) => {
       setConsultant(res);
     });
 
     if (applicationStudentId) {
       get(`Student/Get/${applicationStudentId}`).then((res) => {
-        console.log("Response", res);
         setConsultantLabel(
           res?.consultant?.firstName + " " + res?.consultant?.lastName
         );
@@ -142,13 +170,26 @@ const PersonalInformation = () => {
         setNationalityValue(
           res?.nationality?.id == null ? 0 : res?.nationality?.id
         );
-        setCountryLabel(
-          res?.country?.name == null ? "Select Country" : res?.country?.name
+        setCountryResidenceLabel(
+          res?.country?.name == null
+            ? "Select Residence Country"
+            : res?.country?.name
         );
-        setCountryValue(res?.country?.id == null ? 0 : res?.country?.id);
-        setBirthDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
-        setIssueDate(moment(new Date(res?.issueDate)).format("YYYY-MM-DD"));
-        setexpireDate(moment(new Date(res?.expireDate)).format("YYYY-MM-DD"));
+        setCountryResidenceValue(
+          res?.country?.id == null ? 0 : res?.country?.id
+        );
+        setCountryBirthLabel(
+          res?.countryOfBirth?.name == null
+            ? "Select Birth Country"
+            : res?.countryOfBirth?.name
+        );
+        setCountryBirthValue(
+          res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
+        );
+        setBirthDate(res?.dateOfBirth ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD") : null);
+        setIssueDate(res?.issueDate ? moment(new Date(res.issueDate)).format("YYYY-MM-DD") : null);
+        setexpireDate(res?.expireDate ? moment(new Date(res.expireDate)).format("YYYY-MM-DD") : null);
+
       });
     }
   }, [success, applicationStudentId]);
@@ -190,13 +231,30 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    setBirthDate(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    setBirthDate(value);
+    const current = new Date(currentDate).getFullYear();
+    const selected = new Date(value).getFullYear();
+    const calculateBirthDate = current - selected;
+    if (value === "") {
       setDateError("Date of birth is required");
-    } else {
+    } else if (calculateBirthDate < 15) {
+      setDateError("Age must be more than 15 years");
+    }
+    else {
       setDateError("");
     }
   };
+
+  const handlePassport = (e) => {
+    setPassport(e.target.value);
+    if (e.target.value === "") {
+      setPassportError("Passport Id is required");
+    } else {
+      setPassportError("");
+    }
+  };
+
   const handleIssueDate = (e) => {
     setIssueDate(e.target.value);
     if (e.target.value === "") {
@@ -208,9 +266,11 @@ const PersonalInformation = () => {
   const handleExpireDate = (e) => {
     setexpireDate(e.target.value);
     if (e.target.value === "") {
-      setIssueDateError("Issue Date is required");
+      setexpireDateError("Expiry Date is required");
+    } else if (e.target.value <= issueDate) {
+      setexpireDateError("Expiry Date cannot same or previous date");
     } else {
-      setIssueDateError("");
+      setexpireDateError("");
     }
   };
 
@@ -241,17 +301,31 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
+  const handleDelete = () => {
 
-  const countryName = country?.map((branchCountry) => ({
+  }
+
+  const countryResidenceName = countryResidence?.map((branchCountry) => ({
+    label: branchCountry.name,
+    value: branchCountry.id,
+  }));
+
+  const countryBirthName = countryBirth?.map((branchCountry) => ({
     label: branchCountry.name,
     value: branchCountry.id,
   }));
 
   // select  Country
-  const selectCountry = (label, value) => {
+
+  const selectCountryResidence = (label, value) => {
+    setCountryOfResidenceError(false);
+    setCountryResidenceLabel(label);
+    setCountryResidenceValue(value);
+  };
+  const selectCountryBirth = (label, value) => {
     setCountryOfBirthError(false);
-    setCountryLabel(label);
-    setCountryValue(value);
+    setCountryBirthLabel(label);
+    setCountryBirthValue(value);
   };
 
   const nationalityName = nationality?.map((cons) => ({
@@ -283,10 +357,16 @@ const PersonalInformation = () => {
       isFormValid = false;
       setTitleError(true);
     }
-    if (countryValue === 0) {
+    if (countryResidenceValue === 0) {
+      isFormValid = false;
+      setCountryOfResidenceError(true);
+    }
+
+    if (countryBirthValue === 0) {
       isFormValid = false;
       setCountryOfBirthError(true);
     }
+
     if (genderValue === 0) {
       isFormValid = false;
       setGenderError(true);
@@ -303,9 +383,18 @@ const PersonalInformation = () => {
       isFormValid = false;
       setDateError("Date of birth is required");
     }
+
+    if (!passport) {
+      isFormValid = false;
+      setPassportError("Passport Id is required");
+    }
     if (issueDate === "") {
       isFormValid = false;
       setIssueDateError("Issue Date is required");
+    }
+    if (expireDate === "") {
+      isFormValid = false;
+      setexpireDateError("Expiry Date is required ");
     }
     if (maritalStatusValue === 0) {
       isFormValid = false;
@@ -325,12 +414,12 @@ const PersonalInformation = () => {
       setphoneNUmberError("Phone number required minimum 9 digit");
     }
 
-    if (userType === userTypes.Student.toString()) {
-      if (oneData?.profileImage == null && FileList?.length < 1) {
-        isFormValid = false;
-        setImgError(true);
-      }
-    }
+    // if (userType === userTypes.Student.toString()) {
+    //   if (oneData?.profileImage == null && FileList?.length < 1) {
+    //     isFormValid = false;
+    //     setImgError(true);
+    //   }
+    // }
     return isFormValid;
   };
 
@@ -338,9 +427,18 @@ const PersonalInformation = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
-    subData.append("profileImageFile", FileList[0]?.originFileObj);
+    if (FileList.length === 0) {
+      subData.append("profileImageFile", null);
+    } else {
+      subData.append("profileImageFile", FileList[0]?.originFileObj);
+    }
+
     subData.append("phoneNumber", phoneNumber);
+
     var formIsValid = validateRegisterForm(subData);
+    for (let [key, value] of subData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
@@ -400,7 +498,7 @@ const PersonalInformation = () => {
         activetab={"1"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -416,8 +514,8 @@ const PersonalInformation = () => {
                 />
 
                 {userType === userTypes?.SystemAdmin.toString() ||
-                userType === userTypes?.Admin.toString() ||
-                userType === userTypes?.ComplianceManager.toString() ? (
+                  userType === userTypes?.Admin.toString() ||
+                  userType === userTypes?.ComplianceManager.toString() ? (
                   <FormGroup row>
                     <Col lg="6" md="8">
                       <span>
@@ -535,6 +633,14 @@ const PersonalInformation = () => {
                       Date Of Birth
                     </span>
 
+                    {/* <InputDate
+                      name="dateOfBirth"
+                      value={birthDate}
+                      onChange={(e) => {
+                        handleDate(e);
+                      }}
+                    /> */}
+
                     <Input
                       type="date"
                       name="dateOfBirth"
@@ -543,7 +649,7 @@ const PersonalInformation = () => {
                         handleDate(e);
                       }}
                       value={birthDate}
-                      // min={minDate}
+                    // min={minDate}
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
@@ -551,16 +657,19 @@ const PersonalInformation = () => {
 
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>Passport/ID</span>
+                    <span>
+                      <span className="text-danger">*</span> Passport/ID
+                    </span>
 
                     <Input
                       type="text"
                       name="passportNumber"
                       id="passportNumber"
                       placeholder="Enter Passport Number"
-                      onChange={(e) => setPassport(e.target.value)}
-                      defaultValue={passport}
+                      onChange={(e) => handlePassport(e)}
+                      value={passport}
                     />
+                    <span className="text-danger">{passportError}</span>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -584,7 +693,9 @@ const PersonalInformation = () => {
                 </FormGroup>
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>Expiry Date</span>
+                    <span>
+                      <span className="text-danger">*</span>Expiry Date
+                    </span>
 
                     <Input
                       type="date"
@@ -596,27 +707,7 @@ const PersonalInformation = () => {
                       }}
                       value={expireDate}
                     />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Country Of Residence{" "}
-                    </span>
-
-                    <Select
-                      options={countryName}
-                      value={{ label: countryLabel, value: countryValue }}
-                      onChange={(opt) => selectCountry(opt.label, opt.value)}
-                      name="countryOfCitizenship"
-                      id="countryOfCitizenship"
-                      required
-                    />
-                    {countryOfBirthError && (
-                      <span className="text-danger">Country is required</span>
-                    )}
+                    <span className="text-danger">{expireDateError}</span>
                   </Col>
                 </FormGroup>
 
@@ -701,10 +792,100 @@ const PersonalInformation = () => {
                 </FormGroup>
 
                 <FormGroup row>
+                  <Col lg="6" md="8" className="phone-input-group">
+                    <span>
+                      <span className="text-danger">*</span>
+                      Phone Number
+                    </span>
+                    <PhoneInput
+                      className="w-100"
+                      type="string"
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      country={"gb"}
+                      enableLongNumbers={true}
+                      onChange={handlePhoneNumber}
+                      value={phoneNumber ? phoneNumber : ""}
+                      inputProps={{
+                        required: true,
+                      }}
+                    />
+
+                    <span className="text-danger">{phoneNUmberError}</span>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>
-                      Country Of Nationality
+                      Email
+                    </span>
+
+                    <Input type="email" name="email" id="email" value={email} />
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    {" "}
+                    <span>
+                      <span className="text-danger">*</span> Country of Birth
+                    </span>
+                    <Select
+                      options={countryBirthName}
+                      value={{
+                        label: countryBirthLabel,
+                        value: countryBirthValue,
+                      }}
+                      onChange={(opt) =>
+                        selectCountryBirth(opt.label, opt.value)
+                      }
+                      name="countryOfBirthId"
+                      id="countryOfBirthId"
+                      required
+                    />
+                    {countryOfBirthError && (
+                      <span className="text-danger">
+                        Country Of Birth is required
+                      </span>
+                    )}
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span>
+                      Country Of Residence{" "}
+                    </span>
+
+                    <Select
+                      options={countryResidenceName}
+                      value={{
+                        label: countryResidenceLabel,
+                        value: countryResidenceValue,
+                      }}
+                      onChange={(opt) =>
+                        selectCountryResidence(opt.label, opt.value)
+                      }
+                      name="countryOfCitizenship"
+                      id="countryOfCitizenship"
+                      required
+                    />
+                    {countryOfResidenceError && (
+                      <span className="text-danger">
+                        Country Of Residence is required
+                      </span>
+                    )}
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      <span className="text-danger">*</span>
+                      Nationality
                     </span>
 
                     <Select
@@ -729,84 +910,20 @@ const PersonalInformation = () => {
                   </Col>
                 </FormGroup>
 
-                <FormGroup row>
-                  <Col lg="6" md="8" className="phone-input-group">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Phone Number
-                    </span>
-                    <PhoneInput
-                      className="w-100"
-                      type="string"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      country={"us"}
-                      onChange={handlePhoneNumber}
-                      value={phoneNumber ? phoneNumber : "1"}
-                      inputProps={{
-                        required: true,
-                      }}
-                    />
-
-                    <span className="text-danger">{phoneNUmberError}</span>
-                  </Col>
-                </FormGroup>
-
-                {/* <FormGroup row>
-                  <Col lg="6" md="8" className="phone-input-group">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Phone Number
-                    </span>
-
-                    <Input
-                      type="string"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      placeholder="Enter Phone Number"
-                      onChange={(e) => {
-                        handlePhoneNumber(e);
-                      }}
-                      value={phoneNUmber}
-                    />
-                    <span className="text-danger">{phoneNUmberError}</span>
-                  </Col>
-                </FormGroup> */}
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Email
-                    </span>
-
-                    <Input type="email" name="email" id="email" value={email} />
-                  </Col>
-                </FormGroup>
-
                 <Row>
                   <Col lg="6" md="8">
                     <FormGroup row>
                       <Col md="3">
-                        <span>
+                        {/* <span>
                           {userId === applicationStudentId && (
                             <span className="text-danger mr-1">*</span>
                           )}
                           Profile Image
-                        </span>
+                        </span> */}
+                        <span>Profile Image</span>
                       </Col>
                       <Col md="5">
                         <div className="row">
-                          {oneData?.profileImage !== null ? (
-                            <div className="col-md-6 pb-2 pr-3">
-                              <Image
-                                width={104}
-                                height={104}
-                                src={rootUrl + oneData?.profileImage?.fileUrl}
-                              />
-                            </div>
-                          ) : null}
-
                           <div className="col-md-6 pb-2 pr-3">
                             <Upload
                               listType="picture-card"
@@ -863,10 +980,9 @@ const PersonalInformation = () => {
                           </>
                         ) : null}
                       </Col>
-                      <Col md="4">
+                      <Col md="4" className="pt-4">
                         <span className="text-gray">
-                          Recommanded resolution is 640*640 with file size less
-                          than 2MB, keep visual elements centered
+                          File size less than 2MB, keep visual elements centered
                         </span>
                       </Col>
                     </FormGroup>

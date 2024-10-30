@@ -12,6 +12,7 @@ import {
   Col,
   Table,
   ButtonGroup,
+  ModalHeader,
 } from "reactstrap";
 import post from "../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
@@ -56,8 +57,16 @@ const ComissionGroup = () => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setFilterBranch(res);
+      console.log(res);
     });
   }, []);
+
+  useEffect(() => {
+    if (userType === userTypes?.BranchManager) {
+      setBranchValue(filterbranch[0]?.id);
+      setBranchLable(filterbranch[0]?.name);
+    }
+  }, [userType, filterbranch]);
 
   useEffect(() => {
     get(`CommissionGroup/Index?branchid=${filterbranchValue}`).then((res) => {
@@ -169,37 +178,38 @@ const ComissionGroup = () => {
 
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div>
-          <Modal isOpen={openModal} toggle={modalOff} className="uapp-modal">
-            <ModalBody>
-              <form onSubmit={submitModalForm} className="mt-3">
-                {edit ? (
-                  <input type="hidden" name="id" id="id" value={data?.id} />
-                ) : null}
+      <BreadCrumb title="Commission Groups" backTo="" path="/" />
+      <div>
+        <Modal isOpen={openModal} toggle={modalOff} className="uapp-modal">
+          <ModalHeader> Add Commission Groups </ModalHeader>
+          <ModalBody>
+            <form onSubmit={submitModalForm} className="mt-3">
+              {edit ? (
+                <input type="hidden" name="id" id="id" value={data?.id} />
+              ) : null}
 
-                <FormGroup row>
-                  <Col md="4">
-                    <span>
-                      Name <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Input
-                      type="text"
-                      name="name"
-                      id="name"
-                      value={name}
-                      onChange={(e) => {
-                        handleName(e);
-                      }}
-                    />
-                    <span className="text-danger">{nameError}</span>
-                  </Col>
-                </FormGroup>
+              <FormGroup row>
+                <Col md="4">
+                  <span>
+                    Name <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={name}
+                    onChange={(e) => {
+                      handleName(e);
+                    }}
+                  />
+                  <span className="text-danger">{nameError}</span>
+                </Col>
+              </FormGroup>
 
+              {userType === userTypes?.SystemAdmin ||
+              userType === userTypes?.Admin ? (
                 <FormGroup row>
                   <Col md="4">
                     <span>
@@ -221,38 +231,43 @@ const ComissionGroup = () => {
                     />
                   </Col>
                 </FormGroup>
+              ) : (
+                <input
+                  type="hidden"
+                  name="branchId"
+                  id="branchId"
+                  value={branchValue}
+                />
+              )}
 
-                <FormGroup row>
-                  <Col md="12">
-                    <div className="d-flex justify-content-between">
-                      <CancelButton cancel={modalOff} />
-                      <SaveButton text="Submit" buttonStatus={buttonStatus} />
-                    </div>
-                  </Col>
-                </FormGroup>
-              </form>
-            </ModalBody>
-          </Modal>
+              <FormGroup row>
+                <Col md="12">
+                  <div className="d-flex justify-content-between">
+                    <CancelButton cancel={modalOff} />
+                    <SaveButton text="Submit" buttonStatus={buttonStatus} />
+                  </div>
+                </Col>
+              </FormGroup>
+            </form>
+          </ModalBody>
+        </Modal>
 
-          <BreadCrumb title="Commission Groups" backTo="" path="/" />
-
+        {filterbranch.length > 1 && (
           <Card>
             <CardBody>
               <div className="row">
                 <div className="col-md-12">
                   <div className="row">
-                    {filterbranch.length > 1 && (
-                      <div className="col-md-5 mb-3">
-                        <Filter
-                          data={filterbranch}
-                          label={filterbranchLabel}
-                          setLabel={setFilterBranchLabel}
-                          value={filterbranchValue}
-                          setValue={setFilterBranchValue}
-                          action={() => {}}
-                        />
-                      </div>
-                    )}
+                    <div className="col-md-5 mb-3">
+                      <Filter
+                        data={filterbranch}
+                        label={filterbranchLabel}
+                        setLabel={setFilterBranchLabel}
+                        value={filterbranchValue}
+                        setValue={setFilterBranchValue}
+                        action={() => {}}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -289,41 +304,44 @@ const ComissionGroup = () => {
               </div>
             </CardBody>
           </Card>
-
-          <Card className="uapp-employee-search">
-            <CardHeader>
-              {permissions?.includes(
-                permissionList.Configure_CommissionStucture
-              ) ? (
-                <div className="">
-                  <Button
-                    className="btn btn-uapp-add"
-                    onClick={() => setOpenModal(true)}
-                  >
-                    <i className="fas fa-plus"></i> Add Commission Group
-                  </Button>
-                </div>
-              ) : null}
-
-              <div>
-                {" "}
-                <b>
-                  {" "}
-                  Total{" "}
-                  <span className="badge badge-primary">
-                    {commission?.length}
-                  </span>{" "}
-                  Commission Group Found{" "}
-                </b>
+        )}
+        <Card className="uapp-employee-search">
+          <CardHeader>
+            {permissions?.includes(
+              permissionList.Configure_CommissionStucture
+            ) ? (
+              <div className="">
+                <Button
+                  className="btn btn-uapp-add"
+                  onClick={() => setOpenModal(true)}
+                >
+                  <i className="fas fa-plus"></i> Add Commission Group
+                </Button>
               </div>
-            </CardHeader>
+            ) : null}
 
-            <CardBody className="search-card-body">
+            <div>
+              {" "}
+              <b>
+                {" "}
+                Total{" "}
+                <span className="badge badge-primary">
+                  {commission?.length}
+                </span>{" "}
+                Commission Group Found{" "}
+              </b>
+            </div>
+          </CardHeader>
+
+          <CardBody className="search-card-body">
+            {loading ? (
+              <Loader />
+            ) : (
               <div className="table-responsive">
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       {(userType === userTypes?.SystemAdmin ||
                         userType === userTypes?.Admin) && <th>Branch</th>}
@@ -338,7 +356,7 @@ const ComissionGroup = () => {
                   <tbody>
                     {commission?.map((comm, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{comm?.name}</td>
                         {(userType === userTypes?.SystemAdmin ||
                           userType === userTypes?.Admin) && (
@@ -381,25 +399,26 @@ const ComissionGroup = () => {
                               </Button>
                             ) : null}
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Commission Group ? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={confirmDelete}
-                            cancel={() => setDeleteModal(false)}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                          />
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
               </div>
-            </CardBody>
-          </Card>
-        </div>
-      )}
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Commission Group ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={confirmDelete}
+        cancel={() => setDeleteModal(false)}
+        buttonStatus={buttonStatus}
+        progress={progress}
+      />
     </div>
   );
 };

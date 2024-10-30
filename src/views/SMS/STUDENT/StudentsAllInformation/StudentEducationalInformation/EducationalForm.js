@@ -45,10 +45,17 @@ const EducationalForm = ({
   percentage,
   duration,
   institution,
+  showForm,
+  instituteContactNumber,
+  instituteLanguage,
+  handleInstitutionLanguage,
+  instituteAddress,
+  handleInstitutionContactNumber,
+  handleInstitutionAddress,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
-    <>
+    <div id="student-educational-form" className={showForm ? "form-top" : ""}>
       <Form onSubmit={handleSubmit}>
         <input
           type="hidden"
@@ -176,6 +183,10 @@ const EducationalForm = ({
                     <span className="text-danger mr-1">*</span>
                     Result In Percentage
                   </span>
+                  <br />
+                  <span style={{ color: "rgba(0, 0, 0, 0.45)" }}>
+                    ( Note: It should not be CGPA)
+                  </span>
 
                   <Input
                     className="form-mt"
@@ -186,7 +197,7 @@ const EducationalForm = ({
                       handlePercentage(e);
                     }}
                     value={percentage}
-                    placeholder="Enter Percentage"
+                    placeholder="Enter value in form of percentage without the decimal."
                   />
                   <span className="text-danger">{percentageError}</span>
                 </FormGroup>
@@ -237,7 +248,10 @@ const EducationalForm = ({
                 type="text"
                 name="languageOfInstitution"
                 id="languageOfInstitution"
-                defaultValue={oneData?.languageOfInstitution}
+                onChange={(e) => {
+                  handleInstitutionLanguage(e);
+                }}
+                value={instituteLanguage}
                 placeholder="Enter Language Of Institution"
               />
             </FormGroup>
@@ -264,39 +278,22 @@ const EducationalForm = ({
                 <span className="text-danger">Country is required</span>
               )}
             </FormGroup>
-            {/* <FormGroup row>
-              <Col lg="6" md="8" className="phone-input-group">
-                <span>
-                  <span className="text-danger">*</span>
-                  Phone Number
-                </span>
-                <PhoneInput
-                  className="w-100"
-                  type="string"
-                  name="instituteContactNumber"
-                  id="instituteContactNumber"
-                  country={"us"}
-                  value={
-                    oneData?.instituteContactNumber
-                      ? oneData?.instituteContactNumber
-                      : "1"
-                  }
-                  inputProps={{
-                    required: true,
-                  }}
-                />
-              </Col>
-            </FormGroup> */}
+
             <FormGroup>
               <span>Institute Contact Number</span>
 
-              <Input
-                className="form-mt"
-                type="text"
+              <PhoneInput
+                className="w-100"
+                type="string"
                 name="instituteContactNumber"
                 id="instituteContactNumber"
-                defaultValue={oneData?.instituteContactNumber}
-                placeholder="Enter Institute Contact Number"
+                country={"gb"}
+                enableLongNumbers={true}
+                onChange={handleInstitutionContactNumber}
+                value={instituteContactNumber ? instituteContactNumber : ""}
+                inputProps={{
+                  required: true,
+                }}
               />
             </FormGroup>
             <FormGroup>
@@ -307,7 +304,10 @@ const EducationalForm = ({
                 type="text"
                 name="instituteAddress"
                 id="instituteAddress"
-                defaultValue={oneData?.instituteAddress}
+                onChange={(e) => {
+                  handleInstitutionAddress(e);
+                }}
+                value={instituteAddress}
                 placeholder="Enter Institute Address"
               />
             </FormGroup>
@@ -320,7 +320,7 @@ const EducationalForm = ({
           </Col>
         </Row>
       </Form>
-    </>
+    </div>
   );
 };
 

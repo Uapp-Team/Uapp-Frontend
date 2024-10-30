@@ -268,7 +268,7 @@ const AdminInformation = () => {
               <Col lg="6" md="8">
                 {" "}
                 <span>
-                  <span className="text-danger">*</span> <span>Email vai</span>
+                  <span className="text-danger">*</span> <span>Email</span>
                 </span>
                 <Input
                   type="email"
@@ -292,9 +292,10 @@ const AdminInformation = () => {
                   type="string"
                   name="officialPhoneNumber"
                   id="officialPhoneNumber"
-                  country={"us"}
+                  country={"gb"}
+                  enableLongNumbers={true}
                   onChange={handlePhoneNumber}
-                  value={phone ? phone : "1"}
+                  value={phone ? phone : ""}
                   inputProps={{
                     required: true,
                   }}

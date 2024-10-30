@@ -34,33 +34,92 @@ import put from "../../../../helpers/put";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import TagButton from "../../../../components/buttons/TagButton";
 import Branch from "../../../../components/Dropdown/Filter";
+import logoLg from "../../../../assets/img/Logo.svg";
+import WithdrawPdf from "./WithdrawPdf";
+import ColumnWithdrawRequest from "../../TableColumn/ColumnWithdrawRequest";
+import Filter from "../../../../components/Dropdown/Filter";
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 
 const Index = () => {
+  const withdrawRequestPaging = JSON.parse(
+    sessionStorage.getItem("withdrawRequestList")
+  );
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const history = useHistory();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(
+    withdrawRequestPaging?.currentPage ? withdrawRequestPaging?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    withdrawRequestPaging?.dataPerPage ? withdrawRequestPaging?.dataPerPage : 15
+  );
   const [callApi, setCallApi] = useState(false);
   const [entity, setEntity] = useState(0);
   const [consultant, setConsultant] = useState([]);
-  const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
+  const [userTypeLabel, setUserTypeLabel] = useState(
+    withdrawRequestPaging?.userTypeLabel
+      ? withdrawRequestPaging?.userTypeLabel
+      : "All"
+  );
+  const [userTypeValue, setUserTypeValue] = useState(
+    withdrawRequestPaging?.userTypeValue
+      ? withdrawRequestPaging?.userTypeValue
+      : 0
+  );
+  const [affiliateLabel, setAffiliateLabel] = useState(
+    withdrawRequestPaging?.affiliateLabel
+      ? withdrawRequestPaging?.affiliateLabel
+      : "Select Affiliate"
+  );
+  const [affiliateValue, setAffiliateValue] = useState(
+    withdrawRequestPaging?.affiliateValue
+      ? withdrawRequestPaging?.affiliateValue
+      : 0
+  );
+  const [companionLabel, setCompanionLabel] = useState(
+    withdrawRequestPaging?.companionLabel
+      ? withdrawRequestPaging?.companionLabel
+      : "Select Companion"
+  );
+  const [companionValue, setCompanionValue] = useState(
+    withdrawRequestPaging?.companionValue
+      ? withdrawRequestPaging?.companionValue
+      : 0
+  );
+  const [consultantLabel, setConsultantLabel] = useState(
+    withdrawRequestPaging?.consultantLabel
+      ? withdrawRequestPaging?.consultantLabel
+      : "Select Consultant"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    withdrawRequestPaging?.consultantValue
+      ? withdrawRequestPaging?.consultantValue
+      : 0
+  );
   const [transaction, setTransaction] = useState([]);
   const [transactionLabel, setTransactionLabel] = useState(
     "Select Transaction Status"
   );
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchLabel, setBranchLabel] = useState(
+    withdrawRequestPaging?.branchLabel
+      ? withdrawRequestPaging?.branchLabel
+      : "Select Branch"
+  );
   const [branchValue, setBranchValue] = useState(0);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [transactionValue, setTransactionValue] = useState(0);
   const [payment, setPayment] = useState([]);
+  const [isMarketing, setIsMarketing] = useState(false);
   const [paymentLabel, setPaymentLabel] = useState("Select Payment Status");
   const [paymentValue, setPaymentValue] = useState(0);
-  const [transactionCode, setTransactionCode] = useState("");
+  const [transactionCode, setTransactionCode] = useState(
+    withdrawRequestPaging?.transactionCode
+      ? withdrawRequestPaging?.transactionCode
+      : ""
+  );
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -84,6 +143,55 @@ const Index = () => {
   const [check, setCheck] = useState(true);
 
   const [tableData, setTableData] = useState([]);
+  const [bankDetails, setBankDetails] = useState({});
+
+  useEffect(() => {
+    const tableColumnWithdrawRequest = JSON.parse(
+      localStorage.getItem("ColumnWithdrawRequest")
+    );
+    tableColumnWithdrawRequest && setTableData(tableColumnWithdrawRequest);
+    !tableColumnWithdrawRequest &&
+      localStorage.setItem(
+        "ColumnWithdrawRequest",
+        JSON.stringify(ColumnWithdrawRequest)
+      );
+    !tableColumnWithdrawRequest && setTableData(ColumnWithdrawRequest);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "withdrawRequestList",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        userTypeLabel: userTypeLabel && userTypeLabel,
+        userTypeValue: userTypeValue && userTypeValue,
+        affiliateLabel: affiliateLabel && affiliateLabel,
+        affiliateValue: affiliateValue && affiliateValue,
+        companionLabel: companionLabel && companionLabel,
+        companionValue: companionValue && companionValue,
+        consultantLabel: consultantLabel && consultantLabel,
+        consultantValue: consultantValue && consultantValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
+        transactionCode: transactionCode && transactionCode,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    consultantLabel,
+    consultantValue,
+    branchLabel,
+    branchValue,
+    transactionCode,
+    dataPerPage,
+    userTypeLabel,
+    userTypeValue,
+    affiliateLabel,
+    affiliateValue,
+    companionLabel,
+    companionValue,
+  ]);
 
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
@@ -96,29 +204,24 @@ const Index = () => {
 
     get(`TransactionStatusDD/Index`).then((res) => {
       setTransaction(res);
-      console.log(res, "transaction");
     });
 
     get(`PaymentStatusDD/Index`).then((res) => {
       setPayment(res);
     });
+    get(`TransactionStatus/IsMarketing`).then((res) => {
+      setIsMarketing(res);
+    });
+  }, []);
 
+  useEffect(() => {
     get(
-      `WithdrawRequest/Index?page=${currentPage}&pagesize=${dataPerPage}&consultantid=${consultantValue}&transactionStatus=${transactionValue}&paymentStatuas=${paymentValue}&code=${transactionCode}&branchid=${branchValue}`
+      `WithdrawRequest/Index?page=${currentPage}&pagesize=${dataPerPage}&consultantid=${consultantValue}&transactionStatus=${transactionValue}&paymentStatuas=${paymentValue}&code=${transactionCode}&branchid=${branchValue}&affiliateid=${affiliateValue}&companionid=${companionValue}&type=${userTypeValue}`
     ).then((res) => {
       setData(res?.models);
-
       setEntity(res?.totalEntity);
       setLoading(false);
-      console.log(res, "data");
     });
-
-    get(`TableDefination/Index/${tableIdList?.Withdraw_request_List}`).then(
-      (res) => {
-        console.log("table data", res);
-        setTableData(res);
-      }
-    );
   }, [
     currentPage,
     dataPerPage,
@@ -128,12 +231,11 @@ const Index = () => {
     success,
     transactionCode,
     branchValue,
+    affiliateValue,
+    companionValue,
+    userTypeValue,
   ]);
-
-  const printData = (data) => {
-    setPdfData(data);
-  };
-
+  console.log(isMarketing);
   const handleAddWithdrawRequest = () => {
     history.push("/createWithdrawRequest");
   };
@@ -210,6 +312,7 @@ const Index = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -311,136 +414,156 @@ const Index = () => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Withdraw_request_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        setSuccess(!success);
-      } else {
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnWithdrawRequest", JSON.stringify(values));
   };
 
+  const printData = (data) => {
+    get(`BankDetails/GetDefaultBranch/${data?.consultantId}`).then((res) => {
+      setBankDetails(res);
+      console.log(res);
+    });
+    setPdfData(data);
+  };
+
+  const userTypeSelectAction = () => {
+    setConsultantLabel("Select Consultant");
+    setConsultantValue(0);
+    setAffiliateLabel("Select Affiliate");
+    setAffiliateValue(0);
+    setCompanionLabel("Select Companion");
+    setCompanionValue(0);
+  };
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          {/* Update withdraw request status modal selected Transaction Status  */}
+      <BreadCrumb title="Withdraw Request List" backTo="" path="/" />
 
-          <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
-            <ModalHeader>Update Withdraw Request Status</ModalHeader>
-            <ModalBody>
-              <Form onSubmit={handleTransactionStatusChange}>
-                <input type="hidden" value={currData?.id} />
+      <>
+        {/* Update withdraw request status modal selected Transaction Status  */}
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Amount Available To Pay{" "}
-                      <span className="text-danger">*</span>
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      options={transactionOptions}
-                      value={{ label: modalTLabel, value: modalTValue }}
-                      onChange={(opt) =>
-                        selectTransaction2(opt.label, opt.value)
-                      }
-                    />
-                  </Col>
-                </FormGroup>
+        <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
+          <ModalHeader>Update Withdraw Request Status</ModalHeader>
+          <ModalBody>
+            <Form onSubmit={handleTransactionStatusChange}>
+              <input type="hidden" value={currData?.id} />
 
-                <span className="text-danger">
-                  <b>Note:</b>
-                </span>
-                <span className="ml-1">
-                  By authorizing transaction, account officer will be able to
-                  make payment
-                </span>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Amount Available To Pay{" "}
+                    <span className="text-danger">*</span>
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Select
+                    options={transactionOptions}
+                    value={{ label: modalTLabel, value: modalTValue }}
+                    onChange={(opt) => selectTransaction2(opt.label, opt.value)}
+                  />
+                </Col>
+              </FormGroup>
 
-                <div className="d-flex justify-content-between mt-3">
-                  <Button color="danger" onClick={closeModal}>
-                    Cancel
-                  </Button>
+              <span className="text-danger">
+                <b>Note:</b>
+              </span>
+              <span className="ml-1">
+                By authorizing transaction, account officer will be able to make
+                payment
+              </span>
 
-                  <Button color="primary">
-                    {progress ? <ButtonLoader /> : "Update"}
-                  </Button>
-                </div>
-              </Form>
-            </ModalBody>
-          </Modal>
+              <div className="d-flex justify-content-between mt-3">
+                <Button color="danger" onClick={closeModal}>
+                  Cancel
+                </Button>
 
-          {/* 2md modal to update */}
+                <Button color="primary">
+                  {progress ? <ButtonLoader /> : "Update"}
+                </Button>
+              </div>
+            </Form>
+          </ModalBody>
+        </Modal>
 
-          <Modal
-            isOpen={modalOpen2}
-            toggle={closeModal2}
-            className="uapp-modal2"
-          >
-            <ModalHeader>Update Payment Status</ModalHeader>
-            <ModalBody>
-              <Form onSubmit={handlePaymentStatusChange}>
-                <input type="hidden" value={currData2?.id} />
+        {/* 2md modal to update */}
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
-                      Amount Available To Pay{" "}
-                      <span className="text-danger">*</span>
-                    </span>
-                  </Col>
-                  <Col md="8">
-                    <Select
-                      options={paymentOptions}
-                      value={{ label: modalPLabel, value: modalPValue }}
-                      onChange={(opt) => selectPayment2(opt.label, opt.value)}
-                    />
-                  </Col>
-                </FormGroup>
+        <Modal isOpen={modalOpen2} toggle={closeModal2} className="uapp-modal2">
+          <ModalHeader>Update Payment Status</ModalHeader>
+          <ModalBody>
+            <Form onSubmit={handlePaymentStatusChange}>
+              <input type="hidden" value={currData2?.id} />
 
-                <span className="text-danger">
-                  <b>Note:</b>
-                </span>
-                <span className="ml-1">
-                  Make sure that the withdraw request is paid or rejected
-                </span>
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="4">
+                  <span>
+                    Amount Available To Pay{" "}
+                    <span className="text-danger">*</span>
+                  </span>
+                </Col>
+                <Col md="8">
+                  <Select
+                    options={paymentOptions}
+                    value={{ label: modalPLabel, value: modalPValue }}
+                    onChange={(opt) => selectPayment2(opt.label, opt.value)}
+                  />
+                </Col>
+              </FormGroup>
 
-                <div className="d-flex justify-content-between mt-3">
-                  <Button color="danger" onClick={closeModal2}>
-                    Cancel
-                  </Button>
+              <span className="text-danger">
+                <b>Note:</b>
+              </span>
+              <span className="ml-1">
+                Make sure that the withdraw request is paid or rejected
+              </span>
 
-                  <Button color="primary" type="submit">
-                    {progress1 ? <ButtonLoader /> : "Update"}
-                  </Button>
-                </div>
-              </Form>
-            </ModalBody>
-          </Modal>
+              <div className="d-flex justify-content-between mt-3">
+                <Button color="danger" onClick={closeModal2}>
+                  Cancel
+                </Button>
 
-          <BreadCrumb title="Withdraw Request List" backTo="" path="/" />
+                <Button color="primary" type="submit">
+                  {progress1 ? <ButtonLoader /> : "Update"}
+                </Button>
+              </div>
+            </Form>
+          </ModalBody>
+        </Modal>
 
-          <Card>
-            <CardBody>
-              <div className="row">
-                {userType !== userTypes?.Consultant ? (
-                  <div className="col-md-3 mb-2">
-                    <Select
-                      options={consultantOptions}
-                      value={{ label: consultantLabel, value: consultantValue }}
-                      onChange={(opt) => selectConsultant(opt.label, opt.value)}
-                    />
-                  </div>
-                ) : null}
-
+        <Card className="zindex-100">
+          <CardBody>
+            <div className="row">
+              {isMarketing && (
                 <div className="col-md-3 mb-2">
+                  <Filter
+                    data={[
+                      { id: 0, name: "All" },
+                      { id: 1, name: "Consultant" },
+                      { id: 2, name: "Affiliate" },
+                      { id: 3, name: "Companion" },
+                    ]}
+                    label={userTypeLabel}
+                    setLabel={setUserTypeLabel}
+                    value={userTypeValue}
+                    setValue={setUserTypeValue}
+                    action={userTypeSelectAction}
+                  />
+                </div>
+              )}
+
+              {userType !== userTypes?.Consultant &&
+              (userTypeValue === 0 || userTypeValue === 1) ? (
+                <div className="col-md-3 mb-2">
+                  <Select
+                    options={consultantOptions}
+                    value={{ label: consultantLabel, value: consultantValue }}
+                    onChange={(opt) => selectConsultant(opt.label, opt.value)}
+                  />
+                </div>
+              ) : null}
+
+              {/* <div className="col-md-3 mb-2">
                   <Select
                     options={transactionOptions}
                     value={{ label: transactionLabel, value: transactionValue }}
@@ -454,110 +577,144 @@ const Index = () => {
                     value={{ label: paymentLabel, value: paymentValue }}
                     onChange={(opt) => selectPayment(opt.label, opt.value)}
                   />
-                </div>
-                {branch.length > 1 && (
-                  <div className="col-md-3 mb-2">
-                    <Branch
-                      data={branch}
-                      label={branchLabel}
-                      setLabel={setBranchLabel}
-                      value={branchValue}
-                      setValue={setBranchValue}
-                      name=""
-                      error={() => {}}
-                      setError={() => {}}
-                      action={() => {}}
-                    />
-                  </div>
-                )}
-                <div className="col-md-3">
-                  <Input
-                    style={{ height: "38px" }}
-                    type="text"
+                </div> */}
+
+              {isMarketing && (
+                <>
+                  {(userTypeValue === 0 || userTypeValue === 2) && (
+                    <div className="col-md-3 mb-2">
+                      <DefaultDropdown
+                        label={affiliateLabel}
+                        setLabel={setAffiliateLabel}
+                        value={affiliateValue}
+                        setValue={setAffiliateValue}
+                        url="AffiliateDD"
+                        name="status"
+                        error={() => {}}
+                        setError={() => {}}
+                        action={() => {}}
+                      />
+                    </div>
+                  )}
+                  {(userTypeValue === 0 || userTypeValue === 3) && (
+                    <div className="col-md-3 mb-2">
+                      <DefaultDropdown
+                        label={companionLabel}
+                        setLabel={setCompanionLabel}
+                        value={companionValue}
+                        setValue={setCompanionValue}
+                        url="CompanionDD"
+                        name="status"
+                        error={() => {}}
+                        setError={() => {}}
+                        action={() => {}}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+
+              {branch.length > 1 && (
+                <div className="col-md-3 mb-2">
+                  <Branch
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
                     name=""
-                    id=""
-                    placeholder="Enter Transaction Code"
-                    value={transactionCode}
-                    onChange={(e) => setTransactionCode(e.target.value)}
+                    error={() => {}}
+                    setError={() => {}}
+                    action={() => {}}
                   />
                 </div>
+              )}
+              <div className="col-md-3">
+                <Input
+                  style={{ height: "38px" }}
+                  type="text"
+                  name=""
+                  id=""
+                  placeholder="Enter Transaction Code"
+                  value={transactionCode}
+                  onChange={(e) => setTransactionCode(e.target.value)}
+                />
               </div>
+            </div>
 
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="d-flex justify-content-start">
-                    <div className="mt-1 mx-1" style={{ display: "flex" }}>
-                      {consultantValue !== 0 ||
-                      transactionValue !== 0 ||
-                      paymentValue !== 0
-                        ? ""
-                        : ""}
-                      {consultantValue !== 0 ? (
-                        <TagButton
-                          label={consultantLabel}
-                          setValue={() => setConsultantValue(0)}
-                          setLabel={() =>
-                            setConsultantLabel("Select Consultant")
-                          }
-                        ></TagButton>
-                      ) : (
-                        ""
-                      )}
-                      {consultantValue !== 0 &&
-                        (transactionValue !== 0 || paymentValue !== 0
-                          ? ""
-                          : "")}
-                      {transactionValue !== 0 ? (
-                        <TagButton
-                          label={transactionLabel}
-                          setValue={() => setTransactionValue(0)}
-                          setLabel={() =>
-                            setTransactionLabel("Select Transaction Status")
-                          }
-                        ></TagButton>
-                      ) : (
-                        ""
-                      )}
-                      {transactionValue !== 0 && paymentValue !== 0 ? "" : ""}
-                      {paymentValue !== 0 ? (
-                        <TagButton
-                          label={paymentLabel}
-                          setValue={() => setPaymentValue(0)}
-                          setLabel={() =>
-                            setPaymentLabel("Select Payment Status")
-                          }
-                        ></TagButton>
-                      ) : (
-                        ""
-                      )}
-                      {branchValue !== 0 ? (
-                        <TagButton
-                          label={branchLabel}
-                          setValue={() => setBranchValue(0)}
-                          setLabel={() => setBranchLabel("Select Branch")}
-                        ></TagButton>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                    <div className=" btn-clear mt-1 mx-1 d-flex">
-                      {consultantValue !== 0 ||
-                      transactionValue !== 0 ||
-                      branchValue !== 0 ||
-                      paymentValue !== 0 ? (
-                        <button className="tag-clear" onClick={handleClear}>
-                          Clear All
-                        </button>
-                      ) : (
-                        ""
-                      )}
-                    </div>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="d-flex justify-content-start">
+                  <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                    {consultantValue !== 0 ||
+                    transactionValue !== 0 ||
+                    paymentValue !== 0
+                      ? ""
+                      : ""}
+                    {consultantValue !== 0 ? (
+                      <TagButton
+                        label={consultantLabel}
+                        setValue={() => setConsultantValue(0)}
+                        setLabel={() => setConsultantLabel("Select Consultant")}
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+                    {consultantValue !== 0 &&
+                      (transactionValue !== 0 || paymentValue !== 0 ? "" : "")}
+                    {transactionValue !== 0 ? (
+                      <TagButton
+                        label={transactionLabel}
+                        setValue={() => setTransactionValue(0)}
+                        setLabel={() =>
+                          setTransactionLabel("Select Transaction Status")
+                        }
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+                    {transactionValue !== 0 && paymentValue !== 0 ? "" : ""}
+                    {paymentValue !== 0 ? (
+                      <TagButton
+                        label={paymentLabel}
+                        setValue={() => setPaymentValue(0)}
+                        setLabel={() =>
+                          setPaymentLabel("Select Payment Status")
+                        }
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+                    {branchValue !== 0 ? (
+                      <TagButton
+                        label={branchLabel}
+                        setValue={() => setBranchValue(0)}
+                        setLabel={() => setBranchLabel("Select Branch")}
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className=" btn-clear mt-1 mx-1 d-flex">
+                    {consultantValue !== 0 ||
+                    transactionValue !== 0 ||
+                    branchValue !== 0 ||
+                    paymentValue !== 0 ? (
+                      <button className="tag-clear" onClick={handleClear}>
+                        Clear All
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
-            </CardBody>
-          </Card>
-
+            </div>
+          </CardBody>
+        </Card>
+        {loading ? (
+          <Loader />
+        ) : (
           <Card className="uapp-employee-search">
             <CardBody>
               <div className=" row mb-3">
@@ -580,7 +737,7 @@ const Index = () => {
                     <div className="me-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             className="mr-2"
                             options={dataSizeName}
@@ -642,7 +799,7 @@ const Index = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData.map((table, i) => (
                             <div key={i}>
-                              {i === 7 ? (
+                              {i === 6 ? (
                                 <>
                                   {" "}
                                   {permissions?.includes(
@@ -650,7 +807,7 @@ const Index = () => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -661,7 +818,7 @@ const Index = () => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -678,7 +835,7 @@ const Index = () => {
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -689,7 +846,7 @@ const Index = () => {
                                             id=""
                                             name="isAcceptHome"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
                                             defaultChecked={table?.isActive}
                                           />
@@ -701,7 +858,7 @@ const Index = () => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -712,7 +869,7 @@ const Index = () => {
                                         id=""
                                         name="isAcceptHome"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
                                         defaultChecked={table?.isActive}
                                       />
@@ -732,29 +889,49 @@ const Index = () => {
               </div>
 
               {permissions?.includes(permissionList.View_Widthdraw_Request) ? (
-                <div className="table-responsive" ref={componentRef}>
-                  <Table id="table-to-xls" className="table-sm table-bordered">
-                    <thead className="tablehead">
-                      <tr className="text-center">
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>Request Date</th> : null}
-                        {tableData[2]?.isActive ? (
-                          <th>Consultant Name</th>
-                        ) : null}
-                        {tableData[3]?.isActive ? (
-                          <th>Transaction Code</th>
-                        ) : null}
-                        {tableData[4]?.isActive ? <th>Amount</th> : null}
-                        {tableData[5]?.isActive ? <th>Payment Type</th> : null}
-                        {tableData[6]?.isActive ? <th>Payment Date</th> : null}
-                        {permissions?.includes(
-                          permissionList.Update_Withdraw_Request_Authorize_Status
-                        ) ? (
-                          <>{tableData[7]?.isActive ? <th>Status</th> : null}</>
-                        ) : null}
-                        {tableData[8]?.isActive ? <th>Branch</th> : null}
+                <>
+                  {data?.length === 0 ? (
+                    <h4 className="text-center">No Data Found</h4>
+                  ) : (
+                    <div
+                      className="table-responsive fixedhead"
+                      ref={componentRef}
+                    >
+                      <Table
+                        id="table-to-xls"
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="tablehead">
+                          <tr className="text-center">
+                            {tableData[0]?.isActive ? (
+                              <th>Request Date</th>
+                            ) : null}
+                            {userType !== userTypes?.Consultant &&
+                            tableData[1]?.isActive ? (
+                              <th>Name</th>
+                            ) : null}
+                            {tableData[2]?.isActive ? (
+                              <th>Transaction Code</th>
+                            ) : null}
+                            {tableData[3]?.isActive ? <th>Amount</th> : null}
+                            {tableData[4]?.isActive ? (
+                              <th>Payment Type</th>
+                            ) : null}
+                            {tableData[5]?.isActive ? (
+                              <th>Payment Date</th>
+                            ) : null}
+                            {permissions?.includes(
+                              permissionList.Update_Withdraw_Request_Authorize_Status
+                            ) ? (
+                              <>
+                                {tableData[6]?.isActive ? (
+                                  <th>Status</th>
+                                ) : null}
+                              </>
+                            ) : null}
+                            {tableData[7]?.isActive ? <th>Branch</th> : null}
 
-                        {permissions?.includes(
+                            {/* {permissions?.includes(
                           permissionList.Update_Withdraw_Request_Payment_Status
                         ) ? (
                           <>
@@ -763,107 +940,91 @@ const Index = () => {
                               <th>Payment Status</th>
                             ) : null}
                           </>
-                        ) : null}
-                        {tableData[10]?.isActive ? <th>Invoice</th> : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data?.map((ls, i) => (
-                        <tr key={i} className="text-center">
-                          {tableData[0]?.isActive ? <td>{i + 1}</td> : null}
-                          {tableData[1]?.isActive ? (
-                            <td>{ls?.transactionDate}</td>
-                          ) : null}
-                          {tableData[2]?.isActive ? (
-                            <td>{ls?.consultantName}</td>
-                          ) : null}
-                          {tableData[3]?.isActive ? (
-                            <td>{ls?.transactionCode}</td>
-                          ) : null}
-                          {tableData[4]?.isActive ? (
-                            <td>£ {ls?.amount}</td>
-                          ) : null}
-                          {tableData[5]?.isActive ? (
-                            <td>{ls?.paymentType}</td>
-                          ) : null}
-                          {tableData[6]?.isActive ? (
-                            <td>{ls?.transactionDate}</td>
-                          ) : null}
-                          {permissions?.includes(
-                            permissionList.Update_Withdraw_Request_Authorize_Status
-                          ) ? (
-                            <>
-                              {tableData[7]?.isActive ? (
-                                <td>
-                                  {ls?.transactionStatus}
-                                  {!(ls?.paymentStatusId == 2) &&
-                                    current_user?.userTypeId ==
-                                      userTypes?.SystemAdmin && (
-                                      <Button
-                                        color="warning"
-                                        className="ml-2 btn-sm"
-                                        onClick={() => handleUpdate(ls)}
-                                        disabled={buttonStatus}
-                                      >
-                                        <i className="fas fa-edit"></i>
-                                      </Button>
-                                    )}
-                                </td>
+                        ) : null} */}
+                            {tableData[8]?.isActive ? <th>Invoice</th> : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data?.map((ls, i) => (
+                            <tr key={i} className="text-center">
+                              {tableData[0]?.isActive ? (
+                                <td>{ls?.transactionDate}</td>
                               ) : null}
-                            </>
-                          ) : null}
-                          {tableData[8]?.isActive ? (
-                            <td>{ls?.branchName}</td>
-                          ) : null}
-                          {permissions?.includes(
-                            permissionList.Update_Withdraw_Request_Payment_Status
+                              {userType !== userTypes?.Consultant &&
+                              tableData[1]?.isActive ? (
+                                <td>{ls?.consultantFullName}</td>
+                              ) : null}
+                              {tableData[2]?.isActive ? (
+                                <td>{ls?.transactionCode}</td>
+                              ) : null}
+                              {tableData[3]?.isActive ? (
+                                <td>£ {ls?.amount}</td>
+                              ) : null}
+                              {tableData[4]?.isActive ? (
+                                <td>{ls?.paymentType}</td>
+                              ) : null}
+                              {tableData[5]?.isActive ? (
+                                <td>{ls?.transactionDate}</td>
+                              ) : null}
+                              {permissions?.includes(
+                                permissionList.Update_Withdraw_Request_Authorize_Status
+                              ) ? (
+                                <>
+                                  {tableData[6]?.isActive ? (
+                                    <td>
+                                      {ls?.transactionStatus}
+                                      {!(ls?.paymentStatusId == 2) && (
+                                        <Button
+                                          color="warning"
+                                          className="ml-2 btn-sm"
+                                          onClick={() => handleUpdate(ls)}
+                                          disabled={buttonStatus}
+                                        >
+                                          <i className="fas fa-edit"></i>
+                                        </Button>
+                                      )}
+                                    </td>
+                                  ) : null}
+                                </>
+                              ) : null}
+                              {tableData[7]?.isActive ? (
+                                <td>{ls?.branchName}</td>
+                              ) : null}
+                              {/* {permissions?.includes(
+                            permissionList.Update_Withdraw_Request_Authorize_Status
                           ) ? (
                             <>
                               {" "}
                               {tableData[9]?.isActive ? (
                                 <td>
                                   {ls?.paymentStatus}
-                                  {ls?.transactionStatusId == 2 &&
-                                    !(ls?.paymentStatusId == 2) &&
-                                    current_user?.userTypeId ==
-                                      userTypes?.SystemAdmin && (
-                                      <Button
-                                        color="warning"
-                                        className="ml-2 btn-sm"
-                                        onClick={() => handleUpdate2(ls)}
-                                        disabled={buttonStatus}
-                                      >
-                                        <i className="fas fa-edit"></i>
-                                      </Button>
-                                    )}
+                                  {!(ls?.paymentStatusId == 2) && (
+                                    <Button
+                                      color="warning"
+                                      className="ml-2 btn-sm"
+                                      onClick={() => handleUpdate2(ls)}
+                                      disabled={buttonStatus}
+                                    >
+                                      <i className="fas fa-edit"></i>
+                                    </Button>
+                                  )}
                                 </td>
                               ) : null}
                             </>
-                          ) : null}
+                          ) : null} */}
 
-                          {tableData[10]?.isActive ? (
-                            <td className="text-center">
-                              <ButtonGroup variant="text">
-                                <ReactToPrint
-                                  trigger={() => (
-                                    <Button
-                                      className="me-1 btn-sm"
-                                      color="primary"
-                                      onClick={printData(ls)}
-                                    >
-                                      Download
-                                    </Button>
-                                  )}
-                                  content={() => componentRef2.current}
-                                />
-                              </ButtonGroup>
-                            </td>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                              {tableData[8]?.isActive ? (
+                                <td className="text-center">
+                                  <WithdrawPdf pdfData={ls} />
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  )}
+                </>
               ) : null}
 
               <Pagination
@@ -874,239 +1035,11 @@ const Index = () => {
               />
             </CardBody>
           </Card>
+        )}
+        {/* invoice pdf start */}
 
-          {/* invoice pdf start */}
-
-          <div style={{ display: "none" }}>
-            <div ref={componentRef2} style={{ marginTop: "100px" }}>
-              <div className="invoice-winthdraw-request-style">
-                <img height={70} src={Assets} alt="" />
-                <h1>Remittance Advice</h1>
-              </div>
-
-              <div style={{ marginTop: "100px" }}>
-                <hr />
-              </div>
-
-              <div style={{ marginTop: "100px" }}>
-                <div
-                  style={{ display: "flex", justifyContent: "space-around" }}
-                >
-                  <div>
-                    <div>
-                      <span
-                        className="inv-span-styles"
-                        style={{ color: "#1e98b0", fontWeight: "500" }}
-                      >
-                        {pdfData?.transactionCode}
-                      </span>
-                    </div>
-                    <br />
-                    <br />
-                    <div>
-                      <span>
-                        <Icon.PhoneCall color="#1e98b0" />
-                      </span>
-                      <span
-                        style={{ marginLeft: "10px" }}
-                        className="inv-span-styles"
-                      >
-                        +442072658478
-                      </span>
-                    </div>
-                    <div>
-                      <span>
-                        <Icon.Search color="#1e98b0" />
-                      </span>
-                      <span
-                        style={{ marginLeft: "10px" }}
-                        className="inv-span-styles"
-                      >
-                        finance@uapp.uk
-                      </span>
-                    </div>
-                    <div>
-                      <span>
-                        <Icon.Map color="#1e98b0" />
-                      </span>
-                      <span
-                        style={{ marginLeft: "10px" }}
-                        className="inv-span-styles"
-                      >
-                        80-82 Nelson Street London E1 2DY
-                      </span>
-                    </div>
-                    <div>
-                      <span className="inv-span-styles">
-                        TC Date {pdfData?.transactionDate}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="inv-span-styles">
-                        Transaction Status: {pdfData?.transactionStatus}
-                      </span>
-                    </div>
-                    {pdfData?.transactionStatus !== "Pending" ? (
-                      <>
-                        <div>
-                          <span className="inv-span-styles">
-                            Authorized Date: {pdfData?.authorizationDate}
-                          </span>
-                        </div>
-                      </>
-                    ) : null}
-                  </div>
-
-                  <div>
-                    <div>
-                      <div>
-                        <span
-                          className="inv-span-styles"
-                          style={{ color: "#1e98b0", fontWeight: "500" }}
-                        >
-                          Date : {pdfData?.transactionDate}
-                        </span>
-                      </div>
-                      <br />
-                      <br />
-                      <div>
-                        <span className="inv-span-styles">
-                          Consultant Name :{pdfData?.consultantName}
-                        </span>
-                      </div>
-
-                      <div>
-                        <span className="inv-span-styles">
-                          Consultant ID : {pdfData?.consultantId}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="inv-span-styles">
-                          Payment Type : {pdfData?.paymentType}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="inv-span-styles">
-                          Payment Status : {pdfData?.paymentStatus}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="inv-span-styles">Reference No :</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                style={{
-                  marginTop: "100px",
-                  width: "80%",
-                  marginLeft: "100px",
-                }}
-              >
-                <table style={{ width: "100%" }}>
-                  <thead className="tablehead">
-                    <tr>
-                      <th style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">Quantity</span>
-                      </th>
-                      <th style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">Description</span>
-                      </th>
-                      <th style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">Amount</span>
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody style={{ textAlign: "center" }}>
-                    <tr>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">1</span>
-                      </td>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">
-                          Recruitment & Enrollment Support
-                        </span>
-                      </td>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">£ 200.00</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ border: "1px solid black" }}>
-                        <span></span>
-                      </td>
-                      <td style={{ borderBottom: "1px solid black" }}>
-                        <span className="inv-span-styles">Net Amount</span>
-                      </td>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">£ 200.00</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ border: "1px solid black" }}>
-                        <span></span>
-                      </td>
-                      <td style={{ borderBottom: "1px solid black" }}>
-                        <span className="inv-span-styles">Deductions</span>
-                      </td>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">£ 0</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style={{ border: "1px solid black" }}>
-                        <span></span>
-                      </td>
-                      <td style={{ borderBottom: "1px solid black" }}>
-                        <span className="inv-span-styles">Total Amount</span>
-                      </td>
-                      <td style={{ border: "1px solid black" }}>
-                        <span className="inv-span-styles">£ 200.00</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div style={{ marginTop: "100px", marginLeft: "100px" }}>
-                <div>
-                  <span className="inv-span-styles text-blue">
-                    Bank Details
-                  </span>
-                </div>
-                <div>
-                  <span className="inv-span-styles">
-                    Account Name : M G PORCISTEANU
-                  </span>
-                </div>
-                <div>
-                  <span className="inv-span-styles">
-                    Account Number : 31882007
-                  </span>
-                </div>
-                <div>
-                  <span className="inv-span-styles">Short code : 402310</span>
-                </div>
-                <div>
-                  <span className="inv-span-styles">Bank Name : HSBC</span>
-                </div>
-              </div>
-
-              <div style={{ marginTop: "100px", textAlign: "center" }}>
-                <span className="inv-span-styles">
-                  I will be solely responsible for all my tax returns and
-                  payments required by HMRC / Tax office.
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* invoice pdf end */}
-        </>
-      )}
+        {/* invoice pdf end */}
+      </>
     </div>
   );
 };

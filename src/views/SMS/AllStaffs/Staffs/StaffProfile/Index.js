@@ -24,7 +24,7 @@ import editbtn from "../../../../../assets/img/editbtn.png";
 
 const EmployeeProfile = ({ userId }) => {
   const { id } = useParams();
-  console.log(userId);
+  console.log(userId, id);
   const history = useHistory();
   const { addToast } = useToasts();
   const [employeeDetails, setemployeeDetails] = useState({});
@@ -55,6 +55,7 @@ const EmployeeProfile = ({ userId }) => {
   const [generalInfo, setGeneralInfo] = useState({});
   const [eligibilityInfo, setEligibilityInfo] = useState({});
   const [emergencyInfo, setEmergencyInfo] = useState({});
+  const [croppedImage, setCroppedImage] = useState(null);
 
   useEffect(() => {
     get(`EmployeeProfile/ProfileHead/${id ? id : userId}`).then((action) => {
@@ -173,34 +174,38 @@ const EmployeeProfile = ({ userId }) => {
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
 
-    const subData = new FormData(event.target);
+    // const subData = new FormData(event.target);
 
-    subData.append("coverImage", FileList[0]?.originFileObj);
+    // subData.append("coverImage", FileList[0]?.originFileObj);
+    const subData = {
+      id: id ? id : userId,
+      coverImage: croppedImage,
+    };
 
-    if (FileList.length < 1) {
-      setError(true);
-    } else {
-      setProgress(true);
-      setButtonStatus(true);
-      put(`Employee/UpdateCoverPhoto`, subData).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res?.status == 200 && res?.data?.isSuccess == true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setFileList([]);
-          setModalOpen(false);
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    }
+    // if (FileList.length < 1) {
+    //   setError(true);
+    // } else {
+    setProgress(true);
+    setButtonStatus(true);
+    put(`Employee/UpdateCoverPhoto`, subData).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      if (res?.status == 200 && res?.data?.isSuccess == true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setFileList([]);
+        setModalOpen(false);
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+    // }
   };
 
   const updateProfilePic = () => {
@@ -318,6 +323,8 @@ const EmployeeProfile = ({ userId }) => {
                       buttonStatus={buttonStatus}
                       progress={progress}
                       FileList={FileList}
+                      croppedImage={croppedImage}
+                      setCroppedImage={setCroppedImage}
                     ></UpdateCoverPhoto>
 
                     {/* update cover photo End */}
@@ -388,7 +395,9 @@ const EmployeeProfile = ({ userId }) => {
                                       permissionList.Update_Employee
                                     ) ? (
                                       <Link
-                                        to={`/staffGeneralInformation/${id}`}
+                                        to={`/staffGeneralInformation/${
+                                          id ? id : userId
+                                        }`}
                                       >
                                         <img
                                           src={editbtn}
@@ -426,7 +435,9 @@ const EmployeeProfile = ({ userId }) => {
                                   color: "#d4d4d4",
                                 }}
                               >
-                                {employeeDetails?.uappRegistrationDate}
+                                {dateFormate(
+                                  employeeDetails?.uappRegistrationDate
+                                )}
                               </span>
                             </div>
                           </Col>

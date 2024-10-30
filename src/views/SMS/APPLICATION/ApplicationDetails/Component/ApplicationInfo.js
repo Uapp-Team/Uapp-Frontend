@@ -4,7 +4,6 @@ import {
   Input,
   Table,
   Modal,
-  h4,
   ModalBody,
   FormGroup,
   Form,
@@ -21,11 +20,16 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import ApplicationStatus from "./Status/ApplicationStatus";
-import uploadBtn from "../../../../../assets/img/upload.png";
 import moment from "moment";
 import AddButton from "../../../../../components/buttons/AddButton";
-import { currentDate } from "../../../../../components/date/calenderFormate";
+import {
+  currentDate,
+  dateFormate,
+} from "../../../../../components/date/calenderFormate";
 import { rootUrl } from "../../../../../constants/constants";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import { Link } from "react-router-dom";
+import DownloadButton from "../../../../../components/buttons/DownloadButton";
 
 const ApplicationInfo = ({
   handleScroll,
@@ -33,6 +37,7 @@ const ApplicationInfo = ({
   intakeDD,
   deliveryDD,
   id,
+  sId,
   elptDate,
   setElptDate,
   setEtaDeadLine,
@@ -52,6 +57,7 @@ const ApplicationInfo = ({
   elptOverall,
   setElptOverall,
 }) => {
+  console.log(applicationInfo, "applicationInfo");
   const handleDate = (e) => {
     var datee = e;
     var utcDate = new Date(datee);
@@ -60,13 +66,19 @@ const ApplicationInfo = ({
     return x;
   };
 
-  const userType = localStorage.getItem("userType");
+  // const userType = localStorage.getItem("userType");
   const [statusDD, setStatusDD] = useState([]);
+  console.log(statusDD, "status DD");
+
   const [applicationSubStatus, setApplicationSubStatus] = useState([]);
 
   const [statusLabel, setStatusLabel] = useState("");
   const [statusValue, setStatusvalue] = useState(0);
-  console.log(statusValue, "statusValue");
+
+  const [campusDD, setCampusDD] = useState([]);
+  const [campusLabel, setCampusLabel] = useState("");
+  const [campusValue, setCampusvalue] = useState(0);
+
   const [subStatusLabel, setSubStatusLabel] = useState(
     "Select Additional Status"
   );
@@ -75,7 +87,7 @@ const ApplicationInfo = ({
   const [subStatusError, setSubStatusError] = useState(false);
   const [statusDate, setDateStatus] = useState(currentDate);
   const [file, setFile] = useState([]);
-  // console.log(applicationInfo?.universityApplicationDate);
+  const [rejectionFile, setRejectionFile] = useState([]);
   const [dateError, setDateError] = useState(false);
   const [elptDateError, setElptDateError] = useState(false);
   const [etaDateError, setEtatDateError] = useState(false);
@@ -113,7 +125,8 @@ const ApplicationInfo = ({
   // const [offerModalOpen, setOfferModalOpen] = useState(false);
 
   const [uniStdIdModalOpen, setUniStdIdModalOpen] = useState(false);
-  // const [uniAppDateModalOpen, setUniAppDateModalOpen] = useState(false);
+  const [CampusModalOpen, setCampusModalOpen] = useState(false);
+  const [uniAppDateModalOpen, setUniAppDateModalOpen] = useState(false);
 
   const [intakeModal, setIntakeModal] = useState(false);
   const [intakeLabel, setIntakeLabel] = useState("");
@@ -139,12 +152,12 @@ const ApplicationInfo = ({
   const [elptStatusDD, setElptStatusDD] = useState([]);
 
   const [progress, setProgress] = useState(false);
-  // const [progress1, setProgress1] = useState(false);
+  const [progress1, setProgress1] = useState(false);
   const [progress2, setProgress2] = useState(false);
   const [progress3, setProgress3] = useState(false);
   const [progress4, setProgress4] = useState(false);
   const [progress5, setProgress5] = useState(false);
-  // const [progress6, setProgress6] = useState(false);
+  const [progress6, setProgress6] = useState(false);
   const [progress7, setProgress7] = useState(false);
   const [progress8, setProgress8] = useState(false);
   const [progress9, setProgress9] = useState(false);
@@ -156,10 +169,16 @@ const ApplicationInfo = ({
   const [timeError1, setTimeError1] = useState("");
   const [zone, setZone] = useState([]);
   const [intSts, setIntSts] = useState([]);
-  const [hours, setHour] = useState("");
+  const [hoursInterviewValue, setHoursInterviewValue] = useState(0);
+  const [hoursInterviewLabel, setHoursInterviewLabel] = useState("Select Hour");
+
   const [hourError, setHourError] = useState("");
-  const [min, setMin] = useState("");
+  const [minuteLabelInterview, setMinuteLabelInterview] =
+    useState("Select Minute");
+  const [minuteValueInterview, setMinuteValueInterview] = useState("");
   const [minError, setMinError] = useState("");
+  const [applicationData, setApplicationData] = useState({});
+  const [applicationProfileData, setApplicationProfileData] = useState({});
 
   const { addToast } = useToasts();
 
@@ -167,11 +186,23 @@ const ApplicationInfo = ({
   //   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    setDateStatus(
-      moment(new Date(applicationInfo?.universityApplicationDate)).format(
-        "YYYY-MM-DD"
-      )
-    );
+    get(`ApplicationInfo/Overview/${sId}`).then((res) => {
+      setApplicationData(res);
+    });
+
+    get(`ApplicationInfo/GetByStudentId/${sId}`).then((res) => {
+      setApplicationProfileData(res);
+    });
+  }, [sId]);
+
+  useEffect(() => {
+    if (applicationInfo?.universityApplicationDate) {
+      setDateStatus(
+        moment(new Date(applicationInfo?.universityApplicationDate)).format(
+          "YYYY-MM-DD"
+        )
+      );
+    }
   }, [applicationInfo]);
 
   useEffect(() => {
@@ -188,7 +219,6 @@ const ApplicationInfo = ({
     //   });
     //   get(`IntakeDD/Intake/${applicationInfo?.subjectId}`).then((res) => {
     //     setIntakeDD(res);
-    //     console.log("intakeDD", res);
     //   });
     // }
     get("StudentFinanceStatusDD/Index").then((res) => {
@@ -214,11 +244,13 @@ const ApplicationInfo = ({
     get(`timeZoneDD/Index`).then((res) => {
       setZone(res);
     });
+    get(`UniversityCampus/ByApplication/${id}`).then((res) => {
+      setCampusDD(res);
+    });
     get(`InterviewStatusDD/Index`).then((res) => {
       setIntSts(res);
     });
     get(`ApplicationInterview/GetByApplication/${id}`).then((res) => {
-      // console.log("interview data", res);
       setIntDataList(res);
       // setIntSts(res);
     });
@@ -244,6 +276,11 @@ const ApplicationInfo = ({
     value: hr?.id,
   }));
 
+  const hourOptionsInterview = hour?.map((hr) => ({
+    label: hr?.name,
+    value: hr?.id,
+  }));
+
   const intStsOptions = intSts.map((sts) => ({
     label: sts?.name,
     value: sts?.id,
@@ -264,6 +301,12 @@ const ApplicationInfo = ({
     setHourValue(value);
   };
 
+  const selectHourInterview = (label, value) => {
+    setHourError("");
+    setHoursInterviewLabel(label);
+    setHoursInterviewValue(value);
+  };
+
   const minute = [];
   for (let i = 0; i <= 59; i++) {
     const minObj = {
@@ -278,13 +321,24 @@ const ApplicationInfo = ({
     value: min?.id,
   }));
 
+  const minuteOptionsInterview = minute?.map((min) => ({
+    label: min?.name,
+    value: min?.id,
+  }));
+
   const [minuteLabel, setMinuteLabel] = useState("Select Minute");
-  const [minuteValue, setMinuteValue] = useState(0);
+  const [minuteValue, setMinuteValue] = useState("");
 
   const selectMinute = (label, value) => {
     setMinuteError("");
     setMinuteLabel(label);
     setMinuteValue(value);
+  };
+
+  const selectMinuteInterview = (label, value) => {
+    setMinError("");
+    setMinuteLabelInterview(label);
+    setMinuteValueInterview(value);
   };
 
   const [timeLabel, setTimeLabel] = useState("Select TimeZone");
@@ -331,7 +385,7 @@ const ApplicationInfo = ({
 
     if (subStatus !== null) {
       setSubStatusLabel(subStatus?.name);
-      setSubStatusValue(subStatus?.applicationStatusId);
+      setSubStatusValue(subStatus?.id);
     } else {
       setSubStatusLabel("Select Additional Status");
       setSubStatusValue(0);
@@ -353,6 +407,21 @@ const ApplicationInfo = ({
     get(`ApplicationSubStatus/SelectList/${value}`).then((res) => {
       setApplicationSubStatus(res);
     });
+  };
+
+  const campusMenu = campusDD.map((campus) => ({
+    label: campus?.name,
+    value: campus?.id,
+  }));
+
+  const selectCampus = (label, value) => {
+    // setSubStatusLabel("Select Campus");
+    // setSubStatusValue(0);
+    setCampusLabel(label);
+    setCampusvalue(value);
+    // get(`ApplicationSubStatus/SelectList/${value}`).then((res) => {
+    //   setApplicationSubStatus(res);
+    // });
   };
 
   const subStatusOptions = applicationSubStatus?.map((sub) => ({
@@ -497,7 +566,8 @@ const ApplicationInfo = ({
     // setOfferValue(0);
     // setOfferModalOpen(false);
     setUniStdIdModalOpen(false);
-    // setUniAppDateModalOpen(false);
+    setUniAppDateModalOpen(false);
+    setCampusModalOpen(false);
     setIntakeModal(false);
     setIntakeLabel("");
     setIntakeValue(0);
@@ -509,6 +579,10 @@ const ApplicationInfo = ({
     subData.append(
       "offerLetterFile",
       file.length === 0 ? null : file[0]?.originFileObj
+    );
+    subData.append(
+      "RejectionFile",
+      rejectionFile.length === 0 ? null : rejectionFile[0]?.originFileObj
     );
     if (statusValue === 0) {
       setStatusError(true);
@@ -533,8 +607,10 @@ const ApplicationInfo = ({
   };
 
   const handleFile = ({ fileList }) => {
-    console.log(fileList);
     setFile(fileList);
+  };
+  const handleRejectionFile = ({ fileList }) => {
+    setRejectionFile(fileList);
   };
 
   // const handleOfferUpdateSubmit = (e) => {
@@ -653,26 +729,47 @@ const ApplicationInfo = ({
     });
   };
 
-  // const handleEditUniAppDate = (id) => {
-  //   setUniAppDateModalOpen(true);
-  // };
+  const handleEditUniAppDate = (id) => {
+    setUniAppDateModalOpen(true);
+  };
 
-  // const handleUniAppDateSubmit = (e) => {
-  //   e.preventDefault();
-  //   const subData = new FormData(e.target);
-  //   setProgress6(true);
-  //   put(`Application/UpdateUniversityApplicationDate`, subData).then(
-  //     (action) => {
-  //       setProgress6(false);
-  //       setSuccess(!success);
-  //       setUniAppDateModalOpen(false);
-  //       addToast(action?.data?.message, {
-  //         appearance: "success",
-  //         autoDismiss: true,
-  //       });
-  //     }
-  //   );
-  // };
+  const handleUniAppDateSubmit = (e) => {
+    e.preventDefault();
+    const subData = new FormData(e.target);
+    setProgress6(true);
+    put(`Application/UpdateUniversityApplicationDate`, subData).then(
+      (action) => {
+        setProgress6(false);
+        setSuccess(!success);
+        setUniAppDateModalOpen(false);
+        addToast(action?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+      }
+    );
+  };
+
+  const handleEditCampusUpDate = (id) => {
+    setCampusModalOpen(true);
+    setCampusLabel(applicationInfo?.campus?.name);
+  };
+
+  const handleCampusSubmit = (e) => {
+    e.preventDefault();
+    const subData = new FormData(e.target);
+
+    setProgress1(true);
+    put(`Application/UpdateApplicationCampus`, subData).then((action) => {
+      setProgress1(false);
+      setSuccess(!success);
+      setCampusModalOpen(false);
+      addToast(action?.data?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
+    });
+  };
 
   const handleElptupdate = (e) => {
     setElptStatusLabel(applicationInfo?.elpt?.elptStatus?.name);
@@ -698,10 +795,15 @@ const ApplicationInfo = ({
   const handleInterviewUpdate = (intId) => {
     setInterviewModalOpen(true);
     get(`ApplicationInterview/Get/${intId}`).then((res) => {
+      console.log(res, "kisui bujteci na");
       // setIntData(res);
       setUpIntData(res);
-      setHour(res?.hour);
-      setMin(res?.minute);
+      setHoursInterviewLabel(res?.hour);
+      setHoursInterviewValue(res?.hour);
+      setMinuteLabelInterview(res?.minute);
+      setMinuteValueInterview(res?.minute);
+      // setHour(res?.hour);
+      // setMin(res?.minute);
 
       setIntDate(moment(new Date(res?.interviewDate)).format("YYYY-MM-DD"));
       setTimeLabel1(res?.timeZones?.name);
@@ -767,12 +869,18 @@ const ApplicationInfo = ({
   const closeInterviewModal = () => {
     setInterviewModalOpen(false);
     setUpIntData({});
-    setIntDate(undefined);
+    setIntDate("");
     setDateError(false);
     setHourError("");
     setTimeError1("");
     setMinError("");
     setIntStsError("");
+    setHoursInterviewLabel("Select Hour");
+    setHoursInterviewValue(0);
+    setMinuteLabelInterview("Select Minute");
+    setMinuteValueInterview("");
+    setTimeLabel1("Time Zone");
+    setTimeValue1(0);
   };
 
   const handleELPTDate = (e) => {
@@ -851,7 +959,10 @@ const ApplicationInfo = ({
       isFormValid = false;
       setHourError("Hour is required");
     }
-    if (minuteValue === 0) {
+
+    const minutesRegex = /^[0-5]?[0-9]$/;
+
+    if (!minutesRegex.test(minuteValue)) {
       isFormValid = false;
       setMinuteError("Minute is required");
     }
@@ -925,33 +1036,33 @@ const ApplicationInfo = ({
     }
   };
 
-  const handleHour = (e) => {
-    const newValue = e.target.value;
-    const isNumeric = /^\d+$/.test(newValue);
-    setHour(newValue);
+  // const handleHour = (e) => {
+  //   const newValue = e.target.value;
+  //   const isNumeric = /^\d+$/.test(newValue);
+  //   setHour(newValue);
 
-    if (!newValue) {
-      setHourError("Hour is required");
-    } else if (!isNumeric) {
-      setHourError("Input only numbers.");
-    } else {
-      setHourError("");
-    }
-  };
+  //   if (!newValue) {
+  //     setHourError("Hour is required");
+  //   } else if (!isNumeric) {
+  //     setHourError("Input only numbers.");
+  //   } else {
+  //     setHourError("");
+  //   }
+  // };
 
-  const handleMin = (e) => {
-    const newValue = e.target.value;
-    const isNumeric = /^\d+$/.test(newValue);
-    setMin(newValue);
+  // const handleMin = (e) => {
+  //   const newValue = e.target.value;
+  //   const isNumeric = /^\d+$/.test(newValue);
+  //   setMin(newValue);
 
-    if (!newValue) {
-      setMinError("Minute is required");
-    } else if (!isNumeric) {
-      setMinError("Input only numbers.");
-    } else {
-      setMinError("");
-    }
-  };
+  //   if (!newValue) {
+  //     setMinError("Minute is required");
+  //   } else if (!isNumeric) {
+  //     setMinError("Input only numbers.");
+  //   } else {
+  //     setMinError("");
+  //   }
+  // };
 
   const validateInterviewForm = () => {
     var isFormValid = true;
@@ -960,25 +1071,27 @@ const ApplicationInfo = ({
       setDateError("Date of Interview is required");
     }
 
-    if (!/^\d+$/.test(hours)) {
-      isFormValid = false;
-      setHourError("Input only numbers.");
-    }
+    // if (!/^\d+$/.test(hours)) {
+    //   isFormValid = false;
+    //   setHourError("Input only numbers.");
+    // }
 
-    if (!hours) {
+    if (hoursInterviewValue === 0) {
       isFormValid = false;
       setHourError("Hour is required");
     }
 
-    if (!/^\d+$/.test(min)) {
-      isFormValid = false;
-      setMinError("Input only numbers.");
-    }
+    // if (!/^\d+$/.test(min)) {
+    //   isFormValid = false;
+    //   setMinError("Input only numbers.");
+    // }
+    const minutesRegex = /^[0-5]?[0-9]$/;
 
-    if (!min) {
+    if (!minutesRegex.test(minuteValueInterview)) {
       isFormValid = false;
       setMinError("Minute is required");
     }
+
     if (timeValue1 === 0) {
       isFormValid = false;
       setTimeError1("Time zone is required");
@@ -1010,6 +1123,11 @@ const ApplicationInfo = ({
             appearance: "success",
             autoDismiss: true,
           });
+          setIntDate("");
+          setHoursInterviewLabel("Select Hour");
+          setHoursInterviewValue(0);
+          setMinuteLabelInterview("Select Minute");
+          setMinuteValueInterview("");
           setIntStsLabel("Status");
           setIntStsValue(0);
           setTimeLabel1("Time Zone");
@@ -1026,12 +1144,17 @@ const ApplicationInfo = ({
             appearance: "success",
             autoDismiss: true,
           });
+          setIntDate("");
+          setHoursInterviewLabel("Select Hour");
+          setHoursInterviewValue(0);
+          setMinuteLabelInterview("Select Minute");
+          setMinuteValueInterview("");
           setIntStsLabel("Status");
           setIntStsValue(0);
           setTimeLabel1("Time Zone");
           setTimeValue1(0);
           setUpIntData({});
-          setIntDate(undefined);
+
           setSuccess(!success);
           // setElptStatusValue(0);
         });
@@ -1042,14 +1165,16 @@ const ApplicationInfo = ({
   return (
     <>
       <div className="custom-card-border p-4 mb-3 ">
-        <div>
-          <h3>
-            {applicationInfo?.student?.nameTittle?.name}{" "}
-            {applicationInfo?.student?.firstName}{" "}
-            {applicationInfo?.student?.lastName}
-          </h3>
-          <hr />
+        <div className="d-flex">
+          <Link to={`/studentProfile/${sId}/${1}`}>
+            <h3>
+              {applicationInfo?.student?.nameTittle?.name}{" "}
+              {applicationInfo?.student?.firstName}{" "}
+              {applicationInfo?.student?.lastName}
+            </h3>
+          </Link>
         </div>
+        <hr />
         <Table>
           <thead className="tablehead">
             <td className="border-0">
@@ -1059,37 +1184,39 @@ const ApplicationInfo = ({
           </thead>
           <tbody>
             <tr>
-              <td>Status</td>
+              <td td className="w-50">
+                Status
+              </td>
 
-              <td>
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
-                  {applicationInfo?.applicationStatusId > 2 &&
-                    applicationInfo?.applicationStatusId < 13 && (
-                      <>
-                        {permissions?.includes(
-                          permissionList.Update_Application_Status
-                        ) ? (
-                          <SpanButton
-                            icon={
-                              <i
-                                class="far fa-edit"
-                                style={{ color: "#619bff", cursor: "pointer" }}
-                              ></i>
-                            }
-                            func={() =>
-                              handleApplicationEdit(
-                                applicationInfo?.applicationStatus?.name,
-                                applicationInfo?.applicationStatus?.id,
-                                applicationInfo?.applicationSubStatus
-                              )
-                            }
-                            permission={6}
-                          />
-                        ) : null}
-                      </>
-                    )}
+                  {applicationInfo?.applicationStatusId > 2 && (
+                    // applicationInfo?.applicationStatusId < 13 &&
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Application_Status
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{ color: "#619bff", cursor: "pointer" }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleApplicationEdit(
+                              applicationInfo?.applicationStatus?.name,
+                              applicationInfo?.applicationStatus?.id,
+                              applicationInfo?.applicationSubStatus
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
                   <Modal
                     isOpen={statusModalOpen}
@@ -1185,8 +1312,25 @@ const ApplicationInfo = ({
                                     return false;
                                   }}
                                 >
-                                  {file.length < 1 ? (
-                                    <img src={uploadBtn} alt="" />
+                                  {file.length < 1 ? <UploadButton /> : ""}
+                                </Upload>
+                              </FormGroup>
+                            ) : null}
+                            {statusValue === 12 ? (
+                              <FormGroup>
+                                <span>Rejection Document</span>
+                                <br />
+
+                                <Upload
+                                  multiple={false}
+                                  fileList={rejectionFile}
+                                  onChange={handleRejectionFile}
+                                  beforeUpload={(rejectionFile) => {
+                                    return false;
+                                  }}
+                                >
+                                  {rejectionFile.length < 1 ? (
+                                    <UploadButton />
                                   ) : (
                                     ""
                                   )}
@@ -1266,13 +1410,29 @@ const ApplicationInfo = ({
                     ) : null}
                   </div>
                 ) : null}
+                {applicationInfo?.applicationStatus?.name ===
+                "Student Rejected" ? (
+                  <div>
+                    {applicationInfo?.rejectionFile ? (
+                      <a
+                        href={rootUrl + applicationInfo?.rejectionFile}
+                        target="blank"
+                        className="file-download"
+                      >
+                        Download Rejection Document
+                      </a>
+                    ) : null}
+                  </div>
+                ) : null}
               </td>
             </tr>
 
             <tr>
-              <td>Enrolment Status</td>
+              <td td className="w-50">
+                Enrolment Status
+              </td>
 
-              <td>
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.enrollmentStatus?.name === "Withdrawn" ? (
                     <>
@@ -1406,13 +1566,21 @@ const ApplicationInfo = ({
             </tr>
 
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-              <td>Student Finance Status</td>
+              <td td className="w-50">
+                Student Finance Status
+              </td>
 
-              <td>
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.studentFinanceStatus?.name}
                   {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo.applicationStatusId !== 13 && (
+                    applicationInfo.applicationStatusId !== 13 &&
+                    applicationInfo?.student?.studentType?.name !==
+                      "International" &&
+                    applicationInfo?.applicationStatus?.name ===
+                      "Offer Issued" &&
+                    applicationInfo?.applicationSubStatus?.name ===
+                      "Unconditional Offer" && (
                       <>
                         {permissions?.includes(
                           permissionList.Update_Application_Status
@@ -1498,15 +1666,269 @@ const ApplicationInfo = ({
           </thead>
           <tbody>
             <tr>
-              <td>Application Id</td>
+              <td td className="w-50">
+                Application Id
+              </td>
 
-              <td>{applicationInfo?.applicationViewId}</td>
+              <td td className="w-50">
+                {applicationInfo?.applicationViewId}
+              </td>
+            </tr>
+            <tr>
+              <td td className="w-50">
+                Uapp Application date
+              </td>
+
+              <td td className="w-50">
+                {applicationInfo?.applicationTime ? (
+                  <>{dateFormate(applicationInfo?.applicationTime)}</>
+                ) : null}
+              </td>
             </tr>
 
-            <tr>
-              <td>Delivery Pattern</td>
+            <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+              <td>Application Type</td>
+              <td>{applicationData?.applicationInfo}</td>
+            </tr>
 
-              <td>
+            <>
+              {" "}
+              {applicationProfileData?.studentTypeId === 1 && (
+                <>
+                  {" "}
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>Loan From Student Loans Company</td>
+                    <td>
+                      {applicationProfileData?.loanfromStudentLoansCompanyForHome ===
+                      false
+                        ? "No"
+                        : "Yes"}
+                    </td>
+                  </tr>
+                  {applicationProfileData?.loanfromStudentLoansCompanyForHome ===
+                    true && (
+                    <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                      <td>Loan Years</td>
+                      <td>{applicationProfileData?.loanYearsForHome}</td>
+                    </tr>
+                  )}
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>
+                      Undergraduate or Postgraduate Course of Higher Education
+                      in Any Country Since Leaving School
+                    </td>
+                    <td>
+                      {applicationProfileData?.havingUndergraduatePostgraduateCourseForHome ===
+                      false
+                        ? "No"
+                        : "Yes"}
+                    </td>
+                  </tr>
+                </>
+              )}
+            </>
+
+            <>
+              {applicationProfileData?.studentTypeId === 2 && (
+                <>
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>First Entry Date in UK</td>
+                    <td>
+                      {dateFormate(applicationProfileData?.dateOfMoveToUk)}
+                    </td>
+                  </tr>
+
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>Loan From Student Loans Company</td>
+                    <td>
+                      {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                      false
+                        ? "No"
+                        : "Yes"}
+                    </td>
+                  </tr>
+                  {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                    true && (
+                    <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                      <td>Loan Years</td>
+                      <td>{applicationProfileData?.loanYearsForEU}</td>
+                    </tr>
+                  )}
+                  {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                    false && (
+                    <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                      <td>Settled or Pre-settled status</td>
+                      <td>
+                        {applicationProfileData?.currentResidencyStatusForEU}
+                      </td>
+                    </tr>
+                  )}
+
+                  {applicationProfileData?.isHavePre_Settlementstatus ===
+                  false ? (
+                    <>
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td>Current Residency Status</td>
+                        <td>
+                          {applicationProfileData?.currentResidencyStatusForEU}
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td>
+                          Undergraduate or Postgraduate Course of Higher
+                          Education in Any Country Since Leaving School
+                        </td>
+                        <td>
+                          {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                          false
+                            ? "No"
+                            : "Yes"}
+                        </td>
+                      </tr>
+                    </>
+                  ) : (
+                    <>
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td>Valid Share Code</td>
+                        <td>{applicationProfileData?.shareCode}</td>
+                      </tr>
+
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td>Have You Been Resident For Last Three Years</td>
+                        <td>
+                          {applicationProfileData?.isStayedInsideInUkinLast3Years ===
+                          false
+                            ? "No"
+                            : "Yes"}
+                        </td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td>
+                          Undergraduate or Postgraduate Course of Higher
+                          Education in Any Country Since Leaving School
+                        </td>
+                        <td>
+                          {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                          false
+                            ? "No"
+                            : "Yes"}
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </>
+              )}
+            </>
+
+            <>
+              {applicationProfileData?.studentTypeId === 3 && (
+                <>
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td width="60%">Applying From Inside</td>
+                    <td width="40%">
+                      {applicationProfileData?.isApplyingFromInside === false
+                        ? "No"
+                        : "Yes"}
+                    </td>
+                  </tr>
+                  {applicationProfileData?.isApplyingFromInside === false ? (
+                    <>
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td width="60%">Applied For Uk Visa</td>
+                        <td width="40%">
+                          {applicationProfileData?.isAppliedForUkVisa === false
+                            ? "No"
+                            : "Yes"}
+                        </td>
+                      </tr>
+                      {applicationProfileData?.isAppliedForUkVisa === true && (
+                        <>
+                          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                            <td width="60%">Apply visa Type</td>
+                            <td width="40%">
+                              {applicationProfileData?.visaType}
+                            </td>
+                          </tr>
+                          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                            <td width="60%">Refused For UK Visa</td>
+                            <td width="40%">
+                              {applicationProfileData?.isRefusedForUKVisa ===
+                              false
+                                ? "No"
+                                : "Yes"}
+                            </td>
+                          </tr>
+                          {applicationProfileData?.refusalLetterForUKVisa
+                            ?.fileUrl ? (
+                            <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                              <td width="60%">Attach the refusal letter</td>
+                              <td width="40%">
+                                <a
+                                  href={
+                                    rootUrl +
+                                    applicationProfileData
+                                      ?.refusalLetterForUKVisa?.fileUrl
+                                  }
+                                  target="blank"
+                                >
+                                  <DownloadButton />
+                                </a>
+                              </td>
+                            </tr>
+                          ) : null}
+                        </>
+                      )}
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td width="60%">Refused Visa to Any Other Country</td>
+                        <td width="40%">
+                          {applicationProfileData?.isRefusedForOtherVisa ===
+                          false
+                            ? "No"
+                            : "Yes"}
+                        </td>
+                      </tr>
+                      {applicationProfileData?.refusalLetterForOtherVisa
+                        ?.fileUrl ? (
+                        <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                          <td width="60%">Attach the refusal letter</td>
+                          <td width="40%">
+                            <a
+                              href={
+                                rootUrl +
+                                applicationProfileData
+                                  ?.refusalLetterForOtherVisa?.fileUrl
+                              }
+                              target="blank"
+                            >
+                              <DownloadButton />
+                            </a>
+                          </td>
+                        </tr>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                        <td width="60%">Current Residency Status</td>
+                        <td width="40%">
+                          {
+                            applicationProfileData?.currentResidencyStatusForInternational
+                          }
+                        </td>
+                      </tr>{" "}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+
+            <tr>
+              <td td className="w-50">
+                Delivery Pattern
+              </td>
+
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.deliveryPattern?.name}
 
@@ -1586,31 +2008,21 @@ const ApplicationInfo = ({
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>Application Type</td>
-
-              <td>{applicationInfo?.student?.studentType?.name}</td>
-            </tr>
 
             <tr>
-              <td>Uapp Application date</td>
-
-              <td>
-                {applicationInfo?.applicationTime ? (
-                  <>{handleDate(applicationInfo?.applicationTime)}</>
-                ) : null}
+              <td td className="w-50">
+                University Student Id
               </td>
-            </tr>
 
-            <tr>
-              <td>University Student Id</td>
-
-              <td>
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.universityStudentId}</div>
 
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo?.applicationStatusId === 4 &&
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo?.applicationStatusId !== 2 &&
+                    applicationInfo?.applicationStatusId !== 3 &&
+                    applicationInfo.applicationStatusId !== 11 &&
+                    applicationInfo.applicationStatusId !== 12 &&
                     applicationInfo.applicationStatusId !== 13 && (
                       <>
                         {permissions?.includes(
@@ -1620,7 +2032,10 @@ const ApplicationInfo = ({
                             icon={
                               <i
                                 class="far fa-edit"
-                                style={{ color: "#619bff", cursor: "pointer" }}
+                                style={{
+                                  color: "#619bff",
+                                  cursor: "pointer",
+                                }}
                               ></i>
                             }
                             func={() =>
@@ -1681,37 +2096,52 @@ const ApplicationInfo = ({
             </tr>
 
             <tr>
-              <td>University Application Date</td>
+              <td td className="w-50">
+                University Application Date
+              </td>
 
-              <td>
-                {/* <div className="d-flex justify-content-between"> */}
-                <div>
-                  {applicationInfo?.universityApplicationDate ? (
-                    <>
-                      {handleDate(applicationInfo?.universityApplicationDate)}
-                    </>
-                  ) : null}
-                </div>
-                {/* {permissions?.includes(
-                    permissionList.Update_Application_Info
-                  ) ? (
-                    <SpanButton
-                      icon={
-                        <i
-                          class="far fa-edit"
-                          style={{ color: "#619bff", cursor: "pointer" }}
-                        ></i>
-                      }
-                      func={() =>
-                        handleEditUniAppDate(
+              <td td className="w-50">
+                <div className="d-flex justify-content-between">
+                  <div>
+                    {applicationInfo?.universityApplicationDate ? (
+                      <>
+                        {dateFormate(
                           applicationInfo?.universityApplicationDate
-                        )
-                      }
-                      permission={6}
-                    />
-                  ) : null} */}
+                        )}
+                      </>
+                    ) : null}
+                  </div>
 
-                {/* <Modal
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo?.applicationStatusId !== 2 &&
+                    applicationInfo?.applicationStatusId !== 3 &&
+                    applicationInfo.applicationStatusId !== 11 &&
+                    applicationInfo.applicationStatusId !== 12 &&
+                    applicationInfo.applicationStatusId !== 13 && (
+                      <>
+                        {" "}
+                        {permissions?.includes(
+                          permissionList.Update_Application_Info
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleEditUniAppDate(
+                                applicationInfo?.universityApplicationDate
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
+
+                  <Modal
                     isOpen={uniAppDateModalOpen}
                     toggle={closeModal}
                     className="uapp-modal"
@@ -1735,7 +2165,7 @@ const ApplicationInfo = ({
 
                               <Input
                                 type="Date"
-                                defaultValue={handleDate(
+                                defaultValue={dateFormate(
                                   applicationInfo?.universityApplicationDate
                                 )}
                                 name="universityApplicationDate"
@@ -1751,39 +2181,144 @@ const ApplicationInfo = ({
                         </Row>
                       </Form>
                     </ModalBody>
-                  </Modal> */}
-                {/* </div> */}
+                  </Modal>
+                </div>
               </td>
             </tr>
 
             <tr>
-              <td>University Name</td>
+              <td td className="w-50">
+                University Name
+              </td>
 
-              <td>{applicationInfo?.university?.name}</td>
+              <td td className="w-50">
+                {applicationInfo?.university?.name}
+              </td>
             </tr>
 
             <tr>
-              <td>Campus Name</td>
+              <td td className="w-50">
+                Campus Name
+              </td>
 
-              <td>{applicationInfo?.campus?.name}</td>
+              <td td className="w-50">
+                <div className="d-flex justify-content-between">
+                  <div> {applicationInfo?.campus?.name}</div>
+
+                  {(applicationInfo?.applicationStatusId === 1 ||
+                    applicationInfo?.applicationStatusId === 2 ||
+                    applicationInfo?.applicationStatusId === 3 ||
+                    applicationInfo.applicationStatusId === 11 ||
+                    applicationInfo.applicationStatusId === 12 ||
+                    applicationInfo.applicationStatusId === 13) && (
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Application_Info
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{
+                                color: "#619bff",
+                                cursor: "pointer",
+                              }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleEditCampusUpDate(
+                              applicationInfo?.campus?.name
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
+
+                  <Modal
+                    isOpen={CampusModalOpen}
+                    toggle={closeModal}
+                    className="uapp-modal"
+                  >
+                    <ModalBody className="p-5">
+                      <h4>Update Campus Name</h4>
+                      <Form onSubmit={handleCampusSubmit}>
+                        <FormGroup row>
+                          <input
+                            type="hidden"
+                            name="applicationId"
+                            id="applicationId"
+                            value={applicationInfo?.id}
+                          />
+                        </FormGroup>
+
+                        <Row>
+                          <Col md={7}>
+                            <FormGroup>
+                              <span> Campus Name </span>
+
+                              <Select
+                                options={campusMenu}
+                                value={{
+                                  label: campusLabel,
+                                  value: campusValue,
+                                }}
+                                onChange={(opt) =>
+                                  selectCampus(opt.label, opt.value)
+                                }
+                                name="campusId"
+                                id="campusId"
+                              />
+
+                              {/* <Input
+                                type="text"
+                                defaultValue={applicationInfo?.campus?.name}
+                                name="universityStudentId"
+                                id="universityStudentId"
+                              /> */}
+                            </FormGroup>
+
+                            <FormGroup>
+                              <CancelButton text="Close" cancel={closeModal} />
+
+                              <SaveButton text="Submit" progress={progress1} />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </ModalBody>
+                  </Modal>
+                </div>
+              </td>
             </tr>
 
             <tr>
-              <td>Education level</td>
+              <td td className="w-50">
+                Education level
+              </td>
 
-              <td>{applicationInfo?.subject?.educationLevel?.name}</td>
+              <td td className="w-50">
+                {applicationInfo?.subject?.educationLevel?.name}
+              </td>
             </tr>
 
             <tr>
-              <td>Courses Name</td>
+              <td td className="w-50">
+                Courses Name
+              </td>
 
-              <td>{applicationInfo?.subject?.name}</td>
+              <td td className="w-50">
+                {applicationInfo?.subject?.name}
+              </td>
             </tr>
 
             <tr>
-              <td>Intake</td>
+              <td td className="w-50">
+                Intake
+              </td>
 
-              <td>
+              <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.intake?.name}</div>
 
@@ -1862,8 +2397,12 @@ const ApplicationInfo = ({
             </tr>
 
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-              <td>Additional Message</td>
-              <td>{applicationInfo?.additionalMessage}</td>
+              <td td className="w-50">
+                Additional Message
+              </td>
+              <td td className="w-50">
+                {applicationInfo?.additionalMessage}
+              </td>
             </tr>
           </tbody>
         </Table>
@@ -1931,18 +2470,17 @@ const ApplicationInfo = ({
                         <span>
                           Hour <span className="text-danger">*</span>{" "}
                         </span>
-
-                        <Input
-                          type="text"
+                        <Select
+                          options={hourOptionsInterview}
+                          value={{
+                            label: hoursInterviewLabel,
+                            value: hoursInterviewValue,
+                          }}
+                          onChange={(opt) =>
+                            selectHourInterview(opt.label, opt.value)
+                          }
                           name="hour"
                           id="hour"
-                          min="1"
-                          max="24"
-                          placeholder="Enter Hour"
-                          value={hours}
-                          onChange={(e) => {
-                            handleHour(e);
-                          }}
                         />
                         <span className="text-danger">{hourError}</span>
                       </div>
@@ -1951,18 +2489,17 @@ const ApplicationInfo = ({
                         <span>
                           Minute <span className="text-danger">*</span>{" "}
                         </span>
-
-                        <Input
-                          type="text"
+                        <Select
+                          options={minuteOptionsInterview}
+                          value={{
+                            label: minuteLabelInterview,
+                            value: minuteValueInterview,
+                          }}
+                          onChange={(opt) =>
+                            selectMinuteInterview(opt.label, opt.value)
+                          }
                           name="minute"
                           id="minute"
-                          min="0"
-                          max="59"
-                          placeholder="Enter Minute"
-                          value={min}
-                          onChange={(e) => {
-                            handleMin(e);
-                          }}
                         />
                         <span className="text-danger">{minError}</span>
                       </div>
@@ -2050,24 +2587,34 @@ const ApplicationInfo = ({
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Interview Date</td>
+                      <td td className="w-50">
+                        Interview Date
+                      </td>
 
-                      <td>{handleDate(intr?.interviewDate)}</td>
+                      <td td className="w-50">
+                        {dateFormate(intr?.interviewDate)}
+                      </td>
                     </tr>
 
                     <tr>
-                      <td>Interview Time</td>
+                      <td td className="w-50">
+                        Interview Time
+                      </td>
 
-                      <td>
+                      <td td className="w-50">
                         {`${intr?.hour} : ${intr?.minute}`} <br />
                         {intr?.timeZones?.name}
                       </td>
                     </tr>
 
                     <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-                      <td>Status</td>
+                      <td td className="w-50">
+                        Status
+                      </td>
 
-                      <td>{intr?.applicationInterviewStatus?.name}</td>
+                      <td td className="w-50">
+                        {intr?.applicationInterviewStatus?.name}
+                      </td>
                     </tr>
                   </tbody>
                 </Table>
@@ -2670,23 +3217,31 @@ const ApplicationInfo = ({
             </thead>
             <tbody>
               <tr>
-                <td>Status</td>
+                <td td className="w-50">
+                  Status
+                </td>
 
-                <td>{applicationInfo?.elpt?.elptStatus?.name}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.elptStatus?.name}
+                </td>
               </tr>
               <tr>
-                <td>Date</td>
+                <td td className="w-50">
+                  Date
+                </td>
 
-                <td>
+                <td td className="w-50">
                   {applicationInfo?.elpt?.elptDate ? (
-                    <>{handleDate(applicationInfo?.elpt?.elptDate)}</>
+                    <>{dateFormate(applicationInfo?.elpt?.elptDate)}</>
                   ) : null}
                 </td>
               </tr>
               <tr>
-                <td>Time</td>
+                <td td className="w-50">
+                  Time
+                </td>
 
-                <td>
+                <td td className="w-50">
                   <div>
                     {applicationInfo?.elpt?.hour < 10
                       ? "0" + applicationInfo?.elpt?.hour
@@ -2700,47 +3255,71 @@ const ApplicationInfo = ({
                 </td>
               </tr>
               <tr>
-                <td>ETA</td>
+                <td td className="w-50">
+                  ETA
+                </td>
 
-                <td>
+                <td td className="w-50">
                   {applicationInfo?.elpt?.eta ? (
-                    <>{handleDate(applicationInfo?.elpt?.eta)}</>
+                    <>{dateFormate(applicationInfo?.elpt?.eta)}</>
                   ) : null}
                 </td>
               </tr>
               <tr>
-                <td>ETA Deadline</td>
+                <td td className="w-50">
+                  ETA Deadline
+                </td>
 
-                <td>
+                <td td className="w-50">
                   {applicationInfo?.elpt?.etaDeadline ? (
-                    <>{handleDate(applicationInfo?.elpt?.etaDeadline)}</>
+                    <>{dateFormate(applicationInfo?.elpt?.etaDeadline)}</>
                   ) : null}
                 </td>
               </tr>
               <tr>
-                <td>Reading</td>
+                <td td className="w-50">
+                  Reading
+                </td>
 
-                <td>{applicationInfo?.elpt?.reading}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.reading}
+                </td>
               </tr>
               <tr>
-                <td>Writting</td>
+                <td td className="w-50">
+                  Writting
+                </td>
 
-                <td>{applicationInfo?.elpt?.writting}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.writting}
+                </td>
               </tr>
               <tr>
-                <td>Listening</td>
+                <td td className="w-50">
+                  Listening
+                </td>
 
-                <td>{applicationInfo?.elpt?.listening}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.listening}
+                </td>
               </tr>
               <tr>
-                <td>Speaking</td>
+                <td td className="w-50">
+                  Speaking
+                </td>
 
-                <td>{applicationInfo?.elpt?.speaking}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.speaking}
+                </td>
               </tr>
               <tr>
-                <td>Overall</td>
+                <td td className="w-50">
+                  Overall
+                </td>
 
-                <td>{applicationInfo?.elpt?.overall}</td>
+                <td td className="w-50">
+                  {applicationInfo?.elpt?.overall}
+                </td>
               </tr>
             </tbody>
           </Table>

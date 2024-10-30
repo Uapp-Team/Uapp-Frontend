@@ -36,7 +36,15 @@ const WithdrawTransactions = () => {
                 {data?.map((item, i) => (
                   <tr key={i} className="border-buttom">
                     <td>{item?.date}</td>
-                    <td>{item?.consultant}</td>
+                    <td>
+                      {" "}
+                      <Link
+                        className="text-body"
+                        to={`consultantProfile/${item?.consultantId}`}
+                      >
+                        {item?.consultant}
+                      </Link>
+                    </td>
                     <td>{item?.code}</td>
                     <td>{item?.amount}</td>
                     <td>{item?.paymentType}</td>

@@ -90,16 +90,18 @@ const AdmissionManagerRegister = () => {
   // };
 
   const handleFirstName = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFirstName(data);
+    if (data === "") {
       setFirstNameError("First name is required");
     } else {
       setFirstNameError("");
     }
   };
   const handleLastName = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last name is required");
     } else {
       setLastNameError("");

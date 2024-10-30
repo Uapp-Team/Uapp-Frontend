@@ -147,7 +147,7 @@ const SubjectList = (props) => {
         })
         .catch();
     } else {
-      get("UniversityDD/Index").then((res) => {
+      get("SearchFilter/Universities/0/0/0").then((res) => {
         setUList(res);
         dispatch(StoreUniversityListData(res));
       });
@@ -184,8 +184,8 @@ const SubjectList = (props) => {
         ? uniValue
         : typeof location?.universityId !== undefined ||
           location?.universityId !== null
-        ? location?.universityId
-        : 0;
+          ? location?.universityId
+          : 0;
     // const uTypeId = uniValue !== 0 ? uniValue : typeof JSON.parse(localStorage.getItem("uniIdForSubList")) !== undefined || JSON.parse(localStorage.getItem("uniIdForSubList")) !== null ? JSON.parse(localStorage.getItem("uniIdForSubList")) : 0;
     setUTypeId(uTypeId);
 
@@ -208,8 +208,7 @@ const SubjectList = (props) => {
     // }
 
     get(
-      `Subject/TableShowPaged?page=${currentPage}&pageSize=${dataPerPage}&CampusId=${campValue}&UniversityId=${
-        uTypeId ? uTypeId : uniValue
+      `Subject/TableShowPaged?page=${currentPage}&pageSize=${dataPerPage}&CampusId=${campValue}&UniversityId=${uTypeId ? uTypeId : uniValue
       }&search=${searchStr}&sortby=${orderValue}`
     ).then((res) => {
       setSubList(res?.models);
@@ -243,6 +242,7 @@ const SubjectList = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -320,6 +320,7 @@ const SubjectList = (props) => {
 
   // on clear
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setUniLabel("Select University");
     setUniValue(0);
     setCampLabel("Select Campus");
@@ -416,12 +417,11 @@ const SubjectList = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="subject" backTo="" path="" />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <BreadCrumb title="subject" backTo="" path="" />
-
           <Card className="uapp-employee-search">
             <CardBody className="search-card-body">
               <Row>
@@ -753,7 +753,7 @@ const SubjectList = (props) => {
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        {checkSlNo ? <th>SL/NO</th> : null}
+                        {/* {checkSlNo ? <th>SL/NO</th> : null} */}
                         {checkName ? <th>Name</th> : null}
                         {/* <th>Description</th>
                     <th>Duration</th> */}
@@ -772,9 +772,9 @@ const SubjectList = (props) => {
                     <tbody>
                       {subList?.map((sub, i) => (
                         <tr key={sub.id} style={{ textAlign: "center" }}>
-                          {checkSlNo ? (
+                          {/* {checkSlNo ? (
                             <th scope="row">{serialNum + i}</th>
-                          ) : null}
+                          ) : null} */}
                           {checkName ? <td>{sub?.name}</td> : null}
                           {/* <td>{sub?.description}</td>
 

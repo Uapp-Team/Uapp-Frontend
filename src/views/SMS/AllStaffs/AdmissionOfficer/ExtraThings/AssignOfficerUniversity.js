@@ -363,7 +363,7 @@ const AssignOfficerUniversity = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="tablehead">
                   <tr style={{ textAlign: "center" }}>
-                    {checkSlNo ? <th>SL/NO</th> : null}
+                    {/* {checkSlNo ? <th>SL/NO</th> : null} */}
                     {checkName ? <th>University Name</th> : null}
                     {checkType ? <th>Requirement Type</th> : null}
                     {checkAction ? (
@@ -376,7 +376,7 @@ const AssignOfficerUniversity = () => {
                 <tbody>
                   {uniList?.map((uni, i) => (
                     <tr key={uni?.id} style={{ textAlign: "center" }}>
-                      {checkSlNo ? <th scope="row">{i + 1}</th> : null}
+                      {/* {checkSlNo ? <th scope="row">{i + 1}</th> : null} */}
 
                       {checkName ? <td>{uni?.university?.name}</td> : null}
                       {checkType ? (

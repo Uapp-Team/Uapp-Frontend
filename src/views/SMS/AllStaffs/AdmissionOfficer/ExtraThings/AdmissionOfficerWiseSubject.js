@@ -80,7 +80,7 @@ const AdmissionOfficerWiseSubject = () => {
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Course</th>
 
                   <th>Action</th>
@@ -89,7 +89,7 @@ const AdmissionOfficerWiseSubject = () => {
               <tbody>
                 {list?.map((sub, i) => (
                   <tr key={sub?.id} style={{ textAlign: "center" }}>
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
 
                     <td>{sub?.subjectName}</td>
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
+import { useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, Form, FormGroup, Col, Input, Row } from "reactstrap";
 import get from "../../../../../../helpers/get";
@@ -13,6 +14,8 @@ import { permissionList } from "../../../../../../constants/AuthorizationConstan
 import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const StaffRegister = () => {
+  const { addToast } = useToasts();
+  const { type } = useParams();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userTypeId = localStorage.getItem("userType");
   const [title, setTitle] = useState([]);
@@ -28,7 +31,6 @@ const StaffRegister = () => {
   const [consultantError, setConsultantError] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const history = useHistory();
-  const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
@@ -47,12 +49,18 @@ const StaffRegister = () => {
 
     get("EmployeeTypeDD/index").then((res) => {
       setConsType(res);
+      console.log(res);
+      if (type) {
+        const filterData = res.filter((item) => item.id.toString() === type);
+        setTypeLabel(filterData[0].name);
+        setTypeValue(filterData[0].id);
+      }
     });
 
     get("BranchDD/index").then((res) => {
       setBranch(res);
     });
-  }, []);
+  }, [type]);
 
   const consTypeMenu = consType?.map((consTypeOptions) => ({
     label: consTypeOptions?.name,
@@ -162,6 +170,7 @@ const StaffRegister = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
+    subdata.append("employeeTypeId", type);
 
     var formIsValid = validateRegisterForm();
 
@@ -248,6 +257,7 @@ const StaffRegister = () => {
                     onChange={(opt) => selectConsType(opt.label, opt.value)}
                     name="employeeTypeId"
                     id="employeeTypeId"
+                    isDisabled={type ? true : false}
                   />
 
                   {consultantError && (

@@ -31,12 +31,16 @@ import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../Components/ButtonLoader";
 import { tableIdList } from "../../../../constants/TableIdConstant";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
+import ColumnCampus from "../../TableColumn/ColumnCampus";
 
 const CampusList = (props) => {
+  const CampusPaging = JSON.parse(sessionStorage.getItem("Campus"));
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const [campusList, setCampusList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchStr, setSearchStr] = useState("");
+  const [currentPage, setCurrentPage] = useState(CampusPaging?.currentPage ? CampusPaging?.currentPage : 1);
+  const [searchStr, setSearchStr] = useState(CampusPaging?.searchStr ? CampusPaging?.searchStr : "");
   const [callApi, setCallApi] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -57,8 +61,25 @@ const CampusList = (props) => {
   const { uniId } = useParams();
 
   const history = useHistory();
-  const location = useLocation();
   localStorage.setItem("uIdForCamp", location?.id);
+
+  useEffect(() => {
+    const tableColumnCampus = JSON.parse(localStorage.getItem("ColumnCampus"));
+    tableColumnCampus && setTableData(tableColumnCampus);
+    !tableColumnCampus &&
+      localStorage.setItem("ColumnCampus", JSON.stringify(ColumnCampus));
+    !tableColumnCampus && setTableData(ColumnCampus)
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "Campus",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        searchStr: searchStr && searchStr,
+      })
+    );
+  }, [currentPage, searchStr])
 
   useEffect(() => {
     get(
@@ -73,10 +94,6 @@ const CampusList = (props) => {
       setUniNameFromObj(res?.name);
     });
 
-    get(`TableDefination/Index/${tableIdList?.Campus_List}`).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
   }, [callApi, currentPage, searchStr, loading, success, uniId]);
 
   const handleSearch = () => {
@@ -101,6 +118,11 @@ const CampusList = (props) => {
     setSearchStr("");
     setCallApi((prev) => !prev);
   };
+
+
+  // useEffect(() => {
+  //   handleClearSearch();
+  // }, [currentRoute]);
 
   // toggle dropdown
   const toggle = () => {
@@ -150,23 +172,11 @@ const CampusList = (props) => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    put(`TableDefination/Update/${tableIdList?.Campus_List}/${columnId}`).then(
-      (res) => {
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      }
-    );
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnCampus", JSON.stringify(values));
   };
 
   return (
@@ -183,9 +193,9 @@ const CampusList = (props) => {
             <Input
               style={{ height: "2.7rem" }}
               type="text"
-              name="search"
+              // name="search"
               value={searchStr}
-              id="search"
+              // id="search"
               placeholder="Name ,Short Name"
               onChange={searchValue}
               onKeyDown={handleKeyDown}
@@ -224,9 +234,9 @@ const CampusList = (props) => {
               {permissions?.includes(permissionList.Add_University) ? (
                 <ButtonForFunction
                   func={() => handleAddCampus()}
-                  className={"btn btn-uapp-add "}
+                  className={"btn btn-uapp-add"}
                   icon={<i className="fas fa-plus"></i>}
-                  name={" Add Campus"}
+                  name={"Add Campus"}
                   permission={6}
                 />
               ) : null}
@@ -286,7 +296,7 @@ const CampusList = (props) => {
                       {tableData.map((table, i) => (
                         <div className="d-flex justify-content-between">
                           <Col md="8" className="">
-                            <p className="">{table?.collumnName}</p>
+                            <p className="">{table?.title}</p>
                           </Col>
 
                           <Col md="4" className="text-center">
@@ -297,7 +307,7 @@ const CampusList = (props) => {
                                 id=""
                                 name="isAcceptHome"
                                 onChange={(e) => {
-                                  handleChecked(e, table?.id);
+                                  handleChecked(e, i);
                                 }}
                                 defaultChecked={table?.isActive}
                               />
@@ -323,20 +333,20 @@ const CampusList = (props) => {
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="thead-uapp-bg">
                       <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-                        {tableData[1]?.isActive ? <th>Name</th> : null}
-                        {tableData[2]?.isActive ? <th>Campus City</th> : null}
-                        {tableData[3]?.isActive ? <th>Student</th> : null}
+
+                        {tableData[0]?.isActive ? <th>Name</th> : null}
+                        {tableData[1]?.isActive ? <th>Campus City</th> : null}
+                        {tableData[2]?.isActive ? <th>Student</th> : null}
 
                         {permissions?.includes(
                           permissionList.View_Subject_List
                         ) ? (
                           <>
                             {" "}
-                            {tableData[4]?.isActive ? <th>Courses</th> : null}
+                            {tableData[3]?.isActive ? <th>Courses</th> : null}
                           </>
                         ) : null}
-                        {tableData[5]?.isActive ? (
+                        {tableData[4]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -346,17 +356,15 @@ const CampusList = (props) => {
                     <tbody>
                       {campusList?.map((campus, i) => (
                         <tr key={campus?.id} style={{ textAlign: "center" }}>
-                          {tableData[0]?.isActive ? (
-                            <th scope="row">{i + 1}</th>
-                          ) : null}
 
-                          {tableData[1]?.isActive ? (
+
+                          {tableData[0]?.isActive ? (
                             <td>{campus?.name}</td>
                           ) : null}
-                          {tableData[2]?.isActive ? (
+                          {tableData[1]?.isActive ? (
                             <td>{campus?.universityCity?.name}</td>
                           ) : null}
-                          {tableData[3]?.isActive ? (
+                          {tableData[2]?.isActive ? (
                             <td>
                               Total Student - {campus?.totalStudent} {<br />}
                               International Student -{" "}
@@ -368,7 +376,7 @@ const CampusList = (props) => {
                           ) ? (
                             <>
                               {" "}
-                              {tableData[4]?.isActive ? (
+                              {tableData[3]?.isActive ? (
                                 <td>
                                   {" "}
                                   <span
@@ -387,7 +395,7 @@ const CampusList = (props) => {
                             </>
                           ) : null}
 
-                          {tableData[5]?.isActive ? (
+                          {tableData[4]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(

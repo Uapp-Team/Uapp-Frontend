@@ -6,9 +6,14 @@ import put from "../../../helpers/put";
 import SaveButton from "../../../components/buttons/SaveButton";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { userTypes } from "../../../constants/userTypeConstant";
+import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
+import EyeBtn from "../../../components/buttons/EyeBtn";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState(1);
+  const [oldPasswordEye, setOldPasswordEye] = useState(false);
+  const [newPasswordEye, setNewPasswordEye] = useState(false);
+  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,8 +69,9 @@ const Settings = () => {
           autoDismiss: "true",
         });
         setEmail("");
-        window.localStorage.clear();
-        window.location.reload();
+        logoutStorageHandler();
+        // window.localStorage.clear();
+        // window.location.reload();
       } else {
         addToast(res?.data?.message, {
           appearance: "error",
@@ -165,7 +171,9 @@ const Settings = () => {
                         : `/staffGeneralInformation/${current_user?.referenceId}`
                     }
                   >
-                    <i class="far fa-edit text-primary"></i>
+                    {userTypeId !== userTypes.SystemAdmin.toString() && (
+                      <i class="far fa-edit text-primary"></i>
+                    )}
                   </Link>
                 </div>
               </div>
@@ -250,17 +258,23 @@ const Settings = () => {
                       <label>
                         <b>Old Password</b>
                       </label>
-                      <input
-                        type="password"
-                        class="form-control"
-                        onChange={(e) => {
-                          setOldPassword(e.target.value);
-                          setError("");
-                        }}
-                        value={oldPassword}
-                        name="oldPassword"
-                        id="oldPassword"
-                      />
+                      <div className="d-flex align-items-center">
+                        <input
+                          type={oldPasswordEye ? "text" : "password"}
+                          class="form-control mr-2"
+                          onChange={(e) => {
+                            setOldPassword(e.target.value);
+                            setError("");
+                          }}
+                          value={oldPassword}
+                          name="oldPassword"
+                          id="oldPassword"
+                        />
+                        <EyeBtn
+                          eye={oldPasswordEye}
+                          setEye={setOldPasswordEye}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -270,17 +284,23 @@ const Settings = () => {
                       <label>
                         <b>New Password</b>
                       </label>
-                      <input
-                        type="password"
-                        class="form-control"
-                        onChange={(e) => {
-                          setNewPassword(e.target.value);
-                          setError("");
-                        }}
-                        value={newPassword}
-                        name="newPassword"
-                        id="newPassword"
-                      />
+                      <div className="d-flex align-items-center">
+                        <input
+                          type={newPasswordEye ? "text" : "password"}
+                          class="form-control mr-2"
+                          onChange={(e) => {
+                            setNewPassword(e.target.value);
+                            setError("");
+                          }}
+                          value={newPassword}
+                          name="newPassword"
+                          id="newPassword"
+                        />
+                        <EyeBtn
+                          eye={newPasswordEye}
+                          setEye={setNewPasswordEye}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -291,15 +311,21 @@ const Settings = () => {
                       <label>
                         <b>Confirm New password</b>
                       </label>
-                      <input
-                        type="password"
-                        class="form-control"
-                        onChange={(e) => {
-                          setConfirmPassword(e.target.value);
-                          setError("");
-                        }}
-                        value={confirmPassword}
-                      />
+                      <div className="d-flex align-items-center">
+                        <input
+                          type={confirmPasswordEye ? "text" : "password"}
+                          class="form-control mr-2"
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            setError("");
+                          }}
+                          value={confirmPassword}
+                        />
+                        <EyeBtn
+                          eye={confirmPasswordEye}
+                          setEye={setConfirmPasswordEye}
+                        />
+                      </div>
                     </div>
                     <span className="text-danger">{error}</span>
 

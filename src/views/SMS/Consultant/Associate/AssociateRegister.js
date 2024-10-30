@@ -13,7 +13,7 @@ import SaveButton from "../../../../components/buttons/SaveButton";
 
 const AssociateRegister = () => {
   const { id } = useParams();
-
+  console.log(id, "consultant Id");
   // const [consParent, setConsParent] = useState([]);
   // const [consType, setConsType] = useState([]);
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -32,13 +32,14 @@ const AssociateRegister = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
+  const userId = localStorage.getItem("referenceId");
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
 
-    // get("ConsultantDD/index").then((res) => {
+    // get("ConsultantDD/ByUser").then((res) => {
     //   setConsParent(res);
     // });
 
@@ -165,12 +166,19 @@ const AssociateRegister = () => {
             </div>
           </div>
           <Form onSubmit={handleSubmit}>
-            {id && (
+            {id ? (
               <input
                 type="hidden"
                 id="consultantId"
                 name="consultantId"
                 value={id}
+              />
+            ) : (
+              <input
+                type="hidden"
+                id="consultantId"
+                name="consultantId"
+                value={userId}
               />
             )}
             <Row>

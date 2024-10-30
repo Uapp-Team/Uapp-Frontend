@@ -13,7 +13,7 @@ import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const Index = () => {
   const userType = localStorage.getItem("userType");
-
+  const [navItem, setNavItem] = useState("");
   const { admissionManagerId } = useParams();
   const activetab = "5";
   const [success, setSuccess] = useState(false);
@@ -331,6 +331,15 @@ const Index = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
 
+    if (
+      residencyValue === 2 &&
+      FileList3.length === 0 &&
+      eligibilityData?.idOrPassport?.fileUrl == null
+    ) {
+      isFormValid = false;
+      setIdPassportError(true);
+    }
+
     return isFormValid;
   };
 
@@ -376,9 +385,13 @@ const Index = () => {
           setFileList4([]);
           setFileList5([]);
           setFileList6([]);
-          history.push(
-            `/admissionManagersOfficerInformation/${admissionManagerId}`
-          );
+          userType !== userTypes?.AdmissionManager
+            ? history.push(
+                `/admissionManagersOfficerInformation/${admissionManagerId}`
+              )
+            : history.push(
+                `/admissionManagerTermsInformation/${admissionManagerId}`
+              );
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -404,7 +417,7 @@ const Index = () => {
       <AdmissionManagerNav
         activetab={activetab}
         admissionManagerId={admissionManagerId}
-        action={() => {}}
+        action={setNavItem}
       />
 
       <Card>

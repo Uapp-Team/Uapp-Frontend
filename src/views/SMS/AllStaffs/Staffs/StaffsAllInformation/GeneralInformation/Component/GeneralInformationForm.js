@@ -43,6 +43,7 @@ const GeneralInformationForm = ({
   firstName,
   lastName,
 }) => {
+  const userType = localStorage.getItem("userType");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
     <Form onSubmit={handleSubmit}>
@@ -51,26 +52,50 @@ const GeneralInformationForm = ({
 
       <Row>
         <Col md="6">
-          <FormGroup className="has-icon-left position-relative">
-            <span>
-              <span className="text-danger">*</span>
-              Branch
-            </span>
+          {userType === userTypes?.Admin ||
+          userType === userTypes?.SystemAdmin ? (
+            <FormGroup className="has-icon-left position-relative">
+              <span>
+                <span className="text-danger">*</span>
+                Branch
+              </span>
 
-            <Select
-              options={branchOptions}
-              value={{ label: branchLabel, value: branchValue }}
-              onChange={(opt) => selectBranch(opt.label, opt.value)}
-              name="BranchId"
-              id="BranchId"
-            />
+              <Select
+                options={branchOptions}
+                value={{ label: branchLabel, value: branchValue }}
+                onChange={(opt) => selectBranch(opt.label, opt.value)}
+                name="BranchId"
+                id="BranchId"
+              />
 
-            {branchError && (
-              <span className="text-danger">Branch is required</span>
-            )}
-          </FormGroup>
+              {branchError && (
+                <span className="text-danger">Branch is required</span>
+              )}
+            </FormGroup>
+          ) : (
+            <input type="hidden" value={branchValue} />
+            // <FormGroup className="has-icon-left position-relative">
+            //   <span>
+            //     <span className="text-danger">*</span>
+            //     Branch
+            //   </span>
 
-          {userTypeId === userTypes?.Consultant ? null : (
+            //   <Select
+            //     isDisabled
+            //     value={{ label: branchLabel, value: branchValue }}
+            //     name="BranchId"
+            //     id="BranchId"
+            //   />
+
+            //   {branchError && (
+            //     <span className="text-danger">Branch is required</span>
+            //   )}
+            // </FormGroup>
+          )}
+
+          {userTypeId === userTypes?.SystemAdmin ||
+          userTypeId === userTypes?.Admin ||
+          userTypeId === userTypes?.BranchManager ? (
             <FormGroup className="has-icon-left position-relative">
               <span>
                 <span className="text-danger">*</span> Staff Type
@@ -88,7 +113,7 @@ const GeneralInformationForm = ({
                 <span className="text-danger">Staff type is required</span>
               )}
             </FormGroup>
-          )}
+          ) : null}
 
           <FormGroup>
             <span>

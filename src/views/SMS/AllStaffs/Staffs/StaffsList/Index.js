@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import Select from "react-select";
 import Pagination from "../../../Pagination/Pagination.jsx";
@@ -18,14 +18,25 @@ import DropDownNumber from "./Component/DropDownNumber.js";
 import SelectAndClear from "./Component/SelectAndClear.js";
 import StuffColumnHide from "./Component/StuffColumnHide.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
+import ColumnStaff from "../../../TableColumn/ColumnStaff.js";
+import Loader from "../../../Search/Loader/Loader.js";
 
 const Index = (props) => {
-  const { type } = useParams();
+  const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
+  const { type, branchId } = useParams();
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const history = useHistory();
   const [employeeList, setEmployeeList] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchStr, setSearchStr] = useState("");
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(
+    StaffPaging?.currentPage ? StaffPaging?.currentPage : 1
+  );
+  const [searchStr, setSearchStr] = useState(
+    StaffPaging?.searchStr ? StaffPaging?.searchStr : ""
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    StaffPaging?.dataPerPage ? StaffPaging?.dataPerPage : 15
+  );
   const [entity, setEntity] = useState(0);
   const [callApi, setCallApi] = useState(false);
   const [serialNum, setSerialNum] = useState(0);
@@ -36,8 +47,12 @@ const Index = (props) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const [empList, setEmpList] = useState([]);
-  const [empLabel, setEmpLabel] = useState("Select Staff Type");
-  const [empValue, setEmpValue] = useState(0);
+  const [empLabel, setEmpLabel] = useState(
+    StaffPaging?.empLabel ? StaffPaging?.empLabel : "Select Staff Type"
+  );
+  const [empValue, setEmpValue] = useState(
+    StaffPaging?.empValue ? StaffPaging?.empValue : 0
+  );
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -53,9 +68,18 @@ const Index = (props) => {
   const [pass, setPass] = useState("");
   const [progress, setProgress] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
-  const [branchValue, setBranchValue] = useState(0);
+  const [branchLabel, setBranchLabel] = useState(
+    StaffPaging?.branchLabel ? StaffPaging?.branchLabel : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    branchId
+      ? branchId
+      : StaffPaging?.branchValue
+      ? StaffPaging?.branchValue
+      : 0
+  );
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -63,7 +87,39 @@ const Index = (props) => {
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
+  useEffect(() => {
+    const tableColumnStaff = JSON.parse(localStorage.getItem("ColumnStaff"));
+    tableColumnStaff && setTableData(tableColumnStaff);
+    !tableColumnStaff &&
+      localStorage.setItem("ColumnStaff", JSON.stringify(ColumnStaff));
+    !tableColumnStaff && setTableData(ColumnStaff);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "staff",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        empLabel: empLabel && empLabel,
+        empValue: empValue && empValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    empLabel,
+    empValue,
+    branchLabel,
+    branchValue,
+    searchStr,
+    dataPerPage,
+  ]);
+
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -72,29 +128,34 @@ const Index = (props) => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
+      if (branchId) {
+        const result = res?.find((ans) => ans?.id == branchId);
+        setBranchLabel(result?.name);
+      }
     });
+    if (!isTyping) {
+      type
+        ? get(
+            `Employee/Index?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&employeetypeid=${type}&searchstring=${searchStr}`
+          ).then((action) => {
+            setEmployeeList(action.models);
 
-    type
-      ? get(
-          `Employee/Index?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&employeetypeid=${type}&searchstring=${searchStr}`
-        ).then((action) => {
-          setEmployeeList(action.models);
+            setLoading(false);
+            setEntity(action.totalEntity);
+            setSerialNum(action.firstSerialNumber);
+            setLoading(false);
+          })
+        : get(
+            `Employee/Index?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&employeetypeid=${empValue}&searchstring=${searchStr}`
+          ).then((action) => {
+            setEmployeeList(action.models);
 
-          setLoading(false);
-          setEntity(action.totalEntity);
-          setSerialNum(action.firstSerialNumber);
-          setLoading(false);
-        })
-      : get(
-          `Employee/Index?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&employeetypeid=${empValue}&searchstring=${searchStr}`
-        ).then((action) => {
-          setEmployeeList(action.models);
-
-          setLoading(false);
-          setEntity(action.totalEntity);
-          setSerialNum(action.firstSerialNumber);
-          setLoading(false);
-        });
+            setLoading(false);
+            setEntity(action.totalEntity);
+            setSerialNum(action.firstSerialNumber);
+            setLoading(false);
+          });
+    }
 
     type
       ? get(`EmployeeTypeDD/Index`).then((res) => {
@@ -107,11 +168,6 @@ const Index = (props) => {
           setEmpList(res);
           setLoading(false);
         });
-
-    get(`TableDefination/Index/${tableIdList?.Staff_List}`).then((res) => {
-      setTableData(res);
-      console.log(res, "motka");
-    });
   }, [
     type,
     callApi,
@@ -121,6 +177,8 @@ const Index = (props) => {
     searchStr,
     success,
     branchValue,
+    isTyping,
+    branchId,
   ]);
 
   const branchOptions = branch?.map((br) => ({
@@ -146,7 +204,6 @@ const Index = (props) => {
 
   const toggleDanger = (data) => {
     setData(data);
-
     setDeleteModal(true);
   };
 
@@ -185,6 +242,16 @@ const Index = (props) => {
 
   const confirmPassword = (e) => {
     setCPass(e.target.value);
+    if (e.target.value === "") {
+      setPassError("Confirm your password");
+    } else {
+      setPassError("");
+    }
+    if (pass && e.target.value !== pass) {
+      setPassError("Passwords doesn't match.");
+    } else {
+      setPassError("");
+    }
   };
 
   const verifyPass = (e) => {
@@ -193,6 +260,16 @@ const Index = (props) => {
 
   const passValidate = (e) => {
     setPass(e.target.value);
+    if (e.target.value === "") {
+      setError("Provide a valid password");
+      // } else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(e.target.value)) {
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(e.target.value)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else {
+      setError("");
+    }
   };
 
   //  on reset
@@ -206,6 +283,10 @@ const Index = (props) => {
     setCallApi((prev) => !prev);
   };
 
+  // useEffect(() => {
+  //   handleReset();
+  // }, [currentRoute]);
+
   //  change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -214,7 +295,9 @@ const Index = (props) => {
 
   // add staff handler
   const handleAddStaff = () => {
-    history.push("/staffRegistration");
+    type
+      ? history.push(`/staffRegistrationByType/${type}`)
+      : history.push("/staffRegistration");
   };
 
   // toggle dropdown
@@ -251,17 +334,11 @@ const Index = (props) => {
   };
 
   // for hide/unhide column
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(`TableDefination/Update/${tableIdList?.Staff_List}/${columnId}`).then(
-      (res) => {
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          setSuccess(!success);
-        } else {
-        }
-      }
-    );
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnStaff", JSON.stringify(values));
   };
 
   const submitModalForm = (event) => {
@@ -271,8 +348,10 @@ const Index = (props) => {
 
     subData.append("id", passData?.id);
     subData.append("password", pass);
-    if (pass.length < 6) {
-      setError("Password length can not be less than six digits");
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
     } else if (pass !== cPass) {
       setPassError("Passwords do not match");
     } else {
@@ -302,141 +381,138 @@ const Index = (props) => {
 
   return (
     <div>
-      {loading ? (
-        <div className="text-center">
-          <img className="img-fluid" src={loader} alt="uapp_loader" />
-        </div>
-      ) : (
-        <div>
-          <BreadCrumb title="Staff List" backTo="" path="/" />
+      <BreadCrumb title="Staff List" backTo="" path="/" />
+      <div>
+        <SelectAndClear
+          empOptiopns={empOptiopns}
+          empLabel={empLabel}
+          empValue={empValue}
+          selectEmployeeType={selectEmployeeType}
+          type={type}
+          branchId={branchId}
+          branchOptions={branchOptions}
+          branchLabel={branchLabel}
+          branchValue={branchValue}
+          selectBranch={selectBranch}
+          searchStr={searchStr}
+          setSearchStr={setSearchStr}
+          setBranchLabel={setBranchLabel}
+          setBranchValue={setBranchValue}
+          setEmpLabel={setEmpLabel}
+          setEmpValue={setEmpValue}
+          handleKeyDown={handleKeyDown}
+          handleReset={handleReset}
+          setIsTyping={setIsTyping}
+        ></SelectAndClear>
 
-          <SelectAndClear
-            empOptiopns={empOptiopns}
-            empLabel={empLabel}
-            empValue={empValue}
-            selectEmployeeType={selectEmployeeType}
-            type={type}
-            branchOptions={branchOptions}
-            branchLabel={branchLabel}
-            branchValue={branchValue}
-            selectBranch={selectBranch}
-            searchStr={searchStr}
-            setSearchStr={setSearchStr}
-            setBranchLabel={setBranchLabel}
-            setBranchValue={setBranchValue}
-            setEmpLabel={setEmpLabel}
-            setEmpValue={setEmpValue}
-            handleKeyDown={handleKeyDown}
-            handleReset={handleReset}
-          ></SelectAndClear>
+        <Card className="uapp-employee-search">
+          <CardBody>
+            {/* new */}
+            <Row className="mb-3">
+              <Col
+                lg="5"
+                md="5"
+                sm="12"
+                xs="12"
+                style={{ marginBottom: "10px" }}
+              >
+                {permissions?.includes(permissionList?.Add_Employee) ? (
+                  <ButtonForFunction
+                    func={handleAddStaff}
+                    className={"btn btn-uapp-add "}
+                    icon={<i className="fas fa-plus"></i>}
+                    name={"Add Staff"}
+                  />
+                ) : null}
+              </Col>
 
-          <Card className="uapp-employee-search">
-            <CardBody>
-              {/* new */}
-              <Row className="mb-3">
-                <Col
-                  lg="5"
-                  md="5"
-                  sm="12"
-                  xs="12"
-                  style={{ marginBottom: "10px" }}
-                >
-                  {permissions?.includes(permissionList?.Add_Employee) ? (
-                    <ButtonForFunction
-                      func={handleAddStaff}
-                      className={"btn btn-uapp-add "}
-                      icon={<i className="fas fa-plus"></i>}
-                      name={"Add Staff"}
-                    />
-                  ) : null}
-                </Col>
-
-                <Col lg="7" md="7" sm="12" xs="12">
-                  <div className="d-flex justify-content-end">
-                    <div className="mr-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div>
-                          <Select
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
+              <Col lg="7" md="7" sm="12" xs="12">
+                <div className="d-flex justify-content-end">
+                  <div className="mr-3">
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">Showing :</div>
+                      <div>
+                        <Select
+                          options={dataSizeName}
+                          value={{ label: dataPerPage, value: dataPerPage }}
+                          onChange={(opt) => selectDataSize(opt.value)}
+                        />
                       </div>
                     </div>
-
-                    <div className="mr-3">
-                      <DropDownNumber
-                        dropdownOpen={dropdownOpen}
-                        toggle={toggle}
-                        componentRef={componentRef}
-                      ></DropDownNumber>
-                    </div>
-
-                    {/* column hide unhide starts here */}
-
-                    <StuffColumnHide
-                      dropdownOpen1={dropdownOpen1}
-                      toggle1={toggle1}
-                      tableData={tableData}
-                      handleChecked={handleChecked}
-                    ></StuffColumnHide>
-
-                    {/* column hide unhide ends here */}
                   </div>
-                </Col>
-              </Row>
 
-              {permissions?.includes(permissionList?.View_Employee_list) && (
-                <>
-                  {loading ? (
-                    <h2 className="text-center">Loading...</h2>
-                  ) : (
-                    <StaffTable
+                  <div className="mr-3">
+                    <DropDownNumber
+                      dropdownOpen={dropdownOpen}
+                      toggle={toggle}
                       componentRef={componentRef}
-                      tableData={tableData}
-                      permissions={permissions}
-                      permissionList={permissionList}
-                      toggleDanger={toggleDanger}
-                      deleteModal={deleteModal}
-                      closeDeleteModal={closeDeleteModal}
-                      buttonStatus={buttonStatus}
-                      progress={progress}
-                      userTypeId={userTypeId}
-                      employeeList={employeeList}
-                      handleEmpClick={handleEmpClick}
-                      handlePass={handlePass}
-                      serialNum={serialNum}
-                      passModal={passModal}
-                      handleToggle={handleToggle}
-                      passData={passData}
-                      submitModalForm={submitModalForm}
-                      passValidate={passValidate}
-                      setError={setError}
-                      error={error}
-                      verifyPass={verifyPass}
-                      confirmPassword={confirmPassword}
-                      passError={passError}
-                      setPassModal={setPassModal}
-                      redirectToStaffProfile={redirectToStaffProfile}
-                      redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
-                      handleDeleteStaff={handleDeleteStaff}
-                    ></StaffTable>
-                  )}
-                </>
-              )}
+                    ></DropDownNumber>
+                  </div>
 
-              <Pagination
-                dataPerPage={dataPerPage}
-                totalData={entity}
-                paginate={paginate}
-                currentPage={currentPage}
-              />
-            </CardBody>
-          </Card>
-        </div>
-      )}
+                  {/* column hide unhide starts here */}
+
+                  <StuffColumnHide
+                    dropdownOpen1={dropdownOpen1}
+                    toggle1={toggle1}
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    handleChecked={handleChecked}
+                  ></StuffColumnHide>
+
+                  {/* column hide unhide ends here */}
+                </div>
+              </Col>
+            </Row>
+
+            {permissions?.includes(permissionList?.View_Employee_list) && (
+              <>
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <StaffTable
+                    componentRef={componentRef}
+                    tableData={tableData}
+                    permissions={permissions}
+                    permissionList={permissionList}
+                    data={data}
+                    toggleDanger={toggleDanger}
+                    deleteModal={deleteModal}
+                    closeDeleteModal={closeDeleteModal}
+                    buttonStatus={buttonStatus}
+                    progress={progress}
+                    userTypeId={userTypeId}
+                    employeeList={employeeList}
+                    handleEmpClick={handleEmpClick}
+                    handlePass={handlePass}
+                    serialNum={serialNum}
+                    passModal={passModal}
+                    handleToggle={handleToggle}
+                    passData={passData}
+                    submitModalForm={submitModalForm}
+                    passValidate={passValidate}
+                    setError={setError}
+                    error={error}
+                    verifyPass={verifyPass}
+                    confirmPassword={confirmPassword}
+                    passError={passError}
+                    setPassModal={setPassModal}
+                    redirectToStaffProfile={redirectToStaffProfile}
+                    redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
+                    handleDeleteStaff={handleDeleteStaff}
+                  />
+                )}
+              </>
+            )}
+
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 };

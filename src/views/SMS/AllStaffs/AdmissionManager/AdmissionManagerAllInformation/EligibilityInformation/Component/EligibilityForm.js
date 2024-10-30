@@ -3,11 +3,11 @@ import { FormGroup, Form, Col, Input, Label, Row } from "reactstrap";
 import Select from "react-select";
 import { Upload } from "antd";
 import { rootUrl } from "../../../../../../../constants/constants";
-import downloadBtn from "../../../../../../../assets/img/download.png";
-import uploadBtn from "../../../../../../../assets/img/upload.png";
 import SaveButton from "../../../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
+import UploadButton from "../../../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -72,7 +72,6 @@ const EligibilityForm = ({
   handlePrevious,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-
   return (
     <div>
       <Form onSubmit={handleSubmit} className="mt-5">
@@ -92,7 +91,7 @@ const EligibilityForm = ({
 
         <Row>
           <Col lg="6" md="8">
-            <FormGroup className="has-icon-left position-relative">
+            <FormGroup>
               <span>
                 <span className="text-danger">*</span>
                 Country of Nationality
@@ -112,7 +111,7 @@ const EligibilityForm = ({
               <span className="text-danger">{errorc}</span>
             </FormGroup>
 
-            <FormGroup className="has-icon-left position-relative">
+            <FormGroup>
               <span>
                 {" "}
                 <span className="text-danger">*</span> Country of Residence
@@ -135,7 +134,7 @@ const EligibilityForm = ({
             {uniCountryValue === uniCountryValue2 ||
             uniCountryValue === 0 ||
             uniCountryValue2 === 0 ? null : (
-              <FormGroup className="has-icon-left position-relative">
+              <FormGroup>
                 <span>
                   <span className="text-danger">*</span> Residency Status
                 </span>
@@ -154,7 +153,7 @@ const EligibilityForm = ({
 
             {residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? (
               <>
-                <FormGroup className="has-icon-left position-relative">
+                <FormGroup>
                   <span>
                     <span className="text-danger">*</span> Visa Type
                   </span>
@@ -173,7 +172,7 @@ const EligibilityForm = ({
                   <span className="text-danger">{visaError}</span>
                 </FormGroup>
 
-                <FormGroup className="has-icon-left position-relative">
+                <FormGroup>
                   <span>
                     {" "}
                     <span className="text-danger">*</span> Expiry Date of Your
@@ -192,7 +191,7 @@ const EligibilityForm = ({
                   <span className="text-danger">{dateError}</span>
                 </FormGroup>
 
-                <FormGroup className="has-icon-left position-relative">
+                <FormGroup>
                   <span>Do You Have Right to Work? </span>
 
                   <FormGroup check inline>
@@ -239,8 +238,11 @@ const EligibilityForm = ({
         </Row>
         <Row>
           <Col lg="6" md="8">
-            <FormGroup row className="has-icon-left position-relative">
+            <FormGroup row>
               <Col md="4" className="text-md-right">
+                {residencyValue === 2 && (
+                  <span className="text-danger">* </span>
+                )}
                 <span>Id/Passport : </span>
               </Col>
 
@@ -254,11 +256,7 @@ const EligibilityForm = ({
                   }}
                   style={{ height: "32px" }}
                 >
-                  {FileList3.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList3.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 {idPassportError && (
                   <span className="text-danger">File is required </span>
@@ -267,13 +265,13 @@ const EligibilityForm = ({
               <Col md="4">
                 {eligibilityData?.idOrPassport?.fileUrl != null ? (
                   <a href={rootUrl + eligibilityData?.idOrPassport?.fileUrl}>
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>
             </FormGroup>
 
-            <FormGroup row className="has-icon-left position-relative">
+            <FormGroup row>
               <Col md="4" className="text-md-right">
                 <span>Proof of Address</span>
               </Col>
@@ -286,11 +284,7 @@ const EligibilityForm = ({
                     return false;
                   }}
                 >
-                  {FileList4.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList4.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
                 {proofOfAddressError && (
@@ -300,16 +294,16 @@ const EligibilityForm = ({
               <Col md="4">
                 {eligibilityData?.proofOfAddress?.fileUrl ? (
                   <a href={rootUrl + eligibilityData?.proofOfAddress?.fileUrl}>
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>
             </FormGroup>
 
             {uniCountryValue === uniCountryValue2 ? null : (
-              <FormGroup row className="has-icon-left position-relative">
+              <FormGroup row>
                 <Col md="4" className="text-md-right">
-                  <span>BRP/TRP</span>
+                  <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
                 </Col>
                 <Col md="4">
                   <Upload
@@ -320,24 +314,20 @@ const EligibilityForm = ({
                       return false;
                     }}
                   >
-                    {FileList5.length < 1 ? (
-                      <img className="mb-1" src={uploadBtn} alt="" />
-                    ) : (
-                      ""
-                    )}
+                    {FileList5.length < 1 ? <UploadButton /> : ""}
                   </Upload>
                   <span className="text-danger">{proofOfRightError}</span>
                 </Col>
                 <Col md="4">
                   {eligibilityData?.brp?.fileUrl ? (
                     <a href={rootUrl + eligibilityData?.brp?.fileUrl}>
-                      <img className="mb-1" src={downloadBtn} alt="" />
+                      <DownloadButton />
                     </a>
                   ) : null}
                 </Col>
               </FormGroup>
             )}
-            <FormGroup row className="has-icon-left position-relative">
+            <FormGroup row>
               <Col md="4" className="text-md-right">
                 <span>CV File</span>
               </Col>
@@ -350,11 +340,7 @@ const EligibilityForm = ({
                     return false;
                   }}
                 >
-                  {FileList6.length < 1 ? (
-                    <img className="mb-1" src={uploadBtn} alt="" />
-                  ) : (
-                    ""
-                  )}
+                  {FileList6.length < 1 ? <UploadButton /> : ""}
                 </Upload>
 
                 <span className="text-danger">{cvError}</span>
@@ -362,7 +348,7 @@ const EligibilityForm = ({
               <Col md="4">
                 {eligibilityData?.cv?.fileUrl ? (
                   <a href={rootUrl + eligibilityData?.cv?.fileUrl}>
-                    <img className="mb-1" src={downloadBtn} alt="" />
+                    <DownloadButton />
                   </a>
                 ) : null}
               </Col>

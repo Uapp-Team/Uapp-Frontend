@@ -8,8 +8,12 @@ import { ChevronRight } from "react-feather";
 // import { FormattedMessage } from "react-intl"
 import { history } from "../../../../../history";
 import get from "../../../../../helpers/get";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import SideMenuStudent from "./SideMenuStudent";
-import SideMenuProviderAdmin from "./SideMenuProviderAdmin";
+import SideMenuBin from "./SideMenuBin";
+import SideMenuAffiliate from "./SideMenuAffiliate";
+import SideMenuCompanion from "./SideMenuCompanion";
+import { leadlink } from "../../../../../constants/constants";
 
 const initialState = {
   menu: [],
@@ -31,10 +35,9 @@ class SideMenuContent extends React.Component {
       history.push("/misc/not-authorized");
     };
 
-    var usertype = JSON.parse(localStorage.getItem("userType"));
-    console.log("usertype", usertype);
+    // var usertype = JSON.parse(localStorage.getItem("userType"));
+    // console.log("usertype", usertype);
     // this.setState({ userType: usertype });
-    // console.log("useghrtype", this.state.userType);
 
     const valueObj = JSON.parse(localStorage.getItem("menu"));
 
@@ -151,6 +154,9 @@ class SideMenuContent extends React.Component {
   }
 
   render() {
+    const usertype = JSON.parse(localStorage.getItem("userType"));
+    const usersType = localStorage.getItem("userType");
+    const token = localStorage.getItem("token");
     const navigationConfig = this.state.menu;
     // Loop over sidebar items
     // eslint-disable-next-line
@@ -159,125 +165,129 @@ class SideMenuContent extends React.Component {
       // checks if item has groupheader
       if (item.type === "groupHeader") {
         return (
-          <li
-            className="navigation-header"
-            key={`group-header-${item.groupTitle}`}
-          >
-            <span>{item.groupTitle}</span>
-          </li>
+          <>
+            {" "}
+            <li
+              className="navigation-header"
+              key={`group-header-${item.groupTitle}`}
+            >
+              <span>{item.groupTitle}</span>
+            </li>
+          </>
         );
       }
 
       let renderItem = (
-        <li
-          className={classnames(
-            `nav-item uapp-nav-item ${
-              this.state.activeGroups[0] === item.id ? "open" : ""
-            }`,
-            {
-              "has-sub": item.type === "collapse",
-              open: this.state.activeGroups.includes(item.id),
-              "sidebar-group-active": this.state.currentActiveGroup.includes(
-                item.id
-              ),
-              hover: this.props.hoverIndex === item.id,
-              active:
-                (this.props.activeItemState === item.navLink &&
-                  item.type === "item") ||
-                (item.parentOf &&
-                  item.parentOf.includes(this.props.activeItemState)),
-              disabled: item.disabled,
-            }
-          )}
-          key={item.id}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (item.type === "item") {
-              this.props.handleActiveItem(item.navLink);
-              this.handleGroupClick(item.id, null, item.type);
-              if (this.props.deviceWidth <= 1200 && item.type === "item") {
-                this.props.toggleMenu();
+        <>
+          {" "}
+          <li
+            className={classnames(
+              `nav-item uapp-nav-item ${this.state.activeGroups[0] === item.id ? "open" : ""
+              }`,
+              {
+                "has-sub": item.type === "collapse",
+                open: this.state.activeGroups.includes(item.id),
+                "sidebar-group-active": this.state.currentActiveGroup.includes(
+                  item.id
+                ),
+                hover: this.props.hoverIndex === item.id,
+                active:
+                  (this.props.activeItemState === item.navLink &&
+                    item.type === "item") ||
+                  (item.parentOf &&
+                    item.parentOf.includes(this.props.activeItemState)),
+                disabled: item.disabled,
               }
-            } else {
-              this.handleGroupClick(item.id, null, item.type);
-            }
-          }}
-        >
-          <CustomAnchorTag
-            to={
-              item.filterBase
-                ? item.filterBase
-                : item.navLink && item.type === "item"
-                ? item.navLink
-                : ""
-            }
-            href={item.type === "external-link" ? item.navLink : ""}
-            className={`d-flex ${
-              item.badgeText
-                ? "justify-content-between"
-                : "justify-content-start"
-            }`}
-            onMouseEnter={() => {
-              this.props.handleSidebarMouseEnter(item.id);
-            }}
-            onMouseLeave={() => {
-              this.props.handleSidebarMouseEnter(item.id);
-            }}
+            )}
             key={item.id}
             onClick={(e) => {
-              return item.type === "collapse" ? e.preventDefault() : "";
+              e.stopPropagation();
+              if (item.type === "item") {
+                this.props.handleActiveItem(item.navLink);
+                this.handleGroupClick(item.id, null, item.type);
+                if (this.props.deviceWidth <= 1200 && item.type === "item") {
+                  this.props.toggleMenu();
+                }
+              } else {
+                this.handleGroupClick(item.id, null, item.type);
+              }
             }}
-            target={item.newTab ? "_blank" : undefined}
           >
-            <div className="menu-text">
-              <i className={item.icon}></i>
+            <CustomAnchorTag
+              to={
+                item.filterBase
+                  ? item.filterBase
+                  : item.navLink && item.type === "item"
+                    ? item.navLink
+                    : ""
+              }
+              href={item.type === "external-link" ? item.navLink : ""}
+              className={`d-flex ${item.badgeText
+                ? "justify-content-between"
+                : "justify-content-start"
+                }`}
+              onMouseEnter={() => {
+                this.props.handleSidebarMouseEnter(item.id);
+              }}
+              onMouseLeave={() => {
+                this.props.handleSidebarMouseEnter(item.id);
+              }}
+              key={item.id}
+              onClick={(e) => {
+                return item.type === "collapse" ? e.preventDefault() : "";
+              }}
+              target={item.newTab ? "_blank" : undefined}
+            >
+              <div className="menu-text">
+                <i className={item.icon}></i>
 
-              <span className="menu-item menu-title">
-                {item.title}
-                {/* {<FormattedMessage id=/>} */}
-              </span>
-            </div>
-
-            {item.badge ? (
-              <div className="menu-badge">
-                <Badge color={item.badge} className="mr-1" pill>
-                  {item.badgeText}
-                </Badge>
+                <span className="menu-item menu-title">
+                  {item.title}
+                  {/* {<FormattedMessage id=/>} */}
+                </span>
               </div>
-            ) : (
-              ""
-            )}
+
+              {item.badge ? (
+                <div className="menu-badge">
+                  <Badge color={item.badge} className="mr-1" pill>
+                    {item.badgeText}
+                  </Badge>
+                </div>
+              ) : (
+                ""
+              )}
+              {item.type === "collapse" ? (
+                <ChevronRight className="menu-toggle-icon" size={13} />
+              ) : (
+                ""
+              )}
+            </CustomAnchorTag>
             {item.type === "collapse" ? (
-              <ChevronRight className="menu-toggle-icon" size={13} />
+              <SideMenuGroup
+                group={item}
+                handleGroupClick={this.handleGroupClick}
+                activeGroup={this.state.activeGroups}
+                handleActiveItem={this.props.handleActiveItem}
+                activeItemState={this.props.activeItemState}
+                handleSidebarMouseEnter={this.props.handleSidebarMouseEnter}
+                activePath={this.props.activePath}
+                hoverIndex={this.props.hoverIndex}
+                initRender={this.initRender}
+                parentArr={this.parentArr}
+                triggerActive={undefined}
+                currentActiveGroup={this.state.currentActiveGroup}
+                permission={this.props.permission}
+                currentUser={this.props.currentUser}
+                redirectUnauthorized={this.redirectUnauthorized}
+                collapsedMenuPaths={this.props.collapsedMenuPaths}
+                toggleMenu={this.props.toggleMenu}
+                deviceWidth={this.props.deviceWidth}
+              />
             ) : (
               ""
             )}
-          </CustomAnchorTag>
-          {item.type === "collapse" ? (
-            <SideMenuGroup
-              group={item}
-              handleGroupClick={this.handleGroupClick}
-              activeGroup={this.state.activeGroups}
-              handleActiveItem={this.props.handleActiveItem}
-              activeItemState={this.props.activeItemState}
-              handleSidebarMouseEnter={this.props.handleSidebarMouseEnter}
-              activePath={this.props.activePath}
-              hoverIndex={this.props.hoverIndex}
-              initRender={this.initRender}
-              parentArr={this.parentArr}
-              triggerActive={undefined}
-              currentActiveGroup={this.state.currentActiveGroup}
-              permission={this.props.permission}
-              currentUser={this.props.currentUser}
-              redirectUnauthorized={this.redirectUnauthorized}
-              collapsedMenuPaths={this.props.collapsedMenuPaths}
-              toggleMenu={this.props.toggleMenu}
-              deviceWidth={this.props.deviceWidth}
-            />
-          ) : (
-            ""
-          )}
-        </li>
+          </li>
+        </>
       );
 
       if (
@@ -306,13 +316,52 @@ class SideMenuContent extends React.Component {
         return this.redirectUnauthorized();
       }
     });
-    // return <>{menuItems}</>;
+
+    // const location = useLocation();
+    // const currentLocation = location.pathname;
+
+    const handleLeadLogon = () => {
+      get(`Account/GetTempToken`).then((data) => {
+        console.log(data);
+        window.open(`${leadlink}token/${data?.token}`, "_blank").focus();
+      });
+    };
+    const firstPath = window.location.pathname.split("/")[1];
+
     return (
       <>
-        {JSON.parse(localStorage.getItem("userType")) === 6 ? (
+        {usertype === 6 ? (
           <SideMenuStudent />
+        ) : usertype === 18 ? (
+          <SideMenuAffiliate />
+        ) : usertype === 19 ? (
+          <SideMenuCompanion />
         ) : (
-          menuItems
+          <>
+            {usertype === 1 && firstPath.startsWith("recycle") ? (
+              <SideMenuBin
+                props={this.props}
+                collapsedPath={this.collapsedPath}
+                handleGroupClick={this.handleGroupClick}
+                initRender={this.initRender}
+                parentArr={this.parentArr}
+                redirectUnauthorized={this.redirectUnauthorized}
+              />
+            ) : (
+              <>
+                {menuItems}
+
+                {(usersType !== userTypes?.Consultant &&
+                  usersType !== userTypes?.SystemAdmin &&
+                  usersType !== userTypes?.Admin &&
+                  usersType !== userTypes?.BranchManager) || (
+                    <button className="login-to-lead" onClick={handleLeadLogon}>
+                      Login To Lead
+                    </button>
+                  )}
+              </>
+            )}
+          </>
         )}
       </>
     );

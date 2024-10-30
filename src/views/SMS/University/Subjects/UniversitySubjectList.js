@@ -40,8 +40,12 @@ import put from "../../../../helpers/put";
 import { tableIdList } from "../../../../constants/TableIdConstant";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import TagButton from "../../../../components/buttons/TagButton";
+import ColumnCourse from "../../TableColumn/ColumnCourse.js";
 
 const UniversitySubjectList = (props) => {
+  const UniversitySubjectList = JSON.parse(
+    sessionStorage.getItem("UniversitySubjects")
+  );
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -53,8 +57,12 @@ const UniversitySubjectList = (props) => {
   const [success1, setSuccess1] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(
+    UniversitySubjectList?.currentPage ? UniversitySubjectList?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    UniversitySubjectList?.dataPerPage ? UniversitySubjectList?.dataPerPage : 15
+  );
   const [callApi, setCallApi] = useState(false);
   const [progress, setProgress] = useState(false);
 
@@ -63,15 +71,29 @@ const UniversitySubjectList = (props) => {
 
   const [uniLabel, setUniLabel] = useState("Select University");
   const [uniValue, setUniValue] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
-  const [intakeValue, setIntakeValue] = useState(0);
+  const [intakeLabel, setIntakeLabel] = useState(
+    UniversitySubjectList?.intakeLabel
+      ? UniversitySubjectList?.intakeLabel
+      : "Select Intake"
+  );
+  const [intakeValue, setIntakeValue] = useState(
+    UniversitySubjectList?.intakeValue ? UniversitySubjectList?.intakeValue : 0
+  );
   const [intakeList, setIntakeList] = useState([]);
   const [educationLabel, setEducationLabel] = useState(
-    "Select Education Level"
+    UniversitySubjectList?.educationLabel
+      ? UniversitySubjectList?.educationLabel
+      : "Select Education Level"
   );
-  const [educationValue, setEducationValue] = useState(0);
+  const [educationValue, setEducationValue] = useState(
+    UniversitySubjectList?.educationValue
+      ? UniversitySubjectList?.educationValue
+      : 0
+  );
   const [educationList, setEducationList] = useState([]);
-  const [searchStr, setSearchStr] = useState("");
+  const [searchStr, setSearchStr] = useState(
+    UniversitySubjectList?.searchStr ? UniversitySubjectList?.searchStr : ""
+  );
   const [uniTypeId, setUTypeId] = useState(0);
   const [ulist, setUList] = useState([]);
   const [cam, setCam] = useState([]);
@@ -80,8 +102,14 @@ const UniversitySubjectList = (props) => {
 
   const [uniName, setUniName] = useState(undefined);
 
-  const [orderLabel, setOrderLabel] = useState("Order By");
-  const [orderValue, setOrderValue] = useState(0);
+  const [orderLabel, setOrderLabel] = useState(
+    UniversitySubjectList?.orderLabel
+      ? UniversitySubjectList?.orderLabel
+      : "Order By"
+  );
+  const [orderValue, setOrderValue] = useState(
+    UniversitySubjectList?.orderValue ? UniversitySubjectList?.orderValue : 0
+  );
 
   const [subId, setSubId] = useState(0);
   const [subName, setSubName] = useState("");
@@ -103,6 +131,42 @@ const UniversitySubjectList = (props) => {
   const { id } = useParams();
 
   const uniIDD = id;
+
+  useEffect(() => {
+    const tableColumnCourse = JSON.parse(localStorage.getItem("ColumnCourse"));
+    tableColumnCourse && setTableData(tableColumnCourse);
+
+    !tableColumnCourse &&
+      localStorage.setItem("ColumnStudent", JSON.stringify(ColumnCourse));
+    !tableColumnCourse && setTableData(ColumnCourse);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "UniversitySubjects",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        intakeLabel: intakeLabel && intakeLabel,
+        intakeValue: intakeValue && intakeValue,
+        educationLabel: educationLabel && educationLabel,
+        educationValue: educationValue && educationValue,
+        orderLabel: orderLabel && orderLabel,
+        orderValue: orderValue && orderValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+      })
+    );
+  }, [
+    currentPage,
+    intakeLabel,
+    intakeValue,
+    educationLabel,
+    educationValue,
+    orderLabel,
+    orderValue,
+    searchStr,
+    dataPerPage,
+  ]);
 
   // add university handler
   const handleAddSubject = () => {
@@ -140,7 +204,7 @@ const UniversitySubjectList = (props) => {
         })
         .catch();
     } else {
-      get("UniversityDD/Index").then((res) => {
+      get("SearchFilter/Universities/0/0/0").then((res) => {
         setUList(res);
         dispatch(StoreUniversityListData(res));
       });
@@ -170,14 +234,6 @@ const UniversitySubjectList = (props) => {
       return;
     }
   }, [success1, id]);
-
-  useEffect(() => {
-    get(`TableDefination/Index/${tableIdList?.University_Subject_List}`).then(
-      (res) => {
-        setTableData(res);
-      }
-    );
-  }, [success1]);
 
   useEffect(() => {
     setLoading(true);
@@ -219,6 +275,7 @@ const UniversitySubjectList = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -339,6 +396,7 @@ const UniversitySubjectList = (props) => {
 
   // on clear
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setUniLabel("Select University");
     setUniValue(0);
     setIntakeLabel("Select Intake");
@@ -388,26 +446,11 @@ const UniversitySubjectList = (props) => {
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.University_Subject_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess1(!success1);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnCourse", JSON.stringify(values));
   };
 
   return (
@@ -420,7 +463,7 @@ const UniversitySubjectList = (props) => {
         path={`/universityList`}
       />
 
-      <Card className="uapp-employee-search">
+      <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row>
             <Col md="4" sm="12">
@@ -526,7 +569,7 @@ const UniversitySubjectList = (props) => {
                 <div className="me-3 mb-2">
                   <div className="d-flex align-items-center">
                     <div className="mr-2">Order By :</div>
-                    <div>
+                    <div className="ddzindex">
                       <Select
                         className="mr-md-2 mr-sm-0"
                         options={orderName}
@@ -540,7 +583,7 @@ const UniversitySubjectList = (props) => {
                 <div className="mr-3">
                   <div className="d-flex align-items-center">
                     <div className="mr-2">Showing :</div>
-                    <div>
+                    <div className="ddzindex">
                       <Select
                         options={dataSizeName}
                         value={{ label: dataPerPage, value: dataPerPage }}
@@ -612,10 +655,10 @@ const UniversitySubjectList = (props) => {
                       <i className="fas fa-bars"></i>
                     </DropdownToggle>
                     <DropdownMenu className="bg-dd-1">
-                      {tableData.map((table, i) => (
+                      {tableData?.map((table, i) => (
                         <div className="d-flex justify-content-between">
                           <Col md="8" className="">
-                            <p className="">{table?.collumnName}</p>
+                            <p className="">{table?.title}</p>
                           </Col>
 
                           <Col md="4" className="text-center">
@@ -626,7 +669,7 @@ const UniversitySubjectList = (props) => {
                                 id=""
                                 name="isAcceptHome"
                                 onChange={(e) => {
-                                  handleChecked(e, table?.id);
+                                  handleChecked(e, i);
                                 }}
                                 defaultChecked={table?.isActive}
                               />
@@ -650,15 +693,12 @@ const UniversitySubjectList = (props) => {
               </div>
             </div>
           ) : (
-            <div className="table-responsive" ref={componentRef}>
+            <div className="table-responsive fixedhead" ref={componentRef}>
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
                     {tableData[0]?.isActive ? <th>Course Title</th> : null}
                     {tableData[1]?.isActive ? <th>Campuses</th> : null}
-                    {/* <th>Description</th>
-                    <th>Duration</th> */}
-                    {/* {checkUni ? <th>University</th> : null} */}
                     {tableData[2]?.isActive ? <th>Education Level</th> : null}
                     {tableData[3]?.isActive ? <th>Current Intake</th> : null}
                     {tableData[3]?.isActive ? <th>Applications</th> : null}
@@ -686,7 +726,14 @@ const UniversitySubjectList = (props) => {
                       {/* {checkUni ? <td>{sub?.universityName}</td> : null} */}
 
                       {tableData[1]?.isActive ? (
-                        <td>{sub?.campus.map((item) => item)}</td>
+                        <td>
+                          {sub?.campus.map((item, i) => (
+                            <>
+                              {item}
+                              {sub?.campus.length > i + 1 && ", "}
+                            </>
+                          ))}
+                        </td>
                       ) : null}
 
                       {tableData[2]?.isActive ? (
@@ -697,7 +744,14 @@ const UniversitySubjectList = (props) => {
                         <td>{sub?.nextIntake}</td>
                       ) : null}
                       {tableData[3]?.isActive ? (
-                        <td>{sub?.applicationCount}</td>
+                        <td>
+                          <div style={{ marginTop: "5px" }}>
+                            {" "}
+                            <span className="Count-first-no-pointer">
+                              {sub?.applicationCount}
+                            </span>
+                          </div>
+                        </td>
                       ) : null}
                       {tableData[4]?.isActive ? <td>{sub?.status}</td> : null}
 
@@ -734,7 +788,7 @@ const UniversitySubjectList = (props) => {
                               />
                             ) : null}
 
-                            {permissions?.includes(
+                            {/* {permissions?.includes(
                               permissionList?.Edit_Subjects
                             ) ? (
                               <LinkButton
@@ -749,7 +803,7 @@ const UniversitySubjectList = (props) => {
                                 }
                                 permission={6}
                               />
-                            ) : null}
+                            ) : null} */}
 
                             {permissions?.includes(
                               permissionList?.Delete_Subjects

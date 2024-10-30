@@ -11,9 +11,11 @@ import moment from "moment";
 import EligibilityForm from "./Component/EligibilityForm";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../../components/date/calenderFormate";
+import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const StaffEligibility = () => {
   const activetab = "5";
+  const userType = localStorage.getItem("userType");
   const [success, setSuccess] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [uniCountryLabel, setUniCountryLabel] = useState(
@@ -340,6 +342,15 @@ const StaffEligibility = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
 
+    if (
+      residencyValue === 2 &&
+      FileList3.length === 0 &&
+      eligibilityData?.idOrPassport?.fileUrl == null
+    ) {
+      isFormValid = false;
+      setIdPassportError(true);
+    }
+
     return isFormValid;
   };
 
@@ -406,7 +417,16 @@ const StaffEligibility = () => {
     <div>
       <BreadCrumb
         title="Staff Eligibility Information"
-        backTo="Staff"
+        backTo={
+          userType === userTypes?.Admin ||
+          userType === userTypes?.AccountManager ||
+          userType === userTypes?.ComplianceManager ||
+          userType === userTypes?.AccountOfficer ||
+          userType === userTypes?.FinanceManager ||
+          userType === userTypes?.Editor
+            ? null
+            : "Staff"
+        }
         path={`/staffList`}
       />
 

@@ -17,7 +17,6 @@ import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../helpers/get";
 import put from "../../../../helpers/put";
-import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import PhoneInput from "react-phone-input-2";
@@ -58,7 +57,7 @@ const Branch = () => {
   const [branchCodeError, setbranchCodeError] = useState(false);
   const [stateNameError, setstateNameError] = useState(false);
 
-  const [branchCurrencyId, setBranchCurrencyId] = useState(0);
+  const [branchCurrencyId, setBranchCurrencyId] = useState(2);
   const [branchCurrencyIdError, setBranchCurrencyIdError] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -265,7 +264,7 @@ const Branch = () => {
               autoDismiss: true,
             });
 
-            history.push(`/branchManager/${res?.data?.result?.id}`);
+            history.push(`/branchManager/${branchId}`);
           }
         });
       } else {
@@ -401,9 +400,10 @@ const Branch = () => {
                         type="string"
                         name="phoneNumber"
                         id="phoneNumber"
-                        country={"us"}
+                        country={"gb"}
+                        enableLongNumbers={true}
                         onChange={handlePhoneNumber}
-                        value={phoneNumber ? phoneNumber : "1"}
+                        value={phoneNumber ? phoneNumber : ""}
                         inputProps={{
                           required: true,
                         }}
@@ -418,9 +418,10 @@ const Branch = () => {
                         type="string"
                         name="telePhoneNumber"
                         id="telePhoneNumber"
-                        country={"us"}
+                        country={"gb"}
+                        enableLongNumbers={true}
                         onChange={handleTelephone}
-                        value={telePhoneNumber ? telePhoneNumber : "1"}
+                        value={telePhoneNumber ? telePhoneNumber : ""}
                         inputProps={{
                           required: true,
                         }}
@@ -492,7 +493,9 @@ const Branch = () => {
                     </FormGroup>
 
                     <FormGroup>
-                      <span>Branch Currency </span>
+                      <span>
+                        Branch Currency <span className="text-danger">*</span>
+                      </span>
 
                       <Currency
                         currencyId={branchCurrencyId}
@@ -500,6 +503,7 @@ const Branch = () => {
                         name="currencyId"
                         error={branchCurrencyIdError}
                         setError={setBranchCurrencyIdError}
+                        isDisabled={true}
                       />
                     </FormGroup>
 

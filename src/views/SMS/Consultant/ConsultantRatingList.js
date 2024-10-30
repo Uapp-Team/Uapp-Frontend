@@ -164,6 +164,7 @@ const ConsultantRatingList = ({ id }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };

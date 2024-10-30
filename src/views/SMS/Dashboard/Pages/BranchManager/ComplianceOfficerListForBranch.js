@@ -126,6 +126,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -525,7 +526,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
-                  <td>SL/NO</td>
+                  {/* <td>SL/NO</td> */}
                   <td>Name</td>
                   <td>Contact </td>
                   <td>Address</td>
@@ -536,7 +537,7 @@ const ComplianceOfficerListForBranch = ({ id }) => {
               <tbody>
                 {complianceOficers?.map((item, i) => (
                   <tr key={i} className="border-buttom">
-                    <td>{i + 1}</td>
+                    {/* <td>{i + 1}</td> */}
 
                     <td>
                       {item?.nameTittle?.name} {item?.firstName}{" "}
@@ -569,14 +570,6 @@ const ComplianceOfficerListForBranch = ({ id }) => {
                       >
                         Delete
                       </span>
-
-                      <ConfirmModal
-                        isOpen={deleteModal}
-                        toggle={() => setDeleteModal(!deleteModal)}
-                        confirm={handleDeleteCompOfficer}
-                        cancel={() => setDeleteModal(false)}
-                        buttonStatus={buttonStatus}
-                      />
                     </td>
                   </tr>
                 ))}
@@ -881,6 +874,14 @@ const ComplianceOfficerListForBranch = ({ id }) => {
           </Form>
         </ModalBody>
       </Modal>
+
+      <ConfirmModal
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteCompOfficer}
+        cancel={() => setDeleteModal(false)}
+        buttonStatus={buttonStatus}
+      />
     </>
   );
 };

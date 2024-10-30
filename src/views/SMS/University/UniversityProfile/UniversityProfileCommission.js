@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Input } from "reactstrap";
+// import { Card, CardBody, Input } from "reactstrap";
 import get from "../../../../helpers/get";
-import { Link, useHistory, useParams } from "react-router-dom";
+// import { Link, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Table } from "reactstrap";
 
 const UniversityProfileCommission = ({
@@ -10,11 +11,11 @@ const UniversityProfileCommission = ({
   iconFalse,
   commission,
 }) => {
-  const history = useHistory();
+  // const history = useHistory();
   const { id } = useParams();
-  const activetab = "9";
+  // const activetab = "9";
   const success = false;
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [euCommissions, setEuCommissions] = useState([]);
   const [intCommissions, setIntCommissions] = useState([]);
   useEffect(() => {
@@ -25,7 +26,7 @@ const UniversityProfileCommission = ({
     get(`InternationalComission/GetByUniversity/${id}`).then((res) => {
       setIntCommissions(res);
     });
-    setLoading(false);
+    // setLoading(false);
   }, [success, id]);
   console.log(euCommissions);
   return (
@@ -76,7 +77,7 @@ const UniversityProfileCommission = ({
         </div>
       </div>
 
-      <div className="row mt-5">
+      {/* <div className="row mt-5">
         <div className="col">
           <h4>
             <b>Commission</b>
@@ -412,7 +413,7 @@ const UniversityProfileCommission = ({
             <span>There is no commission added here.</span>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

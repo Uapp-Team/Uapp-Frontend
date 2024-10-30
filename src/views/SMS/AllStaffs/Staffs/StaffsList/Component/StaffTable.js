@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ButtonGroup,
@@ -14,12 +14,14 @@ import ButtonForFunction from "../../../../Components/ButtonForFunction";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../../components/modal/ConfirmModal";
+import PopOverText from "../../../../../../components/PopOverText";
 
 const StaffTable = ({
   componentRef,
   tableData,
   permissions,
   permissionList,
+  data,
   toggleDanger,
   deleteModal,
   closeDeleteModal,
@@ -45,29 +47,23 @@ const StaffTable = ({
   redirecttoStaffGeneralInfo,
   handleDeleteStaff,
 }) => {
+  const [popoverOpen, setPopoverOpen] = useState("");
   console.log(employeeList);
   return (
     <div className="table-responsive" ref={componentRef}>
       <Table id="table-to-xls" className="table-sm table-bordered">
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
-            {tableData[0]?.isActive ? <th>SL/NO</th> : null}
-            {tableData[1]?.isActive ? <th>UAPP Id</th> : null}
-            {tableData[2]?.isActive ? <th>Staff Type</th> : null}
+            {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
+            {tableData[1]?.isActive ? <th>Staff Type</th> : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
-              <>
-                {" "}
-                {userTypeId === userTypes?.SystemAdmin ||
-                userTypeId === userTypes?.Admin ? (
-                  <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
-                ) : null}
-              </>
+              <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
             ) : null}
-            {tableData[4]?.isActive ? <th>Full Name</th> : null}
-            {tableData[5]?.isActive ? <th>Branch</th> : null}
-            {tableData[6]?.isActive ? <th>Email</th> : null}
-            {tableData[7]?.isActive ? <th>Phone No</th> : null}
-            {tableData[8]?.isActive ? (
+            {tableData[3]?.isActive ? <th>Full Name</th> : null}
+            {tableData[4]?.isActive ? <th>Branch</th> : null}
+            {tableData[5]?.isActive ? <th>Contact</th> : null}
+
+            {tableData[6]?.isActive ? (
               <th className="text-center">Action</th>
             ) : null}
           </tr>
@@ -75,119 +71,69 @@ const StaffTable = ({
         <tbody>
           {employeeList?.map((emp, i) => (
             <tr key={emp.id} style={{ textAlign: "center" }}>
-              {tableData[0]?.isActive ? (
+              {/* {tableData[0]?.isActive ? (
                 <th scope="row">{serialNum + i}</th>
-              ) : null}
-              {tableData[1]?.isActive ? (
-                <td
-                  className="cursor-pointer hyperlink-hover"
-                  onClick={() => handleEmpClick(emp.id)}
-                >
-                  <span>{emp?.uappId}</span>
+              ) : null} */}
+              {tableData[0]?.isActive ? (
+                <td className="cursor-pointer hyperlink-hover">
+                  <Link
+                    className="text-id hover"
+                    to={`/staffProfile/${emp.id}`}
+                  >
+                    {emp?.uappId}
+                  </Link>
                 </td>
               ) : null}
-              {tableData[2]?.isActive ? <td>{emp?.staffType}</td> : null}
+              {tableData[1]?.isActive ? <td>{emp?.staffType}</td> : null}
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>
-                  {" "}
-                  {userTypeId === userTypes?.SystemAdmin ||
-                  userTypeId === userTypes?.Admin ? (
-                    <>
-                      {tableData[3]?.isActive ? (
-                        <td>
-                          <Link to="/staffList" onClick={() => handlePass(emp)}>
-                            Change
-                          </Link>
-                          <Modal
-                            isOpen={passModal}
-                            toggle={() => handleToggle}
-                            className="uapp-modal2"
-                          >
-                            {/* <ModalHeader>
-                              <div className="text-center mt-3">
-                                <span>
-                                  Change password for {passData?.firstName}{" "}
-                                  {passData?.lastName}{" "}
-                                </span>
-                              </div>
-                            </ModalHeader> */}
-                            <ModalBody className="p-5">
-                              <h5>
-                                Change password for {passData?.firstName}{" "}
-                                {passData?.lastName}{" "}
-                              </h5>
-                              <form onSubmit={submitModalForm} className="mt-3">
-                                <FormGroup row>
-                                  <Col md="8">
-                                    <span>
-                                      <span className="text-danger">*</span>{" "}
-                                      Password{" "}
-                                    </span>
-
-                                    <Input
-                                      type="password"
-                                      onBlur={passValidate}
-                                      onChange={() => setError("")}
-                                    />
-                                    <span className="text-danger">{error}</span>
-                                  </Col>
-                                </FormGroup>
-
-                                <FormGroup row>
-                                  <Col md="8">
-                                    <span>
-                                      <span className="text-danger">*</span>{" "}
-                                      Confirm Password{" "}
-                                    </span>
-
-                                    <Input
-                                      type="password"
-                                      onChange={(e) => {
-                                        verifyPass();
-                                        confirmPassword(e);
-                                      }}
-                                    />
-
-                                    <br />
-                                    {
-                                      <span className="text-danger">
-                                        {passError}
-                                      </span>
-                                    }
-                                  </Col>
-                                </FormGroup>
-                                <FormGroup className="d-flex justify-content-between mt-3">
-                                  <CancelButton
-                                    cancel={() => handleToggle(false)}
-                                  />
-
-                                  <SaveButton
-                                    text="Submit"
-                                    progress={progress}
-                                    buttonStatus={buttonStatus}
-                                  />
-                                </FormGroup>
-                              </form>
-                            </ModalBody>
-                          </Modal>
-                        </td>
-                      ) : null}
-                    </>
+                  {tableData[2]?.isActive ? (
+                    <td>
+                      <Link to="/staffList" onClick={() => handlePass(emp)}>
+                        Change
+                      </Link>
+                    </td>
                   ) : null}
                 </>
               ) : null}
-              {tableData[4]?.isActive ? (
-                <td
-                  className="cursor-pointer hyperlink-hover"
-                  onClick={() => handleEmpClick(emp.id)}
-                >
-                  {emp?.fullName}
+              {tableData[3]?.isActive ? (
+                <td className="cursor-pointer hyperlink-hover">
+                  <Link
+                    className="text-id hover"
+                    to={`/staffProfile/${emp?.id}`}
+                  >
+                    {emp?.fullName}
+                  </Link>
+                  <span></span>
                 </td>
               ) : null}
-              {tableData[5]?.isActive ? <td>{emp.branch}</td> : null}
-              {tableData[6]?.isActive ? <td>{emp.email}</td> : null}
-              {tableData[7]?.isActive ? <td>{emp.phoneNumber}</td> : null}
-              {tableData[8]?.isActive ? (
+              {tableData[4]?.isActive ? <td>{emp.branch}</td> : null}
+              {tableData[5]?.isActive ? (
+                <td>
+                  <div className="d-flex justify-content-center">
+                    <PopOverText
+                      value={
+                        emp.phoneNumber && emp.phoneNumber.includes("+")
+                          ? emp.phoneNumber
+                          : emp.phoneNumber && !emp.phoneNumber.includes("+")
+                          ? "+" + emp.phoneNumber
+                          : null
+                      }
+                      btn={<i class="fas fa-phone"></i>}
+                      popoverOpen={popoverOpen}
+                      setPopoverOpen={setPopoverOpen}
+                    />
+                    <PopOverText
+                      value={emp.email}
+                      btn={<i className="far fa-envelope"></i>}
+                      popoverOpen={popoverOpen}
+                      setPopoverOpen={setPopoverOpen}
+                    />
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[6]?.isActive ? (
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(
@@ -232,45 +178,73 @@ const StaffTable = ({
                       </>
                     )}
                   </ButtonGroup>
-                  <ConfirmModal
-                    text=" Are You Sure to Delete this Staff ? 
-                    Once Deleted it can't be Undone!"
-                    isOpen={deleteModal}
-                    toggle={closeDeleteModal}
-                    confirm={() => handleDeleteStaff(emp?.id)}
-                    cancel={closeDeleteModal}
-                    buttonStatus={buttonStatus}
-                    progress={progress}
-                  />
-
-                  {/* <Modal
-                    isOpen={deleteModal}
-                    toggle={closeDeleteModal}
-                    className="uapp-modal"
-                  >
-                    <ModalBody>
-                      <p>
-                        Are You Sure to Delete this? Once Deleted it can't be
-                        Undone!
-                      </p>
-                    </ModalBody>
-
-                    <ModalFooter>
-                      <Button
-                        color="danger"
-                        onClick={() => handleDeleteStaff(emp?.id)}
-                      >
-                        {progress ? <ButtonLoader /> : "Yes"}
-                      </Button>
-                      <Button onClick={closeDeleteModal}>NO</Button>
-                    </ModalFooter>
-                  </Modal> */}
                 </td>
               ) : null}
             </tr>
           ))}
         </tbody>
       </Table>
+      <ConfirmModal
+        text=" Are You Sure to Delete this Staff ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => handleDeleteStaff(data?.id)}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+      />
+      <Modal
+        isOpen={passModal}
+        toggle={() => handleToggle}
+        className="uapp-modal2"
+      >
+        <ModalBody className="p-5">
+          <h5>Change password for {passData?.fullName}</h5>
+          <form onSubmit={submitModalForm} className="mt-3">
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    passValidate(e);
+                  }}
+                />
+                <span className="text-danger">{error}</span>
+              </Col>
+            </FormGroup>
+
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span> Confirm Password{" "}
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    confirmPassword(e);
+                  }}
+                />
+
+                <span className="text-danger">{passError}</span>
+              </Col>
+            </FormGroup>
+            <FormGroup className="d-flex justify-content-between mt-3">
+              <CancelButton cancel={() => handleToggle(false)} />
+
+              <SaveButton
+                text="Submit"
+                progress={progress}
+                buttonStatus={buttonStatus}
+              />
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

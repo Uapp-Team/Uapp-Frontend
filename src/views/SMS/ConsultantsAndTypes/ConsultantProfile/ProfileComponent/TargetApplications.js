@@ -39,7 +39,7 @@ const TargetApplications = ({ id }) => {
             className="fas fa-caret-up text-green"
             style={{
               position: "relative",
-              left: `${calculatePercent}%`,
+              left: `calc(${calculatePercent}% - 10px)`,
               fontSize: "xx-large",
             }}
           ></i>

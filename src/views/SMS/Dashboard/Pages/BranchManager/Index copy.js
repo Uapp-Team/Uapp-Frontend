@@ -60,7 +60,7 @@ const BranchManager = () => {
           </span>
           <br />
           <span className="std-dashboard-style2">
-            Here's what's happening with your store today.
+            Here's what's happening with your portal.
           </span>
         </div>
 

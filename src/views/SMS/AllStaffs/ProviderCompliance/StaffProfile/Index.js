@@ -2,10 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router";
 import { useParams } from "react-router";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../helpers/get";
-import ReactToPrint from "react-to-print";
+// import ReactToPrint from "react-to-print";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import put from "../../../../../helpers/put";
 import Loader from "../../../Search/Loader/Loader";
@@ -15,18 +15,19 @@ import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
 import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import PersonalForm from "./Component/PersonalForm";
-import EligibilityForm from "./Component/EligibilityForm";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
-import EmergencyContactForm from "./Component/EmergencyContactForm";
+// import EligibilityForm from "./Component/EligibilityForm";
+// import { dateFormate } from "../../../../../components/date/calenderFormate";
+// import EmergencyContactForm from "./Component/EmergencyContactForm";
 
-const EmployeeProfile = ({ userId }) => {
+const ProviderComplianceProfile = ({ userId }) => {
   const { id } = useParams();
-  console.log(id);
+  console.log(userId);
   const history = useHistory();
   const { addToast } = useToasts();
   const [employeeDetails, setemployeeDetails] = useState({});
-  const [employeeImgDetails, setemployeeImgDetails] = useState({});
-  const [employeeType, setemployeeType] = useState({});
+  // const [employeeImgDetails, setemployeeImgDetails] = useState({});
+  // const [employeeType, setemployeeType] = useState({});
   const [success, setSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
@@ -50,30 +51,34 @@ const EmployeeProfile = ({ userId }) => {
   const [contactInfo, SetContactInfo] = useState({});
   const [personalInfo, SetPersonalInfo] = useState({});
   const [generalInfo, setGeneralInfo] = useState({});
-  const [eligibilityInfo, setEligibilityInfo] = useState({});
-  const [emergencyInfo, setEmergencyInfo] = useState({});
+  // const [eligibilityInfo, setEligibilityInfo] = useState({});
+  // const [emergencyInfo, setEmergencyInfo] = useState({});
 
   useEffect(() => {
-    get(`EmployeeProfile/ProfileHead/${id ? id : userId}`).then((action) => {
-      console.log(action);
-      setemployeeDetails(action);
+    get(`ProviderComplianceProfile/ProfileHead/${id ? id : userId}`).then(
+      (action) => {
+        console.log(action);
+        setemployeeDetails(action);
 
-      setemployeeImgDetails(action.profileImageMedia);
-      setemployeeType(action.employeeType);
-      setLoading(false);
-    });
+        // setemployeeImgDetails(action.profileImageMedia);
+        // setemployeeType(action.employeeType);
+        setLoading(false);
+      }
+    );
   }, [id, userId, success, loading]);
 
   useEffect(() => {
-    get(`EmployeeContactInformation/GetByEmployeeId/${id ? id : userId}`).then(
-      (action) => {
-        SetContactInfo(action);
-      }
-    );
+    get(
+      `ProviderComplianceContactInformation/GetByProviderComplianceId/${
+        id ? id : userId
+      }`
+    ).then((action) => {
+      SetContactInfo(action);
+    });
   }, [id, userId]);
 
   useEffect(() => {
-    get(`Employee/GetPersonalInformation/${id ? id : userId}`).then(
+    get(`ProviderCompliance/GetPersonalInformation/${id ? id : userId}`).then(
       (action) => {
         SetPersonalInfo(action);
       }
@@ -81,35 +86,15 @@ const EmployeeProfile = ({ userId }) => {
   }, [id, userId]);
 
   useEffect(() => {
-    get(`Employee/GetGeneralInformation/${id ? id : userId}`).then((action) => {
-      setGeneralInfo(action);
-    });
-  }, [id, userId]);
-
-  useEffect(() => {
-    get(`EmployeeEligibility/GetEmployeeEligibility/${id ? id : userId}`).then(
+    get(`ProviderCompliance/GetGeneralInformation/${id ? id : userId}`).then(
       (action) => {
-        setEligibilityInfo(action);
+        setGeneralInfo(action);
       }
     );
   }, [id, userId]);
 
-  useEffect(() => {
-    get(
-      `EmployeeEmergencyInformation/GetByEmployeeId/${id ? id : userId}`
-    ).then((action) => {
-      setEmergencyInfo(action);
-      console.log(action, "emergency");
-    });
-  }, [id, userId]);
-
   const redirect = () => {
-    history.push(`/providerComplianceGeneralInfo/${id ? id : userId}`);
-  };
-
-  // redirect to dashboard
-  const backToDashboard = () => {
-    history.push("/providerComplianceList");
+    history.push(`/providerComplianceGeneralInformation/${id ? id : userId}`);
   };
 
   const componentRef = useRef();
@@ -179,10 +164,10 @@ const EmployeeProfile = ({ userId }) => {
     } else {
       setProgress(true);
       setButtonStatus(true);
-      put(`Employee/UpdateCoverPhoto`, subData).then((res) => {
+      put(`ProviderCompliance/UpdateCoverPhoto`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
-        if (res?.status == 200 && res?.data?.isSuccess == true) {
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
@@ -256,10 +241,10 @@ const EmployeeProfile = ({ userId }) => {
     } else {
       setProgress(true);
       setButtonStatus1(true);
-      put(`Employee/UpdateProfilePhoto`, subData).then((res) => {
+      put(`ProviderCompliance/UpdateProfilePhoto`, subData).then((res) => {
         setButtonStatus1(false);
         setProgress(false);
-        if (res?.status == 200 && res?.data?.isSuccess == true) {
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
@@ -397,7 +382,9 @@ const EmployeeProfile = ({ userId }) => {
                                   color: "#d4d4d4",
                                 }}
                               >
-                                {employeeDetails?.uappRegistrationDate}
+                                {dateFormate(
+                                  employeeDetails?.uappRegistrationDate
+                                )}
                               </span>
                             </div>
                           </Col>
@@ -409,12 +396,12 @@ const EmployeeProfile = ({ userId }) => {
                   <GeneralForm generalInfo={generalInfo}></GeneralForm>
                   <PersonalForm personalInfo={personalInfo}></PersonalForm>
                   <ContactForm contactInfo={contactInfo}></ContactForm>
-                  <EmergencyContactForm
+                  {/* <EmergencyContactForm
                     emergencyInfo={emergencyInfo}
                   ></EmergencyContactForm>
                   <EligibilityForm
                     eligibilityInfo={eligibilityInfo}
-                  ></EligibilityForm>
+                  ></EligibilityForm> */}
                 </div>
               </Col>
             </Row>
@@ -425,4 +412,4 @@ const EmployeeProfile = ({ userId }) => {
   );
 };
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps)(EmployeeProfile);
+export default connect(mapStateToProps)(ProviderComplianceProfile);

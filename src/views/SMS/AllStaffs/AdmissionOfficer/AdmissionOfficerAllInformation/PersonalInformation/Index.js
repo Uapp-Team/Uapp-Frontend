@@ -65,7 +65,7 @@ const Index = () => {
 
   const [success, setSuccess] = useState(false);
 
-  const [date, setDate] = useState(currentDate);
+  const [date, setDate] = useState(null);
 
   const [dateError, setDateError] = useState("");
 
@@ -99,9 +99,8 @@ const Index = () => {
         res?.maritalStatusId !== null ? res?.maritalStatusId : 0
       );
 
-      res?.dateOfBirth !== "0001-01-01T00:00:00"
-        ? setDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"))
-        : setDate(null);
+      res?.dateOfBirth &&
+        setDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
     });
   }, [admissionOfficerId]);
 
@@ -457,9 +456,10 @@ const Index = () => {
                         type="string"
                         name="phoneNumber"
                         id="phoneNumber"
-                        country={"us"}
+                        country={"gb"}
+                        enableLongNumbers={true}
                         onChange={handlePhoneNumber}
-                        value={phoneNumber ? phoneNumber : "1"}
+                        value={phoneNumber ? phoneNumber : ""}
                         inputProps={{
                           required: true,
                         }}
@@ -544,10 +544,10 @@ const Index = () => {
                             </span>
                           )}
                         </Col>
-                        <Col md="4">
+                        <Col md="4" className="pt-4">
                           <span className="text-gray">
-                            Recommanded resolution is 640*640 with file size
-                            less than 2MB, keep visual elements centered
+                            File size less than 2MB, keep visual elements
+                            centered
                           </span>
                         </Col>
                       </FormGroup>
@@ -617,10 +617,10 @@ const Index = () => {
                             </div>
                           </div>
                         </Col>
-                        <Col md="4">
+                        <Col md="4" className="pt-4">
                           <span className="text-gray">
-                            Recommanded resolution is 1720*640 with file size
-                            less than 2MB, keep visual elements centered
+                            File size less than 2MB, keep visual elements
+                            centered
                           </span>
                         </Col>
                       </FormGroup>

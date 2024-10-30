@@ -1,12 +1,16 @@
 import React from "react";
 
-const CancelButton = ({ text = "Cancel", cancel }) => {
+const CancelButton = ({ text = "Cancel", cancel, className }) => {
   return (
-    <>
-      <button className="cancel-button" onClick={cancel} type="reset">
+    <span>
+      <button
+        className={`cancel-button ${className}`}
+        onClick={cancel}
+        type="reset"
+      >
         {text}
       </button>
-    </>
+    </span>
   );
 };
 

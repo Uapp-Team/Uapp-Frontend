@@ -36,6 +36,7 @@ const AddUniversityRecruitmentType = () => {
   const [territory, setTerritory] = useState("true");
   const [countryList, setCountryList] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedOptionError, setSelectedOptionError] = useState(false);
   const [loading, setLoading] = useState(true);
   const { univerId } = useParams();
   const history = useHistory();
@@ -99,40 +100,49 @@ const AddUniversityRecruitmentType = () => {
       console.log("valuesss", value);
     }
 
-    setButtonStatus(true);
-    setProgress(true);
-    post(`UniversityRecruitment/save`, subdata).then((res) => {
-      setButtonStatus(false);
-      setProgress(false);
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
-        userType !== userTypes?.ProviderAdmin &&
-          history.push(`/addUniversityCommission/${univerId}`);
-      } else {
-        addToast(res?.data?.message, {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      }
-    });
+    if (
+      acint === "true" &&
+      territory === "false" &&
+      selectedOption.length === 0
+    ) {
+      setSelectedOptionError(true);
+    } else {
+      setButtonStatus(true);
+      setProgress(true);
+      post(`UniversityRecruitment/save`, subdata).then((res) => {
+        setButtonStatus(false);
+        setProgress(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          // (userType === userTypes?.SystemAdmin ||
+          //   userType === userTypes?.Admin) &&
+          //   history.push(`/addUniversityCommission/${univerId}`);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
+    }
   };
 
   return (
     <div>
+      <BreadCrumb
+        title="Recruitment Type"
+        backTo="University"
+        path="/universityList"
+      />
+
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="Recruitment Type"
-            backTo="University"
-            path="/universityList"
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -346,27 +356,37 @@ const AddUniversityRecruitmentType = () => {
                     )}
 
                     {acint === "true" && territory === "false" ? (
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="2">
-                          <span>
-                            <span className="text-danger">*</span>
-                            Recruitment For{" "}
-                          </span>
-                        </Col>
-                        <Col md="6">
-                          <Select
-                            isMulti
-                            name="countryIds"
-                            id="countryIds"
-                            onChange={setSelectedOption}
-                            options={countryName}
-                            value={selectedOption}
-                          />
-                        </Col>
-                      </FormGroup>
+                      <>
+                        <FormGroup
+                          row
+                          className="has-icon-left position-relative"
+                        >
+                          <Col md="2">
+                            <span>
+                              <span className="text-danger">*</span>
+                              Recruitment For{" "}
+                            </span>
+                          </Col>
+                          <Col md="6">
+                            <Select
+                              isMulti
+                              name="countryIds"
+                              id="countryIds"
+                              onChange={(e) => {
+                                setSelectedOption(e);
+                                setSelectedOptionError(false);
+                              }}
+                              options={countryName}
+                              value={selectedOption}
+                            />
+                            {selectedOptionError && (
+                              <span className="text-danger">
+                                Please select atleast one value
+                              </span>
+                            )}
+                          </Col>
+                        </FormGroup>
+                      </>
                     ) : (
                       <Input
                         type="hidden"
@@ -384,11 +404,13 @@ const AddUniversityRecruitmentType = () => {
                             permissionList.Edit_University
                           ) && (
                             <SaveButton
-                              text={
-                                userType === userTypes?.ProviderAdmin
-                                  ? "Save"
-                                  : "Save and Next"
-                              }
+                              // text={
+                              //   userType === userTypes?.SystemAdmin ||
+                              //   userType === userTypes?.Admin
+                              //     ? "Save and Next"
+                              //     : "Save"
+                              // }
+                              text="Save"
                               progress={progress}
                               buttonStatus={buttonStatus}
                             />

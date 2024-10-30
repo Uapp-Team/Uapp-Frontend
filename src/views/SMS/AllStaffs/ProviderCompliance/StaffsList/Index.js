@@ -10,7 +10,7 @@ import get from "../../../../../helpers/get.js";
 import remove from "../../../../../helpers/remove.js";
 import ButtonForFunction from "../../../Components/ButtonForFunction.js";
 import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
-import loader from "../../../../../assets/img/load.gif";
+import loader from "../../../../../assets/img/Optimized.gif";
 import put from "../../../../../helpers/put.js";
 import { tableIdList } from "../../../../../constants/TableIdConstant.js";
 import StaffTable from "./Component/StaffTable.js";
@@ -64,6 +64,7 @@ const Index = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -173,7 +174,7 @@ const Index = (props) => {
   const handleDeleteStaff = () => {
     setButtonStatus(true);
     setProgress(true);
-    remove(`Employee/Delete/${data?.id}`).then((res) => {
+    remove(`ProviderCompliance/Delete/${data?.id}`).then((res) => {
       setProgress(false);
       addToast(res, {
         appearance: "error",
@@ -291,7 +292,7 @@ const Index = (props) => {
       setPassError("Passwords do not match");
     } else {
       setButtonStatus(true);
-      put(`Password/ChangePasswordForEmployee`, subData).then((res) => {
+      put(`ProviderCompliance/ChangePassword`, subData).then((res) => {
         setButtonStatus(false);
         if (res?.status === 200 && res.data?.isSuccess === true) {
           addToast(res?.data?.message, {
@@ -316,14 +317,13 @@ const Index = (props) => {
 
   return (
     <div>
+      <BreadCrumb title="Provider Compliance  List" backTo="" path="/" />
       {loading ? (
         <div className="text-center">
           <img className="img-fluid" src={loader} alt="uapp_loader" />
         </div>
       ) : (
         <div>
-          <BreadCrumb title="Provider Compliance  List" backTo="" path="/" />
-
           <SelectAndClear
             empOptiopns={empOptiopns}
             empLabel={empLabel}

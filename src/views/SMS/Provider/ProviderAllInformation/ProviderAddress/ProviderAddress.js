@@ -501,17 +501,19 @@ const ProviderAddress = () => {
                                   {permissions?.includes(
                                     permissionList.Edit_Provider
                                   ) ? (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          livingdata,
-                                          "mailing"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#provider-address">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            livingdata,
+                                            "mailing"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   ) : null}
                                 </>
                               )}
@@ -613,17 +615,19 @@ const ProviderAddress = () => {
                                   {permissions?.includes(
                                     permissionList.Edit_Provider
                                   ) ? (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          permanentData,
-                                          "parmanent"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#provider-address">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            permanentData,
+                                            "parmanent"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   ) : null}
                                 </>
                               )}

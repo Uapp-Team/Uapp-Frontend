@@ -111,6 +111,7 @@ const AdmissionManagerWiseAssignedSubject = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     // setLoading(true);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
@@ -215,7 +216,7 @@ const AdmissionManagerWiseAssignedSubject = () => {
     setStatusLabel("Select Status");
     setStatusValue(0);
     setCallApi((prev) => !prev);
-    // setReportData({});
+    setCurrentPage(1);
   };
 
   // search handler
@@ -639,7 +640,7 @@ const AdmissionManagerWiseAssignedSubject = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
-                    {checkSlNo ? <th>SL/NO</th> : null}
+                    {/* {checkSlNo ? <th>SL/NO</th> : null} */}
                     {checkSubject ? <th>Courses</th> : null}
                     {/* {checkName ? <th>University</th> : null}   */}
                     {/* {checkType ? <th>Requirement Type</th> : null}    */}
@@ -655,7 +656,7 @@ const AdmissionManagerWiseAssignedSubject = () => {
                 <tbody>
                   {subData?.map((list, i) => (
                     <tr key={i} style={{ textAlign: "center" }}>
-                      {checkSlNo ? <th scope="row">{i + 1}</th> : null}
+                      {/* {checkSlNo ? <th scope="row">{i + 1}</th> : null} */}
                       {checkSubject ? <td>{list?.subjectName}</td> : null}
                       {/* {checkName ? <td>{list?.university?.name}</td> : null} */}
 

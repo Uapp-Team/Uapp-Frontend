@@ -29,7 +29,10 @@ import Loader from "../../Search/Loader/Loader";
 import ButtonLoader from "../../Components/ButtonLoader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import { currentDate } from "../../../../components/date/calenderFormate";
+import {
+  currentDate,
+  dateFormate,
+} from "../../../../components/date/calenderFormate";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 
@@ -359,252 +362,233 @@ const AccountIntake = () => {
 
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div>
-          <BreadCrumb title="Account Intake List" backTo="" path="/" />
+      <BreadCrumb title="Account Intake List" backTo="" path="/" />
+      <div>
+        <Card className="uapp-employee-search">
+          <CardHeader>
+            {permissions?.includes(permissionList?.Add_Account_Intake) ? (
+              <div className="d-flex jusity-content-end">
+                <ButtonForFunction
+                  className={"btn btn-uapp-add "}
+                  icon={<i className="fas fa-plus"></i>}
+                  func={openModal}
+                  name={" Add Intake"}
+                ></ButtonForFunction>
+              </div>
+            ) : null}
 
-          <Card className="uapp-employee-search">
-            <CardHeader>
-              {permissions?.includes(permissionList?.Add_Account_Intake) ? (
-                <div className="d-flex jusity-content-end">
-                  <ButtonForFunction
-                    className={"btn btn-uapp-add "}
-                    icon={<i className="fas fa-plus"></i>}
-                    func={openModal}
-                    name={" Add Intake"}
-                  ></ButtonForFunction>
-                </div>
-              ) : null}
-
-              <div>
+            <div>
+              {" "}
+              <b>
                 {" "}
-                <b>
-                  {" "}
-                  Total{" "}
-                  <span className="badge badge-primary">
-                    {intakeList?.length}
-                  </span>{" "}
-                  Account Intakes Found{" "}
-                </b>
-              </div>
-            </CardHeader>
+                Total{" "}
+                <span className="badge badge-primary">
+                  {intakeList?.length}
+                </span>{" "}
+                Account Intakes Found{" "}
+              </b>
+            </div>
+          </CardHeader>
 
-            <CardBody className="search-card-body">
-              {/* account intake form modal */}
-              <div>
-                <Modal
-                  isOpen={modalOpen}
-                  toggle={closeModal}
-                  className="uapp-modal2"
-                >
-                  <ModalHeader> Account Intake</ModalHeader>
-                  <ModalBody>
-                    <Form onSubmit={handleSubmit}>
-                      {currUpdateData?.id ? (
-                        <input
-                          type="hidden"
-                          name="id"
-                          id="id"
-                          value={currUpdateData?.id}
+          <CardBody className="search-card-body">
+            {/* account intake form modal */}
+            <div>
+              <Modal
+                isOpen={modalOpen}
+                toggle={closeModal}
+                className="uapp-modal2"
+              >
+                <ModalHeader> Account Intake</ModalHeader>
+                <ModalBody>
+                  <Form onSubmit={handleSubmit}>
+                    {currUpdateData?.id ? (
+                      <input
+                        type="hidden"
+                        name="id"
+                        id="id"
+                        value={currUpdateData?.id}
+                      />
+                    ) : null}
+
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          Name <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Input
+                          type="text"
+                          name="IntakeName"
+                          id="IntakeName"
+                          placeholder="Enter Intake Name"
+                          value={name}
+                          onChange={handleName}
                         />
-                      ) : null}
+                        <span className="text-danger">{nameError}</span>
+                      </Col>
+                    </FormGroup>
 
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            Name <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Input
-                            type="text"
-                            name="IntakeName"
-                            id="IntakeName"
-                            placeholder="Enter Intake Name"
-                            value={name}
-                            onChange={handleName}
-                          />
-                          <span className="text-danger">{nameError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            Start Date <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Input
-                            type="date"
-                            name="StartDate"
-                            id="StartDate"
-                            value={startDate}
-                            onChange={(e) => {
-                              handleStartDate(e);
-                            }}
-                          />
-                          <span className="text-danger">{startDateError}</span>
-                        </Col>
-                      </FormGroup>
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            Start Month <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Select
-                            options={monthOptions}
-                            value={{ label: sMonthLabel, value: sMonthValue }}
-                            onChange={(opt) =>
-                              selectStartMonth(opt.label, opt.value)
-                            }
-                            name="StartMonthId"
-                            id="StartMonthId"
-                          />
-                          <span className="text-danger">{startMError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            Start Year <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Select
-                            options={yearOptions}
-                            value={{ label: sYearLabel, value: sYearValue }}
-                            onChange={(opt) =>
-                              selectStartYear(opt.label, opt.value)
-                            }
-                            name="StartYearId"
-                            id="StartYearId"
-                          />
-                          <span className="text-danger">{startYError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            End Date <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Input
-                            type="date"
-                            name="EndDate"
-                            id="EndDate"
-                            value={endDate}
-                            onChange={(e) => {
-                              handleEndDate(e);
-                            }}
-                          />
-                          <span className="text-danger">{endDateError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            End Month <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Select
-                            options={monthOptions}
-                            value={{ label: eMonthLabel, value: eMonthValue }}
-                            onChange={(opt) =>
-                              selectEndMonth(opt.label, opt.value)
-                            }
-                            name="EndMonthId"
-                            id="EndMonthId"
-                          />
-                          <span className="text-danger">{endMError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
-                          <span>
-                            End Year <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Select
-                            options={yearOptions}
-                            value={{ label: eYearLabel, value: eYearValue }}
-                            onChange={(opt) =>
-                              selectEndYear(opt.label, opt.value)
-                            }
-                            name="EndYearId"
-                            id="EndYearId"
-                          />
-                          <span className="text-danger">{endYError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup className="d-flex justify-content-between mt-3">
-                        <CancelButton cancel={closeModal} />
-
-                        <SaveButton
-                          text="Submit"
-                          progress={progress}
-                          buttonStatus={buttonStatus}
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          Start Date <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Input
+                          type="date"
+                          name="StartDate"
+                          id="StartDate"
+                          value={startDate}
+                          onChange={(e) => {
+                            handleStartDate(e);
+                          }}
                         />
-                      </FormGroup>
-                    </Form>
-                  </ModalBody>
-                </Modal>
-              </div>
+                        <span className="text-danger">{startDateError}</span>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          Start Month <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Select
+                          options={monthOptions}
+                          value={{ label: sMonthLabel, value: sMonthValue }}
+                          onChange={(opt) =>
+                            selectStartMonth(opt.label, opt.value)
+                          }
+                          name="StartMonthId"
+                          id="StartMonthId"
+                        />
+                        <span className="text-danger">{startMError}</span>
+                      </Col>
+                    </FormGroup>
 
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          Start Year <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Select
+                          options={yearOptions}
+                          value={{ label: sYearLabel, value: sYearValue }}
+                          onChange={(opt) =>
+                            selectStartYear(opt.label, opt.value)
+                          }
+                          name="StartYearId"
+                          id="StartYearId"
+                        />
+                        <span className="text-danger">{startYError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          End Date <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Input
+                          type="date"
+                          name="EndDate"
+                          id="EndDate"
+                          value={endDate}
+                          onChange={(e) => {
+                            handleEndDate(e);
+                          }}
+                        />
+                        <span className="text-danger">{endDateError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          End Month <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Select
+                          options={monthOptions}
+                          value={{ label: eMonthLabel, value: eMonthValue }}
+                          onChange={(opt) =>
+                            selectEndMonth(opt.label, opt.value)
+                          }
+                          name="EndMonthId"
+                          id="EndMonthId"
+                        />
+                        <span className="text-danger">{endMError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="4">
+                        <span>
+                          End Year <span className="text-danger">*</span>{" "}
+                        </span>
+                      </Col>
+                      <Col md="8">
+                        <Select
+                          options={yearOptions}
+                          value={{ label: eYearLabel, value: eYearValue }}
+                          onChange={(opt) =>
+                            selectEndYear(opt.label, opt.value)
+                          }
+                          name="EndYearId"
+                          id="EndYearId"
+                        />
+                        <span className="text-danger">{endYError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup className="d-flex justify-content-between mt-3">
+                      <CancelButton cancel={closeModal} />
+
+                      <SaveButton
+                        text="Submit"
+                        progress={progress}
+                        buttonStatus={buttonStatus}
+                      />
+                    </FormGroup>
+                  </Form>
+                </ModalBody>
+              </Modal>
+            </div>
+
+            {loading ? (
+              <Loader />
+            ) : (
               <div className="table-responsive">
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
+                      {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Start Date</th>
                       <th>End Date</th>
                       <th>Applications</th>
-                      <th>Action</th>
+                      {permissions?.includes(
+                        permissionList?.Delete_Account_Intake ||
+                          permissionList?.Edit_Account_Intake
+                      ) && <th>Action</th>}
                     </tr>
                   </thead>
                   <tbody>
                     {intakeList?.map((list, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{list?.intakeName}</td>
 
-                        <td>{handleDate(list?.startDate)}</td>
+                        <td>{dateFormate(list?.startDate)}</td>
 
-                        <td>{handleDate(list?.endDate)}</td>
+                        <td>{dateFormate(list?.endDate)}</td>
 
                         <td>
                           <span className="badge badge-pill badge-primary">
@@ -612,49 +596,55 @@ const AccountIntake = () => {
                           </span>
                         </td>
 
-                        <td className="text-center">
-                          <ButtonGroup variant="text">
-                            {permissions?.includes(
-                              permissionList?.Edit_Account_Intake
-                            ) ? (
-                              <ButtonForFunction
-                                icon={<i className="fas fa-edit"></i>}
-                                color={"warning"}
-                                className={"mx-1 btn-sm"}
-                                func={() => handleUpdate(list)}
-                              />
-                            ) : null}
+                        {permissions?.includes(
+                          permissionList?.Delete_Account_Intake ||
+                            permissionList?.Edit_Account_Intake
+                        ) && (
+                          <td className="text-center">
+                            <ButtonGroup variant="text">
+                              {permissions?.includes(
+                                permissionList?.Edit_Account_Intake
+                              ) ? (
+                                <ButtonForFunction
+                                  icon={<i className="fas fa-edit"></i>}
+                                  color={"warning"}
+                                  className={"mx-1 btn-sm"}
+                                  func={() => handleUpdate(list)}
+                                />
+                              ) : null}
 
-                            {permissions?.includes(
-                              permissionList?.Delete_Account_Intake
-                            ) ? (
-                              <ButtonForFunction
-                                icon={<i className="fas fa-trash-alt"></i>}
-                                color={"danger"}
-                                className={"mx-1 btn-sm"}
-                                func={() => toggleDanger(list)}
-                              />
-                            ) : null}
-                          </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Intake? Once Deleted it can't be Undone!"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            confirm={handleDeleteData}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                            cancel={() => setDeleteModal(false)}
-                          ></ConfirmModal>
-                        </td>
+                              {permissions?.includes(
+                                permissionList?.Delete_Account_Intake
+                              ) ? (
+                                <ButtonForFunction
+                                  icon={<i className="fas fa-trash-alt"></i>}
+                                  color={"danger"}
+                                  className={"mx-1 btn-sm"}
+                                  func={() => toggleDanger(list)}
+                                />
+                              ) : null}
+                            </ButtonGroup>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
                 </Table>
               </div>
-            </CardBody>
-          </Card>
-        </div>
-      )}
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Intake? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteData}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        cancel={() => setDeleteModal(false)}
+      />
     </div>
   );
 };

@@ -36,6 +36,7 @@ import Currency from "../../../../components/Dropdown/Currency";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const AddUniversity = (props) => {
+  const { univerId, provideId } = useParams();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   const [univerSityCountries, setUniverSityCountries] = useState([]);
@@ -70,12 +71,11 @@ const AddUniversity = (props) => {
   const AuthStr = localStorage.getItem("token");
   const [universityData, setUniversityData] = useState({});
   const [uniId, setUniId] = useState(undefined);
-  const [check, setCheck] = useState(true);
+  // const [check, setCheck] = useState(true);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [universityId, setUniversityId] = useState(undefined);
+  // const [universityId, setUniversityId] = useState(undefined);
   const { addToast } = useToasts();
-  const { univerId } = useParams();
   const location = useLocation();
   const [homeCurrencyId, sethomeCurrencyId] = useState(0);
   const [homeCurrencyIdError, sethomeCurrencyIdError] = useState(false);
@@ -105,13 +105,13 @@ const AddUniversity = (props) => {
   const [universityName, setUniversityName] = useState("");
   const [universityNameError, setUniversityNameError] = useState("");
   const [universityShortName, setUniversityShortName] = useState("");
-  const [universityShortNameError, setUniversityShortNameError] = useState("");
+  // const [universityShortNameError, setUniversityShortNameError] = useState("");
   const [locations, setLocations] = useState("");
   const [locationError, setLocationError] = useState("");
   const [OfficialWebsite, setOfficialWebsite] = useState("");
-  const [OfficialWebsiteError, setOfficialWebsiteError] = useState("");
+  // const [OfficialWebsiteError, setOfficialWebsiteError] = useState("");
   const [CollectionWebsite, setCollectionWebsite] = useState("");
-  const [CollectionWebsiteError, setCollectionWebsiteError] = useState("");
+  // const [CollectionWebsiteError, setCollectionWebsiteError] = useState("");
 
   const handleChange1 = ({ fileList }) => {
     console.log("fileList", fileList);
@@ -187,22 +187,17 @@ const AddUniversity = (props) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-
+  console.log(userType, referenceId);
   useEffect(() => {
     get(`ProviderHelper/GetProviderId/${userType}/${referenceId}`).then(
       (res) => {
-        console.log(res);
+        console.log("Pid", res);
         setProviderValue(res !== 0 ? res : 0);
       }
     );
   }, [userType, referenceId]);
 
   useEffect(() => {
-    get("ProviderDD/Index")
-      .then((res) => {
-        setProvider(res);
-      })
-      .catch();
     get("UniversityCountryDD/Index")
       .then((res) => {
         setUniverSityCountries(res);
@@ -216,41 +211,29 @@ const AddUniversity = (props) => {
     get("ContractTypeDD/Index")
       .then((res) => {
         setContractTypeDD(res);
-        //
       })
       .catch();
+  }, [univerId, provideId, providerValue]);
 
-    if (universityId !== undefined) {
-      get(`University/get/${universityId}`).then((res) => {
-        console.log(res);
-        setLoading(false);
-        sethomeCurrencyId(res?.homeCurrencyId);
-        setinternationalCurrencyId(res?.internationalCurrencyId);
-        setContractTypeLabel(res?.contractType?.name);
-        setContractTypeValue(res?.contractType?.id);
-        setUniversityData(res);
-        setProviderTypeLabel(res?.provider?.name);
-        setProviderTypeValue(res?.provider?.id);
-        setUniTypeLabel(res?.universityType?.name);
-        setUniTypeValue(res?.universityType?.id);
-        setUniCountryLabel(res?.universityCountry?.name);
-        setUniCountryValue(res?.universityCountry?.id);
-        setUniStateLabel(res?.universityState?.name);
-        setUniStateValue(res?.universityState?.id);
-        setCityLabel(res?.universityCity?.name);
-        setCityValue(res?.universityCity?.id);
-        setUniId(res?.id);
-        setCheck(false);
-        setUniversityName(res?.name);
-        setUniversityShortName(res?.shortName);
-        setLocations(res?.location);
-        setOfficialWebsite(res?.officialWebsite);
-        setCollectionWebsite(res?.dataCollectionWebsite);
-      });
-    } else {
-      setLoading(false);
-    }
+  useEffect(() => {
+    get("ProviderDD/Index")
+      .then((res) => {
+        setProvider(res);
+        if (provideId) {
+          const result = res?.find((ans) => ans?.id.toString() === provideId);
+          setProviderTypeLabel(result?.name);
+          setProviderTypeValue(result?.id);
+        } else if (providerValue) {
+          const result = res?.find((ans) => ans?.id === providerValue);
 
+          setProviderTypeLabel(result?.name);
+          setProviderTypeValue(result?.id);
+        }
+      })
+      .catch();
+  }, [provideId, providerValue]);
+
+  useEffect(() => {
     if (univerId !== undefined) {
       get(`University/get/${univerId}`).then((res) => {
         console.log(res);
@@ -271,7 +254,7 @@ const AddUniversity = (props) => {
         setCityLabel(res?.universityCity?.name);
         setCityValue(res?.universityCity?.id);
         setUniId(res?.id);
-        setCheck(false);
+        // setCheck(false);
         setUniversityName(res?.name);
         setUniversityShortName(res?.shortName);
         setLocations(res?.location);
@@ -281,7 +264,7 @@ const AddUniversity = (props) => {
     } else {
       setLoading(false);
     }
-  }, [universityId, univerId]);
+  }, [univerId]);
 
   const selectProviderType = (label, value) => {
     setProviderTypeError(false);
@@ -312,28 +295,31 @@ const AddUniversity = (props) => {
   const history = useHistory();
 
   const handleUniversityName = (e) => {
-    setUniversityName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setUniversityName(data);
+    if (data === "") {
       setUniversityNameError("University name is required");
     } else {
       setUniversityNameError("");
     }
   };
   const handleOfficialWebsite = (e) => {
-    setOfficialWebsite(e.target.value);
-    if (e.target.value === "") {
-      setOfficialWebsiteError("Official Website is required");
-    } else {
-      setOfficialWebsiteError("");
-    }
+    let data = e.target.value.trimStart();
+    setOfficialWebsite(data);
+    // if (data === "") {
+    //   setOfficialWebsiteError("Official Website is required");
+    // } else {
+    //   setOfficialWebsiteError("");
+    // }
   };
   const handleCollectionWebsite = (e) => {
-    setCollectionWebsite(e.target.value);
-    if (e.target.value === "") {
-      setCollectionWebsiteError("Collection Website is required");
-    } else {
-      setCollectionWebsiteError("");
-    }
+    let data = e.target.value.trimStart();
+    setCollectionWebsite(data);
+    // if (data === "") {
+    //   setCollectionWebsiteError("Collection Website is required");
+    // } else {
+    //   setCollectionWebsiteError("");
+    // }
   };
 
   const handleUniversityShortName = (e) => {
@@ -342,21 +328,22 @@ const AddUniversity = (props) => {
     const format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     console.log(format.test(string));
     setUniversityShortName(e.target.value);
-    if (string === "") {
-      setUniversityShortNameError("University short name is required");
-    } else if (string.match(format)) {
-      setUniversityShortNameError("Special character are not allowed");
-    } else if (string.indexOf(" ") !== -1) {
-      setUniversityShortNameError("Space are not allowed");
-    } else if (string.length > 10) {
-      setUniversityShortNameError("Maximum 10 characters allowed");
-    } else {
-      setUniversityShortNameError("");
-    }
+    // if (string === "") {
+    //   setUniversityShortNameError("University short name is required");
+    // } else if (string.match(format)) {
+    //   setUniversityShortNameError("Special character are not allowed");
+    // } else if (string.indexOf(" ") !== -1) {
+    //   setUniversityShortNameError("Space are not allowed");
+    // } else if (string.length > 10) {
+    //   setUniversityShortNameError("Maximum 10 characters allowed");
+    // } else {
+    //   setUniversityShortNameError("");
+    // }
   };
   const handleLocation = (e) => {
-    setLocations(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLocations(data);
+    if (data === "") {
       setLocationError("Location is required");
     } else {
       setLocationError("");
@@ -377,19 +364,14 @@ const AddUniversity = (props) => {
       }
     }
 
-    // if (providerTypeValue === 0) {
+    if (!universityName) {
+      isFormValid = false;
+      setUniversityNameError("University name is required");
+    }
+    // if (!universityShortName) {
     //   isFormValid = false;
-    //   setProviderTypeError(true);
+    //   setUniversityShortNameError("University short name is required");
     // }
-
-    if (!universityName) {
-      isFormValid = false;
-      setUniversityNameError("University name is required");
-    }
-    if (!universityShortName) {
-      isFormValid = false;
-      setUniversityShortNameError("University short name is required");
-    }
     if (uniTypeValue === 0) {
       isFormValid = false;
       setUniTypeError(true);
@@ -422,76 +404,14 @@ const AddUniversity = (props) => {
       isFormValid = false;
       setLocationError("Location is required");
     }
-    if (!OfficialWebsite) {
-      isFormValid = false;
-      setOfficialWebsiteError("Official Website is required");
-    }
-    if (!CollectionWebsite) {
-      isFormValid = false;
-      setCollectionWebsiteError("Collection Website is required");
-    }
-    if (FileList1.length < 1 && !universityData?.universityLogo) {
-      isFormValid = false;
-      setLogoDropzoneError(true);
-    }
-    if (FileList2.length < 1 && !universityData?.coverPhoto) {
-      isFormValid = false;
-      setCoverDropzoneError(true);
-    }
-    return isFormValid;
-  };
-
-  const validateRegisterFormProviderAdmin = () => {
-    var isFormValid = true;
-
-    if (!universityName) {
-      isFormValid = false;
-      setUniversityNameError("University name is required");
-    }
-    if (!universityShortName) {
-      isFormValid = false;
-      setUniversityShortNameError("University short name is required");
-    }
-    if (uniTypeValue === 0) {
-      isFormValid = false;
-      setUniTypeError(true);
-    }
-    if (contractTypeValue === 0) {
-      isFormValid = false;
-      setContractTypeError(true);
-    }
-    if (uniCountryValue === 0) {
-      isFormValid = false;
-      setUniCountryError(true);
-    }
-    if (unistateValue === 0) {
-      isFormValid = false;
-      setUniStateError(true);
-    }
-    if (cityValue === 0) {
-      isFormValid = false;
-      setCityError(true);
-    }
-    if (homeCurrencyId === 0) {
-      isFormValid = false;
-      sethomeCurrencyIdError(true);
-    }
-    if (internationalCurrencyId === 0) {
-      isFormValid = false;
-      setinternationalCurrencyIdError(true);
-    }
-    if (!locations) {
-      isFormValid = false;
-      setLocationError("Location is required");
-    }
-    if (!OfficialWebsite) {
-      isFormValid = false;
-      setOfficialWebsiteError("Official Website is required");
-    }
-    if (!CollectionWebsite) {
-      isFormValid = false;
-      setCollectionWebsiteError("Collection Website is required");
-    }
+    // if (!OfficialWebsite) {
+    //   isFormValid = false;
+    //   setOfficialWebsiteError("Official Website is required");
+    // }
+    // if (!CollectionWebsite) {
+    //   isFormValid = false;
+    //   setCollectionWebsiteError("Collection Website is required");
+    // }
     if (FileList1.length < 1 && !universityData?.universityLogo) {
       isFormValid = false;
       setLogoDropzoneError(true);
@@ -508,6 +428,7 @@ const AddUniversity = (props) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
 
+    subdata.append("providerId", providerTypeValue);
     subdata.append(
       "UniversityLogoFile",
       FileList1.length === 0 ? null : FileList1[0]?.originFileObj
@@ -524,102 +445,56 @@ const AddUniversity = (props) => {
       },
     };
 
-    if (providerValue === 0) {
-      if (validateRegisterForm()) {
-        setLogoText("");
-        setCoverText("");
-        if (uniId !== undefined) {
-          setButtonStatus(true);
-          setProgress(true);
-          put("University/Update", subdata, config).then((res) => {
+    if (validateRegisterForm()) {
+      setLogoText("");
+      setCoverText("");
+      if (uniId !== undefined) {
+        setButtonStatus(true);
+        setProgress(true);
+        put("University/Update", subdata, config).then((res) => {
+          setButtonStatus(false);
+          setProgress(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+
+            history.push(`/addUniversityCampus/${uniId}`);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else {
+        setButtonStatus(true);
+        setProgress(true);
+        Axios.post(`${rootUrl}University/Create`, subdata, config).then(
+          (res) => {
             setButtonStatus(false);
             setProgress(false);
-            if (res?.status === 200 && res?.data?.isSuccess === true) {
+            const uniID = res?.data?.result?.id;
+
+            if (res.status === 200 && res.data.isSuccess === true) {
+              setSubmitData(true);
               addToast(res?.data?.message, {
                 appearance: "success",
                 autoDismiss: true,
               });
-
-              history.push(`/addUniversityCampus/${uniId}`);
+              history.push({
+                pathname: `/addUniversityCampus/${uniID}`,
+                id: uniID,
+              });
             } else {
               addToast(res?.data?.message, {
                 appearance: "error",
                 autoDismiss: true,
               });
             }
-          });
-        } else {
-          setButtonStatus(true);
-          setProgress(true);
-          Axios.post(`${rootUrl}University/Create`, subdata, config).then(
-            (res) => {
-              setButtonStatus(false);
-              setProgress(false);
-              const uniID = res?.data?.result?.id;
-              setUniversityId(uniID);
-
-              if (res.status === 200 && res.data.isSuccess === true) {
-                setSubmitData(true);
-                addToast(res?.data?.message, {
-                  appearance: "success",
-                  autoDismiss: true,
-                });
-                history.push({
-                  pathname: `/addUniversityCampus/${uniID}`,
-                  id: uniID,
-                });
-              }
-            }
-          );
-        }
-      }
-    } else {
-      if (validateRegisterFormProviderAdmin()) {
-        setLogoText("");
-        setCoverText("");
-        if (uniId !== undefined) {
-          setButtonStatus(true);
-          setProgress(true);
-          put("University/Update", subdata, config).then((res) => {
-            setButtonStatus(false);
-            setProgress(false);
-            if (res?.status === 200 && res?.data?.isSuccess === true) {
-              addToast(res?.data?.message, {
-                appearance: "success",
-                autoDismiss: true,
-              });
-
-              history.push(`/addUniversityCampus/${uniId}`);
-            } else {
-              addToast(res?.data?.message, {
-                appearance: "error",
-                autoDismiss: true,
-              });
-            }
-          });
-        } else {
-          setButtonStatus(true);
-          setProgress(true);
-          Axios.post(`${rootUrl}University/Create`, subdata, config).then(
-            (res) => {
-              setButtonStatus(false);
-              setProgress(false);
-              const uniID = res?.data?.result?.id;
-
-              if (res.status === 200 && res.data.isSuccess === true) {
-                setSubmitData(true);
-                addToast(res?.data?.message, {
-                  appearance: "success",
-                  autoDismiss: true,
-                });
-                history.push({
-                  pathname: `/addUniversityCampus/${uniID}`,
-                  id: uniID,
-                });
-              }
-            }
-          );
-        }
+          }
+        );
       }
     }
   };
@@ -700,34 +575,6 @@ const AddUniversity = (props) => {
       if (tab === "9") {
         history.push(`/addUniversityCommission/${univerId}`);
       }
-    } else {
-      if (tab === "2") {
-        history.push(`/addUniversityCampus/${universityId}`);
-      }
-      if (tab === "3") {
-        history.push(`/addUniversityFinancial/${universityId}`);
-      }
-      if (tab === "4") {
-        history.push(`/addUniversityFeaturesGallery/${univerId}`);
-      }
-
-      if (tab === "5") {
-        history.push(`/addUniversityTemplateDocument/${univerId}`);
-      }
-      if (tab === "6") {
-        history.push(`/addUniversityFunding/${univerId}`);
-      }
-      if (tab === "7") {
-        history.push(`/addUniversityRequirements/${univerId}`);
-      }
-
-      if (tab === "8") {
-        history.push(`/addUniversityRecruitmentType/${univerId}`);
-      }
-
-      if (tab === "9") {
-        history.push(`/addUniversityCommission/${univerId}`);
-      }
     }
   };
 
@@ -747,115 +594,111 @@ const AddUniversity = (props) => {
   const handleCancelAdd = () => {
     history.push("/universityList");
   };
-
   return (
     <div>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div>
-          <BreadCrumb
-            title="University Information"
-            backTo={
-              location.uuId !== undefined ? "University Details" : "University"
-            }
-            path={
-              location.uuId !== undefined
-                ? `/universityDetails/${location.uuId}`
-                : "/universityList"
-            }
-          />
+      <BreadCrumb
+        title="University Information"
+        backTo={
+          location.uuId !== undefined ? "University Details" : "University"
+        }
+        path={
+          location.uuId !== undefined
+            ? `/universityDetails/${location.uuId}`
+            : "/universityList"
+        }
+      />
 
-          <Nav tabs>
-            <NavItem>
-              <NavLink active={activetab === "1"} onClick={() => toggle("1")}>
-                Basic Info.
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
-                  Campuses
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "2"}>
-                  Campuses
-                </NavLink>
-              )}
-            </NavItem>
+      <Nav tabs>
+        <NavItem>
+          <NavLink active={activetab === "1"} onClick={() => toggle("1")}>
+            Basic Info.
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
+              Campuses
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "2"}>
+              Campuses
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Financial
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "3"}>
-                  Financial
-                </NavLink>
-              )}
-            </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
+              Financial
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "3"}>
+              Financial
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "4"} onClick={() => toggle("4")}>
-                  Features and gallery
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "4"}>
-                  Features and gallery
-                </NavLink>
-              )}
-            </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "4"} onClick={() => toggle("4")}>
+              Features and gallery
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "4"}>
+              Features and gallery
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "5"} onClick={() => toggle("5")}>
-                  Template Doc.
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "5"}>
-                  Template Doc.
-                </NavLink>
-              )}
-            </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "5"} onClick={() => toggle("5")}>
+              Template Doc.
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "5"}>
+              Template Doc.
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "6"} onClick={() => toggle("6")}>
-                  Funding
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "6"}>
-                  Funding
-                </NavLink>
-              )}
-            </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "6"} onClick={() => toggle("6")}>
+              Funding
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "6"}>
+              Funding
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "7"} onClick={() => toggle("7")}>
-                  Requirement
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "7"}>
-                  Requirement
-                </NavLink>
-              )}
-            </NavItem>
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "7"} onClick={() => toggle("7")}>
+              Requirement
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "7"}>
+              Requirement
+            </NavLink>
+          )}
+        </NavItem>
 
-            <NavItem>
-              {submitData || univerId ? (
-                <NavLink active={activetab === "8"} onClick={() => toggle("8")}>
-                  Recruit. Type
-                </NavLink>
-              ) : (
-                <NavLink disabled active={activetab === "8"}>
-                  Recruit. Type
-                </NavLink>
-              )}
-            </NavItem>
-            {userType === userTypes?.ProviderAdmin ? null : (
+        <NavItem>
+          {submitData || univerId ? (
+            <NavLink active={activetab === "8"} onClick={() => toggle("8")}>
+              Recruit. Type
+            </NavLink>
+          ) : (
+            <NavLink disabled active={activetab === "8"}>
+              Recruit. Type
+            </NavLink>
+          )}
+        </NavItem>
+        {/* {(userType === userTypes?.SystemAdmin ||
+              userType === userTypes?.Admin) && (
               <NavItem>
                 {submitData || univerId ? (
                   <NavLink
@@ -870,8 +713,13 @@ const AddUniversity = (props) => {
                   </NavLink>
                 )}
               </NavItem>
-            )}
-          </Nav>
+            )} */}
+      </Nav>
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -881,21 +729,7 @@ const AddUniversity = (props) => {
                     {uniId !== undefined ? (
                       <>
                         <input type="hidden" name="id" id="id" value={uniId} />
-                        <input
-                          type="hidden"
-                          name="providerId"
-                          id="providerId"
-                          value={universityData?.providerId}
-                        />
                       </>
-                    ) : null}
-                    {uniId === undefined && providerTypeValue === 0 ? (
-                      <Input
-                        type="hidden"
-                        name="providerId"
-                        id="providerId"
-                        value={providerValue}
-                      />
                     ) : null}
 
                     <Row>
@@ -919,6 +753,7 @@ const AddUniversity = (props) => {
                               }
                               name="providerId"
                               id="providerId"
+                              isDisabled={provideId ? true : false}
                             />
 
                             {providerTypeError && (
@@ -936,16 +771,11 @@ const AddUniversity = (props) => {
                             </span>
 
                             <Select
-                              // options={providerMenu}
-
                               isDisabled
                               value={{
                                 label: providerTypeLabel,
                                 value: providerTypeValue,
                               }}
-                              // onChange={(opt) =>
-                              //   selectProviderType(opt.label, opt.value)
-                              // }
                               name="providerId"
                               id="providerId"
                             />
@@ -1044,9 +874,8 @@ const AddUniversity = (props) => {
                       <Col md="4">
                         <FormGroup>
                           <span>
-                            {" "}
-                            <span className="text-danger">*</span> University
-                            short name
+                            {/* <span className="text-danger">*</span>  */}
+                            University short name
                           </span>
 
                           <Input
@@ -1061,9 +890,9 @@ const AddUniversity = (props) => {
                             pattern="[A-Za-z]{1,10}"
                             // title="You can type maximum 15 characters. You can't type any space and special character."
                           />
-                          <span className="text-danger">
+                          {/* <span className="text-danger">
                             {universityShortNameError}
-                          </span>
+                          </span> */}
                         </FormGroup>
                       </Col>
                       <Col md="4">
@@ -1283,8 +1112,8 @@ const AddUniversity = (props) => {
                       <Col md="4">
                         <FormGroup>
                           <span>
-                            <span className="text-danger">*</span> Official
-                            Website
+                            {/* <span className="text-danger">*</span>  */}
+                            Official Website
                           </span>
 
                           <Input
@@ -1297,16 +1126,16 @@ const AddUniversity = (props) => {
                             }}
                             value={OfficialWebsite}
                           />
-                          <span className="text-danger">
+                          {/* <span className="text-danger">
                             {OfficialWebsiteError}
-                          </span>
+                          </span> */}
                         </FormGroup>
                       </Col>
                       <Col md="4">
                         <FormGroup>
                           <span>
-                            <span className="text-danger">*</span> Data
-                            Collection Website
+                            {/* <span className="text-danger">*</span>  */}
+                            Data Collection Website
                           </span>
 
                           <Input
@@ -1319,9 +1148,9 @@ const AddUniversity = (props) => {
                             }}
                             value={CollectionWebsite}
                           />
-                          <span className="text-danger">
+                          {/* <span className="text-danger">
                             {CollectionWebsiteError}
-                          </span>
+                          </span> */}
                         </FormGroup>
                       </Col>
                     </Row>
@@ -1402,10 +1231,10 @@ const AddUniversity = (props) => {
                                 </span>
                               )}
                             </Col>
-                            <Col md="4">
+                            <Col md="4" className="pt-4">
                               <span style={{ color: "rgba(0, 0, 0, 0.45)" }}>
-                                Recommanded resolution is 640*640 with file size
-                                less than 2MB, keep visual elements centered
+                                File size less than 2MB, keep visual elements
+                                centered
                               </span>
                             </Col>
                           </Row>
@@ -1485,10 +1314,9 @@ const AddUniversity = (props) => {
                                 </span>
                               )}
                             </Col>
-                            <Col md="3">
+                            <Col md="3" className="pt-4">
                               <span style={{ color: "rgba(0, 0, 0, 0.45)" }}>
-                                Recommanded resolution is 1720*640 with file
-                                size less than 2MB, keep visual elements
+                                File size less than 2MB, keep visual elements
                                 centered
                               </span>
                             </Col>

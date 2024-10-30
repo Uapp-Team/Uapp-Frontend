@@ -2,10 +2,12 @@ import React from "react";
 import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import TagButton from "../../../../../components/buttons/TagButton";
-
-import Branch from "../../../../../components/Dropdown/Filter";
+import icon_info from "../../../../../assets/img/icons/icon_info.png";
+import Filter from "../../../../../components/Dropdown/Filter";
+import Typing from "../../../../../components/form/Typing";
 
 const SearchAndClear = ({
+  branchId,
   branch,
   branchLabel,
   setBranchLabel,
@@ -36,13 +38,18 @@ const SearchAndClear = ({
   setStatusLabel,
   setConsultantValue,
   setConsultantLabel,
+  check,
+  setCheck,
+  setIsTyping,
+  setSearchStr,
 }) => {
   const userType = localStorage.getItem("userType");
+
   return (
     <div>
-      <Card className="uapp-employee-search">
+      <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
-          <Row className="mb-2">
+          <Row className="">
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select
                 options={studentTypeOption}
@@ -54,18 +61,42 @@ const SearchAndClear = ({
               />
             </Col>
 
+            {userType !== userTypes?.AdmissionManager &&
+              userType !== userTypes?.ProviderAdmin &&
+              userType !== userTypes?.AdmissionOfficer && (
+                <>
+                  {branch.length > 1 && (
+                    <Col lg="4" md="3" sm="12" className="mb-2">
+                      <Filter
+                        data={branch}
+                        label={branchLabel}
+                        setLabel={setBranchLabel}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        name=""
+                        error={() => {}}
+                        setError={() => {}}
+                        action={() => {}}
+                        isDisabled={branchId ? true : false}
+                      />
+                    </Col>
+                  )}
+                </>
+              )}
+
             {userType !== userTypes?.Consultant ? (
-              <Col lg="4" md="3" sm="12" className="mb-2">
+              <Col lg="4" md="3" sm="12" className="mb-2 ">
                 <Select
                   options={consultantOption}
                   value={{ label: consultantLabel, value: consultantValue }}
                   onChange={(opt) => selectConsultant(opt.label, opt.value)}
                   name="consultantId"
                   id="consultantId"
-                  isDisabled={cId}
+                  isDisabled={cId ? true : false}
                 />
               </Col>
             ) : null}
+
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select
                 options={statusOption}
@@ -76,39 +107,36 @@ const SearchAndClear = ({
               />
             </Col>
 
-            {userType !== userTypes?.AdmissionManager &&
-              userType !== userTypes?.ProviderAdmin &&
-              userType !== userTypes?.AdmissionOfficer && (
-                <>
-                  {branch.length > 1 && (
-                    <Col lg="4" md="3" sm="12" className="mb-2">
-                      <Branch
-                        data={branch}
-                        label={branchLabel}
-                        setLabel={setBranchLabel}
-                        value={branchValue}
-                        setValue={setBranchValue}
-                        name=""
-                        error={() => {}}
-                        setError={() => {}}
-                        action={() => {}}
-                      />
-                    </Col>
-                  )}
-                </>
-              )}
-
             <Col lg="4" md="3" sm="12" className="mb-2">
-              <Input
-                style={{ height: "2.7rem" }}
-                type="text"
+              <Typing
                 name="search"
-                value={searchStr}
-                id="search"
                 placeholder="UAPP ID, Name, Email"
-                onChange={searchValue}
+                value={searchStr}
+                setValue={setSearchStr}
+                setIsTyping={setIsTyping}
                 onKeyDown={handleKeyDown}
               />
+
+              <div className="mt-1 d-flex justify-between">
+                <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
+                <div className="pl-2" style={{ paddingTop: "2px" }}>
+                  <span>Name should not include title.</span>
+                </div>
+              </div>
+            </Col>
+            <Col className="uapp-mb mt-2" md="4" sm="12">
+              <div>
+                <input
+                  onChange={(e) => {
+                    setCheck(e.target.checked);
+                  }}
+                  type="checkbox"
+                  name=""
+                  value=""
+                  checked={check}
+                />{" "}
+                <span>Is Consultant?</span>
+              </div>
             </Col>
           </Row>
 
@@ -130,6 +158,17 @@ const SearchAndClear = ({
                   ) : (
                     ""
                   )}
+
+                  {!branchId && branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select Branch")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+
                   {studentTypeValue !== 0 &&
                     (consultantValue !== 0 || statusValue !== 0 ? "" : "")}
                   {consultantValue !== 0 ? (
@@ -151,21 +190,11 @@ const SearchAndClear = ({
                   ) : (
                     ""
                   )}
-
-                  {branchValue !== 0 ? (
-                    <TagButton
-                      label={branchLabel}
-                      setValue={() => setBranchValue(0)}
-                      setLabel={() => setBranchLabel("Select Branch")}
-                    ></TagButton>
-                  ) : (
-                    ""
-                  )}
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {studentTypeValue !== 0 ||
                   consultantValue !== 0 ||
-                  branchValue !== 0 ||
+                  (!branchId && branchValue !== 0) ||
                   statusValue !== 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All

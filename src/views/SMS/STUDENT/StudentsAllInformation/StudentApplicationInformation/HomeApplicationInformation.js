@@ -17,9 +17,14 @@ export default function HomeApplicationInformation({
   handleManyYears,
   setHowManyYearsError,
   residencyStatusForHomeError,
+  homeResidencyStatusError,
+  homeResidencyStatus,
+  handleHomeResidencyStatus,
+  showResidency,
+  setShowResidency,
 }) {
   const [haveStartedEducation, setHaveStartedEducation] = useState(false);
-  const [showResidency, setShowResidency] = useState([]);
+
   useEffect(() => {
     setHasSLC(
       applicationInformation != null &&
@@ -153,7 +158,7 @@ export default function HomeApplicationInformation({
             <span>
               {" "}
               <span className="text-danger">*</span> What is Your Current
-              Residency Status?
+              Residency Status ?
             </span>
 
             <Input
@@ -162,9 +167,11 @@ export default function HomeApplicationInformation({
               id="ResidencyStatusForHome"
               defaultValue={applicationInformation?.residencyStatusForHome}
               placeholder="Enter Residency Status For Home"
-              required
+              onChange={(e) => {
+                handleHomeResidencyStatus(e);
+              }}
             />
-            <span className="text-danger">{residencyStatusForHomeError}</span>
+            <span className="text-danger">{homeResidencyStatusError}</span>
           </FormGroup>
         </>
       )}

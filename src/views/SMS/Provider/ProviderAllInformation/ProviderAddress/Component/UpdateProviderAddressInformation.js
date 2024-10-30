@@ -121,7 +121,7 @@ const UpdateProviderAddressInformation = ({
   ]);
   console.log(addressField);
   return (
-    <>
+    <div>
       <Form id="scrollDown" onSubmit={handleSubmitIndividual}>
         <input type="hidden" name="providerId" id="providerId" value={id} />
 
@@ -250,7 +250,7 @@ const UpdateProviderAddressInformation = ({
           </Col>
         </FormGroup>
       </Form>
-    </>
+    </div>
   );
 };
 

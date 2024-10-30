@@ -37,7 +37,6 @@ const StaffGeneralInformation = () => {
   const [success, setSuccess] = useState(false);
   const [activetab, setActivetab] = useState("1");
   const { staffId } = useParams();
-  const userTypeId = localStorage.getItem("userType");
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastName, setLastName] = useState("");
@@ -45,6 +44,7 @@ const StaffGeneralInformation = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
+  const userType = localStorage.getItem("userType");
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -193,19 +193,21 @@ const StaffGeneralInformation = () => {
     }
   };
 
-  const front = () => {
-    history.push(`/staffPersonalInformation/${staffId}`);
-  };
-
-  const onGoUniProfile = () => {
-    history.push(`/staffProfile/${staffId}`);
-  };
-
   return (
     <div>
       <BreadCrumb
         title="Staff General Information"
-        backTo="Staff"
+        backTo={
+          userType === userTypes?.Admin ||
+          userType === userTypes?.AccountManager ||
+          userType === userTypes?.ComplianceManager ||
+          userType === userTypes?.AccountOfficer ||
+          userType === userTypes?.FinanceManager ||
+          userType === userTypes?.Editor
+            ? null
+            : "Staff"
+        }
+        // backTo="Staff"
         path={`/staffList`}
       />
 
@@ -228,7 +230,7 @@ const StaffGeneralInformation = () => {
                 branchValue={branchValue}
                 selectBranch={selectBranch}
                 branchError={branchError}
-                userTypeId={userTypeId}
+                userTypeId={userType}
                 userTypes={userTypes}
                 consTypeMenu={consTypeMenu}
                 typeLabel={typeLabel}

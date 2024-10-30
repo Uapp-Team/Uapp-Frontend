@@ -35,6 +35,7 @@ import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
+import CheckOne from "../../../../components/form/CheckOne";
 
 const AddUniversityTemplateDocument = () => {
   const { addToast } = useToasts();
@@ -57,6 +58,7 @@ const AddUniversityTemplateDocument = () => {
   );
   const [applicationTypeValue, setApplicationTypeValue] = useState(0);
   const [applicationTypeId, setApplicationTypeId] = useState([]);
+  const [check, setCheck] = useState(false);
 
   // image upload starts here
   const [previewVisible1, setPreviewVisible1] = useState(false);
@@ -153,8 +155,9 @@ const AddUniversityTemplateDocument = () => {
   };
 
   const handleName = (e) => {
-    setName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setName(data);
+    if (data === "") {
       setNameError("Name is required");
     } else {
       setNameError("");
@@ -196,6 +199,7 @@ const AddUniversityTemplateDocument = () => {
       "template",
       FileList1.length === 0 ? null : FileList1[0]?.originFileObj
     );
+    subData.append("isRequiredForApplication", check);
 
     // for(var i of subData){
     //
@@ -299,6 +303,7 @@ const AddUniversityTemplateDocument = () => {
     setShowForm(false);
 
     get(`UniversityTemplateDocument/Get/${id}`).then((action) => {
+      console.log(action?.isRequiredForApplication);
       setApplicationObject(action);
       setName(action?.name);
       setApplicationTypeLabel(
@@ -310,22 +315,23 @@ const AddUniversityTemplateDocument = () => {
       );
       setApplicationTypeValue(action?.applicationTypeId);
       setSelectedId(action?.id);
+      setCheck(action?.isRequiredForApplication);
     });
   };
 
   return (
     <div>
+      <BreadCrumb
+        title="University Template Document"
+        backTo="University"
+        path="/universityList"
+      />
+
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="University Template Document"
-            backTo="University"
-            path="/universityList"
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>
@@ -338,7 +344,7 @@ const AddUniversityTemplateDocument = () => {
                       <Table className="table-sm table-bordered">
                         <thead className="tablehead">
                           <tr /*style={{ textAlign: "center" }}*/>
-                            <th>SL/NO</th>
+                            {/* <th>SL/NO</th> */}
                             <th>Name</th>
                             <th>Description</th>
                             <th>Type</th>
@@ -351,7 +357,7 @@ const AddUniversityTemplateDocument = () => {
                             <tr
                               key={temp?.id} /*style={{ textAlign: "center" }}*/
                             >
-                              <th scope="row">{i + 1}</th>
+                              {/* <th scope="row">{i + 1}</th> */}
                               <td>{temp?.name}</td>
                               <td>{temp?.description}</td>
                               <td>
@@ -380,13 +386,17 @@ const AddUniversityTemplateDocument = () => {
                                   permissionList.Edit_University
                                 ) && (
                                   <p>
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() => handleUpdate(temp?.id)}
-                                    >
-                                      Edit
-                                    </span>{" "}
-                                    |{" "}
+                                    <a href="#template-document-form">
+                                      <span
+                                        className="mr-2"
+                                        pointer
+                                        text-body
+                                        onClick={() => handleUpdate(temp?.id)}
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
+                                    |
                                     <span
                                       style={{ cursor: "pointer" }}
                                       onClick={() => toggleDanger(temp)}
@@ -395,39 +405,40 @@ const AddUniversityTemplateDocument = () => {
                                     </span>
                                   </p>
                                 )}
-
-                                <ConfirmModal
-                                  text={`Do You Want To Delete This ${templateName} Information ?`}
-                                  isOpen={deleteModal}
-                                  toggle={() => {
-                                    setDeleteModal(false);
-                                    setTemplateId(0);
-                                    setTemplateName("");
-                                  }}
-                                  confirm={() =>
-                                    handleDeletePermission(templateId)
-                                  }
-                                  cancel={() => {
-                                    setDeleteModal(false);
-                                    setTemplateId(0);
-                                    setTemplateName("");
-                                  }}
-                                  buttonStatus={buttonStatus}
-                                  progress={progress}
-                                />
                               </td>
                             </tr>
                           ))}
                         </tbody>
                       </Table>
+
+                      <ConfirmModal
+                        text={`Do You Want To Delete This ${templateName} Information ?`}
+                        isOpen={deleteModal}
+                        toggle={() => {
+                          setDeleteModal(false);
+                          setTemplateId(0);
+                          setTemplateName("");
+                        }}
+                        confirm={() => handleDeletePermission(templateId)}
+                        cancel={() => {
+                          setDeleteModal(false);
+                          setTemplateId(0);
+                          setTemplateName("");
+                        }}
+                        buttonStatus={buttonStatus}
+                        progress={progress}
+                      />
                     </div>
                   ) : null}
 
                   {permissions?.includes(permissionList.Edit_University) && (
                     <>
                       {showForm === false ? (
-                        <>
-                          <Form onSubmit={handleSubmit}>
+                        <div className="pt-3">
+                          <Form
+                            onSubmit={handleSubmit}
+                            id="template-document-form"
+                          >
                             <p className="section-title"> Template Document</p>
                             <FormGroup
                               row
@@ -545,6 +556,7 @@ const AddUniversityTemplateDocument = () => {
                                               applicationObject?.templateFile
                                                 ?.thumbnailUrl
                                             }
+                                            className="pr-2"
                                           />
                                         </div>
                                       ) : null}
@@ -594,17 +606,27 @@ const AddUniversityTemplateDocument = () => {
                                       </span>
                                     )}
                                   </Col>
-                                  <Col md="4">
+                                  <Col md="4" className="pt-4">
                                     <span
                                       style={{ color: "rgba(0, 0, 0, 0.45)" }}
                                     >
-                                      Recommanded resolution is 1720*640 with
-                                      file size less than 2MB, keep visual
+                                      File size less than 2MB, keep visual
                                       elements centered
                                     </span>
                                   </Col>
                                 </FormGroup>
 
+                                <FormGroup className="has-icon-left position-relative text-right">
+                                  <CheckOne
+                                    name="isRequiredForApplication"
+                                    label="Is Required For Application"
+                                    defaultValue={check}
+                                    onChange={(e) => {
+                                      setCheck(e.target.checked);
+                                    }}
+                                    className="mb-3"
+                                  />
+                                </FormGroup>
                                 <FormGroup className="has-icon-left position-relative text-right">
                                   {templateList.length > 0 && (
                                     <button
@@ -628,7 +650,7 @@ const AddUniversityTemplateDocument = () => {
                               </Col>
                             </Row>
                           </Form>
-                        </>
+                        </div>
                       ) : (
                         <FormGroup>
                           <button

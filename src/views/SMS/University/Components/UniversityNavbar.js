@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Nav, NavItem, NavLink } from "reactstrap";
-import { userTypes } from "../../../../constants/userTypeConstant";
+// import { userTypes } from "../../../../constants/userTypeConstant";
 
 export default function UniversityNavbar({ activetab, univerId }) {
   const history = useHistory();
   const [currentTab, setcurrentTab] = useState("");
-  const userType = localStorage.getItem("userType");
+  // const userType = localStorage.getItem("userType");
 
   useEffect(() => {
-    console.log("activeTab", activetab);
     setcurrentTab(activetab);
   }, [activetab]);
 
@@ -94,13 +93,13 @@ export default function UniversityNavbar({ activetab, univerId }) {
         </NavLink>
       </NavItem>
 
-      {userType === userTypes?.ProviderAdmin ? null : (
+      {/* {userType === userTypes?.SystemAdmin || userType === userTypes?.Admin ? (
         <NavItem>
           <NavLink active={currentTab === "9"} onClick={() => navigateTo("9")}>
             Commission
           </NavLink>
         </NavItem>
-      )}
+      ) : null} */}
     </Nav>
   );
 }

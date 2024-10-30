@@ -23,6 +23,7 @@ import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import containsDigit from "../../../../../helpers/nameContainDigit";
 
 const ContactInformation = () => {
   const { addToast } = useToasts();
@@ -92,15 +93,15 @@ const ContactInformation = () => {
         res[0]?.addressTypeId === 1
           ? res[0]
           : res[1]?.addressTypeId === 1
-          ? res[1]
-          : null
+            ? res[1]
+            : null
       );
       setPermanentData(
         res[0]?.addressTypeId === 2
           ? res[0]
           : res[1]?.addressTypeId === 2
-          ? res[1]
-          : null
+            ? res[1]
+            : null
       );
     });
   }, [success, applicationStudentId]);
@@ -142,48 +143,63 @@ const ContactInformation = () => {
     }
   };
   const handleCity = (e) => {
-    setCity(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value;
+    setCity(data);
+    if (data === "") {
       setCityError("City is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setCityError("City should not contain digits");
+    }
+    else {
       setCityError("");
     }
   };
   const handleCityN2 = (e) => {
-    setCityN2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value;
+    setCityN2(data);
+    if (data === "") {
       setCityError2("City is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setCityError2("City should not contain digits");
+    }
+    else {
       setCityError2("");
     }
   };
   const handleState = (e) => {
-    setState(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setState(data);
+    if (data === "") {
       setStateError("State/County is required");
     } else {
       setStateError("");
     }
   };
   const handleState2 = (e) => {
-    setState2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value;
+    setState2(data);
+    if (data === "") {
       setStateError2("State/County is required");
-    } else {
+    } else if (containsDigit(data)) {
+      setStateError2('state should not contain digit');
+    }
+    else {
       setStateError2("");
     }
   };
   const handleZipCode = (e) => {
-    setZipCode(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode(data);
+    if (data === "") {
       setZipCodeError("Zip code is required");
     } else {
       setZipCodeError("");
     }
   };
   const handleZipCode2 = (e) => {
-    setZipCode2(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setZipCode2(data);
+    if (data === "") {
       setZipCodeError2("Zip code is required");
     } else {
       setZipCodeError2("");
@@ -463,7 +479,7 @@ const ContactInformation = () => {
         activetab={"2"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -472,7 +488,7 @@ const ContactInformation = () => {
               {contactList.length > 0 ? (
                 <>
                   <p className="section-title">Addresses</p>
-                  <div className="row mx-0 mb-3">
+                  <div className="row mx-0 mb-3" id="permanentAdd">
                     {livingdata !== null ? (
                       <div
                         className="col-12 border p-2 rounded"
@@ -489,17 +505,19 @@ const ContactInformation = () => {
                               ) ? (
                                 <>
                                   {!showMailingForm && (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          livingdata?.id,
-                                          "mailing"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#mailing-address">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            livingdata?.id,
+                                            "mailing"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   )}
                                 </>
                               ) : null}
@@ -545,9 +563,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{livingdata?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {livingdata?.houseNo}</b>
                                   </p>
@@ -592,7 +613,10 @@ const ContactInformation = () => {
                       >
                         <Card>
                           <CardBody>
-                            <div className="d-flex justify-content-between">
+                            <div
+                              className="d-flex justify-content-between"
+                              id="permanentAdd"
+                            >
                               <span className="card-heading">
                                 Permanent Address
                               </span>
@@ -603,17 +627,19 @@ const ContactInformation = () => {
                                 <>
                                   {" "}
                                   {!showPermanentForm && (
-                                    <span
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleUpdateLiving(
-                                          permanentData?.id,
-                                          "parmanent"
-                                        )
-                                      }
-                                    >
-                                      Edit
-                                    </span>
+                                    <a href="#permanentAdd">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() =>
+                                          handleUpdateLiving(
+                                            permanentData?.id,
+                                            "parmanent"
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
                                   )}
                                 </>
                               ) : null}
@@ -659,9 +685,12 @@ const ContactInformation = () => {
                               <Row className="text-gray">
                                 <Col md="4">
                                   <p>
-                                    <span>Address Line</span>
+                                    <span>Address Line 1</span>
                                     <br />
                                     <b>{permanentData?.addressLine}</b>
+                                  </p>
+                                  <p>
+                                    <span>Address Line 2</span>
                                     <br />
                                     <b> {permanentData?.houseNo}</b>
                                   </p>

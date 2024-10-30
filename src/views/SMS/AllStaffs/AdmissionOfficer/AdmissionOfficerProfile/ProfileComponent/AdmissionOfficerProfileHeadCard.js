@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Upload } from "antd";
+import { Image, Upload } from "antd";
 import * as Icon from "react-feather";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
@@ -27,6 +27,8 @@ import { rootUrl } from "../../../../../../constants/constants";
 import uapploader from "../../../../../../assets/img/profile-img.png";
 import uapploader2 from "../../../../../../assets/img/profile-cover.png";
 import Loader from "../../../../Search/Loader/Loader";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
+import ImageUploadCrop from "../../../../../../components/ImageUpload/ImageUploadCrop";
 
 const AdmissionOfficerProfileHeadCard = ({
   id,
@@ -60,6 +62,7 @@ const AdmissionOfficerProfileHeadCard = ({
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
   const [head, setHead] = useState({});
+  const [croppedImage, setCroppedImage] = useState(null);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -89,7 +92,7 @@ const AdmissionOfficerProfileHeadCard = ({
         setLoading(false);
       });
     }
-  }, [success, id, userId]);
+  }, [success, id, userId, setHeadData]);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
@@ -181,38 +184,43 @@ const AdmissionOfficerProfileHeadCard = ({
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
 
-    const subData = new FormData(event.target);
+    // const subData = new FormData(event.target);
 
-    subData.append("coverImage", FileList[0]?.originFileObj);
+    // subData.append("coverImage", FileList[0]?.originFileObj);
+
+    const subData = {
+      id: id ? id : userId,
+      coverImage: croppedImage,
+    };
 
     // for(var x of subData.values()){
     //
     // }
 
-    if (FileList.length < 1) {
-      setError(true);
-    } else {
-      setProgress(true);
-      setButtonStatus(true);
-      put(`AdmissionOfficer/UpdateCoverPhoto`, subData).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setFileList([]);
-          setModalOpen(false);
-          setSuccess(!success);
-        } else {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-        }
-      });
-    }
+    // if (FileList.length < 1) {
+    //   setError(true);
+    // } else {
+    setProgress(true);
+    setButtonStatus(true);
+    put(`AdmissionOfficer/UpdateCoverPhoto`, subData).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setFileList([]);
+        setModalOpen(false);
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+    // }
   };
 
   const handleCancel1 = () => {
@@ -292,14 +300,6 @@ const AdmissionOfficerProfileHeadCard = ({
     }
   };
 
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
-
   return (
     <>
       {loading ? (
@@ -340,8 +340,22 @@ const AdmissionOfficerProfileHeadCard = ({
             </div>
           </div>
 
+          <ImageUploadCrop
+            modalOpen={modalOpen}
+            closeModal={closeModal}
+            heading="Update Cover Photo"
+            onSubmit={handleSubmitCoverPhoto}
+            croppedImage={croppedImage}
+            setCroppedImage={setCroppedImage}
+            error={error}
+            errorText="Cover photo is required"
+            progress={progress}
+            buttonStatus={buttonStatus}
+          />
+
           {/* cover photo edit modal starts here */}
-          <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
+
+          {/* <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">
             <ModalHeader>Update Cover Photo</ModalHeader>
 
             <ModalBody>
@@ -352,7 +366,7 @@ const AdmissionOfficerProfileHeadCard = ({
                   <input type="hidden" name="id" id="id" value={userId} />
                 )}
 
-                {/* <input type="hidden" name="id" id="id" value={adminData?.id} /> */}
+              
 
                 <FormGroup row className="has-icon-left position-relative">
                   <Col className="ml-5" md="4">
@@ -362,7 +376,7 @@ const AdmissionOfficerProfileHeadCard = ({
                   </Col>
                   <Col md="6">
                     <div className="row d-flex">
-                      {/* {headData?.consultantCoverImageMedia !== null ? (
+                      {headData?.consultantCoverImageMedia !== null ? (
                                 <div className="col-md-6">
                                   <Image
                                     width={104}
@@ -372,7 +386,7 @@ const AdmissionOfficerProfileHeadCard = ({
                                     }
                                   />
                                 </div>
-                              ) : null} */}
+                              ) : null}
 
                       <div className="col-md-6">
                         <>
@@ -447,8 +461,8 @@ const AdmissionOfficerProfileHeadCard = ({
                 </FormGroup>
               </form>
             </ModalBody>
-          </Modal>
-          {/* cover photo edit modal ends here */}
+          </Modal> */}
+
           <CardBody>
             <div className="uapp-employee-profile-image-edit">
               <Row>
@@ -687,7 +701,7 @@ const AdmissionOfficerProfileHeadCard = ({
                   </ul>
 
                   <div className="d-flex">
-                    <Link
+                    {/* <Link
                       to={
                         id !== undefined
                           ? `/ApplicationListByAdmissionofficer/${id}`
@@ -697,7 +711,7 @@ const AdmissionOfficerProfileHeadCard = ({
                       <button className="consultant-profile-redesign-style px-2 py-2">
                         Applications
                       </button>
-                    </Link>
+                    </Link> */}
 
                     <Link
                       to={
@@ -718,7 +732,7 @@ const AdmissionOfficerProfileHeadCard = ({
                   <span>UAPP Registration Date</span>
                   <br />
                   <span className="text-gray my-3">
-                    {handleDate(head?.uappRegistrationDate)}
+                    {dateFormate(head?.uappRegistrationDate)}
                   </span>
                   <br />
 

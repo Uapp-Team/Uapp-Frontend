@@ -58,6 +58,7 @@ const AddUniversitySubjectFee = () => {
   const [radioEvening, setRadioEvening] = useState(false);
   const [radioEveningWeekend, setRadioEveningWeekend] = useState(false);
   const [radioStandard, setRadioStandard] = useState(false);
+  const [radioWeekend, setRadioWeekend] = useState(false);
 
   const onChangeEvening = (event) => {
     console.log(event.target.checked);
@@ -66,8 +67,13 @@ const AddUniversitySubjectFee = () => {
   const onChangeEveningWeekend = (event) => {
     setRadioEveningWeekend(event.target.checked);
   };
+
   const onChangeStandard = (event) => {
     setRadioStandard(event.target.checked);
+  };
+
+  const onChangeWeekend = (event) => {
+    setRadioWeekend(event.target.checked);
   };
 
   useEffect(() => {
@@ -116,6 +122,7 @@ const AddUniversitySubjectFee = () => {
       setRadioEvening(res?.evening);
       setRadioEveningWeekend(res?.eveningweekend);
       setRadioStandard(res?.standard);
+      setRadioWeekend(res?.weekend);
     });
   }, [subjId]);
 
@@ -153,6 +160,7 @@ const AddUniversitySubjectFee = () => {
     subdata.append("evening", radioEvening);
     subdata.append("eveningweekend", radioEveningWeekend);
     subdata.append("standard", radioStandard);
+    subdata.append("weekend", radioWeekend);
     for (var value of subdata.values()) {
       console.log("valuess", value);
     }
@@ -414,6 +422,23 @@ const AddUniversitySubjectFee = () => {
                         checked={radioStandard === true ? true : false}
                       />
                       <span>Standard</span>
+                    </FormGroup>
+                    <FormGroup
+                      row
+                      className="has-icon-left position-relative ml-4"
+                    >
+                      <Input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="weekend"
+                        // name="standard"
+                        onChange={(e) => {
+                          onChangeWeekend(e);
+                        }}
+                        value={radioWeekend}
+                        checked={radioWeekend === true ? true : false}
+                      />
+                      <span>Weekend</span>
                     </FormGroup>
                   </Col>
                 </Row>

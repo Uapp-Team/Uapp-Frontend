@@ -22,43 +22,72 @@ import { userTypes } from "../../../../constants/userTypeConstant.js";
 import put from "../../../../helpers/put.js";
 import Loader from "../../Search/Loader/Loader.js";
 import { permissionList } from "../../../../constants/AuthorizationConstant.js";
-import { tableIdList } from "../../../../constants/TableIdConstant.js";
 import ButtonForFunction from "../../Components/ButtonForFunction.js";
 import SearchAndClear from "./Component/SearchAndClear.js";
 import StudentTable from "./Component/StudentTable.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
+import ColumnStudent from "../../TableColumn/ColumnStudent.js";
 
 const StudentList = () => {
+  const student = JSON.parse(sessionStorage.getItem("student"));
+
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const { cId, type } = useParams();
+  const { cId, type, id } = useParams();
   const [serialNum, setSerialNum] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
-  const [studentList, setStudentList] = useState([]);
+  const [studentTypeList, setStudentTypeList] = useState([]);
   const [studentData, setStudentData] = useState([]);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
-  const [branchValue, setBranchValue] = useState(0);
-  const [studentTypeLabel, setStudentTypeLabel] = useState("Type");
-  const [studentTypeValue, setStudentTypeValue] = useState(0);
-  const [searchStr, setSearchStr] = useState("");
+  const [branchLabel, setBranchLabel] = useState(
+    student?.branchLabel ? student?.branchLabel : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    student?.branchValue ? student?.branchValue : 0
+  );
+  const [studentTypeLabel, setStudentTypeLabel] = useState(
+    student?.studentTypeLabel ? student?.studentTypeLabel : "Type"
+  );
+  const [studentTypeValue, setStudentTypeValue] = useState(
+    student?.studentTypeValue ? student?.studentTypeValue : 0
+  );
+  const [searchStr, setSearchStr] = useState(
+    student?.searchStr ? student?.searchStr : ""
+  );
   const [delData, setDelData] = useState({});
   const referenceId = localStorage.getItem("referenceId");
   const userTypeId = localStorage.getItem("userType");
   const [consultant, setConsultant] = useState([]);
-  const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [statusLabel, setStatusLabel] = useState("Accounts Status");
-  const [statusValue, setStatusValue] = useState(0);
+
+  const [consultantLabel, setConsultantLabel] = useState(
+    student?.consultantLabel ? student?.consultantLabel : "Select Consultant"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    student?.consultantValue ? student?.consultantValue : 0
+  );
+  const [statusLabel, setStatusLabel] = useState(
+    student?.statusLabel ? student?.statusLabel : "Accounts Status"
+  );
+  const [statusValue, setStatusValue] = useState(
+    student?.statusValue ? student?.statusValue : 0
+  );
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [currentPage, setCurrentPage] = useState(
+    student?.currentPage ? student?.currentPage : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    student?.dataPerPage ? student?.dataPerPage : 15
+  );
   const [callApi, setCallApi] = useState(false);
   const [entity, setEntity] = useState(0);
-  const [orderLabel, setOrderLabel] = useState("Order By");
-  const [orderValue, setOrderValue] = useState(0);
+  const [orderLabel, setOrderLabel] = useState(
+    student?.orderLabel ? student?.orderLabel : "Order By"
+  );
+  const [orderValue, setOrderValue] = useState(
+    student?.orderValue ? student?.orderValue : 0
+  );
   const history = useHistory();
   const { addToast } = useToasts();
   const [passModal, setPassModal] = useState(false);
@@ -67,83 +96,138 @@ const StudentList = () => {
   const [pass, setPass] = useState("");
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
-  // for hide/unhide column
-  const [check, setCheck] = useState(true);
-  const [tableData, setTableData] = useState([]);
+
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [check, setCheck] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  // api starts here
+  useEffect(() => {
+    const tableColumn = JSON.parse(localStorage.getItem("ColumnStudent"));
+
+    tableColumn && setTableData(tableColumn);
+
+    !tableColumn &&
+      localStorage.setItem("ColumnStudent", JSON.stringify(ColumnStudent));
+    !tableColumn && setTableData(ColumnStudent);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "student",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        studentTypeLabel: studentTypeLabel && studentTypeLabel,
+        studentTypeValue: studentTypeValue && studentTypeValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
+        consultantLabel: consultantLabel && consultantLabel,
+        consultantValue: consultantValue && consultantValue,
+        statusLabel: statusLabel && statusLabel,
+        statusValue: statusValue && statusValue,
+        searchStr: searchStr && searchStr,
+        dataPerPage: dataPerPage && dataPerPage,
+        orderLabel: orderLabel && orderLabel,
+        orderValue: orderValue && orderValue,
+      })
+    );
+  }, [
+    branchLabel,
+    branchValue,
+    consultantLabel,
+    consultantValue,
+    currentPage,
+    dataPerPage,
+    orderLabel,
+    orderValue,
+    searchStr,
+    statusLabel,
+    statusValue,
+    studentTypeLabel,
+    studentTypeValue,
+  ]);
 
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+      if (id) {
+        const result = res?.find((ans) => ans?.id.toString() === id);
+        setBranchValue(result?.id);
+        setBranchLabel(result?.name);
+      }
       setBranch(res);
     });
 
     if (type) {
       get("StudentTypeDD/Index").then((res) => {
-        setStudentList(res);
+        setStudentTypeList(res);
 
         const result = res?.find((ans) => ans?.id === type);
         setStudentTypeLabel(result?.name);
       });
     } else {
       get("StudentTypeDD/Index").then((res) => {
-        setStudentList(res);
+        setStudentTypeList(res);
       });
     }
 
-    if (cId) {
-      get("ConsultantDD/ByUser").then((res) => {
-        setConsultant(res);
-
-        const result = res.find((r) => r?.id === cId);
-        setConsultantLabel(result?.name);
-        setConsultantValue(result?.id);
-      });
-    } else {
-      get("ConsultantDD/ByUser").then((res) => {
-        setConsultant(res);
-      });
-    }
-  }, [studentTypeValue, cId, consultantValue, type]);
+    get("ConsultantDD/ByUser").then((res) => {
+      setConsultant(res);
+      if (cId) {
+        const result = res.filter((r) => {
+          return r.id.toString() === cId;
+        });
+        setConsultantLabel(result[0]?.name);
+      }
+    });
+  }, [studentTypeValue, cId, consultantValue, type, id]);
 
   useEffect(() => {
-    type
-      ? get(
-          `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&StudentType=${type}&searchstring=${searchStr}&consultantId=${
-            userTypeId === userTypes?.Consultant ? referenceId : consultantValue
-          }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}`
-        ).then((res) => {
-          setStudentData(res?.models);
-          setEntity(res?.totalEntity);
-          setSerialNum(res?.firstSerialNumber);
-          setLoading(false);
-        })
-      : cId
-      ? get(
-          `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&StudentType=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
-            userTypeId === userTypes?.Consultant ? referenceId : cId
-          }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}`
-        ).then((res) => {
-          setStudentData(res?.models);
-          setEntity(res?.totalEntity);
-          setSerialNum(res?.firstSerialNumber);
-          setLoading(false);
-        })
-      : get(
-          `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&StudentType=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
-            userTypeId === userTypes?.Consultant ? referenceId : consultantValue
-          }&status=${statusValue}&sortby=${consultantValue}&branchid=${branchValue}`
-        ).then((res) => {
-          setStudentData(res?.models);
-          setEntity(res?.totalEntity);
-          setSerialNum(res?.firstSerialNumber);
-          setLoading(false);
-        });
+    if (!isTyping) {
+      type
+        ? get(
+            `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${type}&searchstring=${searchStr}&consultantId=${
+              userTypeId === userTypes?.Consultant
+                ? referenceId
+                : consultantValue
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+          ).then((res) => {
+            setStudentData(res?.models);
+            setEntity(res?.totalEntity);
+            setSerialNum(res?.firstSerialNumber);
+            setLoading(false);
+          })
+        : cId
+        ? get(
+            `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
+              userTypeId === userTypes?.Consultant ? referenceId : cId
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+          ).then((res) => {
+            setStudentData(res?.models);
+            setEntity(res?.totalEntity);
+            setSerialNum(res?.firstSerialNumber);
+            setLoading(false);
+          })
+        : get(
+            `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
+              userTypeId === userTypes?.Consultant
+                ? referenceId
+                : consultantValue
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+          ).then((res) => {
+            setStudentData(res?.models);
+            setEntity(res?.totalEntity);
+            setSerialNum(res?.firstSerialNumber);
+            setLoading(false);
+          });
+    }
 
-    get(`TableDefination/Index/${tableIdList?.Student_List}`).then((res) => {
-      setTableData(res);
-      console.log(res, "table data");
-    });
+    // get(`TableDefination/Index/${tableIdList?.Student_List}`).then((res) => {
+    //   setTableData(res);
+    //   console.log(res, "table data");
+    // });
   }, [
     userTypeId,
     referenceId,
@@ -159,10 +243,14 @@ const StudentList = () => {
     type,
     orderValue,
     branchValue,
+    check,
+    isTyping,
   ]);
 
+  // api ends here
+
   // student dropdown options
-  const studentTypeOption = studentList?.map((std) => ({
+  const studentTypeOption = studentTypeList?.map((std) => ({
     label: std?.name,
     value: std?.id,
   }));
@@ -183,6 +271,7 @@ const StudentList = () => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
+    setCurrentPage(1);
     setDataPerPage(value);
     setCallApi((prev) => !prev);
   };
@@ -212,8 +301,6 @@ const StudentList = () => {
   }));
 
   const selectOrder = (label, value) => {
-    //
-
     setOrderLabel(label);
     setOrderValue(value);
     setCallApi((prev) => !prev);
@@ -221,6 +308,15 @@ const StudentList = () => {
 
   const passValidate = (e) => {
     setPass(e.target.value);
+    if (e.target.value === "") {
+      setError("Provide a valid password");
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(e.target.value)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
+    } else {
+      setError("");
+    }
   };
 
   const handleToggle = () => {
@@ -252,6 +348,8 @@ const StudentList = () => {
     handleSearch();
   };
 
+  // consultant dropdown
+
   const consultantOption = consultant?.map((c) => ({
     label: c?.name,
     value: c?.id,
@@ -279,31 +377,37 @@ const StudentList = () => {
     setCallApi((prev) => !prev);
   };
 
-  // search handler
+  // search handler parts here
+
   const handleSearch = () => {
     setCurrentPage(1);
     setCallApi((prev) => !prev);
   };
 
-  // on clear
+  // on clear button parts here
+
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setStudentTypeLabel("Type");
     setStudentTypeValue(0);
     setStatusValue(0);
     setStatusLabel("Accounts Status");
     setConsultantValue(0);
-    setBranchLabel("Select Branch");
-    setBranchValue(0);
+    !id && setBranchLabel("Select Branch");
+    !id && setBranchValue(0);
     setConsultantLabel("Select Consultant");
     setSearchStr("");
     setCallApi((prev) => !prev);
   };
 
+  // Edit students parts here
+
   const handleEdit = (data) => {
     history.push(`/addStudentInformation/${data?.id}/${1}`);
   };
 
-  // on enter press
+  // on enter press parts here
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       setCurrentPage(1);
@@ -311,20 +415,22 @@ const StudentList = () => {
     }
   };
 
-  // add university handler
+  //go to student register page starts here
+
   const handleAddStudent = () => {
     history.push("/addStudentRegister");
   };
 
   const componentRef = useRef();
 
-  // Delete Modal
+  // Delete Modal parts here
 
   const toggleDanger = (data) => {
     setDelData(data);
     setDeleteModal(true);
   };
 
+  //password parts starts here
   const handlePass = (data) => {
     setPassData(data);
     setPassModal(true);
@@ -336,7 +442,19 @@ const StudentList = () => {
 
   const confirmPassword = (e) => {
     setCPass(e.target.value);
+    if (e.target.value === "") {
+      setPassError("Confirm your password");
+    } else {
+      setPassError("");
+    }
+    if (pass && e.target.value !== pass) {
+      setPassError("Passwords doesn't match.");
+    } else {
+      setPassError("");
+    }
   };
+
+  //Update and change password submitting starts here
 
   const submitModalForm = (event) => {
     event.preventDefault();
@@ -345,8 +463,10 @@ const StudentList = () => {
 
     subData.append("id", passData?.id);
     subData.append("password", pass);
-    if (pass.length < 6) {
-      setError("Password length can not be less than six digits");
+    if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
+      setError(
+        "Password must be six digits and combination of letters and numbers"
+      );
     } else if (pass !== cPass) {
       setPassError("Passwords do not match");
     } else {
@@ -376,6 +496,9 @@ const StudentList = () => {
     }
   };
 
+  //Update and change password submitting ends here
+
+  //student delete parts here
   const handleDeleteData = () => {
     setButtonStatus(true);
     setProgress(true);
@@ -391,6 +514,8 @@ const StudentList = () => {
     });
   };
 
+  //for date parts here
+
   const handleDate = (e) => {
     var datee = e;
     var utcDate = new Date(datee);
@@ -398,6 +523,8 @@ const StudentList = () => {
     const x = localeDate.split(",")[0];
     return x;
   };
+
+  //Student black list parts here
 
   const handleBlacklist = (e, id) => {
     const subData = {
@@ -422,33 +549,34 @@ const StudentList = () => {
     });
   };
 
+  //go to student profile parts here
+
   const redirectToStudentProfile = (studentId) => {
     history.push(`/studentProfile/${studentId}`);
   };
 
   // for hide/unhide column
 
-  const handleChecked = (e, columnId) => {
-    setCheck(e.target.checked);
-
-    put(`TableDefination/Update/${tableIdList?.Student_List}/${columnId}`).then(
-      (res) => {
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          setSuccess(!success);
-        }
-      }
-    );
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnStudent", JSON.stringify(values));
   };
 
   return (
     <div>
+      <BreadCrumb title="Student List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <>
-          <BreadCrumb title="Student List" backTo="" path="/" />
+          {/*SearchAndClear starts here */}
 
           <SearchAndClear
+            check={check}
+            setCheck={setCheck}
+            branchId={id}
             branch={branch}
             setBranch={setBranch}
             branchLabel={branchLabel}
@@ -461,6 +589,7 @@ const StudentList = () => {
             selectStudentType={selectStudentType}
             type={type}
             searchStr={searchStr}
+            setSearchStr={setSearchStr}
             searchValue={searchValue}
             handleClearSearch={handleClearSearch}
             handleKeyDown={handleKeyDown}
@@ -480,11 +609,15 @@ const StudentList = () => {
             setStatusLabel={setStatusLabel}
             setConsultantValue={setConsultantValue}
             setConsultantLabel={setConsultantLabel}
-          ></SearchAndClear>
+            setIsTyping={setIsTyping}
+          />
+
+          {/*SearchAndClear ends here */}
 
           <Card className="uapp-employee-search">
             <CardBody>
-              {/* new */}
+              {/* add student, order by, showing and column hide starts here */}
+
               <Row className="mb-3">
                 <Col lg="5" md="5" sm="12" xs="12">
                   {permissions?.includes(permissionList?.Add_New_Student) ? (
@@ -502,7 +635,7 @@ const StudentList = () => {
                     <div className="me-3 mb-2">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Order By :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             className="mr-2"
                             options={orderName}
@@ -518,7 +651,7 @@ const StudentList = () => {
                     <div className="mr-3">
                       <div className="d-flex align-items-center">
                         <div className="mr-2">Showing :</div>
-                        <div>
+                        <div className="ddzindex">
                           <Select
                             options={dataSizeName}
                             value={{ label: dataPerPage, value: dataPerPage }}
@@ -577,16 +710,16 @@ const StudentList = () => {
                           <i className="fas fa-bars"></i>
                         </DropdownToggle>
                         <DropdownMenu className="bg-dd-1">
-                          {tableData.map((table, i) => (
+                          {tableData?.map((table, i) => (
                             <div key={i}>
-                              {i === 8 ? (
+                              {i === 6 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Password
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -597,23 +730,23 @@ const StudentList = () => {
                                             id=""
                                             name="check"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
-                                            defaultChecked={table?.isActive}
+                                            checked={table?.isActive}
                                           />
                                         </FormGroup>
                                       </Col>
                                     </div>
                                   )}
                                 </>
-                              ) : i === 9 ? (
+                              ) : i === 7 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Account_Status
                                   ) && (
                                     <div className="d-flex justify-content-between">
                                       <Col md="8" className="">
-                                        <p className="">{table?.collumnName}</p>
+                                        <p className="">{table?.title}</p>
                                       </Col>
 
                                       <Col md="4" className="text-center">
@@ -624,9 +757,9 @@ const StudentList = () => {
                                             id=""
                                             name="check"
                                             onChange={(e) => {
-                                              handleChecked(e, table?.id);
+                                              handleChecked(e, i);
                                             }}
-                                            defaultChecked={table?.isActive}
+                                            checked={table?.isActive}
                                           />
                                         </FormGroup>
                                       </Col>
@@ -636,7 +769,7 @@ const StudentList = () => {
                               ) : (
                                 <div className="d-flex justify-content-between">
                                   <Col md="8" className="">
-                                    <p className="">{table?.collumnName}</p>
+                                    <p className="">{table?.title}</p>
                                   </Col>
 
                                   <Col md="4" className="text-center">
@@ -647,9 +780,9 @@ const StudentList = () => {
                                         id=""
                                         name="check"
                                         onChange={(e) => {
-                                          handleChecked(e, table?.id);
+                                          handleChecked(e, i);
                                         }}
-                                        defaultChecked={table?.isActive}
+                                        checked={table?.isActive}
                                       />
                                     </FormGroup>
                                   </Col>
@@ -665,47 +798,62 @@ const StudentList = () => {
                   </div>
                 </Col>
               </Row>
+
+              {/* add student, order by, showing and column hide starts here */}
+
+              {/* Student Table starts here */}
+
               {permissions?.includes(permissionList?.View_Student_list) ? (
                 <>
-                  {loading ? (
-                    <h2 className="text-center">Loading...</h2>
+                  {studentData?.length === 0 ? (
+                    <h4 className="text-center">No Data Found</h4>
                   ) : (
-                    <StudentTable
-                      componentRef={componentRef}
-                      tableData={tableData}
-                      permissions={permissions}
-                      permissionList={permissionList}
-                      userTypeId={userTypeId}
-                      userTypes={userTypes}
-                      history={history}
-                      studentData={studentData}
-                      serialNum={serialNum}
-                      handleDate={handleDate}
-                      handlePass={handlePass}
-                      passModal={passModal}
-                      passData={passData}
-                      submitModalForm={submitModalForm}
-                      passValidate={passValidate}
-                      handleToggle={handleToggle}
-                      setError={setError}
-                      error={error}
-                      verifyPass={verifyPass}
-                      confirmPassword={confirmPassword}
-                      passError={passError}
-                      setPassModal={setPassModal}
-                      buttonStatus={buttonStatus}
-                      progress={progress}
-                      handleBlacklist={handleBlacklist}
-                      redirectToStudentProfile={redirectToStudentProfile}
-                      handleEdit={handleEdit}
-                      toggleDanger={toggleDanger}
-                      deleteModal={deleteModal}
-                      setDeleteModal={setDeleteModal}
-                      handleDeleteData={handleDeleteData}
-                    ></StudentTable>
+                    <>
+                      {loading ? (
+                        <h2 className="text-center">Loading...</h2>
+                      ) : (
+                        <StudentTable
+                          componentRef={componentRef}
+                          tableData={tableData}
+                          permissions={permissions}
+                          permissionList={permissionList}
+                          userTypeId={userTypeId}
+                          userTypes={userTypes}
+                          history={history}
+                          studentData={studentData}
+                          serialNum={serialNum}
+                          handleDate={handleDate}
+                          handlePass={handlePass}
+                          passModal={passModal}
+                          passData={passData}
+                          submitModalForm={submitModalForm}
+                          passValidate={passValidate}
+                          handleToggle={handleToggle}
+                          setError={setError}
+                          error={error}
+                          verifyPass={verifyPass}
+                          confirmPassword={confirmPassword}
+                          passError={passError}
+                          setPassModal={setPassModal}
+                          buttonStatus={buttonStatus}
+                          progress={progress}
+                          handleBlacklist={handleBlacklist}
+                          redirectToStudentProfile={redirectToStudentProfile}
+                          handleEdit={handleEdit}
+                          toggleDanger={toggleDanger}
+                          deleteModal={deleteModal}
+                          setDeleteModal={setDeleteModal}
+                          handleDeleteData={handleDeleteData}
+                        ></StudentTable>
+                      )}
+                    </>
                   )}
                 </>
               ) : null}
+
+              {/* Student Table starts here */}
+
+              {/*Pagination starts here */}
 
               <Pagination
                 dataPerPage={dataPerPage}
@@ -713,6 +861,8 @@ const StudentList = () => {
                 paginate={paginate}
                 currentPage={currentPage}
               />
+
+              {/*Pagination ends here */}
             </CardBody>
           </Card>
         </>

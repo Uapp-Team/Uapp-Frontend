@@ -154,8 +154,8 @@ class Sidebar extends Component {
                       this.state.width < 1200 && visibilityState === false,
                   }
                 )}
-                onMouseEnter={() => sidebarHover(false)}
-                onMouseLeave={() => sidebarHover(true)}
+                // onMouseEnter={() => sidebarHover(false)}
+                // onMouseLeave={() => sidebarHover(true)}
               >
                 {/* <SidebarHeader
                   toggleSidebarMenu={toggleSidebarMenu}

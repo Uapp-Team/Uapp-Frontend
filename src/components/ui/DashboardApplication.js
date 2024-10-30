@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Table } from "reactstrap";
 import get from "../../helpers/get";
 import { rootUrl } from "../../constants/constants";
@@ -7,16 +7,18 @@ import { userTypes } from "../../constants/userTypeConstant";
 import user from "../../assets/img/user-3.svg";
 
 const DashboardApplication = ({ url = `Dashboard/applications` }) => {
+  const location = useLocation();
+  const currentRoute = location.pathname.split("/")[1];
+
   const userType = localStorage.getItem("userType");
   const [data, setData] = useState([]);
 
   useEffect(() => {
     get(url).then((res) => {
-      console.log(res);
       setData(res);
     });
   }, [url]);
-
+  console.log(currentRoute);
   return (
     <>
       <div className="custom-card-border p-4 mb-30px">
@@ -26,9 +28,9 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
         </div>
 
         {data?.applications?.length === 0 ? (
-          <p className="text-center">No Application</p>
+          <p className="text-center">No Application found</p>
         ) : (
-          <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+          <div className="overflowY-300px">
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
@@ -36,12 +38,21 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                   <td className="border-0">Student</td>
                   <td className="border-0">University </td>
 
+                  {userType !== userTypes?.Consultant &&
+                    currentRoute !== "consultantDashboard" &&
+                    currentRoute !== "consultantProfile" && (
+                      <td className="border-0">Consultant </td>
+                    )}
+
                   <td className="border-0">
                     Admission{" "}
-                    {userType === userTypes?.AdmissionManager
+                    {userType === userTypes?.AdmissionManager ||
+                    currentRoute === "admissionManagerProfile"
                       ? "Officer"
                       : "Manager"}
                   </td>
+
+                  <td className="border-0">Document Status</td>
                   <td className="border-0">Assessment</td>
                   <td className="border-0">Date </td>
                 </tr>
@@ -60,7 +71,7 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                     </td>
                     <td>
                       <Link
-                        className="text-body hover"
+                        className="text-id hover"
                         to={`/studentProfile/${item?.studentId}`}
                       >
                         {item?.profileImage ? (
@@ -81,16 +92,31 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                     </td>
                     <td>
                       <Link
-                        className="text-body hover"
+                        className="text-id hover"
                         to={`/universityDetails/${item?.universityId}`}
                       >
                         {item?.universityName}
                       </Link>
                     </td>
-                    {userType === userTypes?.AdmissionManager ? (
+
+                    {userType !== userTypes?.Consultant &&
+                      currentRoute !== "consultantDashboard" &&
+                      currentRoute !== "consultantProfile" && (
+                        <td>
+                          <Link
+                            className="text-id hover"
+                            to={`/consultantProfile/${item?.consultantId}`}
+                          >
+                            {item?.consultantName}
+                          </Link>
+                        </td>
+                      )}
+
+                    {userType === userTypes?.AdmissionManager ||
+                    currentRoute === "admissionManagerProfile" ? (
                       <td>
                         <Link
-                          className="text-body hover"
+                          className="text-id hover"
                           to={`/admissionOfficerDetails/${item?.admissionOfficerId}`}
                         >
                           {item?.admissionOfficerName}
@@ -99,7 +125,7 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                     ) : (
                       <td>
                         <Link
-                          className="text-body hover"
+                          className="text-id hover"
                           to={`/admissionManagerProfile/${item?.admissionManagerId}`}
                         >
                           {item?.admissionManagerName}
@@ -107,6 +133,7 @@ const DashboardApplication = ({ url = `Dashboard/applications` }) => {
                       </td>
                     )}
 
+                    <td>{item?.documentStatus}</td>
                     <td>{item?.assesment}%</td>
                     <td>{item?.applicationDate}</td>
                   </tr>

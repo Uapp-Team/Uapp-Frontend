@@ -2,11 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Card,
   CardBody,
-  CardHeader,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  Button,
   Input,
   Col,
   Row,
@@ -17,9 +12,8 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import Select from "react-select";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
-import Pagination from "../../../Pagination/Pagination.jsx";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
 import ButtonForFunction from "../../../Components/ButtonForFunction";
@@ -27,17 +21,50 @@ import LinkButton from "../../../Components/LinkButton.js";
 import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
 import ReactToPrint from "react-to-print";
 import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
-import ButtonLoader from "../../../Components/ButtonLoader.js";
-import { tableIdList } from "../../../../../constants/TableIdConstant.js";
-import put from "../../../../../helpers/put.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
+import ConditionForText from "./ConditionForText.js";
+import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
+import Filter from "../../../../../components/Dropdown/Filter.js";
+import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
+import { Link } from "react-router-dom";
+import ColumnApplicationManager from "../../../TableColumn/ColumnApplicationManager.js";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import Download from "../../../../../components/buttons/Download.js";
 
 const AdmissionManagerApplication = ({ currentUser }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
-  const [callApi, setCallApi] = useState(false);
-  const [orderLabel, setOrderLabel] = useState("Order By");
-  const [orderValue, setOrderValue] = useState(0);
+  const componentRef = useRef();
+  const { addToast } = useToasts();
+  const location = useLocation();
+  const { status, selector, universityId, consultantId, intake } = useParams();
+
+  // Previous states get from session storage
+  const AdmissionManagerApplicationPaging = JSON.parse(
+    sessionStorage.getItem("admissionManagerApplication")
+  );
+
+  // Dropdown Filter states
+  const [isHide, setIsHide] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(
+    AdmissionManagerApplicationPaging?.currentPage
+      ? AdmissionManagerApplicationPaging?.currentPage
+      : 1
+  );
+  const [dataPerPage, setDataPerPage] = useState(
+    AdmissionManagerApplicationPaging?.dataPerPage
+      ? AdmissionManagerApplicationPaging?.dataPerPage
+      : 15
+  );
+  const [orderLabel, setOrderLabel] = useState(
+    AdmissionManagerApplicationPaging?.orderLabel
+      ? AdmissionManagerApplicationPaging?.orderLabel
+      : "Order By"
+  );
+  const [orderValue, setOrderValue] = useState(
+    AdmissionManagerApplicationPaging?.orderValue
+      ? AdmissionManagerApplicationPaging?.orderValue
+      : 0
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
@@ -45,70 +72,296 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [interviewDD, setInterviewDD] = useState([]);
   const [elptDD, setElptDD] = useState([]);
   const [financeDD, setFinanceDD] = useState([]);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const { status, selector, universityId, consultantId } = useParams();
 
-  // for admission manager
+  const [chatOpen, setChatOpen] = useState(false);
+
+  const [chatapp, setchatapp] = useState(null);
+
+  const isChatOpen = () => {
+    setChatOpen(!chatOpen);
+  };
+
+  // states for admission manager
   const [managerUappIdDD, setManagerUappIdDD] = useState([]);
-  const [managerUappIdLabel, setmanagerUappIdLabel] = useState("UAPP ID");
-  const [managerUappIdValue, setmanagerUappIdValue] = useState(0);
+  const [managerUappIdLabel, setmanagerUappIdLabel] = useState(
+    AdmissionManagerApplicationPaging?.managerUappIdLabel
+      ? AdmissionManagerApplicationPaging?.managerUappIdLabel
+      : "UAPP ID"
+  );
+  const [managerUappIdValue, setmanagerUappIdValue] = useState(
+    AdmissionManagerApplicationPaging?.managerUappIdValue
+      ? AdmissionManagerApplicationPaging?.managerUappIdValue
+      : 0
+  );
 
   const [managerStdDD, setManagerStdDD] = useState([]);
-  const [managerStdLabel, setManagerStdLabel] = useState("Name");
-  const [managerStdValue, setManagerStdValue] = useState(0);
+  const [managerStdLabel, setManagerStdLabel] = useState(
+    AdmissionManagerApplicationPaging?.managerStdLabel
+      ? AdmissionManagerApplicationPaging?.managerStdLabel
+      : "Name"
+  );
+  const [managerStdValue, setManagerStdValue] = useState(
+    AdmissionManagerApplicationPaging?.managerStdValue
+      ? AdmissionManagerApplicationPaging?.managerStdValue
+      : 0
+  );
 
   const [managerConsDD, setManagerConsDD] = useState([]);
-  const [managerConsLabel, setManagerConsLabel] = useState("Consultant");
-  const [managerConsValue, setManagerConsValue] = useState(0);
+  const [managerConsLabel, setManagerConsLabel] = useState(
+    AdmissionManagerApplicationPaging?.managerConsLabel
+      ? AdmissionManagerApplicationPaging?.managerConsLabel
+      : "Consultant"
+  );
+  const [managerConsValue, setManagerConsValue] = useState(
+    AdmissionManagerApplicationPaging?.managerConsValue
+      ? AdmissionManagerApplicationPaging?.managerConsValue
+      : 0
+  );
 
   const [managerUniDD, setManagerUniDD] = useState([]);
-  const [managerUniLabel, setManagerUniLabel] = useState("University Name");
-  const [managerUniValue, setManagerUniValue] = useState(0);
+  const [managerUniLabel, setManagerUniLabel] = useState(
+    AdmissionManagerApplicationPaging?.managerUniLabel
+      ? AdmissionManagerApplicationPaging?.managerUniLabel
+      : "University Name"
+  );
+  const [managerUniValue, setManagerUniValue] = useState(
+    AdmissionManagerApplicationPaging?.managerUniValue
+      ? AdmissionManagerApplicationPaging?.managerUniValue
+      : 0
+  );
 
   const [managerPhnDD, setManagerPhoneDD] = useState([]);
-  const [managerPhnLabel, setManagerPhnLabel] = useState("Phone No.");
-  const [managerPhnValue, setManagerPhnValue] = useState(0);
+  const [managerPhnLabel, setManagerPhnLabel] = useState(
+    AdmissionManagerApplicationPaging?.managerPhnLabel
+      ? AdmissionManagerApplicationPaging?.managerPhnLabel
+      : "Phone No."
+  );
+  const [managerPhnValue, setManagerPhnValue] = useState(
+    AdmissionManagerApplicationPaging?.managerPhnValue
+      ? AdmissionManagerApplicationPaging?.managerPhnValue
+      : 0
+  );
 
-  // for all
-  const [applicationLabel, setApplicationLabel] = useState("Status");
-  const [applicationValue, setApplicationValue] = useState(0);
-  const [offerLabel, setOfferLabel] = useState("Offer");
-  const [offerValue, setOfferValue] = useState(0);
-  const [enrollLabel, setEnrollLabel] = useState("Enrolment Status");
-  const [enrollValue, setEnrollValue] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Intake");
-  const [intakeValue, setIntakeValue] = useState(0);
-  const [interviewLabel, setInterviewLabel] = useState("Interview");
-  const [interviewValue, setInterviewValue] = useState(0);
-  const [elptLabel, setElptLabel] = useState("ELPT");
-  const [elptValue, setElptValue] = useState(0);
-  const [financeLabel, setFinanceLabel] = useState("SLCs");
-  const [financeValue, setFinanceValue] = useState(0);
+  const [documentStatusLabel, setdocumentStatusLabel] = useState(
+    AdmissionManagerApplicationPaging?.documentStatusLabel
+      ? AdmissionManagerApplicationPaging?.documentStatusLabel
+      : "Select Document Status"
+  );
+  const [documentStatusValue, setdocumentStatusValue] = useState(
+    AdmissionManagerApplicationPaging?.documentStatusValue
+      ? AdmissionManagerApplicationPaging?.documentStatusValue
+      : 0
+  );
+
+  // states for all common state
+  const [applicationLabel, setApplicationLabel] = useState(
+    AdmissionManagerApplicationPaging?.applicationLabel
+      ? AdmissionManagerApplicationPaging?.applicationLabel
+      : "Status"
+  );
+  const [applicationValue, setApplicationValue] = useState(
+    selector === "1"
+      ? status
+      : AdmissionManagerApplicationPaging?.applicationValue
+      ? AdmissionManagerApplicationPaging?.applicationValue
+      : 0
+  );
+  const [offerLabel, setOfferLabel] = useState(
+    AdmissionManagerApplicationPaging?.offerLabel
+      ? AdmissionManagerApplicationPaging?.offerLabel
+      : "Offer"
+  );
+  const [offerValue, setOfferValue] = useState(
+    selector === "2"
+      ? status
+      : AdmissionManagerApplicationPaging?.offerValue
+      ? AdmissionManagerApplicationPaging?.offerValue
+      : 0
+  );
+  const [enrollLabel, setEnrollLabel] = useState(
+    AdmissionManagerApplicationPaging?.enrollLabel
+      ? AdmissionManagerApplicationPaging?.enrollLabel
+      : "Enrolment Status"
+  );
+  const [enrollValue, setEnrollValue] = useState(
+    selector === "3"
+      ? status
+      : AdmissionManagerApplicationPaging?.enrollValue
+      ? AdmissionManagerApplicationPaging?.enrollValue
+      : 0
+  );
+  const [intakeLabel, setIntakeLabel] = useState(
+    AdmissionManagerApplicationPaging?.intakeLabel
+      ? AdmissionManagerApplicationPaging?.intakeLabel
+      : "Intake"
+  );
+  const [intakeValue, setIntakeValue] = useState(
+    AdmissionManagerApplicationPaging?.intakeValue
+      ? AdmissionManagerApplicationPaging?.intakeValue
+      : 0
+  );
+  const [intakeRngLabel, setIntakeRngLabel] = useState(
+    AdmissionManagerApplicationPaging?.intakeRngLabel
+      ? AdmissionManagerApplicationPaging?.intakeRngLabel
+      : "Intake Range"
+  );
+  const [intakeRngValue, setIntakeRngValue] = useState(
+    intake
+      ? intake
+      : AdmissionManagerApplicationPaging?.intakeRngValue
+      ? AdmissionManagerApplicationPaging?.intakeRngValue
+      : 0
+  );
+  const [interviewLabel, setInterviewLabel] = useState(
+    AdmissionManagerApplicationPaging?.intakeRngValue
+      ? AdmissionManagerApplicationPaging?.intakeRngValue
+      : "Interview"
+  );
+  const [interviewValue, setInterviewValue] = useState(
+    AdmissionManagerApplicationPaging?.interviewValue
+      ? AdmissionManagerApplicationPaging?.interviewValue
+      : 0
+  );
+  const [elptLabel, setElptLabel] = useState(
+    AdmissionManagerApplicationPaging?.elptLabel
+      ? AdmissionManagerApplicationPaging?.elptLabel
+      : "ELPT"
+  );
+  const [elptValue, setElptValue] = useState(
+    AdmissionManagerApplicationPaging?.elptValue
+      ? AdmissionManagerApplicationPaging?.elptValue
+      : 0
+  );
+  const [financeLabel, setFinanceLabel] = useState(
+    AdmissionManagerApplicationPaging?.financeLabel
+      ? AdmissionManagerApplicationPaging?.financeLabel
+      : "SLCs"
+  );
+  const [financeValue, setFinanceValue] = useState(
+    AdmissionManagerApplicationPaging?.financeValue
+      ? AdmissionManagerApplicationPaging?.financeValue
+      : 0
+  );
+
+  const [percentageLabel,setPercentageLabel] = useState(
+    AdmissionManagerApplicationPaging?.percentageLabel
+      ? AdmissionManagerApplicationPaging?.percentageLabel
+      : "Assesment percentage"
+  );
+  const [percentageValue, setPercentageValue] = useState(
+    AdmissionManagerApplicationPaging?.percentageValue
+      ? AdmissionManagerApplicationPaging?.percentageValue
+      : 0
+  );
 
   // application list
   const [applicationList, setApplicationList] = useState([]);
-  const [serialNumber, setSerialNumber] = useState(0);
-
-  const [cId, setConsId] = useState(undefined);
-  const [uId, setUniId] = useState(undefined);
-
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(false);
 
   // for hide/unhide column
-  const [check, setCheck] = useState(true);
   const [tableData, setTableData] = useState([]);
+
+  // table column data get from localstorage or initial set
+  useEffect(() => {
+    const tableColumnAdmissionManager = JSON.parse(
+      localStorage.getItem("ColumnApplicationManager")
+    );
+    tableColumnAdmissionManager && setTableData(tableColumnAdmissionManager);
+    !tableColumnAdmissionManager &&
+      localStorage.setItem(
+        "ColumnApplicationManager",
+        JSON.stringify(ColumnApplicationManager)
+      );
+    !tableColumnAdmissionManager && setTableData(ColumnApplicationManager);
+  }, []);
 
   const [delData, setDelData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const history = useHistory();
-  const { addToast } = useToasts();
-  const location = useLocation();
+  // set page states at sessionStorage for next time use
+  useEffect(() => {
+    sessionStorage.setItem(
+      "admissionManagerApplication",
+      JSON.stringify({
+        currentPage: currentPage && currentPage,
+        managerUappIdLabel: managerUappIdLabel && managerUappIdLabel,
+        managerUappIdValue: managerUappIdValue && managerUappIdValue,
+        managerStdLabel: managerStdLabel && managerStdLabel,
+        managerStdValue: managerStdValue && managerStdValue,
+        offerLabel: selector !== "2" && offerLabel && offerLabel,
+        offerValue: selector !== "2" && offerValue && offerValue,
+        managerConsLabel: managerConsLabel && managerConsLabel,
+        managerConsValue: managerConsValue && managerConsValue,
+        applicationLabel:
+          selector !== "1" && applicationLabel && applicationLabel,
+        applicationValue:
+          selector !== "1" && applicationValue && applicationValue,
+        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        intakeLabel: intakeLabel && intakeLabel,
+        intakeValue: intakeValue && intakeValue,
+        intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
+        intakeRngValue: !intake && intakeRngValue && intakeRngValue,
+        interviewLabel: interviewLabel && interviewLabel,
+        interviewValue: interviewValue && interviewValue,
+        elptLabel: elptLabel && elptLabel,
+        elptValue: elptValue && elptValue,
+        financeLabel: financeLabel && financeLabel,
+        financeValue: financeValue && financeValue,
+        managerUniLabel: managerUniLabel && managerUniLabel,
+        managerUniValue: managerUniValue && managerUniValue,
+        dataPerPage: dataPerPage && dataPerPage,
+        orderLabel: orderLabel && orderLabel,
+        orderValue: orderValue && orderValue,
+        documentStatusLabel: documentStatusLabel && documentStatusLabel,
+        documentStatusValue: documentStatusValue && documentStatusValue,
+        percentageLabel: percentageLabel && percentageLabel,
+        percentageValue: percentageValue && percentageValue,
+      })
+    );
+  }, [
+    currentPage,
+    managerUappIdLabel,
+    managerUappIdValue,
+    managerStdLabel,
+    managerStdValue,
+    offerLabel,
+    offerValue,
+    managerConsLabel,
+    managerConsValue,
+    applicationLabel,
+    applicationValue,
+    enrollLabel,
+    enrollValue,
+    intakeLabel,
+    intakeValue,
+    intakeRngLabel,
+    intakeRngValue,
+    interviewLabel,
+    interviewValue,
+    elptLabel,
+    elptValue,
+    financeLabel,
+    financeValue,
+    managerUniLabel,
+    managerUniValue,
+    dataPerPage,
+    orderLabel,
+    orderValue,
+    selector,
+    intake,
+    documentStatusLabel,
+    documentStatusValue,
+    percentageLabel,
+    percentageValue
+  ]);
 
   // for all dropdown
   const applicationMenu = applicationDD.map((application) => ({
@@ -165,72 +418,63 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const selectAppliDD = (label, value) => {
     setApplicationLabel(label);
     setApplicationValue(value);
-    // handleSearch();
   };
   const selectOfferDD = (label, value) => {
     setOfferLabel(label);
     setOfferValue(value);
-    // handleSearch();
   };
   const selectEnrollDD = (label, value) => {
     setEnrollLabel(label);
     setEnrollValue(value);
-    // handleSearch();
   };
   const selectIntakeDD = (label, value) => {
     setIntakeLabel(label);
     setIntakeValue(value);
-    // handleSearch();
   };
   const selectInterviewDD = (label, value) => {
     setInterviewLabel(label);
     setInterviewValue(value);
-    // handleSearch();
   };
   const selectElptDD = (label, value) => {
     setElptLabel(label);
     setElptValue(value);
-    // handleSearch();
   };
   const selectFinanceDD = (label, value) => {
     setFinanceLabel(label);
     setFinanceValue(value);
-    // handleSearch();
   };
   const selectUappId = (label, value) => {
     setmanagerUappIdLabel(label);
     setmanagerUappIdValue(value);
-    // handleSearch();
   };
   const selectManagerStd = (label, value) => {
     setManagerStdLabel(label);
     setManagerStdValue(value);
-    // handleSearch();
   };
   const selectManagerCons = (label, value) => {
     setManagerConsLabel(label);
     setManagerConsValue(value);
-    // handleSearch();
   };
   const selectUniMenu = (label, value) => {
     setManagerUniLabel(label);
     setManagerUniValue(value);
-    // handleSearch();
   };
   const selectManagerPhn = (label, value) => {
     setManagerPhnLabel(label);
     setManagerPhnValue(value);
-    // handleSearch();
   };
 
-  // on clear
+  // handle clear all search function
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setApplicationLabel("Status");
     setApplicationValue(0);
     setOfferLabel("Offer");
     setOfferValue(0);
     setEnrollLabel("Enrolment Status");
     setEnrollValue(0);
+    setIntakeRngLabel("Intake Range");
+    setIntakeRngValue(0);
     setIntakeLabel("Intake");
     setIntakeValue(0);
     setInterviewLabel("Interview");
@@ -249,6 +493,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setManagerUniValue(0);
     setManagerPhnLabel("Phone No.");
     setManagerPhnValue(0);
+    setdocumentStatusValue(0);
+    setdocumentStatusLabel("Select Document Status");
   };
 
   // user select order
@@ -269,10 +515,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   }));
 
   const selectOrder = (label, value) => {
-    // setLoading(true);
     setOrderLabel(label);
     setOrderValue(value);
-    setCallApi((prev) => !prev);
   };
 
   // user select data per page
@@ -280,16 +524,26 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   const selectDataSize = (value) => {
-    // setLoading(true);
+    setCurrentPage(1);
     setDataPerPage(value);
-    setCallApi((prev) => !prev);
   };
 
   useEffect(() => {
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
+
+      if (intake) {
+        const filterData = res.filter((status) => {
+          return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      }
+    });
+
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
-      if (selector == 1) {
-        const result = res?.find((ans) => ans?.id == status);
+      if (selector === "1") {
+        const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
         setApplicationValue(res?.id);
       }
@@ -297,8 +551,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     get("OfferStatusDD/Index").then((res) => {
       setOfferDD(res);
-      if (selector == 2) {
-        const result = res?.find((ans) => ans?.id == status);
+      if (selector === "2") {
+        const result = res?.find((ans) => ans?.id.toString() === status);
         setOfferLabel(result?.name);
         setOfferValue(res?.id);
       }
@@ -306,8 +560,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     get("EnrollmentStatusDD/Index").then((res) => {
       setEnrollDD(res);
-      if (selector == 3) {
-        const result = res?.find((ans) => ans?.id == status);
+      if (selector === "3") {
+        const result = res?.find((ans) => ans?.id.toString() === status);
         setEnrollLabel(result?.name);
         setEnrollValue(res?.id);
       }
@@ -328,15 +582,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       setFinanceDD(res);
     });
 
-    get(
-      `TableDefination/Index/${tableIdList?.Admission_Manager_Application_List}`
-    ).then((res) => {
-      console.log("table data", res);
-      setTableData(res);
-    });
-
     // for admission manager
-    if (currentUser != undefined) {
+    if (currentUser !== undefined) {
       get(`CommonApplicationFilterDD/UappId`).then((res) => {
         setManagerUappIdDD(res);
       });
@@ -346,7 +593,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/Consultant`).then((res) => {
         setManagerConsDD(res);
         if (consultantId) {
-          const result = res?.find((ans) => ans?.id == consultantId);
+          const result = res?.find(
+            (ans) => ans?.id.toString() === consultantId
+          );
           setManagerConsLabel(result?.name);
           setManagerConsValue(result?.id);
         }
@@ -354,7 +603,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/University`).then((res) => {
         setManagerUniDD(res);
         if (universityId) {
-          const result = res?.find((ans) => ans?.id == universityId);
+          const result = res?.find(
+            (ans) => ans?.id.toString() === universityId
+          );
           setManagerUniLabel(result?.name);
           setManagerUniValue(result?.id);
         }
@@ -364,40 +615,41 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       });
     }
 
-    if (currentUser != undefined) {
+    if (currentUser !== undefined) {
       if (universityId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
 
           setEntity(res?.totalEntity);
-          setSerialNumber(res?.firstSerialNumber);
+          // setSerialNumber(res?.firstSerialNumber);
         });
       } else if (consultantId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
 
           setEntity(res?.totalEntity);
-          setSerialNumber(res?.firstSerialNumber);
+          // setSerialNumber(res?.firstSerialNumber);
         });
       } else {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
 
           setEntity(res?.totalEntity);
-          setSerialNumber(res?.firstSerialNumber);
+          // setSerialNumber(res?.firstSerialNumber);
         });
       }
     }
   }, [
+    currentUser,
     currentPage,
     dataPerPage,
     applicationValue,
@@ -408,7 +660,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     elptValue,
     financeValue,
     orderValue,
-    // entity,
+    intake,
     success,
     managerUappIdValue,
     managerStdValue,
@@ -419,8 +671,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     consultantId,
     status,
     selector,
+    intakeRngValue,
+    documentStatusValue,
+    percentageValue
   ]);
 
+  // Function for open delete modal
   const toggleDanger = (data) => {
     setDelData(data);
     setDeleteModal(true);
@@ -436,40 +692,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setDropdownOpen((prev) => !prev);
   };
 
-  const handleExportXLSX = () => {
-    // var wb = XLSX.utils.book_new(),
-    // ws = XLSX.utils.json_to_sheet(universityList);
-    // XLSX.utils.book_append_sheet(wb, ws, "MySheet1");
-    // XLSX.writeFile(wb, "MyExcel.xlsx");
-  };
-
   //  change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setCallApi((prev) => !prev);
   };
 
-  const componentRef = useRef();
-
-  // redirect to dashboard
-  const backToDashboard = () => {
-    if (location.universityIdFromUniList != undefined) {
-      history.push("/universityList");
-    } else if (location.consultantIdFromConsultantList != undefined) {
-      history.push("/consultantList");
-    } else {
-      history.push("/");
-    }
-  };
-
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
-
+  // Function for delete application
   const handleDeleteData = () => {
     setProgress(true);
     remove(`Application/Delete/${delData?.id}`).then((res) => {
@@ -484,48 +712,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     });
   };
 
-  // for hide/unhide column
-
-  const handleChecked = (e, columnId) => {
-    // setCheckSlNo(e.target.checked);
-    setCheck(e.target.checked);
-
-    put(
-      `TableDefination/Update/${tableIdList?.Admission_Manager_Application_List}/${columnId}`
-    ).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess == true) {
-        // addToast(res?.data?.message, {
-        //   appearance: "success",
-        //   autoDismiss: true,
-        // });
-        setSuccess(!success);
-      } else {
-        // addToast(res?.data?.message, {
-        //   appearance: "error",
-        //   autoDismiss: true,
-        // });
-      }
-    });
+  // table column data update localStorage for next time use
+  const handleChecked = (e, i) => {
+    const values = [...tableData];
+    values[i].isActive = e.target.checked;
+    setTableData(values);
+    localStorage.setItem("ColumnApplicationManager", JSON.stringify(values));
   };
 
   return (
-    <div>
-      {/* <Card className="uapp-card-bg">
-        <CardHeader className="page-header">
-          <h3 className="text-white">Applications</h3>
-          <div className="page-header-back-to-home">
-            <span onClick={backToDashboard} className="text-white">
-              {" "}
-              <i className="fas fa-arrow-circle-left"></i>{" "}
-              {location.universityIdFromUniList != undefined
-                ? "Back to University List"
-                : location.consultantIdFromConsultantList != undefined
-                ? "Back to Consultant List"
-                : "Back to Dashboard"}
-            </span>
-          </div>
-        </CardHeader>
-      </Card> */}
+    <>
+      {/* BreadCrumb */}
       <BreadCrumb
         title="Applications"
         backTo={
@@ -544,6 +741,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         }
       />
 
+      {/*Filter Dropdown Area starts here */}
       <Card className="uapp-employee-search">
         <CardBody className="search-card-body">
           <Row className="gy-3">
@@ -568,31 +766,6 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 id="id"
               />
             </Col>
-
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={managerConsMenu}
-                value={{ label: managerConsLabel, value: managerConsValue }}
-                onChange={(opt) => selectManagerCons(opt.label, opt.value)}
-                placeholder="Consultant"
-                name="name"
-                id="id"
-                isDisabled={consultantId !== undefined ? true : false}
-              />
-            </Col>
-
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={applicationMenu}
-                value={{ label: applicationLabel, value: applicationValue }}
-                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
-                placeholder="Status"
-                name="name"
-                id="id"
-                isDisabled={selector == 1 ? true : false}
-              />
-            </Col>
-
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
                 options={offerMenu}
@@ -601,136 +774,314 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 placeholder="Offer"
                 name="name"
                 id="id"
-                isDisabled={selector == 2 ? true : false}
+                isDisabled={selector === "2" ? true : false}
               />
             </Col>
-
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={enrollMenu}
-                value={{ label: enrollLabel, value: enrollValue }}
-                onChange={(opt) => selectEnrollDD(opt.label, opt.value)}
-                placeholder="Enrolment st..."
-                name="name"
-                id="id"
-                isDisabled={selector == 3 ? true : false}
-              />
+              <div className="mt-2">
+                <span
+                  className="more-filters pointer"
+                  onClick={() => setIsHide(!isHide)}
+                >
+                  {isHide ? <> Hide Filters</> : <>More Filters</>}
+                </span>
+              </div>
             </Col>
+          </Row>
+          <Row className="gy-3">
+            {isHide ? (
+              <>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={managerConsMenu}
+                    value={{ label: managerConsLabel, value: managerConsValue }}
+                    onChange={(opt) => selectManagerCons(opt.label, opt.value)}
+                    placeholder="Consultant"
+                    name="name"
+                    id="id"
+                    isDisabled={consultantId !== undefined ? true : false}
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={intakeMenu}
-                value={{ label: intakeLabel, value: intakeValue }}
-                onChange={(opt) => selectIntakeDD(opt.label, opt.value)}
-                placeholder="Intake"
-                name="name"
-                id="id"
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={applicationMenu}
+                    value={{ label: applicationLabel, value: applicationValue }}
+                    onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                    placeholder="Status"
+                    name="name"
+                    id="id"
+                    isDisabled={selector === "1" ? true : false}
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={interviewMenu}
-                value={{ label: interviewLabel, value: interviewValue }}
-                onChange={(opt) => selectInterviewDD(opt.label, opt.value)}
-                placeholder="Interview"
-                name="name"
-                id="id"
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={enrollMenu}
+                    value={{ label: enrollLabel, value: enrollValue }}
+                    onChange={(opt) => selectEnrollDD(opt.label, opt.value)}
+                    placeholder="Enrolment st..."
+                    name="name"
+                    id="id"
+                    isDisabled={selector === "3" ? true : false}
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={elptMenu}
-                value={{ label: elptLabel, value: elptValue }}
-                onChange={(opt) => selectElptDD(opt.label, opt.value)}
-                placeholder="ELPT"
-                name="name"
-                id="id"
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={intakeMenu}
+                    value={{ label: intakeLabel, value: intakeValue }}
+                    onChange={(opt) => selectIntakeDD(opt.label, opt.value)}
+                    placeholder="Intake"
+                    name="name"
+                    id="id"
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={financeMenu}
-                value={{ label: financeLabel, value: financeValue }}
-                onChange={(opt) => selectFinanceDD(opt.label, opt.value)}
-                placeholder="SLCs"
-                name="name"
-                id="id"
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={intakeRngDD}
+                    label={intakeRngLabel}
+                    setLabel={setIntakeRngLabel}
+                    value={intakeRngValue}
+                    setValue={setIntakeRngValue}
+                    action={() => {}}
+                    // isDisabled={intake ? true : false}
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={managerUniMenu}
-                value={{ label: managerUniLabel, value: managerUniValue }}
-                onChange={(opt) => selectUniMenu(opt.label, opt.value)}
-                placeholder="University N..."
-                name="name"
-                id="id"
-                isDisabled={universityId !== undefined ? true : false}
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={interviewMenu}
+                    value={{ label: interviewLabel, value: interviewValue }}
+                    onChange={(opt) => selectInterviewDD(opt.label, opt.value)}
+                    placeholder="Interview"
+                    name="name"
+                    id="id"
+                  />
+                </Col>
 
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Select
-                options={managerPhnMenu}
-                value={{ label: managerPhnLabel, value: managerPhnValue }}
-                onChange={(opt) => selectManagerPhn(opt.label, opt.value)}
-                placeholder="Phone No."
-                name="name"
-                id="id"
-              />
-            </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={elptMenu}
+                    value={{ label: elptLabel, value: elptValue }}
+                    onChange={(opt) => selectElptDD(opt.label, opt.value)}
+                    placeholder="ELPT"
+                    name="name"
+                    id="id"
+                  />
+                </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={financeMenu}
+                    value={{ label: financeLabel, value: financeValue }}
+                    onChange={(opt) => selectFinanceDD(opt.label, opt.value)}
+                    placeholder="SLCs"
+                    name="name"
+                    id="id"
+                  />
+                </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={managerUniMenu}
+                    value={{ label: managerUniLabel, value: managerUniValue }}
+                    onChange={(opt) => selectUniMenu(opt.label, opt.value)}
+                    placeholder="University N..."
+                    name="name"
+                    id="id"
+                    isDisabled={universityId !== undefined ? true : false}
+                  />
+                </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={managerPhnMenu}
+                    value={{ label: managerPhnLabel, value: managerPhnValue }}
+                    onChange={(opt) => selectManagerPhn(opt.label, opt.value)}
+                    placeholder="Phone No."
+                    name="name"
+                    id="id"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 1,
+                        name: "Approved",
+                      },
+                      {
+                        id: 2,
+                        name: "In Review",
+                      },
+                      {
+                        id: 3,
+                        name: "Missing",
+                      },
+                    ]}
+                    label={documentStatusLabel}
+                    setLabel={setdocumentStatusLabel}
+                    value={documentStatusValue}
+                    setValue={setdocumentStatusValue}
+                    action={() => {}}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 20,
+                        name: '20%'
+                      },
+                      {
+                        id: 40,
+                        name: '40%'
+                      },
+                      {
+                        id: 60,
+                        name: '60%'
+                      },
+                      {
+                        id: 80,
+                        name: '80%'
+                      },
+                      {
+                        id: 100,
+                        name: '100%'
+                      },
+                
+                    ]}
+                    label={percentageLabel}
+                    setLabel={setPercentageLabel}
+                    value={percentageValue}
+                    setValue={setPercentageValue}
+                    action={() => { }}
+                  />
+                </Col>
+              </>
+            ) : null}
           </Row>
 
           <Row className="">
             <Col lg="12" md="12" sm="12" xs="12">
-              <div style={{ display: "flex", justifyContent: "end" }}>
-                <div
-                  className="mt-1 mx-1 d-flex btn-clear"
-                  onClick={handleClearSearch}
-                >
-                  {/* <Icon.X  className='text-danger' />*/}
-                  <span className="text-danger">
-                    <i className="fa fa-times"></i> Clear
-                  </span>
+              <div style={{ display: "flex", justifyContent: "start" }}>
+                <ConditionForText
+                  selector={selector}
+                  // branchId={branchId}
+                  // branchLabel={branchLabel}
+                  // setBranchLabel={setBranchLabel}
+                  branchValue={0}
+                  // setBranchValue={setBranchValue}
+                  commonUappIdValue={managerUappIdValue}
+                  commonStdValue={managerStdValue}
+                  consultantValue={managerConsValue}
+                  applicationValue={applicationValue}
+                  offerValue={offerValue}
+                  enrollValue={enrollValue}
+                  intakeValue={intakeValue}
+                  intakeRng={intake}
+                  intakeRngValue={intakeRngValue}
+                  interviewValue={interviewValue}
+                  elptValue={elptValue}
+                  financeValue={financeValue}
+                  commonUniValue={managerUniValue}
+                  commonUappIdLabel={managerUappIdLabel}
+                  commonStdLabel={managerStdLabel}
+                  consultantLabel={managerConsLabel}
+                  applicationLabel={applicationLabel}
+                  offerLabel={offerLabel}
+                  enrollLabel={enrollLabel}
+                  intakeLabel={intakeLabel}
+                  intakeRngLabel={intakeRngLabel}
+                  interviewLabel={interviewLabel}
+                  elptLabel={elptLabel}
+                  financeLabel={financeLabel}
+                  commonUniLabel={managerUniLabel}
+                  setApplicationLabel={setApplicationLabel}
+                  setApplicationValue={setApplicationValue}
+                  setOfferLabel={setOfferLabel}
+                  setOfferValue={setOfferValue}
+                  setEnrollLabel={setEnrollLabel}
+                  setEnrollValue={setEnrollValue}
+                  setIntakeLabel={setIntakeLabel}
+                  setIntakeValue={setIntakeValue}
+                  setIntakeRngLabel={setIntakeRngLabel}
+                  setIntakeRngValue={setIntakeRngValue}
+                  setInterviewLabel={setInterviewLabel}
+                  setInterviewValue={setInterviewValue}
+                  setElptLabel={setElptLabel}
+                  setElptValue={setElptValue}
+                  setFinanceLabel={setFinanceLabel}
+                  setFinanceValue={setFinanceValue}
+                  setCommonUappIdLabel={setmanagerUappIdLabel}
+                  setCommonUappIdValue={setmanagerUappIdValue}
+                  setCommonUniLabel={setManagerUniLabel}
+                  setCommonUniValue={setManagerUniValue}
+                  setConsultantLabel={setManagerConsLabel}
+                  setConsultantValue={setManagerConsValue}
+                  setCommonStdLabel={setManagerStdLabel}
+                  setCommonStdValue={setManagerStdValue}
+                  branchManagerValue={0}
+                  admissionManagerValue={0}
+                  proValue={0}
+                  documentStatusValue={documentStatusValue}
+                  setdocumentStatusValue={setdocumentStatusValue}
+                  documentStatusLabel={documentStatusLabel}
+                  setdocumentStatusLabel={setdocumentStatusLabel}
+                ></ConditionForText>
+                <div className="mt-1 mx-1 d-flex btn-clear">
+                  {managerUappIdValue !== 0 ||
+                  managerStdValue !== 0 ||
+                  managerConsValue !== 0 ||
+                  (selector !== "1" && applicationValue !== 0) ||
+                  (selector !== "2" && offerValue !== 0) ||
+                  (selector !== "3" && enrollValue !== 0) ||
+                  intakeValue !== 0 ||
+                  intakeRngValue !== 0 ||
+                  interviewValue !== 0 ||
+                  elptValue !== 0 ||
+                  financeValue !== 0 ||
+                  documentStatusValue !== 0 ||
+                  managerUniValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleClearSearch}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             </Col>
           </Row>
         </CardBody>
       </Card>
+      {/*Filter Dropdown Area end here */}
 
       <Card className="uapp-employee-search">
         <CardBody>
+          {/* Filter Page number and column hide Area starts here*/}
           <Row className="mb-3">
-            <Col lg="5" md="5" sm="12" xs="12">
-              {/* <ButtonForFunction
-                func={handleAddUniversity}
-                className={"btn btn-uapp-add "}
-                icon={<i className="fas fa-plus"></i>}
-                name={" Add New"}
-                permission={6}
-              /> */}
+            <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
+              <h5 className="text-orange fw-700">Total {entity} items</h5>
+              <Download
+                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`}
+                className="mx-2"
+                fileName="Applications.xlsx"
+              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
               <div className="d-flex flex-wrap justify-content-end">
-                {/* <Col lg="2">
-                    
-                    <div className='ms-2'>
-                      <ReactToPrint
-                        trigger={()=><div className="uapp-print-icon">
-                          <div className="text-right">
-                            <span title="Print to pdf"> <i className="fas fa-print"></i> </span>
-                          </div>
-                        </div>}
-                        content={() => componentRef.current}
-                      />
-                    </div>
-                </Col> */}
                 <div className="mr-3 mb-2">
                   <div className="d-flex align-items-center">
                     <div className="mr-2">Order By :</div>
@@ -770,9 +1121,6 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     <DropdownMenu className="bg-dd-4">
                       <div className="d-flex justify-content-around align-items-center mt-2">
                         <div className="cursor-pointer">
-                          {/* <p onClick={handleExportXLSX}>
-                            <i className="fas fa-file-excel"></i>
-                          </p> */}
                           <ReactTableConvertToXl
                             id="test-table-xls-button"
                             table="table-to-xls"
@@ -812,7 +1160,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                       {tableData.map((table, i) => (
                         <div className="d-flex justify-content-between">
                           <Col md="8" className="">
-                            <p className="">{table?.collumnName}</p>
+                            <p className="">{table?.title}</p>
                           </Col>
 
                           <Col md="4" className="text-center">
@@ -823,7 +1171,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                                 id=""
                                 name="isAcceptHome"
                                 onChange={(e) => {
-                                  handleChecked(e, table?.id);
+                                  handleChecked(e, i);
                                 }}
                                 defaultChecked={table?.isActive}
                               />
@@ -839,314 +1187,334 @@ const AdmissionManagerApplication = ({ currentUser }) => {
               </div>
             </Col>
           </Row>
+          {/*Filter Page number and column hide Area ends here*/}
+
+          {/* Table Data Showing Area starts here*/}
           {permissions?.includes(permissionList.View_Application_List) && (
             <>
-              {loading ? (
-                <div className="d-flex justify-content-center mb-5">
-                  <div className="spinner-border" role="status">
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </div>
+              {applicationList?.length === 0 ? (
+                <h4 className="text-center">No Data Found</h4>
               ) : (
-                <div className="table-responsive mb-3" ref={componentRef}>
-                  <Table
-                    id="table-to-xls"
-                    style={{ verticalAlign: "middle" }}
-                    className="table-sm table-bordered"
-                  >
-                    <thead className="tablehead">
-                      <tr style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>APP ID</th>
-                        ) : null}
+                <>
+                  {loading ? (
+                    <div className="d-flex justify-content-center mb-5">
+                      <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="table-responsive mb-3" ref={componentRef}>
+                      <Table
+                        id="table-to-xls"
+                        style={{ verticalAlign: "middle" }}
+                        className="table-sm table-bordered"
+                      >
+                        <thead className="tablehead">
+                          <tr style={{ textAlign: "center" }}>
+                            {tableData[0]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                APP ID
+                              </th>
+                            ) : null}
 
-                        {tableData[1]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>UAPP ID</th>
-                        ) : null}
-                        {tableData[2]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Applicant</th>
-                        ) : null}
-                        {tableData[3]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Contact</th>
-                        ) : null}
-                        {tableData[4]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            University
-                          </th>
-                        ) : null}
-                        {tableData[5]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Campus</th>
-                        ) : null}
-                        {tableData[6]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Course</th>
-                        ) : null}
-                        {tableData[7]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Intake</th>
-                        ) : null}
-                        {tableData[8]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            Application Date
-                          </th>
-                        ) : null}
-                        {tableData[9]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Status</th>
-                        ) : null}
-                        {tableData[10]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Offer</th>
-                        ) : null}
-                        {tableData[11]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>Interview</th>
-                        ) : null}
-                        {tableData[12]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>ELPT</th>
-                        ) : null}
-                        {tableData[13]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            Enrolment Status
-                          </th>
-                        ) : null}
-                        {tableData[14]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>SLCs</th>
-                        ) : null}
-                        {tableData[15]?.isActive ? (
-                          <th style={{ verticalAlign: "middle" }}>
-                            Consultant
-                          </th>
-                        ) : null}
-                        {tableData[16]?.isActive ? (
-                          <th
-                            style={{ verticalAlign: "middle" }}
-                            className="text-center"
-                          >
-                            Action
-                          </th>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applicationList?.map((app, i) => (
-                        <tr key={i}>
-                          {tableData[0]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `/applicationDetails/${app?.id}/${app?.studentId}`
-                                  );
-                                }}
+                            {tableData[1]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                UAPP ID
+                              </th>
+                            ) : null}
+                            {tableData[2]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Applicant
+                              </th>
+                            ) : null}
+                            {tableData[3]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Contact
+                              </th>
+                            ) : null}
+                            {tableData[4]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                University
+                              </th>
+                            ) : null}
+                            {tableData[5]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Campus
+                              </th>
+                            ) : null}
+                            {tableData[6]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Course
+                              </th>
+                            ) : null}
+                            {tableData[7]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Intake
+                              </th>
+                            ) : null}
+                            {tableData[8]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Application Date
+                              </th>
+                            ) : null}
+                            {tableData[9]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Status
+                              </th>
+                            ) : null}
+
+                            {tableData[10]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Document Status
+                              </th>
+                            ) : null}
+
+                            {tableData[11]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Assessment
+                              </th>
+                            ) : null}
+
+                            {tableData[12]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>Offer</th>
+                            ) : null}
+                            {tableData[13]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Interview
+                              </th>
+                            ) : null}
+                            {tableData[14]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>ELPT</th>
+                            ) : null}
+                            {tableData[15]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Enrolment Status
+                              </th>
+                            ) : null}
+                            {tableData[16]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>SLCs</th>
+                            ) : null}
+                            {tableData[17]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Consultant
+                              </th>
+                            ) : null}
+                            {tableData[18]?.isActive ? (
+                              <th
+                                style={{ verticalAlign: "middle" }}
+                                className="text-center"
                               >
-                                {app?.applicationViewId}
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[1]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `studentProfile/${app?.studentId}`
-                                  );
-                                }}
-                              >
-                                {app?.uappId}
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[2]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `studentProfile/${app?.studentId}`
-                                  );
-                                }}
-                              >
-                                {app?.studentName}
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[3]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.studentPhone} <br />
-                              {app?.studentEmail}
-                            </td>
-                          ) : null}
-
-                          {tableData[4]?.isActive ? (
-                            <td
-                              style={{ verticalAlign: "middle" }}
-                              className="cursor-pointer hyperlink-hover"
-                            >
-                              <span
-                                onClick={() => {
-                                  history.push(
-                                    `/universityDetails/${app?.universityId}`
-                                  );
-                                }}
-                              >
-                                {app?.universityName}
-                              </span>
-                            </td>
-                          ) : null}
-
-                          {tableData[5]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.campusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[6]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.subjectName}
-                            </td>
-                          ) : null}
-
-                          {tableData[7]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.intakeName}
-                            </td>
-                          ) : null}
-
-                          {tableData[8]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.createdOn}
-                            </td>
-                          ) : null}
-
-                          {tableData[9]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.applicationStatusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[10]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.offerStatusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[11]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.interviewStatusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[12]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.elptStatusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[13]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.enrollmentStatusName}
-                            </td>
-                          ) : null}
-
-                          {tableData[14]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.studentFinanceName}
-                            </td>
-                          ) : null}
-
-                          {tableData[15]?.isActive ? (
-                            <td style={{ verticalAlign: "middle" }}>
-                              {app?.consultantName}
-                            </td>
-                          ) : null}
-
-                          {tableData[16]?.isActive ? (
-                            <td
-                              style={{ width: "8%", verticalAlign: "middle" }}
-                              className="text-center"
-                            >
-                              {/* <ButtonGroup variant="text"> */}
-
-                              <div className="d-flex">
-                                {permissions?.includes(
-                                  permissionList.View_Application_Details
-                                ) ? (
-                                  <LinkButton
-                                    url={`/applicationDetails/${app?.id}/${app?.studentId}`}
-                                    color="primary"
-                                    className={"mx-1 btn-sm mt-2"}
-                                    icon={<i className="fas fa-eye"></i>}
-                                  />
-                                ) : null}
-
-                                {/* <Button onClick={() => toggleDanger(student?.name, student?.id)} color="danger" className="mx-1 btn-sm">
-                              <i className="fas fa-trash-alt"></i>
-                            </Button> */}
-
-                                {permissions?.includes(
-                                  permissionList.Delete_Application_Details
-                                ) ? (
-                                  <ButtonForFunction
-                                    icon={
-                                      <i
-                                        className="fas fa-trash-alt"
-                                        style={{
-                                          paddingLeft: "1.8px",
-                                          paddingRight: "1.8px",
-                                        }}
-                                      ></i>
-                                    }
-                                    color={"danger"}
-                                    className={"mx-1 btn-sm mt-2"}
-                                    func={() => toggleDanger(app)}
-                                  />
-                                ) : null}
-                              </div>
-
-                              {/* </ButtonGroup> */}
-
-                              <Modal
-                                isOpen={deleteModal}
-                                toggle={() => setDeleteModal(!deleteModal)}
-                                className="uapp-modal"
-                              >
-                                <ModalBody>
-                                  <p>
-                                    Are You Sure to Delete this ? Once Deleted
-                                    it can't be Undone!
-                                  </p>
-                                </ModalBody>
-
-                                <ModalFooter>
-                                  <Button
-                                    color="danger"
-                                    onClick={handleDeleteData}
+                                Action
+                              </th>
+                            ) : null}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {applicationList?.map((app, i) => (
+                            <tr key={i}>
+                              {tableData[0]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/applicationDetails/${app?.id}/${app?.studentId}`}
                                   >
-                                    {progress ? <ButtonLoader /> : "YES"}
-                                  </Button>
-                                  <Button onClick={() => setDeleteModal(false)}>
-                                    NO
-                                  </Button>
-                                </ModalFooter>
-                              </Modal>
-                            </td>
-                          ) : null}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
+                                    {app?.applicationViewId}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {tableData[1]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/studentProfile/${app?.studentId}`}
+                                  >
+                                    {app?.uappId}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {tableData[2]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/studentProfile/${app?.studentId}`}
+                                  >
+                                    {app?.studentName}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {tableData[3]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.studentPhone} <br />
+                                  {app?.studentEmail}
+                                </td>
+                              ) : null}
+
+                              {tableData[4]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  <Link
+                                    className="text-id hover"
+                                    to={`/universityDetails/${app?.universityId}`}
+                                  >
+                                    {app?.universityName}
+                                  </Link>
+                                </td>
+                              ) : null}
+
+                              {tableData[5]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.campusName}
+                                </td>
+                              ) : null}
+
+                              {tableData[6]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.subjectName}
+                                </td>
+                              ) : null}
+
+                              {tableData[7]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.intakeName}
+                                </td>
+                              ) : null}
+
+                              {tableData[8]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.createdOn}
+                                </td>
+                              ) : null}
+
+                              {tableData[9]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.applicationStatusName}
+                                </td>
+                              ) : null}
+                              {tableData[10]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.documentStatus}
+                                </td>
+                              ) : null}
+                              {tableData[11]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.assesmentPercentage}%
+                                </td>
+                              ) : null}
+
+                              {tableData[12]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.offerStatusName}
+                                </td>
+                              ) : null}
+
+                              {tableData[13]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.interviewStatusName}
+                                </td>
+                              ) : null}
+
+                              {tableData[14]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.elptStatusName}
+                                </td>
+                              ) : null}
+
+                              {tableData[15]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.enrollmentStatusName}
+                                </td>
+                              ) : null}
+
+                              {tableData[16]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.studentFinanceName}
+                                </td>
+                              ) : null}
+
+                              {tableData[17]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.consultantName}
+                                </td>
+                              ) : null}
+
+                              {tableData[18]?.isActive ? (
+                                <td
+                                  style={{
+                                    width: "8%",
+                                    verticalAlign: "middle",
+                                  }}
+                                  className="text-center"
+                                >
+                                  {/* Application Details page link Button */}
+                                  <div className="d-flex">
+                                    {permissions?.includes(
+                                      permissionList.View_Application_Details
+                                    ) ? (
+                                      <LinkButton
+                                        url={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                        color="primary"
+                                        className={"mx-1 btn-sm mt-2"}
+                                        icon={<i className="fas fa-eye"></i>}
+                                      />
+                                    ) : null}
+
+                                    {/* Chat Button */}
+                                    <ButtonForFunction
+                                      icon={
+                                        <i
+                                          className="fas fa-comment"
+                                          style={{
+                                            paddingLeft: "1.8px",
+                                            paddingRight: "1.8px",
+                                          }}
+                                        ></i>
+                                      }
+                                      color={"info"}
+                                      className={"mx-1 btn-sm mt-2"}
+                                      func={() => {
+                                        setChatOpen(true);
+                                        setchatapp(app);
+                                      }}
+                                    />
+
+                                    {/* Delete Button */}
+                                    {permissions?.includes(
+                                      permissionList.Delete_Application_Details
+                                    ) ? (
+                                      <ButtonForFunction
+                                        icon={
+                                          <i
+                                            className="fas fa-trash-alt"
+                                            style={{
+                                              paddingLeft: "1.8px",
+                                              paddingRight: "1.8px",
+                                            }}
+                                          ></i>
+                                        }
+                                        color={"danger"}
+                                        className={"mx-1 btn-sm mt-2"}
+                                        func={() => toggleDanger(app)}
+                                      />
+                                    ) : null}
+                                  </div>
+                                </td>
+                              ) : null}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}
-          <Pagination
+          {/* Table Data Showing Area end here*/}
+
+          {/* Pagination */}
+          <PaginationOnly
             dataPerPage={dataPerPage}
             totalData={entity}
             paginate={paginate}
@@ -1154,7 +1522,35 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           />
         </CardBody>
       </Card>
-    </div>
+
+      {/* Application Delete models  */}
+      <ConfirmModal
+        text="Are You Sure to Delete this ? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={handleDeleteData}
+        cancel={() => setDeleteModal(false)}
+        progress={progress}
+      />
+
+      {/* Chat Action Component  */}
+      {chatOpen === true && (
+        <div className="messanger">
+          <MessageHistoryCardApplicationDetailsPage
+            applicationStatusId={chatapp.applicationStatusId}
+            applicationId={`${chatapp.id}`}
+            viewId={`${chatapp.applicationViewId}`}
+            chatOpen={chatOpen}
+            close={() => {
+              isChatOpen();
+              setchatapp(null);
+            }}
+            attach={false}
+            user={false}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

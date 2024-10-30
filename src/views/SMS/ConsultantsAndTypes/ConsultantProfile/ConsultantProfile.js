@@ -1,5 +1,5 @@
-import React from "react";
-// import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 // import { Card, CardHeader } from "reactstrap";
 // import { userTypes } from "../../../../../../constants/userTypeConstant";
 // import AssociateDetails from "./Component/AssociateDetails";
@@ -7,24 +7,30 @@ import ParentConsultant from "./ProfileComponent/ParentConsultant";
 import ProfileHeadCard from "./ProfileComponent/ProfileHeadCard";
 // import ProfileRatingsBreakdown from "../../ProfileComponent/ProfileRatingsBreakdown";
 // import ProfileRecruitingForFrom from "../../ProfileComponent/ProfileRecruitingForFrom";
-// import ProfileRecruitingType from "../../ProfileComponent/ProfileRecruitingType";
+import ProfileRecruitingType from "./ProfileComponent/ProfileRecruitingType";
 import ProfileReview from "./ProfileComponent/ProfileReview";
 import Consent from "./ProfileComponent/Consent";
 import ConsultantDetails from "./ProfileComponent/ConsultantDetails";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
+import ProfileRecruitingForFrom from "./ProfileComponent/ProfileRecruitingForFrom";
+import ProfileRatingsBreakdown from "./ProfileComponent/ProfileRatingsBreakdown";
+import get from "../../../../helpers/get";
+import Note from "./ProfileComponent/Note";
 
 const ConsultantProfile = () => {
   const userId = localStorage.getItem("referenceId");
   // const history = useHistory();
-  // const { id } = useParams();
-  // console.log(id);
+  const { id } = useParams();
+  const [status, setStatus] = useState(false);
 
-  // const backToConsultantList = () => {
-  //   history.push("/consultantList");
-  // };
-
+  useEffect(() => {
+    get(`Consultant/Status/${id}`).then((res) => {
+      setStatus(res);
+    });
+  }, [id]);
   return (
     <div>
+      <BreadCrumb title="Profile" backTo="" path={`/`} />
       {/* <Card className="uapp-card-bg">
         <CardHeader className="page-header">
           <h3 className="text-white">Consultant Profile</h3>
@@ -42,21 +48,24 @@ const ConsultantProfile = () => {
           ) : null}
         </CardHeader>
       </Card> */}
-      <BreadCrumb title="Profile" backTo="" path={`/`} />
+
       <div className="row">
         <div className="col-lg-8 col-sm-12">
           <ProfileHeadCard id={userId} />
           <ConsultantDetails id={userId} />
-          {/* <ProfileReview id={id} /> */}
+
+          <ProfileReview id={id} />
           {/* <AssociateDetails id={id} /> */}
         </div>
         <div className="col-lg-4 col-sm-12">
           <ParentConsultant id={userId} />
           {/* <ProfileRecruitingType id={id} /> */}
-          {/* <ProfileRecruitingForFrom id={id} /> */}
-          {/* <ProfileRatingsBreakdown id={id} /> */}
+          <ProfileRecruitingForFrom id={userId} />
+
           <Consent id={userId} />
-          <ProfileReview id={userId} />
+          <Note id={id} />
+          <ProfileRatingsBreakdown id={id} />
+          {/* <ProfileReview id={userId} /> */}
         </div>
       </div>
     </div>

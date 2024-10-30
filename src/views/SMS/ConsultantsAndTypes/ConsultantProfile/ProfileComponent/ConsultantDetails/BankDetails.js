@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import get from "../../../../../../helpers/get";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { Link } from "react-router-dom";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const BankDetails = ({ id }) => {
   const [data, setData] = useState({});
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
+
   useEffect(() => {
     get(`BankDetails/Index/${id}`).then((res) => {
       setData(res);
@@ -19,8 +22,9 @@ const BankDetails = ({ id }) => {
             <b>Bank Details</b>
           </td>
           <td className="border-0 text-right">
-            {" "}
-            <Link to={`/consultantBankInformation/${id}`}> Edit</Link>
+            {permissions?.includes(permissionList.Edit_Consultant) ? (
+              <Link to={`/consultantBankInformation/${id}`}> Edit</Link>
+            ) : null}
           </td>
         </thead>
       </Table>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Image, Modal as Modals, Upload } from "antd";
 import {
   Button,
   Col,
@@ -18,21 +17,16 @@ import { rootUrl } from "../../../../../constants/constants";
 import remove from "../../../../../helpers/remove";
 import { useToasts } from "react-toast-notifications";
 import post from "../../../../../helpers/post";
-import ButtonForFunction from "../../../Components/ButtonForFunction";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import put from "../../../../../helpers/put";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import ButtonLoader from "../../../Components/ButtonLoader";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import doc from "../../../../../assets/icon/doc.png";
-import edit from "../../../../../assets/icon/edit.png";
-import upload from "../../../../../assets/icon/upload.png";
-import download from "../../../../../assets/icon/download.png";
-import bin from "../../../../../assets/icon/bin.png";
-import { dateFormate } from "../../../../../components/date/calenderFormate";
 import Preview from "../../../../../components/ui/Preview";
+import Download from "../../../../../components/ui/Download";
+import CancelButton from "../../../../../components/buttons/CancelButton";
 
 const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
   console.log(applicationInfo);
@@ -41,54 +35,18 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
   const [docuValue, setDocuValue] = useState(0);
   const [docuDD, setDocuDD] = useState([]);
   const [openStatusModal11, setOpenStatusModal11] = useState(false);
-  const [studentDocumentId, setStudentDocumentId] = useState(0);
-  // const [success, setSuccess] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
-  const [progress, setProgress] = useState(false);
   const [progress2, setProgress2] = useState(false);
   const [progress3, setProgress3] = useState(false);
-  const [progress4, setProgress4] = useState(false);
   const [progress9, setProgress9] = useState(false);
-  const [progress10, setProgress10] = useState(false);
-  const [progress11, setProgress11] = useState(false);
-  const [progress12, setProgress12] = useState(false);
   const [progress13, setProgress13] = useState(false);
-  const [rejected, setRejected] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
+
   const [FileList, setFileList] = useState([]);
 
-  const [delDocNam, setDelDocNam] = useState("");
-  const [delFileId, setDelFileId] = useState(0);
-  const [delFileName, setDelFileName] = useState("");
   //   for document upload
-  const [FileList2, setFileList2] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
-  const [studentDocuId, setStudentDocuId] = useState(0);
-  const [delDocData, setdelDocData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteModal2, setDeleteModal2] = useState(false);
-
-  const [FileList1, setFileList1] = useState([]);
-
-  const [uploadError, setUploadError] = useState(false);
-  const [previewVisible1, setPreviewVisible1] = useState(false);
-  const [previewImage1, setPreviewImage1] = useState("");
-  const [previewTitle1, setPreviewTitle1] = useState("");
-
-  const [viewModalOpen, setViewModalOpen] = useState(false);
-  const [docuData, setDocuData] = useState({});
-
-  const [docuType, setDocuType] = useState([]);
-  const [docuTypeLabel, setDocuTypeLabel] = useState("Select Document Type");
-  const [docuTypeValue, setDocuTypeValue] = useState(0);
-  const [docutypeError, setDocuTypeError] = useState(false);
-
-  const [docuCateDD, setDocuCateDD] = useState([]);
-  const [docuCateLabel, setDocuCateLabel] = useState("Category");
-  const [docuCateValue, setDocuCateValue] = useState(0);
-  const [categoryError, setCategoryError] = useState(false);
   const [Document, setDocument] = useState("");
   const [DocumentError, setDocumentError] = useState("");
 
@@ -98,15 +56,15 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
 
   const [uploadDocuId, setUploadDocuId] = useState(0);
   const [updateData, setUpdateData] = useState({});
+  const [rejected, setRejected] = useState("");
+  const [rejectedError, setRejectedError] = useState("");
 
   const { addToast } = useToasts();
 
   useEffect(() => {
-    // document upload
     get(
       `ApplicationDocument/GetDocuments?applicationid=${applicationInfo?.id}`
     ).then((res) => {
-      console.log("docu data", res);
       setUploadedDocuData(res);
     });
 
@@ -119,11 +77,11 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
 
   const statusModal1 = (docu) => {
     setDocuLabel(
-      docu?.applicationDocumentStatusId == 1
+      docu?.applicationDocumentStatusId === 1
         ? "In Review"
-        : docu?.applicationDocumentStatusId == 2
+        : docu?.applicationDocumentStatusId === 2
         ? "Accepted"
-        : docu?.applicationDocumentStatusId == 3
+        : docu?.applicationDocumentStatusId === 3
         ? "Rejected"
         : "No File"
     );
@@ -132,13 +90,6 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     console.log(docu);
     setRejected(docu?.reason);
     setDocuValue(docu?.applicationDocumentStatusId);
-    setStudentDocumentId(studentDocuId);
-
-    // get(`StudentUploadDocument/StatusInfo/${studentDocuId}`).then((res) => {
-    //   setDocuLabel(res?.name);
-    //   setDocuValue(res?.id);
-    // });
-
     setOpenStatusModal11(true);
   };
 
@@ -151,34 +102,43 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     setOpenStatusModal11(false);
   };
 
+  const handleReason = (e) => {
+    setRejected(e.target.value);
+    if (e.target.value === "") {
+      setRejectedError("Reason is required");
+    } else {
+      setRejectedError("");
+    }
+  };
+
   const handleStatusUpdateSubmit = (event) => {
     event.preventDefault();
 
     const subdata = new FormData(event.target);
 
-    // for (var value of subdata.values()) {
-
-    // }
-
-    setProgress13(true);
-    post("ApplicationDocument/UpdateStatus", subdata).then((res) => {
-      if (res?.status == 200 && res?.data?.isSuccess === true) {
-        addToast("Document status updated", {
-          appearance: "success",
-          autoDismiss: true,
-        });
-        setProgress13(false);
-        setOpenStatusModal11(false);
-        setUpdateData({});
-        setRejected({});
-        setSuccess(!success);
-      } else {
-        addToast("Something went wrong", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      }
-    });
+    if (docuValue === 3 && !rejected) {
+      setRejectedError("Reason is required");
+    } else {
+      setProgress13(true);
+      post("ApplicationDocument/UpdateStatus", subdata).then((res) => {
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast("Document status updated", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setProgress13(false);
+          setOpenStatusModal11(false);
+          setUpdateData({});
+          setRejected({});
+          setSuccess(!success);
+        } else {
+          addToast("Something went wrong", {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
+    }
   };
 
   const selectDocuStatus = (label, value) => {
@@ -194,7 +154,6 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
   // trial end
 
   const changeHandler = (e, doc) => {
-    console.log(e.target.files);
     setFileList(e.target.files);
     setIsSelected(true);
     setUploadDocuId(doc?.id);
@@ -206,46 +165,9 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     setDeleteModal(true);
   };
 
-  const toggleDangerFile = (docFile) => {
-    setDelFileName(docFile?.studentDocumentFile?.fileName);
-    setDelFileId(docFile?.studentDocumentLevelId);
-    setDeleteModal2(true);
-  };
-
-  // on Close Delete Modal
-  // const closeDeleteModal = () => {
-  //   setDeleteModal(false);
-  //   localStorage.removeItem("delDocNam");
-  //   localStorage.removeItem("delDocId");
-  // };
-
-  // const handleDeleteDocument = () => {
-  //   setProgress11(true);
-  //   remove(`ApplicationDocument/Delete/${delFile?.id}`).then((action) => {
-  //     setProgress11(false);
-  //     setDeleteModal(false);
-  //     setDelFile({});
-  //     setSuccess(!success);
-  //     addToast("Document deleted successfully", {
-  //       appearance: "error",
-  //       autoDismiss: true,
-  //     });
-  //     localStorage.removeItem("delDocNam");
-  //     localStorage.removeItem("delDocId");
-  //   });
-  // };
-
-  // const toggleDangerFile = (docFile) => {
-  //   localStorage.setItem("delFileName", docFile?.studentDocumentFile?.fileName);
-  //   localStorage.setItem("delFileId", docFile?.studentDocumentLevelId);
-  //   setDeleteModal2(true);
-  // };
-
   // on Close Delete Modal
   const closeDeleteModal = () => {
     setDeleteModal(false);
-    setDelDocNam("");
-    setdelDocData({});
   };
 
   const handleDeleteDocument = () => {
@@ -260,8 +182,6 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
         appearance: "error",
         autoDismiss: true,
       });
-      setDelDocNam("");
-      setdelDocData({});
     });
   };
 
@@ -272,9 +192,9 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
   };
 
   const handleDeleteFile = () => {
-    setProgress10(true);
+    setProgress3(true);
     remove(`ApplicationDocument/DeleteFile/${delFile?.id}`).then((action) => {
-      setProgress10(false);
+      setProgress3(false);
       setDeleteModal2(false);
       setDelFile({});
       setSuccess(!success);
@@ -301,24 +221,6 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     e.preventDefault();
     const subData = new FormData(e.target);
 
-    // subData.append(
-    //   "studentDocument",
-    //   FileList1.length == 0 ? null : FileList1[0]?.originFileObj
-    // );
-
-    // for (var i of subData) {
-    // }
-
-    // if (docuCateValue == 0) {
-    //   setCategoryError(true);
-    // }
-    // if (docuTypeValue == 0) {
-    //   setDocuTypeError(true);
-    // }
-    // if (FileList1.length < 1) {
-    //   setUploadError(true);
-    // }
-
     if (!Document) {
       setDocumentError("Document is required");
     } else {
@@ -333,14 +235,9 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
             appearance: "success",
             autoDismiss: true,
           });
-          // history.push('/addUniversityRequiredDocument');
           setSuccess(!success);
-          // setFileList1([]);
+
           setDocument("");
-          // setDocuTypeLabel("Select Document Type");
-          // setDocuTypeValue(0);
-          // setDocuCateLabel("Category");
-          // setDocuCateValue(0);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -362,9 +259,7 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     // }
 
     if (uploadDocuId !== 0) {
-      setProgress12(true);
       post("ApplicationDocument/UploadDocument", subData).then((res) => {
-        setProgress12(false);
         if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast("File uploaded successfully", {
             appearance: "success",
@@ -386,7 +281,6 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
 
   if (isSelected === true && FileList?.length > 0) {
     handleCardUpload();
-
     setIsSelected(false);
     setUploadDocuId(0);
   }
@@ -395,325 +289,222 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
     <div className="custom-card-border p-4 mb-3 ">
       <Row>
         <Col>
-          {uploadedDocuData.map((docu, i) => (
-            <div
-              key={i}
-              className={
-                docu?.uploadedFile === null
-                  ? "border border-dark rounded mb-3"
-                  : docu?.applicationDocumentStatusId === 2
-                  ? "border border-success rounded mb-3"
-                  : docu?.applicationDocumentStatusId === 3
-                  ? "border border-danger rounded mb-3"
-                  : "border border-warning rounded mb-3"
-              }
-            >
-              <div className="p-3">
-                <Row className="align-items-center">
-                  <Col xs="6">
-                    <div className="d-flex align-items-center">
-                      <div className="mr-2">
-                        <img src={doc} alt="" />
-                      </div>
-                      <div>
-                        <div>
-                          <b> {docu?.documentName} </b>
-                          {docu?.templateFileUrl ? (
-                            <a
-                              href={rootUrl + docu?.templateFileUrl}
-                              target="blank"
-                              className="file-download"
-                            >
-                              Download
-                            </a>
-                          ) : null}
-                        </div>
-                        {docu?.templateFileUrl ? (
-                          <span className="fs-12px">
-                            Download & Upload again flowing instructions
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                  </Col>
-                  <Col xs="6">
-                    <div className="d-flex align-items-center justify-content-between">
-                      <div>
-                        {docu?.uploadedFile === null ? (
-                          "No files"
-                        ) : (
+          {uploadedDocuData.map((item, i) => (
+            <div className="mb-4 border-bottom">
+              <div className="bg-light p-2 rounded mb-3">
+                <p className="mb-0 text-dark">{item.categoryName}</p>
+              </div>
+              {item?.applicationDocuments?.map((docu, j) => (
+                <div
+                  key={j}
+                  className={
+                    docu?.uploadedFile === null
+                      ? "border border-dark rounded mb-3"
+                      : docu?.applicationDocumentStatusId === 2
+                      ? "border border-success rounded mb-3"
+                      : docu?.applicationDocumentStatusId === 3
+                      ? "border border-danger rounded mb-3"
+                      : "border border-warning rounded mb-3"
+                  }
+                >
+                  <div className="p-3">
+                    <Row className="align-items-center">
+                      <Col xs="6">
+                        <div className="d-flex align-items-center">
+                          <div className="mr-2">
+                            <img src={doc} alt="" />
+                          </div>
                           <div>
-                            {userType ===
-                              userTypes?.AdmissionManager.toString() ||
-                            userType ===
-                              userTypes?.AdmissionOfficer.toString() ||
-                            userType === userTypes?.Admin.toString() ||
-                            userType === userTypes?.SystemAdmin.toString() ||
-                            userType === userTypes?.ProviderAdmin.toString() ||
-                            userType ===
-                              userTypes?.ComplianceManager.toString() ? (
-                              <>
-                                <span>
-                                  {docu?.applicationDocumentStatusId === 1
-                                    ? "In review"
-                                    : docu?.applicationDocumentStatusId === 2
-                                    ? "Accepted"
-                                    : "Rejected"}{" "}
-                                </span>
-                                {applicationInfo.applicationStatusId !== 13 && (
-                                  <img
-                                    onClick={() => statusModal1(docu)}
-                                    src={edit}
-                                    style={{
-                                      cursor: "pointer",
-                                    }}
-                                    alt=""
-                                  />
-                                )}
-                              </>
+                            <div>
+                              <b> {docu?.documentName} </b>
+                              {docu?.templateFileUrl ? (
+                                <a
+                                  href={rootUrl + docu?.templateFileUrl}
+                                  target="blank"
+                                  className="file-download"
+                                >
+                                  Download
+                                </a>
+                              ) : null}
+                            </div>
+                            {docu?.templateFileUrl ? (
+                              <span className="fs-12px">
+                                Download & Upload again following instructions
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </Col>
+
+                      <Col xs="6">
+                        <div className="d-flex align-items-center justify-content-between">
+                          <div>
+                            {docu?.uploadedFile === null ? (
+                              "No files"
                             ) : (
-                              <>
-                                <span>
-                                  {docu?.applicationDocumentStatusId === 1
-                                    ? "In review"
-                                    : docu?.applicationDocumentStatusId === 2
-                                    ? "Accepted"
-                                    : "Rejected"}
-                                </span>
-                              </>
+                              <div>
+                                {permissions?.includes(
+                                  permissionList?.Update_Application_Document_Status
+                                ) ? (
+                                  <>
+                                    <span>
+                                      {docu?.applicationDocumentStatusId === 1
+                                        ? "In review"
+                                        : docu?.applicationDocumentStatusId ===
+                                          2
+                                        ? "Accepted"
+                                        : "Rejected"}{" "}
+                                    </span>
+                                    {applicationInfo.applicationStatusId !==
+                                      13 && (
+                                      <i
+                                        onClick={() => statusModal1(docu)}
+                                        className={
+                                          docu?.applicationDocumentStatusId ===
+                                          2
+                                            ? "fas fa-pen text-success pointer"
+                                            : docu?.applicationDocumentStatusId ===
+                                              3
+                                            ? "fas fa-pen text-danger pointer"
+                                            : "fas fa-pen text-warning pointer"
+                                        }
+                                      ></i>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    <span>
+                                      {docu?.applicationDocumentStatusId === 1
+                                        ? "In review"
+                                        : docu?.applicationDocumentStatusId ===
+                                          2
+                                        ? "Accepted"
+                                        : "Rejected"}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
                             )}
                           </div>
-                        )}
-                      </div>
 
-                      <div>
-                        {docu?.uploadedFile?.fileUrl && (
-                          <Preview file={docu?.uploadedFile?.fileUrl} />
-                        )}
-                      </div>
+                          <div>
+                            {docu?.uploadedFile?.fileUrl ? (
+                              <Preview file={docu?.uploadedFile?.fileUrl} />
+                            ) : (
+                              <i class="fas fa-eye text-info fs-24px invisible"></i>
+                            )}
+                          </div>
 
-                      <div>
-                        {docu?.uploadedFile?.fileUrl ? (
-                          <a
-                            key={i}
-                            href={rootUrl + docu?.uploadedFile?.fileUrl}
-                            target="blank"
-                          >
-                            <i class="fas fa-arrow-circle-down text-success fs-24px"></i>
-                          </a>
-                        ) : (
-                          <>
-                            {userType === userTypes?.Student ||
-                            userType === userTypes?.Consultant ? (
+                          <div>
+                            {docu?.uploadedFile?.fileUrl &&
+                            docu?.applicationDocumentStatusId !== 3 ? (
+                              <Download
+                                fileurl={docu?.uploadedFile?.fileUrl}
+                                fileName={docu?.uploadedFile?.fileName}
+                              />
+                            ) : (
                               <>
-                                {applicationInfo.applicationStatusId !== 13 &&
-                                docu?.applicationDocumentStatusId !== 2 ? (
+                                {userType === userTypes?.Student ||
+                                userType === userTypes?.Consultant ? (
                                   <>
-                                    {permissions?.includes(
-                                      permissionList.Add_Application_Document
-                                    ) ? (
-                                      <label htmlFor={`hp+${i}`}>
-                                        <i class="fas fa-arrow-circle-up fs-24px text-warning pointer"></i>
-                                      </label>
-                                    ) : null}
+                                    {applicationInfo.applicationStatusId !==
+                                      13 &&
+                                    docu?.applicationDocumentStatusId !== 2 ? (
+                                      <>
+                                        {permissions?.includes(
+                                          permissionList.Add_Application_Document
+                                        ) ? (
+                                          <label htmlFor={`hp+${j}`}>
+                                            <i class="fas fa-arrow-circle-up fs-24px text-warning pointer"></i>
+                                          </label>
+                                        ) : null}
 
-                                    <input
-                                      name={i}
-                                      id={`hp+${i}`}
-                                      type="file"
-                                      hidden
-                                      onChange={(e) => changeHandler(e, docu)}
-                                    />
+                                        <input
+                                          name={i}
+                                          id={`hp+${j}`}
+                                          type="file"
+                                          hidden
+                                          onChange={(e) =>
+                                            changeHandler(e, docu)
+                                          }
+                                        />
+                                      </>
+                                    ) : null}
                                   </>
                                 ) : null}
                               </>
-                            ) : null}
-                          </>
-                        )}
-                      </div>
-                      <div>
-                        {permissions?.includes(
-                          permissionList.Delete_Application_Document
-                        ) ? (
-                          <>
-                            {" "}
-                            {applicationInfo.applicationStatusId !== 13 && (
-                              <i
-                                class="fas fa-trash pointer text-danger "
-                                onClick={() => toggleDanger(docu)}
-                              ></i>
                             )}
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
+                          </div>
+                          <div>
+                            {userType !== userTypes?.Consultant &&
+                              userType !== userTypes?.Student && (
+                                <>
+                                  {permissions?.includes(
+                                    permissionList.Delete_Application_Document
+                                  ) ? (
+                                    <>
+                                      {applicationInfo.applicationStatusId !==
+                                        13 && (
+                                        <i
+                                          class="fas fa-trash pointer text-danger "
+                                          onClick={() => toggleDanger(docu)}
+                                        ></i>
+                                      )}
+                                    </>
+                                  ) : null}
+                                </>
+                              )}
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
 
-                {docu?.uploadedFile && (
-                  <div className="mt-2">
-                    <span className="fs-12px">
-                      <a
-                        href={rootUrl + docu?.uploadedFile?.fileUrl}
-                        target="blank"
-                        download
-                      >
-                        <span style={{ color: "#1D94AB" }}>
-                          {docu?.uploadedFile?.fileName.slice(0, 15)}
-                          {"... "}
-                        </span>
-                      </a>
+                    {docu?.uploadedFile && (
+                      <div className="mt-2">
+                        <span className="fs-12px">
+                          <span style={{ color: "#1D94AB" }}>
+                            {docu?.uploadedFile?.fileName.slice(0, 15)}
+                            {"... "}
+                          </span>
 
-                      <span className="text-gray">
-                        {docu?.uploadedFile?.uploadedBy} at{" "}
-                        {docu?.uploadedFile?.uploadedOn} {}
-                      </span>
-                      {applicationInfo.applicationStatusId !== 13 &&
-                      docu?.uploadedFile?.canDelete ? (
-                        <>
-                          {permissions?.includes(
-                            permissionList.Delete_Application_Document
-                          ) ? (
-                            <i
-                              onClick={() => {
-                                setDelFile(docu?.uploadedFile);
-
-                                setDeleteModal2(true);
-                              }}
-                              title="delete file"
-                              className="far fa-times-circle text-danger pointer"
-                            ></i>
+                          <span className="text-gray">
+                            {docu?.uploadedFile?.uploadedBy} at{" "}
+                            {docu?.uploadedFile?.uploadedOn} {}
+                          </span>
+                          {applicationInfo.applicationStatusId !== 13 &&
+                          docu?.uploadedFile?.canDelete ? (
+                            <>
+                              {permissions?.includes(
+                                permissionList.Delete_Application_Document
+                              ) ? (
+                                <i
+                                  onClick={() => {
+                                    setDelFile(docu?.uploadedFile);
+                                    setDeleteModal2(true);
+                                  }}
+                                  title="delete file"
+                                  className="far fa-times-circle text-danger pointer"
+                                ></i>
+                              ) : null}
+                            </>
                           ) : null}
-                        </>
-                      ) : null}
-                    </span>
-                  </div>
-                )}
+                        </span>
+                      </div>
+                    )}
 
-                {docu?.reason && (
-                  <div className="mt-1">
-                    <span className="file-upload-warning">
-                      <i class="fa-solid fa-triangle-exclamation"></i>
-                      {docu?.reason}
-                    </span>
+                    {docu?.reason && (
+                      <div className="mt-1">
+                        <span className="file-upload-warning">
+                          <i class="fa-solid fa-triangle-exclamation"></i>
+                          {docu?.reason}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              ))}
             </div>
           ))}
-          <ConfirmModal
-            text={`Do You Want To Delete ${delDocNam}?`}
-            isOpen={deleteModal}
-            toggle={closeDeleteModal}
-            buttonStatus={buttonStatus}
-            progress={progress2}
-            cancel={closeDeleteModal}
-            confirm={handleDeleteDocument}
-          />
-
-          {/* delete file modal */}
-
-          <ConfirmModal
-            text={`Do You Want To Delete ${delFileName}?`}
-            isOpen={deleteModal2}
-            toggle={closeDeleteModalFile}
-            buttonStatus={buttonStatus}
-            progress={progress3}
-            cancel={closeDeleteModalFile}
-            confirm={() => handleDeleteFile(delFileId)}
-          />
-          {/* delete file modal */}
-
-          {/* status update modal starts here */}
-          <Modal
-            isOpen={openStatusModal11}
-            toggle={closeStatusModal11}
-            className="uapp-modal"
-          >
-            <ModalHeader>Update Status</ModalHeader>
-
-            <ModalBody>
-              <form onSubmit={handleStatusUpdateSubmit}>
-                <input
-                  type="hidden"
-                  name="applicationDocumentId"
-                  id="applicationDocumentId"
-                  value={updateData?.id}
-                />
-
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="3">
-                    <span>
-                      {" "}
-                      Status
-                      <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
-                  <Col md="6">
-                    <Select
-                      options={statusName}
-                      value={{
-                        label: docuLabel,
-                        value: docuValue,
-                      }}
-                      onChange={(opt) => selectDocuStatus(opt.label, opt.value)}
-                      name="statusId"
-                      id="statusId"
-                    />
-                  </Col>
-                </FormGroup>
-
-                {docuValue == 3 ? (
-                  <FormGroup row className="has-icon-left position-relative">
-                    <Col md="3">
-                      <span>
-                        {" "}
-                        Reason
-                        <span className="text-danger">*</span>{" "}
-                      </span>
-                    </Col>
-                    <Col md="6">
-                      <Input
-                        type="textarea"
-                        row={8}
-                        required
-                        name="reason"
-                        defaultValue={rejected}
-                        id="reason"
-                      />
-                    </Col>
-                  </FormGroup>
-                ) : null}
-
-                <FormGroup row>
-                  <Col md="9">
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        color="danger"
-                        onClick={closeStatusModal11}
-                        className="mr-1 mt-3"
-                      >
-                        Cancel
-                      </Button>
-
-                      {permissions?.includes(
-                        permissionList.Edit_Student_Document_Level
-                      ) ? (
-                        <Button
-                          className="ml-1 mt-3"
-                          color="primary"
-                          // disabled={buttonStatus}
-                        >
-                          {progress13 ? <ButtonLoader /> : "Update"}
-                        </Button>
-                      ) : null}
-                    </div>
-                  </Col>
-                </FormGroup>
-              </form>
-            </ModalBody>
-          </Modal>
-          {/* status update modal ends here */}
         </Col>
       </Row>
 
@@ -745,7 +536,7 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                 <FormGroup row>
                   <Col sm="11" md="9" lg="7">
                     <p>
-                      <span className="text-danger">*</span> Document Label
+                      <span className="text-danger">*</span> Title
                     </p>
 
                     <Input
@@ -774,6 +565,115 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
           )}
         </>
       )}
+
+      {/* status update modal starts here */}
+      <Modal
+        isOpen={openStatusModal11}
+        toggle={closeStatusModal11}
+        className="uapp-modal"
+      >
+        <ModalHeader>Update Status</ModalHeader>
+
+        <ModalBody>
+          <form onSubmit={handleStatusUpdateSubmit}>
+            <input
+              type="hidden"
+              name="applicationDocumentId"
+              id="applicationDocumentId"
+              value={updateData?.id}
+            />
+
+            <FormGroup row className="has-icon-left position-relative">
+              <Col md="3">
+                <span>
+                  {" "}
+                  Status
+                  <span className="text-danger">*</span>{" "}
+                </span>
+              </Col>
+              <Col md="6">
+                <Select
+                  options={statusName}
+                  value={{
+                    label: docuLabel,
+                    value: docuValue,
+                  }}
+                  onChange={(opt) => selectDocuStatus(opt.label, opt.value)}
+                  name="statusId"
+                  id="statusId"
+                />
+              </Col>
+            </FormGroup>
+
+            {docuValue === 3 ? (
+              <FormGroup row className="has-icon-left position-relative">
+                <Col md="3">
+                  <span>
+                    {" "}
+                    Reason
+                    <span className="text-danger">*</span>{" "}
+                  </span>
+                </Col>
+                <Col md="6">
+                  <Input
+                    type="textarea"
+                    row={8}
+                    name="reason"
+                    onChange={(e) => {
+                      handleReason(e);
+                    }}
+                    value={rejected}
+                    id="reason"
+                  />
+                  <span className="text-danger">{rejectedError}</span>
+                </Col>
+              </FormGroup>
+            ) : null}
+
+            <FormGroup row>
+              <Col md="9">
+                <div className="d-flex justify-content-end">
+                  <CancelButton cancel={closeStatusModal11} />
+
+                  {permissions?.includes(
+                    permissionList?.Update_Application_Document_Status
+                  ) ? (
+                    <SaveButton
+                      text="Update"
+                      progress={progress13}
+                      buttonStatus={progress13}
+                    />
+                  ) : null}
+                </div>
+              </Col>
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
+      {/* status update modal ends here */}
+
+      {/* delete doc modal */}
+      <ConfirmModal
+        text={`Do You Want To Delete ${delFile?.documentName}?`}
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress2}
+        cancel={closeDeleteModal}
+        confirm={handleDeleteDocument}
+      />
+
+      {/* delete file modal */}
+
+      <ConfirmModal
+        text={`Do You Want To Delete ${delFile?.fileName}?`}
+        isOpen={deleteModal2}
+        toggle={closeDeleteModalFile}
+        buttonStatus={buttonStatus}
+        progress={progress3}
+        cancel={closeDeleteModalFile}
+        confirm={() => handleDeleteFile(delFile?.id)}
+      />
     </div>
   );
 };

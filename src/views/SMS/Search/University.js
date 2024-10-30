@@ -34,6 +34,7 @@ const University = ({
   intakeValue,
   setFee,
   setUnInfo,
+  applicationTypes,
 }) => {
   const { addToast } = useToasts();
   const [loadAll, setLoalAll] = useState(false);
@@ -137,57 +138,79 @@ const University = ({
     setEligibleModal(true);
   };
   return (
-    <div key={i}>
+    <div
+      key={i}
+      className="custom-card-border mb-3"
+      style={{
+        borderBottom: `6px solid #045D5E`,
+        borderTopLeftRadius: "10px",
+        borderTopRightRadius: "10px",
+      }}
+    >
       <UniversityHead info={info} />
+      <div className="overflowY-630px">
+        {info?.subjects?.length < 1 ? (
+          <div className="text-center mb-24px">
+            <span className="nodata-found-style">No Courses found</span>
+          </div>
+        ) : (
+          <>
+            {info?.subjects.map((subjectInfo, i) => (
+              <div
+                style={{ border: "0.5px solid rgba(37, 37, 37, 0.12)" }}
+                className="px-4 py-3 background-for-odd-even"
+              >
+                {" "}
+                <Program
+                  subjectInfo={subjectInfo}
+                  i={i}
+                  userType={userType}
+                  userTypes={userTypes}
+                  permissions={permissions}
+                  permissionList={permissionList}
+                  showLocal={showLocal}
+                  showEU={showEU}
+                  showInt={showInt}
+                  studentDataValue={studentDataValue}
+                  applicationTypes={applicationTypes}
+                  addToWishList={() => addToWishList(subjectInfo)}
+                  toggleModal={() => toggleModal(subjectInfo, info)}
+                  checkEligibility={() => checkEligibility(info, subjectInfo)}
+                />
+              </div>
+            ))}
+            <div id={info?.universityId}></div>
+          </>
+        )}
 
-      {info?.subjects?.length < 1 ? (
-        <div className="text-center mb-24px">
-          <span className="nodata-found-style">No Courses found</span>
-        </div>
-      ) : (
-        <>
-          {info?.subjects.map((subjectInfo, i) => (
-            <Program
-              subjectInfo={subjectInfo}
-              i={i}
-              userType={userType}
-              userTypes={userTypes}
-              permissions={permissions}
-              permissionList={permissionList}
-              showLocal={showLocal}
-              showEU={showEU}
-              showInt={showInt}
-              studentDataValue={studentDataValue}
-              addToWishList={() => addToWishList(subjectInfo)}
-              toggleModal={() => toggleModal(subjectInfo, info)}
-              checkEligibility={() => checkEligibility(info, subjectInfo)}
-            />
+        {moreData?.length > 0 &&
+          moreData?.map((subjectInfo, i) => (
+            <div
+              style={{ border: "0.5px solid rgba(37, 37, 37, 0.12)" }}
+              className="px-4 py-3 background-for-odd-even-more-course"
+            >
+              {" "}
+              <Program
+                subjectInfo={subjectInfo}
+                i={i}
+                userType={userType}
+                userTypes={userTypes}
+                permissions={permissions}
+                permissionList={permissionList}
+                showLocal={showLocal}
+                showEU={showEU}
+                showInt={showInt}
+                studentDataValue={studentDataValue}
+                applicationTypes={applicationTypes}
+                addToWishList={() => addToWishList(subjectInfo)}
+                toggleModal={() => toggleModal(subjectInfo, info)}
+                checkEligibility={() => checkEligibility(info, subjectInfo)}
+              />
+            </div>
           ))}
-          <div id={info?.universityId}></div>
-        </>
-      )}
-
-      {moreData?.length > 0 &&
-        moreData?.map((subjectInfo, i) => (
-          <Program
-            subjectInfo={subjectInfo}
-            i={i}
-            userType={userType}
-            userTypes={userTypes}
-            permissions={permissions}
-            permissionList={permissionList}
-            showLocal={showLocal}
-            showEU={showEU}
-            showInt={showInt}
-            studentDataValue={studentDataValue}
-            addToWishList={() => addToWishList(subjectInfo)}
-            toggleModal={() => toggleModal(subjectInfo, info)}
-            checkEligibility={() => checkEligibility(info, subjectInfo)}
-          />
-        ))}
-      {/* show all span */}
-
-      {info?.subjectCounter > 3 ? (
+        {/* show all span */}
+      </div>
+      {info?.subjectCounter > 0 ? (
         <>
           {!loadAll ? (
             <div className="text-center mb-24px">
@@ -195,7 +218,7 @@ const University = ({
                 className="show-all-search-data-style"
                 onClick={() => showAllData(info?.universityId)}
               >
-                See {info?.subjectCounter - 3} More Courses{" "}
+                See {info?.subjectCounter} More Courses{" "}
                 <i className="fas fa-angle-right mt-2"></i>
               </span>
             </div>
@@ -213,7 +236,7 @@ const University = ({
                     className="show-all-search-data-style"
                     onClick={collapseALl}
                   >
-                    Hide {info?.subjectCounter - 3} More Courses{" "}
+                    Hide {info?.subjectCounter} More Courses{" "}
                     <i className="fas fa-angle-left mt-2"></i>
                   </span>
                 </div>

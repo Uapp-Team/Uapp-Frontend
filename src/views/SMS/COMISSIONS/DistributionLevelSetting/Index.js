@@ -47,12 +47,11 @@ const DistributionLevelSetting = () => {
 
   return (
     <div>
+      <BreadCrumb title="Distribution Level Settings" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Distribution Level Settings" backTo="" path="/" />
-
           <Card>
             <CardBody>
               <div className="row">

@@ -11,7 +11,6 @@ const ConsultantNavigation = ({
   const history = useHistory();
   const [currentTab, setcurrentTab] = useState("");
   useEffect(() => {
-    console.log("activeTab", activetab);
     setcurrentTab(activetab);
   }, [success, activetab]);
 

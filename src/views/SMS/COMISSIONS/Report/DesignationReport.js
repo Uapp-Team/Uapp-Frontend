@@ -54,6 +54,7 @@ const DesignationReport = () => {
     setDesignationValue(0);
     setDesignationLable("Select Designation");
     setDataList();
+    setCurrentPage(1);
   };
 
   const paginate = (pageNumber) => {

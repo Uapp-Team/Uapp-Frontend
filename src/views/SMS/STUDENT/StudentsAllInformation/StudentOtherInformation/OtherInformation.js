@@ -40,16 +40,16 @@ const OtherInformation = () => {
           res != null && res?.isHaveDisability === true
             ? true
             : res != null && res?.isHaveDisability === null
-            ? false
-            : false
+              ? false
+              : false
         );
 
         setCrime(
           res != null && res?.isHaveCriminalConvictions === true
             ? true
             : res != null && res?.isHaveCriminalConvictions === null
-            ? false
-            : false
+              ? false
+              : false
         );
 
         setData(res);
@@ -59,16 +59,18 @@ const OtherInformation = () => {
   }, [success, applicationStudentId]);
 
   const handleDescription = (e) => {
-    setDisabilityDes(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setDisabilityDes(data);
+    if (data === "") {
       setDisabilityDesError("Disability description is required");
     } else {
       setDisabilityDesError("");
     }
   };
   const handleCriminal = (e) => {
-    setCriminal(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCriminal(data);
+    if (data === "") {
       setCriminalError("Criminal convictions Description is required");
     } else {
       setCriminalError("");
@@ -163,7 +165,7 @@ const OtherInformation = () => {
         activetab={"10"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -182,7 +184,7 @@ const OtherInformation = () => {
             <FormGroup row>
               <Col lg="6" md="8">
                 <span>
-                  <span className="text-danger">*</span> Have Disability?
+                  <span className="text-danger">*</span> Do you have any disabilities?
                 </span>
                 <div>
                   <FormGroup check inline>
@@ -254,7 +256,7 @@ const OtherInformation = () => {
                 <span>
                   {" "}
                   <span className="text-danger">*</span>
-                  Have Criminal Convictions?
+                  Do you have any criminal conviction?
                 </span>
 
                 <div>

@@ -41,6 +41,7 @@ import { permissionList } from "../../../../../../constants/AuthorizationConstan
 import SpanButton from "../../../../Components/SpanButton";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
 import get from "../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const ProviderAdminDetails = ({ providerAdminId, userId }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -116,13 +117,6 @@ const ProviderAdminDetails = ({ providerAdminId, userId }) => {
     }
   }, []);
 
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
 
   // on Close Modal
   const closeViewModal = () => {
@@ -218,7 +212,7 @@ const ProviderAdminDetails = ({ providerAdminId, userId }) => {
                   <b> Date of Birth:</b>
                 </td>
 
-                <td width="60%">{personalInfo?.dateOfBirth}</td>
+                <td width="60%">{dateFormate(personalInfo?.dateOfBirth)}</td>
               </tr>
 
               <tr>
@@ -376,7 +370,7 @@ const ProviderAdminDetails = ({ providerAdminId, userId }) => {
                     <td>
                       <b>Expiry Date of Your BRP/TRP or Visa:</b>
                     </td>
-                    <td>{handleDate(eligibility?.expireDate)}</td>
+                    <td>{dateFormate(eligibility?.expireDate)}</td>
                   </tr>
                   <tr>
                     <td>

@@ -18,7 +18,7 @@ const CampusAbout = ({ campusInfo }) => {
             >
               <td>Average Application Fee </td>
 
-              <td>€{campusInfo?.avarageApplicationFee}</td>
+              <td>£{campusInfo?.avarageApplicationFee}</td>
             </tr>
             <tr
               style={{
@@ -27,7 +27,7 @@ const CampusAbout = ({ campusInfo }) => {
             >
               <td>Average Tution Fee </td>
 
-              <td>€{campusInfo?.avarageApplicationFee}</td>
+              <td>£{campusInfo?.avarageApplicationFee}</td>
             </tr>
 
             <tr
@@ -37,7 +37,7 @@ const CampusAbout = ({ campusInfo }) => {
             >
               <td>Average Living Cost</td>
 
-              <td>€{campusInfo?.avarageLivingCost}</td>
+              <td>£{campusInfo?.avarageLivingCost}</td>
             </tr>
             <tr
               style={{
@@ -46,7 +46,7 @@ const CampusAbout = ({ campusInfo }) => {
             >
               <td>Estimated Total Cost</td>
 
-              <td>€{campusInfo?.estimatedTotalCost}</td>
+              <td>£{campusInfo?.estimatedTotalCost}</td>
             </tr>
           </tbody>
         </Table>

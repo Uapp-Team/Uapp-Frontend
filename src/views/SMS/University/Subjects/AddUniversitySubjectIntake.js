@@ -104,6 +104,7 @@ const AddUniversitySubjectIntake = () => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
+    setDate(moment(new Date(label)).format("YYYY-MM-DD"));
     // handleSearch();
   };
 
@@ -249,15 +250,15 @@ const AddUniversitySubjectIntake = () => {
 
   return (
     <div>
+      <SubjectNavbar
+        title="Course Intake Information"
+        activeTab={activetab}
+        id={id}
+        subjId={subjId}
+      />
       {/* subject intake starts here */}
       {userType === userTypes?.Student ? null : (
         <div>
-          <SubjectNavbar
-            title="Course Intake Information"
-            activeTab={activetab}
-            id={id}
-            subjId={subjId}
-          />
           <Card className="uapp-employee-search">
             <CardBody className="search-card-body">
               <TabContent activeTab={activetab}>
@@ -489,7 +490,9 @@ const AddUniversitySubjectIntake = () => {
                           <th style={{ width: "20%" }}>Campus</th>
                           <th style={{ width: "20%" }}>Status</th>
                           <th style={{ width: "20%" }}>Deadline</th>
-                          <th style={{ width: "20%" }}>Action</th>
+                          {permissions?.includes(
+                            permissionList.Delete_Subjects
+                          ) && <th style={{ width: "20%" }}>Action</th>}
                         </tr>
                       </thead>
                     </Table>
@@ -497,7 +500,13 @@ const AddUniversitySubjectIntake = () => {
                       <tbody>
                         {data?.map((ls, i) => (
                           <tr>
-                            <td style={{ width: "20%" }}>{ls?.intakeName}</td>
+                            {permissions?.includes(
+                              permissionList.Delete_Subjects
+                            ) ? (
+                              <td style={{ width: "20%" }}>{ls?.intakeName}</td>
+                            ) : (
+                              <td style={{ width: "25%" }}>{ls?.intakeName}</td>
+                            )}
                             <td>
                               <Table className="table-sm">
                                 <tbody>
@@ -534,22 +543,26 @@ const AddUniversitySubjectIntake = () => {
                                           )}
                                         </td>
 
-                                        <td
-                                          style={{
-                                            border: "none",
-                                            width: "20%",
-                                          }}
-                                        >
-                                          <ButtonForFunction
-                                            func={() => toggleDanger(l)}
-                                            color={"danger"}
-                                            className={"mx-1 btn-sm"}
-                                            icon={
-                                              <i className="fas fa-trash-alt"></i>
-                                            }
-                                            permission={6}
-                                          />
-                                        </td>
+                                        {permissions?.includes(
+                                          permissionList.Delete_Subjects
+                                        ) && (
+                                          <td
+                                            style={{
+                                              border: "none",
+                                              width: "20%",
+                                            }}
+                                          >
+                                            <ButtonForFunction
+                                              func={() => toggleDanger(l)}
+                                              color={"danger"}
+                                              className={"mx-1 btn-sm"}
+                                              icon={
+                                                <i className="fas fa-trash-alt"></i>
+                                              }
+                                              permission={6}
+                                            />
+                                          </td>
+                                        )}
                                       </tr>
                                     )
                                   )}

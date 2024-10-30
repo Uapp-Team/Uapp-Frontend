@@ -161,7 +161,7 @@ const Country = () => {
             <Table className="table-sm table-bordered text-center">
               <thead className="thead-uapp-bg">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th> Name</th>
                   <th> Code</th>
                   <th>Action</th>
@@ -170,7 +170,7 @@ const Country = () => {
               <tbody>
                 {countryList.map((list, index) => (
                   <tr key={index} list={list}>
-                    <td>{index + 1}</td>
+                    {/* <td>{index + 1}</td> */}
                     <td>{list?.name}</td>
                     <td>{list?.code}</td>
                     <td>

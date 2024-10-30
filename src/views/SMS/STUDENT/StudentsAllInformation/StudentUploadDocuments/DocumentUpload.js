@@ -10,19 +10,18 @@ import {
   CardBody,
   Col,
   Form,
-  Modal,
   ModalHeader,
   ModalBody,
   FormGroup,
   Input,
   Row,
+  Label,
 } from "reactstrap";
 import Select from "react-select";
 import * as Icon from "react-feather";
 import get from "../../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
-import { Upload, Modal as AntdModal } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Upload, Modal as AntdModal, Modal } from "antd";
 import post from "../../../../../helpers/post";
 import { rootUrl } from "../../../../../constants/constants";
 import remove from "../../../../../helpers/remove";
@@ -34,13 +33,13 @@ import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import doc from "../../../../../assets/icon/doc.png";
-import edit from "../../../../../assets/icon/edit.png";
-import upload from "../../../../../assets/icon/upload.png";
-import download from "../../../../../assets/icon/download.png";
-import bin from "../../../../../assets/icon/bin.png";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import Preview from "../../../../../components/ui/Preview";
+import Download from "../../../../../components/ui/Download";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import { EyeOutlined } from '@ant-design/icons';
+
 
 const DocumentUpload = () => {
   const history = useHistory();
@@ -49,14 +48,14 @@ const DocumentUpload = () => {
   const [progress, setProgress] = useState(false);
   const [progress2, setProgress2] = useState(false);
   const [progress3, setProgress3] = useState(false);
-  const [progress4, setProgress4] = useState(false);
+  // const [progress4, setProgress4] = useState(false);
   const [docuType, setDocuType] = useState([]);
   const [docuTypeLabel, setDocuTypeLabel] = useState("Select Document");
   const [docuTypeValue, setDocuTypeValue] = useState(0);
   const [docutypeError, setDocuTypeError] = useState(false);
   const [FileList1, setFileList1] = useState([]);
   const [uploadError, setUploadError] = useState(false);
-  const [previewVisible1, setPreviewVisible1] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage1, setPreviewImage1] = useState("");
   const [previewTitle1, setPreviewTitle1] = useState("");
   const [uploadedDocuData, setUploadedDocuData] = useState([]);
@@ -81,14 +80,17 @@ const DocumentUpload = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [documentTitle, setDocumentTitle] = useState("");
   const [documentTitleError, setDocumentTitleError] = useState("");
-  console.log(uploadedDocuData);
+  const [addDoc, setAddDoc] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewFileType, setPreviewFileType] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
 
   const handleChange1 = ({ fileList }) => {
     setUploadError(false);
     setFileList1(fileList);
   };
 
-  function getBase641(file) {
+  function getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -97,19 +99,60 @@ const DocumentUpload = () => {
     });
   }
 
-  const handleCancel1 = () => {
-    setPreviewVisible1(false);
+  const handleCancel = () => {
+    setPreviewVisible(false);
   };
 
   const handlePreview1 = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase641(file.originFileObj);
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
+      switch (extension) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+        case 'gif':
+          return 'image/jpeg';
+        case 'pdf':
+          return 'application/pdf';
+        case 'doc':
+          return 'application/msword';
+        case 'docx':
+          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        default:
+          return 'unknown';
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith('image')) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage(file.preview || file.url);
+      setPreviewFileType(fileType);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+    } else if (fileType === 'application/pdf') {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage(pdfPreview);
+      setPreviewVisible(true);
+      setPreviewFileType(fileType);
+      setPreviewTitle(file.name);
+    } else if (
+      fileType === 'application/msword' ||
+      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
+      setPreviewImage(googleViewer);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+      setPreviewFileType(fileType);
+    } else {
+      // Handle unsupported file types
+      alert('Preview not available for this file type');
     }
-    setPreviewImage1(file.url || file.preview);
-    setPreviewVisible1(true);
-    setPreviewTitle1(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
   };
 
   useEffect(() => {
@@ -139,8 +182,9 @@ const DocumentUpload = () => {
   };
 
   const handleDocumentTitle = (e) => {
-    setDocumentTitle(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setDocumentTitle(data);
+    if (data === "") {
       setDocumentTitleError("Document title is required");
     } else {
       setDocumentTitleError("");
@@ -191,6 +235,7 @@ const DocumentUpload = () => {
           setDocumentTitle("");
           setDocuTypeLabel("Select Document Type");
           setDocuTypeValue(0);
+          setAddDoc(!addDoc)
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -266,9 +311,12 @@ const DocumentUpload = () => {
   const changeHandler = (e, doc) => {
     setFileList2(e.target.files[0]);
     setIsSelected(true);
-    setStudentDocuId(doc?.studentDocumentLevelId);
+    console.log(uploadedDocuData);
+    console.log(doc);
+    setStudentDocuId(doc);
+    // setStudentDocuId(doc?.studentDocumentLevelId);
   };
-
+  console.log(studentDocuId);
   const handleCardUpload = () => {
     const subData = new FormData();
     subData.append("studentId", applicationStudentId);
@@ -277,10 +325,10 @@ const DocumentUpload = () => {
 
     if (studentDocuId !== 0) {
       setButtonStatus(true);
-      setProgress4(true);
+      // setProgress4(true);
       post("StudentUploadDocument/FileCreate", subData).then((res) => {
         setButtonStatus(false);
-        setProgress4(false);
+        // setProgress4(false);
         if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
@@ -302,16 +350,15 @@ const DocumentUpload = () => {
     return;
   };
 
-  if (
-    isSelected === true &&
-    FileList2 !== undefined &&
-    typeof FileList2 === "object"
-  ) {
-    handleCardUpload();
-    setFileList2(undefined);
-    setIsSelected(false);
-    setStudentDocuId(0);
-  }
+  useEffect(() => {
+    if (
+      isSelected === true &&
+      FileList2 !== undefined &&
+      typeof FileList2 === "object"
+    ) {
+      handleCardUpload();
+    }
+  }, [FileList2, isSelected]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -393,7 +440,7 @@ const DocumentUpload = () => {
         activetab={"11"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card className="">
         <CardBody>
@@ -401,114 +448,127 @@ const DocumentUpload = () => {
 
           <Row>
             <Col lg="7" md="9">
-              {uploadedDocuData.map((docu, i) => (
-                <div key={i} className="border border-dark rounded mb-3">
-                  <div className="p-3">
-                    <Row className="align-items-center">
-                      <Col xs="8">
-                        <div className="d-flex align-items-center">
-                          <div className="mr-2">
-                            <img src={doc} alt="" />
-                          </div>
-
-                          <div>
-                            <b> {docu?.documentLevelName} </b>
-                          </div>
-                        </div>
-                      </Col>
-
-                      <Col xs="4">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div>
-                            {docu?.studentDocumentFile?.fileUrl && (
-                              <Preview
-                                file={docu?.studentDocumentFile?.fileUrl}
-                              />
-                            )}
-                          </div>
-
-                          <div>
-                            {docu?.studentDocumentFile ? (
-                              <a
-                                key={i}
-                                href={
-                                  rootUrl + docu?.studentDocumentFile?.fileUrl
-                                }
-                                target="blank"
-                              >
-                                <i class="fas fa-arrow-circle-down text-success fs-24px"></i>
-                              </a>
-                            ) : (
-                              <>
-                                {permissions?.includes(
-                                  permissionList?.Upload_Student_Document
-                                ) ? (
-                                  <div
-                                    className="pointer"
-                                    onChange={(e) => changeHandler(e, docu)}
-                                  >
-                                    <label htmlFor={`hp+${i}`}>
-                                      <i class="fas fa-arrow-circle-up fs-24px text-warning pointer"></i>
-                                    </label>
-
-                                    <input
-                                      name={i}
-                                      id={`hp+${i}`}
-                                      type="file"
-                                      hidden
-                                    />
-                                  </div>
-                                ) : null}
-                              </>
-                            )}
-                          </div>
-                          <div>
-                            {permissions?.includes(
-                              permissionList?.Delete_Student_Document
-                            ) ? (
-                              <i
-                                class="fas fa-trash pointer text-danger "
-                                onClick={() => toggleDanger(docu)}
-                              ></i>
-                            ) : null}
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
-
-                    {docu?.studentDocumentFile != null && (
-                      <div className="mt-2">
-                        <span className="fs-12px">
-                          <a
-                            href={rootUrl + docu?.uploadedFile?.fileUrl}
-                            target="blank"
-                            download
-                          >
-                            <span style={{ color: "#1D94AB" }}>
-                              {docu?.studentDocumentFile?.fileName.slice(0, 15)}
-                              {"... "}
-                            </span>
-                          </a>
-
-                          <span className="text-gray">
-                            {docu?.createdBy} at {handleDate(docu?.createdOn)}{" "}
-                            {}
-                          </span>
-
-                          {permissions?.includes(
-                            permissionList.Delete_Student_Document
-                          ) ? (
-                            <i
-                              onClick={() => toggleDangerFile(docu)}
-                              title="delete file"
-                              style={{ cursor: "pointer" }}
-                              className="far fa-times-circle text-danger"
-                            ></i>
-                          ) : null}
-                        </span>
-                      </div>
-                    )}
+              {uploadedDocuData.map((item, i) => (
+                <div className="mb-4 border-bottom">
+                  <div className="bg-light p-2 rounded mb-3">
+                    <p className="mb-0 text-dark">{item.categoryName}</p>
                   </div>
+                  {item?.documents?.map((docu, j) => (
+                    <div key={j} className="border border-dark rounded mb-3">
+                      <div className="p-3">
+                        <Row className="align-items-center">
+                          <Col xs="8">
+                            <div className="d-flex align-items-center">
+                              <div className="mr-2">
+                                <img src={doc} alt="" />
+                              </div>
+
+                              <div>
+                                <b> {docu?.documentLevelName} </b>
+                              </div>
+                            </div>
+                          </Col>
+
+                          <Col xs="4">
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div>
+                                {docu?.studentDocumentFile?.fileUrl ? (
+                                  <Preview
+                                    file={docu?.studentDocumentFile?.fileUrl}
+                                  />
+                                ) : (
+                                  <i class="fas fa-eye text-info fs-24px invisible"></i>
+                                )}
+                              </div>
+
+                              <div>
+                                {docu?.studentDocumentFile ? (
+                                  <Download
+                                    fileurl={docu?.studentDocumentFile?.fileUrl}
+                                    fileName={
+                                      docu?.studentDocumentFile?.fileName
+                                    }
+                                  />
+                                ) : (
+                                  <>
+                                    {permissions?.includes(
+                                      permissionList?.Upload_Student_Document
+                                    ) ? (
+                                      <div
+                                        className="pointer"
+                                        onChange={(e) =>
+                                          changeHandler(
+                                            e,
+                                            docu?.studentDocumentLevelId
+                                          )
+                                        }
+                                      >
+                                        <label htmlFor={`hp+${j}`}>
+                                          <i class="fas fa-arrow-circle-up fs-24px text-warning pointer"></i>
+                                        </label>
+
+                                        <input
+                                          name={j}
+                                          id={`hp+${j}`}
+                                          type="file"
+                                          hidden
+                                        />
+                                      </div>
+                                    ) : null}
+                                  </>
+                                )}
+                              </div>
+                              <div>
+                                {(userType === userTypes?.SystemAdmin ||
+                                  userType === userTypes?.Admin) && (
+                                    <>
+                                      {permissions?.includes(
+                                        permissionList?.Delete_Student_Document
+                                      ) ? (
+                                        <i
+                                          class="fas fa-trash pointer text-danger "
+                                          onClick={() => toggleDanger(docu)}
+                                        ></i>
+                                      ) : null}
+                                    </>
+                                  )}
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+
+                        {docu?.studentDocumentFile != null && (
+                          <div className="mt-2">
+                            <span className="fs-12px">
+                              <span style={{ color: "#1D94AB" }}>
+                                {docu?.studentDocumentFile?.fileName.slice(
+                                  0,
+                                  15
+                                )}
+                                {"... "}
+                              </span>
+
+                              <span className="text-gray">
+                                {docu?.createdBy} at{" "}
+                                {handleDate(docu?.createdOn)} { }
+                              </span>
+
+                              {permissions?.includes(
+                                permissionList.Delete_Student_Document
+                              ) ? (
+                                <i
+                                  onClick={() => toggleDangerFile(docu)}
+                                  title="delete file"
+                                  style={{ cursor: "pointer" }}
+                                  className="far fa-times-circle text-danger"
+                                ></i>
+                              ) : null}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
 
@@ -520,7 +580,7 @@ const DocumentUpload = () => {
                 progress={progress2}
                 cancel={closeDeleteModal}
                 confirm={handleDeleteDocument}
-              ></ConfirmModal>
+              />
 
               {/* delete file modal */}
 
@@ -532,7 +592,7 @@ const DocumentUpload = () => {
                 progress={progress3}
                 cancel={closeDeleteModalFile}
                 confirm={() => handleDeleteFile(delFileId)}
-              ></ConfirmModal>
+              />
               {/* delete file modal */}
 
               {/* status update modal starts here */}
@@ -602,126 +662,177 @@ const DocumentUpload = () => {
             </Col>
           </Row>
 
-          <Row>
-            <Col lg="7" md="9">
-              <Form onSubmit={handleSubmit} className="mt-4">
-                <input
-                  type="hidden"
-                  name="studentId"
-                  id="studentId"
-                  value={applicationStudentId}
-                />
-                <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span>
-                    Document Label
-                  </span>
+          <Row className="mt-4">
+            <Col>
+              <p>Do you want to add additional documents ?</p>
 
-                  <Input
-                    type="text"
-                    value={documentTitle}
-                    name="documentLevelName"
-                    id="documentLevelName"
-                    placeholder="Write Document Title"
-                    onChange={(e) => {
-                      handleDocumentTitle(e);
-                    }}
+              <div>
+                <FormGroup check inline>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="isHaveDisability"
+                    onChange={() => setAddDoc(!addDoc)}
+                    name="isHaveDisability"
+                    value={true}
+                    checked={addDoc === true}
                   />
-                  <span className="text-danger">{documentTitleError}</span>
+                  <Label
+                    className="form-check-label"
+                    check
+                    htmlFor="isHaveDisability"
+                  >
+                    Yes
+                  </Label>
                 </FormGroup>
 
-                <FormGroup>
-                  <span>
-                    {" "}
-                    <span className="text-danger">*</span>
-                    Document
-                  </span>
-
-                  <Select
-                    options={docuTypeDD}
-                    value={{ label: docuTypeLabel, value: docuTypeValue }}
-                    onChange={(opt) => selectDocumentType(opt.label, opt.value)}
-                    name="documentId"
-                    id="documentId"
+                <FormGroup check inline>
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="isHaveDisability"
+                    onChange={() => setAddDoc(!addDoc)}
+                    name="isHaveDisability"
+                    value={false}
+                    checked={addDoc === false}
                   />
-
-                  {docutypeError && (
-                    <span className="text-danger">
-                      Document type is required.
-                    </span>
-                  )}
+                  <Label
+                    className="form-check-label"
+                    check
+                    htmlFor="isHaveDisability"
+                  >
+                    No
+                  </Label>
                 </FormGroup>
-
-                <FormGroup>
-                  <div className="row">
-                    <Col>
-                      <span>
-                        <span className="text-danger text-left">*</span>Upload
-                        Document:{"  "}
-                      </span>
-                    </Col>
-
-                    <Col>
-                      <div>
-                        <Upload
-                          listType="picture-card"
-                          multiple={false}
-                          fileList={FileList1}
-                          onPreview={handlePreview1}
-                          onChange={handleChange1}
-                          beforeUpload={(file) => {
-                            return false;
-                          }}
-                        >
-                          {FileList1.length < 1 ? (
-                            <div
-                              className="text-danger"
-                              style={{ marginTop: 8 }}
-                            >
-                              <Icon.Upload />
-                              {/* <br /> */}
-                              {/* <span>Upload Here</span> */}
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </Upload>
-                        <AntdModal
-                          visible={previewVisible1}
-                          title={previewTitle1}
-                          footer={null}
-                          onCancel={handleCancel1}
-                        >
-                          <img
-                            alt="example"
-                            style={{ width: "100%" }}
-                            src={previewImage1}
-                          />
-                        </AntdModal>
-                        {uploadError && (
-                          <span className="text-danger">File is required </span>
-                        )}
-                      </div>
-                    </Col>
-                    <Col>
-                      <span className="text-gray">
-                        Document size should be 2MB and file format .jpg or .png
-                      </span>
-                    </Col>
-                  </div>
-                </FormGroup>
-                <FormGroup className="text-right">
-                  {permissions?.includes(permissionList?.Edit_Student) ? (
-                    <SaveButton
-                      progress={progress}
-                      buttonStatus={buttonStatus}
-                    />
-                  ) : null}
-                </FormGroup>
-              </Form>
+              </div>
             </Col>
           </Row>
-          <Row className="mt-4 ">
+
+          {addDoc && (
+            <Row className="mt-3">
+              <Col lg="7" md="9">
+                <Form onSubmit={handleSubmit}>
+                  <input
+                    type="hidden"
+                    name="studentId"
+                    id="studentId"
+                    value={applicationStudentId}
+                  />
+                  <FormGroup>
+                    <span>
+                      <span className="text-danger">*</span>
+                      Title
+                    </span>
+
+                    <Input
+                      type="text"
+                      value={documentTitle}
+                      name="documentLevelName"
+                      id="documentLevelName"
+                      placeholder="Write Document Title"
+                      onChange={(e) => {
+                        handleDocumentTitle(e);
+                      }}
+                    />
+                    <span className="text-danger">{documentTitleError}</span>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <span>
+                      {" "}
+                      <span className="text-danger">*</span>
+                      Document
+                    </span>
+
+                    <Select
+                      options={docuTypeDD}
+                      value={{ label: docuTypeLabel, value: docuTypeValue }}
+                      onChange={(opt) =>
+                        selectDocumentType(opt.label, opt.value)
+                      }
+                      name="documentId"
+                      id="documentId"
+                    />
+
+                    {docutypeError && (
+                      <span className="text-danger">
+                        Document type is required.
+                      </span>
+                    )}
+                  </FormGroup>
+
+                  <FormGroup>
+                    <div className="row">
+                      <Col>
+                        <span>
+                          <span className="text-danger text-left">*</span>Upload
+                          Document:{"  "}
+                        </span>
+                      </Col>
+
+                      <Col sm="4">
+                        <Upload
+                          onPreview={handlePreview1}
+                          multiple={false}
+                          fileList={FileList1}
+                          onChange={handleChange1}
+                          beforeUpload={(file) => false}
+                          itemRender={(originNode, file) => (
+                            <div style={{ display: 'flex', alignItems: 'baseLine' }}>
+                              {originNode}
+                              <EyeOutlined
+                                style={{ marginLeft: '8px', cursor: 'pointer' }}
+                                onClick={() => handlePreview1(file)}
+                              />
+                            </div>
+                          )}
+                        >
+                          {FileList1.length < 1 ? <UploadButton /> : ""}
+                        </Upload>
+
+                        {previewVisible && (
+                          <Modal
+                            title={previewTitle}
+                            visible={previewVisible}
+                            footer={null}
+                            onCancel={() => setPreviewVisible(false)}
+                          >
+                            {previewFileType === 'application/pdf' ? (
+                              <iframe
+                                src={previewImage}
+                                style={{ width: '100%', height: '80vh' }}
+                                frameBorder="0"
+                              ></iframe>
+                            ) : (
+                              <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
+                            )}
+                          </Modal>
+                        )}
+
+                        <div className="text-danger d-block">{uploadError}</div>
+                      </Col>
+                      <Col>
+                        {/* <span className="text-gray">
+                          Document size should be 2MB and file format .jpg or
+                          .png
+                        </span> */}
+                      </Col>
+                    </div>
+                  </FormGroup>
+                  <FormGroup className="text-right">
+                    {permissions?.includes(permissionList?.Edit_Student) ? (
+                      <SaveButton
+                        progress={progress}
+                        buttonStatus={buttonStatus}
+                      />
+                    ) : null}
+                  </FormGroup>
+                </Form>
+              </Col>
+            </Row>
+          )}
+
+          <Row>
             <Col className="d-flex justify-content-between mt-4">
               <PreviousButton action={goPrevious} />
               <SaveButton text="Next" action={goForward} />

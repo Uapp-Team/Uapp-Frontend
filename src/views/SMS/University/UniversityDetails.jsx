@@ -351,6 +351,7 @@ const UniversityDetails = () => {
 
   // on clear
   const handleClearSearch = () => {
+    setCurrentPage(1);
     setIntakeLabel(" Intake...");
     setIntakeValue(0);
     setStatusLabel(" Status...");
@@ -629,8 +630,6 @@ const UniversityDetails = () => {
     });
   };
 
-
-
   const handleAddUniversitySubject = () => {
     history.push(`/add-University-course/${id}`);
   };
@@ -820,8 +819,8 @@ const UniversityDetails = () => {
               {location.subjectDataUniversityId !== undefined
                 ? "Course Details"
                 : location.providerId !== undefined
-                  ? "Provider Details"
-                  : "University"}
+                ? "Provider Details"
+                : "University"}
             </>
           )
         }
@@ -832,8 +831,8 @@ const UniversityDetails = () => {
               {location.subjectDataUniversityId !== undefined
                 ? `/subjectProfile/${location.subjectDataUniversityId}`
                 : location.providerId !== undefined
-                  ? `/providerDetails/${location.providerId}`
-                  : "/universityList"}
+                ? `/providerDetails/${location.providerId}`
+                : "/universityList"}
             </>
           )
         }
@@ -847,10 +846,11 @@ const UniversityDetails = () => {
                 <div
                   className="bg-image-profile"
                   style={{
-                    backgroundImage: `url(${universityInfo?.coverPhoto
-                      ? rootUrl + universityInfo?.coverPhoto?.fileUrl
-                      : uapploader2
-                      })`,
+                    backgroundImage: `url(${
+                      universityInfo?.coverPhoto
+                        ? rootUrl + universityInfo?.coverPhoto?.fileUrl
+                        : uapploader2
+                    })`,
                   }}
                 >
                   {/* {universityInfo?.coverPhoto == null ? (
@@ -2011,7 +2011,7 @@ const UniversityDetails = () => {
                                 name="EmbededMap"
                                 id="EmbededMap"
                                 placeholder="https://example.com"
-                              // placeholder="Please type the src link only from the embed map"
+                                // placeholder="Please type the src link only from the embed map"
                               />
                               <span className="text-danger">
                                 Note: Please type the "src" link only from the
@@ -2592,14 +2592,14 @@ const UniversityDetails = () => {
                               {temp?.applicationTypeId === 1
                                 ? "Home"
                                 : temp?.applicationTypeId === 2
-                                  ? "EU/UK"
-                                  : "International"}
+                                ? "EU/UK"
+                                : "International"}
                             </td>
                             <td>
                               <a
                                 href={rootUrl + temp?.templateFile?.fileUrl}
                                 target="_blank"
-                              // download
+                                // download
                               >
                                 Download
                               </a>
@@ -2635,7 +2635,7 @@ const UniversityDetails = () => {
                     >
                       <div className="uapp-circle-image margin-top-minus">
                         {universityInfo?.provider?.providerLogoMedia?.fileUrl ==
-                          null ? (
+                        null ? (
                           <img src={profileImage} alt="provider_img" />
                         ) : (
                           <img
@@ -2679,7 +2679,7 @@ const UniversityDetails = () => {
                   >
                     <div className="uapp-circle-image margin-top-minus">
                       {universityInfo?.provider?.providerLogoMedia?.fileUrl ==
-                        null ? (
+                      null ? (
                         <img src={profileImage} alt="provider_img" />
                       ) : (
                         <img
@@ -2732,7 +2732,7 @@ const UniversityDetails = () => {
                 </div>
 
                 {JSON.stringify(financialInfo) === "{}" ||
-                  financialInfo === null ? (
+                financialInfo === null ? (
                   <p>There is no financial information added here.</p>
                 ) : (
                   <>
@@ -2742,12 +2742,12 @@ const UniversityDetails = () => {
                         {universityInfo?.universityCountry?.id == 1
                           ? "£"
                           : universityInfo?.universityCountry?.id == 3
-                            ? "CA$"
-                            : universityInfo?.universityCountry?.id == 2
-                              ? "$"
-                              : universityInfo?.universityCountry?.id == 4
-                                ? "€"
-                                : null}
+                          ? "CA$"
+                          : universityInfo?.universityCountry?.id == 2
+                          ? "$"
+                          : universityInfo?.universityCountry?.id == 4
+                          ? "€"
+                          : null}
                         {financialInfo?.avarageTutionFee}
                       </p>
                     </div>
@@ -2763,12 +2763,12 @@ const UniversityDetails = () => {
                         {universityInfo?.universityCountry?.id == 1
                           ? "£"
                           : universityInfo?.universityCountry?.id == 3
-                            ? "CA$"
-                            : universityInfo?.universityCountry?.id == 2
-                              ? "$"
-                              : universityInfo?.universityCountry?.id == 4
-                                ? "€"
-                                : null}
+                          ? "CA$"
+                          : universityInfo?.universityCountry?.id == 2
+                          ? "$"
+                          : universityInfo?.universityCountry?.id == 4
+                          ? "€"
+                          : null}
                         {financialInfo?.avarageLivingCost}
                       </p>
                     </div>
@@ -2779,12 +2779,12 @@ const UniversityDetails = () => {
                         {universityInfo?.universityCountry?.id == 1
                           ? "£"
                           : universityInfo?.universityCountry?.id == 3
-                            ? "CA$"
-                            : universityInfo?.universityCountry?.id == 2
-                              ? "$"
-                              : universityInfo?.universityCountry?.id == 4
-                                ? "€"
-                                : null}
+                          ? "CA$"
+                          : universityInfo?.universityCountry?.id == 2
+                          ? "$"
+                          : universityInfo?.universityCountry?.id == 4
+                          ? "€"
+                          : null}
                         {financialInfo?.estimatedTotalCost}
                       </p>
                     </div>
@@ -2813,7 +2813,7 @@ const UniversityDetails = () => {
                 </div>
 
                 {JSON.stringify(universityFeatures) === "{}" ||
-                  universityFeatures === null ? (
+                universityFeatures === null ? (
                   <p>There is no feature added here.</p>
                 ) : (
                   <>
@@ -2832,7 +2832,7 @@ const UniversityDetails = () => {
                       <span>Conditional Offer Letter</span>
                       <p>
                         {universityFeatures?.conditionalOfferLetter ===
-                          false ? (
+                        false ? (
                           <i className="text-danger fas fa-times-circle"></i>
                         ) : (
                           <i className="text-success fas fa-check-circle"></i>
@@ -2844,7 +2844,7 @@ const UniversityDetails = () => {
                       <span>Internship Participation</span>
                       <p>
                         {universityFeatures?.intershipParticipation ===
-                          false ? (
+                        false ? (
                           <i className="text-danger fas fa-times-circle"></i>
                         ) : (
                           <i className="text-success fas fa-check-circle"></i>

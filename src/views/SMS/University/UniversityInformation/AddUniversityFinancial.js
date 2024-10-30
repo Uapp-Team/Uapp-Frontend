@@ -106,8 +106,9 @@ const AddUniversityFinancial = (props) => {
   // };
 
   const handleTuitionFee = (e) => {
-    setTuitionFee(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setTuitionFee(data);
+    if (data === "") {
       setTuitionFeeError("Average Tuition Fee is required");
     } else {
       setTuitionFeeError("");
@@ -115,8 +116,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handleLivingCost = (e) => {
-    setLivingCost(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLivingCost(data);
+    if (data === "") {
       setLivingCostError("Average Living Cost is required");
     } else {
       setLivingCostError("");
@@ -124,8 +126,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handleTotalCost = (e) => {
-    setTotalCost(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setTotalCost(data);
+    if (data === "") {
       setTotalCostError("Estimated Total Cost is required");
     } else {
       setTotalCostError("");
@@ -133,8 +136,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handleFoundation = (e) => {
-    setFoundation(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFoundation(data);
+    if (data === "") {
       setFoundationError("Foundation is required");
     } else {
       setFoundationError("");
@@ -142,8 +146,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handleUndergraduate = (e) => {
-    setUndergraduate(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setUndergraduate(data);
+    if (data === "") {
       setUndergraduateError("Undergraduate is required");
     } else {
       setUndergraduateError("");
@@ -151,8 +156,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handlePostgraduate = (e) => {
-    setPostgraduate(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setPostgraduate(data);
+    if (data === "") {
       setPostgraduateError("Postgraduate is required");
     } else {
       setPostgraduateError("");
@@ -169,8 +175,9 @@ const AddUniversityFinancial = (props) => {
   };
 
   const handleAverage = (e) => {
-    setAverage(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setAverage(data);
+    if (data === "") {
       setAverageError("Average is required");
     } else {
       setAverageError("");
@@ -288,17 +295,17 @@ const AddUniversityFinancial = (props) => {
 
   return (
     <div>
+      <BreadCrumb
+        title="University Financial Information"
+        backTo="University"
+        path="/universityList"
+      />
+
+      <UniversityNavbar activetab={activetab} univerId={univerId} />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb
-            title="University Financial Information"
-            backTo="University"
-            path="/universityList"
-          />
-
-          <UniversityNavbar activetab={activetab} univerId={univerId} />
           <Card>
             <CardBody>
               <TabContent activeTab={activetab}>

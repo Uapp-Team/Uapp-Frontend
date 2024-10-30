@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Button,
@@ -9,19 +9,26 @@ import {
   Nav,
   NavLink,
   NavItem,
+  Row,
+  Col,
 } from "reactstrap";
 import Select from "react-select";
 import Pagination from "../../SMS/Pagination/Pagination";
 import { userTypes } from "../../../constants/userTypeConstant";
-import loader from "../../../assets/img/load.gif";
+import loader from "../../../assets/img/Optimized.gif";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 import { Drawer } from "antd";
 import University from "./University";
 import UniversityHead from "./UniversityHead";
 import Filter from "./Filter";
 import Apply from "./Apply";
+import { useParams } from "react-router-dom";
+import get from "../../../helpers/get";
+import TagButton from "../../../components/buttons/TagButton";
+import Loader from "./Loader/Loader";
 
 const Search = () => {
+  const { student, departmentId } = useParams();
   const userType = localStorage.getItem("userType");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [showLocal, setShowLocal] = useState(true);
@@ -31,14 +38,17 @@ const Search = () => {
   const [fee, setFee] = useState({});
   const [unInfo, setUnInfo] = useState();
 
-  const [studentTypeValue, setStudentTypeValue] = useState(0);
-  const [campusValue, setCampusValue] = useState(0);
+  const [studentTypeValue, setStudentTypeValue] = useState("0");
+  const [studentTypeLabel, setStudentTypeLabel] = useState(
+    "Select Student Type"
+  );
+  const [campusValue, setCampusValue] = useState("0");
 
-  const [intakeValue, setIntakeValue] = useState(0);
-  const [programValue, setProgramValue] = useState(0);
+  const [intakeValue, setIntakeValue] = useState("0");
+  const [programValue, setProgramValue] = useState("0");
 
-  const [departmentValue, setDepartmentValue] = useState(0);
-  const [subValue, setSubValue] = useState(0);
+  const [departmentValue, setDepartmentValue] = useState("0");
+  const [subValue, setSubValue] = useState("0");
   const [dataSizeLabel, setDataSizeLabel] = useState("20");
   const [dataSizeValue, setDataSizeValue] = useState(20);
   const [sortLabel, setSortLabel] = useState("A-Z");
@@ -59,14 +69,30 @@ const Search = () => {
     "Select Delivery Pattern"
   );
   const [modalDeliveryPatternValue, setModalDeliveryPatternValue] = useState(0);
+  const [intakeLabel, setIntakeLabel] = useState("Select Intakes");
+  const [programLabel, setProgramLabel] = useState("Select Course Level");
+  const [departmentLabel, setDepartmentLabel] = useState("Select Department");
+  const [subLabel, setSubLabel] = useState("Select Sub Department Category");
+  const [cityLabel, setCityLabel] = useState("Select City/Location");
+  const [campusLabel, setCampusLabel] = useState("Select University Campus");
+  const [universityCountryLabel, setUniversityCountryLabel] =
+    useState("Select Country");
   const [modalCampusLabel, setModalCampusLabel] = useState("Select Campus");
   const [modalCampusValue, setModalCampusValue] = useState(0);
   const [currentData, setCurrentData] = useState({});
+  const [universityLabel, setUniversityLabel] = useState("Select University");
+  const [universityValue, setUniversityValue] = useState("0");
+  const [universityTypeLabel, setUniversityTypeLabel] = useState(
+    "Select University Type"
+  );
+
+  const [studentDataLabel, setStudentDataLabel] = useState("Select Student");
   const [studentDataValue, setStudentDataValue] = useState(
     userType === userTypes?.Student.toString()
       ? localStorage.getItem("referenceId")
       : "0"
   );
+  const [applicationTypes, setApplicationTypes] = useState([]);
   const [modalCampus, setModalCampus] = useState([]);
   const [primaryCampus, setPrimaryCampus] = useState({});
   const [applicationCount, setApplicationCount] = useState(0);
@@ -74,6 +100,19 @@ const Search = () => {
   const [elans, setElAns] = useState({});
   const [eligibilityWhileAppying, setEligibilityWhileApplying] = useState({});
   const [elStatus, setElStatus] = useState({});
+  const [universityCountryValue, setUniversityCountryValue] = useState("0");
+
+  const [cityValue, setCityValue] = useState("0");
+
+  const [universityTypeValue, setUniversityTypeValue] = useState("0");
+
+  useEffect(() => {
+    if (studentDataValue !== "0") {
+      get(`StudentType/Student/${studentDataValue}`).then((res) => {
+        setApplicationTypes(res);
+      });
+    }
+  }, [studentDataValue]);
 
   // drawer code antd start
 
@@ -122,6 +161,33 @@ const Search = () => {
       id: 100,
     },
   ];
+
+  const handleClearSearch = () => {
+    userType !== userTypes?.Student.toString() &&
+      setStudentDataLabel("Select Student");
+    userType !== userTypes?.Student.toString() && setStudentDataValue("0");
+    setStudentTypeLabel("Select Student Type");
+    setStudentTypeValue("0");
+    setCampusLabel("Select University Campus");
+    setCampusValue("0");
+    setUniversityCountryLabel("Select University Country");
+    setUniversityCountryValue("0");
+    setCityLabel("Select City/Location");
+    setCityValue("0");
+    setUniversityTypeLabel("Select University Type");
+    setUniversityTypeValue("0");
+    setUniversityLabel("Select University");
+    setUniversityValue("0");
+
+    setIntakeLabel("Select Intakes");
+    setIntakeValue("0");
+    setProgramLabel("Select Programme Level");
+    setProgramValue("0");
+    setDepartmentLabel("Select Department Category");
+    setDepartmentValue("0");
+    setSubLabel("Select SubDepartment Category");
+    setSubValue("0");
+  };
 
   const toggle1 = (tab) => {
     setActivetab(tab);
@@ -214,46 +280,38 @@ const Search = () => {
           toggle={closeModal}
           className="uapp-modal2"
         >
-          {/* <ModalHeader className="bg-white">
-            <div className="px-3 pt-3 text-gray">
-              Are You Sure You Want to Apply for This Course?
-            </div>
-          </ModalHeader> */}
-
-          <ModalBody>
-            <Apply
-              success={success}
-              setSuccess={setSuccess}
-              modalCampus={modalCampus}
-              setModalCampus={setModalCampus}
-              currentData={currentData}
-              modalDeliveryPattern={modalDeliveryPattern}
-              setModalDeliveryPattern={setModalDeliveryPattern}
-              setModal={setModal}
-              fee={fee}
-              unInfo={unInfo}
-              primaryCampus={primaryCampus}
-              studentDataValue={studentDataValue}
-              eligibilityWhileAppying={eligibilityWhileAppying}
-              elStatus={elStatus}
-              campusValue={campusValue}
-              applicationCount={applicationCount}
-              setModalCampusLabel={setModalCampusLabel}
-              setModalCampusValue={setModalCampusValue}
-              modalIntake={modalIntake}
-              setModalIntake={setModalIntake}
-              setModalIntakeLabel={setModalIntakeLabel}
-              setModalIntakeValue={setModalIntakeValue}
-              setModalDeliveryPatternLabel={setModalDeliveryPatternLabel}
-              setModalDeliveryPatternValue={setModalDeliveryPatternValue}
-              modalIntakeValue={modalIntakeValue}
-              modalDeliveryPatternValue={modalDeliveryPatternValue}
-              modalCampusValue={modalCampusValue}
-              modalCampusLabel={modalCampusLabel}
-              modalIntakeLabel={modalIntakeLabel}
-              modalDeliveryPatternLabel={modalDeliveryPatternLabel}
-            />
-          </ModalBody>
+          <Apply
+            success={success}
+            setSuccess={setSuccess}
+            modalCampus={modalCampus}
+            setModalCampus={setModalCampus}
+            currentData={currentData}
+            modalDeliveryPattern={modalDeliveryPattern}
+            setModalDeliveryPattern={setModalDeliveryPattern}
+            setModal={setModal}
+            fee={fee}
+            unInfo={unInfo}
+            primaryCampus={primaryCampus}
+            studentDataValue={studentDataValue}
+            eligibilityWhileAppying={eligibilityWhileAppying}
+            elStatus={elStatus}
+            campusValue={campusValue}
+            applicationCount={applicationCount}
+            setModalCampusLabel={setModalCampusLabel}
+            setModalCampusValue={setModalCampusValue}
+            modalIntake={modalIntake}
+            setModalIntake={setModalIntake}
+            setModalIntakeLabel={setModalIntakeLabel}
+            setModalIntakeValue={setModalIntakeValue}
+            setModalDeliveryPatternLabel={setModalDeliveryPatternLabel}
+            setModalDeliveryPatternValue={setModalDeliveryPatternValue}
+            modalIntakeValue={modalIntakeValue}
+            modalDeliveryPatternValue={modalDeliveryPatternValue}
+            modalCampusValue={modalCampusValue}
+            modalCampusLabel={modalCampusLabel}
+            modalIntakeLabel={modalIntakeLabel}
+            modalDeliveryPatternLabel={modalDeliveryPatternLabel}
+          />
         </Modal>
 
         {/* Tabs */}
@@ -293,7 +351,7 @@ const Search = () => {
               </Nav>
             </div>
 
-            <div className="d-flex align-items-center justify-content-end">
+            <div className="d-flex align-items-center justify-content-end ddzindex">
               <div className="d-flex align-items-center mx-3">
                 <div className="mr-2">Order By :</div>
 
@@ -316,13 +374,90 @@ const Search = () => {
                 />
               </div>
             </div>
+            <div className="col-md-3 mb-2 mt-4 left-max-button">
+              <Button color="primary" onClick={showDrawer}>
+                Show Filters
+              </Button>
+
+              <Drawer
+                title="Filters"
+                placement="left"
+                onClose={onClose}
+                open={open}
+              >
+                <Filter
+                  studentId={student}
+                  success={success}
+                  setSuccess={setSuccess}
+                  setData={setData}
+                  setEntity={setEntity}
+                  setLoading={setLoading}
+                  page={page}
+                  dataSizeValue={dataSizeValue}
+                  sortValue={sortValue}
+                  setApplicationCount={setApplicationCount}
+                  setShowInt={setShowInt}
+                  setShowLocal={setShowLocal}
+                  setShowEU={setShowEU}
+                  studentDataValue={studentDataValue}
+                  setStudentDataValue={setStudentDataValue}
+                  intakeValue={intakeValue}
+                  setIntakeValue={setIntakeValue}
+                  setModalIntakeValue={setModalIntakeValue}
+                  studentTypeValue={studentTypeValue}
+                  setStudentTypeValue={setStudentTypeValue}
+                  programValue={programValue}
+                  setProgramValue={setProgramValue}
+                  campusValue={campusValue}
+                  setCampusValue={setCampusValue}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  subValue={subValue}
+                  setSubValue={setSubValue}
+                  programName={programName}
+                  setProgramName={setProgramName}
+                  onClose={onClose}
+                  open={open}
+                  studentDataLabel={studentDataLabel}
+                  setStudentDataLabel={setStudentDataLabel}
+                  universityLabel={universityLabel}
+                  setUniversityLabel={setUniversityLabel}
+                  universityTypeLabel={universityTypeLabel}
+                  setUniversityTypeLabel={setUniversityTypeLabel}
+                  campusLabel={campusLabel}
+                  setCampusLabel={setCampusLabel}
+                  universityCountryLabel={universityCountryLabel}
+                  setUniversityCountryLabel={setUniversityCountryLabel}
+                  cityLabel={cityLabel}
+                  setCityLabel={setCityLabel}
+                  intakeLabel={intakeLabel}
+                  setIntakeLabel={setIntakeLabel}
+                  programLabel={programLabel}
+                  setProgramLabel={setProgramLabel}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
+                  setSubLabel={setSubLabel}
+                  subLabel={subLabel}
+                  setUniversityValue={setUniversityValue}
+                  universityValue={universityValue}
+                  universityCountryValue={universityCountryValue}
+                  setUniversityCountryValue={setUniversityCountryValue}
+                  cityValue={cityValue}
+                  setCityValue={setCityValue}
+                  universityTypeValue={universityTypeValue}
+                  setUniversityTypeValue={setUniversityTypeValue}
+                  setStudentTypeLabel={setStudentTypeLabel}
+                  studentTypeLabel={studentTypeLabel}
+                />
+              </Drawer>
+            </div>
           </div>
         </div>
 
         {/* Modal For Apply Button Code End */}
 
         <div className="row searchbody">
-          <div className="col-md-3 mb-2 left-max-button">
+          {/* <div className="col-md-3 mb-2 left-max-button">
             <Button color="primary" onClick={showDrawer}>
               Show Filters
             </Button>
@@ -334,52 +469,9 @@ const Search = () => {
               open={open}
             >
               <Filter
+                studentId={student}
                 success={success}
                 setSuccess={setSuccess}
-                setData={setData}
-                setEntity={setEntity}
-                setLoading={setLoading}
-                page={page}
-                dataSizeValue={dataSizeValue}
-                sortValue={sortValue}
-                setApplicationCount={setApplicationCount}
-                setShowInt={setShowInt}
-                setShowLocal={setShowLocal}
-                setShowEU={setShowEU}
-                studentDataValue={studentDataValue}
-                setStudentDataValue={setStudentDataValue}
-                intakeValue={intakeValue}
-                setModalIntakeValue={setModalIntakeValue}
-                studentTypeValue={studentTypeValue}
-                setStudentTypeValue={setStudentTypeValue}
-                programValue={programValue}
-                setProgramValue={setProgramValue}
-                campusValue={campusValue}
-                setCampusValue={setCampusValue}
-                departmentValue={departmentValue}
-                setDepartmentValue={setDepartmentValue}
-                subValue={subValue}
-                setSubValue={setSubValue}
-                programName={programName}
-                setProgramName={setProgramName}
-              />
-            </Drawer>
-          </div>
-
-          <div
-            className="col-md-3 mb-5 left-max-height"
-            style={{ position: "relative", top: "10px", marginBottom: "20px" }}
-          >
-            <div
-              className="custom-webkit-scrollbar"
-              style={{
-                position: "fixed",
-                width: "20%",
-                height: "70vh",
-                overflowY: "scroll",
-              }}
-            >
-              <Filter
                 setData={setData}
                 setEntity={setEntity}
                 setLoading={setLoading}
@@ -407,121 +499,408 @@ const Search = () => {
                 setSubValue={setSubValue}
                 programName={programName}
                 setProgramName={setProgramName}
+                onClose={onClose}
+                open={open}
+              />
+            </Drawer>
+          </div> */}
+
+          <div
+            className="col-md-3 mb-5 left-max-height"
+            style={{ position: "relative", top: "10px", marginBottom: "20px" }}
+          >
+            <div
+              className="custom-webkit-scrollbar"
+              style={{
+                position: "fixed",
+                width: "20%",
+                height: "calc(100vh - 180px)",
+                overflowY: "scroll",
+              }}
+            >
+              <Filter
+                studentId={student}
+                success={success}
+                setSuccess={setSuccess}
+                setData={setData}
+                setEntity={setEntity}
+                setLoading={setLoading}
+                page={page}
+                dataSizeValue={dataSizeValue}
+                sortValue={sortValue}
+                setApplicationCount={setApplicationCount}
+                setShowInt={setShowInt}
+                setShowLocal={setShowLocal}
+                setShowEU={setShowEU}
+                studentDataValue={studentDataValue}
+                setStudentDataValue={setStudentDataValue}
+                intakeValue={intakeValue}
+                setIntakeValue={setIntakeValue}
+                setModalIntakeValue={setModalIntakeValue}
+                studentTypeValue={studentTypeValue}
+                setStudentTypeValue={setStudentTypeValue}
+                programValue={programValue}
+                setProgramValue={setProgramValue}
+                campusValue={campusValue}
+                setCampusValue={setCampusValue}
+                departmentValue={departmentValue}
+                setDepartmentValue={setDepartmentValue}
+                subValue={subValue}
+                setSubValue={setSubValue}
+                programName={programName}
+                setProgramName={setProgramName}
+                onClose={onClose}
+                open={open}
+                studentDataLabel={studentDataLabel}
+                setStudentDataLabel={setStudentDataLabel}
+                universityLabel={universityLabel}
+                setUniversityLabel={setUniversityLabel}
+                universityTypeLabel={universityTypeLabel}
+                setUniversityTypeLabel={setUniversityTypeLabel}
+                campusLabel={campusLabel}
+                setCampusLabel={setCampusLabel}
+                universityCountryLabel={universityCountryLabel}
+                setUniversityCountryLabel={setUniversityCountryLabel}
+                cityLabel={cityLabel}
+                setCityLabel={setCityLabel}
+                intakeLabel={intakeLabel}
+                setIntakeLabel={setIntakeLabel}
+                programLabel={programLabel}
+                setProgramLabel={setProgramLabel}
+                departmentLabel={departmentLabel}
+                setDepartmentLabel={setDepartmentLabel}
+                setSubLabel={setSubLabel}
+                subLabel={subLabel}
+                setUniversityValue={setUniversityValue}
+                universityValue={universityValue}
+                universityCountryValue={universityCountryValue}
+                setUniversityCountryValue={setUniversityCountryValue}
+                cityValue={cityValue}
+                setCityValue={setCityValue}
+                universityTypeValue={universityTypeValue}
+                setUniversityTypeValue={setUniversityTypeValue}
+                setStudentTypeLabel={setStudentTypeLabel}
+                studentTypeLabel={studentTypeLabel}
               />
             </div>
           </div>
 
-          {loading ? (
+          {/* {loading ? (
             <div className="col-md-9">
               <div className="text-center">
                 <img className="img-fluid" src={loader} alt="loader" />
               </div>
             </div>
-          ) : (
-            <div className="col-md-9 mt-3">
-              {/* Showing University Course Start */}
+          ) : ( */}
+          <div className="col-md-9 mt-3">
+            {/* Showing University Course Start */}
 
-              {checkActiveTab ? (
-                <>
-                  {!loading ? (
-                    <>
-                      {data?.map((info, i) => (
-                        <University
-                          info={info}
-                          i={i}
-                          userType={userType}
-                          userTypes={userTypes}
-                          permissions={permissions}
-                          permissionList={permissionList}
-                          showLocal={showLocal}
-                          showEU={showEU}
-                          showInt={showInt}
-                          studentDataValue={studentDataValue}
-                          setModalCampus={setModalCampus}
-                          setModalIntake={setModalIntake}
-                          setModalDeliveryPattern={setModalDeliveryPattern}
-                          setCurrentData={setCurrentData}
-                          setPrimaryCampus={setPrimaryCampus}
-                          campusValue={campusValue}
-                          setFee={setFee}
-                          setUnInfo={setUnInfo}
-                          setEligibilityWhileApplying={
-                            setEligibilityWhileApplying
-                          }
-                          setElStatus={setElStatus}
-                          setModal={setModal}
-                          setEligibleModal={setEligibleModal}
-                          setElAns={setElAns}
-                          programName={programName}
-                          studentTypeValue={studentTypeValue}
-                          departmentValue={departmentValue}
-                          setDepartmentValue={setDepartmentValue}
-                          subValue={subValue}
-                          programValue={programValue}
-                          intakeValue={intakeValue}
-                          // setIntakeValue={setIntakeValue}
-                        />
-                      ))}
+            <>
+              {(userType !== userTypes?.Student.toString() &&
+                studentDataValue !== "0") ||
+              studentTypeValue !== "0" ||
+              universityValue !== "0" ||
+              universityTypeValue !== "0" ||
+              universityCountryValue !== "0" ||
+              cityValue !== "0" ||
+              campusValue !== "0" ||
+              intakeValue !== "0" ||
+              programValue !== "0" ||
+              (!departmentId && departmentValue !== "0") ||
+              subValue !== "0" ? (
+                <div className="custom-card-border py-4 px-4 mb-3 searchfiltertags">
+                  <Row>
+                    <Col lg="12" md="12" sm="12">
+                      <div className="scroll-x">
+                        {userType !== userTypes?.Student.toString() &&
+                        studentDataValue !== "0" ? (
+                          <TagButton
+                            label={studentDataLabel}
+                            setValue={() => setStudentDataValue("0")}
+                            setLabel={() =>
+                              setStudentDataLabel("Select Student")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
 
-                      {/* pagination */}
+                        {studentTypeValue !== "0" ? (
+                          <TagButton
+                            label={studentTypeLabel}
+                            setValue={() => setStudentTypeValue("0")}
+                            setLabel={() =>
+                              setStudentTypeLabel("Select Student Type")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
 
-                      <div className="mb-130px">
-                        <Card className="pt-2 px-1">
-                          <Pagination
-                            dataPerPage={dataSizeValue}
-                            totalData={entity}
-                            paginate={paginate}
-                            currentPage={page}
-                          />
-                        </Card>
+                        {universityValue !== "0" ? (
+                          <TagButton
+                            label={universityLabel}
+                            setValue={() => setUniversityValue("0")}
+                            setLabel={() =>
+                              setUniversityLabel("Select University")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {universityTypeValue !== "0" ? (
+                          <TagButton
+                            label={universityTypeLabel}
+                            setValue={() => setUniversityTypeValue("0")}
+                            setLabel={() =>
+                              setUniversityTypeLabel("Select University Type")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {universityCountryValue !== "0" ? (
+                          <TagButton
+                            label={universityCountryLabel}
+                            setValue={() => setUniversityCountryValue("0")}
+                            setLabel={() =>
+                              setUniversityCountryLabel("Select Country")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {cityValue !== "0" ? (
+                          <TagButton
+                            label={cityLabel}
+                            setValue={() => setCityValue("0")}
+                            setLabel={() =>
+                              setCityLabel("Select City/Location")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {campusValue !== "0" ? (
+                          <TagButton
+                            label={campusLabel}
+                            setValue={() => setCampusValue("0")}
+                            setLabel={() =>
+                              setCampusLabel("Select University Campus")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {intakeValue !== "0" ? (
+                          <TagButton
+                            label={intakeLabel}
+                            setValue={() => setIntakeValue("0")}
+                            setLabel={() => setIntakeLabel("Select Intakes")}
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {programValue !== "0" ? (
+                          <TagButton
+                            label={programLabel}
+                            setValue={() => setProgramValue("0")}
+                            setLabel={() =>
+                              setProgramLabel("Select Course Level")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {!departmentId && departmentValue !== "0" ? (
+                          <TagButton
+                            label={departmentLabel}
+                            setValue={() => setDepartmentValue("0")}
+                            setLabel={() =>
+                              setDepartmentLabel("Select Department Category")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {subValue !== "0" ? (
+                          <TagButton
+                            label={subLabel}
+                            setValue={() => setSubValue("0")}
+                            setLabel={() =>
+                              setSubLabel("Select Sub Department Category")
+                            }
+                          ></TagButton>
+                        ) : (
+                          ""
+                        )}
+
+                        {(userType !== userTypes?.Student.toString() &&
+                          studentDataValue !== "0") ||
+                        studentTypeValue !== "0" ||
+                        universityValue !== "0" ||
+                        universityTypeValue !== "0" ||
+                        universityCountryValue !== "0" ||
+                        cityValue !== "0" ||
+                        campusValue !== "0" ||
+                        intakeValue !== "0" ||
+                        programValue !== "0" ||
+                        (!departmentId && departmentValue !== "0") ||
+                        subValue !== "0" ? (
+                          <button
+                            className="tag-clear"
+                            onClick={handleClearSearch}
+                          >
+                            Clear All
+                          </button>
+                        ) : (
+                          ""
+                        )}
                       </div>
+                    </Col>
+                  </Row>
+                </div>
+              ) : null}
+            </>
+
+            <div
+              className={
+                (userType !== userTypes?.Student.toString() &&
+                  studentDataValue !== "0") ||
+                studentTypeValue !== "0" ||
+                universityValue !== "0" ||
+                universityTypeValue !== "0" ||
+                universityCountryValue !== "0" ||
+                cityValue !== "0" ||
+                campusValue !== "0" ||
+                intakeValue !== "0" ||
+                programValue !== "0" ||
+                (!departmentId && departmentValue !== "0") ||
+                subValue !== "0"
+                  ? "uniProgramm"
+                  : ""
+              }
+            >
+              {loading ? (
+                <Loader />
+              ) : (
+                <>
+                  {checkActiveTab ? (
+                    <>
+                      {!loading ? (
+                        <>
+                          {data?.map((info, i) => (
+                            <University
+                              info={info}
+                              i={i}
+                              userType={userType}
+                              userTypes={userTypes}
+                              permissions={permissions}
+                              permissionList={permissionList}
+                              showLocal={showLocal}
+                              showEU={showEU}
+                              showInt={showInt}
+                              studentDataValue={studentDataValue}
+                              setModalCampus={setModalCampus}
+                              setModalIntake={setModalIntake}
+                              setModalDeliveryPattern={setModalDeliveryPattern}
+                              setCurrentData={setCurrentData}
+                              setPrimaryCampus={setPrimaryCampus}
+                              campusValue={campusValue}
+                              setFee={setFee}
+                              setUnInfo={setUnInfo}
+                              setEligibilityWhileApplying={
+                                setEligibilityWhileApplying
+                              }
+                              setElStatus={setElStatus}
+                              setModal={setModal}
+                              setEligibleModal={setEligibleModal}
+                              setElAns={setElAns}
+                              programName={programName}
+                              studentTypeValue={studentTypeValue}
+                              departmentValue={departmentValue}
+                              setDepartmentValue={setDepartmentValue}
+                              subValue={subValue}
+                              programValue={programValue}
+                              intakeValue={intakeValue}
+                              applicationTypes={applicationTypes}
+                              // setIntakeValue={setIntakeValue}
+                            />
+                          ))}
+
+                          {/* pagination */}
+
+                          <div className="mb-130px">
+                            <Card className="pt-2 px-1">
+                              <Pagination
+                                dataPerPage={dataSizeValue}
+                                totalData={entity}
+                                paginate={paginate}
+                                currentPage={page}
+                              />
+                            </Card>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="d-flex justify-content-center">
+                          <div className="spinner-border" role="status">
+                            <span className="sr-only">Loading...</span>
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
-                    <div className="d-flex justify-content-center">
-                      <div className="spinner-border" role="status">
-                        <span className="sr-only">Loading...</span>
-                      </div>
+                    <div>
+                      <>
+                        {data?.length < 1 ? (
+                          <div class="text-center">
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            {data?.map((info, i) => (
+                              <div key={i} className=" mb-3">
+                                <UniversityHead
+                                  info={info}
+                                  className="university-name-extra"
+                                />
+                              </div>
+                            ))}
+
+                            {/* pagination */}
+
+                            <div className="mb-80px">
+                              <Card className="pt-2 px-1">
+                                <Pagination
+                                  dataPerPage={dataSizeValue}
+                                  totalData={entity}
+                                  paginate={paginate}
+                                  currentPage={page}
+                                />
+                              </Card>
+                            </div>
+                          </>
+                        )}
+                      </>
                     </div>
                   )}
                 </>
-              ) : (
-                <div>
-                  <>
-                    {data?.length < 1 ? (
-                      <div class="text-center">
-                        <div class="spinner-border" role="status">
-                          <span class="sr-only">Loading...</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        {data?.map((info, i) => (
-                          <div key={i}>
-                            <UniversityHead info={info} />
-                          </div>
-                        ))}
-
-                        {/* pagination */}
-
-                        <div className="mb-80px">
-                          <Card className="pt-2 px-1">
-                            <Pagination
-                              dataPerPage={dataSizeValue}
-                              totalData={entity}
-                              paginate={paginate}
-                              currentPage={page}
-                            />
-                          </Card>
-                        </div>
-                      </>
-                    )}
-                  </>
-                </div>
               )}
-
-              {/* Showing University Course End */}
             </div>
-          )}
+
+            {/* Showing University Course End */}
+          </div>
+          {/* )} */}
         </div>
       </div>
     </div>

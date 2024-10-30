@@ -14,6 +14,7 @@ import {
   Col,
   Table,
   ButtonGroup,
+  Row,
 } from "reactstrap";
 import Select from "react-select";
 import get from "../../../../helpers/get";
@@ -51,6 +52,7 @@ const List = () => {
   const [man, setMan] = useState(null);
   const [details, setDetails] = useState("");
   const [detailsError, setDetailsError] = useState("");
+  const [applicationType, setApplicationType] = useState([]);
 
   useEffect(() => {
     get(`StudentTypeDocument/Index`).then((res) => {
@@ -64,6 +66,7 @@ const List = () => {
 
     get(`ApplicationTypeDD/Index`).then((res) => {
       setApp(res);
+      console.log("applicationtype", res);
     });
   }, [success]);
 
@@ -110,6 +113,7 @@ const List = () => {
     setDocError("");
     setAppError("");
     setMan(null);
+    setApplicationType([]);
   };
 
   // on Close Delete Modal
@@ -147,7 +151,7 @@ const List = () => {
       setDetailsError("");
     }
   };
-
+  console.log(applicationType);
   const validateForm = () => {
     var isFormValid = true;
     if (!details) {
@@ -158,7 +162,7 @@ const List = () => {
       isFormValid = false;
       setDocError("Document type is required");
     }
-    if (appValue === 0) {
+    if (applicationType.length === 0) {
       isFormValid = false;
       setAppError("Application type is required");
     }
@@ -170,33 +174,51 @@ const List = () => {
     return isFormValid;
   };
 
+  const handleChange = (e, id) => {
+    let isChecked = e.target.checked;
+
+    if (isChecked === true) {
+      setApplicationType([...applicationType, id]);
+      setAppError("");
+    } else {
+      const res = applicationType.filter((c) => c !== id);
+      setApplicationType(res);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const subData = new FormData(e.target);
     var formIsValid = validateForm(subData);
 
-    if (formIsValid) {
-      setButtonStatus(true);
-      setProgress1(true);
-      post(`StudentTypeDocument/Create`, subData).then((res) => {
-        setButtonStatus(false);
-        setProgress1(false);
-        if (res?.status === 200 && res?.data?.isSuccess === true) {
-          addToast(res?.data?.message, {
-            appearance: "success",
-            autoDismiss: true,
-          });
-          setSuccess(!success);
-          closeModal();
-        } else if (res?.status === 200 && res?.data?.isSuccess === false) {
-          addToast(res?.data?.message, {
-            appearance: "error",
-            autoDismiss: true,
-          });
-          // closeModal();
-        }
-      });
+    for (let i = 0; i < applicationType.length; i++) {
+      subData.delete("applicationTypeId");
+      subData.append("applicationTypeId", applicationType[i]);
+
+      if (formIsValid) {
+        setButtonStatus(true);
+        setProgress1(true);
+        post(`StudentTypeDocument/Create`, subData).then((res) => {
+          setButtonStatus(false);
+          setProgress1(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setApplicationType([]);
+            setSuccess(!success);
+            closeModal();
+          } else if (res?.status === 200 && res?.data?.isSuccess === false) {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+            // closeModal();
+          }
+        });
+      }
     }
   };
 
@@ -268,6 +290,36 @@ const List = () => {
                           Application Type{" "}
                           <span className="text-danger">*</span>{" "}
                         </span>
+                      </Col>
+                      <Col md="8" className="ml-3">
+                        <>
+                          <Row className="has-icon-left position-relative">
+                            {app?.map((notices, i) => (
+                              <div key={i}>
+                                {" "}
+                                <Col md="6" className="d-flex">
+                                  <span>{notices?.name}</span>
+                                  <Input
+                                    type="checkbox"
+                                    onChange={(e) =>
+                                      handleChange(e, notices?.id)
+                                    }
+                                  />
+                                </Col>
+                              </div>
+                            ))}
+                            <span className="text-danger">{appError}</span>
+                          </Row>
+                        </>
+                      </Col>
+                    </FormGroup>
+                    {/* 
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col md="9">
+                        <span>
+                          Application Type{" "}
+                          <span className="text-danger">*</span>{" "}
+                        </span>
                         <Select
                           options={appOption}
                           value={{
@@ -281,7 +333,7 @@ const List = () => {
 
                         <span className="text-danger">{appError}</span>
                       </Col>
-                    </FormGroup>
+                    </FormGroup> */}
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col md="9">
@@ -373,7 +425,7 @@ const List = () => {
             <Table className="table-sm table-bordered">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>Title</th>
 
                   <th>Application type</th>
@@ -386,7 +438,7 @@ const List = () => {
               <tbody>
                 {list?.map((doc, i) => (
                   <tr key={doc?.id} style={{ textAlign: "center" }}>
-                    <th scope="row">{i + 1}</th>
+                    {/* <th scope="row">{i + 1}</th> */}
 
                     <td className="text-center">{doc?.document?.name}</td>
                     <td className="text-center">
@@ -414,16 +466,6 @@ const List = () => {
                           />
                         ) : null}
                       </ButtonGroup>
-
-                      <ConfirmModal
-                        text="Do You Want To Delete This Prefix Document Group? Once Deleted it can't be Undone!"
-                        isOpen={deleteModal}
-                        toggle={closeDeleteModal}
-                        buttonStatus={buttonStatus}
-                        progress={progress2}
-                        confirm={handleDeleteDocumentGroup}
-                        cancel={closeDeleteModal}
-                      ></ConfirmModal>
                     </td>
                   </tr>
                 ))}
@@ -432,6 +474,16 @@ const List = () => {
           </div>
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Prefix Document Group? Once Deleted it can't be Undone!"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress2}
+        confirm={handleDeleteDocumentGroup}
+        cancel={closeDeleteModal}
+      />
     </div>
   );
 };

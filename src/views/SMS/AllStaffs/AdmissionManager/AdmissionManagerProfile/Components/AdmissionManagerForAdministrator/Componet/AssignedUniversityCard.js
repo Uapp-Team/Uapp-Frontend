@@ -69,7 +69,7 @@ const AssignedUniversityCard = ({
             <Table borderless responsive className="mt-3">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>University Name</th>
                   <th>Short Name</th>
                   <th>Application type</th>
@@ -84,7 +84,7 @@ const AssignedUniversityCard = ({
                       borderBottom: "1px solid #2525251F",
                     }}
                   >
-                    <th scope="row">{1 + i}</th>
+                    {/* <th scope="row">{1 + i}</th> */}
                     <td>
                       <Link
                         className="text-body"

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
-const EducationalInformationCard = ({ sId }) => {
-  const [educationInfos, setEducationInfos] = useState([]);
+const EducationalInformationCard = ({
+  sId,
+  educationInfos,
+  setEducationInfos,
+}) => {
   useEffect(() => {
     get(`EducationInformation/GetByStudentId/${sId}`).then((res) => {
       setEducationInfos(res);
@@ -57,14 +61,14 @@ const EducationalInformationCard = ({ sId }) => {
                     <p>
                       <span>Attended From</span>
                       <br />
-                      <b>{handleDate(edu?.attendedInstitutionFrom)}</b>
+                      <b>{dateFormate(edu?.attendedInstitutionFrom)}</b>
                     </p>
                     <p>
                       <span>Attended To</span>
                       <br />
                       <b>
                         {edu?.qualificationAchieved === true &&
-                          handleDate(edu?.attendedInstitutionTo)}
+                          dateFormate(edu?.attendedInstitutionTo)}
                       </b>
                     </p>
                   </Col>

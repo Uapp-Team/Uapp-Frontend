@@ -27,7 +27,7 @@ const RoleMenu = (props) => {
   const [rolelabel, setRoleLabel] = useState("Select Role...");
   const [roleValue, setRoleValue] = useState("");
   const [menus, setMenus] = useState([]);
-  let [checked, setChecked] = useState([]);
+  const [checked, setChecked] = useState([]);
   const { addToast } = useToasts();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [roles, setRoles] = useState([]);
@@ -48,14 +48,14 @@ const RoleMenu = (props) => {
   // on Select Role
   const selectRole = (label, value) => {
     setMenus([]);
-    checked = [];
+    setChecked([]);
     setRoleLabel(label);
     setRoleValue(value);
 
     get(`RoleMenuItem/GetCheckBoxes/${value}`).then((action) => {
       setMenus(action);
 
-      let defaultChecked = checked;
+      let defaultChecked = [];
       if (action.length > 0) {
         for (let i = 0; i < action.length; i++) {
           const menu = action[i];
@@ -97,7 +97,6 @@ const RoleMenu = (props) => {
       setChecked(checkedData);
     }
   };
-
 
   // on Select All Checkbox
   const handleSelectAll = (e) => {
@@ -262,7 +261,9 @@ const RoleMenu = (props) => {
               <Row>
                 <Col>
                   {menus.length > 0 &&
-                  permissions?.includes(permissionList?.Role_Menu_Configuration) ? (
+                  permissions?.includes(
+                    permissionList?.Role_Menu_Configuration
+                  ) ? (
                     <Button.Ripple
                       type="submit"
                       className="mr-1 mt-3 badge-primary"

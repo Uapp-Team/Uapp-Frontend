@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardBody, Table } from "reactstrap";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const PersonalForm = ({ personalInfo }) => {
   return (
@@ -20,7 +21,7 @@ const PersonalForm = ({ personalInfo }) => {
           >
             <td width="40%">Date of Birth</td>
 
-            <td width="60%">{personalInfo?.dateOfBirth}</td>
+            <td width="60%">{dateFormate(personalInfo?.dateOfBirth)}</td>
           </tr>
 
           <tr
@@ -43,15 +44,6 @@ const PersonalForm = ({ personalInfo }) => {
             <td width="60%">{personalInfo?.gender?.name}</td>
           </tr>
 
-          <tr
-            style={{
-              borderBottom: "1px solid #2525251F",
-            }}
-          >
-            <td width="40%">Marital Status</td>
-
-            <td width="60%">{personalInfo?.maritalStatus?.name}</td>
-          </tr>
           <tr
             style={{
               borderBottom: "1px solid #2525251F",

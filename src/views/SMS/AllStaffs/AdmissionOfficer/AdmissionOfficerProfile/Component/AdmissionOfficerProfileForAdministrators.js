@@ -13,7 +13,6 @@ const AdmissionOfficerProfileForAdministrators = () => {
   const [headData, setHeadData] = useState({});
 
   const { officerId } = useParams();
-  console.log("object", officerId);
   const userId = localStorage.getItem("referenceId");
 
   return (

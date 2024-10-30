@@ -55,7 +55,7 @@ const AddAssociate = () => {
       setNameTitle(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsParent(res);
     });
 

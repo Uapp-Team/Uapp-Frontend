@@ -11,7 +11,7 @@ async function post(url, body = {}, authToken = "") {
     expireDateHandler();
     const res = await axios.post(`${rootUrl}${url}`, body, {
       headers: {
-        'authorization': AuthStr,
+        authorization: AuthStr,
       },
     });
     return await res;
@@ -20,7 +20,7 @@ async function post(url, body = {}, authToken = "") {
       history.push("/404");
     }
 
-    throw error;
+    return error?.response;
   }
 }
 

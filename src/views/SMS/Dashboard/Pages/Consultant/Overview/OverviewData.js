@@ -6,10 +6,10 @@ const OverviewData = ({ text, value }) => {
     <>
       {value > 0 && (
         <Row className="mb-0">
-          <Col xs={7} className="text-gray-70">
+          <Col xs={7} md={6} lg={7} xl={6} className="text-gray-70">
             {text}
           </Col>
-          <Col xs={5} className="fw-500">
+          <Col xs={5} md={6} lg={5} xl={6} className="fw-500">
             {value}
           </Col>
         </Row>

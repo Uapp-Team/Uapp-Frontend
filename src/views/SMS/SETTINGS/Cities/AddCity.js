@@ -299,7 +299,7 @@ const AddCity = () => {
             <Table className="table-sm table-bordered">
               <thead className="tablehead">
                 <tr style={{ textAlign: "center" }}>
-                  <th>SL/NO</th>
+                  {/* <th>SL/NO</th> */}
                   <th>City</th>
                   <th className="text-center">Country</th>
                   <th>Action</th>
@@ -308,7 +308,7 @@ const AddCity = () => {
               <tbody>
                 {city?.map((state, i) => (
                   <tr key={i} style={{ textAlign: "center" }}>
-                    <th scope="row">{i + 1}</th>
+                    {/* <th scope="row">{i + 1}</th> */}
                     <td>{state?.name}</td>
                     <td>{state?.universityCountry?.name}</td>
                     <td>
@@ -336,17 +336,6 @@ const AddCity = () => {
                           />
                         ) : null}
                       </ButtonGroup>
-
-                      <ConfirmModal
-                        text="Do You Want To Delete This City? Once Deleted it can't be Undone "
-                        // ${delData?.name}
-                        isOpen={deleteModal}
-                        toggle={closeDeleteModal}
-                        cancel={closeDeleteModal}
-                        buttonStatus={buttonStatus}
-                        progress={progress}
-                        confirm={() => handleDeleteUniState()}
-                      ></ConfirmModal>
                     </td>
                   </tr>
                 ))}
@@ -355,6 +344,17 @@ const AddCity = () => {
           </div>
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text="Do You Want To Delete This City? Once Deleted it can't be Undone "
+        // ${delData?.name}
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        confirm={() => handleDeleteUniState()}
+      />
     </div>
   );
 };

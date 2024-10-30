@@ -23,9 +23,9 @@ import { Upload } from "antd";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import { rootUrl } from "../../../../../constants/constants";
-import downloadBtn from "../../../../../assets/img/download.png";
-import uploadBtn from "../../../../../assets/img/upload.png";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../../components/buttons/DownloadButton";
 
 const ApplicationInformation = () => {
   const history = useHistory();
@@ -485,27 +485,28 @@ const ApplicationInformation = () => {
                         {userType === userTypes?.Student ? (
                           <>
                             {dataExist === false ? (
-                              <div
-                                style={{
-                                  fontSize: "14px",
-                                  fontWeight: "500",
-                                  marginBottom: "20px",
-                                }}
-                              >
-                                {currentCountry === previousCountry ||
-                                currentCountry === null ? (
-                                  <span>
-                                    Based on your profile, your application type
-                                    seems to be {studentTypeLabel}. You can
-                                    change your application type.
-                                  </span>
-                                ) : (
-                                  <span>
-                                    You have changed you preferred study
-                                    destination. Your application type might
-                                    also require to be changed.
-                                  </span>
-                                )}
+                              <div className="mt-1 mb-4 d-flex justify-between align-items-center cardborder">
+                                <img
+                                  style={{ height: "100%" }}
+                                  src={icon_info}
+                                  alt=""
+                                />{" "}
+                                <div className="pl-3">
+                                  {currentCountry === previousCountry ||
+                                  currentCountry === null ? (
+                                    <span>
+                                      Based on your profile, your application
+                                      type seems to be {studentTypeLabel}. You
+                                      can change your application type.
+                                    </span>
+                                  ) : (
+                                    <span>
+                                      You have changed you preferred study
+                                      destination. Your application type might
+                                      also require to be changed.
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             ) : null}
                           </>
@@ -887,17 +888,6 @@ const ApplicationInformation = () => {
                                           </Col>
                                         </Row>
 
-                                        {/* {
-                              (applicationInformation?.refusalLetterForUKVisa?.fileUrl !== null) ?
-                              <Image
-                              src={`${rootUrl}`+applicationInformation?.refusalLetterForUKVisa?.fileUrl}
-                              width={100}
-                              height={100}
-                              /> 
-              
-                              :
-                              null
-                            } */}
                                         <>
                                           <Row>
                                             <Col md="4">
@@ -911,11 +901,7 @@ const ApplicationInformation = () => {
                                                 style={{ height: "32px" }}
                                               >
                                                 {FileList.length < 1 ? (
-                                                  <img
-                                                    className="mb-1"
-                                                    src={uploadBtn}
-                                                    alt=""
-                                                  />
+                                                  <UploadButton />
                                                 ) : (
                                                   ""
                                                 )}
@@ -934,27 +920,11 @@ const ApplicationInformation = () => {
                                                   }
                                                   target="blank"
                                                 >
-                                                  <img
-                                                    className="mb-1"
-                                                    src={downloadBtn}
-                                                    alt=""
-                                                  />
+                                                  <DownloadButton />
                                                 </a>
                                               ) : null}
                                             </Col>
                                           </Row>
-                                          {/* <Modal
-                                            visible={previewVisible}
-                                            title={previewTitle}
-                                            footer={null}
-                                            onCancel={handleCancel}
-                                          >
-                                            <img
-                                              alt="example"
-                                              style={{ width: "100%" }}
-                                              src={previewImage}
-                                            />
-                                          </Modal> */}
                                         </>
                                       </FormGroup>
                                     ) : null}
@@ -1037,11 +1007,7 @@ const ApplicationInformation = () => {
                                             style={{ height: "32px" }}
                                           >
                                             {FileList2.length < 1 ? (
-                                              <img
-                                                className="mb-1"
-                                                src={uploadBtn}
-                                                alt=""
-                                              />
+                                              <UploadButton />
                                             ) : (
                                               ""
                                             )}
@@ -1060,11 +1026,7 @@ const ApplicationInformation = () => {
                                               }
                                               target="blank"
                                             >
-                                              <img
-                                                className="mb-1"
-                                                src={downloadBtn}
-                                                alt=""
-                                              />
+                                              <DownloadButton />
                                             </a>
                                           ) : null}
                                         </Col>

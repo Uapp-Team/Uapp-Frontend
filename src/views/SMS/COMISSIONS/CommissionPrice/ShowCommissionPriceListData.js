@@ -72,21 +72,21 @@ const ShowCommissionPriceListData = (props) => {
                       </Button>
                     ) : null}
                   </ButtonGroup>
-
-                  <ConfirmModal
-                    text="Do You Want To Delete This Information?"
-                    isOpen={deleteModal}
-                    toggle={() => setDeleteModal(!deleteModal)}
-                    confirm={confirmDelete}
-                    cancel={() => setDeleteModal(false)}
-                    progress={progress}
-                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
       </div>
+
+      <ConfirmModal
+        text="Do You Want To Delete This Information?"
+        isOpen={deleteModal}
+        toggle={() => setDeleteModal(!deleteModal)}
+        confirm={confirmDelete}
+        cancel={() => setDeleteModal(false)}
+        progress={progress}
+      />
     </div>
   );
 };

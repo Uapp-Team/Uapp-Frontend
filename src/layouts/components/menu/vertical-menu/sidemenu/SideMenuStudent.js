@@ -2,15 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import SideMenuItem from "./SideMenuItem";
+import { Modal } from "reactstrap";
+import StudentRegRefer from "../../../../../components/Refer/StudentRegRefer";
+import StudentJoinBanner from "../../../../../views/SMS/Affiliate/AffiliateComponents/StudentJoinBanner";
 
 const SideMenuStudent = () => {
-  const [info, setInfo] = useState(false);
+  const [canConsultant, setCanConsultant] = useState(false);
+  const referenceId = localStorage.getItem("referenceId");
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
+  const isLead = JSON?.parse(localStorage.getItem("IsLead"));
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
-    get(`Student/CheckIfStudentIsConsultant/${currentUser?.displayEmail}`).then(
+    get(`Student/CanBecomeConsultant/${currentUser?.referenceId}`).then(
       (res) => {
-        setInfo(res);
+        setCanConsultant(res);
       }
     );
   }, [currentUser]);
@@ -24,13 +30,15 @@ const SideMenuStudent = () => {
         icon="fas fa-magnifying-glass"
         path="/search"
       />
-      <SideMenuItem
-        title="My Applications"
-        icon="far fa-file"
-        path="/applications"
-      />
+      {!isLead && (
+        <SideMenuItem
+          title="My Applications"
+          icon="far fa-file"
+          path="/applications"
+        />
+      )}
 
-      {info ? null : (
+      {canConsultant && (
         <li className="nav-item uapp-nav-item ">
           <Link to="/becomeConsultant" className="d-flex justify-content-start">
             <button type="button" class="btn btn-primary">
@@ -39,6 +47,36 @@ const SideMenuStudent = () => {
           </Link>
         </li>
       )}
+
+      {!isLead && (
+        <>
+          <button
+            onClick={() => {
+              setModalShow(true);
+            }}
+            type="button"
+            class="login-to-lead"
+          >
+            Refer a friend
+          </button>
+
+          <Modal
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            isOpen={modalShow}
+            toggle={() => setModalShow(false)}
+            centered
+          >
+            <StudentRegRefer
+              apiUrl={`Consultant/referralForStudent/${referenceId}`}
+              modalClose={() => setModalShow(false)}
+            />
+          </Modal>
+        </>
+      )}
+      <div className="m-3">
+        <StudentJoinBanner className="my-5 text-center" />
+      </div>
     </>
   );
 };

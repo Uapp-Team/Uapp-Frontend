@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
-const TestScoresCard = ({ sId }) => {
-  const [ielts, setIelts] = useState({});
-  const [duolingo, setDuolingo] = useState({});
-  const [toefl, setToefl] = useState({});
-  const [functions, setFunctions] = useState({});
-  const [gcse, setGcse] = useState({});
-  const [pearson, setPearson] = useState({});
-  const [others, setOthers] = useState({});
-  const [pte, setPte] = useState({});
-  const [greData, setGreData] = useState({});
-  const [gmatData, setGmatData] = useState({});
+const TestScoresCard = ({
+  sId,
+  ielts,
+  setIelts,
+  duolingo,
+  setDuolingo,
+  toefl,
+  setToefl,
+  functions,
+  setFunctions,
+  gcse,
+  setGcse,
+  pearson,
+  setPearson,
+  others,
+  setOthers,
+  pte,
+  setPte,
+  greData,
+  setGreData,
+  gmatData,
+  setGmatData,
+}) => {
+  console.log(duolingo);
 
   const handleDate = (e) => {
     var datee = e;
@@ -29,7 +43,8 @@ const TestScoresCard = ({ sId }) => {
     get(`GmatScore/GetByStudent/${sId}`).then((res) => {
       setGmatData(res);
     });
-  });
+  }, [sId]);
+
   useEffect(() => {
     get(`Ielts/Index/${sId}`).then((res) => {
       setIelts(res);
@@ -274,7 +289,7 @@ const TestScoresCard = ({ sId }) => {
                     <p>
                       <span>Exam Date</span>
                       <br />
-                      <b> {handleDate(ielts?.examDate)}</b>
+                      <b> {dateFormate(ielts?.examDate)}</b>
                     </p>
                   </Col>
                   <Col lg="3"></Col>
@@ -327,7 +342,7 @@ const TestScoresCard = ({ sId }) => {
                     <p>
                       <span>Exam Date</span>
                       <br />
-                      <b> {handleDate(duolingo?.examDate)}</b>
+                      <b> {dateFormate(duolingo?.examDate)}</b>
                     </p>
                   </Col>
                   <Col lg="3">
@@ -394,7 +409,7 @@ const TestScoresCard = ({ sId }) => {
                     <p>
                       <span> Exam Date</span>
                       <br />
-                      <b> {handleDate(toefl?.examDate)}</b>
+                      <b> {dateFormate(toefl?.examDate)}</b>
                     </p>
                   </Col>
                   <Col lg="3">
@@ -460,7 +475,7 @@ const TestScoresCard = ({ sId }) => {
                     <p>
                       <span> Exam Date</span>
                       <br />
-                      <b> {handleDate(functions?.examDate)}</b>
+                      <b> {dateFormate(functions?.examDate)}</b>
                     </p>
                   </Col>
                   <Col lg="3">

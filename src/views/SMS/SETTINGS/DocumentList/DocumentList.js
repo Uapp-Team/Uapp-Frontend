@@ -17,6 +17,7 @@ import {
   Col,
   Table,
   ButtonGroup,
+  Row,
 } from "reactstrap";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
@@ -63,11 +64,16 @@ const DocumentList = () => {
   // const [Description, setDescription] = useState("");
   const [Description, setDescription] = useState("");
   const [DescriptionError, setDescriptionError] = useState("");
+  const [homeAccept, setHomeAccept] = useState(false);
+  const [ukAccept, setUkAccept] = useState(false);
+  const [intAccept, setIntAccept] = useState(false);
+  const [acceptError, setAcceptError] = useState(false);
 
   useEffect(() => {
     get("Document/Index").then((res) => {
       setDocumentdata(res);
       setLoading(false);
+      console.log("asif's document", res);
     });
 
     get("DocumentCategoryDD/Index").then((res) => {
@@ -88,19 +94,22 @@ const DocumentList = () => {
 
   const handleUpdate = (document) => {
     setModalOpen(true);
-    setDocuLabel(document?.documentCategory?.name);
-    setDocuValue(document?.documentCategory?.id);
+    setDocuLabel(document?.categoryName);
+    setDocuValue(document?.documentCategoryId);
     setName(document?.name);
     setDescription(document?.description);
     setApplication(`${document?.isVaryForApplication}`);
     // localStorage.setItem("updateDocument", document?.id);
     setUpdateDocument(document?.id);
+    setHomeAccept(document?.isForHome);
+    setUkAccept(document?.isForEu_uk);
+    setIntAccept(document?.isForInternational);
   };
 
   const handleName = (e) => {
     setName(e.target.value);
     if (e.target.value === "") {
-      setNameError("Name is required");
+      setNameError("Title is required");
     } else {
       setNameError("");
     }
@@ -127,8 +136,14 @@ const DocumentList = () => {
     }
     if (!Name) {
       isFormValid = false;
-      setNameError("Name is required");
+      setNameError("Title is required");
     }
+
+    // if (homeAccept === false && ukAccept === false && intAccept === false) {
+    //   isFormValid = false;
+    //   setAcceptError(true);
+    // }
+
     if (!Description) {
       isFormValid = false;
       setDescriptionError("Description is required");
@@ -141,6 +156,9 @@ const DocumentList = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
+    subData.append("isForHome", homeAccept);
+    subData.append("isForEu_uk", ukAccept);
+    subData.append("isForInternational", intAccept);
     var formIsValid = validateForm(subData);
 
     if (formIsValid) {
@@ -257,6 +275,9 @@ const DocumentList = () => {
     setNameError("");
     setCategoryError("");
     setApplicationError("");
+    setUkAccept(false);
+    setIntAccept(false);
+    setHomeAccept(false);
   };
 
   // on Close Delete Modal
@@ -278,12 +299,11 @@ const DocumentList = () => {
 
   return (
     <div>
+      <BreadCrumb title="Documents" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Documents" backTo="" path="/" />
-
           <Card>
             <CardHeader>
               {permissions?.includes(permissionList?.Configure_Documents) ? (
@@ -331,12 +351,11 @@ const DocumentList = () => {
                         row
                         className="has-icon-left position-relative"
                       >
-                        <Col md="4">
+                        <Col md="11">
                           <span>
                             Category <span className="text-danger">*</span>{" "}
                           </span>
-                        </Col>
-                        <Col md="8">
+
                           <Select
                             options={docuCategory}
                             value={{ label: docuLabel, value: docuValue }}
@@ -359,12 +378,108 @@ const DocumentList = () => {
                         row
                         className="has-icon-left position-relative"
                       >
-                        <Col md="4">
+                        <Col md="11">
                           <span>
-                            Applicable? <span className="text-danger">*</span>{" "}
+                            Title <span className="text-danger">*</span>{" "}
+                          </span>
+
+                          <Input
+                            type="text"
+                            name="name"
+                            id="name"
+                            value={Name}
+                            placeholder="Enter title"
+                            onChange={(e) => {
+                              handleName(e);
+                            }}
+                          />
+                          <span className="text-danger">{NameError}</span>
+                        </Col>
+                      </FormGroup>
+
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>Prefix For</span>
+
+                        <Row>
+                          <Col
+                            xs="2"
+                            sm="12"
+                            md="2"
+                            className="text-center mt-2"
+                          >
+                            <FormGroup check inline>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setHomeAccept(e.target.checked);
+                                  setAcceptError(false);
+                                }}
+                                checked={homeAccept}
+                              />
+                              <span className="mr-2">Home </span>
+                            </FormGroup>
+                          </Col>
+
+                          <Col
+                            xs="2"
+                            sm="12"
+                            md="2"
+                            className="text-center mt-2"
+                          >
+                            <FormGroup check inline>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setUkAccept(e.target.checked);
+                                  setAcceptError(false);
+                                }}
+                                checked={ukAccept}
+                              />
+                              <span className="mr-2">EU/UK </span>
+                            </FormGroup>
+                          </Col>
+
+                          <Col
+                            xs="2"
+                            sm="12"
+                            md="2"
+                            className="text-center mt-2"
+                          >
+                            <FormGroup check inline>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setIntAccept(e.target.checked);
+                                  setAcceptError(false);
+                                  console.log("Tria testing", e.target.checked);
+                                }}
+                                checked={intAccept}
+                              />
+                              <span className="mr-2">International </span>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        {/* {acceptError ? (
+                          <span className="text-danger">
+                            Prefix is required
+                          </span>
+                        ) : null} */}
+                      </FormGroup>
+
+                      <FormGroup
+                        row
+                        className="has-icon-left position-relative"
+                      >
+                        <Col md="11">
+                          <span>
+                            Variable for each application{" "}
+                            <span className="text-danger">*</span>{" "}
                           </span>
                         </Col>
-                        <Col md="8">
+                        <Col md="11">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
@@ -417,36 +532,11 @@ const DocumentList = () => {
                         row
                         className="has-icon-left position-relative"
                       >
-                        <Col md="4">
-                          <span>
-                            Name <span className="text-danger">*</span>{" "}
-                          </span>
-                        </Col>
-                        <Col md="8">
-                          <Input
-                            type="text"
-                            name="name"
-                            id="name"
-                            value={Name}
-                            placeholder="Enter name"
-                            onChange={(e) => {
-                              handleName(e);
-                            }}
-                          />
-                          <span className="text-danger">{NameError}</span>
-                        </Col>
-                      </FormGroup>
-
-                      <FormGroup
-                        row
-                        className="has-icon-left position-relative"
-                      >
-                        <Col md="4">
+                        <Col md="11">
                           <span>
                             Description <span className="text-danger">*</span>{" "}
                           </span>
-                        </Col>
-                        <Col md="8">
+
                           <Input
                             type="textarea"
                             rows="6"
@@ -481,9 +571,10 @@ const DocumentList = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      <th>SL/NO</th>
-                      <th>Name</th>
+                      {/* <th>SL/NO</th> */}
+                      <th>Title</th>
                       <th>Description</th>
+                      <th>Prefix For</th>
                       <th>Category</th>
                       <th>Action</th>
                     </tr>
@@ -491,11 +582,28 @@ const DocumentList = () => {
                   <tbody>
                     {documentData?.map((document, i) => (
                       <tr key={document?.id} style={{ textAlign: "center" }}>
-                        <th scope="row">{i + 1}</th>
+                        {/* <th scope="row">{i + 1}</th> */}
                         <td>{document?.name}</td>
                         <td className="text-center">{document?.description}</td>
                         <td className="text-center">
-                          {document?.documentCategory?.name}
+                          {document?.isForInternational ? (
+                            <>
+                              <span>International </span> <br />
+                            </>
+                          ) : null}
+                          {document?.isForHome ? (
+                            <>
+                              <span>Home</span> <br />
+                            </>
+                          ) : null}
+                          {document?.isForEu_uk ? (
+                            <>
+                              <span>EU/UK</span>{" "}
+                            </>
+                          ) : null}
+                        </td>
+                        <td className="text-center">
+                          {document?.categoryName}
                         </td>
 
                         <td>
@@ -526,13 +634,6 @@ const DocumentList = () => {
                               />
                             ) : null}
                           </ButtonGroup>
-                          <ConfirmModal
-                            text="Do You Want To Delete This Document?"
-                            isOpen={deleteModal}
-                            toggle={closeDeleteModal}
-                            confirm={() => handleDeleteDocument(delDocuId)}
-                            cancel={closeDeleteModal}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -543,6 +644,14 @@ const DocumentList = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Document?"
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        confirm={() => handleDeleteDocument(delDocuId)}
+        cancel={closeDeleteModal}
+      />
     </div>
   );
 };

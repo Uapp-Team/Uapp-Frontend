@@ -182,12 +182,11 @@ const ComplianceOfficerList = () => {
 
   return (
     <div>
+      <BreadCrumb title="Compliance Officer List" backTo="" path="/" />
       {loading ? (
         <Loader />
       ) : (
         <div>
-          <BreadCrumb title="Compliance Officer List" backTo="" path="/" />
-
           <Card className="uapp-employee-search">
             <CardBody>
               <Row className="mb-3">
@@ -466,7 +465,7 @@ const ComplianceOfficerList = () => {
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="tablehead">
                       <tr style={{ textAlign: "center" }}>
-                        {checkSlNo ? <th>SL/NO</th> : null}
+                        {/* {checkSlNo ? <th>SL/NO</th> : null} */}
 
                         {checkName ? <th>Name</th> : null}
                         {checkEmail ? <th>Email</th> : null}
@@ -490,7 +489,7 @@ const ComplianceOfficerList = () => {
                     <tbody>
                       {complianceList?.map((comp, i) => (
                         <tr key={comp?.id} style={{ textAlign: "center" }}>
-                          {checkSlNo ? <td>{serialNum + i}</td> : null}
+                          {/* {checkSlNo ? <td>{serialNum + i}</td> : null} */}
 
                           {checkName ? (
                             <td>
@@ -576,17 +575,6 @@ const ComplianceOfficerList = () => {
                                     ) : null}
                                   </>
                                 ) : null}
-
-                                <ConfirmModal
-                                  text="Do You Want To Delete This Compliance Officer? Once Deleted it can't be Undone "
-                                  // ${delData?.name}
-                                  isOpen={deleteModal}
-                                  toggle={closeDeleteModal}
-                                  cancel={closeDeleteModal}
-                                  buttonStatus={buttonStatus}
-                                  progress={progress}
-                                  confirm={handleDeleteCompOfficer}
-                                ></ConfirmModal>
                               </ButtonGroup>
                             </td>
                           ) : null}
@@ -603,6 +591,16 @@ const ComplianceOfficerList = () => {
           </Card>
         </div>
       )}
+
+      <ConfirmModal
+        text="Do You Want To Delete This Compliance Officer? Once Deleted it can't be Undone "
+        isOpen={deleteModal}
+        toggle={closeDeleteModal}
+        cancel={closeDeleteModal}
+        buttonStatus={buttonStatus}
+        progress={progress}
+        confirm={handleDeleteCompOfficer}
+      />
     </div>
   );
 };

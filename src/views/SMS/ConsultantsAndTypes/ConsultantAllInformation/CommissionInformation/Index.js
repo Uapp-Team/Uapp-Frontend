@@ -66,11 +66,14 @@ const ConsultantCommission = () => {
   const [designationError, setDesignationError] = useState(false);
 
   useEffect(() => {
-    get(`CommissionGroupDD/ByConsultant?id=${consultantRegisterId}`).then(
-      (res) => {
-        setCommissionDD(res);
-      }
-    );
+    // get(`CommissionGroupDD/ByConsultant?id=${consultantRegisterId}`).then(
+    //   (res) => {
+    //     setCommissionDD(res);
+    //   }
+    // );
+    get(`CommissionGroupDD/Index`).then((res) => {
+      setCommissionDD(res);
+    });
 
     get(`ConsultantDesignation/Overview/${consultantRegisterId}`).then(
       (res) => {
@@ -93,13 +96,16 @@ const ConsultantCommission = () => {
       }
     );
 
+    get(`PromotionalCommission/ForConsultant/${consultantRegisterId}`).then(
+      (res) => {
+        setPromotionalList(res);
+      }
+    );
+  }, [consultantRegisterId, success]);
+
+  useEffect(() => {
     get(`GroupPriceRange/ByConsultant/${consultantRegisterId}`).then((res) => {
       setPriceRangeList(res);
-    });
-
-    get("PromotionalCommission/Index").then((res) => {
-      console.log(res, "asif");
-      setPromotionalList(res);
     });
   }, [consultantRegisterId, success]);
 
@@ -333,9 +339,9 @@ const ConsultantCommission = () => {
                       <Table>
                         <thead className="tablehead">
                           <tr>
-                            <th>SL/No</th>
+                            {/* <th>SL/No</th> */}
                             <th>Designation</th>
-                            <th>Intake</th>
+                            <th>Intakes</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -352,11 +358,16 @@ const ConsultantCommission = () => {
 
                           {logList?.map((logs, i) => (
                             <tr key={logs.designationId}>
-                              <th scope="row">{1 + i}</th>
-                              <td>{logs?.title}</td>
-                              <td>
+                              {/* <th scope="row">{1 + i}</th> */}
+                              <td width="60%">{logs?.title}</td>
+                              <td width="40%">
                                 {logs?.intakeRanges?.map((intake, i) => (
-                                  <> {intake?.name}</>
+                                  <>
+                                    {intake?.name}
+                                    {logs?.intakeRanges.length === i + 1
+                                      ? null
+                                      : ", "}
+                                  </>
                                 ))}
                               </td>
                             </tr>
@@ -371,22 +382,24 @@ const ConsultantCommission = () => {
                   <Table>
                     <thead className="tablehead">
                       <tr>
-                        <th>SL/No</th>
+                        {/* <th>SL/No</th> */}
                         <th>Bonus target</th>
                         <th>Bonuses </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">{1}</th>
-                        <td>
+                        {/* <th scope="row">{1}</th> */}
+                        <td width="60%">
                           Minimum student required :{" "}
                           {bonusList?.personalStudentTarget}
                         </td>
-                        <td>Level 1 Bonus : {bonusList?.teamBonus}</td>
+                        <td width="40%">
+                          Level 1 Bonus : {bonusList?.teamBonus}
+                        </td>
                       </tr>
                       <tr>
-                        <th scope="row">{2}</th>
+                        {/* <th scope="row">{2}</th> */}
                         <td>
                           Minimum consultant required :{" "}
                           {bonusList?.consultantTarget}
@@ -394,9 +407,9 @@ const ConsultantCommission = () => {
                         <td>Personal Bonus: {bonusList?.personalBonus}</td>
                       </tr>
                       <tr>
-                        <th scope="row">{3}</th>
+                        {/* <th scope="row">{3}</th> */}
                         <td>
-                          Minimum student from team :
+                          Minimum student from team :{" "}
                           {bonusList?.studentFormTeam}
                         </td>
                         <td></td>
@@ -513,9 +526,11 @@ const ConsultantCommission = () => {
             ></ConsultantCommissionGroupHistory>
           ) : null}
 
-          {promotionalList.length > 0 ? (
-            <PromotionalCommission promotionalList={promotionalList} />
-          ) : null}
+          <>
+            {promotionalList.length > 0 ? (
+              <PromotionalCommission promotionalList={promotionalList} />
+            ) : null}
+          </>
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />

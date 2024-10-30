@@ -4,7 +4,6 @@ import get from "../../../../../helpers/get";
 import { Link } from "react-router-dom";
 
 const Application = ({ id }) => {
-  console.log(id);
   const [data, setData] = useState({});
   useEffect(() => {
     get(`StudentProfile/StudentApplication/${id}`).then((res) => {
@@ -32,9 +31,15 @@ const Application = ({ id }) => {
             {data?.length > 0 &&
               data?.map((item, i) => (
                 <tr key={i} style={{ borderBottom: "1px solid #dee2e6" }}>
-                  <td className="border-0">{item?.applicationId}</td>
                   <td className="border-0">
-                    {" "}
+                    <Link
+                      className="text-body"
+                      to={`/applicationDetails/${item?.applicationId}/${id}`}
+                    >
+                      #{item?.applicationId}
+                    </Link>
+                  </td>
+                  <td className="border-0">
                     <Link
                       className="text-body"
                       to={`/universityDetails/${item?.universityId}`}
@@ -43,7 +48,6 @@ const Application = ({ id }) => {
                     </Link>
                   </td>
                   <td className="border-0">
-                    {" "}
                     <Link
                       className="text-body"
                       to={`/campusDetails/${item?.campusId}`}
@@ -52,7 +56,6 @@ const Application = ({ id }) => {
                     </Link>
                   </td>
                   <td className="border-0">
-                    {" "}
                     <Link
                       className="text-body"
                       to={`/subjectProfile/${item?.subjectId}`}

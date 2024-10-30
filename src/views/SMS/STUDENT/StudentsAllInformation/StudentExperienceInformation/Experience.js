@@ -27,9 +27,13 @@ import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
-import { currentDate } from "../../../../../components/date/calenderFormate";
+import {
+  currentDate,
+  dateFormate,
+} from "../../../../../components/date/calenderFormate";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import { data } from "jquery";
 
 const Experience = () => {
   const { applicationStudentId } = useParams();
@@ -61,9 +65,9 @@ const Experience = () => {
   const [employmentError, setEmploymentError] = useState("");
   const [company, setCompany] = useState("");
   const [companyError, setCompanyError] = useState("");
-  const [startDate, setStartDate] = useState(currentDate);
+  const [startDate, setStartDate] = useState('');
   const [startDateError, setStartDateError] = useState("");
-  const [endDate, setEndDate] = useState(currentDate);
+  const [endDate, setEndDate] = useState('');
   const [endDateError, setEndDateError] = useState("");
   const minDate = "1950-01-01";
   const userType = localStorage.getItem("userType");
@@ -85,24 +89,27 @@ const Experience = () => {
   };
 
   const handleJobTitle = (e) => {
-    setJobTitle(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setJobTitle(data);
+    if (data === "") {
       setJobTitleError("Job title is required");
     } else {
       setJobTitleError("");
     }
   };
   const handleEmployment = (e) => {
-    setEmployment(e.target.value);
-    if (e.target.value === "") {
-      setEmploymentError(" Employment details is required");
+    let data = e.target.value.trimStart();
+    setEmployment(data);
+    if (data === "") {
+      setEmploymentError("Duties and Responsibilities is required");
     } else {
       setEmploymentError("");
     }
   };
   const handleCompany = (e) => {
-    setCompany(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setCompany(data);
+    if (data === "") {
       setCompanyError("Company name is required");
     } else {
       setCompanyError("");
@@ -134,7 +141,7 @@ const Experience = () => {
     }
     if (!employment) {
       isFormValid = false;
-      setEmploymentError(" Employment details is required");
+      setEmploymentError(" Duties and Responsibilities is required");
     }
     if (!company) {
       isFormValid = false;
@@ -231,6 +238,15 @@ const Experience = () => {
         setInfo(res);
       });
     });
+    setValue({});
+    setJobTitle("");
+    setEmployment("");
+    setCompany("");
+    setStartDate(currentDate);
+    setEndDate(currentDate);
+    setJobTitleError("");
+    setEmploymentError("");
+    setCompanyError("");
   };
 
   const handleUpdate = (id) => {
@@ -245,6 +261,9 @@ const Experience = () => {
       setEndDate(moment(new Date(res?.endDate)).format("YYYY-MM-DD"));
       setWorking(res.isStillWorking);
     });
+    setJobTitleError("");
+    setEmploymentError("");
+    setCompanyError("");
   };
 
   if (showForm) {
@@ -262,6 +281,16 @@ const Experience = () => {
   };
   const onShow = () => {
     setShowForm(true);
+
+    setJobTitle("");
+    setEmployment("");
+    setCompany("");
+    setStartDate(currentDate);
+    setEndDate(currentDate);
+    setJobTitleError("");
+    setEmploymentError("");
+    setCompanyError("");
+    setWorking(false);
   };
 
   return (
@@ -290,7 +319,7 @@ const Experience = () => {
                   <tr>
                     <th>Job Title</th>
                     <th>Company Name</th>
-                    <th>Employeement Details</th>
+                    <th>Duties and Responsibilities</th>
                     <th>From</th>
                     <th>To</th>
                     <th>Action</th>
@@ -302,10 +331,10 @@ const Experience = () => {
                       <td>{inf?.jobTitle}</td>
                       <td>{inf?.companyName}</td>
                       <td>{inf?.employeementDetails}</td>
-                      <td>{handleDate(inf?.startDate)}</td>
+                      <td>{dateFormate(inf?.startDate)}</td>
                       <td>
                         {inf?.isStillWorking === false ? (
-                          handleDate(inf?.endDate)
+                          dateFormate(inf?.endDate)
                         ) : (
                           <span>Continue</span>
                         )}
@@ -316,12 +345,14 @@ const Experience = () => {
                           {permissions?.includes(
                             permissionList?.Edit_Student
                           ) ? (
-                            <span
-                              style={{ cursor: "pointer" }}
-                              onClick={() => handleUpdate(inf.id)}
-                            >
-                              Edit
-                            </span>
+                            <a href="#experience-form">
+                              <span
+                                className="pointer text-body"
+                                onClick={() => handleUpdate(inf.id)}
+                              >
+                                Edit
+                              </span>
+                            </a>
                           ) : null}{" "}
                           |{" "}
                           {permissions?.includes(
@@ -349,148 +380,156 @@ const Experience = () => {
               buttonStatus={buttonStatus}
               progress={progress}
               cancel={() => setDeleteModal(false)}
-            ></ConfirmModal>
+            />
           </div>
 
           {info.length < 1 || showForm ? (
-            <Form onSubmit={handleRegisterStudent}>
-              <input
-                type="hidden"
-                name="studentId"
-                id="studentId"
-                value={applicationStudentId}
-              />
-              {value?.id ? (
-                <input type="hidden" name="id" id="id" value={value.id} />
-              ) : null}
-              <Row>
-                <Col lg="6" md="8">
-                  <FormGroup className="has-icon-left position-relative">
-                    <span>
-                      <span className="text-danger">*</span> Job Title
-                    </span>
-
-                    <Input
-                      className="form-mt"
-                      type="text"
-                      name="jobTitle"
-                      id="jobTitle"
-                      placeholder="Enter Job Title"
-                      onChange={(e) => {
-                        handleJobTitle(e);
-                      }}
-                      value={jobTitle}
-                    />
-                    <span className="text-danger">{jobTitleError}</span>
-                  </FormGroup>
-                  <FormGroup className="has-icon-left position-relative">
-                    <span>
-                      <span className="text-danger">*</span> Employment Details
-                    </span>
-
-                    <Input
-                      className="form-mt"
-                      type="text"
-                      name="employeementDetails"
-                      id="employeementDetails"
-                      placeholder="Enter Employment Details"
-                      onChange={(e) => {
-                        handleEmployment(e);
-                      }}
-                      value={employment}
-                    />
-                    <span className="text-danger">{employmentError}</span>
-                  </FormGroup>
-                  <FormGroup className="has-icon-left position-relative">
-                    <span>
-                      <span className="text-danger">*</span>Company Name
-                    </span>
-
-                    <Input
-                      className="form-mt"
-                      type="text"
-                      name="companyName"
-                      id="companyName"
-                      onChange={(e) => {
-                        handleCompany(e);
-                      }}
-                      placeholder="Enter Company Name"
-                      value={company}
-                    />
-                    <span className="text-danger">{companyError}</span>
-                  </FormGroup>
-                  <FormGroup className="has-icon-left position-relative">
-                    <span>
-                      <span className="text-danger">*</span> Start Date
-                    </span>
-
-                    <Input
-                      className="form-mt"
-                      type="date"
-                      name="startDate"
-                      id="startDate"
-                      value={startDate}
-                      onChange={(e) => {
-                        handleStartDate(e);
-                      }}
-                      min={minDate}
-                    />
-                    <span className="text-danger">{startDateError}</span>
-                  </FormGroup>
-                  <FormGroup>
-                    <Input
-                      className="ml-0"
-                      type="checkbox"
-                      checked={working}
-                      onChange={handleChange}
-                    />
-                    <span className="ml-4">Still Working?</span>
-                  </FormGroup>
-                  {!working ? (
+            <div id="experience-form" className="pt-1">
+              {" "}
+              <Form onSubmit={handleRegisterStudent}>
+                <input
+                  type="hidden"
+                  name="studentId"
+                  id="studentId"
+                  value={applicationStudentId}
+                />
+                {value?.id ? (
+                  <input type="hidden" name="id" id="id" value={value.id} />
+                ) : null}
+                <Row>
+                  <Col lg="6" md="8">
                     <FormGroup className="has-icon-left position-relative">
                       <span>
-                        End Date <span className="text-danger">*</span>{" "}
+                        <span className="text-danger">*</span> Job Title
+                      </span>
+
+                      <Input
+                        className="form-mt"
+                        type="text"
+                        name="jobTitle"
+                        id="jobTitle"
+                        placeholder="Enter Job Title"
+                        onChange={(e) => {
+                          handleJobTitle(e);
+                        }}
+                        value={jobTitle}
+                      />
+                      <span className="text-danger">{jobTitleError}</span>
+                    </FormGroup>
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span> Duties and
+                        Responsibilities
+                      </span>
+
+                      <Input
+                        className="form-mt"
+                        type="text"
+                        name="employeementDetails"
+                        id="employeementDetails"
+                        placeholder="Enter Duties and Responsibilities"
+                        onChange={(e) => {
+                          handleEmployment(e);
+                        }}
+                        value={employment}
+                      />
+                      <span className="text-danger">{employmentError}</span>
+                    </FormGroup>
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span>Company Name
+                      </span>
+
+                      <Input
+                        className="form-mt"
+                        type="text"
+                        name="companyName"
+                        id="companyName"
+                        onChange={(e) => {
+                          handleCompany(e);
+                        }}
+                        placeholder="Enter Company Name"
+                        value={company}
+                      />
+                      <span className="text-danger">{companyError}</span>
+                    </FormGroup>
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span> Start Date
                       </span>
 
                       <Input
                         className="form-mt"
                         type="date"
+                        name="startDate"
+                        id="startDate"
+                        value={startDate}
                         onChange={(e) => {
-                          handleEndDate(e);
+                          handleStartDate(e);
                         }}
                         min={minDate}
-                        value={endDate}
                       />
-                      <span className="text-danger">{endDateError}</span>
+                      <span className="text-danger">{startDateError}</span>
                     </FormGroup>
-                  ) : null}
-                </Col>
-              </Row>
+                    <FormGroup>
+                      <Input
+                        className="ml-0"
+                        type="checkbox"
+                        checked={working}
+                        onChange={handleChange}
+                      />
+                      <span className="ml-4">Still Working?</span>
+                    </FormGroup>
+                    {!working ? (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>
+                          End Date <span className="text-danger">*</span>{" "}
+                        </span>
 
-              <FormGroup row className="mt-2">
-                <Col lg="6" md="8" className="text-right">
-                  {info.length > 0 && <CancelButton cancel={handleCancelAdd} />}
-                  {permissions?.includes(permissionList?.Edit_Student) ? (
-                    <SaveButton
-                      progress={progress}
-                      buttonStatus={buttonStatus}
-                    />
-                  ) : null}
-                </Col>
-              </FormGroup>
-            </Form>
+                        <Input
+                          className="form-mt"
+                          type="date"
+                          onChange={(e) => {
+                            handleEndDate(e);
+                          }}
+                          min={minDate}
+                          value={endDate}
+                        />
+                        <span className="text-danger">{endDateError}</span>
+                      </FormGroup>
+                    ) : null}
+                  </Col>
+                </Row>
+
+                <FormGroup row className="mt-2">
+                  <Col lg="6" md="8" className="text-right">
+                    {info.length > 0 && (
+                      <CancelButton cancel={handleCancelAdd} />
+                    )}
+                    {permissions?.includes(permissionList?.Edit_Student) ? (
+                      <SaveButton
+                        progress={progress}
+                        buttonStatus={buttonStatus}
+                      />
+                    ) : null}
+                  </Col>
+                </FormGroup>
+              </Form>
+            </div>
           ) : (
             <>
               {info?.length > 0 && !showForm ? (
                 <>
                   {permissions?.includes(permissionList?.Edit_Student) ? (
-                    <button
-                      className="add-button"
-                      onClick={onShow}
-                      permission={6}
-                    >
-                      Add experience
-                    </button>
+                    <a href="#experience-form" className="text-decoration-none">
+                      <button
+                        className="add-button"
+                        onClick={onShow}
+                        permission={6}
+                      >
+                        Add experience
+                      </button>
+                    </a>
                   ) : null}
                 </>
               ) : null}

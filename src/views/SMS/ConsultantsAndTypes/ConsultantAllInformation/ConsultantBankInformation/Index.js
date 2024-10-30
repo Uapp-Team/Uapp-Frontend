@@ -141,32 +141,36 @@ const ConsultantBankDetails = () => {
   };
 
   const handleBankName = (e) => {
-    setBankName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setBankName(data);
+    if (data === "") {
       setBankNameError("Bank name is required");
     } else {
       setBankNameError("");
     }
   };
   const handleAccountName = (e) => {
-    setAccountName(e.target.value);
-    if (e.target.value === "") {
-      setAccountNameError("Account name is required");
+    let data = e.target.value.trimStart();
+    setAccountName(data);
+    if (data === "") {
+      setAccountNameError("Account Holder name is required");
     } else {
       setAccountNameError("");
     }
   };
   const handleAccountNumber = (e) => {
-    setAccountNumber(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setAccountNumber(data);
+    if (data === "") {
       setAccountNumberError("Account number is required");
     } else {
       setAccountNumberError("");
     }
   };
   const handleShortCode = (e) => {
-    setShortCode(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setShortCode(data);
+    if (data === "") {
       setShortCodeError("Short code is required");
     } else {
       setShortCodeError("");
@@ -182,7 +186,7 @@ const ConsultantBankDetails = () => {
     }
     if (!accountName) {
       isValid = false;
-      setAccountNameError("Account name is required");
+      setAccountNameError("Account Holder name is required");
     }
     if (!accountNumber) {
       isValid = false;
@@ -262,6 +266,7 @@ const ConsultantBankDetails = () => {
             <>
               {!showForm && bankDetailsData?.length > 0 ? (
                 <button
+                  id="bank-details"
                   className="add-button mb-4"
                   onClick={addNewData}
                   permission={6}

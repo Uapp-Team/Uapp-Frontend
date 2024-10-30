@@ -22,7 +22,6 @@ const ConsultantListForBranch = ({ id }) => {
 
   useEffect(() => {
     get(`BranchManagerDashboard/Consultants?id=${id}`).then((res) => {
-      console.log(res);
       setData(res);
     });
   }, [success, id]);
@@ -80,11 +79,11 @@ const ConsultantListForBranch = ({ id }) => {
         {data?.consultants?.length === 0 ? (
           <p className="text-center">No Consultant List</p>
         ) : (
-          <>
+          <div className="overflowY-300px">
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
-                  <td>SL/NO</td>
+                  {/* <td>SL/NO</td> */}
                   <td>Name</td>
                   <td>Contact </td>
                   <td>Address</td>
@@ -95,7 +94,7 @@ const ConsultantListForBranch = ({ id }) => {
               <tbody>
                 {data?.consultants?.map((item, i) => (
                   <tr key={i} className="border-buttom">
-                    <td>{i + 1}</td>
+                    {/* <td>{i + 1}</td> */}
 
                     <td>{item?.name}</td>
                     <td>{item?.contact}</td>
@@ -123,26 +122,26 @@ const ConsultantListForBranch = ({ id }) => {
                       >
                         Delete
                       </span>
-
-                      <ConfirmModal
-                        isOpen={deleteModal}
-                        toggle={() => setDeleteModal(!deleteModal)}
-                        confirm={handleDeleteData}
-                        cancel={() => setDeleteModal(false)}
-                        buttonStatus={buttonStatus}
-                      />
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-            {data?.totalConsultant > 5 && (
+            {/* {data?.totalConsultant > 5 && (
               <div className="text-center text-blue">
                 <Link to="/consultantList">See All</Link>
               </div>
-            )}
-          </>
+            )} */}
+          </div>
         )}
+
+        <ConfirmModal
+          isOpen={deleteModal}
+          toggle={() => setDeleteModal(!deleteModal)}
+          confirm={handleDeleteData}
+          cancel={() => setDeleteModal(false)}
+          buttonStatus={buttonStatus}
+        />
       </div>
     </>
   );

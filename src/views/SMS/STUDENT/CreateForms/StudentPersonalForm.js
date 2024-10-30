@@ -30,7 +30,6 @@ import { useToasts } from "react-toast-notifications";
 import { rootUrl } from "../../../../constants/constants";
 
 import ButtonForFunction from "../../Components/ButtonForFunction";
-import { SelectUnstyledContext } from "@mui/base";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import ButtonLoader from "../../Components/ButtonLoader";
 
@@ -124,7 +123,7 @@ const StudentPersonalForm = () => {
       setNationality(res);
     });
 
-    get("ConsultantDD/index").then((res) => {
+    get("ConsultantDD/ByUser").then((res) => {
       setConsultant(res);
       setConsultantLabel(res?.name);
       setConsultantValue(res?.id);

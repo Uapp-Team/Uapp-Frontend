@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
 
-const PersonalStatementCard = ({ sId }) => {
-  const [studentDetails, setStudentDetails] = useState({});
-
+const PersonalStatementCard = ({
+  sId,
+  studentStatementDetails,
+  setStudentStatementDetails,
+}) => {
   useEffect(() => {
     get(`PersonalStatement/GetByStudentId/${sId}`).then((res) => {
-      setStudentDetails(res);
+      setStudentStatementDetails(res);
     });
   }, [sId]);
 
@@ -22,8 +24,8 @@ const PersonalStatementCard = ({ sId }) => {
         </thead>
       </Table>
       <p className="pl-10px">
-        {studentDetails?.statement
-          ? studentDetails?.statement
+        {studentStatementDetails?.statement
+          ? studentStatementDetails?.statement
           : "Personal Statement is not added."}
       </p>
     </>

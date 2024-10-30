@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Card, Table } from "reactstrap";
 import { Link } from "react-router-dom";
 import get from "../../../../../helpers/get";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
-const ReferenceCard = ({ sId }) => {
-  const [refList, setRefList] = useState([]);
+const ReferenceCard = ({ sId, referenceList, setReferenceList, activity }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
     get(`Reference/GetByStudentId/${sId}`).then((res) => {
-      setRefList(res);
+      setReferenceList(res);
       console.log(res, "refer");
     });
-  }, [sId]);
+  }, [sId, setReferenceList]);
 
   return (
     <>
@@ -23,7 +22,7 @@ const ReferenceCard = ({ sId }) => {
             <h5>Reference Information</h5>
           </td>
           <td className="border-0 text-right">
-            {permissions?.includes(permissionList?.Edit_Student) ? (
+            {permissions?.includes(permissionList?.Edit_Student) && activity ? (
               <Link to={`/addReference/${sId}/${1}`}>Edit</Link>
             ) : null}
           </td>
@@ -31,11 +30,11 @@ const ReferenceCard = ({ sId }) => {
       </Table>
 
       <Card>
-        {refList?.length < 1 ? (
+        {referenceList && referenceList?.length < 1 ? (
           <span className="pl-10px">There is no reference added here.</span>
         ) : (
           <>
-            {refList.length > 0 && (
+            {referenceList.length > 0 && (
               <Table className="text-gray-70">
                 <thead className="tablehead">
                   <td
@@ -70,7 +69,7 @@ const ReferenceCard = ({ sId }) => {
                   </td>
                 </thead>
                 <tbody>
-                  {refList?.map((ref, i) => (
+                  {referenceList?.map((ref, i) => (
                     <tr
                       key={ref.id}
                       style={{ borderBottom: "1px solid #dee2e6" }}

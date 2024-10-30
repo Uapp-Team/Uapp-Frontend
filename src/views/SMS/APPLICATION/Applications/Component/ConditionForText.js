@@ -2,10 +2,26 @@ import React from "react";
 import TagButton from "../../../../../components/buttons/TagButton";
 
 const ConditionForText = ({
+  selector,
+  branchId,
   branchLabel,
   setBranchLabel,
   branchValue,
   setBranchValue,
+  providerId,
+  proLabel,
+  setProLabel,
+  proValue,
+  setProValue,
+  branchManagerLabel,
+  setBranchManagerLabel,
+  branchManagerValue,
+  setBranchManagerValue,
+  admId,
+  admissionManagerLabel,
+  setAdmissionManagerLabel,
+  admissionManagerValue,
+  setAdmissionManagerValue,
   commonUappIdValue,
   commonStdValue,
   consultantValue,
@@ -13,6 +29,7 @@ const ConditionForText = ({
   offerValue,
   enrollValue,
   intakeValue,
+  intakeRngValue,
   interviewValue,
   elptValue,
   financeValue,
@@ -24,6 +41,8 @@ const ConditionForText = ({
   offerLabel,
   enrollLabel,
   intakeLabel,
+  intake,
+  intakeRngLabel,
   interviewLabel,
   elptLabel,
   financeLabel,
@@ -36,6 +55,8 @@ const ConditionForText = ({
   setEnrollValue,
   setIntakeLabel,
   setIntakeValue,
+  setIntakeRngLabel,
+  setIntakeRngValue,
   setInterviewLabel,
   setInterviewValue,
   setElptLabel,
@@ -50,24 +71,16 @@ const ConditionForText = ({
   setConsultantValue,
   setCommonStdLabel,
   setCommonStdValue,
+  consultantId,
   setApplicationId,
+  documentStatusLabel,
+  setdocumentStatusLabel,
+  documentStatusValue,
+  setdocumentStatusValue,
 }) => {
   return (
     <>
       <div className="d-flex mt-1">
-        {commonUappIdValue !== 0 ||
-        commonStdValue !== 0 ||
-        consultantValue !== 0 ||
-        applicationValue !== 0 ||
-        offerValue !== 0 ||
-        enrollValue !== 0 ||
-        intakeValue !== 0 ||
-        interviewValue !== 0 ||
-        elptValue !== 0 ||
-        financeValue !== 0 ||
-        commonUniValue !== 0
-          ? ""
-          : ""}
         {commonUappIdValue !== 0 ? (
           <TagButton
             label={commonUappIdLabel}
@@ -77,19 +90,7 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {commonUappIdValue !== 0 &&
-        (commonStdValue !== 0 ||
-          consultantValue !== 0 ||
-          applicationValue !== 0 ||
-          offerValue !== 0 ||
-          enrollValue !== 0 ||
-          intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
+
         {commonStdValue !== 0 ? (
           <TagButton
             label={commonStdLabel}
@@ -99,19 +100,8 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {commonStdValue !== 0 &&
-        (consultantValue !== 0 ||
-          applicationValue !== 0 ||
-          offerValue !== 0 ||
-          enrollValue !== 0 ||
-          intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
-        {consultantValue !== 0 ? (
+
+        {!consultantId && consultantValue !== 0 ? (
           <TagButton
             label={consultantLabel}
             setValue={() => setConsultantValue(0)}
@@ -120,18 +110,8 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {consultantValue !== 0 &&
-        (applicationValue !== 0 ||
-          offerValue !== 0 ||
-          enrollValue !== 0 ||
-          intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
-        {applicationValue !== 0 ? (
+
+        {selector !== "1" && applicationValue !== 0 ? (
           <TagButton
             label={applicationLabel}
             setValue={() => setApplicationValue(0)}
@@ -141,17 +121,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {applicationValue !== 0 &&
-        (offerValue !== 0 ||
-          enrollValue !== 0 ||
-          intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
-        {offerValue !== 0 ? (
+        {selector !== "2" && offerValue !== 0 ? (
           <TagButton
             label={offerLabel}
             setValue={() => setOfferValue(0)}
@@ -160,16 +130,8 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {offerValue !== 0 &&
-        (enrollValue !== 0 ||
-          intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
-        {enrollValue !== 0 ? (
+
+        {selector !== "3" && enrollValue !== 0 ? (
           <TagButton
             label={enrollLabel}
             setValue={() => setEnrollValue(0)}
@@ -179,14 +141,6 @@ const ConditionForText = ({
           ""
         )}
 
-        {enrollValue !== 0 &&
-        (intakeValue !== 0 ||
-          interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
         {intakeValue !== 0 ? (
           <TagButton
             label={intakeLabel}
@@ -196,13 +150,17 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {intakeValue !== 0 &&
-        (interviewValue !== 0 ||
-          elptValue !== 0 ||
-          financeValue !== 0 ||
-          commonUniValue !== 0)
-          ? ""
-          : ""}
+
+        {!intake && intakeRngValue !== 0 ? (
+          <TagButton
+            label={intakeRngLabel}
+            setValue={() => setIntakeRngValue(0)}
+            setLabel={() => setIntakeRngLabel("Intake Range")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
         {interviewValue !== 0 ? (
           <TagButton
             label={interviewLabel}
@@ -212,10 +170,6 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {interviewValue !== 0 &&
-        (elptValue !== 0 || financeValue !== 0 || commonUniValue !== 0)
-          ? ""
-          : ""}
         {elptValue !== 0 ? (
           <TagButton
             label={elptLabel}
@@ -225,9 +179,7 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {elptValue !== 0 && (financeValue !== 0 || commonUniValue !== 0)
-          ? ""
-          : ""}
+
         {financeValue !== 0 ? (
           <TagButton
             label={financeLabel}
@@ -237,7 +189,7 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {financeValue !== 0 && commonUniValue !== 0 ? "" : ""}
+
         {commonUniValue !== 0 ? (
           <TagButton
             label={commonUniLabel}
@@ -247,11 +199,52 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {branchValue !== 0 ? (
+
+        {!branchId && branchValue !== 0 ? (
           <TagButton
             label={branchLabel}
             setValue={() => setBranchValue(0)}
             setLabel={() => setBranchLabel("Select Branch")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {branchManagerValue !== 0 ? (
+          <TagButton
+            label={branchManagerLabel}
+            setValue={() => setBranchManagerValue(0)}
+            setLabel={() => setBranchManagerLabel("Branch Manager")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {!providerId && proValue !== 0 ? (
+          <TagButton
+            label={proLabel}
+            setValue={() => setProValue(0)}
+            setLabel={() => setProLabel("Select Provider")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {documentStatusValue !== 0 ? (
+          <TagButton
+            label={documentStatusLabel}
+            setValue={() => setdocumentStatusValue(0)}
+            setLabel={() => setdocumentStatusLabel("Select Document Status")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {!admId && admissionManagerValue !== 0 ? (
+          <TagButton
+            label={admissionManagerLabel}
+            setValue={() => setAdmissionManagerValue(0)}
+            setLabel={() => setAdmissionManagerLabel("Admission Manager")}
           ></TagButton>
         ) : (
           ""

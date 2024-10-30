@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Card, CardBody, Button, Input } from "reactstrap";
 import Select from "react-select";
 import get from "../../../helpers/get";
 import { userTypes } from "../../../constants/userTypeConstant";
-import ToggleSwitch from "../Components/ToggleSwitch";
-import { permissionList } from "../../../constants/AuthorizationConstant";
+import Typing from "../../../components/form/Typing";
+// import ToggleSwitch from "../Components/ToggleSwitch";
+// import { permissionList } from "../../../constants/AuthorizationConstant";
 
 const Filter = ({
+  studentId,
   success,
   setSuccess,
   setData,
@@ -35,31 +38,46 @@ const Filter = ({
   setSubValue,
   programName,
   setProgramName,
-}) => {
-  const userType = localStorage.getItem("userType");
-  const permissions = JSON.parse(localStorage.getItem("permissions"));
+  open,
+  onClose,
+  ///
+  studentDataLabel,
+  setStudentDataLabel,
+  studentTypeLabel,
+  setStudentTypeLabel,
+  universityLabel,
+  setUniversityLabel,
+  universityTypeLabel,
+  setUniversityTypeLabel,
+  campusLabel,
+  setCampusLabel,
+  universityCountryLabel,
+  setUniversityCountryLabel,
+  cityLabel,
+  setCityLabel,
+  intakeLabel,
+  setIntakeLabel,
+  programLabel,
+  setProgramLabel,
+  departmentLabel,
+  setDepartmentLabel,
+  subLabel,
+  setSubLabel,
 
-  const [studentTypeLabel, setStudentTypeLabel] = useState(
-    "Select Student Type"
-  );
-  const [campusLabel, setCampusLabel] = useState("Select University Campus");
-  const [universityCountryLabel, setUniversityCountryLabel] =
-    useState("Select Country");
-  const [universityCountryValue, setUniversityCountryValue] = useState(0);
-  const [cityLabel, setCityLabel] = useState("Select City/Location");
-  const [cityValue, setCityValue] = useState(0);
-  const [universityTypeLabel, setUniversityTypeLabel] = useState(
-    "Select University Type"
-  );
-  const [universityTypeValue, setUniversityTypeValue] = useState(0);
-  const [universityLabel, setUniversityLabel] = useState("Select University");
-  const [universityValue, setUniversityValue] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Select Intakes");
-  const [programLabel, setProgramLabel] = useState("Select Course Level");
-  const [departmentLabel, setDepartmentLabel] = useState(
-    "Select Department Category"
-  );
-  const [subLabel, setSubLabel] = useState("Select Sub Department Category");
+  //////
+  setUniversityValue,
+  universityValue,
+  universityCountryValue,
+  setUniversityCountryValue,
+  cityValue,
+  setCityValue,
+  universityTypeValue,
+  setUniversityTypeValue,
+}) => {
+  const { departmentId } = useParams();
+
+  const userType = localStorage.getItem("userType");
+  // const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   const [universityType, setUniversityType] = useState([]);
   const [campus, setCampus] = useState([]);
@@ -73,12 +91,33 @@ const Filter = ({
   const [SubDepartment, setSubDepartment] = useState([]);
 
   const [studentData, setStudentData] = useState([]);
-  const [studentDataLabel, setStudentDataLabel] = useState("Select Student");
+  const [isTyping, setIsTyping] = useState(false);
 
   const [eligibleonly, setEligibleonly] = useState(false);
   const handleCheckedChange = () => {
     setEligibleonly(!eligibleonly);
   };
+
+  useEffect(() => {
+    if (studentId) {
+      const filterStudent = studentData.filter(
+        (item) => item.id.toString() === studentId
+      );
+      // console.log(filterStudent[0].name);
+      setStudentDataLabel(filterStudent[0]?.name);
+      setStudentDataValue(filterStudent[0]?.id);
+    }
+  }, [studentId, studentData, setStudentDataLabel, setStudentDataValue]);
+
+  useEffect(() => {
+    if (departmentId && department.length > 0) {
+      const filterData = department.filter((item) => {
+        return item.id.toString() === departmentId;
+      });
+      setDepartmentValue(filterData[0].id);
+      setDepartmentLabel(filterData[0].name);
+    }
+  }, [department, departmentId, setDepartmentLabel, setDepartmentValue]);
 
   useEffect(() => {
     get(`SearchFilter/Students`).then((res) => {
@@ -90,11 +129,11 @@ const Filter = ({
     });
 
     get(`SearchFilter/Campus/${universityValue}`).then((res) => {
-      setCampus([{ id: "0", name: "Select Campus" }, ...res]);
+      setCampus([{ id: "0", name: "Select University Campus" }, ...res]);
     });
 
     get(
-      `SearchFilter/Universities/${universityCountryValue}/${universityTypeValue}/${cityValue}`
+      `SearchFilter/GetUniversities/${universityCountryValue}/${universityTypeValue}/${cityValue}`
     ).then((res) => {
       setUniversity([{ id: "0", name: "Select University" }, ...res]);
     });
@@ -134,14 +173,15 @@ const Filter = ({
     const programLevelName = programName === "" ? "null" : programName;
 
     setLoading(true);
-
-    get(
-      `ApplyFilter/Index/${page}/${dataSizeValue}/${sortValue}/${studentDataValue}/${universityTypeValue}/${universityValue}/${campusValue}/${universityCountryValue}/${cityValue}/${studentTypeValue}/${departmentValue}/${subValue}/${programValue}/${intakeValue}/${0}/${programLevelName}/${eligibleonly}`
-    ).then((res) => {
-      setData(res?.models);
-      setEntity(res?.totalEntity);
-      setLoading(false);
-    });
+    if (!isTyping) {
+      get(
+        `ApplyFilter/Index/${page}/${dataSizeValue}/${sortValue}/${studentDataValue}/${universityTypeValue}/${universityValue}/${campusValue}/${universityCountryValue}/${cityValue}/${studentTypeValue}/${departmentValue}/${subValue}/${programValue}/${intakeValue}/${0}/${programLevelName}/${eligibleonly}`
+      ).then((res) => {
+        setData(res?.models);
+        setEntity(res?.totalEntity);
+        setLoading(false);
+      });
+    }
   }, [
     success,
     page,
@@ -163,6 +203,7 @@ const Filter = ({
     setData,
     setEntity,
     setLoading,
+    isTyping,
   ]);
 
   const studentOptions = studentData?.map((std) => ({
@@ -263,7 +304,7 @@ const Filter = ({
     setUniversityLabel(label);
     setUniversityValue(value);
     setCampusLabel("Select Campus");
-    setCampusValue(0);
+    setCampusValue("0");
     get(`SearchFilter/Campus/${value}`).then((res) => {
       setCampus([{ id: "0", name: "Select Campus" }, ...res]);
     });
@@ -273,9 +314,12 @@ const Filter = ({
     setUniversityCountryLabel(label);
     setUniversityCountryValue(value);
 
-    get(`SearchFilter/States/${value}`).then((res) => {
+    get(`SearchFilter/Cities/${value}`).then((res) => {
       setState([{ id: "0", name: "Select State" }, ...res]);
     });
+    // get(`SearchFilter/States/${value}`).then((res) => {
+    //   setState([{ id: "0", name: "Select State" }, ...res]);
+    // });
     get(
       `SearchFilter/Universities/${value}/${universityTypeValue}/${cityValue}`
     ).then((res) => {
@@ -340,34 +384,33 @@ const Filter = ({
   const clearAllDropdown = () => {
     setLoading(true);
     setStudentDataLabel("Select Student");
-    setStudentDataValue(0);
+    setStudentDataValue("0");
     setStudentTypeLabel("Select Student Type");
-    setStudentTypeValue(0);
+    setStudentTypeValue("0");
     setCampusLabel("Select University Campus");
-    setCampusValue(0);
+    setCampusValue("0");
     setUniversityCountryLabel("Select University Country");
-    setUniversityCountryValue(0);
+    setUniversityCountryValue("0");
     setCityLabel("Select City/Location");
-    setCityValue(0);
+    setCityValue("0");
     setUniversityTypeLabel("Select University Type");
-    setUniversityTypeValue(0);
+    setUniversityTypeValue("0");
     setUniversityLabel("Select University");
-    setUniversityValue(0);
+    setUniversityValue("0");
     setState([]);
     setIntakeLabel("Select Intakes");
-    setIntakeValue(0);
+    setIntakeValue("0");
     setProgramLabel("Select Programme Level");
-    setProgramValue(0);
+    setProgramValue("0");
     setDepartmentLabel("Select Department Category");
-    setDepartmentValue(0);
+    setDepartmentValue("0");
     setSubLabel("Select SubDepartment Category");
-    setSubValue(0);
+    setSubValue("0");
     setProgramName("");
-    setStudentDataLabel("Select Student");
-    setStudentDataValue(0);
     setShowLocal(true);
     setShowEU(true);
     setShowInt(true);
+    setSuccess(!success);
   };
 
   return (
@@ -420,13 +463,23 @@ const Filter = ({
             <div className="mb-2">
               <span className="search-card-title-1">Search Course</span>
             </div>
-
-            <Input
-              type="text"
+            <Typing
+              name="search"
               placeholder="Search Name"
-              style={{ border: "1px solidrgba(0,0,0,.125)" }}
-              onChange={handleProgramName}
               value={programName}
+              setValue={setProgramName}
+              setIsTyping={setIsTyping}
+            />
+
+            <Select
+              className="mt-3"
+              options={universityOptions}
+              value={universityOptions.filter(function (otp) {
+                return otp.value === universityValue;
+              })}
+              name="providerTypeId"
+              id="providerTypeId"
+              onChange={(opt) => selectUniversity(opt.label, opt.value)}
             />
           </div>
           {/* {studentDataValue !== 0 &&
@@ -456,10 +509,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={uniTypeOptions}
-              value={{
-                label: universityTypeLabel,
-                value: universityTypeValue,
-              }}
+              value={uniTypeOptions.filter(function (opt) {
+                return opt.value === universityTypeValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectUniversityType(opt.label, opt.value)}
@@ -468,10 +520,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={countryOptions}
-              value={{
-                label: universityCountryLabel,
-                value: universityCountryValue,
-              }}
+              value={countryOptions.filter(function (opt) {
+                return opt.value === universityCountryValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectCountry(opt.label, opt.value)}
@@ -480,7 +531,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={stateOptions}
-              value={{ label: cityLabel, value: cityValue }}
+              value={stateOptions.filter(function (opt) {
+                return opt.value === cityValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectState(opt.label, opt.value)}
@@ -488,21 +541,14 @@ const Filter = ({
 
             <Select
               className="mt-3"
-              options={universityOptions}
-              value={{ label: universityLabel, value: universityValue }}
-              name="providerTypeId"
-              id="providerTypeId"
-              onChange={(opt) => selectUniversity(opt.label, opt.value)}
-            />
-
-            <Select
-              className="mt-3"
               options={campusOptions}
-              value={{ label: campusLabel, value: campusValue }}
+              value={campusOptions.filter(function (opt) {
+                return opt.value === campusValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectCampus(opt.label, opt.value)}
-              isDisabled={universityValue === 0 ? true : false}
+              isDisabled={universityValue === "0" ? true : false}
             />
           </CardBody>
         </Card>
@@ -517,7 +563,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={intakeOptions}
-              value={{ label: intakeLabel, value: intakeValue }}
+              value={intakeOptions.filter(function (opt) {
+                return opt.value === intakeValue;
+              })}
               onChange={(opt) => selectIntake(opt.label, opt.value)}
               name="providerTypeId"
               id="providerTypeId"
@@ -526,7 +574,9 @@ const Filter = ({
             <Select
               className="mt-3"
               options={programLevelOptions}
-              value={{ label: programLabel, value: programValue }}
+              value={programLevelOptions.filter(function (opt) {
+                return opt.value === programValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectProgramLevel(opt.label, opt.value)}
@@ -535,16 +585,21 @@ const Filter = ({
             <Select
               className="mt-3"
               options={departmentOptions}
-              value={{ label: departmentLabel, value: departmentValue }}
+              value={departmentOptions.filter(function (opt) {
+                return opt.value === departmentValue;
+              })}
               name="providerTypeId"
               id="providerTypeId"
               onChange={(opt) => selectDepartment(opt.label, opt.value)}
+              isDisabled={departmentId}
             />
 
             <Select
               className="mt-3"
               options={subDepartmentOptions}
-              value={{ label: subLabel, value: subValue }}
+              value={subDepartmentOptions.filter(function (opt) {
+                return opt.value === subValue;
+              })}
               onChange={(opt) => selectSubDepartment(opt.label, opt.value)}
               name="providerTypeId"
               id="providerTypeId"
@@ -553,8 +608,19 @@ const Filter = ({
             <br />
 
             <div className="d-flex justify-content-end">
-              <Button color="danger" onClick={clearAllDropdown}>
+              <Button
+                color="danger"
+                className="mr-2"
+                onClick={clearAllDropdown}
+              >
                 Clear
+              </Button>
+              <Button
+                color="primary"
+                onClick={onClose}
+                className="filter-mobile-device"
+              >
+                Show Results
               </Button>
             </div>
           </CardBody>

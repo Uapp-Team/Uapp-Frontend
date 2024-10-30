@@ -52,7 +52,7 @@ const Pagination = ({ dataPerPage, totalData, paginate, currentPage }) => {
 
   return (
     <Row>
-      <Col md="6">
+      <Col lg="8" md="8">
         <nav className="page navigation uapp-pagination">
           <ul className="pagination ml-2">
             {PageIndex > 1 && (
@@ -128,13 +128,19 @@ const Pagination = ({ dataPerPage, totalData, paginate, currentPage }) => {
         </nav>
       </Col>
 
-      <Col
+      <Col lg="4" md="4" sm="12" xs="12">
+        <h5 className="text-right text-dark-green fw-500">
+          Total {totalData} items
+        </h5>
+      </Col>
+
+      {/* <Col
         md="6"
         className="text-right"
-        // style={{ textAlign: "right", marginTop: "1.5%", paddingRight: "2.5%" }}
+      // style={{ textAlign: "right", marginTop: "1.5%", paddingRight: "2.5%" }}
       >
         <h5>Total {totalData} items</h5>
-      </Col>
+      </Col> */}
     </Row>
   );
 };

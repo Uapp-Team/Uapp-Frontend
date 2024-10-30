@@ -8,6 +8,7 @@ import {
   TabContent,
   TabPane,
   Row,
+  Label,
 } from "reactstrap";
 import get from "../../../../../helpers/get";
 import { useHistory, useParams } from "react-router-dom";
@@ -24,7 +25,10 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 import EducationalForm from "./EducationalForm";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
-import { currentDate } from "../../../../../components/date/calenderFormate";
+import {
+  currentDate,
+  dateFormate,
+} from "../../../../../components/date/calenderFormate";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 
@@ -58,9 +62,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState(currentDate);
+  const [attendedFrom, setAttendedFrom] = useState('');
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState(currentDate);
+  const [attendedTo, setAttendedTo] = useState('');
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -70,6 +74,8 @@ const EducationalInformation = () => {
   const [percentageError, setPercentageError] = useState("");
   const minDate = "1950-01-01";
   const [instituteContactNumber, setInstituteContactNumber] = useState("");
+  const [instituteAddress, setInstituteAddress] = useState("");
+  const [instituteLanguage, setInstituteLanguage] = useState("");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
 
@@ -168,33 +174,44 @@ const EducationalInformation = () => {
   };
 
   const handleQualificationSubject = (e) => {
-    setQualificationSubject(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setQualificationSubject(data);
+    if (data === "") {
       setQualificationSubjectError("Qualification Course is required");
     } else {
       setQualificationSubjectError("");
     }
   };
   const handleAttendedFrom = (e) => {
-    setAttendedFrom(e.target.value);
+    const value = e.target.value;
+    setAttendedFrom(value);
     if (e.target.value === "") {
       setAttendedFromError("Date is required");
-    } else {
+    } else if (currentDate < value) {
+      setAttendedFromError("Invalid Date");
+    }
+    else {
       setAttendedFromError("");
     }
   };
   const handleAttendedTo = (e) => {
-    setAttendedTo(e.target.value);
+    const value = e.target.value;
+    setAttendedTo(value);
     if (e.target.value === "") {
       setAttendedToError("Date is required");
+    } else if (currentDate < value) {
+      setAttendedToError("Invalid Date");
+    } else if (attendedFrom > value) {
+      setAttendedToError("Attended to date should be greater than Attended from date");
     } else {
       setAttendedToError("");
     }
   };
 
   const handleDuration = (e) => {
-    setDuration(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setDuration(data);
+    if (data === "") {
       setDurationError("Date is required");
     } else {
       setDurationError("");
@@ -202,21 +219,40 @@ const EducationalInformation = () => {
   };
 
   const handlePercentage = (e) => {
-    setPercentage(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    const isNumeric = /^\d+$/.test(value);
+    setPercentage(value);
+    if (value === "") {
       setPercentageError("Result in percentage is required");
+    } else if (!isNumeric) {
+      setPercentageError("Floating number not allow");
+    } else if (value < 0 || value > 100) {
+      setPercentageError("Value must be 0 to 100");
     } else {
       setPercentageError("");
     }
   };
 
   const handleInstitution = (e) => {
-    setInstitution(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setInstitution(data);
+    if (data === "") {
       setInstitutionError("Name of institution is required");
     } else {
       setInstitutionError("");
     }
+  };
+
+  const handleInstitutionLanguage = (e) => {
+    setInstituteLanguage(e.target.value);
+  };
+
+  const handleInstitutionContactNumber = (value) => {
+    setInstituteContactNumber(value);
+  };
+
+  const handleInstitutionAddress = (e) => {
+    setInstituteAddress(e.target.value);
   };
 
   const validateRegisterForm = () => {
@@ -241,10 +277,18 @@ const EducationalInformation = () => {
       isFormValid = false;
       setAttendedToError("Date is required");
     }
+
     if (isAchieved && !percentage) {
       isFormValid = false;
       setPercentageError("Result in percentage is required");
+    } else if (isAchieved && !/^\d+$/.test(percentage)) {
+      isFormValid = false;
+      setPercentageError("Floating number not allow");
+    } else if (isAchieved && (percentage < 0 || percentage > 100)) {
+      isFormValid = false;
+      setPercentageError("Value must be 0 to 100");
     }
+
     if (!duration) {
       isFormValid = false;
       setDurationError("Duration is required");
@@ -258,10 +302,9 @@ const EducationalInformation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("mannavai");
     const subData = new FormData(event.target);
     subData.append("qualificationAchieved", isAchieved);
-    // subData.append("instituteContactNumber", instituteContactNumber);
+    subData.append("instituteContactNumber", instituteContactNumber);
 
     if (validateRegisterForm()) {
       if (oneData?.id) {
@@ -331,6 +374,21 @@ const EducationalInformation = () => {
       });
       setDeleteModal(false);
       setSuccess(!success);
+      setDeleteData({});
+      setOneData({});
+      setAttendedFrom(currentDate);
+      setAttendedTo(currentDate);
+      setCountryLabel("Select Country");
+      setCountryValue(0);
+      setEducationLevelLabel("Select Education Level");
+      setEducationLevelValue(0);
+      setQualificationSubject("");
+      setDuration("");
+      setInstitution("");
+      setInstituteContactNumber("");
+      setPercentage("");
+      setInstituteLanguage("");
+      setInstituteAddress("");
     });
   };
 
@@ -349,17 +407,19 @@ const EducationalInformation = () => {
       setPercentage(res?.finalGrade);
       setInstitution(res?.nameOfInstitution);
       setInstituteContactNumber(res?.instituteContactNumber);
+      setInstituteLanguage(res?.languageOfInstitution);
+      setInstituteAddress(res?.instituteAddress);
 
       res?.attendedInstitutionFrom
         ? setAttendedFrom(
-            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
+        )
         : setAttendedFrom(currentDate);
 
       res?.attendedInstitutionTo
         ? setAttendedTo(
-            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-          )
+          moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
+        )
         : setAttendedTo(currentDate);
 
       // setAttendedFrom(
@@ -374,6 +434,13 @@ const EducationalInformation = () => {
       setAttendedTo(c[0]);
     });
     setShowForm(true);
+    setSuccess(!success);
+    setProgramError(false);
+    setCountryError(false);
+    setQualificationSubjectError("");
+    setPercentageError("");
+    setInstitutionError("");
+    setDurationError("");
   };
 
   if (showForm) {
@@ -384,11 +451,27 @@ const EducationalInformation = () => {
   }
 
   const onShow = () => {
+    setSuccess(!success);
     setShowForm(true);
     setAttendedFrom(currentDate);
     setAttendedTo(currentDate);
+    setCountryLabel("Select Country");
+    setCountryValue(0);
     setEducationLevelLabel("Select Education Level");
     setEducationLevelValue(0);
+    setQualificationSubject("");
+    setDuration("");
+    setInstitution("");
+    setInstituteContactNumber("");
+    setPercentage("");
+    setInstituteLanguage("");
+    setInstituteAddress("");
+    setProgramError(false);
+    setCountryError(false);
+    setQualificationSubjectError("");
+    setPercentageError("");
+    setInstitutionError("");
+    setDurationError("");
   };
 
   return (
@@ -404,7 +487,7 @@ const EducationalInformation = () => {
         activetab={"5"}
         success={success}
         setSuccess={setSuccess}
-        action={() => {}}
+        action={() => { }}
       />
       <Card>
         <CardBody>
@@ -428,20 +511,32 @@ const EducationalInformation = () => {
                       <div>
                         <Input
                           type="radio"
+                          name="radioYes"
+                          id="radioYes"
                           onClick={() => {
                             setForms(true);
                           }}
                           checked={forms === true}
                         />
-                        <span>Yes</span>
+                        <span>
+                          <label style={{ fontSize: "14px" }} for="radioYes">
+                            Yes
+                          </label>
+                        </span>
                       </div>
                       <div className="ml-5">
                         <Input
                           checked={forms === false}
                           type="radio"
+                          name="radioNo"
+                          id="radioNo"
                           onClick={deleteCheckFunction}
                         />
-                        <span>No</span>
+                        <span>
+                          <label style={{ fontSize: "14px" }} for="radioNo">
+                            No
+                          </label>
+                        </span>
                       </div>
                     </div>
                   </FormGroup>
@@ -479,19 +574,21 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.nameOfInstitution}
+                                {edu?.educationLevel?.name}
                               </span>
 
                               <span>
                                 {permissions?.includes(
                                   permissionList?.Edit_Student
                                 ) ? (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => handleUpdate(edu.id)}
-                                  >
-                                    Edit
-                                  </span>
+                                  <a href="#student-educational-form">
+                                    <span
+                                      className="pointer text-body"
+                                      onClick={() => handleUpdate(edu.id)}
+                                    >
+                                      Edit
+                                    </span>
+                                  </a>
                                 ) : null}
                                 {" | "}
                                 {permissions?.includes(
@@ -513,7 +610,7 @@ const EducationalInformation = () => {
                                   <span>Attended From</span>
                                   <br />
                                   <b>
-                                    {handleDate(edu?.attendedInstitutionFrom)}
+                                    {dateFormate(edu?.attendedInstitutionFrom)}
                                   </b>
                                 </p>
                                 <p>
@@ -521,7 +618,7 @@ const EducationalInformation = () => {
                                   <br />
                                   <b>
                                     {edu?.qualificationAchieved === true &&
-                                      handleDate(edu?.attendedInstitutionTo)}
+                                      dateFormate(edu?.attendedInstitutionTo)}
                                   </b>
                                 </p>
                               </Col>
@@ -529,7 +626,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.educationLevel?.name}</b>
+                                  <b>{edu?.nameOfInstitution}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
@@ -575,19 +672,19 @@ const EducationalInformation = () => {
                               </Col>
                             </Row>
                           </CardBody>
-
-                          <ConfirmModal
-                            text="Do You Want To Delete Educational Information?"
-                            isOpen={deleteModal}
-                            toggle={() => setDeleteModal(!deleteModal)}
-                            buttonStatus={buttonStatus}
-                            progress={progress}
-                            cancel={() => setDeleteModal(false)}
-                            confirm={handleDeletePermission}
-                          ></ConfirmModal>
                         </Card>
                       </div>
                     ))}
+
+                    <ConfirmModal
+                      text="Do You Want To Delete Educational Information?"
+                      isOpen={deleteModal}
+                      toggle={() => setDeleteModal(!deleteModal)}
+                      buttonStatus={buttonStatus}
+                      progress={progress}
+                      cancel={() => setDeleteModal(false)}
+                      confirm={handleDeletePermission}
+                    />
                   </div>
 
                   {showForm && (
@@ -630,6 +727,15 @@ const EducationalInformation = () => {
                       duration={duration}
                       institution={institution}
                       instituteContactNumber={instituteContactNumber}
+                      showForm={showForm}
+                      instituteLanguage={instituteLanguage}
+                      handleInstitutionLanguage={handleInstitutionLanguage}
+                      setInstituteAddress={setInstituteAddress}
+                      instituteAddress={instituteAddress}
+                      handleInstitutionContactNumber={
+                        handleInstitutionContactNumber
+                      }
+                      handleInstitutionAddress={handleInstitutionAddress}
                     />
                   )}
 
@@ -672,6 +778,15 @@ const EducationalInformation = () => {
                       duration={duration}
                       institution={institution}
                       instituteContactNumber={instituteContactNumber}
+                      showForm={showForm}
+                      instituteLanguage={instituteLanguage}
+                      handleInstitutionLanguage={handleInstitutionLanguage}
+                      setInstituteAddress={setInstituteAddress}
+                      instituteAddress={instituteAddress}
+                      handleInstitutionContactNumber={
+                        handleInstitutionContactNumber
+                      }
+                      handleInstitutionAddress={handleInstitutionAddress}
                     />
                   )}
 
@@ -692,9 +807,9 @@ const EducationalInformation = () => {
               )}
 
               {showDeleteOption === false &&
-              forms === false &&
-              showForm === false &&
-              eduDetails?.length === 0 ? (
+                forms === false &&
+                showForm === false &&
+                eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) ? (

@@ -21,6 +21,7 @@ import { useToasts } from "react-toast-notifications";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import Loader from "../../../../Search/Loader/Loader";
 
 const Index = () => {
   const [navItem, setNavItem] = useState("");
@@ -93,11 +94,7 @@ const Index = () => {
           <TabContent activeTab={activetab}>
             <TabPane tabId="6">
               {loading ? (
-                <>
-                  <div className="text-center">
-                    <img src={loader} className="img-fluid" alt="uapp_loader" />
-                  </div>
-                </>
+                <Loader />
               ) : (
                 <>
                   <p className="section-title">Admission officers</p>
@@ -105,7 +102,7 @@ const Index = () => {
                     <Table className="table-sm table-bordered">
                       <thead className="tablehead">
                         <tr style={{ textAlign: "center" }}>
-                          <th>SL/NO</th>
+                          {/* <th>SL/NO</th> */}
                           <th>Name</th>
                           <th>Is Assigned</th>
                         </tr>
@@ -113,7 +110,7 @@ const Index = () => {
                       <tbody>
                         {assignedOfficers?.map((officer, i) => (
                           <tr key={officer.id} style={{ textAlign: "center" }}>
-                            <th scope="row">{i + 1}</th>
+                            {/* <th scope="row">{i + 1}</th> */}
                             <td>{officer.fullName}</td>
                             <td>
                               <input
@@ -134,7 +131,7 @@ const Index = () => {
                     </Table>
                   </div>
                   <Row>
-                    <Col md="7">
+                    <Col md="12">
                       <div className="d-flex justify-content-between">
                         <PreviousButton action={handlePrevious} />
                         {permissions?.includes(

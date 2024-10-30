@@ -43,7 +43,7 @@ const PersonalInformation = () => {
   const { addToast } = useToasts();
   const [phoneNUmberError, setphoneNUmberError] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
-  const [valid, setValid] = useState(true);
+  // const [valid, setValid] = useState(true);
   const [birthDate, setBirthDate] = useState(null);
   const [dateError, setDateError] = useState("");
   const minDate = "1950-01-01";
@@ -76,8 +76,8 @@ const PersonalInformation = () => {
         setMaritalStatusValue(
           res?.maritalStatusId !== null ? res?.maritalStatusId : 0
         );
-        console.log(new Date(res?.dateOfBirth));
-        setBirthDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
+        res?.dateOfBirth &&
+          setBirthDate(moment(new Date(res?.dateOfBirth)).format("YYYY-MM-DD"));
       }
     );
   }, [success, consultantRegisterId]);
@@ -168,11 +168,11 @@ const PersonalInformation = () => {
     }
   };
 
-  const validatePhoneNumber = (phoneNumber) => {
-    const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+  // const validatePhoneNumber = (phoneNumber) => {
+  //   const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
 
-    return phoneNumberPattern.test(phoneNumber);
-  };
+  //   return phoneNumberPattern.test(phoneNumber);
+  // };
 
   const handlePhoneNumber = (value) => {
     setphoneNumber(value);
@@ -184,7 +184,7 @@ const PersonalInformation = () => {
       setphoneNUmberError("");
     }
     // setphoneNumber(value);
-    setValid(validatePhoneNumber(value));
+    // setValid(validatePhoneNumber(value));
   };
 
   const handleDate = (e) => {

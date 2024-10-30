@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Card, CardBody, Table } from "reactstrap";
-import studyLevel from "../../../assets/img/pages/studyLevel.png";
+import { Col, Row } from "reactstrap";
 // import booknark from "../../../assets/icon/bookmarkBg.png";
 
 const Program = ({
@@ -14,214 +13,164 @@ const Program = ({
   studentDataValue,
   toggleModal,
   checkEligibility,
+  applicationTypes,
 }) => {
+  const isApply = subjectInfo?.applicationTypes?.includes(applicationTypes?.id);
   return (
     <>
-      <Card className="uapp-employee-search mt-4" key={i}>
-        <CardBody>
-          <Link
-            className="subjectNameText"
-            to={`/subjectProfile/${subjectInfo?.subjectId}`}
-          >
-            {subjectInfo?.title}
-          </Link>
-          <br />
-          {subjectInfo?.campuses.length !== 0 && (
-            <span className="text-gray-70">
-              Available in:{" "}
-              {subjectInfo?.campuses?.map((item, i) => (
-                <Link to={`/campusDetails/${item?.campusId}`}>
-                  {item?.campusName}
-                  {subjectInfo?.campuses.length !== i + 1 && ", "}
-                </Link>
-              ))}
-            </span>
-          )}
-          <div className="row justify-content-between mt-2">
-            <div className="col-12 col-md-9">
-              <div className="table-responsive">
-                <Table
-                  borderless
-                  style={{ overflowX: "scroll" }}
-                  className="mb-0"
+      <div>
+        {/* <p className="mb-10px d-sm-flex justify-content-start"> */}
+        <p className="mb-10px  d-sm-flex justify-content-start">
+          <span className="mr-4"> {subjectInfo?.educationLevelName}</span>
+          <span className="d-block">
+            <i class="fas fa-clock text-orange mr-1"></i>
+            {subjectInfo?.duration}
+          </span>
+        </p>{" "}
+        <Row className="mb-10px d-flex justify-content-between">
+          <Col md="9">
+            <div>
+              <p className="mb-10px">
+                <Link
+                  className="fs-20px fw-700 text-black mb-10px"
+                  to={`/subjectProfile/${subjectInfo?.subjectId}`}
                 >
-                  <thead className="bg-yellow">
-                    <tr>
-                      <th>
-                        <div className="d-flex align-items-center">
-                          <i class="fas fa-pound-sign text-orange mr-1"></i>
-                          <span className="d-lg-block d-none">Tution Fee</span>
-                          <span className="d-lg-none d-block">Fees</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex align-items-center">
-                          <i class="far fa-clock text-orange mr-1"></i>
-                          <span>Duration</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex align-items-center">
-                          <img
-                            style={{ width: "15px" }}
-                            className="mr-1"
-                            src={studyLevel}
-                            alt=""
-                          />
-
-                          <span className="d-lg-block d-none">
-                            Level of Study
-                          </span>
-                          <span className="d-lg-none d-block"> Level</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex align-items-center">
-                          <i class="far fa-calendar-alt text-orange mr-1"></i>
-                          <span className="d-lg-block d-none">
-                            {" "}
-                            Next Intake
-                          </span>
-                          <span className="d-lg-none d-block"> Intake</span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                  {/* <thead className="bg-yellow">
-                    <tr>
-                      <th>
-                        <div className="d-flex">
-                          <i class="fas fa-pound-sign text-orange mr-1"></i>
-                          <span className="d-lg-block d-none">Tution Fee</span>
-                          <span className="d-lg-none d-block">Fees</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex">
-                          <i class="far fa-clock text-orange mr-1"></i>
-                          <span>Duration</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex">
-                          <img
-                            style={{ width: "15px" }}
-                            className="mr-1"
-                            src={studyLevel}
-                            alt=""
-                          />
-
-                          <span className="d-lg-block d-none">
-                            Level of Study
-                          </span>
-                          <span className="d-lg-none d-block"> Level</span>
-                        </div>
-                      </th>
-                      <th>
-                        <div className="d-flex align-items-center">
-                          <i class="far fa-calendar-alt text-orange mr-1"></i>
-                          <span className="d-lg-block d-none">
-                            {" "}
-                            Next Intake
-                          </span>
-                          <span className="d-lg-none d-block"> Intake</span>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead> */}
-                  <tbody>
-                    <tr>
-                      <td>
-                        {subjectInfo?.home_Fee ? (
-                          <>
-                            Local - {subjectInfo?.home_Fee} <br />{" "}
-                          </>
-                        ) : null}
-
-                        {subjectInfo?.eu_Fee ? (
-                          <>
-                            EU - {subjectInfo?.eu_Fee} <br />
-                          </>
-                        ) : null}
-
-                        {subjectInfo?.international_Fee ? (
-                          <>
-                            International - {subjectInfo?.international_Fee}{" "}
-                            <br />
-                          </>
-                        ) : null}
-
-                        <span className="text-green">
-                          {subjectInfo?.avarageApplicationFee ? (
-                            <>
-                              Application Fee: {subjectInfo?.international_Fee}{" "}
-                            </>
-                          ) : (
-                            "Free to Apply"
-                          )}
-                        </span>
-                      </td>
-                      <td> {subjectInfo?.duration} </td>
-                      <td> {subjectInfo?.educationLevelName} </td>
-                      <td>
-                        {subjectInfo?.intakes?.length < 1 ? (
-                          <div className="text-center">
-                            <span className="">-</span>
-                          </div>
-                        ) : (
-                          <>
-                            {subjectInfo?.intakes?.map((int, i) => (
-                              <ul style={{ paddingLeft: "0px" }} key={i}>
-                                {int?.intakeName}
-                              </ul>
-                            ))}
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-
-            <div className="col-12 col-md-3">
-              <div className="text-right">
-                {permissions?.includes(permissionList.Add_Application) ? (
+                  {subjectInfo?.title}
+                </Link>
+              </p>
+              <span>
+                <i class="fas fa-map-marker-alt fw-18px text-orange mr-2"></i>
+                {subjectInfo?.campuses.length !== 0 && (
                   <>
-                    {subjectInfo?.canApply === true ? (
-                      <button
-                        className="btn-apply mb-1"
-                        onClick={() => toggleModal()}
+                    {subjectInfo?.campuses?.map((item, i) => (
+                      <Link
+                        to={`/campusDetails/${item?.campusId}`}
+                        className="text-underline mr-3"
                       >
-                        Apply Now
-                      </button>
-                    ) : (
-                      <button className="btn-applied mb-1" disabled>
-                        Already Applied
-                      </button>
-                    )}
+                        {item?.campusName}
+                      </Link>
+                    ))}
                   </>
-                ) : null}
-
-                {/* {userType === userTypes?.Student.toString() ? (
-                  <img src={booknark} alt="" className="btn-bookmark ml-3" />
-                ) : null} */}
-              </div>
-
-              {/* <div className="mt-3 text-right">
-                {studentDataValue !== "0" ? (
-                  <span
-                    className="btn-eligibility"
-                    onClick={() => checkEligibility()}
-                  >
-                    Check eligibility
-                  </span>
-                ) : null}
-              </div> */}
+                )}
+              </span>
             </div>
-          </div>
-        </CardBody>
-      </Card>
+          </Col>
+          <Col md="3">
+            <div className="d-none d-md-block text-right">
+              {permissions?.includes(permissionList.Add_Application) ? (
+                <>
+                  {isApply === true ? (
+                    <>
+                      {subjectInfo?.canApply === true ? (
+                        <button
+                          className="saved-button mb-1"
+                          onClick={() => toggleModal()}
+                        >
+                          <span className="fs-16px fw-600"> Apply Now</span>
+                        </button>
+                      ) : (
+                        <button className="btn-applied mb-1" disabled>
+                          Already Applied
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {studentDataValue === "0" ? (
+                        <span className="text-warning">
+                          Please select a student
+                        </span>
+                      ) : (
+                        <span style={{ color: "#7A8F90" }}>
+                          Is not available for{applicationTypes?.name} student
+                        </span>
+                      )}
+                      <br />
+                      {/* <span className="text-warning">
+                        {studentDataValue === "0"
+                          ? "Please select a student"
+                          : ` Is not available for ${applicationTypes?.name} student`}
+                      </span> */}
+                    </>
+                  )}
+                </>
+              ) : null}
+            </div>
+          </Col>
+        </Row>
+        {/* <div className="mb-10px d-flex justify-content-between"> */}
+        <Row className="mb-10px">
+          <Col sm={6}>
+            {subjectInfo?.home_Fee ? (
+              <>
+                Home: {subjectInfo?.home_Fee} <br />{" "}
+              </>
+            ) : null}
+
+            {subjectInfo?.eu_Fee ? (
+              <>
+                EU: {subjectInfo?.eu_Fee} <br />
+              </>
+            ) : null}
+
+            {subjectInfo?.international_Fee ? (
+              <>
+                Int: {subjectInfo?.international_Fee} <br />
+              </>
+            ) : null}
+          </Col>
+          <Col sm={6} className="text-sm-right">
+            <span className="text-green">
+              {subjectInfo?.avarageApplicationFee ? (
+                <>Application Fee: {subjectInfo?.applicationFeeCurrency} </>
+              ) : (
+                <div class="ribbon">Free to Apply</div>
+              )}
+            </span>
+            <br />
+            <br />
+            <span>
+              {subjectInfo?.intakes?.length < 1 ? null : (
+                <>
+                  <i class="far fa-calendar-alt"></i> -{" "}
+                  {subjectInfo?.intakes?.map((int, i) => (
+                    <>
+                      {int?.intakeName}
+                      {subjectInfo?.intakes.length !== i + 1 && ", "}
+                    </>
+                  ))}
+                </>
+              )}
+            </span>
+          </Col>
+        </Row>
+        <div className="d-block d-md-none">
+          {permissions?.includes(permissionList.Add_Application) ? (
+            <>
+              {isApply === true ? (
+                <>
+                  {subjectInfo?.canApply === true ? (
+                    <button
+                      className="saved-button mb-1"
+                      onClick={() => toggleModal()}
+                    >
+                      <span className="fs-16px fw-600"> Apply Now</span>
+                    </button>
+                  ) : (
+                    <button className="btn-applied mb-1" disabled>
+                      Already Applied
+                    </button>
+                  )}
+                </>
+              ) : (
+                <span>
+                  Is not available for {applicationTypes?.name} student
+                </span>
+              )}
+            </>
+          ) : null}
+        </div>
+      </div>
     </>
   );
 };
