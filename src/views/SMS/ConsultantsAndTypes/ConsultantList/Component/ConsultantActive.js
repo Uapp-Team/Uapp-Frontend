@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
 import ConsultantStatus from "./ConsultantStatus";
+import put from "../../../../../helpers/put";
 
 const ConsultantActive = ({ isActive, id }) => {
   const [check, setCheck] = useState(isActive);
@@ -35,9 +36,14 @@ const ConsultantActive = ({ isActive, id }) => {
       >
         <ModalBody>
           <ConsultantStatus
-            id={id}
-            close={() => setModalForStatus(false)}
-            action={() => handleClose()}
+            data={{
+              id: id,
+              message: "",
+            }}
+            url="consultant/block-with-note"
+            method={put}
+            close={() => handleClose()}
+            action={() => setModalForStatus(false)}
           />
         </ModalBody>
       </Modal>
