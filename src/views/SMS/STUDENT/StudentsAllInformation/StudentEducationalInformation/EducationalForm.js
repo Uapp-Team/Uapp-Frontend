@@ -55,7 +55,7 @@ const EducationalForm = ({
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
-    <div id="student-educational-form" className={showForm ? "form-top" : ""}>
+    <div id="student-educational-form">
       <Form onSubmit={handleSubmit}>
         <input
           type="hidden"
