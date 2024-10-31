@@ -201,11 +201,9 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/companion-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(`/companion-lead-list/${companion?.id}`);
+                      }}
                     >
                       {companion?.leadCount}
                     </span>
@@ -217,11 +215,11 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-sixth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/companion-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/companion-student-list/${companion?.id}`
+                        );
+                      }}
                     >
                       {companion?.studentCount}
                     </span>
