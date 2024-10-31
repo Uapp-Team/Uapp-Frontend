@@ -92,20 +92,15 @@ const EducationalInformation = () => {
     get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
         setEduDetails(res);
-        if (res?.length > 0) {
-          setForms(true);
-        } else {
-          setForms(false);
-        }
       }
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
         setStudentType(res?.studentTypeId)
         if (res?.studentTypeId == 3) {
-          setShowForm(true);
+          setForms(true);
         } else {
-          setShowForm(false);
+          setForms(false);
         }
       }
     )
