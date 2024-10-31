@@ -149,7 +149,7 @@ const BranchManagerProfile = () => {
       ) : (
         <div>
           <BreadCrumb
-            title="Branch Manager Profile"
+            title="Branch Admin Profile"
             backTo="Branch Profile"
             path={`/branchProfile/${manager?.branchId}`}
           />

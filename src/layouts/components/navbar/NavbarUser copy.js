@@ -48,7 +48,7 @@ const AuthStr = localStorage.getItem("token");
 //   else if (userInfo?.userTypeId == userTypes?.ProviderAdmin) {
 //     history.push(`/providerAdminProfile/${userInfo?.referenceId}`);
 //   }
-//   else if (userInfo?.userTypeId == userTypes?.BranchManager) {
+//   else if (userInfo?.userTypeId == userTypes?.BranchAdmin) {
 //     history.push(`/branchManagerProfile/${userInfo?.referenceId}`);//TODO
 //   }
 //   else if (userInfo?.userTypeId == userTypes?.Consultant) {

@@ -231,12 +231,12 @@ const Index = () => {
   }, [consultantId, consultant, success]);
 
   useEffect(() => {
+    setLoading(true);
     if (consultantId !== undefined) {
       get(
         `ApplicationTransaction/Index?page=${currentPage}&pagesize=${dataPerPage}&uappid=${uappValue}&studentid=${studentValue}&typeid=${consultantTypeValue}&consultantid=${consultantId}&intakeid=${intakeValue}&statusid=${transactionValue}&branchid=${branchValue}`
       ).then((res) => {
         setData(res?.models);
-
         setEntity(res?.totalEntity);
         setLoading(false);
       });
@@ -697,8 +697,10 @@ const Index = () => {
               </Col>
             </Row>
 
-            {data?.length === 0 ? (
+            {loading ? (
               <Loader />
+            ) : data?.length === 0 ? (
+              <h4 className="text-center">No Data Found</h4>
             ) : (
               <>
                 <div className="table-responsive fixedhead">

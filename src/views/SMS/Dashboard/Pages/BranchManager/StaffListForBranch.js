@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 import get from "../../../../../helpers/get";
-import ToggleSwitch from "../../../Components/ToggleSwitch";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import remove from "../../../../../helpers/remove";
-import put from "../../../../../helpers/put";
-import { Link } from "react-router-dom/cjs/react-router-dom";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import PopOverText from "../../../../../components/PopOverText";
 
 const StaffListForBranch = ({ id }) => {
   const [data, setData] = useState([]);
+  const [popoverOpen, setPopoverOpen] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [success, setSuccess] = useState(false);
   const [delData, setDelData] = useState({});
@@ -21,9 +20,9 @@ const StaffListForBranch = ({ id }) => {
   // user select data per page
 
   useEffect(() => {
-    // get(`BranchManagerDashboard/Consultants?id=${id}`).then((res) => {
-    //   setData(res);
-    // });
+    get(`Employee/Index?branchId=${id}`).then((res) => {
+      setData(res);
+    });
   }, [success, id]);
 
   const toggleDanger = (p) => {
@@ -33,7 +32,7 @@ const StaffListForBranch = ({ id }) => {
 
   const handleDeleteData = () => {
     setButtonStatus(true);
-    remove(`Consultant/Delete/${delData?.id}`).then((res) => {
+    remove(`Employee/Delete/${delData}`).then((res) => {
       setButtonStatus(false);
       //
       addToast(res, {
@@ -48,24 +47,7 @@ const StaffListForBranch = ({ id }) => {
   // Edit Consultant Information
 
   const handleEdit = (id) => {
-    history.push(`/consultantInformation/${id}`);
-  };
-
-  const handleUpdate = (id) => {
-    put(`Consultant/UpdateAccountStatus/${id}`).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "success",
-        });
-        setSuccess(!success);
-      } else {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "error",
-        });
-      }
-    });
+    history.push(`/staffGeneralInformation/${id}`);
   };
 
   return (
@@ -73,7 +55,7 @@ const StaffListForBranch = ({ id }) => {
       <div className="custom-card-border p-4 mb-30px">
         <div className="d-flex">
           <h5 className="mb-0">Staff List</h5>
-          <span className="count-summery">{data?.totalConsultant}</span>
+          <span className="count-summery">{data?.totalEntity}</span>
         </div>
 
         {data?.consultants?.length === 0 ? (
@@ -83,42 +65,51 @@ const StaffListForBranch = ({ id }) => {
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
-                  {/* <td>SL/NO</td> */}
                   <td>Name</td>
                   <td>Contact </td>
-                  <td>Address</td>
-                  {/* <td>Status </td> */}
+                  <td>Type</td>
                   <td>Action </td>
                 </tr>
               </thead>
               <tbody>
-                {data?.consultants?.map((item, i) => (
+                {data?.models?.map((item, i) => (
                   <tr key={i} className="border-buttom">
-                    {/* <td>{i + 1}</td> */}
-
-                    <td>{item?.name}</td>
-                    <td>{item?.contact}</td>
-                    <td>{item?.typeName}</td>
-                    {/* <td>
-                      {
-                        <ToggleSwitch
-                          defaultChecked={
-                            item?.isActive === false ? false : true
+                    <td>{item?.fullName}</td>
+                    <td>
+                      <div className="d-flex justify-content-start">
+                        <PopOverText
+                          value={
+                            item.phoneNumber && item.phoneNumber.includes("+")
+                              ? item.phoneNumber
+                              : item.phoneNumber &&
+                                !item.phoneNumber.includes("+")
+                              ? "+" + item.phoneNumber
+                              : null
                           }
-                          onChange={() => handleUpdate(item?.consultantId)}
+                          btn={<i class="fas fa-phone"></i>}
+                          popoverOpen={popoverOpen}
+                          setPopoverOpen={setPopoverOpen}
                         />
-                      }
-                    </td> */}
+                        <PopOverText
+                          value={item?.email}
+                          btn={<i className="far fa-envelope"></i>}
+                          popoverOpen={popoverOpen}
+                          setPopoverOpen={setPopoverOpen}
+                        />
+                      </div>
+                    </td>
+                    <td>{item?.staffType}</td>
+
                     <td>
                       <span
                         className="text-info pointer mr-3"
-                        onClick={() => handleEdit(item?.consultantId)}
+                        onClick={() => handleEdit(item?.id)}
                       >
                         Edit
                       </span>
                       <span
                         className="text-danger pointer"
-                        onClick={() => toggleDanger(item?.consultantId)}
+                        onClick={() => toggleDanger(item?.id)}
                       >
                         Delete
                       </span>

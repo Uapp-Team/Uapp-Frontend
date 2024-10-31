@@ -496,7 +496,11 @@ const Branch = () => {
                       <span>
                         Branch Currency <span className="text-danger">*</span>
                       </span>
-
+                      <input
+                        type="hidden"
+                        value={branchCurrencyId}
+                        name="currencyId"
+                      />
                       <Currency
                         currencyId={branchCurrencyId}
                         setCurrencyId={setBranchCurrencyId}

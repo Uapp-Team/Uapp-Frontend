@@ -21,12 +21,12 @@ const Manager = (props) => {
     <div>
       {branchManager?.id && (
         <Card>
-          {/* <div className=' pl-3 mt-2'> <span className='branch-title-style'>Branch Manager</span></div> */}
+          {/* <div className=' pl-3 mt-2'> <span className='branch-title-style'>Branch Admin</span></div> */}
 
           <div className="pl-3 mt-3 hedding-titel">
             <h5>
               {" "}
-              <b>Branch Manager</b>{" "}
+              <b>Branch Admin</b>{" "}
             </h5>
 
             <div className="bg-h"></div>
@@ -101,7 +101,7 @@ const Manager = (props) => {
                 <Link to={`/branchManager/${id}`}>
                   <Button className="btn btn-uapp-add ">
                     {" "}
-                    <i className="fas fa-plus"></i> Add Branch Manager{" "}
+                    <i className="fas fa-plus"></i> Add Branch Admin{" "}
                   </Button>
                 </Link>
               </div>

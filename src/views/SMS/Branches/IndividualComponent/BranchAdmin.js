@@ -13,7 +13,6 @@ const BranchAdmin = ({ id }) => {
 
   useEffect(() => {
     get(`BranchManager/GetbyBranch/${id}`).then((res) => {
-      console.log("kire vai", res);
       setBranchManager(res);
     });
   }, [id]);
@@ -91,7 +90,7 @@ const BranchAdmin = ({ id }) => {
             <center>
               <div className="container py-3">
                 <Link to={`/branchManager/${id}`}>
-                  <AddButton text="Add Branch Manager" />
+                  <AddButton text="Add Branch Admin" />
                 </Link>
               </div>
             </center>

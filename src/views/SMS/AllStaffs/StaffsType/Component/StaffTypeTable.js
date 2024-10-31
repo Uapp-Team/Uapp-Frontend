@@ -69,7 +69,8 @@ const StaffTypeTable = ({
                       etype?.id === 4 ||
                       etype?.id === 5 ||
                       etype?.id === 6 ||
-                      etype?.id === 7 ? null : (
+                      etype?.id === 7 ||
+                      etype?.id === 11 ? null : (
                         <>
                           {permissions?.includes(
                             permissionList?.Edit_Staff_type

@@ -5,6 +5,7 @@ import TagButton from "../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import Filter from "../../../../../components/Dropdown/Filter";
 import Typing from "../../../../../components/form/Typing";
+import { AdminUsers } from "../../../../../components/core/User";
 
 const SearchAndClear = ({
   branchId,
@@ -65,7 +66,7 @@ const SearchAndClear = ({
               userType !== userTypes?.ProviderAdmin &&
               userType !== userTypes?.AdmissionOfficer && (
                 <>
-                  {branch.length > 1 && (
+                  {AdminUsers() && branch.length > 1 && (
                     <Col lg="4" md="3" sm="12" className="mb-2">
                       <Filter
                         data={branch}

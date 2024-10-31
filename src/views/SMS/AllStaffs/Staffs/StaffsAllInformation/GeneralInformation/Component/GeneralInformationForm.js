@@ -95,7 +95,7 @@ const GeneralInformationForm = ({
 
           {userTypeId === userTypes?.SystemAdmin ||
           userTypeId === userTypes?.Admin ||
-          userTypeId === userTypes?.BranchManager ? (
+          userTypeId === userTypes?.BranchAdmin ? (
             <FormGroup className="has-icon-left position-relative">
               <span>
                 <span className="text-danger">*</span> Staff Type
