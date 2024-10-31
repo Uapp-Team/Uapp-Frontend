@@ -19,4 +19,5 @@ export const userTypes = {
   Affiliate: "18",
   Companion: "19",
   BranchManager: "22",
+  ConsultantCompliance: "101",
 };
