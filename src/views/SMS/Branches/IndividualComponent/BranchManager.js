@@ -22,7 +22,7 @@ const BranchManager = ({ id }) => {
 
   return (
     <>
-      {branchManager?.name ? (
+      {branchManager?.email ? (
         <div className="custom-card-border p-4 mb-30px">
           <div className="d-flex justify-content-between">
             <div className="d-flex justify-between-start">

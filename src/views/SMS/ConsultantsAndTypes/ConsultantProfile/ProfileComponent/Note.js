@@ -8,6 +8,7 @@ import post from "../../../../../helpers/post";
 import EditBtn from "../../../../../components/buttons/EditBtn";
 import DeleteBtn from "../../../../../components/buttons/DeleteBtn";
 import put from "../../../../../helpers/put";
+import { AdminUsers, BranchAdmin } from "../../../../../components/core/User";
 
 const Note = ({ id }) => {
   const [data, setData] = useState([]);
@@ -39,21 +40,23 @@ const Note = ({ id }) => {
                     {dateFormate(chat?.createdDate)}
                   </span>
 
-                  <span>
-                    <EditBtn
-                      action={() => {
-                        setModalForEdit(!modalForEdit);
-                        setModalData({
-                          id: chat?.id,
-                          message: chat?.note,
-                        });
-                      }}
-                    />
-                    <DeleteBtn
-                      url={`consultant/delete-note/${chat?.id}`}
-                      refetch={() => setSucess(!sucess)}
-                    />
-                  </span>
+                  {(AdminUsers() || BranchAdmin()) && (
+                    <span>
+                      <EditBtn
+                        action={() => {
+                          setModalForEdit(!modalForEdit);
+                          setModalData({
+                            id: chat?.id,
+                            message: chat?.note,
+                          });
+                        }}
+                      />
+                      <DeleteBtn
+                        url={`consultant/delete-note/${chat?.id}`}
+                        refetch={() => setSucess(!sucess)}
+                      />
+                    </span>
+                  )}
                 </div>
 
                 <p className="bg-note bg-note-border p-12px mr-1 mt-2">
