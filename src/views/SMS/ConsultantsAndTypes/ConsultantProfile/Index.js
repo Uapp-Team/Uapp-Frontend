@@ -19,6 +19,7 @@ const Index = () => {
         userType === userTypes?.BranchAdmin.toString() ||
         userType === userTypes?.BranchManager.toString() ||
         userType === userTypes?.ComplianceManager.toString() ||
+        userType === "22" ||
         userType === userTypes?.Admin.toString() ? (
         <ConsultantProfileForAdministrator />
       ) : userType === userTypes?.FinanceManager.toString() ||
