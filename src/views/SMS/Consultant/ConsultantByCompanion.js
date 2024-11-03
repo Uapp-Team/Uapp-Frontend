@@ -561,7 +561,7 @@ const ConsultantByCompanion = () => {
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
-                                className="Count-fifth-no-pointer"
+                                className="Count-sixth-no-pointer"
                                 onClick={() => {
                                   history.push(
                                     `/companion-student-List/${companion?.id}`

@@ -80,6 +80,7 @@ const AffiliateTable = ({
             {tableData[5]?.isActive ? <th>Started</th> : null}
             {tableData[6]?.isActive ? <th>Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
             {tableData[7]?.isActive ? <th>Application</th> : null}
             {tableData[7]?.isActive ? <th>Registered</th> : null}
@@ -200,13 +201,28 @@ const AffiliateTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/affiliate-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(`/affiliate-lead-list/${affiliate?.id}`);
+                      }}
                     >
                       {affiliate?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-sixth-no-pointer"
+                      onClick={() => {
+                        history.push(
+                          `/affiliate-student-list/${affiliate?.id}`
+                        );
+                      }}
+                    >
+                      {affiliate?.studentCount}
                     </span>
                   </div>
                 </td>

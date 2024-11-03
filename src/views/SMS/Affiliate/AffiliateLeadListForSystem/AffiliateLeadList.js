@@ -29,7 +29,7 @@ import Loader from "../../Search/Loader/Loader";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import { useParams } from "react-router";
 
-const CompanionStudentList = () => {
+const AffiliateLeadList = () => {
   const { addToast } = useToasts();
 
   const referenceId = localStorage.getItem("referenceId");
@@ -55,12 +55,12 @@ const CompanionStudentList = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const { companionId } = useParams();
+  const { affiliateId } = useParams();
 
   useEffect(() => {
     if (!isTyping) {
       get(
-        `companionInvitation/leads?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}&islead=${false}`
+        `affiliateInvitation/leads?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&affiliateid=${affiliateId}&islead=${true}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);
@@ -77,7 +77,7 @@ const CompanionStudentList = () => {
     statusValue,
     toDate,
     success,
-    companionId,
+    affiliateId,
   ]);
 
   const closeModal = () => {
@@ -123,7 +123,7 @@ const CompanionStudentList = () => {
   };
   return (
     <>
-      <BreadCrumb title="Student List" backTo="" path="/" />
+      <BreadCrumb title="Lead List" backTo="" path="/" />
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
           <div className="row">
@@ -285,4 +285,4 @@ const CompanionStudentList = () => {
   );
 };
 
-export default CompanionStudentList;
+export default AffiliateLeadList;

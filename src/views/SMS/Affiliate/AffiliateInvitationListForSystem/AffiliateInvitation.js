@@ -214,8 +214,8 @@ const AffiliateInvitation = () => {
                 </div>
               </Col>
             </Row>
-            {!data ? (
-              <p className="text-center">No Recent invitations</p>
+            {data?.length === 0 ? (
+              <h4 className="text-center">No Data Found</h4>
             ) : (
               <>
                 <div className="table-responsive fixedhead mb-2">

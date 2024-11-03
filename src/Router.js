@@ -1520,14 +1520,27 @@ const CompanionInvitationListForSystem = lazy(() =>
     "./views/SMS/Companion/CompanionInvitationListForSystem/CompanionInvitation.js"
   )
 );
+
 const CompanionLeadListForSystem = lazy(() =>
   import(
     "./views/SMS/Companion/CompanionLeadListForSystem/CompanionLeadList.js"
   )
 );
+const AffiliateLeadListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateLeadListForSystem/AffiliateLeadList.js"
+  )
+);
+
 const CompanionStudentListForSystem = lazy(() =>
   import(
     "./views/SMS/Companion/CompanionStudentListForSystem/CompanionStudentList.js"
+  )
+);
+
+const AffiliateStudentListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateStudentListForSystem/AffiliateStudentList.js"
   )
 );
 
@@ -1948,6 +1961,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/affiliate-Invitation-list/:affiliateId"
                     component={AffiliateInvitationListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-lead-list/:affiliateId"
+                    component={AffiliateLeadListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-student-list/:affiliateId"
+                    component={AffiliateStudentListForSystem}
                   />
 
                   <AppRoute
