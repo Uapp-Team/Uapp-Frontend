@@ -1,6 +1,6 @@
 import React from "react";
 
-const AccordionForFaqCategory = ({
+const CategoryAccordion = ({
   key,
   content,
   categoryId,
@@ -50,4 +50,4 @@ const AccordionForFaqCategory = ({
   );
 };
 
-export default AccordionForFaqCategory;
+export default CategoryAccordion;
