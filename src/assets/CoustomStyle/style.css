@@ -194,6 +194,9 @@ tbody tr:hover {
   cursor: default !important;
 }
 
+.border-radius-unlimited {
+  border-radius: 999px;
+}
 .border-radius {
   border-radius: 0.5rem;
 }
@@ -543,6 +546,10 @@ tbody tr:hover {
 
 .relative {
   position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
 
 .chat-icon {
@@ -5566,4 +5573,14 @@ span.ant-upload-list-item-name {
   color: #000000;
   font-weight: 500;
   font-size: 16px;
+}
+
+/* ISM */
+.ism-category-card {
+  background-color: #edf2f2;
+  border: 0.5px solid #689e9e;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  text-align: center;
+  padding: 50px 0;
 }

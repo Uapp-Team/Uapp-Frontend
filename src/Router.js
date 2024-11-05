@@ -3379,6 +3379,10 @@ class AppRouter extends React.Component {
                     component={ISMDocuments}
                   />
                   <AppRoute
+                    path="/university-information-doc-faq"
+                    component={ISMDocuments}
+                  />
+                  <AppRoute
                     path="/users-answer-for-fAQ/:Uid"
                     component={UsersAnswerForFAQ}
                   />

@@ -13,6 +13,7 @@ const DefaultDropdownU = ({
   setError,
   errorText,
   action,
+  className,
 }) => {
   const [data, setData] = useState([]);
 
@@ -35,7 +36,7 @@ const DefaultDropdownU = ({
   };
 
   return (
-    <>
+    <div className={className}>
       <Select
         options={options}
         value={{
@@ -47,7 +48,7 @@ const DefaultDropdownU = ({
         id={name}
       />
       {error === true ? <span className="text-danger">{errorText}</span> : null}
-    </>
+    </div>
   );
 };
 
