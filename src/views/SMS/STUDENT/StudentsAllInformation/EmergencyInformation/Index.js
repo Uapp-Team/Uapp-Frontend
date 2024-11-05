@@ -60,6 +60,7 @@ const ContactInformation = () => {
   const [street, setStreet] = useState("");
   const [route, setRoute] = useState("");
   const [state, setState] = useState("");
+  const [stateError, setStateError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [action, setAction] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
@@ -179,6 +180,16 @@ const ContactInformation = () => {
       setCityError("City is required");
     } else {
       setCityError("");
+    }
+  };
+
+  const handleState = (e) => {
+    let data = e.target.value.trimStart();
+    setState(data);
+    if (data === "") {
+      setStateError("State is required");
+    } else {
+      setStateError("");
     }
   };
 
