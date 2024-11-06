@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Table } from "reactstrap";
 import { Link } from "react-router-dom";
-import get from "../../../../../helpers/get";
+import { Table } from "reactstrap";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
 
 const OtherInformationCard = ({
   sId,
@@ -46,7 +46,7 @@ const OtherInformationCard = ({
 
         <div className="pl-10px mb-3">
           <span>
-            <b>Criminal convictions Description</b>
+            <b>Criminal Convictions Description</b>
           </span>
           <br />
           <span className="text-gray-70">
