@@ -13,11 +13,18 @@ const CategoryAccordion = ({
       <div
         key={key}
         className={`${
-          isOpen ? `accordion-header-faq-open` : `accordion-header-faq`
-        } d-flex justify-content-between`}
+          isOpen ? `bg-f2f2f2` : `bg-white`
+        } d-flex justify-content-between category-accordian`}
         onClick={toggleAccordion}
       >
-        <span>{content?.name}</span>
+        <div>
+          <span>{content?.name}</span>
+          <span
+            className={`${isOpen ? `bg-white` : `bg-f2f2f2`} category-count`}
+          >
+            00
+          </span>
+        </div>
 
         <span>
           {isOpen ? (
@@ -33,11 +40,11 @@ const CategoryAccordion = ({
             {content?.subCategories?.map((item, i) => (
               <li
                 key={i}
-                className="faq-sub-category mb-3 pointer"
+                className="mb-3 pointer border-left"
                 onClick={() => setCategoryId(item?.id)}
               >
                 {categoryId === item?.id ? (
-                  <b>{item?.name}</b>
+                  <span className="fw-500">{item?.name}</span>
                 ) : (
                   <span>{item?.name}</span>
                 )}

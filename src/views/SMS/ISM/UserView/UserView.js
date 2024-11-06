@@ -6,6 +6,7 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import Typing from "../../../../components/form/Typing";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import UserViewAns from "./UserViewAns";
+import Uget from "../../../../helpers/Uget";
 
 const UserView = () => {
   const [noFilter, setNoFilter] = useState(true);
@@ -14,13 +15,19 @@ const UserView = () => {
   const [uniModal, setUniModal] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [category, setCategory] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [category, setCategory] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
+  const [openIndex, setOpenIndex] = useState(0);
 
+  useEffect(() => {
+    Uget(`QuestionCategory/get-all`).then((res) => {
+      setCategory(res?.data);
+    });
+  }, []);
+  console.log(category);
   useEffect(() => {
     keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
   }, [categoryId, keyword]);
-  console.log(noFilter);
   return (
     <>
       <BreadCrumb title="Information Search" backTo="" path="/" />
@@ -76,27 +83,38 @@ const UserView = () => {
               </div>
             )}
           </div>
-          {noFilter ? (
-            <Row>
-              {category.map((item, i) => (
-                <Col lg={2} md={3} sm={4} xs={6} key={i}>
-                  <div
-                    onClick={() => setCategoryId(item)}
-                    className="ism-category-card pointer"
-                  >
-                    Category {item}
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <UserViewAns
-              uniLable={uniLable}
-              setUniLable={setUniLable}
-              uniValue={uniValue}
-              setUniValue={setUniValue}
-            />
-          )}
+
+          <div className="w-75 mx-auto">
+            {noFilter ? (
+              <Row>
+                {category.map((item, i) => (
+                  <Col xl={2} lg={3} md={4} xs={6} key={i}>
+                    <div
+                      onClick={() => {
+                        setCategoryId(item?.subCategories[0]?.id);
+                        setOpenIndex(item?.id);
+                      }}
+                      className="ism-category-card pointer"
+                    >
+                      {item?.name}
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <UserViewAns
+                uniLable={uniLable}
+                setUniLable={setUniLable}
+                uniValue={uniValue}
+                setUniValue={setUniValue}
+                category={category}
+                categoryId={categoryId}
+                setCategoryId={setCategoryId}
+                openIndex={openIndex}
+                setOpenIndex={setOpenIndex}
+              />
+            )}
+          </div>
         </CardBody>
       </Card>
     </>

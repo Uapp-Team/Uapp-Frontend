@@ -28,7 +28,6 @@ const ISMDocuments = () => {
 
   useEffect(() => {
     Uget(`QuestionCategory/get-all`).then((res) => {
-      console.log(res?.data);
       setContent(res?.data);
     });
   }, [categoryFetch]);
