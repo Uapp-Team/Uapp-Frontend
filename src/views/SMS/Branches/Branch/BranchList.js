@@ -170,7 +170,7 @@ const BranchList = () => {
 
     const subData = new FormData(event.target);
 
-    subData.append("id", passData?.id);
+    subData.append("id", passData?.branchAdminId);
     subData.append("password", pass);
     if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
       setError(
@@ -419,7 +419,7 @@ const BranchList = () => {
                               ) : null}
 
                               {tableData[1]?.isActive ? (
-                                <td>{singleBranch?.branchManagerName}</td>
+                                <td>{singleBranch?.branchAdminName}</td>
                               ) : null}
 
                               {permissions?.includes(
