@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
-import Select from "react-select";
 import { useParams } from "react-router-dom";
-import get from "../../../../../helpers/get";
+import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-import post from "../../../../../helpers/post";
-import remove from "../../../../../helpers/remove";
-import put from "../../../../../helpers/put";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import loadingImages from "../../../../../assets/img/data.svg";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
 // import cardImage from "../../../../../assets/img/Group.png";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 import moment from "moment";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 import AllScoresCard from "./Component/AllScoresCard";
 // import { Person } from "@material-ui/icons";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 // import icon_gmt from "../../../../../assets/img/icons/icon-gmt.png";
-import GREScore from "./Component/GREScore";
-import { valid } from "chroma-js";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import GREScore from "./Component/GREScore";
 
 const TestScore = () => {
   const userType = localStorage.getItem("userType");
@@ -115,8 +114,7 @@ const TestScore = () => {
   const [FunctionSkillsOverall, setFunctionSkillsOverall] = useState(0);
   const [FunctionSkillsOverallError, setFunctionSkillsOverallError] =
     useState(false);
-  const [FunctionSkillsExamDate, setFunctionSkillsExamDate] =
-    useState(null);
+  const [FunctionSkillsExamDate, setFunctionSkillsExamDate] = useState(null);
   const [FunctionSkillsExamDateError, setFunctionSkillsExamDateError] =
     useState(null);
   const [FunctionSkillsEquivalentScore, setFunctionSkillsEquivalentScore] =
@@ -151,53 +149,63 @@ const TestScore = () => {
   // Ielts validation
 
   const handleIeltsSpeaking = (e) => {
-    setIeltsSpeaking(e.target.value);
-    if (e.target.value > 9 || e.target.value === "") {
-      setIeltsSpeakingError(true);
-    } else {
+    let value = e.target.value;
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (regex.test(value)) {
+      setIeltsSpeaking(value);
       setIeltsSpeakingError(false);
+    } else {
+      setIeltsSpeakingError(true);
     }
   };
 
   const handleIeltsReading = (e) => {
-    setIeltsReading(e.target.value);
-    if (e.target.value > 9 || e.target.value === "") {
-      setIeltsReadingError(true);
-    } else {
+    const value = e.target.value;
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (regex.test(value)) {
+      setIeltsReading(value);
       setIeltsReadingError(false);
+    } else {
+      setIeltsReadingError(true);
     }
   };
 
   const handleIeltsWriting = (e) => {
-    setIeltsWriting(e.target.value);
-    if (e.target.value > 9 || e.target.value === "") {
-      setIeltsWritingError(true);
-    } else {
+    const value = e.target.value;
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (regex.test(value)) {
+      setIeltsWriting(value);
       setIeltsWritingError(false);
+    } else {
+      setIeltsWritingError(true);
     }
   };
 
   const handleIeltsListening = (e) => {
-    setIeltsListening(e.target.value);
-    if (e.target.value > 9 || e.target.value === "") {
-      setIeltsListeningError(true);
-    } else {
+    const value = e.target.value;
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (regex.test(value)) {
+      setIeltsListening(value);
       setIeltsListeningError(false);
+    } else {
+      setIeltsListeningError(true);
     }
   };
 
   const handleIeltsOverall = (e) => {
-    setIeltsOverall(e.target.value);
-    if (e.target.value > 9 || e.target.value === "") {
-      setIeltsOverallError(true);
-    } else {
+    const value = e.target.value;
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (regex.test(value)) {
+      setIeltsOverall(value);
       setIeltsOverallError(false);
+    } else {
+      setIeltsOverallError(true);
     }
   };
 
   const handleIeltsExamDate = (e) => {
     const value = e.target.value;
-    const yearValue = value.split('-')[0]
+    const yearValue = value.split("-")[0];
     setIeltsExamDate(value);
     if (value === null) {
       setIeltsExamDateError("Date is required");
@@ -251,7 +259,7 @@ const TestScore = () => {
 
   const handleDuolingoExamDate = (e) => {
     const value = e.target.value;
-    const yearValue = value.split('-')[0]
+    const yearValue = value.split("-")[0];
     setDuolingoExamDate(value);
     if (value === null) {
       setDuolingoExamDateError("Date of Exam is required");
@@ -259,8 +267,7 @@ const TestScore = () => {
       setDuolingoExamDateError("Invalid Date");
     } else if (currentDate < value) {
       setDuolingoExamDateError("Invalid Date");
-    }
-    else {
+    } else {
       setDuolingoExamDateError(null);
     }
   };
@@ -332,16 +339,15 @@ const TestScore = () => {
 
   const handleToeflExamDate = (e) => {
     const value = e.target.value;
-    const yearValue = value.split('-')[0]
+    const yearValue = value.split("-")[0];
     setToeflExamDate(value);
     if (value === null) {
       setToeflExamDateError("Exam date are required");
     } else if (yearValue.length > 4) {
-      setToeflExamDateError("Invalid Date")
+      setToeflExamDateError("Invalid Date");
     } else if (currentDate < value) {
-      setToeflExamDateError("Invalid Date")
-    }
-    else {
+      setToeflExamDateError("Invalid Date");
+    } else {
       setToeflExamDateError(null);
     }
   };
@@ -405,7 +411,7 @@ const TestScore = () => {
 
   const handleFunctionSkillsExamDate = (e) => {
     const value = e.target.value;
-    const yearValue = value.split('-')[0]
+    const yearValue = value.split("-")[0];
     setFunctionSkillsExamDate(value);
     if (value === null) {
       setFunctionSkillsExamDateError("Exam date are required");
@@ -413,8 +419,7 @@ const TestScore = () => {
       setFunctionSkillsExamDateError("Invalid date");
     } else if (currentDate < value) {
       setFunctionSkillsExamDateError("Invalid date");
-    }
-    else {
+    } else {
       setFunctionSkillsExamDateError(null);
     }
   };
@@ -549,7 +554,7 @@ const TestScore = () => {
       setIeltsListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setIeltsExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setIeltsExamDate('');
+        : setIeltsExamDate("");
       setLoading(false);
       setIeltsOverall(res?.overall ? res?.overall : 0);
       // setScoreInfo(res);
@@ -564,8 +569,8 @@ const TestScore = () => {
       setDuoLingoProduction(res?.production ? res?.production : 10);
       res?.examDate
         ? setDuolingoExamDate(
-          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-        )
+            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+          )
         : setDuolingoExamDate(null);
       setDuolingoOverall(res?.overall ? res?.overall : 10);
       setDuolingoEquivalentScore(res?.ieltsEquivalent);
@@ -598,8 +603,8 @@ const TestScore = () => {
       setFunctionSkillsListening(res?.listening ? res?.listening : 0);
       res?.examDate
         ? setFunctionSkillsExamDate(
-          moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-        )
+            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+          )
         : setFunctionSkillsExamDate(null);
       setLoading(false);
       setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
@@ -1591,7 +1596,7 @@ const TestScore = () => {
         studentid={applicationStudentId}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       {loading ? (
         <div className="text-center">

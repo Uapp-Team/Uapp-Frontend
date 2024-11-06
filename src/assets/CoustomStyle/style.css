@@ -1927,9 +1927,7 @@ th {
   background: #dde4e3;
   position: fixed;
   z-index: 40;
-  width: -webkit-fill-available;
-  display: flex;
-  justify-content: flex-start;
+  width: 80vw;
   top: 75px;
   padding: 2rem 1rem 0 0;
 }
