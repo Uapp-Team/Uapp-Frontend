@@ -38,6 +38,7 @@ const ContactInformation = () => {
   const [country, setCountry] = useState([]);
   const [countryLabel, setCountryLabel] = useState("Select Country");
   const [countryValue, setCountryValue] = useState(0);
+  const [idValue, setIdValue] = useState(0);
   const [oneData, setOneData] = useState({});
   const { addToast } = useToasts();
   const [progress, setProgress] = useState(false);
@@ -267,7 +268,7 @@ const ContactInformation = () => {
           appearance: res?.data?.isSuccess === true ? "success" : "error",
           autoDismiss: true,
         });
-
+        setIdValue(0);
         setButtonStatus(false);
       });
     }
@@ -314,6 +315,7 @@ const ContactInformation = () => {
       setCity(res?.city);
       setZipCode(res?.zipCode);
       setState(res?.state);
+      setIdValue(res?.id)
     });
   };
 
@@ -500,12 +502,12 @@ const ContactInformation = () => {
               </div>
               {oneData.length < 1 || showForm ? (
                 <Form onSubmit={handleSubmit}>
-                  {oneData?.id ? (
+                  {idValue!=0 ? (
                     <input
                       type="hidden"
                       name="id"
                       id="id"
-                      value={oneData?.id}
+                      value={idValue}
                     />
                   ) : null}
                   <input
