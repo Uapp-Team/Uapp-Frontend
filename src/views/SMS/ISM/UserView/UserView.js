@@ -17,6 +17,7 @@ const UserView = () => {
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
+  const [categoryName, setCategoryName] = useState("");
   const [openIndex, setOpenIndex] = useState(0);
 
   useEffect(() => {
@@ -88,17 +89,22 @@ const UserView = () => {
             {noFilter ? (
               <Row>
                 {category.map((item, i) => (
-                  <Col xl={2} lg={3} md={4} xs={6} key={i}>
-                    <div
-                      onClick={() => {
-                        setCategoryId(item?.subCategories[0]?.id);
-                        setOpenIndex(item?.id);
-                      }}
-                      className="ism-category-card pointer"
-                    >
-                      {item?.name}
-                    </div>
-                  </Col>
+                  <>
+                    {item?.subCategories[0]?.id && (
+                      <Col xl={2} lg={3} md={4} xs={6} key={i}>
+                        <div
+                          onClick={() => {
+                            setCategoryId(item?.subCategories[0]?.id);
+                            setCategoryName(item?.subCategories[0]?.name);
+                            setOpenIndex(item?.id);
+                          }}
+                          className="ism-category-card pointer"
+                        >
+                          {item?.name}
+                        </div>
+                      </Col>
+                    )}
+                  </>
                 ))}
               </Row>
             ) : (
@@ -108,6 +114,8 @@ const UserView = () => {
                 uniValue={uniValue}
                 setUniValue={setUniValue}
                 category={category}
+                categoryName={categoryName}
+                setCategoryName={setCategoryName}
                 categoryId={categoryId}
                 setCategoryId={setCategoryId}
                 openIndex={openIndex}

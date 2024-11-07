@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Row } from "reactstrap";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 import CategoryAccordion from "../Components/CategoryAccordion";
+import Tag from "../../../../components/ui/Tag";
 
 const UserViewAns = ({
   uniLable,
@@ -9,6 +10,8 @@ const UserViewAns = ({
   uniValue,
   setUniValue,
   category,
+  categoryName,
+  setCategoryName,
   categoryId,
   setCategoryId,
   openIndex,
@@ -37,12 +40,28 @@ const UserViewAns = ({
               content={item}
               categoryId={categoryId}
               setCategoryId={setCategoryId}
+              setCategoryName={setCategoryName}
               isOpen={openIndex === item?.id}
               toggleAccordion={() => toggleAccordion(item?.id)}
             />
           ))}
         </Col>
-        <Col md={8}></Col>
+        <Col md={8}>
+          <Tag
+            title="Category"
+            label={categoryName}
+            action={() => {
+              setCategoryId(0);
+              setCategoryName("");
+            }}
+          />
+
+          <hr />
+          <span className="text-gray-70 fs-12px">
+            Results 1-7 of 7 for university
+          </span>
+          <hr />
+        </Col>
       </Row>
     </>
   );

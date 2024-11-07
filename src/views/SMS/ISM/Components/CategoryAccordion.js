@@ -5,6 +5,7 @@ const CategoryAccordion = ({
   content,
   categoryId,
   setCategoryId,
+  setCategoryName,
   isOpen,
   toggleAccordion,
 }) => {
@@ -36,12 +37,19 @@ const CategoryAccordion = ({
       </div>
       {isOpen && (
         <>
-          <div className="faq-category-list pl-3 border-left">
+          <div className="faq-category-list">
             {content?.subCategories?.map((item, i) => (
               <li
                 key={i}
-                className="mb-3 pointer border-left"
-                onClick={() => setCategoryId(item?.id)}
+                className={`py-2 pl-3 pointer ${
+                  categoryId === item?.id
+                    ? "border-left-367D7E"
+                    : "border-left-e9e9e9"
+                }`}
+                onClick={() => {
+                  setCategoryId(item?.id);
+                  setCategoryName && setCategoryName(item?.name);
+                }}
               >
                 {categoryId === item?.id ? (
                   <span className="fw-500">{item?.name}</span>
