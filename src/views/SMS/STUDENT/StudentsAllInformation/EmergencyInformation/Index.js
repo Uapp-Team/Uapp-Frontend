@@ -261,7 +261,8 @@ const ContactInformation = () => {
       post("StudentEmergency/Address", subData).then((res) => {
         setProgress(false);
         setSuccess(!success);
-        history.push(`/addPersonalStatement/${applicationStudentId}`);
+        handleCancelAdd()
+        // history.push(`/addPersonalStatement/${applicationStudentId}`);
         addToast(res?.data?.message, {
           appearance: res?.data?.isSuccess === true ? "success" : "error",
           autoDismiss: true,
@@ -275,7 +276,7 @@ const ContactInformation = () => {
   const handleDeletePermission = () => {
     setButtonStatus(true);
     setProgress(true);
-    remove(`StudentEmergency/Delete/${delData?.id}`).then((res) => {
+    remove(`StudentEmergency/delete/${delData}`).then((res) => {
       setButtonStatus(false);
       setProgress(false);
       setSuccess(!success);
@@ -303,8 +304,8 @@ const ContactInformation = () => {
 
   const handleUpdate = (id) => {
     setShowForm(true);
-    get(`StudentEmergency/GetByStudentId/${id}`).then((res) => {
-      setCountryValue(res?.countryId ? res?.countryId : 0);
+    get(`StudentEmergency/Get/${id}`).then((res) => {
+      setCountryValue(res?.countryId);
       setReferenceName(res?.personName);
       setRelationship(res?.relationship);
       setPhoneNumber(res?.phoneNumber);
@@ -360,7 +361,6 @@ const ContactInformation = () => {
     function fillInAddress() {
       // Get the place details from the autocomplete object.
       const place = autocomplete.getPlace();
-      console.log(place);
       for (const component of place.address_components) {
         // @ts-ignore remove once typings fixed
         let componentType = component.types[0];
@@ -464,7 +464,7 @@ const ContactInformation = () => {
                                 <a href="#experience-form">
                                   <span
                                     className="pointer text-body"
-                                    onClick={() => handleUpdate(item.id)}
+                                    onClick={() => handleUpdate(item?.id)}
                                   >
                                     Edit
                                   </span>
@@ -476,7 +476,7 @@ const ContactInformation = () => {
                               ) ? (
                                 <span
                                   style={{ cursor: "pointer" }}
-                                  onClick={() => toggleDanger(item)}
+                                  onClick={() => toggleDanger(item?.id)}
                                 >
                                   Delete
                                 </span>
@@ -720,15 +720,6 @@ const ContactInformation = () => {
                       ) : null}
                     </Col>
                   </FormGroup>
-
-                  <Row className="mt-4 ">
-                    <Col className="d-flex justify-content-between">
-                      <PreviousButton action={handlePrevious} />
-                      {action?.reference && (
-                        <SaveButton text="Next" action={goForward} />
-                      )}
-                    </Col>
-                  </Row>
                 </Form>
               ) : (
                 <>
@@ -752,6 +743,13 @@ const ContactInformation = () => {
                   ) : null}
                 </>
               )}
+
+              <Row className="mt-4 ">
+                <Col className="d-flex justify-content-between">
+                  <PreviousButton action={handlePrevious} />
+                  <SaveButton text="Next" action={goForward} />
+                </Col>
+              </Row>
             </TabPane>
           </TabContent>
         </CardBody>

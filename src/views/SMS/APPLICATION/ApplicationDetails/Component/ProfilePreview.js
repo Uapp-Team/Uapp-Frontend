@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import PersonalStatementCard from "./ProfilePreview/PersonalStatementCard";
-import PersonalInformationCard from "./ProfilePreview/PersonalInformationCard";
-import ContactInformationCard from "./ProfilePreview/ContactInformationCard";
-import OtherInformationCard from "./ProfilePreview/OtherInformationCard";
-import EducationalInformationCard from "./ProfilePreview/EducationalInformationCard";
-import TestScoresCard from "./ProfilePreview/TestScoresCard";
-import ExperienceCard from "./ProfilePreview/ExperienceCard";
-import ReferenceCard from "./ProfilePreview/ReferenceCard";
-import UploadDocuments from "./ProfilePreview/UploadDocuments";
-import ApplicationInformation from "./ProfilePreview/ApplicationInformation";
-import FundingInformation from "./ProfilePreview/FundingInformation";
-import ProfileStatus from "./Status/ProfileStatus";
-import StudentDeclaration from "./ProfilePreview/StudentDeclaration";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import EmergencyContactInformation from "./ProfilePreview/EmergencyContactInformation";
 import { Link } from "react-router-dom";
 import editbtn from "../../../../../assets/img/editbtn.png";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import ContactInformationCard from "./ProfilePreview/ContactInformationCard";
+import EducationalInformationCard from "./ProfilePreview/EducationalInformationCard";
+import EmergencyContactInformation from "./ProfilePreview/EmergencyContactInformation";
+import ExperienceCard from "./ProfilePreview/ExperienceCard";
+import FundingInformation from "./ProfilePreview/FundingInformation";
+import OtherInformationCard from "./ProfilePreview/OtherInformationCard";
+import PersonalInformationCard from "./ProfilePreview/PersonalInformationCard";
+import PersonalStatementCard from "./ProfilePreview/PersonalStatementCard";
+import ReferenceCard from "./ProfilePreview/ReferenceCard";
+import StudentDeclaration from "./ProfilePreview/StudentDeclaration";
+import TestScoresCard from "./ProfilePreview/TestScoresCard";
+import UploadDocuments from "./ProfilePreview/UploadDocuments";
+import ProfileStatus from "./Status/ProfileStatus";
 
 const ProfilePreview = ({ sId, applicationInfo, success, setSuccess }) => {
   // const componentRef = useRef();
@@ -26,7 +25,7 @@ const ProfilePreview = ({ sId, applicationInfo, success, setSuccess }) => {
   const [studentDetails, setStudentDetails] = useState({});
   console.log(studentDetails, "hahahaha");
   const [contactData, setContactData] = useState([]);
-  const [emergencyContactList, setEmergencyContactList] = useState({});
+  const [emergencyContactList, setEmergencyContactList] = useState([]);
   const [fundingData, setFundingData] = useState({});
   const [educationInfos, setEducationInfos] = useState([]);
   const [ielts, setIelts] = useState({});
