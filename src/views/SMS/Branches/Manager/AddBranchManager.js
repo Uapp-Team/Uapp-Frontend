@@ -490,7 +490,7 @@ const AddBranchManager = () => {
                         <Col md="3">
                           {" "}
                           <span>
-                            Manager Image <span className="text-danger">*</span>{" "}
+                            Admin Image <span className="text-danger">*</span>{" "}
                           </span>
                         </Col>
                         <Col md="5">

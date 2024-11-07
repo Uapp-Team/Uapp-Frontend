@@ -438,80 +438,6 @@ const BranchList = () => {
                                           >
                                             Change
                                           </Link>
-                                          <Modal
-                                            isOpen={passModal}
-                                            toggle={() => handleToggle}
-                                            className="uapp-modal2"
-                                          >
-                                            <ModalBody className="p-5">
-                                              <h5>
-                                                Change password for
-                                                {passData?.name}
-                                              </h5>
-                                              <form
-                                                onSubmit={submitModalForm}
-                                                className="mt-3"
-                                              >
-                                                <FormGroup row>
-                                                  <Col md="8">
-                                                    <span>
-                                                      <span className="text-danger">
-                                                        *
-                                                      </span>
-                                                      Password
-                                                    </span>
-
-                                                    <Input
-                                                      type="password"
-                                                      onChange={(e) => {
-                                                        passValidate(e);
-                                                      }}
-                                                    />
-                                                    <span className="text-danger">
-                                                      {error}
-                                                    </span>
-                                                  </Col>
-                                                </FormGroup>
-
-                                                <FormGroup row>
-                                                  <Col md="8">
-                                                    <span>
-                                                      <span className="text-danger">
-                                                        *
-                                                      </span>
-                                                      Confirm Password
-                                                    </span>
-
-                                                    <Input
-                                                      type="password"
-                                                      onChange={(e) => {
-                                                        confirmPassword(e);
-                                                      }}
-                                                    />
-
-                                                    <span className="text-danger">
-                                                      {passError}
-                                                    </span>
-                                                  </Col>
-                                                </FormGroup>
-                                                <FormGroup className="d-flex justify-content-between mt-3">
-                                                  <CancelButton
-                                                    cancel={() =>
-                                                      handleToggle(false)
-                                                    }
-                                                  />
-
-                                                  <SaveButton
-                                                    text="Submit"
-                                                    progress={progress}
-                                                    buttonStatus={
-                                                      resetButtonStatus
-                                                    }
-                                                  />
-                                                </FormGroup>
-                                              </form>
-                                            </ModalBody>
-                                          </Modal>
                                         </td>
                                       ) : null}
                                     </>
@@ -705,6 +631,64 @@ const BranchList = () => {
           </CardBody>
         </Card>
       </div>
+
+      <Modal
+        isOpen={passModal}
+        toggle={() => handleToggle}
+        className="uapp-modal2"
+      >
+        <ModalBody className="p-5">
+          <h5>
+            Change password for
+            {passData?.name}
+          </h5>
+          <form onSubmit={submitModalForm} className="mt-3">
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span>
+                  Password
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    passValidate(e);
+                  }}
+                />
+                <span className="text-danger">{error}</span>
+              </Col>
+            </FormGroup>
+
+            <FormGroup row>
+              <Col md="8">
+                <span>
+                  <span className="text-danger">*</span>
+                  Confirm Password
+                </span>
+
+                <Input
+                  type="password"
+                  onChange={(e) => {
+                    confirmPassword(e);
+                  }}
+                />
+
+                <span className="text-danger">{passError}</span>
+              </Col>
+            </FormGroup>
+            <FormGroup className="d-flex justify-content-between mt-3">
+              <CancelButton cancel={() => handleToggle(false)} />
+
+              <SaveButton
+                text="Submit"
+                progress={progress}
+                buttonStatus={resetButtonStatus}
+              />
+            </FormGroup>
+          </form>
+        </ModalBody>
+      </Modal>
 
       <ConfirmModal
         text="Do You Want To Delete This Branch? Once Deleted it can't be Undone!"
