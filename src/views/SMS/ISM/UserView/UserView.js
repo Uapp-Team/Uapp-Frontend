@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ismhero from "../../../../assets/img/ismhero.png";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
@@ -9,6 +10,7 @@ import UserViewAns from "./UserViewAns";
 import Uget from "../../../../helpers/Uget";
 
 const UserView = () => {
+  const history = useHistory();
   const [noFilter, setNoFilter] = useState(true);
   const [uniLable, setUniLable] = useState("Select University");
   const [uniValue, setUniValue] = useState(0);
@@ -19,13 +21,31 @@ const UserView = () => {
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [openIndex, setOpenIndex] = useState(0);
+  const [answerData, setAnswerData] = useState([]);
+
+  const redirectRoute = (label, value) => {
+    history.push(`/informationViewUniversity`, {
+      state: { name: label, id: value },
+    });
+  };
+
+  useEffect(() => {
+    if (!isTyping) {
+      Uget(
+        `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${keyword}`
+      ).then((res) => {
+        console.log(res?.items);
+        setAnswerData(res?.items);
+      });
+    }
+  }, [categoryId, isTyping, keyword, uniValue]);
 
   useEffect(() => {
     Uget(`QuestionCategory/get-all`).then((res) => {
       setCategory(res?.data);
     });
   }, []);
-  console.log(category);
+
   useEffect(() => {
     keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
   }, [categoryId, keyword]);
@@ -71,6 +91,7 @@ const UserView = () => {
                       setValue={setUniValue}
                       url="University/get-dd"
                       className="w-100"
+                      action={(label, value) => redirectRoute(label, value)}
                     />
                   </div>
                 ) : (
@@ -109,6 +130,7 @@ const UserView = () => {
               </Row>
             ) : (
               <UserViewAns
+                answerData={answerData}
                 uniLable={uniLable}
                 setUniLable={setUniLable}
                 uniValue={uniValue}

@@ -57,6 +57,12 @@
   overflow-x: hidden;
 }
 
+.modal-overflow {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .scroll-x {
   overflow-x: auto;
   overflow-y: hidden;
@@ -282,8 +288,20 @@ tbody tr:hover {
   border-radius: 50px;
 }
 
+.h-83 {
+  height: 83%;
+}
+
+.h-85 {
+  height: 85%;
+}
+
 .h-120px {
   height: 120px;
+}
+
+.h-250px {
+  height: 250px;
 }
 
 .h-300px {

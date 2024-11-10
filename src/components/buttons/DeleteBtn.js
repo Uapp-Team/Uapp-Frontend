@@ -24,7 +24,7 @@ const DeleteBtn = ({ url, refetch }) => {
   return (
     <>
       <span
-        className="pointer text-danger ml-4px"
+        className="pointer text-gray ml-4px"
         onClick={() => setDeleteModal(true)}
       >
         <AiOutlineDelete size={20} />

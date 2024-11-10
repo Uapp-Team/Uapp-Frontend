@@ -1,5 +1,5 @@
 import React from "react";
-import Origine from "../Form/Origine";
+import Origine from "../Components/Origine";
 
 const DateAns = ({ defaultData }) => {
   return (

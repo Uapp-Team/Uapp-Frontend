@@ -10,6 +10,23 @@ const QueAdd = ({ modalClose, refetch }) => {
     subCategoryId: 0,
     title: "",
     answers: "",
+    answerList: [
+      {
+        id: 0,
+        origineType: 1,
+        answers: "",
+      },
+      {
+        id: 0,
+        origineType: 2,
+        answers: "",
+      },
+      {
+        id: 0,
+        origineType: 3,
+        answers: "",
+      },
+    ],
     isRequiredAns: true,
     isMandatoryForAll: false,
     universities: [],
@@ -17,7 +34,7 @@ const QueAdd = ({ modalClose, refetch }) => {
 
   return (
     <>
-      <div className="d-flex justify-content-between mb-3">
+      <div className="d-flex justify-content-between">
         <h3>Add Question</h3>
         <CloseBtn action={modalClose} />
       </div>

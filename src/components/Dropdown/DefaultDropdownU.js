@@ -32,7 +32,7 @@ const DefaultDropdownU = ({
     setError && setError(false);
     setLabel && setLabel(label);
     setValue && setValue(value);
-    action && action(value);
+    action && action(label, value);
   };
 
   return (

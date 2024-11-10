@@ -3,8 +3,10 @@ import { Col, Row } from "reactstrap";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 import CategoryAccordion from "../Components/CategoryAccordion";
 import Tag from "../../../../components/ui/Tag";
+import Answear from "../Components/Answear";
 
 const UserViewAns = ({
+  answerData,
   uniLable,
   setUniLable,
   uniValue,
@@ -61,6 +63,12 @@ const UserViewAns = ({
             Results 1-7 of 7 for university
           </span>
           <hr />
+
+          {answerData?.map((item, i) => (
+            <div key={i}>
+              <Answear defaultData={item} refetch={() => {}} />
+            </div>
+          ))}
         </Col>
       </Row>
     </>

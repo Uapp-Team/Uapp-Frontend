@@ -36,7 +36,7 @@ const DDByAppUrlU = ({
   return (
     <>
       <Form.Group className={className}>
-        {label && <Form.Label>{label}</Form.Label>}
+        {label && <span>{label}</span>}
 
         <Form.Select
           {...register(name)}

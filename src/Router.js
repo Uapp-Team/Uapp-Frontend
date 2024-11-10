@@ -213,6 +213,9 @@ const ISMUniversityList = lazy(() =>
 );
 const ISMDocuments = lazy(() => import("./views/SMS/ISM/ISMDocuments.js"));
 const ISMUserView = lazy(() => import("./views/SMS/ISM/UserView/UserView.js"));
+const UserViewUniversity = lazy(() =>
+  import("./views/SMS/ISM/UserView/UserViewUniversity.js")
+);
 
 const UsersAnswerForFAQ = lazy(() =>
   import("./views/SMS/ISM/UsersAnswerForFaq/UsersAnswerForFAQ.js")
@@ -3373,6 +3376,10 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute path="/informationView" component={ISMUserView} />
+                  <AppRoute
+                    path="/informationViewUniversity"
+                    component={UserViewUniversity}
+                  />
 
                   <AppRoute
                     path="/university-information-doc-faq-by-id/:Uid"

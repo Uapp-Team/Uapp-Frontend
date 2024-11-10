@@ -13,7 +13,7 @@ import { Modal, ModalBody } from "reactstrap";
 import QueEdit from "../Questions/QueEdit";
 import Radio from "../../../../components/form/Radio";
 import { AdminUsers, AdmissionManager } from "../../../../components/core/User";
-import Origine from "./Origine";
+import Origine from "../Components/Origine";
 
 const schema = yup.object({
   id: yup.string(),

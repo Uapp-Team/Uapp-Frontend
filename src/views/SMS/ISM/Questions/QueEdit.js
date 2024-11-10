@@ -20,6 +20,7 @@ const QueEdit = ({ id, modalClose, refetch }) => {
     subCategoryId: data?.subCategoryId,
     title: data?.title,
     answers: data?.answers,
+    answerList: data?.answerList,
     isRequiredAns: data?.isRequiredAns,
     isMandatoryForAll: data?.isMandatoryForAll,
     universities: data?.universities,
