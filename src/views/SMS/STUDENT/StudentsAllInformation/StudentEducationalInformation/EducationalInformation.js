@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
   Col,
   FormGroup,
   Input,
+  Row,
   TabContent,
   TabPane,
-  Row,
-  Label,
 } from "reactstrap";
 import get from "../../../../../helpers/get";
-import { useHistory, useParams } from "react-router-dom";
 import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import remove from "../../../../../helpers/remove";
 import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import EducationalForm from "./EducationalForm";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import {
   currentDate,
   dateFormate,
 } from "../../../../../components/date/calenderFormate";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import EducationalForm from "./EducationalForm";
 
 const EducationalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -62,9 +61,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState('');
+  const [attendedFrom, setAttendedFrom] = useState("");
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState('');
+  const [attendedTo, setAttendedTo] = useState("");
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -78,8 +77,7 @@ const EducationalInformation = () => {
   const [instituteLanguage, setInstituteLanguage] = useState("");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
-
-  console.log(attendedFrom);
+  const [studentType, setStudentType] = useState(null);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -93,7 +91,12 @@ const EducationalInformation = () => {
     get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
         setEduDetails(res);
-        if (res?.length > 0) {
+      }
+    );
+    get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
+      (res) => {
+        setStudentType(res?.studentTypeId);
+        if (res?.studentTypeId == 3) {
           setForms(true);
         } else {
           setForms(false);
@@ -189,8 +192,7 @@ const EducationalInformation = () => {
       setAttendedFromError("Date is required");
     } else if (currentDate < value) {
       setAttendedFromError("Invalid Date");
-    }
-    else {
+    } else {
       setAttendedFromError("");
     }
   };
@@ -202,7 +204,9 @@ const EducationalInformation = () => {
     } else if (currentDate < value) {
       setAttendedToError("Invalid Date");
     } else if (attendedFrom > value) {
-      setAttendedToError("Attended to date should be greater than Attended from date");
+      setAttendedToError(
+        "Attended to date should be greater than Attended from date"
+      );
     } else {
       setAttendedToError("");
     }
@@ -412,26 +416,15 @@ const EducationalInformation = () => {
 
       res?.attendedInstitutionFrom
         ? setAttendedFrom(
-          moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-        )
-        : setAttendedFrom(currentDate);
+            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
+          )
+        : setAttendedFrom("");
 
       res?.attendedInstitutionTo
         ? setAttendedTo(
-          moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-        )
-        : setAttendedTo(currentDate);
-
-      // setAttendedFrom(
-      //   moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-      // );
-
-      const a = res?.attendedInstitutionTo;
-      var utcDate = new Date(a);
-      var localeDte2 = utcDate.toLocaleString("en-CA");
-      const b = localeDte2.split("T");
-      const c = b[0].split(",");
-      setAttendedTo(c[0]);
+            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
+          )
+        : setAttendedTo("");
     });
     setShowForm(true);
     setSuccess(!success);
@@ -487,7 +480,7 @@ const EducationalInformation = () => {
         activetab={"5"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -495,53 +488,55 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              <Row>
-                <Col md="4">
-                  <FormGroup>
-                    <span>
-                      {" "}
-                      <span className="text-danger"> *</span>
-                      Have You Ever Studied?{" "}
-                    </span>
+              {studentType != 3 && (
+                <Row>
+                  <Col md="4">
+                    <FormGroup>
+                      <span>
+                        {" "}
+                        <span className="text-danger"> *</span>
+                        Have You Ever Studied?{" "}
+                      </span>
 
-                    <div
-                      className="d-flex flex-wrap form-mt"
-                      style={{ marginLeft: "17px" }}
-                    >
-                      <div>
-                        <Input
-                          type="radio"
-                          name="radioYes"
-                          id="radioYes"
-                          onClick={() => {
-                            setForms(true);
-                          }}
-                          checked={forms === true}
-                        />
-                        <span>
-                          <label style={{ fontSize: "14px" }} for="radioYes">
-                            Yes
-                          </label>
-                        </span>
+                      <div
+                        className="d-flex flex-wrap form-mt"
+                        style={{ marginLeft: "17px" }}
+                      >
+                        <div>
+                          <Input
+                            type="radio"
+                            name="radioYes"
+                            id="radioYes"
+                            onClick={() => {
+                              setForms(true);
+                            }}
+                            checked={forms === true}
+                          />
+                          <span>
+                            <label style={{ fontSize: "14px" }} for="radioYes">
+                              Yes
+                            </label>
+                          </span>
+                        </div>
+                        <div className="ml-5">
+                          <Input
+                            checked={forms === false}
+                            type="radio"
+                            name="radioNo"
+                            id="radioNo"
+                            onClick={deleteCheckFunction}
+                          />
+                          <span>
+                            <label style={{ fontSize: "14px" }} for="radioNo">
+                              No
+                            </label>
+                          </span>
+                        </div>
                       </div>
-                      <div className="ml-5">
-                        <Input
-                          checked={forms === false}
-                          type="radio"
-                          name="radioNo"
-                          id="radioNo"
-                          onClick={deleteCheckFunction}
-                        />
-                        <span>
-                          <label style={{ fontSize: "14px" }} for="radioNo">
-                            No
-                          </label>
-                        </span>
-                      </div>
-                    </div>
-                  </FormGroup>
-                </Col>
-              </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
+              )}
               {showDeleteOption === true ? (
                 <>
                   <FormGroup row>
@@ -574,7 +569,7 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.educationLevel?.name}
+                                {edu?.nameOfInstitution}
                               </span>
 
                               <span>
@@ -626,7 +621,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.nameOfInstitution}</b>
+                                  <b>{edu?.educationLevel?.name}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
@@ -807,9 +802,9 @@ const EducationalInformation = () => {
               )}
 
               {showDeleteOption === false &&
-                forms === false &&
-                showForm === false &&
-                eduDetails?.length === 0 ? (
+              forms === false &&
+              showForm === false &&
+              eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) ? (

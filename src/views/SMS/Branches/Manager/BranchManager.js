@@ -185,7 +185,7 @@ const BranchManager = () => {
     <div>
       <div>
         <BreadCrumb
-          title="Add Branch Manager Information"
+          title="Add Branch Admin Information"
           backTo="Branch"
           path={`/branchList`}
         />

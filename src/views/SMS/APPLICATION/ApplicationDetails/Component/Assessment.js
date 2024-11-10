@@ -9,6 +9,7 @@ const Assessment = ({ id, success }) => {
   const [profile, setProfile] = useState(false);
   const [consent, setConsent] = useState(false);
   const [internalAssesment, setInternalAssesment] = useState(false);
+  const [assessmentPercent, setassessmentPercent] = useState(0);
 
   useEffect(() => {
     get(`ApplicationAssesment/GetByApplication/${id}`).then((res) => {
@@ -20,64 +21,111 @@ const Assessment = ({ id, success }) => {
     });
   }, [id, success]);
 
-  const assessmentPercent =
-    (details === 3 && 20) +
-    (document === 3 && 20) +
-    (profile === 3 && 20) +
-    (consent === 3 && 20) +
-    (internalAssesment === 3 && 20);
-
-  const chartColor =
-    assessmentPercent <= 20
-      ? "#F64C4C"
-      : assessmentPercent <= 60
-      ? "#FFAD0D"
-      : "#47B881";
+  useEffect(() => {
+    const assessmentPercent =
+      (details === 3 && 20) +
+      (document === 3 && 20) +
+      (profile === 3 && 20) +
+      (consent === 3 && 20) +
+      (internalAssesment === 3 && 20);
+    setassessmentPercent(assessmentPercent);
+  }, [consent, details, document, internalAssesment, profile]);
 
   const series = [assessmentPercent];
 
-  const options = {
-    chart: {
-      height: 350,
-      type: "radialBar",
-    },
-    plotOptions: {
-      radialBar: {
-        hollow: {
-          size: "50%",
-        },
-      },
-    },
-    colors: [chartColor],
-    stroke: {
-      lineCap: "round",
-    },
-    labels: ["Assessment"],
-  };
-
   return (
     <div className="custom-card-border p-4 mb-3 ">
-      {/* <div className="row">
-        <div className="col-9">
-          <h5>Application Assessment</h5>
-        </div>
-        <div className="col-3 text-right">
-          <h5>{assessmentPercent}%</h5>
-        </div>
-      </div> */}
       <p>
         <b>Application Assessment</b>
       </p>
       <hr />
 
-      <div id="chart">
-        <ReactApexChart
-          options={options}
-          series={series}
-          type="radialBar"
-          height={250}
-        />
-      </div>
+      {assessmentPercent > 0 && (
+        <>
+          {assessmentPercent <= 20 && (
+            <div id="chart">
+              <ReactApexChart
+                options={{
+                  chart: {
+                    height: 350,
+                    type: "radialBar",
+                  },
+                  plotOptions: {
+                    radialBar: {
+                      hollow: {
+                        size: "50%",
+                      },
+                    },
+                  },
+                  colors: ["#F64C4C"],
+                  stroke: {
+                    lineCap: "round",
+                  },
+                  labels: ["Assessment"],
+                }}
+                series={series}
+                type="radialBar"
+                height={250}
+              />
+            </div>
+          )}
+          {assessmentPercent > 20 && assessmentPercent <= 60 && (
+            <div id="chart">
+              <ReactApexChart
+                options={{
+                  chart: {
+                    height: 350,
+                    type: "radialBar",
+                  },
+                  plotOptions: {
+                    radialBar: {
+                      hollow: {
+                        size: "50%",
+                      },
+                    },
+                  },
+                  colors: ["#FFAD0D"],
+                  stroke: {
+                    lineCap: "round",
+                  },
+                  labels: ["Assessment"],
+                }}
+                series={series}
+                type="radialBar"
+                height={250}
+              />
+            </div>
+          )}
+          {assessmentPercent > 60 && (
+            <div id="chart">
+              <ReactApexChart
+                options={{
+                  chart: {
+                    height: 350,
+                    type: "radialBar",
+                  },
+                  plotOptions: {
+                    radialBar: {
+                      hollow: {
+                        size: "50%",
+                      },
+                    },
+                  },
+                  colors: ["#47B881"],
+                  stroke: {
+                    lineCap: "round",
+                  },
+                  labels: ["Assessment"],
+                }}
+                series={series}
+                type="radialBar"
+                height={250}
+              />
+            </div>
+          )}
+        </>
+      )}
+
       <AssessmentStatus title="Application Details" value={details} />
       <AssessmentStatus title="Student Details" value={profile} />
       <AssessmentStatus title="Internal Assessment" value={internalAssesment} />

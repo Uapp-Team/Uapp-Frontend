@@ -301,7 +301,7 @@ const AddBranchManager = () => {
     <div>
       <div>
         <BranchNavbar
-          title="Add Branch Manager Information"
+          title="Add Branch Admin Information"
           activeTab={activetab}
           branchId={branchId}
         />
@@ -310,7 +310,7 @@ const AddBranchManager = () => {
             <TabContent activeTab={activetab}>
               <TabPane tabId="2">
                 {" "}
-                <p className="section-title">Manager Information</p>
+                <p className="section-title">Admin Information</p>
                 <Form className="mt-4" onSubmit={handleSubmit}>
                   <input
                     type="hidden"

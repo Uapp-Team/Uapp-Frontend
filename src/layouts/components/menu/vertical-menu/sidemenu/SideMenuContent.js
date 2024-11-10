@@ -182,7 +182,8 @@ class SideMenuContent extends React.Component {
           {" "}
           <li
             className={classnames(
-              `nav-item uapp-nav-item ${this.state.activeGroups[0] === item.id ? "open" : ""
+              `nav-item uapp-nav-item ${
+                this.state.activeGroups[0] === item.id ? "open" : ""
               }`,
               {
                 "has-sub": item.type === "collapse",
@@ -218,14 +219,15 @@ class SideMenuContent extends React.Component {
                 item.filterBase
                   ? item.filterBase
                   : item.navLink && item.type === "item"
-                    ? item.navLink
-                    : ""
+                  ? item.navLink
+                  : ""
               }
               href={item.type === "external-link" ? item.navLink : ""}
-              className={`d-flex ${item.badgeText
-                ? "justify-content-between"
-                : "justify-content-start"
-                }`}
+              className={`d-flex ${
+                item.badgeText
+                  ? "justify-content-between"
+                  : "justify-content-start"
+              }`}
               onMouseEnter={() => {
                 this.props.handleSidebarMouseEnter(item.id);
               }}
@@ -354,11 +356,11 @@ class SideMenuContent extends React.Component {
                 {(usersType !== userTypes?.Consultant &&
                   usersType !== userTypes?.SystemAdmin &&
                   usersType !== userTypes?.Admin &&
-                  usersType !== userTypes?.BranchManager) || (
-                    <button className="login-to-lead" onClick={handleLeadLogon}>
-                      Login To Lead
-                    </button>
-                  )}
+                  usersType !== userTypes?.BranchAdmin) || (
+                  <button className="login-to-lead" onClick={handleLeadLogon}>
+                    Login To Lead
+                  </button>
+                )}
               </>
             )}
           </>

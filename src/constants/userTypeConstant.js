@@ -3,7 +3,7 @@ export const userTypes = {
   Admin: "2",
   AdmissionManager: "3",
   Provider: "4",
-  BranchManager: "5",
+  BranchAdmin: "5",
   Student: "6",
   AccountManager: "7",
   Editor: "8",
@@ -18,4 +18,6 @@ export const userTypes = {
   AdmissionCompliance: "17",
   Affiliate: "18",
   Companion: "19",
+  BranchManager: "22",
+  ConsultantCompliance: "101",
 };

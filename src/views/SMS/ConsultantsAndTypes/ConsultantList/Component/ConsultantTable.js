@@ -352,8 +352,8 @@ const ConsultantTable = ({
                   {tableData[15]?.isActive ? (
                     <td>
                       <ConsultantActive
+                        id={consultant?.id}
                         isActive={!consultant?.isActive}
-                        item={consultant}
                       />
                     </td>
                   ) : null}

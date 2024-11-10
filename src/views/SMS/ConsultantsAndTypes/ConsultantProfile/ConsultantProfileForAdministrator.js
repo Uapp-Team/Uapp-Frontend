@@ -38,6 +38,7 @@ import Rightwork from "./ProfileComponent/ConsultantDetails/Rightwork";
 import BankDetails from "./ProfileComponent/ConsultantDetails/BankDetails";
 import Recruitment from "./ProfileComponent/ConsultantDetails/Recruitment";
 import Note from "./ProfileComponent/Note";
+import ConvertBranchManager from "./ProfileComponent/ConvertBranchManager";
 
 const ConsultantProfileForAdministrator = () => {
   const { id } = useParams();
@@ -105,6 +106,7 @@ const ConsultantProfileForAdministrator = () => {
           <EstimatedIncome id={id} />
           <TargetApplications id={id} />
           <Note id={id} />
+          <ConvertBranchManager id={id} />
           {/* <ProfileRecruitingType id={id} /> */}
           <ProfileRatingsBreakdown id={id} />
           {/* <ProfileNotice id={id} /> */}

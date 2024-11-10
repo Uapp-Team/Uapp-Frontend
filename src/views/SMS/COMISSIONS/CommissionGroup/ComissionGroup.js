@@ -62,7 +62,7 @@ const ComissionGroup = () => {
   }, []);
 
   useEffect(() => {
-    if (userType === userTypes?.BranchManager) {
+    if (userType === userTypes?.BranchAdmin) {
       setBranchValue(filterbranch[0]?.id);
       setBranchLable(filterbranch[0]?.name);
     }

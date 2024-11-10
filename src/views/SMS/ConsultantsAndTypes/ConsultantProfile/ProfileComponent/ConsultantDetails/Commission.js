@@ -274,7 +274,7 @@ const Commission = ({ id }) => {
         <div ref={divRef}>
           {(userType === userTypes?.SystemAdmin ||
             userType === userTypes?.Admin ||
-            userType === userTypes?.BranchManager) && (
+            userType === userTypes?.BranchAdmin) && (
             <Row>
               <Col>
                 <div className="p-3">

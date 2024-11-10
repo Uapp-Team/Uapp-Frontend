@@ -202,8 +202,7 @@ const ApplicationsCommon = () => {
   const [financeValue, setFinanceValue] = useState(
     application?.financeValue ? application?.financeValue : 0
   );
-  const [branchManagerLabel, setBranchManagerLabel] =
-    useState("Branch Manager");
+  const [branchManagerLabel, setBranchManagerLabel] = useState("Branch Admin");
   const [branchManagerValue, setBranchManagerValue] = useState(0);
   const [admissionManagerDD, setAdmissionManagerDD] = useState([]);
   const [admissionManagerLabel, setAdmissionManagerLabel] = useState(
@@ -723,7 +722,11 @@ const ApplicationsCommon = () => {
             setEntity(res?.totalEntity);
           })
         : get(
+<<<<<<< HEAD
             `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&adoId=${admissionOfficerValue}`
+=======
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
+>>>>>>> 89a4211e5cda767999e0b555273d1080c445affb
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -827,7 +830,7 @@ const ApplicationsCommon = () => {
     setApplicationId("");
     !branchId && setBranchLabel("Select Branch");
     !branchId && setBranchValue(0);
-    setBranchManagerLabel("Branch Manager");
+    setBranchManagerLabel("Branch Admin");
     setBranchManagerValue(0);
     !providerId && setProLabel("Select Provider");
     !providerId && setProValue(0);

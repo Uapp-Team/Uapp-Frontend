@@ -214,7 +214,7 @@ const ConditionForText = ({
           <TagButton
             label={branchManagerLabel}
             setValue={() => setBranchManagerValue(0)}
-            setLabel={() => setBranchManagerLabel("Branch Manager")}
+            setLabel={() => setBranchManagerLabel("Branch Admin")}
           ></TagButton>
         ) : (
           ""

@@ -7,27 +7,25 @@ import ParentConsultant from "./ProfileComponent/ParentConsultant";
 import ProfileHeadCard from "./ProfileComponent/ProfileHeadCard";
 // import ProfileRatingsBreakdown from "../../ProfileComponent/ProfileRatingsBreakdown";
 // import ProfileRecruitingForFrom from "../../ProfileComponent/ProfileRecruitingForFrom";
-import ProfileRecruitingType from "./ProfileComponent/ProfileRecruitingType";
 import ProfileReview from "./ProfileComponent/ProfileReview";
 import Consent from "./ProfileComponent/Consent";
 import ConsultantDetails from "./ProfileComponent/ConsultantDetails";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ProfileRecruitingForFrom from "./ProfileComponent/ProfileRecruitingForFrom";
 import ProfileRatingsBreakdown from "./ProfileComponent/ProfileRatingsBreakdown";
-import get from "../../../../helpers/get";
-import Note from "./ProfileComponent/Note";
+// import get from "../../../../helpers/get";
 
 const ConsultantProfile = () => {
   const userId = localStorage.getItem("referenceId");
   // const history = useHistory();
   const { id } = useParams();
-  const [status, setStatus] = useState(false);
+  // const [status, setStatus] = useState(false);
 
-  useEffect(() => {
-    get(`Consultant/Status/${id}`).then((res) => {
-      setStatus(res);
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   get(`Consultant/Status/${id}`).then((res) => {
+  //     setStatus(res);
+  //   });
+  // }, [id]);
   return (
     <div>
       <BreadCrumb title="Profile" backTo="" path={`/`} />
@@ -35,7 +33,7 @@ const ConsultantProfile = () => {
         <CardHeader className="page-header">
           <h3 className="text-white">Consultant Profile</h3>
           {userType == userTypes?.SystemAdmin ||
-          userType == userTypes?.BranchManager ||
+          userType == userTypes?.BranchAdmin ||
           userType == userTypes?.Admin ||
           userType == userTypes?.ComplianceManager ? (
             <div className="page-header-back-to-home">
@@ -63,7 +61,7 @@ const ConsultantProfile = () => {
           <ProfileRecruitingForFrom id={userId} />
 
           <Consent id={userId} />
-          <Note id={id} />
+
           <ProfileRatingsBreakdown id={id} />
           {/* <ProfileReview id={userId} /> */}
         </div>

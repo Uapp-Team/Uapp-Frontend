@@ -64,7 +64,6 @@ const BranchConsultantRegistration = () => {
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setNameTitle(res);
-      console.log(res, "title");
     });
   }, []);
 
@@ -77,9 +76,10 @@ const BranchConsultantRegistration = () => {
       setphoneNumber(res?.phoneNumber);
       setTitleValue(res?.nameTittleId == null ? 0 : res?.nameTittleId);
       setConsultantRegisterId(res?.id);
-      setHomeAccept(res?.isAcceptedHome);
-      setUkAccept(res?.isAcceptedEU_UK);
-      setIntAccept(res?.isAcceptedInternational);
+      res?.isAcceptedHome && setHomeAccept(res?.isAcceptedHome);
+      res?.isAcceptedEU_UK && setUkAccept(res?.isAcceptedEU_UK);
+      res?.isAcceptedInternational &&
+        setIntAccept(res?.isAcceptedInternational);
       console.log(res, "branch consultant");
     });
   }, [success, branchId]);
@@ -247,6 +247,8 @@ const BranchConsultantRegistration = () => {
 
     return isFormValid;
   };
+
+  console.log(homeAccept, ukAccept, intAccept);
 
   // on submit form
   const handleSubmit = (event) => {
@@ -448,11 +450,9 @@ const BranchConsultantRegistration = () => {
                             <Input
                               className="form-check-input"
                               type="checkbox"
-                              checked={homeAccept === true}
+                              checked={homeAccept}
                               onChange={(e) => {
-                                setHomeAccept(false);
                                 setHomeAccept(!homeAccept);
-                                setAcceptError(false);
                               }}
                             />
                             <span className="mr-2">Home </span>
@@ -464,11 +464,9 @@ const BranchConsultantRegistration = () => {
                             <Input
                               className="form-check-input"
                               type="checkbox"
-                              checked={ukAccept === true}
+                              checked={ukAccept}
                               onChange={(e) => {
-                                setUkAccept(false);
                                 setUkAccept(!ukAccept);
-                                setAcceptError(false);
                               }}
                             />
                             <span className="mr-2">EU/UK </span>
@@ -480,11 +478,9 @@ const BranchConsultantRegistration = () => {
                             <Input
                               className="form-check-input"
                               type="checkbox"
-                              checked={intAccept === true}
+                              checked={intAccept}
                               onChange={(e) => {
-                                setIntAccept(false);
                                 setIntAccept(!intAccept);
-                                setAcceptError(false);
                               }}
                             />
                             <span className="mr-2">International </span>

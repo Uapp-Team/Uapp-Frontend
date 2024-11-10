@@ -25,7 +25,7 @@ const Recruitment = ({ id }) => {
           <td className="border-0 text-right">
             {" "}
             {userType === userTypes?.SystemAdmin.toString() ||
-            userType === userTypes?.BranchManager.toString() ||
+            userType === userTypes?.BranchAdmin.toString() ||
             userType === userTypes?.ComplianceManager.toString() ||
             userType === userTypes?.Admin.toString() ? (
               <>

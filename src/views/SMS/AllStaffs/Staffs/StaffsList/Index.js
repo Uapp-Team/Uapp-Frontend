@@ -25,7 +25,6 @@ const Index = (props) => {
   const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
   const { type, branchId } = useParams();
   const location = useLocation();
-  const currentRoute = location.pathname;
   const history = useHistory();
   const [employeeList, setEmployeeList] = useState([]);
   const [currentPage, setCurrentPage] = useState(
