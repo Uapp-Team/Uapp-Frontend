@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from "react";
-import poundicon from "../../../../../assets/img/poundcoin.svg";
-import camera from "../../../../../assets/img/camera.svg";
-import { Col, Form, FormGroup, Input, Modal, ModalBody, Row } from "reactstrap";
-import get from "../../../../../helpers/get";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
+import { Col, Form, FormGroup, Input, Modal, ModalBody, Row } from "reactstrap";
 import "../../../../../assets/CoustomStyle/dashboard.css";
-import { Link } from "react-router-dom/cjs/react-router-dom";
-import UserNotices from "../../Component/UserNotices";
+import poundicon from "../../../../../assets/img/poundcoin.svg";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import RecentInvitations from "./RecentInvitations";
-import CountingCards from "./CountingCards";
-import Uget from "../../../../../helpers/Uget";
-import CompanionRefer from "./CompanionRefer/CompanionRefer";
 import CopyButton from "../../../../../components/Refer/CopyButton";
 import SocialShare from "../../../../../components/Refer/SocialShare";
-import put from "../../../../../helpers/put";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import put from "../../../../../helpers/put";
+import Uget from "../../../../../helpers/Uget";
+import UserNotices from "../../Component/UserNotices";
+import CompanionRefer from "./CompanionRefer/CompanionRefer";
+import CountingCards from "./CountingCards";
+import RecentInvitations from "./RecentInvitations";
 
 const Companion = () => {
   const { id } = useParams();
@@ -30,8 +27,6 @@ const Companion = () => {
 
   const [showBal, setShowBal] = useState(false);
   const [availableWithdraw, setAvailableWithdraw] = useState(0);
-  // const [balance, setBalance] = useState(0);
-  // const [open, setOpen] = useState(false);
   const history = useHistory();
   const [overview, setOverview] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
