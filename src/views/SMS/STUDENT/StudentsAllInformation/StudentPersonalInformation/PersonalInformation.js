@@ -283,8 +283,6 @@ const PersonalInformation = () => {
 
     if (e.target.value === "") {
       setexpireDateError("Expiry Date is required");
-    } else if (currentDate < value) {
-      setexpireDateError("Invalid date");
     } else if (value <= issueDate) {
       setexpireDateError("Expiry Date cannot same or previous date");
     } else {
