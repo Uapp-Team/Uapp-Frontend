@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Col, Row } from "reactstrap";
-import get from "../../../../../helpers/get";
 import DashboardCount from "../../../../../components/ui/DashboardCount";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import Uget from "../../../../../helpers/Uget";
 
 const CountingCards = ({ id, count, setCount }) => {
   return (
@@ -16,6 +13,7 @@ const CountingCards = ({ id, count, setCount }) => {
               value={count?.invited}
               bgColor="#E1F5FC"
               borderColor="#24A1CD"
+              link="/companion-Invitation"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">

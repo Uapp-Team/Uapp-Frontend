@@ -612,8 +612,9 @@ const EducationalInformation = () => {
                                   <span>Attended To</span>
                                   <br />
                                   <b>
-                                    {edu?.qualificationAchieved === true &&
-                                      dateFormate(edu?.attendedInstitutionTo)}
+                                    {edu?.qualificationAchieved === true
+                                      ? dateFormate(edu?.attendedInstitutionTo)
+                                      : "Continue..."}
                                   </b>
                                 </p>
                               </Col>
@@ -635,10 +636,15 @@ const EducationalInformation = () => {
                                   <br />
                                   <b>{edu?.duration}</b>
                                 </p>
+
                                 <p>
                                   <span>Result In Percentage</span>
                                   <br />
-                                  <b>{edu?.finalGrade}</b>
+                                  <b>
+                                    {edu?.qualificationAchieved === true
+                                      ? edu?.finalGrade
+                                      : "N/A"}
+                                  </b>
                                 </p>
                               </Col>
                               <Col md="3">

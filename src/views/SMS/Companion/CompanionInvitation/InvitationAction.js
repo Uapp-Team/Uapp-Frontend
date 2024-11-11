@@ -50,7 +50,7 @@ const InvitationAction = ({ text, email, data }) => {
                 <li className="list" key={i}>
                   <div class="text-green">{timeline?.date}</div>
                   <p className="mb-0">
-                    <b>{timeline?.status}</b>
+                    <b>{timeline?.status != 0 ? timeline?.status : ""}</b>
                   </p>
                   <span>{timeline?.note}</span>
                 </li>
