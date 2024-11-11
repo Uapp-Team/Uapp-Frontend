@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import ButtonForFunction from "../Components/ButtonForFunction";
 import Typing from "../../../components/form/Typing";
-import { useHistory } from "react-router";
 import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
 import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 import GroupButton from "../../../components/buttons/GroupButton";
 import Filter from "../../../components/Dropdown/Filter";
+import ISMDocuments from "./ISMDocuments";
 
 const ISM = () => {
   const [universityList, setUniversityList] = useState([]);
   const [uniTypeLabel, setUniTypeLabel] = useState("Select Type");
   const [uniTypeValue, setUniTypeValue] = useState(0);
-
+  const [uniValue, setUniValue] = useState(0);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [tab, setTab] = useState("1");
-  const history = useHistory();
 
   useEffect(() => {
     if (!isTyping) {
@@ -28,21 +26,21 @@ const ISM = () => {
     }
   }, [isTyping, searchStr]);
 
-  const handleManageQueries = () => {
-    history.push("/university-information-doc-faq");
-  };
-
   const redirectRoute = (item) => {
-    if (AdminUsers() || AdmissionUsers()) {
-      history.push(`/university-information-doc-faq-by-id/${item?.id}`, {
-        state: { name: item?.universityFullName, id: item?.id },
-      });
-    } else {
-      history.push(`/users-answer-for-fAQ/${item?.id}`, {
-        state: { name: item?.universityFullName, id: item?.id },
-      });
-    }
+    setUniValue(item?.id);
+    setTab("2");
   };
+  // const redirectRoute = (item) => {
+  //   if (AdminUsers() || AdmissionUsers()) {
+  //     history.push(`/university-information-doc-faq-by-id/${item?.id}`, {
+  //       state: { name: item?.universityFullName, id: item?.id },
+  //     });
+  //   } else {
+  //     history.push(`/users-answer-for-fAQ/${item?.id}`, {
+  //       state: { name: item?.universityFullName, id: item?.id },
+  //     });
+  //   }
+  // };
 
   return (
     <div>
@@ -160,7 +158,9 @@ const ISM = () => {
                 ))}
               </Row>
             </>
-          ) : null}
+          ) : (
+            <ISMDocuments uniValue={uniValue} setUniValue={setUniValue} />
+          )}
         </CardBody>
       </Card>
     </div>

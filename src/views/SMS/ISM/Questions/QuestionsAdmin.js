@@ -12,6 +12,7 @@ import SingleChoiceForm from "../Form/SingleChoiceForm";
 import MultiChoiceForm from "../Form/MultiChoiceForm";
 import Typing from "../../../../components/form/Typing";
 import { Col } from "react-bootstrap";
+import Answear from "../Components/Answear";
 
 const QuestionsAdmin = ({ categoryId }) => {
   const [success, setSuccess] = useState(false);
@@ -54,8 +55,12 @@ const QuestionsAdmin = ({ categoryId }) => {
           />
         </Col>
       </div>
-
       {data?.map((item, i) => (
+        <div key={i}>
+          <Answear defaultData={item} refetch={() => {}} />
+        </div>
+      ))}
+      {/* {data?.map((item, i) => (
         <div key={i}>
           {item?.questionType === QuestionType.SingleQuestion ? (
             <TextForm
@@ -89,7 +94,7 @@ const QuestionsAdmin = ({ categoryId }) => {
             />
           ) : null}
         </div>
-      ))}
+      ))} */}
 
       <Modal
         isOpen={modalOpen}
