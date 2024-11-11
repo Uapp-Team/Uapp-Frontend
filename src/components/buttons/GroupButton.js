@@ -17,7 +17,7 @@ const GroupButton = ({ list, value, setValue, action }) => {
               value === item?.id ? "bg-orange text-white" : "bg-white"
             }`}
           >
-            {item.name}
+            {item?.name}
           </button>
         ))}
       </div>

@@ -12,6 +12,7 @@ import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 import BackIcon from "../../../../components/buttons/BackIcon";
 import PreviewUniDocu from "../../../../components/ui/PreviewUniDocu";
 import { AiOutlineFileText } from "react-icons/ai";
+import Answear from "../Components/Answear";
 
 const UserViewUniversity = () => {
   const history = useHistory();
@@ -102,6 +103,10 @@ const UserViewUniversity = () => {
                 setValue={setCategoryId}
                 url="QuestionCategory/get-all"
                 className="mb-3"
+                action={() => {
+                  setSubCategoryName("Select Sub Category");
+                  setSubCategoryId(0);
+                }}
               />
             </Col>
             <Col md={3}>
@@ -128,9 +133,57 @@ const UserViewUniversity = () => {
           <hr />
 
           <Row>
-            <Col md={8}></Col>
+            <Col md={8}>
+              <div className="custom-card-border mb-3">
+                {/* <div className="d-flex justify-content-between align-items-center px-3 pt-3">
+                  <span className="section-title mr-5">
+                    {categoryName !== "Select Category" && categoryName}
+                    {subCategoryName !== "Select Sub Category" && " > "}
+                    {subCategoryName !== "Select Sub Category" &&
+                      subCategoryName}
+                  </span>
+
+                  <Typing
+                    placeholder="Search Documents"
+                    value={searchStr}
+                    setValue={setSearchStr}
+                    setIsTyping={setIsDocTyping}
+                  />
+                </div> */}
+
+                <Row className="px-3 pt-3 align-items-center">
+                  <Col>
+                    <span className="section-title mr-5 d-inline-block">
+                      {categoryName !== "Select Category" && categoryName}
+                      {subCategoryName !== "Select Sub Category" && " > "}
+                      {subCategoryName !== "Select Sub Category" &&
+                        subCategoryName}
+                    </span>
+                  </Col>
+                  <Col>
+                    <Typing
+                      placeholder="Search Documents"
+                      value={searchStr}
+                      setValue={setSearchStr}
+                      setIsTyping={setIsDocTyping}
+                    />
+                  </Col>
+                </Row>
+                <hr />
+                <div
+                  className="overflowY"
+                  style={{ height: "calc(100vh - 300px)" }}
+                >
+                  {answerData?.map((item, i) => (
+                    <div key={i}>
+                      <Answear defaultData={item} refetch={() => {}} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Col>
             <Col md={4}>
-              <div className="custom-card-border h-100 overflowY">
+              <div className="custom-card-border mb-3">
                 <div className="d-flex justify-content-between align-items-center px-3 pt-3">
                   <span className="section-title mr-5">Documents</span>
 
@@ -142,37 +195,23 @@ const UserViewUniversity = () => {
                   />
                 </div>
                 <hr />
-
-                {uniDocument?.map((item, i) => (
-                  <div
-                    key={i}
-                    className="px-3 py-2 d-flex justify-content-between"
-                  >
-                    <div className="d-flex">
-                      <AiOutlineFileText size={18} />
-                      <span className="ml-2">{item?.name}</span>
+                <div
+                  className="overflowY"
+                  style={{ height: "calc(100vh - 300px)" }}
+                >
+                  {uniDocument?.map((item, i) => (
+                    <div
+                      key={i}
+                      className="px-3 py-2 d-flex justify-content-between"
+                    >
+                      <div className="d-flex">
+                        <AiOutlineFileText size={18} />
+                        <span className="ml-2">{item?.name}</span>
+                      </div>
+                      {item?.url && <PreviewUniDocu file={item?.url} />}
                     </div>
-                    {item?.url && <PreviewUniDocu file={item?.url} />}
-                  </div>
-                ))}
-
-                {/* <span>
-                  const [isTyping, setIsTyping] = useState(false); const
-                  [isTyping, setIsTyping] = useState(false); const [isTyping,
-                  setIsTyping] = useState(false); const [isTyping, setIsTyping]
-                  = useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false); const [isTyping, setIsTyping] =
-                  useState(false);
-                </span> */}
+                  ))}
+                </div>
               </div>
             </Col>
           </Row>
