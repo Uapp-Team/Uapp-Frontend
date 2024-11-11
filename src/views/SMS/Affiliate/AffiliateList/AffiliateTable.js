@@ -246,10 +246,12 @@ const AffiliateTable = ({
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
-                      className="Count-third-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/affiliate-team-List/${affiliate?.id}`);
-                      // }}
+                      className="Count-third"
+                      onClick={() => {
+                        history.push(
+                          `/ApplicationListByAffiliate/${affiliate?.id}`
+                        );
+                      }}
                     >
                       {affiliate?.totalApplicationCount}
                     </span>
@@ -261,9 +263,11 @@ const AffiliateTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fourth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/affiliate-team-List/${affiliate?.id}`);
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/affiliate-applications/${2}/${3}/${affiliate?.id}`
+                        );
+                      }}
                     >
                       {affiliate?.totalRegisteredApplicationCount}
                     </span>

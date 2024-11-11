@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState, useRef } from "react";
 import {
   Card,
@@ -40,6 +41,7 @@ const ApplicationsCommon = () => {
   const componentRef = useRef();
   const location = useLocation();
   const {
+    affiliateId,
     admId,
     adoId,
     branchId,
@@ -49,6 +51,8 @@ const ApplicationsCommon = () => {
     selector,
     intake,
     providerId,
+    companionId,
+    courseId,
   } = useParams();
 
   // Previous states get from session storage
@@ -81,6 +85,8 @@ const ApplicationsCommon = () => {
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [interviewDD, setInterviewDD] = useState([]);
   const [elptDD, setElptDD] = useState([]);
+  const [affiliateDD, setAffiliateDD] = useState([]);
+  const [companionDD, setCompanionDD] = useState([]);
   const [financeDD, setFinanceDD] = useState([]);
 
   const [branch, setBranch] = useState([]);
@@ -195,6 +201,21 @@ const ApplicationsCommon = () => {
   );
   const [elptValue, setElptValue] = useState(
     application?.elptValue ? application?.elptValue : 0
+  );
+  const [affiliateLabel, setAffiliateLabel] = useState(
+    application?.affiliateLabel ? application?.affiliateLabel : "Affiliate"
+  );
+  const [affiliateValue, setAffiliateValue] = useState(
+    affiliateId ? affiliateId : 0
+  );
+  // const [affiliateValue, setAffiliateValue] = useState(
+  //   application?.affiliateValue ? application?.affiliateValue : 0
+  // );
+  const [companionLabel, setCompanionLabel] = useState(
+    application?.companionLabel ? application?.companionLabel : "Companion"
+  );
+  const [companionValue, setCompanionValue] = useState(
+    companionId ? companionId : 0
   );
   const [financeLabel, setFinanceLabel] = useState(
     application?.financeLabel ? application?.financeLabel : "SLCs"
@@ -312,6 +333,10 @@ const ApplicationsCommon = () => {
         interviewValue: interviewValue && interviewValue,
         elptLabel: elptLabel && elptLabel,
         elptValue: elptValue && elptValue,
+        affiliateLabel: !affiliateId && affiliateLabel && affiliateLabel,
+        affiliateValue: !affiliateId && affiliateValue && affiliateValue,
+        companionLabel: !companionId && companionLabel && companionLabel,
+        companionValue: !companionId && companionValue && companionValue,
         financeLabel: financeLabel && financeLabel,
         financeValue: financeValue && financeValue,
         commonUniLabel: commonUniLabel && commonUniLabel,
@@ -360,6 +385,10 @@ const ApplicationsCommon = () => {
     interviewValue,
     elptLabel,
     elptValue,
+    affiliateValue,
+    affiliateLabel,
+    companionLabel,
+    companionValue,
     financeLabel,
     financeValue,
     commonUniLabel,
@@ -378,6 +407,8 @@ const ApplicationsCommon = () => {
     selector,
     intake,
     providerId,
+    companionId,
+    affiliateId,
     admId,
     adoId,
     branchId,
@@ -413,6 +444,14 @@ const ApplicationsCommon = () => {
   const elptMenu = elptDD.map((elpt) => ({
     label: elpt?.name,
     value: elpt?.id,
+  }));
+  const affiliateMenu = affiliateDD.map((affiliate) => ({
+    label: affiliate?.name,
+    value: affiliate?.id,
+  }));
+  const companionMenu = companionDD.map((companion) => ({
+    label: companion?.name,
+    value: companion?.id,
   }));
 
   const admissionManagerMenu = admissionManagerDD.map((admissionManager) => ({
@@ -510,6 +549,15 @@ const ApplicationsCommon = () => {
   const selectElptDD = (label, value) => {
     setElptLabel(label);
     setElptValue(value);
+  };
+
+  const selectAffiliateDD = (label, value) => {
+    setAffiliateLabel(label);
+    setAffiliateValue(value);
+  };
+  const selectCompanionDD = (label, value) => {
+    setCompanionLabel(label);
+    setCompanionValue(value);
   };
 
   const selectAdmissionManagerDD = (label, value) => {
@@ -635,6 +683,22 @@ const ApplicationsCommon = () => {
     get("ElptStatusDD/Index").then((res) => {
       setElptDD(res);
     });
+
+    get("affiliateDD").then((res) => {
+      setAffiliateDD(res);
+      if (affiliateId) {
+        const result = res?.find((ans) => ans.id.toString() === affiliateId);
+        setAffiliateLabel(result?.name);
+      }
+    });
+    get("companionDD").then((res) => {
+      setCompanionDD(res);
+      if (companionId) {
+        const result = res?.find((ans) => ans.id.toString() === companionId);
+        setCompanionLabel(result?.name);
+      }
+    });
+
     get("StudentFinanceStatusDD/Index").then((res) => {
       setFinanceDD(res);
     });
@@ -668,6 +732,8 @@ const ApplicationsCommon = () => {
     universityId,
     status,
     selector,
+    affiliateId,
+    companionId,
     admId,
     adoId,
     success,
@@ -722,7 +788,7 @@ const ApplicationsCommon = () => {
             setEntity(res?.totalEntity);
           })
         : get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&adoId=${admissionOfficerValue}`
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${courseId}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -744,6 +810,8 @@ const ApplicationsCommon = () => {
     intakeRngValue,
     interviewValue,
     elptValue,
+    affiliateValue,
+    companionValue,
     financeValue,
     orderValue,
     success,
@@ -832,6 +900,10 @@ const ApplicationsCommon = () => {
     !providerId && setProValue(0);
     !admId && setAdmissionManagerLabel("Admission Manager");
     !admId && setAdmissionManagerValue(0);
+    !affiliateId && setAffiliateLabel("Affiliate");
+    !affiliateId && setAffiliateValue(0);
+    !companionId && setCompanionLabel("Companion");
+    !companionId && setCompanionValue(0);
     !adoId && setAdmissionOfficerLabel("Admission Officer");
     !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
@@ -1201,6 +1273,29 @@ const ApplicationsCommon = () => {
                     action={() => {}}
                   />
                 </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={affiliateMenu}
+                    value={{ label: affiliateLabel, value: affiliateValue }}
+                    onChange={(opt) => selectAffiliateDD(opt.label, opt.value)}
+                    placeholder="Affiliate"
+                    name="name"
+                    id="id"
+                    isDisabled={affiliateId ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={companionMenu}
+                    value={{ label: companionLabel, value: companionValue }}
+                    onChange={(opt) => selectCompanionDD(opt.label, opt.value)}
+                    placeholder="companion"
+                    name="name"
+                    id="id"
+                    isDisabled={companionId ? true : false}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -1229,6 +1324,16 @@ const ApplicationsCommon = () => {
                   admissionManagerValue={admissionManagerValue}
                   setAdmissionManagerValue={setAdmissionManagerValue}
                   admId={admId}
+                  affiliateLabel={affiliateLabel}
+                  setAffiliateLabel={setAffiliateLabel}
+                  affiliateValue={affiliateValue}
+                  setAffiliateValue={setAffiliateValue}
+                  affiliateId={affiliateId}
+                  companionLabel={companionLabel}
+                  setCompanionLabel={setCompanionLabel}
+                  companionValue={companionValue}
+                  setCompanionValue={setCompanionValue}
+                  companionId={companionId}
                   commonUappIdValue={commonUappIdValue}
                   commonStdValue={commonStdValue}
                   consultantValue={consultantValue}
@@ -1302,7 +1407,10 @@ const ApplicationsCommon = () => {
                   branchManagerValue !== 0 ||
                   documentStatusValue !== 0 ||
                   (!providerId && proValue !== 0) ||
-                  (!admId && admissionManagerValue !== 0) ? (
+                  (!admId && admissionManagerValue !== 0) ||
+                  (!affiliateId && affiliateValue !== 0) ||
+                  (!adoId && admissionOfficerValue !== 0) ||
+                  (!companionId && companionValue !== 0) ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>

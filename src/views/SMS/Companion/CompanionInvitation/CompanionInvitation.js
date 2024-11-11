@@ -265,15 +265,14 @@ const CompanionInvitation = () => {
                     </tbody>
                   </Table>
                 </div>
-
-                <Pagination
-                  dataPerPage={dataPerPage}
-                  totalData={entity}
-                  paginate={paginate}
-                  currentPage={currentPage}
-                />
               </>
             )}
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
           </CardBody>
         </Card>
       )}
