@@ -36,6 +36,7 @@ import ConfirmModal from "../../../components/modal/ConfirmModal.js";
 import { Link } from "react-router-dom";
 import ColumnUniversity from "../TableColumn/ColumnUniversity.js";
 import Typing from "../../../components/form/Typing.js";
+import Filter from "../../../components/Dropdown/Filter.js";
 
 const UniversityList = (props) => {
   const UniversityPaging = JSON.parse(sessionStorage.getItem("university"));
@@ -109,6 +110,16 @@ const UniversityList = (props) => {
   const [providerValue, setProviderValue] = useState(
     UniversityPaging?.providerValue ? UniversityPaging?.providerValue : 0
   );
+
+  const [branchLabel, setBranchLabel] = useState(
+    UniversityPaging?.branchLabel
+      ? UniversityPaging?.branchLabel
+      : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    UniversityPaging?.branchValue ? UniversityPaging?.branchValue : 0
+  );
+
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column
@@ -145,6 +156,14 @@ const UniversityList = (props) => {
     !tableColumnUniversity && setTableData(ColumnUniversity);
   }, []);
 
+  const [branch, setBranch] = useState([]);
+
+  useEffect(() => {
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
+  }, [setBranchLabel, setBranchValue]);
+
   useEffect(() => {
     sessionStorage.setItem(
       "university",
@@ -160,6 +179,8 @@ const UniversityList = (props) => {
         providerValue: providerValue && providerValue,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
@@ -178,6 +199,8 @@ const UniversityList = (props) => {
     orderValue,
     searchStr,
     dataPerPage,
+    branchLabel,
+    branchValue,
   ]);
 
   useEffect(() => {
@@ -214,48 +237,45 @@ const UniversityList = (props) => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       if (counId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
         ).then((action) => {
           setUniversityList(action?.models);
 
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else if (univerTypeId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
         ).then((action) => {
           setUniversityList(action?.models);
 
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else if (provideId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
         ).then((action) => {
           setUniversityList(action?.models);
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
         ).then((action) => {
           console.log("action", action);
           setUniversityList(action?.models);
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       }
     }
@@ -273,6 +293,7 @@ const UniversityList = (props) => {
     providerValue,
     success,
     isTyping,
+    branchValue,
   ]);
 
   const searchStateByCountry = (countryValue) => {
@@ -634,7 +655,19 @@ const UniversityList = (props) => {
                 </Col>
               ) : null}
 
-              <Col lg="4" md="4" sm="6" xs="6">
+              {branch.length > 1 && (
+                <Col lg="2" md="3" sm="6" xs="6">
+                  <Filter
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                  />
+                </Col>
+              )}
+
+              <Col lg="2" md="3" sm="6" xs="6">
                 <Typing
                   name="search"
                   placeholder="Name, Short Name"
@@ -1015,8 +1048,10 @@ const UniversityList = (props) => {
               </Col>
             </Row>
 
-            {universityList?.length === 0 ? (
+            {loading ? (
               <Loader />
+            ) : universityList?.length === 0 ? (
+              <h3 className="text-center my-4">No data Found</h3>
             ) : (
               <>
                 <div className="table-responsive fixedhead" ref={componentRef}>
@@ -1072,15 +1107,17 @@ const UniversityList = (props) => {
                           </>
                         ) : null}
 
+                        {tableData[10]?.isActive ? <th>Branch</th> : null}
+
                         {permissions?.includes(
                           permissionList?.Change_University_Status
                         ) ? (
                           <>
-                            {tableData[10]?.isActive ? <th>Status</th> : null}
+                            {tableData[11]?.isActive ? <th>Status</th> : null}
                           </>
                         ) : null}
 
-                        {tableData[11]?.isActive ? (
+                        {tableData[12]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -1275,11 +1312,15 @@ const UniversityList = (props) => {
                             </>
                           ) : null}
 
+                          {tableData[10]?.isActive ? (
+                            <td>{university?.branchName}</td>
+                          ) : null}
+
                           {permissions?.includes(
                             permissionList?.Change_University_Status
                           ) ? (
                             <>
-                              {tableData[10]?.isActive ? (
+                              {tableData[11]?.isActive ? (
                                 <td>
                                   <ToggleSwitch
                                     defaultChecked={university?.isActive}
@@ -1292,7 +1333,7 @@ const UniversityList = (props) => {
                             </>
                           ) : null}
 
-                          {tableData[11]?.isActive ? (
+                          {tableData[12]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(

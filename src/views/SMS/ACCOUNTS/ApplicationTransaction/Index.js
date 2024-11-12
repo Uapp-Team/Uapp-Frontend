@@ -101,6 +101,7 @@ const Index = () => {
   const [dataPerPage, setDataPerPage] = useState(
     appTransaction?.dataPerPage ? appTransaction?.dataPerPage : 15
   );
+
   const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // user select data per page
