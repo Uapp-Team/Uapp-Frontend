@@ -569,7 +569,7 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.nameOfInstitution}
+                                {edu?.educationLevel?.name}
                               </span>
 
                               <span>
@@ -622,7 +622,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.educationLevel?.name}</b>
+                                  <b> {edu?.nameOfInstitution}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
