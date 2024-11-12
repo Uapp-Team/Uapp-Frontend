@@ -747,7 +747,14 @@ const UniversitySubjectList = (props) => {
                         <td>
                           <div style={{ marginTop: "5px" }}>
                             {" "}
-                            <span className="Count-first-no-pointer">
+                            <span
+                              className="Count-first"
+                              onClick={() => {
+                                history.push(
+                                  `/ApplicationListByCourse/${sub?.id}`
+                                );
+                              }}
+                            >
                               {sub?.applicationCount}
                             </span>
                           </div>

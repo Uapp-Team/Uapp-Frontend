@@ -12,7 +12,6 @@ import {
   Row,
   Table,
 } from "reactstrap";
-import InvitationAction from "./InvitationAction";
 import Typing from "../../../../components/form/Typing";
 import { Filter } from "react-feather";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
@@ -28,9 +27,9 @@ import { useToasts } from "react-toast-notifications";
 import get from "../../../../helpers/get";
 import Loader from "../../Search/Loader/Loader";
 import { userTypes } from "../../../../constants/userTypeConstant";
-import Uget from "../../../../helpers/Uget";
+import { useParams } from "react-router";
 
-const CompanionInvitation = () => {
+const CompanionLeadList = () => {
   const { addToast } = useToasts();
 
   const referenceId = localStorage.getItem("referenceId");
@@ -53,23 +52,15 @@ const CompanionInvitation = () => {
   const [emailError, setEmailError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
-      console.log(res?.data);
-      setActive(res?.data);
-    });
-  }, [referenceId]);
-
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+  const { companionId } = useParams();
 
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}`
+        `companionInvitation/leads?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}&islead=${true}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);
@@ -86,6 +77,7 @@ const CompanionInvitation = () => {
     statusValue,
     toDate,
     success,
+    companionId,
   ]);
 
   const closeModal = () => {
@@ -131,7 +123,7 @@ const CompanionInvitation = () => {
   };
   return (
     <>
-      <BreadCrumb title="Invitation List" backTo="" path="/" />
+      <BreadCrumb title="Lead List" backTo="" path="/" />
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
           <div className="row">
@@ -155,22 +147,6 @@ const CompanionInvitation = () => {
                   settoDate(e.target.value);
                 }}
                 value={toDate}
-              />
-            </div>
-
-            <div className="col-md-3 mb-2">
-              <span>Status</span>
-
-              <DefaultDropdown
-                label={inStatusLable}
-                setLabel={setStatusLable}
-                value={statusValue}
-                setValue={setStatusValue}
-                url="InvitationStatusDD"
-                name="status"
-                error={() => {}}
-                setError={() => {}}
-                action={() => {}}
               />
             </div>
             <div className="col-md-3 mb-2">
@@ -202,16 +178,12 @@ const CompanionInvitation = () => {
                 style={{ marginBottom: "10px" }}
               >
                 {userTypeId === userTypes?.Companion.toString() ? (
-                  <>
-                    {active && (
-                      <LinkButton
-                        className={"btn btn-uapp-add "}
-                        name={"Invite"}
-                        icon={<i className="fas fa-plus"></i>}
-                        func={() => setModalOpen(true)}
-                      />
-                    )}
-                  </>
+                  <LinkButton
+                    className={"btn btn-uapp-add "}
+                    name={"Invite"}
+                    icon={<i className="fas fa-plus"></i>}
+                    func={() => setModalOpen(true)}
+                  />
                 ) : null}
               </Col>
 
@@ -225,41 +197,29 @@ const CompanionInvitation = () => {
                 </div>
               </Col>
             </Row>
-            {!data ? (
-              <p className="text-center">No Recent invitations</p>
+            {data?.length === 0 ? (
+              <h4 className="text-center">No Data Found</h4>
             ) : (
               <>
                 <div className="table-responsive fixedhead mb-2">
                   <Table id="table-to-xls" className="table-sm table-bordered">
                     <thead className="tablehead">
                       <tr>
-                        <th>Date</th>
+                        <th>UAPP ID</th>
+                        <th>Full Name</th>
                         <th>Email</th>
-                        <th>Source</th>
-                        <th>University</th>
-                        <th>Course</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Phone</th>
+                        <th>UAPP Reg Date</th>
                       </tr>
                     </thead>
                     <tbody>
                       {data?.map((item, i) => (
                         <tr key={i} className="border-buttom">
-                          <td>{item?.date}</td>
+                          <td>{item?.uappId}</td>
+                          <td>{item?.fullName}</td>
                           <td>{item?.email}</td>
-                          <td>{item?.source}</td>
-                          <td>{item?.university} </td>
-                          <td>{item?.course}</td>
-                          <td>{item?.status}</td>
-                          <td className="text-id hover">
-                            <InvitationAction
-                              text={
-                                item?.statusId === 1 ? "Resend" : "Timeline"
-                              }
-                              email={item?.email}
-                              data={item?.companionInvitationTimeline}
-                            />
-                          </td>
+                          <td>{item?.phone} </td>
+                          <td>{item?.registrationDate}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -324,4 +284,4 @@ const CompanionInvitation = () => {
   );
 };
 
-export default CompanionInvitation;
+export default CompanionLeadList;

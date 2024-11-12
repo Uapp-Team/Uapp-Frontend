@@ -81,6 +81,7 @@ const CompanionTable = ({
             {tableData[5]?.isActive ? <th>Started</th> : null}
             {tableData[6]?.isActive ? <th>Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
             {tableData[7]?.isActive ? <th>Application</th> : null}
             {tableData[7]?.isActive ? <th>Registered</th> : null}
@@ -200,13 +201,27 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/companion-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(`/companion-lead-list/${companion?.id}`);
+                      }}
                     >
                       {companion?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-sixth-no-pointer"
+                      onClick={() => {
+                        history.push(
+                          `/companion-student-list/${companion?.id}`
+                        );
+                      }}
+                    >
+                      {companion?.studentCount}
                     </span>
                   </div>
                 </td>
@@ -231,10 +246,12 @@ const CompanionTable = ({
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
-                      className="Count-third-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/companion-team-List/${affiliate?.id}`);
-                      // }}
+                      className="Count-third"
+                      onClick={() => {
+                        history.push(
+                          `/ApplicationListByCompanion/${companion?.id}`
+                        );
+                      }}
                     >
                       {companion?.totalApplicationCount}
                     </span>
@@ -246,9 +263,11 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fourth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/companion-team-List/${affiliate?.id}`);
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/companion-applications/${2}/${3}/${companion?.id}`
+                        );
+                      }}
                     >
                       {companion?.totalRegisteredApplicationCount}
                     </span>
