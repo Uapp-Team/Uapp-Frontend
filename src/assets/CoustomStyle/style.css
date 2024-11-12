@@ -1927,8 +1927,9 @@ th {
   background: #dde4e3;
   position: fixed;
   z-index: 40;
-  width: 80vw;
+  width: calc(100vw - 260px);
   top: 75px;
+  margin-left: 15px;
   padding: 2rem 1rem 0 0;
 }
 

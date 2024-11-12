@@ -899,7 +899,7 @@ const PersonalInformation = () => {
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>
-                      Nationality
+                      Country Of Nationality
                     </span>
 
                     <Select
