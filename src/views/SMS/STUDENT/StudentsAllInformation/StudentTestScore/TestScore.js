@@ -996,7 +996,6 @@ const TestScore = () => {
   };
 
   const FormDuolingoValid = () => {
-    console.log(duolingoExamDate);
     var validation = true;
     if (duolingoLiteracy < 10 || duolingoLiteracy > 160) {
       validation = false;
