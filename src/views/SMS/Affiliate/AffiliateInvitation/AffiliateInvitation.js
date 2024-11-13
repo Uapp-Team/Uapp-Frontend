@@ -66,7 +66,7 @@ const AffiliateInvitation = () => {
   useEffect(() => {
     if (!isTyping) {
       get(
-        `AffiliateInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}`
+        `AffiliateInvitation/for-own?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);
