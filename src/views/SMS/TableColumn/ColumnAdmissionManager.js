@@ -40,10 +40,6 @@ const ColumnAdmissionManager = [
     isActive: true,
   },
   {
-    title: "Branch",
-    isActive: true,
-  },
-  {
     title: "Account Status",
     isActive: true,
   },

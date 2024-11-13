@@ -111,15 +111,6 @@ const UniversityList = (props) => {
     UniversityPaging?.providerValue ? UniversityPaging?.providerValue : 0
   );
 
-  const [branchLabel, setBranchLabel] = useState(
-    UniversityPaging?.branchLabel
-      ? UniversityPaging?.branchLabel
-      : "Select Branch"
-  );
-  const [branchValue, setBranchValue] = useState(
-    UniversityPaging?.branchValue ? UniversityPaging?.branchValue : 0
-  );
-
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column
@@ -156,14 +147,6 @@ const UniversityList = (props) => {
     !tableColumnUniversity && setTableData(ColumnUniversity);
   }, []);
 
-  const [branch, setBranch] = useState([]);
-
-  useEffect(() => {
-    get(`BranchDD/Index`).then((res) => {
-      setBranch(res);
-    });
-  }, [setBranchLabel, setBranchValue]);
-
   useEffect(() => {
     sessionStorage.setItem(
       "university",
@@ -179,8 +162,6 @@ const UniversityList = (props) => {
         providerValue: providerValue && providerValue,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
-        branchLabel: branchLabel && branchLabel,
-        branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
@@ -199,8 +180,6 @@ const UniversityList = (props) => {
     orderValue,
     searchStr,
     dataPerPage,
-    branchLabel,
-    branchValue,
   ]);
 
   useEffect(() => {
@@ -240,7 +219,7 @@ const UniversityList = (props) => {
       setLoading(true);
       if (counId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
         ).then((action) => {
           setUniversityList(action?.models);
 
@@ -250,7 +229,7 @@ const UniversityList = (props) => {
         });
       } else if (univerTypeId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${univerTypeId}&search=${searchStr}&orderId=${orderValue}`
         ).then((action) => {
           setUniversityList(action?.models);
 
@@ -260,7 +239,7 @@ const UniversityList = (props) => {
         });
       } else if (provideId !== undefined) {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${provideId}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
         ).then((action) => {
           setUniversityList(action?.models);
           setLoading(false);
@@ -269,7 +248,7 @@ const UniversityList = (props) => {
         });
       } else {
         get(
-          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}&branchid=${branchValue}`
+          `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${uniCountryValue}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
         ).then((action) => {
           console.log("action", action);
           setUniversityList(action?.models);
@@ -293,7 +272,6 @@ const UniversityList = (props) => {
     providerValue,
     success,
     isTyping,
-    branchValue,
   ]);
 
   const searchStateByCountry = (countryValue) => {
@@ -654,18 +632,6 @@ const UniversityList = (props) => {
                   />
                 </Col>
               ) : null}
-
-              {branch.length > 1 && (
-                <Col lg="2" md="3" sm="6" xs="6">
-                  <Filter
-                    data={branch}
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                  />
-                </Col>
-              )}
 
               <Col lg="2" md="3" sm="6" xs="6">
                 <Typing
@@ -1107,17 +1073,15 @@ const UniversityList = (props) => {
                           </>
                         ) : null}
 
-                        {tableData[10]?.isActive ? <th>Branch</th> : null}
-
                         {permissions?.includes(
                           permissionList?.Change_University_Status
                         ) ? (
                           <>
-                            {tableData[11]?.isActive ? <th>Status</th> : null}
+                            {tableData[10]?.isActive ? <th>Status</th> : null}
                           </>
                         ) : null}
 
-                        {tableData[12]?.isActive ? (
+                        {tableData[11]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -1312,15 +1276,11 @@ const UniversityList = (props) => {
                             </>
                           ) : null}
 
-                          {tableData[10]?.isActive ? (
-                            <td>{university?.branchName}</td>
-                          ) : null}
-
                           {permissions?.includes(
                             permissionList?.Change_University_Status
                           ) ? (
                             <>
-                              {tableData[11]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td>
                                   <ToggleSwitch
                                     defaultChecked={university?.isActive}
@@ -1333,7 +1293,7 @@ const UniversityList = (props) => {
                             </>
                           ) : null}
 
-                          {tableData[12]?.isActive ? (
+                          {tableData[11]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(

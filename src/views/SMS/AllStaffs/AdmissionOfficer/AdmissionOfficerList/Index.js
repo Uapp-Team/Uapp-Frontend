@@ -73,16 +73,7 @@ const Index = () => {
       ? AdmissionOfficerPaging?.proLabel
       : "Select Provider"
   );
-  const [branchLabel, setBranchLabel] = useState(
-    AdmissionOfficerPaging?.branchLabel
-      ? AdmissionOfficerPaging?.branchLabel
-      : "Select Branch"
-  );
-  const [branchValue, setBranchValue] = useState(
-    AdmissionOfficerPaging?.branchValue
-      ? AdmissionOfficerPaging?.branchValue
-      : 0
-  );
+
   const [proValue, setProValue] = useState(
     AdmissionOfficerPaging?.proValue ? AdmissionOfficerPaging?.proValue : 0
   );
@@ -113,8 +104,6 @@ const Index = () => {
         proValue: proValue && proValue,
         managerLabel: managerLabel && managerLabel,
         managerValue: managerValue && managerValue,
-        branchLabel: branchLabel && branchLabel,
-        branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
@@ -127,8 +116,6 @@ const Index = () => {
     managerValue,
     searchStr,
     dataPerPage,
-    branchLabel,
-    branchValue,
   ]);
 
   useEffect(() => {
@@ -180,7 +167,7 @@ const Index = () => {
     if (!isTyping) {
       if (providerId !== undefined && managerId !== undefined) {
         get(
-          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}&branchid=${branchValue}`
+          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}}`
         ).then((res) => {
           setOfficerList(res?.models);
           setEntity(res?.totalEntity);
@@ -189,7 +176,7 @@ const Index = () => {
         });
       } else {
         get(
-          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${proValue}&admissionmanagerId=${managerValue}&search=${searchStr}&branchid=${branchValue}`
+          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${proValue}&admissionmanagerId=${managerValue}&search=${searchStr}`
         ).then((res) => {
           setOfficerList(res?.models);
           setEntity(res?.totalEntity);
@@ -208,7 +195,6 @@ const Index = () => {
     success,
     proValue,
     isTyping,
-    branchValue,
   ]);
 
   useEffect(() => {
@@ -456,10 +442,6 @@ const Index = () => {
           managerValue={managerValue}
           selectManager={selectManager}
           managerId={managerId}
-          branchLabel={branchLabel}
-          setBranchLabel={setBranchLabel}
-          branchValue={branchValue}
-          setBranchValue={setBranchValue}
           searchStr={searchStr}
           searchValue={searchValue}
           handleKeyDown={handleKeyDown}

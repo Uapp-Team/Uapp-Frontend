@@ -27,6 +27,7 @@ import { permissionList } from "../../../constants/AuthorizationConstant";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
 import { userTypes } from "../../../constants/userTypeConstant";
+import Filter from "../../../components/Dropdown/Filter";
 
 const AllLoginHistory = () => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
@@ -51,15 +52,25 @@ const AllLoginHistory = () => {
 
   const { addToast } = useToasts();
 
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branch, setBranch] = useState([]);
+
+  useEffect(() => {
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
+  }, []);
+
   useEffect(() => {
     get(
-      `LoginHistory/IndexForSysAdmin?page=${currentPage}&pageSize=${dataPerPage}&Username=${searchStr}`
+      `LoginHistory/IndexForSysAdmin?page=${currentPage}&pageSize=${dataPerPage}&Username=${searchStr}&branchid=${branchValue}`
     ).then((res) => {
       setEntity(res?.totalEntity);
       setData(res?.models);
       setSerialNum(res?.firstSerialNumber);
     });
-  }, [currentPage, dataPerPage, callApi, searchStr, success]);
+  }, [currentPage, dataPerPage, callApi, searchStr, success, branchValue]);
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
@@ -175,7 +186,16 @@ const AllLoginHistory = () => {
           <Card className="uapp-employee-search">
             <CardBody className="search-card-body">
               <Row>
-                <Col lg="12" md="12" sm="12" xs="12">
+                <Col lg="6" md="6" sm="6" xs="6">
+                  <Filter
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                  />
+                </Col>
+                <Col lg="6" md="6" sm="6" xs="6">
                   <Input
                     style={{ height: "2.7rem" }}
                     type="text"
@@ -188,24 +208,6 @@ const AllLoginHistory = () => {
                   />
                 </Col>
               </Row>
-
-              {/* <Row className="">
-            <Col lg="12" md="12" sm="12" xs="12">
-              <div
-                style={{
-                  marginBottom: "10px",
-                  display: "flex",
-                  justifyContent: "end",
-                }}
-              >
-                <div className="mt-2 mx-1 d-flex btn-clear">
-                  <button className="tag-clear" onClick={handleClearSearch}>
-                    Clear All
-                  </button>
-                </div>
-              </div>
-            </Col>
-          </Row> */}
             </CardBody>
           </Card>
         </>
@@ -236,6 +238,7 @@ const AllLoginHistory = () => {
                   <th>Date</th>
                   <th>IP Address</th>
                   <th>Geolocation</th>
+                  <th>Branch </th>
                   <th>Blocked</th>
                   <th>Action</th>
                 </tr>
@@ -249,6 +252,8 @@ const AllLoginHistory = () => {
                     <td>{d?.lastLoginDate}</td>
                     <td>{d?.ipAddress}</td>
                     <td>{d?.geoLocationInfo}</td>
+                    <td>{d?.branchName}</td>
+
                     <td>
                       {d?.ipAddress !== "Not found" && d?.ipAddress !== "" ? (
                         <>

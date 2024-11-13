@@ -468,18 +468,17 @@ const AddMissionManagerAdd = ({
                         ) : null}
 
                         {tableData[9]?.isActive ? <th>Applications</th> : null}
-                        {tableData[10]?.isActive ? <th>Branch</th> : null}
 
                         {permissions?.includes(
                           permissionList?.AdmissionManager_Account_Status
                         ) ? (
                           <>
-                            {tableData[11]?.isActive ? (
+                            {tableData[10]?.isActive ? (
                               <th>Account Status</th>
                             ) : null}
                           </>
                         ) : null}
-                        {tableData[12]?.isActive ? (
+                        {tableData[11]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -676,15 +675,11 @@ const AddMissionManagerAdd = ({
                           ) : null}
                           {/* Applications ends here */}
 
-                          {tableData[10]?.isActive ? (
-                            <td>{manager?.branchName}</td>
-                          ) : null}
-
                           {permissions?.includes(
                             permissionList?.AdmissionManager_Account_Status
                           ) ? (
                             <>
-                              {tableData[11]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td>
                                   {
                                     <ToggleSwitch
@@ -703,7 +698,7 @@ const AddMissionManagerAdd = ({
                             </>
                           ) : null}
 
-                          {tableData[12]?.isActive ? (
+                          {tableData[121]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(

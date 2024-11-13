@@ -1,11 +1,9 @@
 import Select from "react-select";
-import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Input, Row } from "reactstrap";
+import React from "react";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import TagButton from "../../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../../components/form/Typing";
-import get from "../../../../../../helpers/get";
-import Filter from "../../../../../../components/Dropdown/Filter";
 
 const AddMissionManagerClear = ({
   userType,
@@ -14,10 +12,6 @@ const AddMissionManagerClear = ({
   providerLabel,
   providerValue,
   selectProvider,
-  branchLabel,
-  setBranchLabel,
-  branchValue,
-  setBranchValue,
   searchStr,
   searchValue,
   handleKeyDown,
@@ -28,14 +22,6 @@ const AddMissionManagerClear = ({
   setIsTyping,
   setSearchStr,
 }) => {
-  const [branch, setBranch] = useState([]);
-
-  useEffect(() => {
-    get(`BranchDD/Index`).then((res) => {
-      setBranch(res);
-    });
-  }, [setBranchLabel, setBranchValue]);
-
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
@@ -50,18 +36,6 @@ const AddMissionManagerClear = ({
                   name="providerId"
                   id="providerId"
                   isDisabled={providerId ? true : false}
-                />
-              </Col>
-            )}
-
-            {branch.length > 1 && (
-              <Col lg="6" md="6" sm="6" xs="12" className="mb-2">
-                <Filter
-                  data={branch}
-                  label={branchLabel}
-                  setLabel={setBranchLabel}
-                  value={branchValue}
-                  setValue={setBranchValue}
                 />
               </Col>
             )}
