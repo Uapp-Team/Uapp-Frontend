@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "reactstrap";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import get from "../../../../../helpers/get";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { Table } from "reactstrap";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
 
 const PersonalInformationCard = ({
   sId,
@@ -45,7 +45,11 @@ const PersonalInformationCard = ({
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Date of Birth</td>
 
-            <td>{dateFormate(studentDetails?.dateOfBirth)}</td>
+            <td>
+              {studentDetails?.dateOfBirth
+                ? dateFormate(studentDetails?.dateOfBirth)
+                : ""}
+            </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Nationality</td>

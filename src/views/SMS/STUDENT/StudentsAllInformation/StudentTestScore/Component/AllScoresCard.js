@@ -1,16 +1,6 @@
 import React from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  Col,
-  FormGroup,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  Row,
-} from "reactstrap";
-import ButtonLoader from "../../../../Components/ButtonLoader";
+import { Card, CardBody, Col, FormGroup, Row } from "reactstrap";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 import ConfirmModal from "../../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
@@ -117,7 +107,7 @@ const AllScoresCard = ({
                   <p>
                     <span>Exam Date</span>
                     <br />
-                    <b> {handleDate(ielts?.examDate)}</b>
+                    <b> {dateFormate(ielts?.examDate)}</b>
                   </p>
                 </Col>
                 <Col lg="3"></Col>
@@ -662,7 +652,7 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-        isQualification === false ? (
+      isQualification === false ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (
