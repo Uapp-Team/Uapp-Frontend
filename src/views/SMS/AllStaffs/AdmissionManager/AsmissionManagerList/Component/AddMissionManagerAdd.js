@@ -698,7 +698,7 @@ const AddMissionManagerAdd = ({
                             </>
                           ) : null}
 
-                          {tableData[121]?.isActive ? (
+                          {tableData[11]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(

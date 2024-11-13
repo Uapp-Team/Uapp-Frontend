@@ -86,13 +86,15 @@ const AffiliateTable = ({
             {tableData[7]?.isActive ? <th>Registered</th> : null}
             {tableData[8]?.isActive ? <th>Status</th> : null}
 
+            {tableData[9]?.isActive ? <th>Branch</th> : null}
+
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[9]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[10]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[10]?.isActive ? (
+            {tableData[11]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -277,11 +279,14 @@ const AffiliateTable = ({
               {tableData[8]?.isActive ? (
                 <td>{affiliate?.accountStatus}</td>
               ) : null}
+
+              {tableData[9]?.isActive ? <td>{affiliate?.branchName}</td> : null}
+
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[9]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!affiliate?.isActive}
@@ -292,7 +297,7 @@ const AffiliateTable = ({
                 </>
               ) : null}
 
-              {tableData[10]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}

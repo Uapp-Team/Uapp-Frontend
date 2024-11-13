@@ -21,6 +21,7 @@ import Pagination from "../../Pagination/Pagination";
 import Uget from "../../../../helpers/Uget";
 import Uremove from "../../../../helpers/Uremove";
 import Loader from "../../Search/Loader/Loader";
+import Filter from "../../../../components/Dropdown/Filter";
 
 const AffiliateList = () => {
   const userType = localStorage.getItem("userType");
@@ -51,8 +52,9 @@ const AffiliateList = () => {
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
-
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
   const [entity, setEntity] = useState(0);
 
   const [serialNum, setSerialNum] = useState(0);
@@ -98,9 +100,9 @@ const AffiliateList = () => {
   };
 
   useEffect(() => {
-    // get(`BranchDD/Index`).then((res) => {
-    //   setBranch(res);
-    // });
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
     get("consultantdd/ActiveConsultant").then((res) => {
       setConsultant(res);
     });
@@ -113,7 +115,7 @@ const AffiliateList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Affiliate/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}`
+        `Affiliate/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
       ).then((res) => {
         console.log(res);
         setAffiliateList(res?.items);
@@ -131,6 +133,7 @@ const AffiliateList = () => {
     success,
     isTyping,
     consultantValue,
+    branchValue,
   ]);
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
@@ -314,8 +317,20 @@ const AffiliateList = () => {
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
           <Row>
+            {branch.length > 1 && (
+              <Col className="uapp-mb mb-2" md="3" sm="12">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                />
+              </Col>
+            )}
+
             {adminPermission && (
-              <Col className="uapp-mb mb-2" md="4" sm="12">
+              <Col className="uapp-mb mb-2" md="3" sm="12">
                 <Select
                   options={consultantName}
                   value={{
@@ -329,7 +344,7 @@ const AffiliateList = () => {
               </Col>
             )}
 
-            <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Col className="uapp-mb mb-2" md="3" sm="12">
               <Select
                 options={statusTypeMenu}
                 value={{
@@ -343,7 +358,7 @@ const AffiliateList = () => {
               />
             </Col>
 
-            <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Col className="uapp-mb mb-2" md="3" sm="12">
               <Typing
                 name="search"
                 placeholder="Id, Name, Email"
