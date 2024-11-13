@@ -191,12 +191,12 @@ const Branch = () => {
     if (data === "") {
       setbranchCodeError("Branch Code required");
     } else {
-      Uget(`Branch/check-branch-code-duplication?&branchCode=${data}`).then(
+      get(`Branch/check-branch-code-duplication?&branchCode=${data}`).then(
         (res) => {
           console.log(res, "vai plz");
 
-          setBranchExistError(res?.data);
-          if (!branchExistError) {
+          setBranchExistError(res);
+          if (res) {
             setbranchCodeError("Branch code already exists");
           } else {
             setbranchCodeError("");
