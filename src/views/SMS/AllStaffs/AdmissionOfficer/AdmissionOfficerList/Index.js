@@ -73,6 +73,7 @@ const Index = () => {
       ? AdmissionOfficerPaging?.proLabel
       : "Select Provider"
   );
+
   const [proValue, setProValue] = useState(
     AdmissionOfficerPaging?.proValue ? AdmissionOfficerPaging?.proValue : 0
   );
@@ -166,7 +167,7 @@ const Index = () => {
     if (!isTyping) {
       if (providerId !== undefined && managerId !== undefined) {
         get(
-          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}`
+          `AdmissionOfficer/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerId}&admissionmanagerId=${managerId}&search=${searchStr}}`
         ).then((res) => {
           setOfficerList(res?.models);
           setEntity(res?.totalEntity);

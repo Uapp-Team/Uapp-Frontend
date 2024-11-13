@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
 import TagButton from "../../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../../components/form/Typing";
+import get from "../../../../../../helpers/get";
+import Filter from "../../../../../../components/Dropdown/Filter";
 
 const SelectAndClear = ({
   userType,
@@ -29,8 +31,6 @@ const SelectAndClear = ({
   setIsTyping,
   setSearchStr,
 }) => {
-  // console.log(proValue);
-  // console.log(managerValue);
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
@@ -66,7 +66,7 @@ const SelectAndClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

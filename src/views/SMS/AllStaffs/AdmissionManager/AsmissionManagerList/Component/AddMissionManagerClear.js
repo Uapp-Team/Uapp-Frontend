@@ -1,6 +1,6 @@
 import Select from "react-select";
 import React from "react";
-import { Card, CardBody, Col, Input, Row } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import TagButton from "../../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../../components/form/Typing";
@@ -44,7 +44,7 @@ const AddMissionManagerClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

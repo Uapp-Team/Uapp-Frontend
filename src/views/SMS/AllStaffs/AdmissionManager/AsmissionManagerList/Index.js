@@ -1,5 +1,4 @@
-import React, { useEffect, useState, Component, useRef } from "react";
-import { Card, CardHeader } from "reactstrap";
+import React, { useEffect, useState, useRef } from "react";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { useHistory } from "react-router";
 import get from "../../../../../helpers/get";
@@ -8,8 +7,6 @@ import remove from "../../../../../helpers/remove";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import put from "../../../../../helpers/put";
 import post from "../../../../../helpers/post";
-import loader from "../../../../../assets/img/load.gif";
-import { tableIdList } from "../../../../../constants/TableIdConstant";
 import AddMissionManagerClear from "./Component/AddMissionManagerClear";
 import AddMissionManagerAdd from "./Component/AddMissionManagerAdd";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
@@ -57,6 +54,7 @@ const Index = () => {
       ? AdmissionManagerPaging?.providerValue
       : 0
   );
+
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
   const [providerValue2, setProviderValue2] = useState(0);
   const [providerError, setProviderError] = useState(false);

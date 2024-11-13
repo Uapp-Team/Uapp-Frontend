@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useToasts } from "react-toast-notifications";
 import post from "../../../../../helpers/post";
 import Input from "../../../../../components/form/Input";
-import DDByAppUrl from "../../../../../components/form/DDByAppUrl";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import get from "../../../../../helpers/get";
 
@@ -37,7 +36,7 @@ const ConvertBranchManager = ({ id }) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    // formState: { errors },
   } = useForm({
     defaultData: defaultData,
     resolver: yupResolver(schema),
@@ -69,18 +68,21 @@ const ConvertBranchManager = ({ id }) => {
 
   return (
     <>
-      {!data?.isBranchManager && data?.isEmployee && (
-        <div className={"custom-card-border p-4 mb-3"}>
-          <h5 className="mb-3">Assign {data?.name} as a Branch Manager </h5>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              type="hidden"
-              name="id"
-              register={register}
-              defaultValue={defaultData.id}
-            />
+      {!data?.isBranchManager &&
+        data?.isEmployee &&
+        data?.isActive &&
+        data?.isConsentSigned && (
+          <div className={"custom-card-border p-4 mb-3"}>
+            <h5 className="mb-3">Assign {data?.name} as a Branch Manager </h5>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Input
+                type="hidden"
+                name="id"
+                register={register}
+                defaultValue={defaultData.id}
+              />
 
-            {/* <DDByAppUrl
+              {/* <DDByAppUrl
           register={register}
           label=""
           placeholder="Select a Branch"
@@ -91,10 +93,13 @@ const ConvertBranchManager = ({ id }) => {
           action={() => {}}
         /> */}
 
-            <SaveButton text="Assign Branch Manager" buttonStatus={isSubmit} />
-          </Form>
-        </div>
-      )}
+              <SaveButton
+                text="Assign Branch Manager"
+                buttonStatus={isSubmit}
+              />
+            </Form>
+          </div>
+        )}
     </>
   );
 };

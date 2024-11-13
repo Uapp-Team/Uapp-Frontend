@@ -174,14 +174,21 @@ const AddmissionOfficerTable = ({
                       ) : null}
                     </>
                   ) : null}
+
+                  {tableData[7]?.isActive ? (
+                    <th>Registered Applications</th>
+                  ) : null}
+
+                  {tableData[8]?.isActive ? <th>Applications</th> : null}
+
                   {permissions?.includes(
                     permissionList.AdmissionOfficer_Account_Status
                   ) ? (
                     <>
-                      {tableData[7]?.isActive ? <th>Account Status</th> : null}
+                      {tableData[9]?.isActive ? <th>Account Status</th> : null}
                     </>
                   ) : null}
-                  {tableData[8]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <th style={{ width: "8%" }} className="text-center">
                       Action
                     </th>
@@ -286,6 +293,7 @@ const AddmissionOfficerTable = ({
                         ) : null}
                       </>
                     ) : null}
+
                     {permissions?.includes(
                       permissionList.AdmissionOfficer_Assign_Subject
                     ) ? (
@@ -307,11 +315,48 @@ const AddmissionOfficerTable = ({
                       </>
                     ) : null}
 
+                    {tableData[7]?.isActive ? (
+                      <td>
+                        <div style={{ marginTop: "5px" }}>
+                          <span
+                            onClick={() => {
+                              history.push(
+                                `/admission-officer-applications/${2}/${3}/${
+                                  officer?.id
+                                }`
+                              );
+                            }}
+                            className="Count-second"
+                          >
+                            {officer?.registeredCount}
+                          </span>
+                        </div>
+                      </td>
+                    ) : null}
+
+                    {/* Applications starts here */}
+                    {tableData[8]?.isActive ? (
+                      <td>
+                        <div style={{ marginTop: "5px" }}>
+                          <span
+                            onClick={() => {
+                              history.push(
+                                `/ApplicationListByAdmissionOfficer/${officer?.id}`
+                              );
+                            }}
+                            className="Count-third"
+                          >
+                            {officer?.applicationCount}
+                          </span>
+                        </div>
+                      </td>
+                    ) : null}
+
                     {permissions?.includes(
                       permissionList.AdmissionOfficer_Account_Status
                     ) ? (
                       <>
-                        {tableData[7]?.isActive ? (
+                        {tableData[9]?.isActive ? (
                           <td>
                             {
                               <ToggleSwitch
@@ -328,7 +373,7 @@ const AddmissionOfficerTable = ({
                       </>
                     ) : null}
 
-                    {tableData[8]?.isActive ? (
+                    {tableData[10]?.isActive ? (
                       <td style={{ width: "8%" }} className="text-center">
                         <ButtonGroup variant="text">
                           {permissions?.includes(
