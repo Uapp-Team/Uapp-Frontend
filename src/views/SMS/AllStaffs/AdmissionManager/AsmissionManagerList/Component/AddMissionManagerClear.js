@@ -44,7 +44,7 @@ const AddMissionManagerClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}
