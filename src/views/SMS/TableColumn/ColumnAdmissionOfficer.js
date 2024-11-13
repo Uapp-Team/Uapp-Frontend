@@ -35,6 +35,7 @@ const ColumnAdmissionOfficer = [
     title: "Applications",
     isActive: true,
   },
+
   {
     title: "Account Status",
     isActive: true,

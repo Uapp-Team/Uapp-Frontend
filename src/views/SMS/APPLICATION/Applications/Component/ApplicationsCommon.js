@@ -1558,7 +1558,7 @@ const ApplicationsCommon = () => {
               ) : (
                 <>
                   {applicationList?.length === 0 ? (
-                    <h4 className="text-center">No Data Found</h4>
+                    <h4 className="text-center my-4">No Data Found</h4>
                   ) : (
                     <>
                       {loading ? (

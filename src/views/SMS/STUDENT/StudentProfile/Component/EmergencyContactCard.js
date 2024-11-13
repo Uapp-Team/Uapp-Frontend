@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import get from "../../../../../helpers/get";
 
@@ -17,9 +17,22 @@ const EmergencyContactCard = ({
     });
   }, [sId, setEmergencyContactList]);
 
-  console.log(emergencyContactList);
   return (
     <>
+      <Table>
+        <thead className="tablehead">
+          <td className="border-0">
+            <b>Emergency Contact Information</b>
+          </td>
+          <td className="border-0 text-right">
+            {permissions?.includes(permissionList?.Edit_Student) ? (
+              <Link to={`/addStudentEmergencyInformation/${sId}/${1}`}>
+                Edit
+              </Link>
+            ) : null}
+          </td>
+        </thead>
+      </Table>
       {emergencyContactList?.length > 0 &&
         emergencyContactList?.map((contact, i) => (
           <div
@@ -33,12 +46,6 @@ const EmergencyContactCard = ({
                   <span className="card-heading">
                     Emergency Contact {i + 1}
                   </span>
-                  {permissions?.includes(permissionList?.Edit_Student) &&
-                  activity ? (
-                    <Link to={`/addStudentEmergencyInformation/${sId}/${1}`}>
-                      Edit
-                    </Link>
-                  ) : null}
                 </div>
                 <hr />
                 <Row className="text-gray">
@@ -77,7 +84,7 @@ const EmergencyContactCard = ({
                     <p>
                       <span>Country</span>
                       <br />
-                      <b> {contact?.country?.name}</b>
+                      <b> {contact?.countryName}</b>
                     </p>
                   </Col>
                 </Row>

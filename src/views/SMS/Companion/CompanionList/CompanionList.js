@@ -21,6 +21,7 @@ import CompanionColumnHide from "./CompanionColumnHide";
 import CompanionTable from "./CompanionTable";
 import Uremove from "../../../../helpers/Uremove";
 import Loader from "../../Search/Loader/Loader";
+import Filter from "../../../../components/Dropdown/Filter";
 
 const CompanionList = () => {
   const userType = localStorage.getItem("userType");
@@ -51,20 +52,14 @@ const CompanionList = () => {
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
+  // // const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
 
-  const [empValue, setEmpValue] = useState(
-    ConsultantPaging?.empValue ? ConsultantPaging?.empValue : 0
-  );
+  // const [empValue, setEmpValue] = useState(
+  //   ConsultantPaging?.empValue ? ConsultantPaging?.empValue : 0
+  // );
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState(
-    ConsultantPaging?.branchLabel
-      ? ConsultantPaging?.branchLabel
-      : "Select Branch"
-  );
-  const [branchValue, setBranchValue] = useState(
-    ConsultantPaging?.branchValue ? ConsultantPaging?.branchValue : 0
-  );
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
 
   const [entity, setEntity] = useState(0);
 
@@ -111,9 +106,9 @@ const CompanionList = () => {
   };
 
   useEffect(() => {
-    // get(`BranchDD/Index`).then((res) => {
-    //   setBranch(res);
-    // });
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
 
     get("consultantdd/ActiveConsultant").then((res) => {
       setConsultant(res);
@@ -127,7 +122,7 @@ const CompanionList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Companion/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}`
+        `Companion/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
       ).then((res) => {
         console.log(res);
         setCompanionList(res?.items);
@@ -145,6 +140,7 @@ const CompanionList = () => {
     success,
     isTyping,
     consultantValue,
+    branchValue,
   ]);
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
@@ -328,8 +324,20 @@ const CompanionList = () => {
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
           <Row>
+            {branch.length > 1 && (
+              <Col className="uapp-mb mb-2" md="3" sm="12">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                />
+              </Col>
+            )}
+
             {adminPermission && (
-              <Col className="uapp-mb mb-2" md="4" sm="12">
+              <Col className="uapp-mb mb-2" md="3" sm="12">
                 <Select
                   options={consultantName}
                   value={{
@@ -342,7 +350,7 @@ const CompanionList = () => {
                 />
               </Col>
             )}
-            <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Col className="uapp-mb mb-2" md="3" sm="12">
               <Select
                 options={statusTypeMenu}
                 value={{
@@ -356,7 +364,7 @@ const CompanionList = () => {
               />
             </Col>
 
-            <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Col className="uapp-mb mb-2" md="3" sm="12">
               <Typing
                 name="search"
                 placeholder="Id, Name, Email"

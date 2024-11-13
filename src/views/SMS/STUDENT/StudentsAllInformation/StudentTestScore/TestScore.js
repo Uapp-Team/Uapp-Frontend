@@ -965,19 +965,19 @@ const TestScore = () => {
 
   const FormIELTSValid = () => {
     var validation = true;
-    if (ieltsSpeaking === "" || ieltsSpeaking < 0 || ieltsSpeaking > 9) {
+    if (ieltsSpeaking === "" || ieltsSpeaking <= 0 || ieltsSpeaking > 9) {
       validation = false;
       setIeltsSpeakingError(true);
     }
-    if (ieltsReading === "" || ieltsReading < 0 || ieltsReading > 9) {
+    if (ieltsReading === "" || ieltsReading <= 0 || ieltsReading > 9) {
       validation = false;
       setIeltsReadingError(true);
     }
-    if (ieltsWriting === "" || ieltsWriting < 0 || ieltsWriting > 9) {
+    if (ieltsWriting === "" || ieltsWriting <= 0 || ieltsWriting > 9) {
       validation = false;
       setIeltsWritingError(true);
     }
-    if (ieltsListening === "" || ieltsListening < 0 || ieltsListening > 9) {
+    if (ieltsListening === "" || ieltsListening <= 0 || ieltsListening > 9) {
       validation = false;
       setIeltsListeningError(true);
     }
@@ -987,7 +987,7 @@ const TestScore = () => {
       setIeltsExamDateError("Exam Date is required");
     }
 
-    if (ieltsOverall === "" || ieltsOverall < 0 || ieltsOverall > 9) {
+    if (ieltsOverall === "" || ieltsOverall <= 0 || ieltsOverall > 9) {
       validation = false;
       setIeltsOverallError(true);
     }
@@ -996,7 +996,6 @@ const TestScore = () => {
   };
 
   const FormDuolingoValid = () => {
-    console.log(duolingoExamDate);
     var validation = true;
     if (duolingoLiteracy < 10 || duolingoLiteracy > 160) {
       validation = false;

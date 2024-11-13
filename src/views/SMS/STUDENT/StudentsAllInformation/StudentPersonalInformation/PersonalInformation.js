@@ -283,8 +283,6 @@ const PersonalInformation = () => {
 
     if (e.target.value === "") {
       setexpireDateError("Expiry Date is required");
-    } else if (currentDate < value) {
-      setexpireDateError("Invalid date");
     } else if (value <= issueDate) {
       setexpireDateError("Expiry Date cannot same or previous date");
     } else {
@@ -901,7 +899,7 @@ const PersonalInformation = () => {
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>
-                      Nationality
+                      Country Of Nationality
                     </span>
 
                     <Select

@@ -569,7 +569,7 @@ const EducationalInformation = () => {
                           <CardBody>
                             <div className="d-flex justify-content-between">
                               <span className="card-heading">
-                                {edu?.nameOfInstitution}
+                                {edu?.educationLevel?.name}
                               </span>
 
                               <span>
@@ -612,8 +612,9 @@ const EducationalInformation = () => {
                                   <span>Attended To</span>
                                   <br />
                                   <b>
-                                    {edu?.qualificationAchieved === true &&
-                                      dateFormate(edu?.attendedInstitutionTo)}
+                                    {edu?.qualificationAchieved === true
+                                      ? dateFormate(edu?.attendedInstitutionTo)
+                                      : "Continue..."}
                                   </b>
                                 </p>
                               </Col>
@@ -621,7 +622,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.educationLevel?.name}</b>
+                                  <b> {edu?.nameOfInstitution}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
@@ -635,10 +636,15 @@ const EducationalInformation = () => {
                                   <br />
                                   <b>{edu?.duration}</b>
                                 </p>
+
                                 <p>
                                   <span>Result In Percentage</span>
                                   <br />
-                                  <b>{edu?.finalGrade}</b>
+                                  <b>
+                                    {edu?.qualificationAchieved === true
+                                      ? edu?.finalGrade
+                                      : "N/A"}
+                                  </b>
                                 </p>
                               </Col>
                               <Col md="3">
