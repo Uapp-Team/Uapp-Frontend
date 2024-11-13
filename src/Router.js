@@ -1571,6 +1571,12 @@ const CompanionApplicationListForSystem = lazy(() =>
     "./views/SMS/Companion/CompanionApplicationListForSystem/CompanionApplicationListForSystem.js"
   )
 );
+const CompanionTeamMembersApplication = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersApplication.js"
+  )
+);
+
 const CompanionCommissionSetting = lazy(() =>
   import("./views/SMS/Companion/CompanionCommissionSetting/Index.js")
 );
@@ -1993,6 +1999,10 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/companion-application-List/:companionId"
                     component={CompanionApplicationListForSystem}
+                  />
+                  <AppRoute
+                    path="/companion-application-List-Team-Members/:companionId"
+                    component={CompanionTeamMembersApplication}
                   />
                   <AppRoute
                     path="/companion-team-List"
