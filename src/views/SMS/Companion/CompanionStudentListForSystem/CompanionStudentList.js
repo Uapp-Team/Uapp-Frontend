@@ -177,14 +177,14 @@ const CompanionStudentList = () => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {userTypeId === userTypes?.Companion.toString() ? (
+                {/* {userTypeId === userTypes?.Companion.toString() ? (
                   <LinkButton
                     className={"btn btn-uapp-add "}
                     name={"Invite"}
                     icon={<i className="fas fa-plus"></i>}
                     func={() => setModalOpen(true)}
                   />
-                ) : null}
+                ) : null} */}
               </Col>
 
               <Col lg="7" md="7" sm="12" xs="12">
