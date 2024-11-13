@@ -407,6 +407,8 @@ const AddMissionManagerAdd = ({
             <>
               {loading ? (
                 <Loader />
+              ) : managerList.length === 0 ? (
+                <h3 className="text-center fw-600">No Data Found</h3>
               ) : (
                 <div className="table-responsive fixedhead" ref={componentRef}>
                   <Table id="table-to-xls" className="table-sm table-bordered">
@@ -466,6 +468,7 @@ const AddMissionManagerAdd = ({
                         ) : null}
 
                         {tableData[9]?.isActive ? <th>Applications</th> : null}
+
                         {permissions?.includes(
                           permissionList?.AdmissionManager_Account_Status
                         ) ? (

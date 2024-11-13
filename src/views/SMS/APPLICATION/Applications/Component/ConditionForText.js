@@ -17,7 +17,17 @@ const ConditionForText = ({
   setBranchManagerLabel,
   branchManagerValue,
   setBranchManagerValue,
+  affiliateLabel,
+  setAffiliateLabel,
+  affiliateValue,
+  setAffiliateValue,
+  affiliateId,
   admId,
+  companionLabel,
+  setCompanionLabel,
+  companionValue,
+  setCompanionValue,
+  companionId,
   admissionManagerLabel,
   setAdmissionManagerLabel,
   admissionManagerValue,
@@ -245,6 +255,24 @@ const ConditionForText = ({
             label={admissionManagerLabel}
             setValue={() => setAdmissionManagerValue(0)}
             setLabel={() => setAdmissionManagerLabel("Admission Manager")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {!affiliateId && affiliateValue !== 0 ? (
+          <TagButton
+            label={affiliateLabel}
+            setValue={() => setAffiliateValue(0)}
+            setLabel={() => setAffiliateLabel("Affiliate")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {!companionId && companionValue !== 0 ? (
+          <TagButton
+            label={companionLabel}
+            setValue={() => setCompanionValue(0)}
+            setLabel={() => setCompanionLabel("Companion")}
           ></TagButton>
         ) : (
           ""

@@ -81,18 +81,20 @@ const CompanionTable = ({
             {tableData[5]?.isActive ? <th>Started</th> : null}
             {tableData[6]?.isActive ? <th>Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
             {tableData[7]?.isActive ? <th>Application</th> : null}
             {tableData[7]?.isActive ? <th>Registered</th> : null}
             {tableData[8]?.isActive ? <th>Status</th> : null}
+            {tableData[9]?.isActive ? <th>Branch</th> : null}
 
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[9]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[10]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[10]?.isActive ? (
+            {tableData[11]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -200,13 +202,27 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/companion-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(`/companion-lead-list/${companion?.id}`);
+                      }}
                     >
                       {companion?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-sixth-no-pointer"
+                      onClick={() => {
+                        history.push(
+                          `/companion-student-list/${companion?.id}`
+                        );
+                      }}
+                    >
+                      {companion?.studentCount}
                     </span>
                   </div>
                 </td>
@@ -231,10 +247,12 @@ const CompanionTable = ({
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
-                      className="Count-third-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/companion-team-List/${affiliate?.id}`);
-                      // }}
+                      className="Count-third"
+                      onClick={() => {
+                        history.push(
+                          `/ApplicationListByCompanion/${companion?.id}`
+                        );
+                      }}
                     >
                       {companion?.totalApplicationCount}
                     </span>
@@ -246,9 +264,11 @@ const CompanionTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fourth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/companion-team-List/${affiliate?.id}`);
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/companion-applications/${2}/${3}/${companion?.id}`
+                        );
+                      }}
                     >
                       {companion?.totalRegisteredApplicationCount}
                     </span>
@@ -259,11 +279,14 @@ const CompanionTable = ({
               {tableData[8]?.isActive ? (
                 <td>{companion?.accountStatus}</td>
               ) : null}
+
+              {tableData[9]?.isActive ? <td>{companion?.branchName}</td> : null}
+
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[9]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!companion?.isActive}
@@ -274,7 +297,7 @@ const CompanionTable = ({
                 </>
               ) : null}
 
-              {tableData[10]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}

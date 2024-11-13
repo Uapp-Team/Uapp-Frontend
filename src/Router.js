@@ -1507,6 +1507,10 @@ const CompanionTransation = lazy(() =>
   import("./views/SMS/ACCOUNTS/Companion/CompanionTransation.js")
 );
 
+const CompanionLeadList = lazy(() =>
+  import("./views/SMS/Companion/CompanionLeadList/CompanionLeadList.js")
+);
+
 const CompanionInvitation = lazy(() =>
   import("./views/SMS/Companion/CompanionInvitation/CompanionInvitation.js")
 );
@@ -1516,6 +1520,30 @@ const CompanionInvitationListForSystem = lazy(() =>
     "./views/SMS/Companion/CompanionInvitationListForSystem/CompanionInvitation.js"
   )
 );
+
+const CompanionLeadListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionLeadListForSystem/CompanionLeadList.js"
+  )
+);
+const AffiliateLeadListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateLeadListForSystem/AffiliateLeadList.js"
+  )
+);
+
+const CompanionStudentListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionStudentListForSystem/CompanionStudentList.js"
+  )
+);
+
+const AffiliateStudentListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateStudentListForSystem/AffiliateStudentList.js"
+  )
+);
+
 const AffiliateInvitationListForSystem = lazy(() =>
   import(
     "./views/SMS/Affiliate/AffiliateInvitationListForSystem/AffiliateInvitation.js"
@@ -1537,6 +1565,18 @@ const CompanionTeamMemberListForSystem = lazy(() =>
     "./views/SMS/Companion/CompanionTeamMemberListForSystem/CompanionMyTeamList.js"
   )
 );
+
+const CompanionApplicationListForSystem = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionApplicationListForSystem/CompanionApplicationListForSystem.js"
+  )
+);
+const CompanionTeamMembersApplication = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersApplication.js"
+  )
+);
+
 const CompanionCommissionSetting = lazy(() =>
   import("./views/SMS/Companion/CompanionCommissionSetting/Index.js")
 );
@@ -1909,9 +1949,23 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
+                    path="/companion-leads"
+                    component={CompanionLeadList}
+                  />
+                  <AppRoute
+                    path="/companion-lead-list/:companionId"
+                    component={CompanionLeadListForSystem}
+                  />
+                  <AppRoute
+                    path="/companion-student-list/:companionId"
+                    component={CompanionStudentListForSystem}
+                  />
+
+                  <AppRoute
                     path="/companion-Invitation"
                     component={CompanionInvitation}
                   />
+
                   <AppRoute
                     path="/companion-Invitation-list/:companionId"
                     component={CompanionInvitationListForSystem}
@@ -1919,6 +1973,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/affiliate-Invitation-list/:affiliateId"
                     component={AffiliateInvitationListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-lead-list/:affiliateId"
+                    component={AffiliateLeadListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-student-list/:affiliateId"
+                    component={AffiliateStudentListForSystem}
                   />
 
                   <AppRoute
@@ -1933,6 +1995,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/companion-team-List/:companionId"
                     component={CompanionTeamMemberListForSystem}
+                  />
+                  <AppRoute
+                    path="/companion-application-List/:companionId"
+                    component={CompanionApplicationListForSystem}
+                  />
+                  <AppRoute
+                    path="/companion-application-List-Team-Members/:companionId"
+                    component={CompanionTeamMembersApplication}
                   />
                   <AppRoute
                     path="/companion-team-List"
@@ -3787,7 +3857,80 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
+                    path="/affiliate-applications/:status/:selector/:affiliateId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/companion-applications/:status/:selector/:companionId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/admission-officer-applications/:status/:selector/:adoId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
                     path="/ApplicationListByAdmissionmanager/:admId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ApplicationListByAffiliate/:affiliateId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ApplicationListByCourse/:courseId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/ApplicationListByCompanion/:companionId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/ApplicationListByAdmissionOfficer/:adoId"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List

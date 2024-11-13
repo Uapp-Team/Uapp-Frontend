@@ -35,7 +35,6 @@ import ButtonForFunction from "../Components/ButtonForFunction.js";
 import ToggleSwitch from "../Components/ToggleSwitch.js";
 import Loader from "../Search/Loader/Loader.js";
 import ColumnUniversity from "../TableColumn/ColumnUniversity.js";
-
 const UniversityList = (props) => {
   const UniversityPaging = JSON.parse(sessionStorage.getItem("university"));
   const { counId, univerTypeId, provideId } = useParams();
@@ -108,6 +107,7 @@ const UniversityList = (props) => {
   const [providerValue, setProviderValue] = useState(
     UniversityPaging?.providerValue ? UniversityPaging?.providerValue : 0
   );
+
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column
@@ -213,6 +213,7 @@ const UniversityList = (props) => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       if (counId !== undefined) {
         get(
           `University/Index?page=${currentPage}&pagesize=${dataPerPage}&providerId=${providerValue}&universityCountryId=${counId}&universityStateId=${unistateValue}&universityTypeId=${uniTypeValue}&search=${searchStr}&orderId=${orderValue}`
@@ -222,7 +223,6 @@ const UniversityList = (props) => {
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else if (univerTypeId !== undefined) {
         get(
@@ -233,7 +233,6 @@ const UniversityList = (props) => {
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else if (provideId !== undefined) {
         get(
@@ -243,7 +242,6 @@ const UniversityList = (props) => {
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       } else {
         get(
@@ -254,7 +252,6 @@ const UniversityList = (props) => {
           setLoading(false);
           setEntity(action?.totalEntity);
           // setSerialNum(action?.firstSerialNumber);
-          setLoading(false);
         });
       }
     }
@@ -633,7 +630,7 @@ const UniversityList = (props) => {
                 </Col>
               ) : null}
 
-              <Col lg="4" md="4" sm="6" xs="6">
+              <Col lg="2" md="3" sm="6" xs="6">
                 <Typing
                   name="search"
                   placeholder="Name, Short Name"
@@ -1014,8 +1011,10 @@ const UniversityList = (props) => {
               </Col>
             </Row>
 
-            {universityList?.length === 0 ? (
-              <h4 className="text-center">No Data Found</h4>
+            {loading ? (
+              <Loader />
+            ) : universityList?.length === 0 ? (
+              <h3 className="text-center my-4">No data Found</h3>
             ) : (
               <>
                 {!loading ? (
