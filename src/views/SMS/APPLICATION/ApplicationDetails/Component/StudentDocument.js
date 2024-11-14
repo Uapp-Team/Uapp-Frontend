@@ -510,6 +510,8 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
 
       {(userType === userTypes?.SystemAdmin ||
         userType === userTypes?.Admin ||
+        userType === userTypes?.BranchAdmin ||
+        userType === userTypes?.BranchManager ||
         userType === userTypes?.AdmissionOfficer ||
         userType === userTypes?.ProviderAdmin ||
         userType === userTypes?.AdmissionManager) && (

@@ -162,11 +162,11 @@ const CompanionMyTeamTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/companion-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/companion-lead-list/${companionTeam?.id}`
+                        );
+                      }}
                     >
                       {companionTeam?.leadCount}
                     </span>

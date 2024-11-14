@@ -135,6 +135,8 @@ const AddmissionOfficerTable = ({
     <>
       {loading ? (
         <Loader />
+      ) : officerList.length === 0 ? (
+        <h2 className="text-center">No Data Found</h2>
       ) : (
         <>
           <div className="table-responsive fixedhead" ref={componentRef}>
