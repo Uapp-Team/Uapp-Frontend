@@ -31,17 +31,6 @@ const SelectAndClear = ({
     <Card className="uapp-employee-search">
       <CardBody className="search-card-body">
         <Row>
-          <Col className="uapp-mb" md="4" sm="12">
-            <Select
-              options={empOptiopns}
-              value={{ label: empLabel, value: empValue }}
-              onChange={(opt) => selectEmployeeType(opt.label, opt.value)}
-              name="employeeType"
-              id="employeeType"
-              isDisabled={type ? true : false}
-            />
-          </Col>
-
           {AdminUsers() && (
             <Col className="uapp-mb" md="4" sm="12">
               <Select
@@ -54,6 +43,17 @@ const SelectAndClear = ({
               />
             </Col>
           )}
+
+          <Col className="uapp-mb" md="4" sm="12">
+            <Select
+              options={empOptiopns}
+              value={{ label: empLabel, value: empValue }}
+              onChange={(opt) => selectEmployeeType(opt.label, opt.value)}
+              name="employeeType"
+              id="employeeType"
+              isDisabled={type ? true : false}
+            />
+          </Col>
 
           <Col className="uapp-mb" md="4" sm="12">
             <Typing

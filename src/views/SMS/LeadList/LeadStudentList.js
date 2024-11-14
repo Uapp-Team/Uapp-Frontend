@@ -71,6 +71,7 @@ const LeadStudentList = () => {
   const [statusValue, setStatusValue] = useState(
     student?.statusValue ? student?.statusValue : 0
   );
+
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(
     student?.currentPage ? student?.currentPage : 1
