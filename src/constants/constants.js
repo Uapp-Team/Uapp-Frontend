@@ -2,7 +2,7 @@
 export const rootUrl = `http://localtest.uapp.uk/`;
 // export const rootUrl = `https://lostaquaapple55.conveyor.cloud/`;
 // export const rootUrl = `https://localhost:44357/`;
-// export const rootUrl = `http://192.168.68.104:45457/`;
+// export const rootUrl = `http://192.168.68.104:45459/`;
 
 export const etest = `https://etest.uapp.uk/`;
 //export const etest = `https://192.168.0.138:45455/`;

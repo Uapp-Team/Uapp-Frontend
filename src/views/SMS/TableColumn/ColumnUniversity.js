@@ -40,6 +40,10 @@ const ColumnUniversity = [
     isActive: true,
   },
   {
+    title: "Branch",
+    isActive: true,
+  },
+  {
     title: "Status",
     isActive: true,
   },

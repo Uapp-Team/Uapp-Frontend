@@ -465,6 +465,17 @@ const ProviderList = () => {
         <Card className="uapp-employee-search zindex-100">
           <CardBody>
             <Row>
+              {branch.length > 1 && (
+                <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
+                  <Filter
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                  />
+                </Col>
+              )}
               <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
                 <Select
                   options={providertype}
@@ -487,17 +498,6 @@ const ProviderList = () => {
                 />
               </Col>
 
-              {branch.length > 1 && (
-                <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
-                  <Filter
-                    data={branch}
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                  />
-                </Col>
-              )}
               <Col lg="3" md="6" sm="12" xs="12">
                 <Typing
                   name="searchstring"

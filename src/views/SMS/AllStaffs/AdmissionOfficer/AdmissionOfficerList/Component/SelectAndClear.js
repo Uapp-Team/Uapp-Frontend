@@ -20,6 +20,10 @@ const SelectAndClear = ({
   managerValue,
   selectManager,
   managerId,
+  branchLabel,
+  setBranchLabel,
+  branchValue,
+  setBranchValue,
   searchStr,
   searchValue,
   handleKeyDown,
@@ -31,11 +35,30 @@ const SelectAndClear = ({
   setIsTyping,
   setSearchStr,
 }) => {
+  const [branch, setBranch] = useState([]);
+
+  useEffect(() => {
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
+  }, [setBranchLabel, setBranchValue]);
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row>
+            {branch.length > 1 && (
+              <Col lg="6" md="6" sm="6" xs="12" className="mb-2">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                />
+              </Col>
+            )}
+
             {userType === userTypes?.AdmissionManager ||
             userType === userTypes?.ProviderAdmin ? null : (
               <Col lg="6" md="6" sm="12" xs="12" className="mb-2">
@@ -66,7 +89,7 @@ const SelectAndClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name, Email"
+                placeholder="Name"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

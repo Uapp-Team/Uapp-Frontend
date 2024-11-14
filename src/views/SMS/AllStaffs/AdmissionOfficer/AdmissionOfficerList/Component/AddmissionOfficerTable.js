@@ -135,6 +135,8 @@ const AddmissionOfficerTable = ({
     <>
       {loading ? (
         <Loader />
+      ) : officerList.length === 0 ? (
+        <h2 className="text-center">No Data Found</h2>
       ) : (
         <>
           <div className="table-responsive fixedhead" ref={componentRef}>
@@ -181,14 +183,16 @@ const AddmissionOfficerTable = ({
 
                   {tableData[8]?.isActive ? <th>Applications</th> : null}
 
+                  {tableData[9]?.isActive ? <th>Branch</th> : null}
+
                   {permissions?.includes(
                     permissionList.AdmissionOfficer_Account_Status
                   ) ? (
                     <>
-                      {tableData[9]?.isActive ? <th>Account Status</th> : null}
+                      {tableData[10]?.isActive ? <th>Account Status</th> : null}
                     </>
                   ) : null}
-                  {tableData[10]?.isActive ? (
+                  {tableData[11]?.isActive ? (
                     <th style={{ width: "8%" }} className="text-center">
                       Action
                     </th>
@@ -352,11 +356,15 @@ const AddmissionOfficerTable = ({
                       </td>
                     ) : null}
 
+                    {tableData[9]?.isActive ? (
+                      <td>{officer?.branchName}</td>
+                    ) : null}
+
                     {permissions?.includes(
                       permissionList.AdmissionOfficer_Account_Status
                     ) ? (
                       <>
-                        {tableData[9]?.isActive ? (
+                        {tableData[10]?.isActive ? (
                           <td>
                             {
                               <ToggleSwitch
@@ -373,7 +381,7 @@ const AddmissionOfficerTable = ({
                       </>
                     ) : null}
 
-                    {tableData[10]?.isActive ? (
+                    {tableData[11]?.isActive ? (
                       <td style={{ width: "8%" }} className="text-center">
                         <ButtonGroup variant="text">
                           {permissions?.includes(

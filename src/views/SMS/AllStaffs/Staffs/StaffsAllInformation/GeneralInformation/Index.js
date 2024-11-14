@@ -178,7 +178,8 @@ const StaffGeneralInformation = () => {
         });
         setButtonStatus(false);
         setSuccess(!success);
-        history.push(`/staffPersonalInformation/${staffId}`);
+        res?.data?.isSuccess == true &&
+          history.push(`/staffPersonalInformation/${staffId}`);
       });
     }
   };

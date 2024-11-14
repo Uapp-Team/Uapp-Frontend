@@ -195,7 +195,10 @@ const StaffRegister = () => {
           setEmail("");
           // history.push(`/staffGeneralInformation/${res?.data?.result?.id}`);
         } else {
-          return;
+          addToast(res?.data?.message, {
+            appearance: res?.data?.isSuccess == true ? "success" : "error",
+            autoDismiss: true,
+          });
         }
       });
     }
@@ -243,7 +246,12 @@ const StaffRegister = () => {
                     )}
                   </FormGroup>
                 ) : (
-                  <input type="hidden" value={branchValue} />
+                  <input
+                    type="hidden"
+                    name="BranchId"
+                    id="BranchId"
+                    value={branchValue}
+                  />
                 )}
 
                 <FormGroup>

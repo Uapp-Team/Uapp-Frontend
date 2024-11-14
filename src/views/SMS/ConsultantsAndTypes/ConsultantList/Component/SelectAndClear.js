@@ -45,17 +45,6 @@ const SelectAndClear = ({
     <Card className="uapp-employee-search zindex-100">
       <CardBody>
         <Row>
-          <Col className="uapp-mb mb-2" md="4" sm="12">
-            <Select
-              options={empOptiopns}
-              value={{ label: empLabel, value: empValue }}
-              onChange={(opt) => selectEmployeeType(opt.label, opt.value)}
-              name="employeeType"
-              id="employeeType"
-              isDisabled={type ? true : false}
-            />
-          </Col>
-
           {branchOptions.length < 2 ? null : (
             <Col className="uapp-mb mb-2" md="4" sm="12">
               <Select
@@ -68,6 +57,16 @@ const SelectAndClear = ({
               />
             </Col>
           )}
+          <Col className="uapp-mb mb-2" md="4" sm="12">
+            <Select
+              options={empOptiopns}
+              value={{ label: empLabel, value: empValue }}
+              onChange={(opt) => selectEmployeeType(opt.label, opt.value)}
+              name="employeeType"
+              id="employeeType"
+              isDisabled={type ? true : false}
+            />
+          </Col>
 
           <Col className="uapp-mb mb-2" md="4" sm="12">
             <Select

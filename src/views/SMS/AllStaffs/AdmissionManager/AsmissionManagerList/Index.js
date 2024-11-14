@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, Component, useRef } from "react";
+import { Card, CardHeader } from "reactstrap";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { useHistory } from "react-router";
 import get from "../../../../../helpers/get";
@@ -7,6 +8,8 @@ import remove from "../../../../../helpers/remove";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import put from "../../../../../helpers/put";
 import post from "../../../../../helpers/post";
+import loader from "../../../../../assets/img/load.gif";
+import { tableIdList } from "../../../../../constants/TableIdConstant";
 import AddMissionManagerClear from "./Component/AddMissionManagerClear";
 import AddMissionManagerAdd from "./Component/AddMissionManagerAdd";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
@@ -55,6 +58,16 @@ const Index = () => {
       : 0
   );
 
+  const [branchLabel, setBranchLabel] = useState(
+    AdmissionManagerPaging?.branchLabel
+      ? AdmissionManagerPaging?.branchLabel
+      : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    AdmissionManagerPaging?.branchValue
+      ? AdmissionManagerPaging?.branchValue
+      : 0
+  );
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
   const [providerValue2, setProviderValue2] = useState(0);
   const [providerError, setProviderError] = useState(false);
@@ -119,6 +132,8 @@ const Index = () => {
         unistateValue: unistateValue && unistateValue,
         providerLabel: providerLabel && providerLabel,
         providerValue: providerValue && providerValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
@@ -133,6 +148,8 @@ const Index = () => {
     providerValue,
     searchStr,
     dataPerPage,
+    branchLabel,
+    branchValue,
   ]);
 
   useEffect(() => {
@@ -162,7 +179,7 @@ const Index = () => {
 
     if (!isTyping) {
       get(
-        `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}`
+        `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}&branchid=${branchValue}`
       ).then((res) => {
         setManagerList(res?.models);
         setEntity(res?.totalEntity);
@@ -178,6 +195,7 @@ const Index = () => {
     searchStr,
     success,
     isTyping,
+    branchValue,
   ]);
 
   useEffect(() => {
@@ -548,6 +566,10 @@ const Index = () => {
           providerLabel={providerLabel}
           providerValue={providerValue}
           selectProvider={selectProvider}
+          branchLabel={branchLabel}
+          setBranchLabel={setBranchLabel}
+          branchValue={branchValue}
+          setBranchValue={setBranchValue}
           searchStr={searchStr}
           setSearchStr={setSearchStr}
           searchValue={searchValue}

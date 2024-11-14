@@ -408,7 +408,7 @@ const AddMissionManagerAdd = ({
               {loading ? (
                 <Loader />
               ) : managerList.length === 0 ? (
-                <h3 className="text-center fw-600">No Data Found</h3>
+                <h3 className="text-center">No Data Found</h3>
               ) : (
                 <div className="table-responsive fixedhead" ref={componentRef}>
                   <Table id="table-to-xls" className="table-sm table-bordered">
@@ -468,17 +468,18 @@ const AddMissionManagerAdd = ({
                         ) : null}
 
                         {tableData[9]?.isActive ? <th>Applications</th> : null}
+                        {tableData[10]?.isActive ? <th>Branch</th> : null}
 
                         {permissions?.includes(
                           permissionList?.AdmissionManager_Account_Status
                         ) ? (
                           <>
-                            {tableData[10]?.isActive ? (
+                            {tableData[11]?.isActive ? (
                               <th>Account Status</th>
                             ) : null}
                           </>
                         ) : null}
-                        {tableData[11]?.isActive ? (
+                        {tableData[12]?.isActive ? (
                           <th style={{ width: "8%" }} className="text-center">
                             Action
                           </th>
@@ -675,11 +676,15 @@ const AddMissionManagerAdd = ({
                           ) : null}
                           {/* Applications ends here */}
 
+                          {tableData[10]?.isActive ? (
+                            <td>{manager?.branchName}</td>
+                          ) : null}
+
                           {permissions?.includes(
                             permissionList?.AdmissionManager_Account_Status
                           ) ? (
                             <>
-                              {tableData[10]?.isActive ? (
+                              {tableData[11]?.isActive ? (
                                 <td>
                                   {
                                     <ToggleSwitch
@@ -698,7 +703,7 @@ const AddMissionManagerAdd = ({
                             </>
                           ) : null}
 
-                          {tableData[11]?.isActive ? (
+                          {tableData[12]?.isActive ? (
                             <td style={{ width: "8%" }} className="text-center">
                               <ButtonGroup variant="text">
                                 {permissions?.includes(
