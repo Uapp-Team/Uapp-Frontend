@@ -384,6 +384,49 @@
   margin-top: 120px;
 }
 
+.Download-app-section {
+  margin-top: 60px;
+
+}
+
+.Download-app-section a {
+  text-decoration: none;
+}
+
+.apple-download {
+  width: 150px;
+  height: 49px;
+  color: white;
+  background: black;
+  border-radius: 10px;
+}
+
+.apple-download p span {
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+}
+
+.fa-app-store-ios {
+  font-size: 25px;
+}
+
+.android-download {
+  width: 150px;
+  height: 49px;
+  color: white;
+  background: black;
+  border-radius: 10px;
+}
+
+.fa-android {
+  font-size: 25px;
+}
+
+.android-download p span {
+  font-size: 10px;
+  color: rgb(238, 238, 238);
+}
+
 /* .register-links-section {
   margin-top: 60px;
 } */
