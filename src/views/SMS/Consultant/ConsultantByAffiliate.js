@@ -685,7 +685,7 @@ const ConsultantByAffiliate = () => {
             </CardBody>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardBody>
               <h5>Sent Invitations</h5>
 
@@ -714,7 +714,7 @@ const ConsultantByAffiliate = () => {
                 </Table>
               </div>
             </CardBody>
-          </Card>
+          </Card> */}
         </>
       )}
     </div>

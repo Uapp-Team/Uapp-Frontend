@@ -228,9 +228,11 @@ const CompanionMyTeamTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fourth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/companion-team-List/${affiliate?.id}`);
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/companion-registered-application-List-Team-Members/${companionTeam?.id}`
+                        );
+                      }}
                     >
                       {companionTeam?.totalRegisterApplicationCount}
                     </span>
