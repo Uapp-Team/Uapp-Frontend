@@ -367,7 +367,7 @@ const CompanionList = () => {
             <Col className="uapp-mb mb-2" md="3" sm="12">
               <Typing
                 name="search"
-                placeholder="Id, Name, Email"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

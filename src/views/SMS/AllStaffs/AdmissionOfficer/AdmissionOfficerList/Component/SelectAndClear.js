@@ -89,7 +89,7 @@ const SelectAndClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}
