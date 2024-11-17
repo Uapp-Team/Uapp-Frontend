@@ -5,7 +5,7 @@ import { history } from "../../../../history";
 import axios from "axios";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { rootUrl } from "../../../../constants/constants";
+import { androidAppUrl, rootUrl } from "../../../../constants/constants";
 import SetStorage from "../../../SMS/TableColumn/SetStorage";
 import get from "../../../../helpers/get";
 import { userTypes } from "../../../../constants/userTypeConstant";
@@ -272,7 +272,7 @@ const LoginForm = () => {
         <h4 className="mb-3">Download for mobile</h4>
 
         <div className="d-flex">
-          <a href="https://dll.gcamapk.io/agc/9424/ruler/?target=external">
+          {/* <a href={androidAppUrl}>
             {" "}
             <div className="apple-download mr-2 d-flex justify-content-center align-items-center">
               <i class="fab fa-app-store-ios"></i>
@@ -285,9 +285,9 @@ const LoginForm = () => {
                 </p>
               </div>
             </div>
-          </a>
+          </a> */}
 
-          <a href="https://dll.gcamapk.io/agc/9424/ruler/?target=external">
+          <a href={androidAppUrl}>
             <div className="android-download d-flex justify-content-center align-items-center">
               <i class="fab fa-android"></i>
               <div className="mt-2">
