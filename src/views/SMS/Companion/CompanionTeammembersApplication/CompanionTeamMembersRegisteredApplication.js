@@ -11,27 +11,26 @@ import {
   DropdownMenu,
   DropdownToggle,
 } from "reactstrap";
-
+import ReactTableConvertToXl from "../../ReactTableConvertToXl/ReactTableConvertToXl.js";
 import ReactToPrint from "react-to-print";
-import ColumnApplicationStudent from "../../TableColumn/ColumnApplicationStudent.js";
-import PaginationOnly from "../../Pagination/PaginationOnly.jsx";
+
 import { useParams } from "react-router";
-import get from "../../../../helpers/get.js";
-import ReactTableConvertToXl from "../../ReactTableConvertToXl/ReactTableConvertToXl";
+import ColumnApplicationStudent from "../../TableColumn/ColumnApplicationStudent.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import { permissionList } from "../../../../constants/AuthorizationConstant.js";
+import PaginationOnly from "../../Pagination/PaginationOnly.jsx";
+import get from "../../../../helpers/get.js";
 
-const CompanionApplicationListForSystem = ({ currentUser }) => {
+const CompanionTeamMembersRegisteredApplication = () => {
   const { companionId } = useParams();
-  const referenceId = localStorage.getItem("referenceId");
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
-  const [entity, setEntity] = useState(0);
   const [enrollDD, setEnrollDD] = useState([]);
   const [enrollLabel, setEnrollLabel] = useState("Enrolment Status");
   const [enrollValue, setEnrollValue] = useState(0);
+  const [entity, setEntity] = useState(0);
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -56,8 +55,14 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
   }, []);
 
   useEffect(() => {
+    get("EnrollmentStatusDD/Index").then((res) => {
+      setEnrollDD(res);
+    });
+  }, []);
+
+  useEffect(() => {
     get(
-      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${false}`
+      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${true}`
     ).then((res) => {
       setLoading(false);
       setApplicationList(res?.models);
@@ -65,23 +70,17 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
       // setEntity(res?.totalEntity);
       // setSerialNumber(res?.firstSerialNumber);
     });
-  }, [currentPage, currentUser, dataPerPage, companionId, enrollValue]);
-
-  useEffect(() => {
-    get("EnrollmentStatusDD/Index").then((res) => {
-      setEnrollDD(res);
-    });
-  }, []);
-  const selectEnrollDD = (label, value) => {
-    setEnrollLabel(label);
-    setEnrollValue(value);
-  };
+  }, [currentPage, dataPerPage, companionId, enrollValue]);
 
   // toggle1 dropdown
   const toggle1 = () => {
     setDropdownOpen1((prev) => !prev);
   };
 
+  const selectEnrollDD = (label, value) => {
+    setEnrollLabel(label);
+    setEnrollValue(value);
+  };
   // toggle dropdown
   const toggle = () => {
     setDropdownOpen((prev) => !prev);
@@ -100,7 +99,7 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
 
   return (
     <div>
-      <BreadCrumb title="Applications" backTo="" path="" />
+      <BreadCrumb title="Applications naki" backTo="" path="" />
 
       <Card className="uapp-employee-search">
         <CardBody>
@@ -331,4 +330,4 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
   );
 };
 
-export default CompanionApplicationListForSystem;
+export default CompanionTeamMembersRegisteredApplication;
