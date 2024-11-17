@@ -19,3 +19,5 @@ export const leadUrl = `https://leadapi.uapp.uk/`;
 // export const rootUrl = `http://192.168.68.122:45457/`;
 
 export const leadApi = `${leadUrl}api/v1/`;
+
+export const androidAppUrl = `https://api.uapp.uk/apps_download/uapp.apk`;
