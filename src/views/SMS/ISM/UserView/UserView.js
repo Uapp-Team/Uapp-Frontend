@@ -56,14 +56,16 @@ const UserView = () => {
       <Card>
         <CardBody>
           <div
-            className="bg-cover-img py-5 text-center mb-5"
+            className="bg-cover-img py-5 mb-5"
             style={{
               background: "url(" + ismhero + ")",
             }}
           >
-            <h2 className="text-white fw-600">How can we help you?</h2>
+            <h2 className="text-white text-center fw-600">
+              How can we help you?
+            </h2>
             {noFilter && (
-              <p className="text-white">
+              <p className="text-white text-center">
                 Search or browse through the category below to find answers.
               </p>
             )}
@@ -82,7 +84,7 @@ const UserView = () => {
                 {uniModal ? (
                   <div
                     className="w-50 mx-auto"
-                    // onMouseLeave={() => setUniModal(!uniModal)}
+                    onMouseLeave={() => setUniModal(!uniModal)}
                   >
                     <DefaultDropdownU
                       label={uniLable}
@@ -95,11 +97,10 @@ const UserView = () => {
                     />
                   </div>
                 ) : (
-                  <p
-                    className="text-white pointer"
-                    onClick={() => setUniModal(!uniModal)}
-                  >
-                    University wise information <FaRegArrowAltCircleRight />
+                  <p className="text-white text-center pointer">
+                    <span onClick={() => setUniModal(!uniModal)}>
+                      University wise information <FaRegArrowAltCircleRight />
+                    </span>
                   </p>
                 )}
               </div>

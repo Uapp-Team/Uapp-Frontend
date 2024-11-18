@@ -9,6 +9,8 @@ const QueAdd = ({ modalClose, refetch }) => {
     categoryId: 0,
     subCategoryId: 0,
     title: "",
+    isRequiredAns: true,
+    isSameForAll: true,
     answers: "",
     answerList: [
       {
@@ -27,7 +29,6 @@ const QueAdd = ({ modalClose, refetch }) => {
         answers: "",
       },
     ],
-    isRequiredAns: true,
     isMandatoryForAll: false,
     universities: [],
   };

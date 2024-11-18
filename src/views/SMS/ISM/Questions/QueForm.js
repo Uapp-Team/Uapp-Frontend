@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Card, Col, Form, Row } from "reactstrap";
+import { Col, Form, Row } from "reactstrap";
 import Input from "../../../../components/form/Input";
 import { useForm } from "react-hook-form";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { useToasts } from "react-toast-notifications";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import CheckOne from "../../../../components/form/CheckOne";
-import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 import RichTextArea from "../../../../components/form/RichTextArea";
 import TopicDivider from "../../Components/TopicDivider";
 import MultiSelectU from "../../../../components/form/MultiSelectU";
 import Origine from "../Components/Origine";
+import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -21,7 +21,6 @@ const schema = yup.object().shape({
   title: yup.string(),
   isRequiredAns: yup.boolean(),
   isSameForAll: yup.boolean(),
-  isMandatoryForAll: yup.boolean(),
   answers: yup.string(),
   answerList: yup.array().of(
     yup.object().shape({
@@ -30,6 +29,7 @@ const schema = yup.object().shape({
       answers: yup.string(),
     })
   ),
+  isMandatoryForAll: yup.boolean(),
   universities: yup.array().of(
     yup.object().shape({
       item: yup.string(),
@@ -40,24 +40,16 @@ const schema = yup.object().shape({
 const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
-  const [check, setCheck] = useState(defaultData.isMandatoryForAll);
-  const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
-  const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [categoryId, setCategoryId] = useState(defaultData.categoryId);
   const [subCategoryId, setSubCategoryId] = useState(defaultData.subCategoryId);
   const [categoryIdError, setCategoryIdError] = useState("");
   const [subCategoryIdError, setSubCategoryIdError] = useState("");
-
-  const [universityValue, setuniversityValue] = useState(
-    defaultData.universities
-  );
-
   const [title, setTitle] = useState(defaultData?.title);
   const [titleError, setTitleError] = useState("");
-
+  const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
+  const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
   const [answers, setAnswers] = useState(defaultData?.answers);
   const [answersError, setAnswersError] = useState("");
-
   const [answers1, setAnswers1] = useState(
     defaultData?.answerList && defaultData?.answerList[0]?.answers?.[0]
   );
@@ -70,6 +62,10 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [answers1Error, setAnswers1Error] = useState("");
   const [answers2Error, setAnswers2Error] = useState("");
   const [answers3Error, setAnswers3Error] = useState("");
+  const [check, setCheck] = useState(defaultData.isMandatoryForAll);
+  const [universityValue, setuniversityValue] = useState(
+    defaultData.universities
+  );
 
   const {
     register,
@@ -96,31 +92,31 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         categoryId: categoryId,
         subCategoryId: subCategoryId,
         title: title,
+        status: 1,
         isRequiredAns: ansReq,
-        isMandatoryForAll: check,
-        universities: universityValue,
-
         isSameForAll: formData.isSameForAll,
-        answers: !isSameForAll ? null : [answers],
+        answers: !isSameForAll ? null : answers,
         answerList: isSameForAll
           ? null
           : [
               {
                 id: formData?.answerList[0]?.id,
                 origineType: formData?.answerList[0]?.origineType,
-                answers: [answers1],
+                answers: answers1,
               },
               {
                 id: formData?.answerList[1]?.id,
                 origineType: formData?.answerList[1]?.origineType,
-                answers: [answers2],
+                answers: answers2,
               },
               {
                 id: formData?.answerList[2]?.id,
                 origineType: formData?.answerList[2]?.origineType,
-                answers: [answers3],
+                answers: answers3,
               },
             ],
+        isMandatoryForAll: check,
+        universities: universityValue,
       };
       console.log(formData);
       console.log(submitData);
@@ -152,31 +148,26 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
       <Form onSubmit={handleSubmit(onSubmit)} className="modal-overflow">
         <input type="hidden" {...register("id")} value={defaultData?.id} />
 
-        {/* <div className="bg-answer-card-faq p-3 mb-4"> */}
         <Row>
           <Col>
-            <DDByAppUrlU
-              register={register}
+            <DDFilterByAppUrlU
               label="Category"
               placeholder="Select Category"
               url="QuestionCategory/get-all"
-              name="categoryId"
               defaultValue={categoryId}
-              setValue={setCategoryId}
-              action={() => setCategoryIdError("")}
+              action={setCategoryId}
+              setError={() => setCategoryIdError("")}
               error={categoryIdError}
             />
           </Col>
           <Col>
-            <DDByAppUrlU
-              register={register}
+            <DDFilterByAppUrlU
               label="Sub Category"
               placeholder="Select Sub Category"
               url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
-              name="subCategoryId"
               defaultValue={subCategoryId}
-              setValue={setSubCategoryId}
-              action={() => setSubCategoryIdError("")}
+              action={setSubCategoryId}
+              setError={() => setSubCategoryIdError("")}
               error={subCategoryIdError}
             />
           </Col>
@@ -213,22 +204,12 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
           />
         </div>
 
-        {/* <RichTextArea
-          label="Details"
-          defaultValue={answers}
-          onChange={setAnswers}
-          error={answersError}
-          action={() => setAnswersError("")}
-          className="mb-3"
-        /> */}
-
         {isSameForAll === true ? (
           <RichTextArea
             defaultValue={answers}
             onChange={setAnswers}
             error={answersError}
             action={() => setAnswersError("")}
-            // className="mb-3"
           />
         ) : (
           <>
@@ -269,7 +250,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
                       ? setAnswers2Error("")
                       : setAnswers3Error("")
                   }
-                  // className="mb-3"
                 />
               </div>
             ))}

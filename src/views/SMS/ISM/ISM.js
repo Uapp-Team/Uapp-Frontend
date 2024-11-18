@@ -4,7 +4,6 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import Typing from "../../../components/form/Typing";
 import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
-import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 import GroupButton from "../../../components/buttons/GroupButton";
 import Filter from "../../../components/Dropdown/Filter";
 import ISMDocuments from "./ISMDocuments";
@@ -16,7 +15,7 @@ const ISM = () => {
   const [uniValue, setUniValue] = useState(0);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [tab, setTab] = useState("1");
+  const [tab, setTab] = useState("2");
 
   useEffect(() => {
     if (!isTyping) {

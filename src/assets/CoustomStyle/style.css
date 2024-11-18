@@ -110,6 +110,10 @@
   z-index: 9999999 !important;
 }
 
+.css-1nmdiq5-menu {
+  margin-top: 0;
+}
+
 /* #react-tiny-popover-container {
   z-index: 999;
 } */
