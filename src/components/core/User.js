@@ -24,6 +24,11 @@ export const Provider = () => {
   return result;
 };
 
+export const BranchAdmin = () => {
+  const result = userType === userTypes?.BranchAdmin;
+  return result;
+};
+
 export const BranchManager = () => {
   const result = userType === userTypes?.BranchManager;
   return result;
@@ -90,5 +95,6 @@ export const AdmissionCompliance = () => {
 };
 
 export const AdminUsers = () => SystemAdmin() || Admin();
+export const BranchUsers = () => BranchAdmin() || BranchManager();
 export const AdmissionUsers = () =>
   Provider() || ProviderAdmin() || AdmissionManager() || AdmissionOfficer();

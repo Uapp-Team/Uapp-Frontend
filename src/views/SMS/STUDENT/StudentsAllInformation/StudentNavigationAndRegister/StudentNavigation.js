@@ -122,7 +122,7 @@ const StudentNavigation = ({ activetab, studentid, success, action }) => {
           onClick={() => navigateTo("5")}
           disabled={!activity?.educational}
         >
-          Educational
+          Education
         </NavLink>
       </NavItem>
 

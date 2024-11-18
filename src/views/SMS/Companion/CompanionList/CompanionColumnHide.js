@@ -10,7 +10,7 @@ import {
 
 import ColumnAffiliate from "../../TableColumn/ColumnAffiliate";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
-import ColumnCompanionsTeam from "../../TableColumn/ColumnCompanionsTeam";
+import ColumnCompanions from "../../TableColumn/ColumnCompanions";
 
 const CompanionColumnHide = ({
   dropdownOpen1,
@@ -29,9 +29,9 @@ const CompanionColumnHide = ({
     !tableColumnCompanionsTeam &&
       localStorage.setItem(
         "ColumnCompanionsTeamTeam",
-        JSON.stringify(ColumnCompanionsTeam)
+        JSON.stringify(ColumnCompanions)
       );
-    !tableColumnCompanionsTeam && setTableData(ColumnCompanionsTeam);
+    !tableColumnCompanionsTeam && setTableData(ColumnCompanions);
   }, [setTableData]);
 
   return (

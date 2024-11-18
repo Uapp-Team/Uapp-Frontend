@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
 import ConsultantStatus from "./ConsultantStatus";
+import put from "../../../../../helpers/put";
 
-const ConsultantActive = ({ isActive, item }) => {
+const ConsultantActive = ({ isActive, id }) => {
   const [check, setCheck] = useState(isActive);
-  const [modalData, setModalData] = useState();
 
   const [modalForStaus, setModalForStatus] = useState(false);
 
   const handleUpdate = (data) => {
     setCheck(!check);
-    setModalData(data);
     setModalForStatus(true);
   };
 
@@ -25,7 +24,7 @@ const ConsultantActive = ({ isActive, item }) => {
         <input
           type="checkbox"
           checked={check}
-          onChange={() => handleUpdate(item)}
+          onChange={() => handleUpdate()}
         />
         <span className="switch" />
       </label>
@@ -37,9 +36,14 @@ const ConsultantActive = ({ isActive, item }) => {
       >
         <ModalBody>
           <ConsultantStatus
-            data={modalData}
-            close={() => setModalForStatus(false)}
-            action={() => handleClose()}
+            data={{
+              id: id,
+              message: "",
+            }}
+            url="consultant/block-with-note"
+            method={put}
+            close={() => handleClose()}
+            action={() => setModalForStatus(false)}
           />
         </ModalBody>
       </Modal>

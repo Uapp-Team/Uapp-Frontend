@@ -558,7 +558,7 @@ const MyTeamList = () => {
         </CardBody>
       </Card>
 
-      <Card>
+      {/* <Card>
         <CardBody>
           <h5>Sent Invitations</h5>
           <Row className="mb-3 mt-3">
@@ -656,7 +656,7 @@ const MyTeamList = () => {
             </Table>
           </div>
         </CardBody>
-      </Card>
+      </Card> */}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import TagButton from "../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import Filter from "../../../../../components/Dropdown/Filter";
 import Typing from "../../../../../components/form/Typing";
+import { AdminUsers } from "../../../../../components/core/User";
 
 const SearchAndClear = ({
   branchId,
@@ -50,6 +51,23 @@ const SearchAndClear = ({
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row className="">
+            {AdminUsers() && branch.length > 1 && (
+              <Col lg="4" md="3" sm="12" className="mb-2">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                  name=""
+                  error={() => {}}
+                  setError={() => {}}
+                  action={() => {}}
+                  isDisabled={branchId ? true : false}
+                />
+              </Col>
+            )}
+
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select
                 options={studentTypeOption}
@@ -60,29 +78,6 @@ const SearchAndClear = ({
                 isDisabled={type}
               />
             </Col>
-
-            {userType !== userTypes?.AdmissionManager &&
-              userType !== userTypes?.ProviderAdmin &&
-              userType !== userTypes?.AdmissionOfficer && (
-                <>
-                  {branch.length > 1 && (
-                    <Col lg="4" md="3" sm="12" className="mb-2">
-                      <Filter
-                        data={branch}
-                        label={branchLabel}
-                        setLabel={setBranchLabel}
-                        value={branchValue}
-                        setValue={setBranchValue}
-                        name=""
-                        error={() => {}}
-                        setError={() => {}}
-                        action={() => {}}
-                        isDisabled={branchId ? true : false}
-                      />
-                    </Col>
-                  )}
-                </>
-              )}
 
             {userType !== userTypes?.Consultant ? (
               <Col lg="4" md="3" sm="12" className="mb-2 ">

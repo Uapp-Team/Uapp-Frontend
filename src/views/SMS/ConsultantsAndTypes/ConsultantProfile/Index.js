@@ -16,8 +16,10 @@ const Index = () => {
       ) : userType === userTypes?.Student.toString() ? (
         <ConsultantProfileForStudent />
       ) : userType === userTypes?.SystemAdmin.toString() ||
+        userType === userTypes?.BranchAdmin.toString() ||
         userType === userTypes?.BranchManager.toString() ||
         userType === userTypes?.ComplianceManager.toString() ||
+        userType === userTypes?.ConsultantCompliance.toString() ||
         userType === userTypes?.Admin.toString() ? (
         <ConsultantProfileForAdministrator />
       ) : userType === userTypes?.FinanceManager.toString() ||

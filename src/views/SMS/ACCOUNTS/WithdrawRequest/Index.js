@@ -61,7 +61,7 @@ const Index = () => {
   const [userTypeLabel, setUserTypeLabel] = useState(
     withdrawRequestPaging?.userTypeLabel
       ? withdrawRequestPaging?.userTypeLabel
-      : "All"
+      : "All User Type"
   );
   const [userTypeValue, setUserTypeValue] = useState(
     withdrawRequestPaging?.userTypeValue
@@ -534,11 +534,26 @@ const Index = () => {
         <Card className="zindex-100">
           <CardBody>
             <div className="row">
+              {branch.length > 1 && (
+                <div className="col-md-3 mb-2">
+                  <Branch
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                    name=""
+                    error={() => {}}
+                    setError={() => {}}
+                    action={() => {}}
+                  />
+                </div>
+              )}
               {isMarketing && (
                 <div className="col-md-3 mb-2">
                   <Filter
                     data={[
-                      { id: 0, name: "All" },
+                      { id: 0, name: "All User Type" },
                       { id: 1, name: "Consultant" },
                       { id: 2, name: "Affiliate" },
                       { id: 3, name: "Companion" },
@@ -614,21 +629,6 @@ const Index = () => {
                 </>
               )}
 
-              {branch.length > 1 && (
-                <div className="col-md-3 mb-2">
-                  <Branch
-                    data={branch}
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                    name=""
-                    error={() => {}}
-                    setError={() => {}}
-                    action={() => {}}
-                  />
-                </div>
-              )}
               <div className="col-md-3">
                 <Input
                   style={{ height: "38px" }}

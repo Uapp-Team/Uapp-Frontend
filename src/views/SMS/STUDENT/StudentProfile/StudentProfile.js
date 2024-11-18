@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
 import React, { useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Card, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
-import StudentParentConsultant from "./Component/StudentParentConsultant";
-import StudentProfileHeadComponent from "./Component/StudentProfileHeadComponent";
 import Application from "./Component/Application";
 import Consent from "./Component/Consent";
+import StudentParentConsultant from "./Component/StudentParentConsultant";
+import StudentProfileHeadComponent from "./Component/StudentProfileHeadComponent";
 import ProfilePreview from "./ProfilePreview";
 
 const StudentProfile = () => {
@@ -14,7 +14,7 @@ const StudentProfile = () => {
   const componentRef = useRef();
   const [studentDetails, setStudentDetails] = useState({});
   const [contactData, setContactData] = useState([]);
-  const [emergencyContactList, setEmergencyContactList] = useState({});
+  const [emergencyContactList, setEmergencyContactList] = useState([]);
   const [applicationData, setApplicationData] = useState({});
   const [fundingData, setFundingData] = useState({});
   const [educationalInfos, setEducationalInfos] = useState([]);

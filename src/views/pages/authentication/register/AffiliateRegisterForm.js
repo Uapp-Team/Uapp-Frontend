@@ -260,7 +260,10 @@ const AffiliateRegisterForm = () => {
             });
             history.push("/affiliateAccountCreated");
           } else {
-            setPasswordError(res?.data?.message);
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
           }
         });
     }

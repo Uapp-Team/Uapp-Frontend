@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
-import get from "../../../../../../helpers/get";
-import Uget from "../../../../../../helpers/Uget";
+import { useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Button,
   Card,
   CardBody,
-  FormGroup,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
   Col,
+  Form,
+  FormGroup,
   Input,
-  Row,
+  Modal,
+  ModalBody,
+  ModalHeader,
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import tick from "../../../../../../assets/img/tick.svg";
-import greenTick from "../../../../../../assets/icon/Check_fill.svg";
-import ashTick from "../../../../../../assets/icon/Check_fill-ash.svg";
-import tickfaka from "../../../../../../assets/img/ticks-faka.svg";
-import documentsIcon from "../../../../../../assets/icon/Documents.svg";
-import PersonalDetailsIcon from "../../../../../../assets/icon/Personal Details.svg";
 import applicationIcon from "../../../../../../assets/icon/Application.svg";
+import ashTick from "../../../../../../assets/icon/Check_fill-ash.svg";
+import greenTick from "../../../../../../assets/icon/Check_fill.svg";
+import documentsIcon from "../../../../../../assets/icon/Documents.svg";
 import educationIcon from "../../../../../../assets/icon/Education.svg";
 import experienceIcon from "../../../../../../assets/icon/Experience.svg";
+import PersonalDetailsIcon from "../../../../../../assets/icon/Personal Details.svg";
 import ReviewApplyIcon from "../../../../../../assets/icon/Review & Apply.svg";
 import StdDashBoardUperCarousel1 from "../../../../../../assets/img/std-dashboard-uper-carousel-1.jpg";
-import ButtonForFunction from "../../../../Components/ButtonForFunction";
+import tick from "../../../../../../assets/img/tick.svg";
+import tickfaka from "../../../../../../assets/img/ticks-faka.svg";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
+import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
+import Uget from "../../../../../../helpers/Uget";
+import ButtonForFunction from "../../../../Components/ButtonForFunction";
 import StarRatings from "../../../../Components/StarRatings";
 import UndocumentName from "./UndocumentName";
 
@@ -59,10 +58,8 @@ export default function ApplicationList({
   const [applicationId, setapplicationId] = useState(0);
   const [isCheckDetails, setIsCheckDetails] = useState(false);
   const [stdDashboard, setStdDashboard] = useState([]);
-  console.log(stdDashboard, "stdDashboard");
 
   const { addToast } = useToasts();
-
   // useEffect(() => {
   //   get(
   //     `ApplicationDocument//GetUnUploadedDocuments?applicationid=${applicationInfo[0]?.applicationId}`
@@ -257,7 +254,7 @@ export default function ApplicationList({
                       {appinfo?.enrollmentStatusId === 2 ? (
                         <>
                           {appinfo?.enrollmentStatusId === 2 &&
-                            appinfo?.alreadyReviewed === true ? (
+                          appinfo?.alreadyReviewed === true ? (
                             <>
                               <span
                                 className="std-dashboard-style7
@@ -283,9 +280,9 @@ export default function ApplicationList({
                         <span
                           color="primary"
                           onClick={() => setIsCheckDetails(!isCheckDetails)}
-                        // onClick={() =>
-                        //   gotoApplicationDetails(appinfo?.applicationId)
-                        // }
+                          // onClick={() =>
+                          //   gotoApplicationDetails(appinfo?.applicationId)
+                          // }
                         >
                           {isCheckDetails ? (
                             <button
@@ -310,9 +307,9 @@ export default function ApplicationList({
                                   onClick={() =>
                                     setIsCheckDetails(!isCheckDetails)
                                   }
-                                // onClick={() =>
-                                //   gotoApplicationDetails(appinfo?.applicationId)
-                                // }
+                                  // onClick={() =>
+                                  //   gotoApplicationDetails(appinfo?.applicationId)
+                                  // }
                                 >
                                   Check Details{" "}
                                   <span className="ml-1">
@@ -578,13 +575,14 @@ export default function ApplicationList({
                             <div class="stepper-wrapper">
                               {appinfo?.timeLines.map((timeline) => (
                                 <div
-                                  class={`stepper-item ${timeline?.isCompleted || timeline?.isCurrent
+                                  class={`stepper-item ${
+                                    timeline?.isCompleted || timeline?.isCurrent
                                       ? "completed"
                                       : ""
-                                    }`}
+                                  }`}
                                 >
                                   {timeline?.isCompleted ||
-                                    timeline?.isCurrent ? (
+                                  timeline?.isCurrent ? (
                                     <div class="step-counter">
                                       <img
                                         src={tick}

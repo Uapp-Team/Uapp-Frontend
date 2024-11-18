@@ -32,7 +32,6 @@ const UpdateBranchManager = () => {
 
   const { addToast } = useToasts();
 
-
   useEffect(() => {
     get(`Branch/Index`).then((res) => {
       setBranch(res);
@@ -81,7 +80,7 @@ const UpdateBranchManager = () => {
     <div>
       <div>
         <BreadCrumb
-          title="Add Branch Manager Information"
+          title="Add Branch Admin Information"
           backTo="Branch"
           path=""
         />

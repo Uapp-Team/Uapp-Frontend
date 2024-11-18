@@ -80,18 +80,21 @@ const AffiliateTable = ({
             {tableData[5]?.isActive ? <th>Started</th> : null}
             {tableData[6]?.isActive ? <th>Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
             {tableData[7]?.isActive ? <th>Application</th> : null}
             {tableData[7]?.isActive ? <th>Registered</th> : null}
             {tableData[8]?.isActive ? <th>Status</th> : null}
 
+            {tableData[9]?.isActive ? <th>Branch</th> : null}
+
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[9]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[10]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[10]?.isActive ? (
+            {tableData[11]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -200,13 +203,28 @@ const AffiliateTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fifth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(
-                      //     `/affiliate-Invitation-list/${companion?.id}`
-                      //   );
-                      // }}
+                      onClick={() => {
+                        history.push(`/affiliate-lead-list/${affiliate?.id}`);
+                      }}
                     >
                       {affiliate?.leadCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[6]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      className="Count-sixth-no-pointer"
+                      onClick={() => {
+                        history.push(
+                          `/affiliate-student-list/${affiliate?.id}`
+                        );
+                      }}
+                    >
+                      {affiliate?.studentCount}
                     </span>
                   </div>
                 </td>
@@ -230,10 +248,12 @@ const AffiliateTable = ({
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
-                      className="Count-third-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/affiliate-team-List/${affiliate?.id}`);
-                      // }}
+                      className="Count-third"
+                      onClick={() => {
+                        history.push(
+                          `/ApplicationListByAffiliate/${affiliate?.id}`
+                        );
+                      }}
                     >
                       {affiliate?.totalApplicationCount}
                     </span>
@@ -245,9 +265,11 @@ const AffiliateTable = ({
                   <div style={{ marginTop: "5px" }}>
                     <span
                       className="Count-fourth-no-pointer"
-                      // onClick={() => {
-                      //   history.push(`/affiliate-team-List/${affiliate?.id}`);
-                      // }}
+                      onClick={() => {
+                        history.push(
+                          `/affiliate-applications/${2}/${3}/${affiliate?.id}`
+                        );
+                      }}
                     >
                       {affiliate?.totalRegisteredApplicationCount}
                     </span>
@@ -257,11 +279,14 @@ const AffiliateTable = ({
               {tableData[8]?.isActive ? (
                 <td>{affiliate?.accountStatus}</td>
               ) : null}
+
+              {tableData[9]?.isActive ? <td>{affiliate?.branchName}</td> : null}
+
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[9]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!affiliate?.isActive}
@@ -272,7 +297,7 @@ const AffiliateTable = ({
                 </>
               ) : null}
 
-              {tableData[10]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}

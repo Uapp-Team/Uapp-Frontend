@@ -132,11 +132,11 @@ const Branch = () => {
             <NavItem>
               {submitData ? (
                 <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
-                  Manager Information
+                  Admin Information
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "2"}>
-                  Manager Information
+                  Admin Information
                 </NavLink>
               )}
             </NavItem>

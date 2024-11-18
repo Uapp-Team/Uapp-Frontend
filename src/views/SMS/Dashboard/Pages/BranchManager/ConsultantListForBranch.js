@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
 import get from "../../../../../helpers/get";
-import ToggleSwitch from "../../../Components/ToggleSwitch";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import remove from "../../../../../helpers/remove";
-import put from "../../../../../helpers/put";
-import { Link } from "react-router-dom/cjs/react-router-dom";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import ConsultantActive from "../../../ConsultantsAndTypes/ConsultantList/Component/ConsultantActive";
 
 const ConsultantListForBranch = ({ id }) => {
   const [data, setData] = useState([]);
@@ -33,7 +31,7 @@ const ConsultantListForBranch = ({ id }) => {
 
   const handleDeleteData = () => {
     setButtonStatus(true);
-    remove(`Consultant/Delete/${delData?.id}`).then((res) => {
+    remove(`Consultant/Delete/${delData}`).then((res) => {
       setButtonStatus(false);
       //
       addToast(res, {
@@ -51,23 +49,6 @@ const ConsultantListForBranch = ({ id }) => {
     history.push(`/consultantInformation/${id}`);
   };
 
-  const handleUpdate = (id) => {
-    put(`Consultant/UpdateAccountStatus/${id}`).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "success",
-        });
-        setSuccess(!success);
-      } else {
-        addToast(res?.data?.message, {
-          autoDismiss: true,
-          appearance: "error",
-        });
-      }
-    });
-  };
-
   return (
     <>
       <div className="custom-card-border p-4 mb-30px">
@@ -83,10 +64,9 @@ const ConsultantListForBranch = ({ id }) => {
             <Table responsive className="mt-3">
               <thead className="tablehead">
                 <tr>
-                  {/* <td>SL/NO</td> */}
                   <td>Name</td>
                   <td>Contact </td>
-                  <td>Address</td>
+                  <td>Type</td>
                   <td>Status </td>
                   <td>Action </td>
                 </tr>
@@ -94,20 +74,14 @@ const ConsultantListForBranch = ({ id }) => {
               <tbody>
                 {data?.consultants?.map((item, i) => (
                   <tr key={i} className="border-buttom">
-                    {/* <td>{i + 1}</td> */}
-
                     <td>{item?.name}</td>
                     <td>{item?.contact}</td>
                     <td>{item?.typeName}</td>
                     <td>
-                      {
-                        <ToggleSwitch
-                          defaultChecked={
-                            item?.isActive === false ? false : true
-                          }
-                          onChange={() => handleUpdate(item?.consultantId)}
-                        />
-                      }
+                      <ConsultantActive
+                        id={item?.consultantId}
+                        isActive={!item?.isActive}
+                      />
                     </td>
                     <td>
                       <span

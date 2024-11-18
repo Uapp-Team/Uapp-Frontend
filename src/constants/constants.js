@@ -2,7 +2,7 @@
 export const rootUrl = `http://localtest.uapp.uk/`;
 // export const rootUrl = `https://lostaquaapple55.conveyor.cloud/`;
 // export const rootUrl = `https://localhost:44357/`;
-// export const rootUrl = `http://192.168.68.111:45455/`;
+// export const rootUrl = `http://192.168.0.12:45463/`;
 
 export const etest = `https://etest.uapp.uk/`;
 //export const etest = `https://192.168.0.138:45455/`;
@@ -19,3 +19,5 @@ export const leadUrl = `https://leadapi.uapp.uk/`;
 // export const rootUrl = `http://192.168.68.122:45457/`;
 
 export const leadApi = `${leadUrl}api/v1/`;
+
+export const androidAppUrl = `https://api.uapp.uk/apps_download/uapp.apk`;

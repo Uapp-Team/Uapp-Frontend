@@ -143,7 +143,7 @@ const BranchManagerNewProfile = () => {
       ) : (
         <div>
           <BreadCrumb
-            title="Branch Manager Profile"
+            title="Branch Admin Profile"
             backTo="Branch Profile"
             path={`/branchProfile/${manager?.branchId}`}
           />
@@ -151,9 +151,7 @@ const BranchManagerNewProfile = () => {
           <Row>
             <Col md="12">
               <div className="row">
-                {permissions?.includes(
-                  permissionList.Edit_Branch
-                ) ? (
+                {permissions?.includes(permissionList.Edit_Branch) ? (
                   <Modal
                     isOpen={modalOpen2}
                     toggle={closeModal1}

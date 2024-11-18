@@ -1011,6 +1011,22 @@ const Index = () => {
             <div className="row g-2">
               <div className="col-md-10">
                 <div className="row mb-3">
+                  {branch.length > 1 && (
+                    <div className="col-md-3 mb-2">
+                      <Branch
+                        data={branch}
+                        label={branchLabel}
+                        setLabel={setBranchLabel}
+                        value={branchValue}
+                        setValue={setBranchValue}
+                        name=""
+                        error={() => {}}
+                        setError={() => {}}
+                        action={() => {}}
+                      />
+                    </div>
+                  )}
+
                   {userType !== userTypes?.Consultant ? (
                     <div className="col-md-3 mb-2">
                       <Select
@@ -1043,41 +1059,6 @@ const Index = () => {
                       </>
                     </div>
                   ) : null}
-                  {/* 
-                  {userType === userTypes?.SystemAdmin && (
-                    <>
-                      {(userTypeValue === 0 || userTypeValue === 2) && (
-                        <div className="col-md-3 mb-2">
-                          <DefaultDropdown
-                            label={affiliateLabel}
-                            setLabel={setAffiliateLabel}
-                            value={affiliateValue}
-                            setValue={setAffiliateValue}
-                            url="AffiliateDD"
-                            name="status"
-                            error={() => {}}
-                            setError={() => {}}
-                            action={() => {}}
-                          />
-                        </div>
-                      )}
-                      {(userTypeValue === 0 || userTypeValue === 3) && (
-                        <div className="col-md-3 mb-2">
-                          <DefaultDropdown
-                            label={companionLabel}
-                            setLabel={setCompanionLabel}
-                            value={companionValue}
-                            setValue={setCompanionValue}
-                            url="CompanionDD"
-                            name="status"
-                            error={() => {}}
-                            setError={() => {}}
-                            action={() => {}}
-                          />
-                        </div>
-                      )}
-                    </>
-                  )} */}
 
                   <div className="col-md-3 mb-2">
                     <Select
@@ -1098,22 +1079,6 @@ const Index = () => {
                       onChange={(opt) => selectStatus(opt.label, opt.value)}
                     />
                   </div>
-
-                  {branch.length > 1 && (
-                    <div className="col-md-3 mb-2">
-                      <Branch
-                        data={branch}
-                        label={branchLabel}
-                        setLabel={setBranchLabel}
-                        value={branchValue}
-                        setValue={setBranchValue}
-                        name=""
-                        error={() => {}}
-                        setError={() => {}}
-                        action={() => {}}
-                      />
-                    </div>
-                  )}
 
                   <div className="col-md-3 mb-2">
                     <Typing

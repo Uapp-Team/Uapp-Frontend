@@ -16,6 +16,7 @@ import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import Typing from "../../../../components/form/Typing";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
+import { AdminUsers } from "../../../../components/core/User";
 
 const CommissionReport = () => {
   const ConsultantPerformancePaging = JSON.parse(
@@ -346,7 +347,7 @@ const CommissionReport = () => {
       <Card className="zindex-100">
         <CardBody>
           <div className="row">
-            {branch.length > 1 && (
+            {AdminUsers() && branch.length > 1 && (
               <div className="col-md-3 col-sm-12 mb-1">
                 <Filter
                   data={branch}
@@ -424,7 +425,7 @@ const CommissionReport = () => {
           </div>
           <div className="d-flex justify-content-start mt-3">
             <div className="d-flex mt-1">
-              {branch.length > 1 && branchValue !== 0 ? (
+              {AdminUsers() && branch.length > 1 && branchValue !== 0 ? (
                 <TagButton
                   label={branchLabel}
                   setValue={() => setBranchValue(0)}
@@ -463,7 +464,7 @@ const CommissionReport = () => {
               )}
             </div>
             <div className="mt-1 mx-1 d-flex btn-clear">
-              {(branch.length > 1 && branchValue !== 0) ||
+              {(AdminUsers() && branch.length > 1 && branchValue !== 0) ||
               intakeValue !== 0 ||
               conTypeValue !== 0 ||
               designationValue !== 0 ? (

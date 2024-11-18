@@ -63,7 +63,7 @@ const Index = () => {
   const [userTypeLabel, setUserTypeLabel] = useState(
     withdrawTransactionPaging?.userTypeLabel
       ? withdrawTransactionPaging?.userTypeLabel
-      : "All"
+      : "All User Type"
   );
   const [userTypeValue, setUserTypeValue] = useState(
     withdrawTransactionPaging?.userTypeValue
@@ -608,11 +608,27 @@ const Index = () => {
             </div>
 
             <div className="row">
+              {branch.length > 1 && (
+                <div className="col-md-3 mb-2">
+                  <Branch
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                    name=""
+                    error={() => {}}
+                    setError={() => {}}
+                    action={() => {}}
+                  />
+                </div>
+              )}
+
               {isMarketing && (
                 <div className="col-md-3 mb-2">
                   <Filter
                     data={[
-                      { id: 0, name: "All" },
+                      { id: 0, name: "All User Type" },
                       { id: 1, name: "Consultant" },
                       { id: 2, name: "Affiliate" },
                       { id: 3, name: "Companion" },
@@ -687,21 +703,6 @@ const Index = () => {
                   onChange={(opt) => selectPayment(opt.label, opt.value)}
                 />
               </div>
-              {branch.length > 1 && (
-                <div className="col-md-3 mb-2">
-                  <Branch
-                    data={branch}
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                    name=""
-                    error={() => {}}
-                    setError={() => {}}
-                    action={() => {}}
-                  />
-                </div>
-              )}
 
               <div className="col-md-3">
                 <Typing

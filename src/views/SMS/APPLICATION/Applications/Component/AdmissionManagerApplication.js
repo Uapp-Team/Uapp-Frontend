@@ -248,15 +248,16 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : 0
   );
 
-  const [percentageLabel,setPercentageLabel] = useState(
+  const [percentageLabel, setPercentageLabel] = useState(
     AdmissionManagerApplicationPaging?.percentageLabel
       ? AdmissionManagerApplicationPaging?.percentageLabel
       : "Assesment percentage"
   );
+
   const [percentageValue, setPercentageValue] = useState(
     AdmissionManagerApplicationPaging?.percentageValue
       ? AdmissionManagerApplicationPaging?.percentageValue
-      : 0
+      : 100
   );
 
   // application list
@@ -360,7 +361,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     documentStatusLabel,
     documentStatusValue,
     percentageLabel,
-    percentageValue
+    percentageValue,
   ]);
 
   // for all dropdown
@@ -614,7 +615,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         setManagerPhoneDD(res);
       });
     }
+  }, [consultantId, currentUser, intake, selector, status, universityId]);
 
+  useEffect(() => {
     if (currentUser !== undefined) {
       if (universityId !== undefined) {
         get(
@@ -673,7 +676,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     selector,
     intakeRngValue,
     documentStatusValue,
-    percentageValue
+    percentageValue,
   ]);
 
   // Function for open delete modal
@@ -941,31 +944,30 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                       },
                       {
                         id: 20,
-                        name: '20%'
+                        name: "20%",
                       },
                       {
                         id: 40,
-                        name: '40%'
+                        name: "40%",
                       },
                       {
                         id: 60,
-                        name: '60%'
+                        name: "60%",
                       },
                       {
                         id: 80,
-                        name: '80%'
+                        name: "80%",
                       },
                       {
                         id: 100,
-                        name: '100%'
+                        name: "100%",
                       },
-                
                     ]}
                     label={percentageLabel}
                     setLabel={setPercentageLabel}
                     value={percentageValue}
                     setValue={setPercentageValue}
-                    action={() => { }}
+                    action={() => {}}
                   />
                 </Col>
               </>

@@ -42,7 +42,7 @@ const Applications = () => {
               userTypes?.AdmissionManager ||
             localStorage.getItem("userType") === userTypes?.AdmissionOfficer ? (
             <AdmissionManagerApplication currentUser={currentUser} />
-          ) : localStorage.getItem("userType") === userTypes?.BranchManager ? (
+          ) : localStorage.getItem("userType") === userTypes?.BranchAdmin ? (
             <ApplicationsCommon />
           ) : (
             <ApplicationsCommon />

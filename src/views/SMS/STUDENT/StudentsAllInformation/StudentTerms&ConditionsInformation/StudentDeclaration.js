@@ -243,7 +243,7 @@ const StudentDeclaration = () => {
               >
                 {userTypeId === userTypes?.SystemAdmin.toString() ||
                 userTypeId === userTypes?.Admin.toString() ||
-                userTypeId === userTypes?.BranchManager.toString() ||
+                userTypeId === userTypes?.BranchAdmin.toString() ||
                 userTypeId === userTypes?.AdmissionManager.toString() ||
                 userTypeId === userTypes?.ComplianceManager.toString() ||
                 userTypeId === userTypes?.Consultant.toString() ? (

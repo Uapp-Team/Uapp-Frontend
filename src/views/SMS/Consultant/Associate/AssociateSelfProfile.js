@@ -18,7 +18,7 @@ const AssociateSelfProfile = () => {
         title="Associate Profile"
         backTo={
           userType === userTypes?.SystemAdmin ||
-          userType === userTypes?.BranchManager ||
+          userType === userTypes?.BranchAdmin ||
           userType === userTypes?.Admin ||
           userType === userTypes?.Consultant ||
           userType === userTypes?.ComplianceManager
@@ -27,7 +27,7 @@ const AssociateSelfProfile = () => {
         }
         path={
           userType === userTypes?.SystemAdmin ||
-          userType === userTypes?.BranchManager ||
+          userType === userTypes?.BranchAdmin ||
           userType === userTypes?.Admin ||
           userType === userTypes?.Consultant ||
           userType === userTypes?.ComplianceManager

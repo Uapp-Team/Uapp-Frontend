@@ -73,7 +73,12 @@ const GeneralInformationForm = ({
               )}
             </FormGroup>
           ) : (
-            <input type="hidden" value={branchValue} />
+            <input
+              type="hidden"
+              value={branchValue}
+              name="BranchId"
+              id="BranchId"
+            />
             // <FormGroup className="has-icon-left position-relative">
             //   <span>
             //     <span className="text-danger">*</span>
@@ -95,7 +100,7 @@ const GeneralInformationForm = ({
 
           {userTypeId === userTypes?.SystemAdmin ||
           userTypeId === userTypes?.Admin ||
-          userTypeId === userTypes?.BranchManager ? (
+          userTypeId === userTypes?.BranchAdmin ? (
             <FormGroup className="has-icon-left position-relative">
               <span>
                 <span className="text-danger">*</span> Staff Type
@@ -113,7 +118,14 @@ const GeneralInformationForm = ({
                 <span className="text-danger">Staff type is required</span>
               )}
             </FormGroup>
-          ) : null}
+          ) : (
+            <input
+              type="hidden"
+              value={typeValue}
+              name="employeeTypeId"
+              id="employeeTypeId"
+            />
+          )}
 
           <FormGroup>
             <span>

@@ -135,7 +135,7 @@ const StaffRegister = () => {
       isFormValid = false;
       setConsultantError(true);
     }
-    if (userTypeId !== userTypes?.BranchManager && branchValue === 0) {
+    if (userTypeId !== userTypes?.BranchAdmin && branchValue === 0) {
       isFormValid = false;
       setBranchError(true);
     }
@@ -195,7 +195,10 @@ const StaffRegister = () => {
           setEmail("");
           // history.push(`/staffGeneralInformation/${res?.data?.result?.id}`);
         } else {
-          return;
+          addToast(res?.data?.message, {
+            appearance: res?.data?.isSuccess == true ? "success" : "error",
+            autoDismiss: true,
+          });
         }
       });
     }
@@ -224,7 +227,7 @@ const StaffRegister = () => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md="6">
-                {userTypeId !== userTypes?.BranchManager ? (
+                {userTypeId !== userTypes?.BranchAdmin ? (
                   <FormGroup>
                     <span>
                       Branch <span className="text-danger">*</span>
@@ -243,7 +246,12 @@ const StaffRegister = () => {
                     )}
                   </FormGroup>
                 ) : (
-                  <input type="hidden" value={branchValue} />
+                  <input
+                    type="hidden"
+                    name="BranchId"
+                    id="BranchId"
+                    value={branchValue}
+                  />
                 )}
 
                 <FormGroup>

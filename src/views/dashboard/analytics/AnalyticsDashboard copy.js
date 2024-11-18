@@ -39,7 +39,7 @@ const AnalyticsDashboard = () => {
 
       {currentUser.userTypeId == userTypes?.Provider && <Provider />}
 
-      {currentUser.userTypeId == userTypes?.BranchManager && <BranchManager />}
+      {currentUser.userTypeId == userTypes?.BranchAdmin && <BranchManager />}
 
       {currentUser.userTypeId == userTypes?.Student && <Student />}
 

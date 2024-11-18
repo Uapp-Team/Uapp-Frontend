@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
-import poundicon from "../../../../../assets/img/poundcoin.svg";
-import camera from "../../../../../assets/img/camera.svg";
-import { Col, Form, FormGroup, Input, Modal, ModalBody, Row } from "reactstrap";
-import get from "../../../../../helpers/get";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
+import { Col, Form, FormGroup, Input, Modal, ModalBody, Row } from "reactstrap";
 import "../../../../../assets/CoustomStyle/dashboard.css";
-import { Link } from "react-router-dom/cjs/react-router-dom";
-import UserNotices from "../../Component/UserNotices";
+import poundicon from "../../../../../assets/img/poundcoin.svg";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import RecentInvitations from "./RecentInvitations";
-import CountingCards from "./CountingCards";
-import Uget from "../../../../../helpers/Uget";
-import CompanionRefer from "./CompanionRefer/CompanionRefer";
 import CopyButton from "../../../../../components/Refer/CopyButton";
 import SocialShare from "../../../../../components/Refer/SocialShare";
-import put from "../../../../../helpers/put";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import put from "../../../../../helpers/put";
+import Uget from "../../../../../helpers/Uget";
+import Loader from "../../../Search/Loader/Loader";
+import UserNotices from "../../Component/UserNotices";
+import CompanionRefer from "./CompanionRefer/CompanionRefer";
+import CountingCards from "./CountingCards";
+import RecentInvitations from "./RecentInvitations";
 
 const Companion = () => {
   const { id } = useParams();
@@ -30,8 +28,6 @@ const Companion = () => {
 
   const [showBal, setShowBal] = useState(false);
   const [availableWithdraw, setAvailableWithdraw] = useState(0);
-  // const [balance, setBalance] = useState(0);
-  // const [open, setOpen] = useState(false);
   const history = useHistory();
   const [overview, setOverview] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -47,6 +43,7 @@ const Companion = () => {
   const userType = localStorage.getItem("userType");
 
   const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
@@ -56,9 +53,18 @@ const Companion = () => {
   }, [referenceId]);
 
   useEffect(() => {
-    Uget(`Companion/get-dashboard-info/${userId}`).then((res) => {
-      setCount(res?.data);
-    });
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await Uget(`Companion/get-dashboard-info/${userId}`);
+        setCount(res?.data);
+      } catch (error) {
+        console.error("Error fetching dashboard info:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [userId]);
 
   useEffect(() => {
@@ -138,69 +144,72 @@ const Companion = () => {
         ) : null}
       </div>
 
-      <Row className="mb-4">
-        <Col lg="9">
-          <CountingCards id={referenceId} count={count} setCount={setCount} />
-          <RecentInvitations count={count} setCount={setCount} />
-        </Col>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Row className="mb-4">
+          <Col lg="9">
+            <CountingCards id={referenceId} count={count} setCount={setCount} />
+            <RecentInvitations count={count} setCount={setCount} />
+          </Col>
 
-        <Col lg="3">
-          {active && (
-            <>
-              {userType !== userTypes?.SystemAdmin ? (
-                <div className="custom-card-border p-4 minH-250px relative mb-30px">
-                  <div className="text-center my-5">
-                    {" "}
-                    <div className="text-center mx-auto mb-4">
-                      <p style={{ color: "##828282" }}>Copy & Share</p>
+          <Col lg="3">
+            {active && (
+              <>
+                {userType !== userTypes?.SystemAdmin ? (
+                  <div className="custom-card-border p-4 minH-250px relative mb-30px">
+                    <div className="text-center my-5">
+                      {" "}
+                      <div className="text-center mx-auto mb-4">
+                        <p style={{ color: "##828282" }}>Copy & Share</p>
+                      </div>
+                      <div className="d-flex justify-content-between align-items-center copy-text mx-auto w-75">
+                        <p className="mb-0 text-ellipsis mr-1">{url}</p>
+                        <CopyButton text={url} />
+                      </div>
+                      <SocialShare
+                        description={"this is a basic share page"}
+                        url={url}
+                      ></SocialShare>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center copy-text mx-auto w-75">
-                      <p className="mb-0 text-ellipsis mr-1">{url}</p>
-                      <CopyButton text={url} />
-                    </div>
-                    <SocialShare
-                      description={"this is a basic share page"}
-                      url={url}
-                    ></SocialShare>
                   </div>
+                ) : null}
+              </>
+            )}
+
+            <div className="custom-card-border p-4 minH-250px relative mb-30px">
+              <div className="d-flex justify-content-between">
+                <div className="text-gray">MY BALANCE</div>
+                <div className="dashboard-balance">
+                  £ {availableWithdraw?.balance}
                 </div>
-              ) : null}
-            </>
-          )}
-
-          <div className="custom-card-border p-4 minH-250px relative mb-30px">
-            <div className="d-flex justify-content-between">
-              <div className="text-gray">MY BALANCE</div>
-              <div className="dashboard-balance">
-                £ {availableWithdraw?.balance}
               </div>
-            </div>
-            <div className="text-center my-5">
-              <p className="mb-0">Available to withdraw</p>
-              <p>
-                <button
-                  className="consultant-balance-button pr-3"
-                  style={{ border: "1px solid #019088" }}
-                  onClick={() => setShowBal(!showBal)}
-                >
-                  <img src={poundicon} className="img-fluid mr-4" alt="" />
-
-                  <span
-                    style={{
-                      color: "#1E98B0",
-                      fontWeight: "600",
-                      fontSize: "17px",
-                    }}
+              <div className="text-center my-5">
+                <p className="mb-0">Available to withdraw</p>
+                <p>
+                  <button
+                    className="consultant-balance-button pr-3"
+                    style={{ border: "1px solid #019088" }}
+                    onClick={() => setShowBal(!showBal)}
                   >
-                    {showBal
-                      ? availableWithdraw?.availableToWithdraw
-                      : "Balance"}
-                  </span>
-                </button>
-              </p>
-            </div>
+                    <img src={poundicon} className="img-fluid mr-4" alt="" />
 
-            {/* <div className="consultant-balance-botton pb-4 pr-5 w-100">
+                    <span
+                      style={{
+                        color: "#1E98B0",
+                        fontWeight: "600",
+                        fontSize: "17px",
+                      }}
+                    >
+                      {showBal
+                        ? availableWithdraw?.availableToWithdraw
+                        : "Balance"}
+                    </span>
+                  </button>
+                </p>
+              </div>
+
+              {/* <div className="consultant-balance-botton pb-4 pr-5 w-100">
               <div className="d-flex justify-content-between">
                 <Link
                   to={`/withdrawTransactionByConsultant/${currentUser?.referenceId}`}
@@ -214,43 +223,44 @@ const Companion = () => {
                 </div>
               </div>
             </div> */}
-          </div>
+            </div>
 
-          {userType !== userTypes?.SystemAdmin ? (
-            <>
-              {active && (
-                <div className="custom-card-border p-4 relative mb-3">
-                  <div>
-                    <div className="p-4 pb-3 d-flex justify-content-center flex-collumn ">
-                      <i
-                        className="fas fa-gift fs-63px"
-                        style={{
-                          color: "#1E98B0",
-                        }}
-                      ></i>
-                    </div>
-                    <div className="text-center">
-                      <h1 className="mb-3 fs-16px fw-500">
-                        Refer a student, Earn Unlimited
-                      </h1>
-                      <p className="fs-13px ">
-                        Refer a friend or family and receive up to £500!
-                      </p>
-                      <button
-                        onClick={() => setModalOpen(true)}
-                        className="btn btn-primary btn-invite relative"
-                      >
-                        <i className="fas fa-envelope invite-now"></i>
-                        <span>Invite Now</span>
-                      </button>
+            {userType !== userTypes?.SystemAdmin ? (
+              <>
+                {active && (
+                  <div className="custom-card-border p-4 relative mb-3">
+                    <div>
+                      <div className="p-4 pb-3 d-flex justify-content-center flex-collumn ">
+                        <i
+                          className="fas fa-gift fs-63px"
+                          style={{
+                            color: "#1E98B0",
+                          }}
+                        ></i>
+                      </div>
+                      <div className="text-center">
+                        <h1 className="mb-3 fs-16px fw-500">
+                          Refer a student, Earn Unlimited
+                        </h1>
+                        <p className="fs-13px ">
+                          Refer a friend or family and receive up to £500!
+                        </p>
+                        <button
+                          onClick={() => setModalOpen(true)}
+                          className="btn btn-primary btn-invite relative"
+                        >
+                          <i className="fas fa-envelope invite-now"></i>
+                          <span>Invite Now</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </>
-          ) : null}
-        </Col>
-      </Row>
+                )}
+              </>
+            ) : null}
+          </Col>
+        </Row>
+      )}
 
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
         {/* <ModalHeader></ModalHeader> */}

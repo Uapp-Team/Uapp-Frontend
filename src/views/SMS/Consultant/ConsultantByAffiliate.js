@@ -473,9 +473,15 @@ const ConsultantByAffiliate = () => {
                         {tableData[0]?.isActive ? <th>UAPP ID</th> : null}
                         {tableData[1]?.isActive ? <th>Full Name</th> : null}
                         {tableData[2]?.isActive ? <th>Contact</th> : null}
+                        {tableData[3]?.isActive ? <th>Parent</th> : null}
                         {tableData[3]?.isActive ? <th>Started</th> : null}
                         {tableData[4]?.isActive ? <th>Invitation</th> : null}
+                        {tableData[6]?.isActive ? <th>Leads</th> : null}
+                        {tableData[6]?.isActive ? <th>Students</th> : null}
                         {tableData[5]?.isActive ? <th>Team Member</th> : null}
+                        {tableData[8]?.isActive ? <th>Application</th> : null}
+                        {tableData[9]?.isActive ? <th>Registered</th> : null}
+                        {tableData[10]?.isActive ? <th>Status</th> : null}
                         {tableData[6]?.isActive ? <th>Action</th> : null}
                       </tr>
                     </thead>
@@ -532,6 +538,9 @@ const ConsultantByAffiliate = () => {
                             </td>
                           ) : null}
                           {tableData[3]?.isActive ? (
+                            <td>{affiliate?.parentName}</td>
+                          ) : null}
+                          {tableData[3]?.isActive ? (
                             <td>{dateFormate(affiliate?.createdOn)}</td>
                           ) : null}
                           {tableData[4]?.isActive ? (
@@ -546,6 +555,39 @@ const ConsultantByAffiliate = () => {
                                   }}
                                 >
                                   {affiliate?.invitationCount}
+                                </span>
+                              </div>
+                            </td>
+                          ) : null}
+                          {tableData[6]?.isActive ? (
+                            <td>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  className="Count-fifth-no-pointer"
+                                  onClick={() => {
+                                    history.push(
+                                      `/affiliate-lead-List/${affiliate?.id}`
+                                    );
+                                  }}
+                                >
+                                  {affiliate?.leadCount}
+                                </span>
+                              </div>
+                            </td>
+                          ) : null}
+
+                          {tableData[6]?.isActive ? (
+                            <td>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  className="Count-sixth-no-pointer"
+                                  onClick={() => {
+                                    history.push(
+                                      `/affiliate-student-List/${affiliate?.id}`
+                                    );
+                                  }}
+                                >
+                                  {affiliate?.studentCount}
                                 </span>
                               </div>
                             </td>
@@ -566,6 +608,44 @@ const ConsultantByAffiliate = () => {
                                 </span>
                               </div>
                             </td>
+                          ) : null}
+
+                          {tableData[8]?.isActive ? (
+                            <td>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  className="Count-third-no-pointer"
+                                  // onClick={() => {
+                                  //   history.push(
+                                  //     `/companion-team-List/${companion?.id}`
+                                  //   );
+                                  // }}
+                                >
+                                  {affiliate?.totalApplicationCount}
+                                </span>
+                              </div>
+                            </td>
+                          ) : null}
+
+                          {tableData[9]?.isActive ? (
+                            <td>
+                              <div style={{ marginTop: "5px" }}>
+                                <span
+                                  className="Count-fourth-no-pointer"
+                                  // onClick={() => {
+                                  //   history.push(
+                                  //     `/companion-team-List/${companion?.id}`
+                                  //   );
+                                  // }}
+                                >
+                                  {affiliate?.totalRegisteredApplicationCount}
+                                </span>
+                              </div>
+                            </td>
+                          ) : null}
+
+                          {tableData[10]?.isActive ? (
+                            <td>{affiliate?.accountStatus}</td>
                           ) : null}
 
                           {tableData[7]?.isActive ? (
@@ -605,7 +685,7 @@ const ConsultantByAffiliate = () => {
             </CardBody>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardBody>
               <h5>Sent Invitations</h5>
 
@@ -634,7 +714,7 @@ const ConsultantByAffiliate = () => {
                 </Table>
               </div>
             </CardBody>
-          </Card>
+          </Card> */}
         </>
       )}
     </div>
