@@ -99,10 +99,6 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
-  const { RangePicker } = DatePicker;
-
-  // const formattedDate = format(new Date(), "dd-MM-yyyy");
-  console.log(birthDate);
 
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
