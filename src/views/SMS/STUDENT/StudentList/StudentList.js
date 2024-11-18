@@ -251,6 +251,7 @@ const StudentList = () => {
     branchValue,
     check,
     isTyping,
+    id,
   ]);
 
   // api ends here

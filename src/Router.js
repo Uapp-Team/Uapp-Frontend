@@ -1581,6 +1581,16 @@ const CompanionTeamMembersRegisteredApplication = lazy(() =>
     "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersRegisteredApplication.js"
   )
 );
+const AffiliateTeamMembersApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersApplication.js"
+  )
+);
+const AffiliateTeamMembersRegisteredApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersRegisteredApplication.js"
+  )
+);
 
 const CompanionCommissionSetting = lazy(() =>
   import("./views/SMS/Companion/CompanionCommissionSetting/Index.js")
@@ -1986,6 +1996,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/affiliate-student-list/:affiliateId"
                     component={AffiliateStudentListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersApplication}
+                  />
+                  <AppRoute
+                    path="/affiliate-registered-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersRegisteredApplication}
                   />
 
                   <AppRoute
