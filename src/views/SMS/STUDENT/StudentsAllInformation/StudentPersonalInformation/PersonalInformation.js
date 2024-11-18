@@ -1,5 +1,4 @@
-import { Modal, Upload } from "antd";
-import moment from "moment";
+import { DatePicker, Modal, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
 import PhoneInput from "react-phone-input-2";
@@ -7,6 +6,8 @@ import "react-phone-input-2/lib/style.css";
 import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
+
+import moment from "moment";
 import {
   Card,
   CardBody,
@@ -98,6 +99,10 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+  const { RangePicker } = DatePicker;
+
+  // const formattedDate = format(new Date(), "dd-MM-yyyy");
+  console.log(birthDate);
 
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
@@ -183,21 +188,9 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        setBirthDate(
-          res?.dateOfBirth
-            ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD")
-            : null
-        );
-        setIssueDate(
-          res?.issueDate
-            ? moment(new Date(res.issueDate)).format("YYYY-MM-DD")
-            : null
-        );
-        setexpireDate(
-          res?.expireDate
-            ? moment(new Date(res.expireDate)).format("YYYY-MM-DD")
-            : null
-        );
+        setBirthDate(res?.dateOfBirth ? moment(res.dateOfBirth) : null);
+        setIssueDate(res?.issueDate ? moment(res.issueDate) : null);
+        setexpireDate(res?.expireDate ? moment(res.expireDate) : null);
       });
     }
   }, [success, applicationStudentId]);
@@ -238,15 +231,22 @@ const PersonalInformation = () => {
     }
   };
 
-  const handleDate = (e) => {
-    const value = e.target.value;
-    setBirthDate(value);
-    const current = new Date(currentDate).getFullYear();
-    const selected = new Date(value).getFullYear();
-    const calculateBirthDate = current - selected;
-    if (value === "") {
+  const handleDate = (selectedDate) => {
+    if (!selectedDate) {
       setDateError("Date of birth is required");
-    } else if (calculateBirthDate < 15) {
+      setBirthDate("");
+      return;
+    }
+
+    const birthdate = selectedDate.toDate();
+    setBirthDate(birthdate);
+
+    const currentYear = new Date().getFullYear();
+    const selectedYear = birthdate.getFullYear();
+    const calculatedAge = currentYear - selectedYear;
+    console.log(calculatedAge, "year");
+
+    if (calculatedAge < 15) {
       setDateError("Age must be more than 15 years");
     } else {
       setDateError("");
@@ -655,15 +655,38 @@ const PersonalInformation = () => {
                       }}
                     /> */}
 
-                    <Input
+                    {/* <Input
                       type="date"
                       name="dateOfBirth"
                       id="dateOfBirth"
                       onChange={(e) => {
                         handleDate(e);
                       }}
-                      value={birthDate}
+                      value={birthDate == "" ? new Date() : birthDate}
                       // min={minDate}
+                    /> */}
+                    {/* <DatePicker
+                      onChange={(e) => {
+                        setBirthDate(e);
+                      }}
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText="dd/mm/yyyy"
+                      selected={birthDate}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    /> */}
+
+                    <DatePicker
+                      onChange={(e) => {
+                        handleDate(e);
+                      }}
+                      format="DD-MM-YYYY"
+                      placeholder="dd/mm/yyyy"
+                      style={{
+                        width: "100%",
+                      }}
+                      value={birthDate ? moment(birthDate) : null}
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
