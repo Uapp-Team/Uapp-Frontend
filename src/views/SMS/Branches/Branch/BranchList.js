@@ -364,7 +364,7 @@ const BranchList = () => {
                               <th>Branch Name</th>
                             ) : null}
                             {tableData[1]?.isActive ? (
-                              <th>Manager Name</th>
+                              <th>Admin Name</th>
                             ) : null}
                             {permissions?.includes(
                               permissionList.Staff_Password_Change
