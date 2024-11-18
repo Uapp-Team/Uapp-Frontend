@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
-import { useHistory, useParams } from "react-router-dom";
-import { Card, CardBody, Table } from "reactstrap";
+import { useParams } from "react-router-dom";
+import { Card, CardBody } from "reactstrap";
 import get from "../../../../helpers/get";
 import DOMPurify from "dompurify";
 import Loader from "../../Search/Loader/Loader";
+import { userTypes } from "../../../../constants/userTypeConstant";
 
 const StudentNewDeclaration = () => {
   const { applicationStudentId } = useParams();
+  const referenceId = localStorage.getItem("referenceId");
   const [studentDetails, setStudentDetails] = useState({});
   const [conscentData, setConscentData] = useState({});
   const [currentUserDetails, setCurrentUserDetails] = useState({});
   const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
+
+  const userId = applicationStudentId ? applicationStudentId : referenceId;
 
   useEffect(() => {
-    get(`UserTermsAndConditions/GetByCurrentUser`).then((res) => {
-      setLoading(false);
-      console.log(res, "msg ki paico");
-      setCurrentUserDetails(res);
-    });
-  }, [success]);
+    get(`UserTermsAndConditions/Get/${userTypes.Student}/${userId}`).then(
+      (res) => {
+        setLoading(false);
+        setCurrentUserDetails(res);
+      }
+    );
+  }, [userId]);
 
   const createMarkup = (html) => {
     return {
@@ -29,16 +33,14 @@ const StudentNewDeclaration = () => {
   };
 
   useEffect(() => {
-    get(`Student/Get/${applicationStudentId}`).then((res) => {
+    get(`Student/Get/${userId}`).then((res) => {
       setStudentDetails(res);
-      console.log(res, "personal details");
     });
 
-    get(`StudentConsent/Get/${applicationStudentId}`).then((res) => {
+    get(`StudentConsent/Get/${userId}`).then((res) => {
       setConscentData(res);
-      console.log(res, "declaration");
     });
-  }, [applicationStudentId, setStudentDetails]);
+  }, [userId]);
 
   function formatDate(string) {
     var options = { year: "numeric", month: "long", day: "numeric" };
@@ -62,7 +64,6 @@ const StudentNewDeclaration = () => {
                 <Loader />
               ) : (
                 <>
-                  {" "}
                   {currentUserDetails?.details !== "<p><br></p>" &&
                     currentUserDetails?.details !== "<p> </p>" &&
                     currentUserDetails?.details !== "<h5><br></h5>" && (

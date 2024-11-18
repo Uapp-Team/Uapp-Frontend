@@ -23,15 +23,17 @@ const Registration = () => {
   // const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Affiliate");
   const [parentValue, setParentValue] = useState(affiliateId ? affiliateId : 0);
-
+  // const [branchLabel, setBranchLabel] = useState("Select Branch");
+  // const [branchValue, setBranchValue] = useState(0);
+  // const [branchError, setBranchError] = useState(false);
   const [consultant, setConsultant] = useState([]);
   const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
 
-  const [consultantError, setConsultantError] = useState(false);
+  // const [consultantError, setConsultantError] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [parentError, setParentError] = useState(false);
+  // const [parentError, setParentError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [title, setTitle] = useState([]);
   const [titleValue, setTitleValue] = useState(0);
@@ -57,6 +59,8 @@ const Registration = () => {
     get("consultantdd/ActiveConsultant").then((res) => {
       setConsultant(res);
     });
+  }, []);
+  useEffect(() => {
     get("AffiliateDD").then((res) => {
       setConsParent(res);
 
@@ -73,7 +77,7 @@ const Registration = () => {
   }));
 
   const selectParentCons = (label, value) => {
-    setParentError(false);
+    // setParentError(false);
     setParentLabel(label);
     setParentValue(value);
   };
@@ -84,7 +88,7 @@ const Registration = () => {
   }));
 
   const selectConsultant = (label, value) => {
-    setConsultantError(false);
+    // setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
   };
@@ -273,6 +277,21 @@ const Registration = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
+                {/* <FormGroup>
+                  <span>Branch</span>
+                  <DefaultDropdown
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                    url="BranchDD/Index"
+                    name="branchId"
+                    error={branchError}
+                    setError={setBranchError}
+                    errorText="Branch is Required"
+                    action={() => {}}
+                  />
+                </FormGroup> */}
                 {userType === userTypes?.Consultant.toString() ? (
                   <>
                     {userId && (

@@ -68,15 +68,13 @@ const AddUniversitySubject = () => {
   const { addToast } = useToasts();
   const { id, subjId } = useParams();
   const referenceId = localStorage.getItem("referenceId");
-  console.log(subjId);
-  console.log(id);
 
   const history = useHistory();
 
   useEffect(() => {
     get(`ProviderHelper/GetProviderId/${userType}/${referenceId}`).then(
       (res) => {
-        setProviderValue(res != 0 ? res : 0);
+        setProviderValue(res !== 0 ? res : 0);
         // if(res != 0){
         //   localStorage.setItem("providerValue", res);
         // }
@@ -101,7 +99,7 @@ const AddUniversitySubject = () => {
     if (id != 0) {
       setUniValue(id);
     }
-  }, [userType]);
+  }, [id, userType]);
 
   // useEffect(() => {
   //   if (id != 0) {

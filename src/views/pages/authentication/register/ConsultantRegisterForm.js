@@ -226,7 +226,10 @@ const ConsultantRegisterForm = () => {
             });
             history.push("/consultantAccountCreated");
           } else {
-            setPasswordError(res?.data?.message);
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
           }
         });
     }

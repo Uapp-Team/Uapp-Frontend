@@ -29,7 +29,7 @@ const AffiliateAddSuccess = () => {
       <BreadCrumb
         title="Affiliate Registration"
         backTo="My Teams"
-        path={`/associateList`}
+        path={`/ConsultantByAffiliateList`}
       />
 
       <Card>

@@ -735,6 +735,7 @@ const AddUniversity = (props) => {
                     <Row>
                       {userType === userTypes?.SystemAdmin.toString() ||
                       userType === userTypes?.Admin.toString() ||
+                      userType === userTypes?.BranchAdmin.toString() ||
                       userType === userTypes?.Editor.toString() ? (
                         <Col md="4">
                           <FormGroup>

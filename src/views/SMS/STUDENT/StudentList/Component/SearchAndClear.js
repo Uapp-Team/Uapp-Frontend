@@ -51,6 +51,23 @@ const SearchAndClear = ({
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row className="">
+            {AdminUsers() && branch.length > 1 && (
+              <Col lg="4" md="3" sm="12" className="mb-2">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                  name=""
+                  error={() => {}}
+                  setError={() => {}}
+                  action={() => {}}
+                  isDisabled={branchId ? true : false}
+                />
+              </Col>
+            )}
+
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select
                 options={studentTypeOption}
@@ -61,29 +78,6 @@ const SearchAndClear = ({
                 isDisabled={type}
               />
             </Col>
-
-            {userType !== userTypes?.AdmissionManager &&
-              userType !== userTypes?.ProviderAdmin &&
-              userType !== userTypes?.AdmissionOfficer && (
-                <>
-                  {AdminUsers() && branch.length > 1 && (
-                    <Col lg="4" md="3" sm="12" className="mb-2">
-                      <Filter
-                        data={branch}
-                        label={branchLabel}
-                        setLabel={setBranchLabel}
-                        value={branchValue}
-                        setValue={setBranchValue}
-                        name=""
-                        error={() => {}}
-                        setError={() => {}}
-                        action={() => {}}
-                        isDisabled={branchId ? true : false}
-                      />
-                    </Col>
-                  )}
-                </>
-              )}
 
             {userType !== userTypes?.Consultant ? (
               <Col lg="4" md="3" sm="12" className="mb-2 ">

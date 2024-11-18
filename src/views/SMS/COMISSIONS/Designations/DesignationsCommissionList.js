@@ -144,7 +144,7 @@ const DesignationsCommissionList = () => {
                 </tr>
               </thead>
               <tbody>
-                {dataList.length > 0 &&
+                {dataList?.length > 0 &&
                   dataList?.map((item, i) => (
                     <tr key={i} className="border-buttom">
                       {/* <th scope="row">{i + 1}</th> */}

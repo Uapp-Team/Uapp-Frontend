@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  Col,
   Form,
   FormGroup,
-  Col,
   Input,
   Row,
   Table,
 } from "reactstrap";
-import Select from "react-select";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import remove from "../../../../../helpers/remove";
-import put from "../../../../../helpers/put";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const Reference = () => {
   const history = useHistory();
@@ -446,7 +446,7 @@ const Reference = () => {
           <p className="section-title">Reference Information</p>
           <div className="row mx-1 mb-3">
             {refList.length > 0 && (
-              <Table className="table-bordered">
+              <Table responsive className="table-bordered">
                 <thead className="tablehead">
                   <tr>
                     <th>Name</th>
@@ -463,7 +463,7 @@ const Reference = () => {
                       <td>{ref?.referenceName}</td>
                       <td>{ref?.referenceType.name}</td>
                       <td>{ref?.institute_Company}</td>
-                      <td>{ref?.phoneNumber}</td>
+                      <td>+{ref?.phoneNumber}</td>
                       <td>{ref?.emailAddress}</td>
                       <td>
                         {permissions?.includes(permissionList?.Edit_Student) ? (

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Card, CardBody, Form, FormGroup, Col, Input, Row } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 import PlagiarismResultPdf from "./PlagiarismResultPdf";
 
 const PersonalStatement = () => {
@@ -26,6 +26,7 @@ const PersonalStatement = () => {
   const [progress, setProgress] = useState(false);
   const [success, setSuccess] = useState(false);
   const [stateMentError, setStateMentError] = useState("");
+  const [fileName, setFileName] = useState("");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
 
@@ -57,7 +58,7 @@ const PersonalStatement = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-
+    setFileName(file.name);
     if (file) {
       const reader = new FileReader();
 
@@ -143,7 +144,7 @@ const PersonalStatement = () => {
         activetab={"9"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -181,7 +182,15 @@ const PersonalStatement = () => {
                           id="inputImage"
                           onChange={(e) => handleFileChange(e)}
                         />
-                        {/* <p>Only .txt file is allow</p> */}
+                        <div className="mt-3">
+                          {fileName ? (
+                            <p>{fileName}</p>
+                          ) : stateMentError ? (
+                            <div className="text-danger">{stateMentError}</div>
+                          ) : (
+                            <p>Only .txt file are allowed</p>
+                          )}
+                        </div>
                       </Col>
                     </Row>
                   </FormGroup>
@@ -198,7 +207,7 @@ const PersonalStatement = () => {
                       rows={12}
                       value={statement}
                       onChange={(e) => handleStringData(e)}
-                    // onBlur={checkPlagiarism}
+                      // onBlur={checkPlagiarism}
                     />
 
                     <div className="d-flex justify-content-between">
@@ -255,8 +264,8 @@ const PersonalStatement = () => {
                               result?.score?.aggregatedScore < 25
                                 ? `text-success fw-600`
                                 : result?.score?.aggregatedScore < 50
-                                  ? `text-warning fw-600`
-                                  : `text-danger fw-600`
+                                ? `text-warning fw-600`
+                                : `text-danger fw-600`
                             }
                           >
                             {result?.score?.aggregatedScore}%
@@ -266,8 +275,8 @@ const PersonalStatement = () => {
                               result?.score?.aggregatedScore < 25
                                 ? `text-success fw-600`
                                 : result?.score?.aggregatedScore < 50
-                                  ? `text-warning fw-600`
-                                  : `text-danger fw-600`
+                                ? `text-warning fw-600`
+                                : `text-danger fw-600`
                             }
                           >
                             Plagiarism

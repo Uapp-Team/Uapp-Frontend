@@ -19,9 +19,6 @@ const StaffGeneralInformation = () => {
   const [parentValue, setParentValue] = useState(0);
   const [typeLabel, setTypeLabel] = useState("Select Staff Type");
   const [typeValue, setTypeValue] = useState(0);
-  const [homeAccept, setHomeAccept] = useState(false);
-  const [ukAccept, setUkAccept] = useState(false);
-  const [intAccept, setIntAccept] = useState(false);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("London office");
   const [branchValue, setBranchValue] = useState(1);
@@ -74,9 +71,6 @@ const StaffGeneralInformation = () => {
       setBranchLabel(res?.branch?.name);
       setTitleValue(res?.nameTittle?.id);
       setNameLabel(res?.nameTittle?.name);
-      setHomeAccept(res?.isAcceptedHome);
-      setUkAccept(res?.isAcceptedEU_UK);
-      setIntAccept(res?.isAcceptedInternational);
       setFirstName(res?.firstName);
       setLastName(res?.lastName);
       setEmail(res?.email);
@@ -158,10 +152,6 @@ const StaffGeneralInformation = () => {
     event.preventDefault();
     const subdata = new FormData(event.target);
 
-    subdata.append("isAcceptedHome", homeAccept);
-    subdata.append("isAcceptedEU_UK", ukAccept);
-    subdata.append("isAcceptedInternational", intAccept);
-
     for (var value of subdata) {
       console.log(value);
     }
@@ -188,7 +178,8 @@ const StaffGeneralInformation = () => {
         });
         setButtonStatus(false);
         setSuccess(!success);
-        history.push(`/staffPersonalInformation/${staffId}`);
+        res?.data?.isSuccess == true &&
+          history.push(`/staffPersonalInformation/${staffId}`);
       });
     }
   };

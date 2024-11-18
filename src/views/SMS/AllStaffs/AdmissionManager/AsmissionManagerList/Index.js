@@ -57,6 +57,17 @@ const Index = () => {
       ? AdmissionManagerPaging?.providerValue
       : 0
   );
+
+  const [branchLabel, setBranchLabel] = useState(
+    AdmissionManagerPaging?.branchLabel
+      ? AdmissionManagerPaging?.branchLabel
+      : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    AdmissionManagerPaging?.branchValue
+      ? AdmissionManagerPaging?.branchValue
+      : 0
+  );
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
   const [providerValue2, setProviderValue2] = useState(0);
   const [providerError, setProviderError] = useState(false);
@@ -121,6 +132,8 @@ const Index = () => {
         unistateValue: unistateValue && unistateValue,
         providerLabel: providerLabel && providerLabel,
         providerValue: providerValue && providerValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
@@ -135,6 +148,8 @@ const Index = () => {
     providerValue,
     searchStr,
     dataPerPage,
+    branchLabel,
+    branchValue,
   ]);
 
   useEffect(() => {
@@ -164,7 +179,7 @@ const Index = () => {
 
     if (!isTyping) {
       get(
-        `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}`
+        `AdmissionManager/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&providerId=${providerValue}&search=${searchStr}&branchid=${branchValue}`
       ).then((res) => {
         setManagerList(res?.models);
         setEntity(res?.totalEntity);
@@ -180,6 +195,7 @@ const Index = () => {
     searchStr,
     success,
     isTyping,
+    branchValue,
   ]);
 
   useEffect(() => {
@@ -550,6 +566,10 @@ const Index = () => {
           providerLabel={providerLabel}
           providerValue={providerValue}
           selectProvider={selectProvider}
+          branchLabel={branchLabel}
+          setBranchLabel={setBranchLabel}
+          branchValue={branchValue}
+          setBranchValue={setBranchValue}
           searchStr={searchStr}
           setSearchStr={setSearchStr}
           searchValue={searchValue}

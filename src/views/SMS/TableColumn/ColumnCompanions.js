@@ -36,6 +36,10 @@ const ColumnCompanions = [
     isActive: true,
   },
   {
+    title: "Branch",
+    isActive: true,
+  },
+  {
     title: "BlackList",
     isActive: true,
   },

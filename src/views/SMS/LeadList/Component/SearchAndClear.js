@@ -3,7 +3,6 @@ import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import Filter from "../../../../components/Dropdown/Filter";
 import icon_info from "../../../../assets/img/icons/icon_info.png";
-import TagButton from "../../../../components/buttons/TagButton";
 
 const SearchAndClear = ({
   branchId,
@@ -41,11 +40,24 @@ const SearchAndClear = ({
   setCheck,
 }) => {
   const userType = localStorage.getItem("userType");
+
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row className="">
+            {branch.length > 1 && (
+              <Col lg="4" md="3" sm="12" className="mb-2 ">
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                />
+              </Col>
+            )}
+
             {userType !== userTypes?.Consultant ? (
               <Col lg="4" md="3" sm="12" className="mb-2 ">
                 <Select

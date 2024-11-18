@@ -24,6 +24,7 @@ import "react-phone-input-2/lib/style.css";
 import Currency from "../../../../components/Dropdown/Currency";
 import BranchNavbar from "./BranchNavbar";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import Uget from "../../../../helpers/Uget";
 
 const Branch = () => {
   const history = useHistory();
@@ -52,9 +53,13 @@ const Branch = () => {
   const [nameError, setnameError] = useState(false);
   const [addressLineError, setaddressLineError] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [emailExistError, setEmailExistError] = useState(true);
+  const [branchExistError, setBranchExistError] = useState(true);
+  console.log(branchExistError);
+
   const [phoneNumberError, setphoneNumberError] = useState("");
   const [telePhoneNumberError, settelePhoneNumberError] = useState("");
-  const [branchCodeError, setbranchCodeError] = useState(false);
+  const [branchCodeError, setbranchCodeError] = useState("");
   const [stateNameError, setstateNameError] = useState(false);
 
   const [branchCurrencyId, setBranchCurrencyId] = useState(2);
@@ -160,13 +165,44 @@ const Branch = () => {
     }
   };
 
+  // const handleBranchCode = (e) => {
+  //   let data = e.target.value;
+  //   setbranchCode(data);
+  //   if (data === "") {
+  //     setbranchCodeError("Branch Code required");
+  //   } else if (data) {
+  //     Uget(`Branch/check-branch-code-duplication?&branchCode=${data}`).then(
+  //       (res) => {
+  //         if (!res) {
+  //           setbranchCodeError("Branch code is already exists");
+  //         } else {
+  //           setbranchCodeError("");
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     setbranchCodeError("");
+  //   }
+  // };
+
   const handleBranchCode = (e) => {
-    let data = e.target.value.trimStart();
+    let data = e.target.value;
     setbranchCode(data);
     if (data === "") {
-      setbranchCodeError(true);
+      setbranchCodeError("Branch Code required");
     } else {
-      setbranchCodeError(false);
+      get(`Branch/check-branch-code-duplication?&branchCode=${data}`).then(
+        (res) => {
+          console.log(res, "vai plz");
+
+          setBranchExistError(res);
+          if (res) {
+            setbranchCodeError("Branch code already exists");
+          } else {
+            setbranchCodeError("");
+          }
+        }
+      );
     }
   };
 
@@ -195,7 +231,12 @@ const Branch = () => {
     }
     if (!branchCode) {
       isFormValid = false;
-      setbranchCodeError(true);
+      setbranchCodeError("Branch Code required");
+    }
+
+    if (branchExistError === true) {
+      isFormValid = false;
+      setBranchExistError(branchExistError);
     }
     if (!phoneNumber) {
       isFormValid = false;
@@ -217,11 +258,18 @@ const Branch = () => {
       settelePhoneNumberError("TelePhone number required minimum 9 digit");
     }
     if (!email) {
-      isFormValid = false;
       setEmailError("Email is required");
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      isFormValid = false;
+    }
+
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
       isFormValid = false;
       setEmailError("Email is not Valid");
+    }
+
+    if (emailExistError === false) {
+      isFormValid = false;
+      setEmailExistError(emailExistError);
     }
 
     if (countryValue === 0) {
@@ -290,7 +338,7 @@ const Branch = () => {
   };
 
   const handleEmail = (e) => {
-    let data = e.target.value.trimStart();
+    let data = e.target.value;
     setemail(data);
     if (data === "") {
       setEmailError("Email is required");
@@ -298,6 +346,7 @@ const Branch = () => {
       setEmailError("Email is not valid");
     } else {
       get(`EmailCheck/EmailCheck/${data}`).then((res) => {
+        setEmailExistError(res);
         if (!res) {
           setEmailError("Email already exists");
         } else {
@@ -306,6 +355,25 @@ const Branch = () => {
       });
     }
   };
+
+  // const handleEmail = (e) => {
+  //   let data = e.target.value.trimStart();
+  //   setemail(data);
+
+  //   if (data === "") {
+  //     setEmailError("Email is required");
+  //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data)) {
+  //     setEmailError("Email is not valid");
+  //   } else {
+  //     get(`EmailCheck/EmailCheck/${data}`).then((res) => {
+  //       if (!res) {
+  //         setEmailError("Email already exists");
+  //       } else {
+  //         setEmailError("");
+  //       }
+  //     });
+  //   }
+  // };
 
   const cancelForm = () => {
     history.push("/branchList");
@@ -447,11 +515,7 @@ const Branch = () => {
                           handleBranchCode(e);
                         }}
                       />
-                      {branchCodeError && (
-                        <span className="text-danger">
-                          Branch Code required
-                        </span>
-                      )}
+                      <span className="text-danger">{branchCodeError}</span>
                     </FormGroup>
 
                     <FormGroup>
