@@ -235,7 +235,12 @@ const CompanionInvitation = () => {
                       {data?.map((item, i) => (
                         <tr key={i} className="border-buttom">
                           <td>{item?.date}</td>
-                          <td>{item?.email}</td>
+                          <td>
+                            {item?.email}{" "}
+                            {item?.statusId === 1 || item?.statusId === 2 ? (
+                              <p className="pending-invitation">Pending</p>
+                            ) : null}
+                          </td>
                           <td>{item?.source}</td>
                           <td>{item?.university} </td>
                           <td>{item?.course}</td>
