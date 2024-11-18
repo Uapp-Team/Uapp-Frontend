@@ -28,6 +28,10 @@ const ColumnProvider = [
     isActive: true,
   },
   {
+    title: "Branch",
+    isActive: true,
+  },
+  {
     title: "Action",
     isActive: true,
   },

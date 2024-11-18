@@ -1,34 +1,32 @@
+import { Modal, Upload } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
+import * as Icon from "react-feather";
+import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
-  TabContent,
-  TabPane,
+  Col,
   Form,
   FormGroup,
-  Col,
   Input,
   Row,
+  TabContent,
+  TabPane,
 } from "reactstrap";
-import get from "../../../../../helpers/get";
-import { Image } from "antd";
-import { Upload, Modal } from "antd";
-import * as Icon from "react-feather";
-import put from "../../../../../helpers/put";
-import { useToasts } from "react-toast-notifications";
-import { rootUrl } from "../../../../../constants/constants";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { currentDate } from "../../../../../components/date/calenderFormate";
-import PhoneInput from "react-phone-input-2";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import InputDate from "../../../../../components/date/InputDate";
+import { rootUrl } from "../../../../../constants/constants";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import put from "../../../../../helpers/put";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -101,19 +99,18 @@ const PersonalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
 
-
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
       setFileList([
         {
-          uid: '-1',
-          name: 'Profile Image',
-          status: 'done',
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
           url: rootUrl + oneData.profileImage.fileUrl,
         },
       ]);
     }
-  }, [oneData, rootUrl])
+  }, [oneData, rootUrl]);
 
   useEffect(() => {
     get(`RecruitmentFrom/ByConsultant/${consultantValue}`).then((res) => {
@@ -186,10 +183,21 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        setBirthDate(res?.dateOfBirth ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD") : null);
-        setIssueDate(res?.issueDate ? moment(new Date(res.issueDate)).format("YYYY-MM-DD") : null);
-        setexpireDate(res?.expireDate ? moment(new Date(res.expireDate)).format("YYYY-MM-DD") : null);
-
+        setBirthDate(
+          res?.dateOfBirth
+            ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD")
+            : null
+        );
+        setIssueDate(
+          res?.issueDate
+            ? moment(new Date(res.issueDate)).format("YYYY-MM-DD")
+            : null
+        );
+        setexpireDate(
+          res?.expireDate
+            ? moment(new Date(res.expireDate)).format("YYYY-MM-DD")
+            : null
+        );
       });
     }
   }, [success, applicationStudentId]);
@@ -240,8 +248,7 @@ const PersonalInformation = () => {
       setDateError("Date of birth is required");
     } else if (calculateBirthDate < 15) {
       setDateError("Age must be more than 15 years");
-    }
-    else {
+    } else {
       setDateError("");
     }
   };
@@ -256,18 +263,27 @@ const PersonalInformation = () => {
   };
 
   const handleIssueDate = (e) => {
-    setIssueDate(e.target.value);
-    if (e.target.value === "") {
+    const value = e.target.value;
+    setIssueDate(value);
+    const year = value.split("-")[0];
+    if (value === "") {
       setIssueDateError("Issue Date is required");
+    } else if (year.length > 4) {
+      setIssueDateError("Invalid date");
+    } else if (value > currentDate) {
+      setIssueDateError("Invalid date");
     } else {
       setIssueDateError("");
     }
   };
   const handleExpireDate = (e) => {
-    setexpireDate(e.target.value);
+    const value = e.target.value;
+    setexpireDate(value);
+    const year = value.split("-")[0];
+
     if (e.target.value === "") {
       setexpireDateError("Expiry Date is required");
-    } else if (e.target.value <= issueDate) {
+    } else if (value <= issueDate) {
       setexpireDateError("Expiry Date cannot same or previous date");
     } else {
       setexpireDateError("");
@@ -301,9 +317,7 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
-  const handleDelete = () => {
-
-  }
+  const handleDelete = () => {};
 
   const countryResidenceName = countryResidence?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -498,7 +512,7 @@ const PersonalInformation = () => {
         activetab={"1"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -514,8 +528,8 @@ const PersonalInformation = () => {
                 />
 
                 {userType === userTypes?.SystemAdmin.toString() ||
-                  userType === userTypes?.Admin.toString() ||
-                  userType === userTypes?.ComplianceManager.toString() ? (
+                userType === userTypes?.Admin.toString() ||
+                userType === userTypes?.ComplianceManager.toString() ? (
                   <FormGroup row>
                     <Col lg="6" md="8">
                       <span>
@@ -649,7 +663,7 @@ const PersonalInformation = () => {
                         handleDate(e);
                       }}
                       value={birthDate}
-                    // min={minDate}
+                      // min={minDate}
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
@@ -885,7 +899,7 @@ const PersonalInformation = () => {
                   <Col lg="6" md="8">
                     <span>
                       <span className="text-danger">*</span>
-                      Nationality
+                      Country Of Nationality
                     </span>
 
                     <Select

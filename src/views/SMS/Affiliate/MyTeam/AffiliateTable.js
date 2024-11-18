@@ -61,23 +61,17 @@ const AffiliateTable = ({
             {tableData[0]?.isActive ? <th>UAPP ID </th> : null}
             {tableData[1]?.isActive ? <th>Full Name</th> : null}
             {tableData[2]?.isActive ? <th>Contact</th> : null}
-
-            {/* {permissions?.includes(
-              permissionList.Consultant_Password_Change
-            ) ? (
-              <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
-            ) : null} */}
+            {tableData[3]?.isActive ? <th>Parent</th> : null}
 
             {tableData[7]?.isActive ? <th>Started</th> : null}
-            {tableData[11]?.isActive ? <th>Status</th> : null}
+            {tableData[5]?.isActive ? <th>Invitation</th> : null}
+            {tableData[6]?.isActive ? <th>Leads</th> : null}
+            {tableData[6]?.isActive ? <th>Student</th> : null}
+            {tableData[7]?.isActive ? <th>Team Member</th> : null}
+            {tableData[8]?.isActive ? <th>Application</th> : null}
+            {tableData[9]?.isActive ? <th>Registered</th> : null}
 
-            {permissions?.includes(
-              permissionList?.Change_Consultant_AccountStatus
-            ) ? (
-              <>{tableData[12]?.isActive ? <th>BlackList</th> : null}</>
-            ) : null}
-
-            {tableData[13]?.isActive ? (
+            {tableData[10]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -154,11 +148,11 @@ const AffiliateTable = ({
                 </>
               ) : null} */}
 
-              {tableData[7]?.isActive ? (
+              {tableData[3]?.isActive ? (
                 <td>{dateFormate(affiliateTeam?.started)}</td>
               ) : null}
-              {tableData[11]?.isActive ? (
-                <td>{affiliateTeam?.accountStatus}</td>
+              {tableData[4]?.isActive ? (
+                <td>{dateFormate(affiliateTeam?.createdOn)}</td>
               ) : null}
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus

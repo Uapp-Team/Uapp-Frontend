@@ -28,6 +28,18 @@ const ColumnAdmissionOfficer = [
     isActive: true,
   },
   {
+    title: "Registered Application",
+    isActive: true,
+  },
+  {
+    title: "Applications",
+    isActive: true,
+  },
+  {
+    title: "Branch",
+    isActive: true,
+  },
+  {
     title: "Account Status",
     isActive: true,
   },

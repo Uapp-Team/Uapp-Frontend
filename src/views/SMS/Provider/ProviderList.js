@@ -43,6 +43,7 @@ import icon_info from "../../../assets/img/icons/icon_info.png";
 import Pagination from "../Pagination/Pagination.jsx";
 import ColumnProvider from "../TableColumn/ColumnProvider.js";
 import Typing from "../../../components/form/Typing.js";
+import Filter from "../../../components/Dropdown/Filter.js";
 
 const ProviderList = () => {
   const ProviderPaging = JSON.parse(sessionStorage.getItem("provider"));
@@ -77,6 +78,14 @@ const ProviderList = () => {
   );
   const [uappIdValue, setUappIdValue] = useState(
     ProviderPaging?.uappIdValue ? ProviderPaging?.uappIdValue : 0
+  );
+  const [branch, setBranch] = useState([]);
+
+  const [branchLabel, setBranchLabel] = useState(
+    ProviderPaging?.branchLabel ? ProviderPaging?.branchLabel : "Select Branch"
+  );
+  const [branchValue, setBranchValue] = useState(
+    ProviderPaging?.branchValue ? ProviderPaging?.branchValue : 0
   );
   const userType = localStorage.getItem("userType");
   const [callApi, setCallApi] = useState(false);
@@ -124,6 +133,8 @@ const ProviderList = () => {
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
+        branchLabel: branchLabel && branchLabel,
+        branchValue: branchValue && branchValue,
       })
     );
   }, [
@@ -136,34 +147,14 @@ const ProviderList = () => {
     dataPerPage,
     orderValue,
     orderLabel,
+    branchLabel,
+    branchValue,
   ]);
 
   useEffect(() => {
-    const providerTypeId = 0;
-    // const pageSize = 15;
-    if (!isTyping) {
-      get(
-        `Provider/Index?page=${currentPage}&pagesize=${dataPerPage}&providerTypeId=${
-          providerTypeId ? providerTypeId : providerValue
-        }&uappId=${uappIdValue}&searchstring=${searchStr}&sortby=${orderValue}`
-      ).then((action) => {
-        setProviderList(action?.models);
-        setLoading(false);
-        setEntity(action?.totalEntity);
-        // setSerialNum(action?.firstSerialNumber);
-      });
-    }
-
-    // get(
-    //   `Provider/Index?providerTypeId=${
-    //     providerTypeId ? providerTypeId : providerValue
-    //   }&uappId=${uappIdValue}&searchstring=${searchStr}`
-    // ).then((action) => {
-    //   setProviderList(action?.models);
-    //   setLoading(false);
-    //   // setEntity(action?.totalEntity);
-    //   // setSerialNum(action?.firstSerialNumber);
-    // });
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
 
     get(`ProviderType/GetAll`).then((res) => {
       setProviderType(res);
@@ -172,6 +163,23 @@ const ProviderList = () => {
     get(`ProviderDD/UappId`).then((res) => {
       setUappIdDD(res);
     });
+  }, []);
+
+  useEffect(() => {
+    const providerTypeId = 0;
+    // const pageSize = 15;
+    if (!isTyping) {
+      get(
+        `Provider/Index?page=${currentPage}&pagesize=${dataPerPage}&providerTypeId=${
+          providerTypeId ? providerTypeId : providerValue
+        }&uappId=${uappIdValue}&searchstring=${searchStr}&sortby=${orderValue}&branchid=${branchValue}`
+      ).then((action) => {
+        setProviderList(action?.models);
+        setLoading(false);
+        setEntity(action?.totalEntity);
+        // setSerialNum(action?.firstSerialNumber);
+      });
+    }
   }, [
     providerValue,
     uappIdValue,
@@ -182,6 +190,7 @@ const ProviderList = () => {
     dataPerPage,
     orderValue,
     isTyping,
+    branchValue,
   ]);
 
   const toggleDeleteProvider = (data) => {
@@ -193,11 +202,11 @@ const ProviderList = () => {
     setDeleteModal(false);
   };
 
-  useEffect(() => {
-    get(`Provider/Index`).then((res) => {
-      dispatch(StoreUniversityProviderData(res));
-    });
-  }, []);
+  // useEffect(() => {
+  //   get(`Provider/Index`).then((res) => {
+  //     dispatch(StoreUniversityProviderData(res));
+  //   });
+  // }, [dispatch]);
 
   const deleteProvider = () => {
     setButtonStatus(true);
@@ -456,7 +465,18 @@ const ProviderList = () => {
         <Card className="uapp-employee-search zindex-100">
           <CardBody>
             <Row>
-              <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
+              {branch.length > 1 && (
+                <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
+                  <Filter
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                  />
+                </Col>
+              )}
+              <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
                 <Select
                   options={providertype}
                   value={{ label: providerLabel, value: providerValue }}
@@ -468,7 +488,7 @@ const ProviderList = () => {
                 />
               </Col>
 
-              <Col lg="4" md="4" sm="12" xs="12" className="mb-2">
+              <Col lg="3" md="6" sm="12" xs="12" className="mb-2">
                 <Select
                   options={uappIdOptions}
                   value={{ label: uappIdLabel, value: uappIdValue }}
@@ -478,7 +498,7 @@ const ProviderList = () => {
                 />
               </Col>
 
-              <Col lg="4" md="4" sm="12" xs="12">
+              <Col lg="3" md="6" sm="12" xs="12">
                 <Typing
                   name="searchstring"
                   id="searchstring"
@@ -758,13 +778,12 @@ const ProviderList = () => {
               </Col>
             </Row>
 
-            {providerList?.length === 0 ? (
+            {loading ? (
               <Loader />
             ) : (
               <>
-                {" "}
-                {loading ? (
-                  <h2 className="text-center">Loading...</h2>
+                {providerList?.length === 0 ? (
+                  <h2 className="text-center">No Data Found</h2>
                 ) : (
                   <div
                     className="table-responsive fixedhead"
@@ -825,8 +844,8 @@ const ProviderList = () => {
                             ) : null}
                           </>
                         ) : null} */}
-
-                          {tableData[7]?.isActive ? (
+                          {tableData[7]?.isActive ? <th>Branch</th> : null}
+                          {tableData[8]?.isActive ? (
                             <th style={{ width: "8%" }} className="text-center">
                               Action
                             </th>
@@ -893,11 +912,6 @@ const ProviderList = () => {
                                         ? "+" + prov?.phoneNumber
                                         : null
                                     }
-                                    // value={
-                                    //   prov?.phoneNumber
-                                    //     ? "+" + prov?.phoneNumber
-                                    //     : null
-                                    // }
                                     btn={<i class="fas fa-phone"></i>}
                                     popoverOpen={popoverOpen}
                                     setPopoverOpen={setPopoverOpen}
@@ -994,6 +1008,10 @@ const ProviderList = () => {
                           ) : null} */}
 
                             {tableData[7]?.isActive ? (
+                              <td>{prov?.branchName}</td>
+                            ) : null}
+
+                            {tableData[8]?.isActive ? (
                               <td
                                 style={{ width: "8%" }}
                                 className="text-center"

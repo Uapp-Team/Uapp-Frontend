@@ -90,7 +90,8 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${id ? id : referenceId
+      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
+        id ? id : referenceId
       }`
     ).then((res) => {
       console.log(res);
@@ -453,6 +454,7 @@ const ConsultantByCompanion = () => {
                       {tableData[4]?.isActive ? <th>Started</th> : null}
                       {tableData[5]?.isActive ? <th>Invitation</th> : null}
                       {tableData[6]?.isActive ? <th>Leads</th> : null}
+                      {tableData[6]?.isActive ? <th>Students</th> : null}
                       {tableData[7]?.isActive ? <th>Team Member</th> : null}
                       {tableData[8]?.isActive ? <th>Application</th> : null}
                       {tableData[9]?.isActive ? <th>Registered</th> : null}
@@ -493,12 +495,12 @@ const ConsultantByCompanion = () => {
                               <PopOverText
                                 value={
                                   companion?.phone &&
-                                    companion?.phone.includes("+")
+                                  companion?.phone.includes("+")
                                     ? companion?.phone
                                     : companion?.phone &&
                                       !companion?.phone.includes("+")
-                                      ? "+" + companion?.phone
-                                      : null
+                                    ? "+" + companion?.phone
+                                    : null
                                 }
                                 btn={<i class="fas fa-phone"></i>}
                                 popoverOpen={popoverOpen}
@@ -544,13 +546,29 @@ const ConsultantByCompanion = () => {
                             <div style={{ marginTop: "5px" }}>
                               <span
                                 className="Count-fifth-no-pointer"
-                              // onClick={() => {
-                              //   history.push(
-                              //     `/companion-team-List/${companion?.id}`
-                              //   );
-                              // }}
+                                onClick={() => {
+                                  history.push(
+                                    `/companion-lead-List/${companion?.id}`
+                                  );
+                                }}
                               >
                                 {companion?.leadCount}
+                              </span>
+                            </div>
+                          </td>
+                        ) : null}
+                        {tableData[6]?.isActive ? (
+                          <td>
+                            <div style={{ marginTop: "5px" }}>
+                              <span
+                                className="Count-sixth-no-pointer"
+                                onClick={() => {
+                                  history.push(
+                                    `/companion-student-List/${companion?.id}`
+                                  );
+                                }}
+                              >
+                                {companion?.studentCount}
                               </span>
                             </div>
                           </td>
@@ -578,11 +596,11 @@ const ConsultantByCompanion = () => {
                             <div style={{ marginTop: "5px" }}>
                               <span
                                 className="Count-third-no-pointer"
-                              // onClick={() => {
-                              //   history.push(
-                              //     `/companion-team-List/${companion?.id}`
-                              //   );
-                              // }}
+                                // onClick={() => {
+                                //   history.push(
+                                //     `/companion-team-List/${companion?.id}`
+                                //   );
+                                // }}
                               >
                                 {companion?.totalApplicationCount}
                               </span>
@@ -595,11 +613,11 @@ const ConsultantByCompanion = () => {
                             <div style={{ marginTop: "5px" }}>
                               <span
                                 className="Count-fourth-no-pointer"
-                              // onClick={() => {
-                              //   history.push(
-                              //     `/companion-team-List/${companion?.id}`
-                              //   );
-                              // }}
+                                // onClick={() => {
+                                //   history.push(
+                                //     `/companion-team-List/${companion?.id}`
+                                //   );
+                                // }}
                               >
                                 {companion?.totalRegisteredApplicationCount}
                               </span>

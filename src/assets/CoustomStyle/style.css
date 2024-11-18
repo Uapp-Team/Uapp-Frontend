@@ -1955,10 +1955,9 @@ th {
   background: #dde4e3;
   position: fixed;
   z-index: 40;
-  width: -webkit-fill-available;
-  display: flex;
-  justify-content: flex-start;
+  width: calc(100vw - 260px);
   top: 75px;
+  margin-left: 15px;
   padding: 2rem 1rem 0 0;
 }
 
@@ -5005,6 +5004,15 @@ label.ant-radio-button-wrapper {
 .Count-fifth-no-pointer {
   cursor: pointer;
   background-color: #ff6c22;
+  color: white;
+  padding: 2px 21px;
+  border-radius: 29px;
+  margin-top: 3px !important;
+}
+
+.Count-sixth-no-pointer {
+  cursor: pointer;
+  background-color: #179fa1;
   color: white;
   padding: 2px 21px;
   border-radius: 29px;

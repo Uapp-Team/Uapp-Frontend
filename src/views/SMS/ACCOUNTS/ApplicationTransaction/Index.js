@@ -101,6 +101,7 @@ const Index = () => {
   const [dataPerPage, setDataPerPage] = useState(
     appTransaction?.dataPerPage ? appTransaction?.dataPerPage : 15
   );
+
   const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // user select data per page
@@ -367,84 +368,76 @@ const Index = () => {
         <Card className="zindex-100">
           <CardBody>
             <div className="row">
-              <div className="col-md-12">
-                <div className="row">
-                  {userType !== userTypes?.Consultant ? (
-                    <div className="col-md-3 mb-3">
-                      <Select
-                        options={consultantTypeOptions}
-                        value={{
-                          label: consultantTypeLabel,
-                          value: consultantTypeValue,
-                        }}
-                        onChange={(opt) =>
-                          selectConsultantType(opt.label, opt.value)
-                        }
-                        isDisabled={consultantId !== undefined ? true : false}
-                      />
-                    </div>
-                  ) : null}
-                  {userType !== userTypes?.Consultant ? (
-                    <div className="col-md-3 mb-3">
-                      <Select
-                        options={consultantOptions}
-                        value={{
-                          label: consultantLabel,
-                          value: consultantValue,
-                        }}
-                        onChange={(opt) =>
-                          selectConsultant(opt.label, opt.value)
-                        }
-                        isDisabled={consultantId !== undefined ? true : false}
-                      />
-                    </div>
-                  ) : null}
-                  {branch.length > 1 && (
-                    <div className="col-md-3 mb-3">
-                      <Filter
-                        data={branch}
-                        label={branchLabel}
-                        setLabel={setBranchLabel}
-                        value={branchValue}
-                        setValue={setBranchValue}
-                        action={() => {}}
-                      />
-                    </div>
-                  )}
-                  <div className="col-md-3 mb-3">
-                    <Select
-                      options={uappOptions}
-                      value={{ label: uappLabel, value: uappValue }}
-                      onChange={(opt) => selectUapp(opt.label, opt.value)}
-                    />
-                  </div>
-                  <div className="col-md-3 mb-3">
-                    <Select
-                      options={studentOptions}
-                      value={{ label: studentLabel, value: studentValue }}
-                      onChange={(opt) => selectStudent(opt.label, opt.value)}
-                    />
-                  </div>{" "}
-                  <div className="col-md-3 mb-3">
-                    <Select
-                      options={intakeOptions}
-                      value={{ label: intakeLabel, value: intakeValue }}
-                      onChange={(opt) => selectIntake(opt.label, opt.value)}
-                    />
-                  </div>
-                  <div className="col-md-3 md-3">
-                    <Select
-                      options={TransactionOptions}
-                      value={{
-                        label: transactionLabel,
-                        value: transactionValue,
-                      }}
-                      onChange={(opt) =>
-                        selectTransaction(opt.label, opt.value)
-                      }
-                    />
-                  </div>
+              {branch.length > 1 && (
+                <div className="col-md-3 mb-3">
+                  <Filter
+                    data={branch}
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                    action={() => {}}
+                  />
                 </div>
+              )}
+              {userType !== userTypes?.Consultant ? (
+                <div className="col-md-3 mb-3">
+                  <Select
+                    options={consultantTypeOptions}
+                    value={{
+                      label: consultantTypeLabel,
+                      value: consultantTypeValue,
+                    }}
+                    onChange={(opt) =>
+                      selectConsultantType(opt.label, opt.value)
+                    }
+                    isDisabled={consultantId !== undefined ? true : false}
+                  />
+                </div>
+              ) : null}
+              {userType !== userTypes?.Consultant ? (
+                <div className="col-md-3 mb-3">
+                  <Select
+                    options={consultantOptions}
+                    value={{
+                      label: consultantLabel,
+                      value: consultantValue,
+                    }}
+                    onChange={(opt) => selectConsultant(opt.label, opt.value)}
+                    isDisabled={consultantId !== undefined ? true : false}
+                  />
+                </div>
+              ) : null}
+              <div className="col-md-3 mb-3">
+                <Select
+                  options={uappOptions}
+                  value={{ label: uappLabel, value: uappValue }}
+                  onChange={(opt) => selectUapp(opt.label, opt.value)}
+                />
+              </div>
+              <div className="col-md-3 mb-3">
+                <Select
+                  options={studentOptions}
+                  value={{ label: studentLabel, value: studentValue }}
+                  onChange={(opt) => selectStudent(opt.label, opt.value)}
+                />
+              </div>{" "}
+              <div className="col-md-3 mb-3">
+                <Select
+                  options={intakeOptions}
+                  value={{ label: intakeLabel, value: intakeValue }}
+                  onChange={(opt) => selectIntake(opt.label, opt.value)}
+                />
+              </div>
+              <div className="col-md-3 md-3">
+                <Select
+                  options={TransactionOptions}
+                  value={{
+                    label: transactionLabel,
+                    value: transactionValue,
+                  }}
+                  onChange={(opt) => selectTransaction(opt.label, opt.value)}
+                />
               </div>
             </div>
 

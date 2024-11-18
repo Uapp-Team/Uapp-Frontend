@@ -6,6 +6,7 @@ import Typing from "../../../../components/form/Typing";
 import Pagination from "../../Pagination/Pagination";
 import DataShow from "../../../../components/Dropdown/DataShow";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
+import Filter from "../../../../components/Dropdown/Filter";
 
 const CompanionTransation = () => {
   const [data, setData] = useState([]);
@@ -22,11 +23,20 @@ const CompanionTransation = () => {
   const [typeValue, setTypeValue] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [searchStr, setSearchStr] = useState("");
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branch, setBranch] = useState([]);
+
+  useEffect(() => {
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}&companionid=${companionValue}`
+        `CompanionTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}&companionid=${companionValue}&branchid=${branchValue}`
       ).then((res) => {
         setData(res?.models);
         setEntity(res?.totalEntity);
@@ -42,15 +52,29 @@ const CompanionTransation = () => {
     toDate,
     typeValue,
     companionValue,
+    branchValue,
   ]);
 
   return (
     <div>
       <BreadCrumb title="Companion Transaction List" backTo="" path="/" />
-      <Card className="ddzindex">
+      <Card className="zindex-100">
         <CardBody>
           <div className="row">
-            <div className="col-lg-2 col-md-4 mb-2">
+            {branch.length > 1 && (
+              <div className="col-lg-3 col-md-4 mb-2 ddzindex">
+                <span>Branch</span>
+                <Filter
+                  data={branch}
+                  label={branchLabel}
+                  setLabel={setBranchLabel}
+                  value={branchValue}
+                  setValue={setBranchValue}
+                />
+              </div>
+            )}
+
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>Companion</span>
               <DefaultDropdown
                 label={companionLabel}
@@ -65,7 +89,7 @@ const CompanionTransation = () => {
               />
             </div>
 
-            <div className="col-lg-2 col-md-4 mb-2">
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>From Date</span>
 
               <Input
@@ -76,7 +100,7 @@ const CompanionTransation = () => {
                 value={fromDate}
               />
             </div>
-            <div className="col-lg-2 col-md-4 mb-2">
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>To Date</span>
 
               <Input
@@ -87,7 +111,7 @@ const CompanionTransation = () => {
                 value={toDate}
               />
             </div>
-            <div className="col-lg-2 col-md-4 mb-2">
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>Status</span>
 
               <DefaultDropdown
@@ -102,7 +126,7 @@ const CompanionTransation = () => {
                 action={() => {}}
               />
             </div>
-            <div className="col-lg-2 col-md-4 mb-2">
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>Type</span>
 
               <DefaultDropdown
@@ -117,7 +141,7 @@ const CompanionTransation = () => {
                 action={() => {}}
               />
             </div>
-            <div className="col-lg-2 col-md-4 mb-2">
+            <div className="col-lg-3 col-md-4 mb-2">
               <span>Transaction Code</span>
 
               <Typing
@@ -155,6 +179,7 @@ const CompanionTransation = () => {
                       <th>Transaction Code</th>
                       <th>Activity</th>
                       <th>Status </th>
+                      <th>Branch </th>
                       <th>APP ID</th>
                       <th>Intake </th>
                       <th>Debit/Outflow </th>
@@ -169,6 +194,7 @@ const CompanionTransation = () => {
                         <td>{item?.transctionCode}</td>
                         <td>{item?.activity}</td>
                         <td>{item?.status}</td>
+                        <td>{item?.branchName}</td>
                         <td>{item?.applicationViewId}</td>
                         <td>{item?.intake}</td>
                         <td

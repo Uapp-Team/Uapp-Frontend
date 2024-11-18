@@ -1,31 +1,30 @@
+import { Drawer } from "antd";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Select from "react-select";
 import {
-  Card,
   Button,
+  Card,
+  Col,
   Modal,
-  ModalHeader,
   ModalBody,
   ModalFooter,
+  ModalHeader,
   Nav,
-  NavLink,
   NavItem,
+  NavLink,
   Row,
-  Col,
 } from "reactstrap";
-import Select from "react-select";
-import Pagination from "../../SMS/Pagination/Pagination";
-import { userTypes } from "../../../constants/userTypeConstant";
-import loader from "../../../assets/img/Optimized.gif";
+import TagButton from "../../../components/buttons/TagButton";
 import { permissionList } from "../../../constants/AuthorizationConstant";
-import { Drawer } from "antd";
+import { userTypes } from "../../../constants/userTypeConstant";
+import get from "../../../helpers/get";
+import Pagination from "../../SMS/Pagination/Pagination";
+import Apply from "./Apply";
+import Filter from "./Filter";
+import Loader from "./Loader/Loader";
 import University from "./University";
 import UniversityHead from "./UniversityHead";
-import Filter from "./Filter";
-import Apply from "./Apply";
-import { useParams } from "react-router-dom";
-import get from "../../../helpers/get";
-import TagButton from "../../../components/buttons/TagButton";
-import Loader from "./Loader/Loader";
 
 const Search = () => {
   const { student, departmentId } = useParams();
@@ -316,14 +315,7 @@ const Search = () => {
 
         {/* Tabs */}
         <div className="searchnav">
-          <div
-            className="row d-flex align-items-center justify-content-between mb-3"
-            style={{
-              width: "100%",
-              margin: "0 auto",
-              padding: "0 5px",
-            }}
-          >
+          <div className="row d-flex align-items-center justify-content-between mb-3">
             <div className="d-flex justify-content-start">
               <Nav tabs>
                 <NavItem>

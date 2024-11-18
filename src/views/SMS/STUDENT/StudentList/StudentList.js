@@ -35,6 +35,8 @@ const StudentList = () => {
   const [success, setSuccess] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { cId, type, id } = useParams();
+  console.log(id, "id");
+
   const [serialNum, setSerialNum] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -157,7 +159,7 @@ const StudentList = () => {
         setBranchValue(result?.id);
         setBranchLabel(result?.name);
       }
-      setBranch(res);
+      // setBranch(res);
     });
 
     if (type) {
@@ -215,8 +217,12 @@ const StudentList = () => {
               userTypeId === userTypes?.Consultant
                 ? referenceId
                 : consultantValue
-            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${
+              branchValue ? branchValue : id ? id : 0
+            }&isconsultant=${check}`
           ).then((res) => {
+            console.log(res?.models, "pore");
+
             setStudentData(res?.models);
             setEntity(res?.totalEntity);
             setSerialNum(res?.firstSerialNumber);

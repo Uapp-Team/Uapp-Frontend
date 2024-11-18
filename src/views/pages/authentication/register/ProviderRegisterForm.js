@@ -239,7 +239,10 @@ const ProviderRegisterForm = () => {
             });
             history.push("/providerAccountCreated");
           } else {
-            setPasswordError(data?.message);
+            addToast(data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
           }
         });
     }

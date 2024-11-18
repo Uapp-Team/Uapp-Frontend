@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
   Col,
   FormGroup,
   Input,
+  Row,
   TabContent,
   TabPane,
-  Row,
-  Label,
 } from "reactstrap";
 import get from "../../../../../helpers/get";
-import { useHistory, useParams } from "react-router-dom";
 import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import remove from "../../../../../helpers/remove";
 import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import EducationalForm from "./EducationalForm";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import {
   currentDate,
   dateFormate,
 } from "../../../../../components/date/calenderFormate";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import EducationalForm from "./EducationalForm";
 
 const EducationalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -62,9 +61,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState('');
+  const [attendedFrom, setAttendedFrom] = useState("");
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState('');
+  const [attendedTo, setAttendedTo] = useState("");
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -96,14 +95,14 @@ const EducationalInformation = () => {
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
-        setStudentType(res?.studentTypeId)
+        setStudentType(res?.studentTypeId);
         if (res?.studentTypeId == 3) {
           setForms(true);
         } else {
           setForms(false);
         }
       }
-    )
+    );
   }, [success, applicationStudentId]);
 
   // date handling
@@ -193,8 +192,7 @@ const EducationalInformation = () => {
       setAttendedFromError("Date is required");
     } else if (currentDate < value) {
       setAttendedFromError("Invalid Date");
-    }
-    else {
+    } else {
       setAttendedFromError("");
     }
   };
@@ -206,7 +204,9 @@ const EducationalInformation = () => {
     } else if (currentDate < value) {
       setAttendedToError("Invalid Date");
     } else if (attendedFrom > value) {
-      setAttendedToError("Attended to date should be greater than Attended from date");
+      setAttendedToError(
+        "Attended to date should be greater than Attended from date"
+      );
     } else {
       setAttendedToError("");
     }
@@ -416,26 +416,15 @@ const EducationalInformation = () => {
 
       res?.attendedInstitutionFrom
         ? setAttendedFrom(
-          moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-        )
-        : setAttendedFrom(currentDate);
+            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
+          )
+        : setAttendedFrom("");
 
       res?.attendedInstitutionTo
         ? setAttendedTo(
-          moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-        )
-        : setAttendedTo(currentDate);
-
-      // setAttendedFrom(
-      //   moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-      // );
-
-      const a = res?.attendedInstitutionTo;
-      var utcDate = new Date(a);
-      var localeDte2 = utcDate.toLocaleString("en-CA");
-      const b = localeDte2.split("T");
-      const c = b[0].split(",");
-      setAttendedTo(c[0]);
+            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
+          )
+        : setAttendedTo("");
     });
     setShowForm(true);
     setSuccess(!success);
@@ -491,7 +480,7 @@ const EducationalInformation = () => {
         activetab={"5"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -499,7 +488,7 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              {studentType != 3 &&
+              {studentType != 3 && (
                 <Row>
                   <Col md="4">
                     <FormGroup>
@@ -547,7 +536,7 @@ const EducationalInformation = () => {
                     </FormGroup>
                   </Col>
                 </Row>
-              }
+              )}
               {showDeleteOption === true ? (
                 <>
                   <FormGroup row>
@@ -623,8 +612,9 @@ const EducationalInformation = () => {
                                   <span>Attended To</span>
                                   <br />
                                   <b>
-                                    {edu?.qualificationAchieved === true &&
-                                      dateFormate(edu?.attendedInstitutionTo)}
+                                    {edu?.qualificationAchieved === true
+                                      ? dateFormate(edu?.attendedInstitutionTo)
+                                      : "Continue..."}
                                   </b>
                                 </p>
                               </Col>
@@ -632,7 +622,7 @@ const EducationalInformation = () => {
                                 <p>
                                   <span>Education Level</span>
                                   <br />
-                                  <b>{edu?.nameOfInstitution}</b>
+                                  <b> {edu?.nameOfInstitution}</b>
                                 </p>
                                 <p>
                                   <span>Qualification Course</span>
@@ -646,10 +636,15 @@ const EducationalInformation = () => {
                                   <br />
                                   <b>{edu?.duration}</b>
                                 </p>
+
                                 <p>
                                   <span>Result In Percentage</span>
                                   <br />
-                                  <b>{edu?.finalGrade}</b>
+                                  <b>
+                                    {edu?.qualificationAchieved === true
+                                      ? edu?.finalGrade
+                                      : "N/A"}
+                                  </b>
                                 </p>
                               </Col>
                               <Col md="3">
@@ -813,9 +808,9 @@ const EducationalInformation = () => {
               )}
 
               {showDeleteOption === false &&
-                forms === false &&
-                showForm === false &&
-                eduDetails?.length === 0 ? (
+              forms === false &&
+              showForm === false &&
+              eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) ? (
