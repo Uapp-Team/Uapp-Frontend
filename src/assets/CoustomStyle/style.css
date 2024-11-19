@@ -5474,14 +5474,13 @@ span.ant-upload-list-item-name {
 
 .University-information-list-text {
   background: #eef1f1;
-  padding: 20px 20px;
+  padding: 16px 20px;
   border-radius: 8px;
 }
 
 .University-information-list-text p {
   font-weight: 500;
-  font-size: 17px;
-  margin-top: 14px;
+  font-size: 16px;
 }
 
 .Universities-text-faq {

@@ -9,8 +9,8 @@ import { AdminUsers } from "../../../components/core/User";
 import QuestionsAdmin from "./Questions/QuestionsAdmin";
 import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 
-const ISMDocuments = ({ uniValue, setUniValue }) => {
-  const [uniLable, setUniLable] = useState("Select University");
+const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
+  // const [uniLable, setUniLable] = useState("Select University");
 
   const [openIndex, setOpenIndex] = useState(1);
   const [categoryModal, setCategoryModal] = useState(false);
@@ -33,7 +33,7 @@ const ISMDocuments = ({ uniValue, setUniValue }) => {
       <div className="custom-card-border pr-3">
         <Row>
           <Col lg={3} sm={4} className="p-3">
-            {AdminUsers() && (
+            {/* {AdminUsers() && (
               <div className="ml-3">
                 <ButtonForFunction
                   func={() => setCategoryModal(!categoryModal)}
@@ -42,7 +42,7 @@ const ISMDocuments = ({ uniValue, setUniValue }) => {
                   name={"Manage Category"}
                 />
               </div>
-            )}
+            )} */}
             <div className="ml-3 mt-3">
               <DefaultDropdownU
                 label={uniLable}

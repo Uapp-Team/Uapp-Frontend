@@ -7,12 +7,15 @@ import { rootUrl } from "../../../constants/constants";
 import GroupButton from "../../../components/buttons/GroupButton";
 import Filter from "../../../components/Dropdown/Filter";
 import ISMDocuments from "./ISMDocuments";
+import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
+import ButtonForFunction from "../Components/ButtonForFunction";
 
 const ISM = () => {
   const [universityList, setUniversityList] = useState([]);
   const [uniTypeLabel, setUniTypeLabel] = useState("Select Type");
   const [uniTypeValue, setUniTypeValue] = useState(0);
   const [uniValue, setUniValue] = useState(0);
+  const [uniLable, setUniLable] = useState("Select University");
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [tab, setTab] = useState("2");
@@ -27,6 +30,7 @@ const ISM = () => {
 
   const redirectRoute = (item) => {
     setUniValue(item?.id);
+    setUniLable(item?.universityFullName);
     setTab("2");
   };
   // const redirectRoute = (item) => {
@@ -51,20 +55,20 @@ const ISM = () => {
 
       <Card>
         <CardBody>
-          {/* {(AdminUsers() || AdmissionUsers()) && (
-            <div className="d-flex justify-content-between University-information-list-text mb-4">
-              <p className="d-flex align-items-center mr-3">
+          {(AdminUsers() || AdmissionUsers()) && (
+            <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
+              <p className="d-flex align-items-center mr-3 mb-0">
                 Manage Queries for University information manage
               </p>
               <ButtonForFunction
-                func={handleManageQueries}
-                className={"btn btn-uapp-add "}
+                // func={handleManageQueries}
+                className={"btn btn-uapp-add p-2"}
                 icon={<i class="fas fa-list-ul"></i>}
                 name={"Manage Queries"}
               />
             </div>
-          )} */}
-          <h3 className="mb-4">University Information Documents & FAQ</h3>
+          )}
+          {/* <h3 className="mb-4">University Information Documents & FAQ</h3> */}
 
           <GroupButton
             list={[
@@ -158,7 +162,12 @@ const ISM = () => {
               </Row>
             </>
           ) : (
-            <ISMDocuments uniValue={uniValue} setUniValue={setUniValue} />
+            <ISMDocuments
+              uniValue={uniValue}
+              setUniValue={setUniValue}
+              uniLable={uniLable}
+              setUniLable={setUniLable}
+            />
           )}
         </CardBody>
       </Card>
