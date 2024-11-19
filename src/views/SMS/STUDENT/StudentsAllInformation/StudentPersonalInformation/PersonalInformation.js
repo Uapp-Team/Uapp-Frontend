@@ -86,7 +86,7 @@ const PersonalInformation = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthDate, setBirthDate] = useState(null);
   const [issueDate, setIssueDate] = useState(null);
   const [issueDateError, setIssueDateError] = useState("");
   const [expireDate, setexpireDate] = useState(null);
@@ -184,7 +184,7 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        setBirthDate(res?.dateOfBirth ? moment(res.dateOfBirth) : null);
+        setBirthDate(res?.dateOfBirth);
         setIssueDate(res?.issueDate ? moment(res.issueDate) : null);
         setexpireDate(res?.expireDate ? moment(res.expireDate) : null);
       });
@@ -237,10 +237,9 @@ const PersonalInformation = () => {
     const birthdate = selectedDate.toDate();
     setBirthDate(birthdate);
 
-    const currentYear = new Date().getFullYear();
     const selectedYear = birthdate.getFullYear();
+    const currentYear = new Date().getFullYear();
     const calculatedAge = currentYear - selectedYear;
-    console.log(calculatedAge, "year");
 
     if (calculatedAge < 15) {
       setDateError("Age must be more than 15 years");
@@ -248,7 +247,6 @@ const PersonalInformation = () => {
       setDateError("");
     }
   };
-
   const handlePassport = (e) => {
     setPassport(e.target.value);
     if (e.target.value === "") {
@@ -259,27 +257,33 @@ const PersonalInformation = () => {
   };
 
   const handleIssueDate = (e) => {
-    const value = e.target.value;
-    setIssueDate(value);
-    const year = value.split("-")[0];
-    if (value === "") {
+    if (!e) {
       setIssueDateError("Issue Date is required");
-    } else if (year.length > 4) {
+      setIssueDate("");
+      return;
+    }
+    const issuedate = e.toDate();
+    setIssueDate(issuedate);
+    const year = issuedate.getFullYear();
+    if (year.length > 4) {
       setIssueDateError("Invalid date");
-    } else if (value > currentDate) {
+    } else if (currentDate <= issuedate.toISOString()) {
       setIssueDateError("Invalid date");
     } else {
       setIssueDateError("");
     }
   };
   const handleExpireDate = (e) => {
-    const value = e.target.value;
-    setexpireDate(value);
-    const year = value.split("-")[0];
+    if (!e) {
+      setexpireDateError("Expire Date is required");
+      setexpireDate("");
+      return;
+    }
 
-    if (e.target.value === "") {
-      setexpireDateError("Expiry Date is required");
-    } else if (value <= issueDate) {
+    const value = e.toDate();
+    setexpireDate(value);
+
+    if (value.toISOString() <= issueDate.toISOString()) {
       setexpireDateError("Expiry Date cannot same or previous date");
     } else {
       setexpireDateError("");
@@ -389,7 +393,7 @@ const PersonalInformation = () => {
       isFormValid = false;
       setLastNameError("Last Name is required");
     }
-    if (birthDate === "") {
+    if (!birthDate) {
       isFormValid = false;
       setDateError("Date of birth is required");
     }
@@ -432,9 +436,19 @@ const PersonalInformation = () => {
     // }
     return isFormValid;
   };
+  function convertDateFormat(dateString) {
+    // Split the input date string into day, month, and year
+    const [day, month, year] = dateString.split("-");
+
+    // Return the date in yyyy-MM-dd format
+    return `${year}-${month}-${day}`;
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const dateOfBirth = event.target.elements.formDateOfBirth.value;
+    const issueDate = event.target.elements.formIssueDate.value;
+    const expireDate = event.target.elements.formExpireDate.value;
 
     const subData = new FormData(event.target);
     if (FileList.length === 0) {
@@ -443,12 +457,12 @@ const PersonalInformation = () => {
       subData.append("profileImageFile", FileList[0]?.originFileObj);
     }
 
+    subData.append("dateOfBirth", convertDateFormat(dateOfBirth));
+    subData.append("issueDate", convertDateFormat(issueDate));
+    subData.append("expireDate", convertDateFormat(expireDate));
     subData.append("phoneNumber", phoneNumber);
 
     var formIsValid = validateRegisterForm(subData);
-    for (let [key, value] of subData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
@@ -642,37 +656,6 @@ const PersonalInformation = () => {
                       <span className="text-danger">*</span>
                       Date Of Birth
                     </span>
-
-                    {/* <InputDate
-                      name="dateOfBirth"
-                      value={birthDate}
-                      onChange={(e) => {
-                        handleDate(e);
-                      }}
-                    /> */}
-
-                    {/* <Input
-                      type="date"
-                      name="dateOfBirth"
-                      id="dateOfBirth"
-                      onChange={(e) => {
-                        handleDate(e);
-                      }}
-                      value={birthDate == "" ? new Date() : birthDate}
-                      // min={minDate}
-                    /> */}
-                    {/* <DatePicker
-                      onChange={(e) => {
-                        setBirthDate(e);
-                      }}
-                      dateFormat="dd/MM/yyyy"
-                      placeholderText="dd/mm/yyyy"
-                      selected={birthDate}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    /> */}
-
                     <DatePicker
                       onChange={(e) => {
                         handleDate(e);
@@ -682,7 +665,9 @@ const PersonalInformation = () => {
                       style={{
                         width: "100%",
                       }}
-                      value={birthDate ? moment(birthDate) : null}
+                      value={birthDate ? moment(birthDate) : ""}
+                      name="formDateOfBirth"
+                      id="formDateOfBirth"
                     />
                     <span className="text-danger">{dateError}</span>
                   </Col>
@@ -711,7 +696,7 @@ const PersonalInformation = () => {
                       <span className="text-danger">*</span>Issue Date
                     </span>
 
-                    <Input
+                    {/* <Input
                       type="date"
                       name="issueDate"
                       id="issueDate"
@@ -720,6 +705,20 @@ const PersonalInformation = () => {
                         handleIssueDate(e);
                       }}
                       value={issueDate}
+                    /> */}
+
+                    <DatePicker
+                      onChange={(e) => {
+                        handleIssueDate(e);
+                      }}
+                      format="DD-MM-YYYY"
+                      placeholder="dd/mm/yyyy"
+                      style={{
+                        width: "100%",
+                      }}
+                      value={issueDate ? moment(issueDate) : null}
+                      name="formIssueDate"
+                      id="formIssueDate"
                     />
                     <span className="text-danger">{issueDateError}</span>
                   </Col>
@@ -730,7 +729,7 @@ const PersonalInformation = () => {
                       <span className="text-danger">*</span>Expiry Date
                     </span>
 
-                    <Input
+                    {/* <Input
                       type="date"
                       name="expireDate"
                       id="expireDate"
@@ -739,6 +738,19 @@ const PersonalInformation = () => {
                         handleExpireDate(e);
                       }}
                       value={expireDate}
+                    /> */}
+                    <DatePicker
+                      onChange={(e) => {
+                        handleExpireDate(e);
+                      }}
+                      format="DD-MM-YYYY"
+                      placeholder="dd/mm/yyyy"
+                      style={{
+                        width: "100%",
+                      }}
+                      value={expireDate ? moment(expireDate) : null}
+                      name="formExpireDate"
+                      id="formxpireDate"
                     />
                     <span className="text-danger">{expireDateError}</span>
                   </Col>
