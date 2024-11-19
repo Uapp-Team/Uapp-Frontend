@@ -385,7 +385,7 @@
   padding: 3px 18px !important;
 }
 
-.page-header > h5 {
+.page-header>h5 {
   padding-top: 5px;
   font-size: 20px;
 }
@@ -1729,15 +1729,11 @@ flexbox-container2 h4 {
 .consultant-overview-card-text {
   border-radius: 2px;
   border: 1px solid #b2cbd2;
-  background: var(
-    --material-theme-read-only-light-surface-2,
-    linear-gradient(
-      0deg,
-      rgba(0, 104, 123, 0.08) 0%,
-      rgba(0, 104, 123, 0.08) 100%
-    ),
-    #fafcfd
-  );
+  background: var(--material-theme-read-only-light-surface-2,
+      linear-gradient(0deg,
+        rgba(0, 104, 123, 0.08) 0%,
+        rgba(0, 104, 123, 0.08) 100%),
+      #fafcfd);
   padding: 9px 16px;
 }
 
@@ -1782,6 +1778,16 @@ flexbox-container2 h4 {
 
 .from-student {
   background: #707070;
+  color: #f2f1ff;
+  font-size: 10px;
+  font-weight: 400;
+  padding: 0px 6px;
+  border-radius: 19px;
+  display: inline-block;
+}
+
+.pending-invitation {
+  background: #f08686;
   color: #f2f1ff;
   font-size: 10px;
   font-weight: 400;
@@ -2083,6 +2089,7 @@ flexbox-container2 h4 {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
 }
+
 .card-min {
   padding: 20px;
   margin-bottom: 24px;
@@ -2090,6 +2097,7 @@ flexbox-container2 h4 {
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
 }
+
 .card-filter {
   padding: 20px 30px;
   margin-bottom: 24px;

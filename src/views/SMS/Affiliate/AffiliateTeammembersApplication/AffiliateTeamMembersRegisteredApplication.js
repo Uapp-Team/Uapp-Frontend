@@ -21,8 +21,8 @@ import { permissionList } from "../../../../constants/AuthorizationConstant.js";
 import PaginationOnly from "../../Pagination/PaginationOnly.jsx";
 import get from "../../../../helpers/get.js";
 
-const CompanionTeamMembersApplication = () => {
-  const { companionId } = useParams();
+const AffiliateTeamMembersRegisteredApplication = () => {
+  const { affiliateId } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -62,7 +62,7 @@ const CompanionTeamMembersApplication = () => {
 
   useEffect(() => {
     get(
-      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${false}`
+      `AffiliateApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&affiliateid=${affiliateId}&enrollmentStatus=${true}`
     ).then((res) => {
       setLoading(false);
       setApplicationList(res?.models);
@@ -70,7 +70,7 @@ const CompanionTeamMembersApplication = () => {
       // setEntity(res?.totalEntity);
       // setSerialNumber(res?.firstSerialNumber);
     });
-  }, [currentPage, dataPerPage, companionId, enrollValue]);
+  }, [currentPage, dataPerPage, affiliateId, enrollValue]);
 
   // toggle1 dropdown
   const toggle1 = () => {
@@ -330,4 +330,4 @@ const CompanionTeamMembersApplication = () => {
   );
 };
 
-export default CompanionTeamMembersApplication;
+export default AffiliateTeamMembersRegisteredApplication;
