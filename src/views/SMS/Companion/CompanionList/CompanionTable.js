@@ -79,7 +79,7 @@ const CompanionTable = ({
               <th>Consultant</th>
             ) : null}
             {tableData[5]?.isActive ? <th>Started</th> : null}
-            {tableData[6]?.isActive ? <th>Invitation</th> : null}
+            {tableData[6]?.isActive ? <th>Pending Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
             {tableData[6]?.isActive ? <th>Students</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}

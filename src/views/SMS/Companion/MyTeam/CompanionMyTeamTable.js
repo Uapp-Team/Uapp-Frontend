@@ -66,7 +66,7 @@ const CompanionMyTeamTable = ({
             {tableData[3]?.isActive ? <th>Parent</th> : null}
 
             {tableData[4]?.isActive ? <th>Started</th> : null}
-            {tableData[5]?.isActive ? <th>Invitation</th> : null}
+            {tableData[5]?.isActive ? <th>Pending Invitation</th> : null}
             {tableData[6]?.isActive ? <th>Leads</th> : null}
             {tableData[6]?.isActive ? <th>Student</th> : null}
             {tableData[7]?.isActive ? <th>Team Member</th> : null}
