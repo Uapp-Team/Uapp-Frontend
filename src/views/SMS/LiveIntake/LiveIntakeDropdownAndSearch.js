@@ -3,6 +3,7 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import Typing from "../../../components/form/Typing";
 import Filter from "../../../components/Dropdown/Filter";
 import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
+import TagButton from "../../../components/buttons/TagButton";
 
 const LiveIntakeDropdownAndSearch = ({
   setIsTyping,
@@ -37,6 +38,7 @@ const LiveIntakeDropdownAndSearch = ({
   deliveryPatternValue,
   setDeliveryPatternLabel,
   setDeliveryPatternValue,
+  handleReset,
 }) => {
   return (
     <div>
@@ -48,7 +50,7 @@ const LiveIntakeDropdownAndSearch = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name, Email"
+                placeholder="University Name"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}
@@ -114,7 +116,15 @@ const LiveIntakeDropdownAndSearch = ({
               />
             </Col>
             <Col lg="2" md="2" sm="2" xs="12" className="mb-2">
-              <Filter
+              <DefaultDropdownU
+                label={deliveryPatternLabel}
+                setLabel={setDeliveryPatternLabel}
+                value={deliveryPatternValue}
+                setValue={setDeliveryPatternValue}
+                url={`DeliveryPatternDD/GetByUniversityId?universityId=${universityValue}`}
+                className="mb-3"
+              />
+              {/* <Filter
                 data={deliveryPatternDD}
                 label={deliveryPatternLabel}
                 setLabel={setDeliveryPatternLabel}
@@ -122,7 +132,93 @@ const LiveIntakeDropdownAndSearch = ({
                 setValue={setDeliveryPatternValue}
                 action={() => {}}
                 isDisabled={false}
-              />
+              /> */}
+            </Col>
+          </Row>
+          <Row className="">
+            <Col lg="12" md="12" sm="12">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                }}
+              >
+                <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                  {universityValue !== 0 ||
+                  campusValue !== 0 ||
+                  recruitmentValue !== 0 ||
+                  deliveryPatternValue !== 0
+                    ? ""
+                    : ""}
+                  {universityValue !== 0 ? (
+                    <TagButton
+                      label={universityLabel}
+                      setValue={() => setUniversityValue(0)}
+                      setLabel={() => setUniversityLabel("University")}
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {universityValue !== 0 &&
+                    (campusValue !== 0 ||
+                    recruitmentValue !== 0 ||
+                    deliveryPatternValue !== 0
+                      ? ""
+                      : "")}
+
+                  {campusValue !== 0 ? (
+                    <TagButton
+                      label={campusLabel}
+                      setValue={() => setCampusValue(0)}
+                      setLabel={() => setCampusLabel("Campus")}
+                    />
+                  ) : (
+                    ""
+                  )}
+
+                  {campusValue !== 0 &&
+                    (recruitmentValue !== 0 || deliveryPatternValue !== 0
+                      ? ""
+                      : "")}
+
+                  {recruitmentValue !== 0 ? (
+                    <TagButton
+                      label={recruitmentLabel}
+                      setValue={() => setRecruitmentValue(0)}
+                      setLabel={() => setRecruitmentLabel("Recruitment")}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  {recruitmentValue !== 0 && deliveryPatternValue !== 0
+                    ? ""
+                    : ""}
+                  {deliveryPatternValue !== 0 ? (
+                    <TagButton
+                      label={deliveryPatternLabel}
+                      setValue={() => setDeliveryPatternValue(0)}
+                      setLabel={() =>
+                        setDeliveryPatternLabel("Delivery Pattern")
+                      }
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                <div className="mt-1 mx-0 d-flex btn-clear">
+                  {universityValue !== 0 ||
+                  campusValue !== 0 ||
+                  recruitmentValue !== 0 ||
+                  deliveryPatternValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleReset}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
             </Col>
           </Row>
         </CardBody>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Pagination from "../Pagination/Pagination";
 import {
+  Button,
   Card,
   CardBody,
   Col,
@@ -11,6 +12,7 @@ import {
   Input,
   Modal,
   ModalBody,
+  ModalHeader,
   Row,
   Table,
 } from "reactstrap";
@@ -18,6 +20,8 @@ import Loader from "../Search/Loader/Loader";
 import Select from "react-select";
 import ReactToPrint from "react-to-print";
 import ReactTableConvertToXl from "../ReactTableConvertToXl/ReactTableConvertToXl";
+import MoreData from "./MoreData";
+import SideModal from "./SideModal";
 
 const LiveIntakeTable = ({
   loading,
@@ -34,7 +38,10 @@ const LiveIntakeTable = ({
   entity,
   paginate,
   currentPage,
+  liveIntakeList,
 }) => {
+  // const [intakeDataList, setIntakeDataList] = useState(liveIntake?.intakeNames);
+  const [data, setData] = useState({});
   const [passModal, setPassModal] = useState(false);
   const [passData, setPassData] = useState({});
   const handlePass = (data) => {
@@ -44,6 +51,19 @@ const LiveIntakeTable = ({
 
   const handleToggle = () => {
     setPassModal(!passModal);
+  };
+
+  const closeOpenModal = () => {
+    setPassModal(false);
+  };
+
+  const handleUpdate = (data) => {
+    setData(data);
+    setPassModal(true);
+    // setDescription(data?.description);
+    // setName(data?.name);
+    // setdepartmentLabel(data?.departmentinfo?.name);
+    // setdepartmentValue(data?.departmentinfo?.id);
   };
   return (
     <div>
@@ -271,108 +291,11 @@ const LiveIntakeTable = ({
           <>
             {/* {loading ? (
               <Loader />
-            ) : managerList.length === 0 ? (
+            ) : liveIntakeList.length === 0 ? (
               <h3 className="text-center">No Data Found</h3>
             ) : (
-              <div className="table-responsive fixedhead" ref={componentRef}>
-                <Table id="table-to-xls" className="table-sm table-bordered">
-                  <thead className="tablehead">
-                    <tr style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? <th>University</th> : null}
-                      {tableData[1]?.isActive ? <th>Intake</th> : null}
-
-                      {tableData[3]?.isActive ? <th>Campus</th> : null}
-                      {tableData[4]?.isActive ? (
-                        <th>Recruitment Type</th>
-                      ) : null}
-                      {tableData[5]?.isActive ? (
-                        <th>Delivery Pattern</th>
-                      ) : null}
-                      {tableData[6]?.isActive ? <th>Course</th> : null}
-
-                      {tableData[12]?.isActive ? (
-                        <th style={{ width: "8%" }} className="text-center">
-                          Action
-                        </th>
-                      ) : null}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {managerList?.map((manager, i) => (
-                      <tr key={manager.id} style={{ textAlign: "center" }}>
-                        {tableData[0]?.isActive ? (
-                          <td className="cursor-pointer hyperlink-hover">
-                            {" "}
-                            <span
-                              onClick={() => {
-                                handleViewAdmissionManager(
-                                  manager?.id,
-                                  manager?.provider?.id
-                                );
-                              }}
-                            >
-                              {manager?.sequenceId}
-                            </span>
-                          </td>
-                        ) : null}
-
-                        {tableData[1]?.isActive ? (
-                          <td className="cursor-pointer hyperlink-hover">
-                            <span
-                              onClick={() => {
-                                handleViewAdmissionManager(
-                                  manager?.id,
-                                  manager?.provider?.id
-                                );
-                              }}
-                            >
-                              {" "}
-                              {manager?.nameTittle?.name} {manager?.firstName}{" "}
-                              {manager?.lastName}
-                            </span>
-                          </td>
-                        ) : null}
-
-                      
-
-                        {tableData[3]?.isActive ? (
-                          <td>{manager?.provider?.name}</td>
-                        ) : null}
-
-                        {tableData[4]?.isActive ? (
-                          <td>
-                            <div className=" d-flex">
-                              <PopOverText
-                                value={
-                                  manager?.phoneNumber &&
-                                  manager?.phoneNumber.includes("+")
-                                    ? manager?.phoneNumber
-                                    : manager?.phoneNumber &&
-                                      !manager?.phoneNumber.includes("+")
-                                    ? "+" + manager?.phoneNumber
-                                    : null
-                                }
-                                btn={<i class="fas fa-phone"></i>}
-                                popoverOpen={popoverOpen}
-                                setPopoverOpen={setPopoverOpen}
-                              />
-                              <PopOverText
-                                value={manager?.email}
-                                btn={<i className="far fa-envelope"></i>}
-                                popoverOpen={popoverOpen}
-                                setPopoverOpen={setPopoverOpen}
-                              />
-                            </div>
-                          </td>
-                        ) : null}
-                      </tr>
-                    ))}
-                
-                  </tbody>
-                </Table>
-              </div>
+            
             )} */}
-
             <div className="table-responsive fixedhead" ref={componentRef}>
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="tablehead">
@@ -389,124 +312,55 @@ const LiveIntakeTable = ({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>De MOntFort University</td>
-                    <td>November 2024</td>
-                    <td>London East</td>
-                    <td>
-                      <span className="for-intake-table">Home</span>
-                      <span className="for-intake-table">Eu</span>
-                      <span className="for-intake-table">International</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">Weekend</span>
-                      <span className="for-intake-table">Stander</span>
-                      <span className="for-intake-table">Evening</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">35</span>
-                    </td>
-                    <td
-                      className="cursor-pointer"
-                      onClick={() => setPassModal(true)}
-                    >
-                      More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>De MOntFort University</td>
-                    <td>November 2024</td>
-                    <td>London East</td>
-                    <td>
-                      <span className="for-intake-table">Home</span>
-                      <span className="for-intake-table">Eu</span>
-                      <span className="for-intake-table">International</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">Weekend</span>
-                      <span className="for-intake-table">Stander</span>
-                      <span className="for-intake-table">Evening</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">35</span>
-                    </td>
-                    <td>
-                      More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>De MOntFort University</td>
-                    <td>November 2024</td>
-                    <td>London East</td>
-                    <td>
-                      <span className="for-intake-table">Home</span>
-                      <span className="for-intake-table">Eu</span>
-                      <span className="for-intake-table">International</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">Weekend</span>
-                      <span className="for-intake-table">Stander</span>
-                      <span className="for-intake-table">Evening</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">35</span>
-                    </td>
-                    <td>
-                      More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>De MOntFort University</td>
-                    <td>November 2024</td>
-                    <td>London East</td>
-                    <td>
-                      <span className="for-intake-table">Home</span>
-                      <span className="for-intake-table">Eu</span>
-                      <span className="for-intake-table">International</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">Weekend</span>
-                      <span className="for-intake-table">Stander</span>
-                      <span className="for-intake-table">Evening</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">35</span>
-                    </td>
-                    <td>
-                      More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>De MOntFort University</td>
-                    <td>November 2024</td>
-                    <td>London East</td>
-                    <td>
-                      <span className="for-intake-table">Home</span>
-                      <span className="for-intake-table">Eu</span>
-                      <span className="for-intake-table">International</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">Weekend</span>
-                      <span className="for-intake-table">Stander</span>
-                      <span className="for-intake-table">Evening</span>
-                    </td>
-                    <td>
-                      {" "}
-                      <span className="for-intake-table">35</span>
-                    </td>
-                    <td>
-                      More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                    </td>
-                  </tr>
+                  {liveIntakeList?.map((liveIntake, i) => (
+                    <tr key={i} style={{ textAlign: "center" }}>
+                      <td>{liveIntake?.universityName}</td>
+                      <td>
+                        <MoreData
+                          data={liveIntake?.intakeNames}
+                          action={() => handleUpdate(liveIntake)}
+                        />
+                      </td>
+                      <td>
+                        <MoreData
+                          data={liveIntake?.campusNames}
+                          action={() => handleUpdate(liveIntake)}
+                        />
+                      </td>
+                      <td>
+                        {liveIntake?.isAcceptHome === true ? (
+                          <span className="for-intake-table">Home</span>
+                        ) : null}
+                        {liveIntake?.isAcceptEU_UK === true ? (
+                          <span className="for-intake-table">Eu/Uk</span>
+                        ) : null}
+                        {liveIntake?.isAcceptInternational === true ? (
+                          <span className="for-intake-table">
+                            International
+                          </span>
+                        ) : null}
+                      </td>
+                      <td>
+                        {" "}
+                        {/* <span className="for-intake-table">
+                          
+                        </span> */}
+                        {liveIntake?.deliveryPatternNames}
+                      </td>
+                      <td>
+                        <span className="for-intake-table">
+                          {liveIntake?.courseCount}{" "}
+                        </span>
+                      </td>
+                      <td
+                        className="cursor-pointer"
+                        onClick={() => handleUpdate(liveIntake)}
+                      >
+                        {" "}
+                        More Info<i class="fa-solid fa-chevron-right ml-2"></i>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>
@@ -521,18 +375,23 @@ const LiveIntakeTable = ({
         </CardBody>
       </Card>
 
-      <Modal
+      {passModal && <SideModal action={closeOpenModal} data={data} />}
+
+      {/* <Modal
         isOpen={passModal}
         toggle={() => handleToggle}
         className="uapp-modal2"
       >
+        <ModalHeader>
+          <i
+            onClick={closeOpenModal}
+            class="fa-solid fa-xmark cursor-pointer"
+          ></i>
+        </ModalHeader>
         <ModalBody className="p-5">
-          <h5>
-            Change password for {passData?.nameTittle?.name}{" "}
-            {passData?.firstName} {passData?.lastName}
-          </h5>
+          <h5>sakib</h5>
         </ModalBody>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

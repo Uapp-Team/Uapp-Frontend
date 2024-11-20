@@ -23,6 +23,10 @@ const LiveIntake = () => {
   const [deliveryPatternValue, setDeliveryPatternValue] = useState(0);
   const [recruitmentDD, setRecruitmentDD] = useState([
     {
+      id: 0,
+      name: "All",
+    },
+    {
       id: 1,
       name: "Home",
     },
@@ -35,8 +39,10 @@ const LiveIntake = () => {
       name: "International",
     },
   ]);
+
   const [recruitmentLabel, setRecruitmentLabel] = useState("Recruitment");
   const [recruitmentValue, setRecruitmentValue] = useState(0);
+
   const [campusDD, setCampusDD] = useState([]);
   const [campusLabel, setCampusLabel] = useState("Campus");
   const [campusValue, setCampusValue] = useState(0);
@@ -47,9 +53,19 @@ const LiveIntake = () => {
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
   const [intake, setIntake] = useState({});
+  const [liveIntakeList, setLiveIntakeList] = useState([]);
+  const [intakeDataList, setIntakeDataList] = useState([]);
+
   const [entity, setEntity] = useState(0);
+
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+
+  useEffect(() => {
+    get(`UniversityCampus/GetByUniversity/${universityValue}`).then((res) => {
+      setCampusDD(res);
+    });
+  }, [universityValue]);
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -61,25 +77,13 @@ const LiveIntake = () => {
   }, [setIntake, setIntakeRngDD]);
 
   useEffect(() => {
-    get(`UniversityCampus/GetByUniversity/${universityValue}`).then((res) => {
-      setCampusDD(res);
-    });
-  }, [universityValue]);
-
-  useEffect(() => {
-    const filterData = intakeRngDD.filter((status) => {
-      return status.id === intake?.id;
-    });
-
-    setIntakeRngValue(filterData[0]?.id);
-    setIntakeRngLabel(filterData[0]?.name);
-  }, [intakeRngDD, intake, setIntakeRngValue, setIntakeRngLabel]);
-
-  useEffect(() => {
     Uget(
-      `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&isAcceptHome=${recruitmentValue}&search=${searchStr}`
+      `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
+        recruitmentValue ? recruitmentValue : 0
+      }&searchText=${searchStr}`
     ).then((res) => {
-      setIntakeRngDD(res);
+      setLiveIntakeList(res?.items);
+      setEntity(res?.totalFiltered);
     });
   }, [
     campusValue,
@@ -92,6 +96,14 @@ const LiveIntake = () => {
     recruitmentValue,
   ]);
 
+  useEffect(() => {
+    const filterData = intakeRngDD.filter((status) => {
+      return status.id === intake?.id;
+    });
+    setIntakeRngValue(filterData[0]?.id);
+    setIntakeRngLabel(filterData[0]?.name);
+  }, [intakeRngDD, intake, setIntakeRngValue, setIntakeRngLabel]);
+
   const selectDataSize = (value) => {
     setCurrentPage(1);
     setLoading(true);
@@ -101,7 +113,6 @@ const LiveIntake = () => {
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setCallApi((prev) => !prev);
   };
 
   const handleKeyDown = (event) => {
@@ -126,6 +137,20 @@ const LiveIntake = () => {
     values[i].isActive = e.target.checked;
     setTableData(values);
     localStorage.setItem("ColumnAdmissionManager", JSON.stringify(values));
+  };
+
+  const handleReset = () => {
+    setUniversityLabel("University");
+    setUniversityValue(0);
+    setCampusLabel("Campus");
+    setCampusValue(0);
+    setRecruitmentLabel("Recruitment");
+    setRecruitmentValue(0);
+    setDeliveryPatternLabel("Delivery Pattern");
+    setDeliveryPatternValue(0);
+    setSearchStr("");
+    setCurrentPage(1);
+    setCallApi((prev) => !prev);
   };
 
   return (
@@ -164,6 +189,7 @@ const LiveIntake = () => {
         deliveryPatternValue={deliveryPatternValue}
         setDeliveryPatternLabel={setDeliveryPatternLabel}
         setDeliveryPatternValue={setDeliveryPatternValue}
+        handleReset={handleReset}
       />
       <LiveIntakeTable
         loading={loading}
@@ -180,6 +206,7 @@ const LiveIntake = () => {
         entity={entity}
         paginate={paginate}
         currentPage={currentPage}
+        liveIntakeList={liveIntakeList}
       />
     </div>
   );

@@ -31,7 +31,6 @@ const SuperAdmin = () => {
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
-
   const history = useHistory();
   const [intake, setIntake] = useState({});
   const userType = localStorage.getItem("userType");
