@@ -185,8 +185,8 @@ const PersonalInformation = () => {
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
         setBirthDate(res?.dateOfBirth);
-        setIssueDate(res?.issueDate ? moment(res.issueDate) : null);
-        setexpireDate(res?.expireDate ? moment(res.expireDate) : null);
+        setIssueDate(res?.issueDate);
+        setexpireDate(res?.expireDate);
       });
     }
   }, [success, applicationStudentId]);
@@ -438,7 +438,7 @@ const PersonalInformation = () => {
   };
   function convertDateFormat(dateString) {
     // Split the input date string into day, month, and year
-    const [day, month, year] = dateString.split("-");
+    const [day, month, year] = dateString.split("/");
 
     // Return the date in yyyy-MM-dd format
     return `${year}-${month}-${day}`;
@@ -451,16 +451,15 @@ const PersonalInformation = () => {
     const expireDate = event.target.elements.formExpireDate.value;
 
     const subData = new FormData(event.target);
+    subData.append("dateOfBirth", convertDateFormat(dateOfBirth));
+    subData.append("issueDate", convertDateFormat(issueDate));
+    subData.append("expireDate", convertDateFormat(expireDate));
+    subData.append("phoneNumber", phoneNumber);
     if (FileList.length === 0) {
       subData.append("profileImageFile", null);
     } else {
       subData.append("profileImageFile", FileList[0]?.originFileObj);
     }
-
-    subData.append("dateOfBirth", convertDateFormat(dateOfBirth));
-    subData.append("issueDate", convertDateFormat(issueDate));
-    subData.append("expireDate", convertDateFormat(expireDate));
-    subData.append("phoneNumber", phoneNumber);
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
@@ -660,7 +659,7 @@ const PersonalInformation = () => {
                       onChange={(e) => {
                         handleDate(e);
                       }}
-                      format="DD-MM-YYYY"
+                      format="DD/MM/YYYY"
                       placeholder="dd/mm/yyyy"
                       style={{
                         width: "100%",
@@ -711,7 +710,7 @@ const PersonalInformation = () => {
                       onChange={(e) => {
                         handleIssueDate(e);
                       }}
-                      format="DD-MM-YYYY"
+                      format="DD/MM/YYYY"
                       placeholder="dd/mm/yyyy"
                       style={{
                         width: "100%",
@@ -743,7 +742,7 @@ const PersonalInformation = () => {
                       onChange={(e) => {
                         handleExpireDate(e);
                       }}
-                      format="DD-MM-YYYY"
+                      format="DD/MM/YYYY"
                       placeholder="dd/mm/yyyy"
                       style={{
                         width: "100%",
