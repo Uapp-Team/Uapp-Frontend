@@ -8,6 +8,7 @@ import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 
 const EducationalForm = ({
   oneData,
@@ -39,6 +40,7 @@ const EducationalForm = ({
   handleInstitution,
   institutionError,
   handleAttendedTo,
+  setAttendedToError,
   attendedToError,
   handlePercentage,
   percentageError,
@@ -177,9 +179,9 @@ const EducationalForm = ({
             {isAchieved && (
               <>
                 <FormGroup>
-                  <span>
+                  {/* <span>
                     <span className="text-danger">*</span> Attended To
-                  </span>
+                  </span> */}
 
                   {/* <Input
                     className="form-mt"
@@ -192,7 +194,7 @@ const EducationalForm = ({
                     min={minDate}
                     id="attendedInstitutionTo"
                   /> */}
-
+                  {/* 
                   <DatePicker
                     value={attendedTo ? moment(attendedTo) : ""}
                     name="attendedInstitutionTo"
@@ -206,7 +208,17 @@ const EducationalForm = ({
                       width: "100%",
                     }}
                   />
-                  <span className="text-danger">{attendedToError}</span>
+                  <span className="text-danger">{attendedToError}</span> */}
+
+                  <DMYPicker
+                    label="Attended To"
+                    name="attendedInstitutionTo"
+                    value={attendedTo}
+                    setValue={handleAttendedTo}
+                    error={attendedToError}
+                    setError={setAttendedToError}
+                    required={true}
+                  />
                 </FormGroup>
                 <FormGroup>
                   <span>

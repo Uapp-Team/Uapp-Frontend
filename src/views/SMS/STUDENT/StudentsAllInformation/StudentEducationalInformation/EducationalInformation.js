@@ -209,20 +209,27 @@ const EducationalInformation = () => {
     }
   };
   const handleAttendedTo = (e) => {
-    if (!e) {
-      setAttendedToError("Attended To is required");
-      setAttendedTo(null);
-      return;
-    }
-    const value = e.toDate();
-    const formateDate = convertDateFormat(value.toISOString().split("T")[0]);
-    setAttendedTo(formateDate);
-    if (currentDate < value.toISOString()) {
-      setAttendedToError("Invalid Date");
+    if (e) {
+      setAttendedTo(e);
     } else {
-      setAttendedToError("");
+      setAttendedToError("Attended To is required");
     }
   };
+  // const handleAttendedTo = (e) => {
+  //   if (!e) {
+  //     setAttendedToError("Attended To is required");
+  //     setAttendedTo(null);
+  //     return;
+  //   }
+  //   const value = e.toDate();
+  //   const formateDate = convertDateFormat(value.toISOString().split("T")[0]);
+  //   setAttendedTo(formateDate);
+  //   if (currentDate < value.toISOString()) {
+  //     setAttendedToError("Invalid Date");
+  //   } else {
+  //     setAttendedToError("");
+  //   }
+  // };
 
   const handleDuration = (e) => {
     let data = e.target.value.trimStart();
@@ -320,6 +327,8 @@ const EducationalInformation = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
     console.log("first", subData);
+    subData.append("attendedInstitutionFrom", attendedFrom);
+    subData.append("attendedInstitutionTo", attendedTo);
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
     if (validateRegisterForm()) {
@@ -779,6 +788,7 @@ const EducationalInformation = () => {
                       handleInstitution={handleInstitution}
                       institutionError={institutionError}
                       handleAttendedTo={handleAttendedTo}
+                      setAttendedToError={setAttendedToError}
                       attendedToError={attendedToError}
                       handlePercentage={handlePercentage}
                       percentageError={percentageError}
