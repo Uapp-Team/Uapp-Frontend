@@ -83,7 +83,7 @@ const LiveIntake = () => {
       }&searchText=${searchStr}`
     ).then((res) => {
       setLiveIntakeList(res?.items);
-      setEntity(res?.totalFiltered);
+      setEntity(res?.total);
     });
   }, [
     campusValue,
