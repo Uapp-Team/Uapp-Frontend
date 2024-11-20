@@ -17,7 +17,6 @@ import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
-import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
@@ -61,9 +60,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState("");
+  const [attendedFrom, setAttendedFrom] = useState(null);
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState("");
+  const [attendedTo, setAttendedTo] = useState(null);
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -185,28 +184,41 @@ const EducationalInformation = () => {
       setQualificationSubjectError("");
     }
   };
+
+  function convertDateFormat(dateString) {
+    // Split the input date string into day, month, and year
+    const [day, month, year] = dateString.split("/");
+
+    // Return the date in yyyy-MM-dd format
+    return `${year}-${month}-${day}`;
+  }
+
   const handleAttendedFrom = (e) => {
-    const value = e.target.value;
-    setAttendedFrom(value);
-    if (e.target.value === "") {
-      setAttendedFromError("Date is required");
-    } else if (currentDate < value) {
+    if (!e) {
+      setAttendedFromError("Attended From is required");
+      setAttendedFrom(null);
+      return;
+    }
+    const value = e.toDate();
+    const formatedDate = convertDateFormat(value.toISOString().split("T")[0]);
+    setAttendedFrom(formatedDate);
+    if (currentDate < value.toISOString()) {
       setAttendedFromError("Invalid Date");
     } else {
       setAttendedFromError("");
     }
   };
   const handleAttendedTo = (e) => {
-    const value = e.target.value;
-    setAttendedTo(value);
-    if (e.target.value === "") {
-      setAttendedToError("Date is required");
-    } else if (currentDate < value) {
+    if (!e) {
+      setAttendedToError("Attended To is required");
+      setAttendedTo(null);
+      return;
+    }
+    const value = e.toDate();
+    const formateDate = convertDateFormat(value.toISOString().split("T")[0]);
+    setAttendedTo(formateDate);
+    if (currentDate < value.toISOString()) {
       setAttendedToError("Invalid Date");
-    } else if (attendedFrom > value) {
-      setAttendedToError(
-        "Attended to date should be greater than Attended from date"
-      );
     } else {
       setAttendedToError("");
     }
@@ -307,9 +319,9 @@ const EducationalInformation = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
+    console.log("first", subData);
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
-
     if (validateRegisterForm()) {
       if (oneData?.id) {
         setButtonStatus(true);
@@ -330,7 +342,7 @@ const EducationalInformation = () => {
           setQualificationSubject("");
           setDuration("");
           setInstitution("");
-          setAttendedFrom(currentDate);
+          setAttendedFrom(null);
           setShowForm(false);
         });
       } else {
@@ -351,11 +363,12 @@ const EducationalInformation = () => {
           setDuration("");
           setInstitution("");
 
-          setAttendedFrom(currentDate);
+          setAttendedFrom(null);
           setSuccess(!success);
           setCountryLabel("Select Country");
           setCountryValue(0);
           setShowForm(false);
+
           setForms(true);
         });
       }
@@ -380,8 +393,8 @@ const EducationalInformation = () => {
       setSuccess(!success);
       setDeleteData({});
       setOneData({});
-      setAttendedFrom(currentDate);
-      setAttendedTo(currentDate);
+      setAttendedFrom(null);
+      setAttendedTo(null);
       setCountryLabel("Select Country");
       setCountryValue(0);
       setEducationLevelLabel("Select Education Level");
@@ -415,15 +428,11 @@ const EducationalInformation = () => {
       setInstituteAddress(res?.instituteAddress);
 
       res?.attendedInstitutionFrom
-        ? setAttendedFrom(
-            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-          )
+        ? setAttendedFrom(res?.attendedInstitutionFrom)
         : setAttendedFrom("");
 
       res?.attendedInstitutionTo
-        ? setAttendedTo(
-            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-          )
+        ? setAttendedTo(res?.attendedInstitutionTo)
         : setAttendedTo("");
     });
     setShowForm(true);
@@ -446,8 +455,8 @@ const EducationalInformation = () => {
   const onShow = () => {
     setSuccess(!success);
     setShowForm(true);
-    setAttendedFrom(currentDate);
-    setAttendedTo(currentDate);
+    setAttendedFrom(null);
+    setAttendedTo(null);
     setCountryLabel("Select Country");
     setCountryValue(0);
     setEducationLevelLabel("Select Education Level");

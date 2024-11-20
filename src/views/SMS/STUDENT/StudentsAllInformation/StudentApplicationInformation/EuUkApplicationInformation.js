@@ -1,3 +1,5 @@
+import { DatePicker } from "antd";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { FormGroup, Input, Label } from "reactstrap";
 
@@ -110,7 +112,7 @@ export default function EuUkApplicationInformation({
           {countryLabel}?
         </span>
 
-        <Input
+        {/* <Input
           className="form-mt"
           type="date"
           name="DateOfMoveToUk"
@@ -120,6 +122,19 @@ export default function EuUkApplicationInformation({
           }}
           value={date}
           // min={minDate}
+        /> */}
+        <DatePicker
+          onChange={(e) => {
+            handleDate(e);
+          }}
+          format="DD/MM/YYYY"
+          placeholder="dd/mm/yyyy"
+          style={{
+            width: "100%",
+          }}
+          value={date ? moment(date) : ""}
+          name="DateOfMoveToUk"
+          id="DateOfMoveToUk"
         />
         <span className="text-danger">{dateError}</span>
       </FormGroup>

@@ -1,10 +1,12 @@
+import { DatePicker } from "antd";
+import moment from "moment";
 import React from "react";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
-import Select from "react-select";
-import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import CancelButton from "../../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
 const EducationalForm = ({
@@ -112,7 +114,7 @@ const EducationalForm = ({
                 <span className="text-danger">*</span> Attended From
               </span>
 
-              <Input
+              {/* <Input
                 className="form-mt"
                 type="date"
                 value={attendedFrom}
@@ -120,6 +122,20 @@ const EducationalForm = ({
                   handleAttendedFrom(e);
                 }}
                 min={minDate}
+                name="attendedInstitutionFrom"
+                id="attendedInstitutionFrom"
+              /> */}
+
+              <DatePicker
+                onChange={(e) => {
+                  handleAttendedFrom(e);
+                }}
+                value={attendedFrom ? moment(attendedFrom) : null}
+                style={{
+                  width: "100%",
+                }}
+                format="DD/MM/YYYY"
+                placeholder="dd/mm/yyyy"
                 name="attendedInstitutionFrom"
                 id="attendedInstitutionFrom"
               />
@@ -165,7 +181,7 @@ const EducationalForm = ({
                     <span className="text-danger">*</span> Attended To
                   </span>
 
-                  <Input
+                  {/* <Input
                     className="form-mt"
                     type="date"
                     value={attendedTo}
@@ -175,6 +191,20 @@ const EducationalForm = ({
                     }}
                     min={minDate}
                     id="attendedInstitutionTo"
+                  /> */}
+
+                  <DatePicker
+                    value={attendedTo ? moment(attendedTo) : ""}
+                    name="attendedInstitutionTo"
+                    onChange={(e) => {
+                      handleAttendedTo(e);
+                    }}
+                    format="DD/MM/YYYY"
+                    placeholder="dd/mm/yyyy"
+                    id="attendedInstitutionTo"
+                    style={{
+                      width: "100%",
+                    }}
                   />
                   <span className="text-danger">{attendedToError}</span>
                 </FormGroup>
