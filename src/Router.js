@@ -1420,6 +1420,7 @@ const UserContent = lazy(() =>
 const UserContentHub = lazy(() =>
   import("./views/SMS/ContentForUser/ContentHub.js")
 );
+const LiveIntake = lazy(() => import("./views/SMS/LiveIntake/LiveIntake.js"));
 
 // Affiliate path start
 const AffiliateTransation = lazy(() =>
@@ -1790,6 +1791,7 @@ class AppRouter extends React.Component {
 
                   <AppRoute path="/content" component={UserContent} />
                   <AppRoute path="/contentHub" component={UserContentHub} />
+                  <AppRoute path="/live-intake" component={LiveIntake} />
 
                   {/* Affiliate paths */}
                   <AppRoute
