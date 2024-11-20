@@ -1,7 +1,8 @@
 import React from "react";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import Select from "react-select";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
+import { BranchAdmin } from "../../../../../../components/core/User";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const GeneralInformationForm = ({
@@ -168,7 +169,7 @@ const GeneralInformationForm = ({
               {userTypeId === userTypes?.Consultant.toString() ? (
                 <FormGroup className="has-icon-left position-relative">
                   <span className="mr-2">
-                    <span className="text-danger">*</span>
+                    {!BranchAdmin() && <span className="text-danger">*</span>}
                     Parent Consultant
                   </span>
                   {consData?.parentConsultant?.firstName}{" "}
@@ -178,7 +179,7 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    <span className="text-danger">*</span>
+                    {!BranchAdmin() && <span className="text-danger">*</span>}
                     Parent Consultant
                   </span>
 
