@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import { BranchAdmin } from "../../../../../components/core/User";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import GeneralInformationForm from "./Component/GeneralInformationForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 
 const GeneralInformation = () => {
   const [nameTitle, setNameTitle] = useState([]);
@@ -80,11 +81,15 @@ const GeneralInformation = () => {
         // setSubmitData(true);
         setTypeValue(res?.consultantType?.id);
         setTypeLabel(res?.consultantType?.name);
-        setParentValue(res?.parentConsultant?.id);
+        setParentValue(
+          res?.parentConsultant?.id ? res?.parentConsultant?.id : 0
+        );
         setParentLabel(
-          res?.parentConsultant?.firstName +
-            " " +
-            res?.parentConsultant?.lastName
+          res?.parentConsultant?.firstName
+            ? res?.parentConsultant?.firstName +
+                " " +
+                res?.parentConsultant?.lastName
+            : "Select Parent Consultant"
         );
         setBranchValue(res?.branch?.id);
         setBranchLabel(res?.branch?.name);
@@ -198,15 +203,21 @@ const GeneralInformation = () => {
     //   setAcceptError(true);
     // }
 
-    if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
-      isValid = false;
-      setParentError(true);
-    }
-
-    // if (parentValue === 0) {
+    // if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
     //   isValid = false;
     //   setParentError(true);
     // }
+
+    if (BranchAdmin()) {
+      setParentError(false);
+    } else {
+      if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
+        isValid = false;
+        setParentError(true);
+      } else {
+        setParentError(false);
+      }
+    }
 
     if (titleValue === 0) {
       isValid = false;
