@@ -40,6 +40,7 @@ const EducationalForm = ({
   handleInstitution,
   institutionError,
   handleAttendedTo,
+  setAttendedFromError,
   setAttendedToError,
   attendedToError,
   handlePercentage,
@@ -112,36 +113,14 @@ const EducationalForm = ({
               <span className="text-danger">{qualificationSubjectError}</span>
             </FormGroup>
             <FormGroup>
-              <span>
-                <span className="text-danger">*</span> Attended From
-              </span>
-
-              {/* <Input
-                className="form-mt"
-                type="date"
+              <DMYPicker
+                label="Attended From"
                 value={attendedFrom}
-                onChange={(e) => {
-                  handleAttendedFrom(e);
-                }}
-                min={minDate}
-                name="attendedInstitutionFrom"
-                id="attendedInstitutionFrom"
-              /> */}
-
-              <DatePicker
-                onChange={(e) => {
-                  handleAttendedFrom(e);
-                }}
-                value={attendedFrom ? moment(attendedFrom) : null}
-                style={{
-                  width: "100%",
-                }}
-                format="DD/MM/YYYY"
-                placeholder="dd/mm/yyyy"
-                name="attendedInstitutionFrom"
-                id="attendedInstitutionFrom"
+                setValue={handleAttendedFrom}
+                error={attendedFromError}
+                action={() => setAttendedFromError("")}
+                required={true}
               />
-              <span className="text-danger">{attendedFromError}</span>
             </FormGroup>
             <FormGroup>
               <span>
@@ -179,44 +158,12 @@ const EducationalForm = ({
             {isAchieved && (
               <>
                 <FormGroup>
-                  {/* <span>
-                    <span className="text-danger">*</span> Attended To
-                  </span> */}
-
-                  {/* <Input
-                    className="form-mt"
-                    type="date"
-                    value={attendedTo}
-                    name="attendedInstitutionTo"
-                    onChange={(e) => {
-                      handleAttendedTo(e);
-                    }}
-                    min={minDate}
-                    id="attendedInstitutionTo"
-                  /> */}
-                  {/* 
-                  <DatePicker
-                    value={attendedTo ? moment(attendedTo) : ""}
-                    name="attendedInstitutionTo"
-                    onChange={(e) => {
-                      handleAttendedTo(e);
-                    }}
-                    format="DD/MM/YYYY"
-                    placeholder="dd/mm/yyyy"
-                    id="attendedInstitutionTo"
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                  <span className="text-danger">{attendedToError}</span> */}
-
                   <DMYPicker
                     label="Attended To"
-                    name="attendedInstitutionTo"
                     value={attendedTo}
                     setValue={handleAttendedTo}
                     error={attendedToError}
-                    setError={setAttendedToError}
+                    action={() => setAttendedToError("")}
                     required={true}
                   />
                 </FormGroup>

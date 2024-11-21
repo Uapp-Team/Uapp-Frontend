@@ -8,45 +8,18 @@ const DMYPicker = ({
   value,
   setValue,
   error,
-  setError,
+  action,
   required = false,
 }) => {
-  //   const [expireDate, setexpireDate] = useState(null);
-
-  function convertDateFormat(dateString) {
-    // Split the input date string into day, month, and year
-    const [day, month, year] = dateString.split("/");
-
-    // Return the date in yyyy-MM-dd format
-    return `${year}-${month}-${day}`;
-  }
-
   const handleDate = (e) => {
-    // if (!e) {
-    //   setexpireDateError("Expire Date is required");
-    //   setexpireDate("");
-    //   return;
-    // }
-
     if (e) {
-      console.log(e);
-      const value = new Date(e._d).getDate();
-      console.log(value);
-      // Split the input date string into day, month, and year
-      const [day, month, year] = value.split("/");
-
-      // Return the date in yyyy-MM-dd format
+      const day = new Date(e._d).getDate();
+      const month = new Date(e._d).getMonth();
+      const year = new Date(e._d).getFullYear();
       const convertedValue = `${year}-${month}-${day}`;
-      console.log(convertedValue);
       setValue(convertedValue);
-      setError && setError("");
+      action && action();
     }
-
-    // if (value.toISOString() <= issueDate.toISOString()) {
-    //   setexpireDateError("Expiry Date cannot same or previous date");
-    // } else {
-    //   setexpireDateError("");
-    // }
   };
 
   return (
@@ -65,8 +38,8 @@ const DMYPicker = ({
         }}
         format="DD/MM/YYYY"
         placeholder="dd/mm/yyyy"
-        name={name}
-        id={name}
+        // name={name}
+        // id={name}
       />
       <span className="text-danger">{error}</span>
     </>

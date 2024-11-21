@@ -193,19 +193,26 @@ const EducationalInformation = () => {
     return `${year}-${month}-${day}`;
   }
 
+  // const handleAttendedFrom = (e) => {
+  //   if (!e) {
+  //     setAttendedFromError("Attended From is required");
+  //     setAttendedFrom(null);
+  //     return;
+  //   }
+  //   const value = e.toDate();
+  //   const formatedDate = convertDateFormat(value.toISOString().split("T")[0]);
+  //   setAttendedFrom(formatedDate);
+  //   if (currentDate < value.toISOString()) {
+  //     setAttendedFromError("Invalid Date");
+  //   } else {
+  //     setAttendedFromError("");
+  //   }
+  // };
   const handleAttendedFrom = (e) => {
-    if (!e) {
-      setAttendedFromError("Attended From is required");
-      setAttendedFrom(null);
-      return;
-    }
-    const value = e.toDate();
-    const formatedDate = convertDateFormat(value.toISOString().split("T")[0]);
-    setAttendedFrom(formatedDate);
-    if (currentDate < value.toISOString()) {
-      setAttendedFromError("Invalid Date");
+    if (e) {
+      setAttendedFrom(e);
     } else {
-      setAttendedFromError("");
+      setAttendedFromError("Attended From is required");
     }
   };
   const handleAttendedTo = (e) => {
@@ -730,6 +737,8 @@ const EducationalInformation = () => {
                       setAchieved={setAchieved}
                       handleQualificationSubject={handleQualificationSubject}
                       qualificationSubjectError={qualificationSubjectError}
+                      setAttendedToError={setAttendedToError}
+                      setAttendedFromError={setAttendedFromError}
                       handleAttendedFrom={handleAttendedFrom}
                       attendedFromError={attendedFromError}
                       handleDuration={handleDuration}
@@ -789,6 +798,7 @@ const EducationalInformation = () => {
                       institutionError={institutionError}
                       handleAttendedTo={handleAttendedTo}
                       setAttendedToError={setAttendedToError}
+                      setAttendedFromError={setAttendedFromError}
                       attendedToError={attendedToError}
                       handlePercentage={handlePercentage}
                       percentageError={percentageError}
