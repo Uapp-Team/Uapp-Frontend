@@ -356,55 +356,54 @@ const DocumentsRequestFaq = ({ Uid }) => {
 
   return (
     <div>
-      <div className="px-3 pt-3 mt-3 d-flex justify-content-between">
-        <p className="section-title mt-2">Documents</p>
-        {Uid ? null : (
-          <button
-            className="btn-documents-request"
-            onClick={() => setFaqRequestModalOpen(true)}
-          >
-            Request <i class="fas fa-chevron-right"></i>
-          </button>
-        )}
-      </div>
+      <p className="Universities-text-faq fs-24px mx-3 my-3 pb-3">Documents</p>
 
-      {documentRequest?.map((item, i) => (
-        <div key={i} className="px-3 mt-4 d-flex justify-content-between">
-          <div className="d-flex">
-            <i class="far fa-file-alt" style={{ marginTop: "3px" }}></i>
-            <h5 className="ml-2">{item?.name}</h5>
-          </div>
-          {/* userType === userTypes?.AdmissionManager */}
-          {Uid ? (
-            <>
-              {item?.url === null ? (
-                <MdOutlineFileUpload
-                  size={20}
-                  onClick={() => handleUploadDocu(item)}
-                  className="document-upload-icon"
-                />
+      <hr />
+      {!documentRequest.length > 0 ? (
+        <p className="text-center fw-600 my-3">No Document Found</p>
+      ) : (
+        <>
+          {documentRequest?.map((item, i) => (
+            <div key={i} className="px-3 mt-4 d-flex justify-content-between">
+              <div className="d-flex">
+                <i class="far fa-file-alt" style={{ marginTop: "3px" }}></i>
+                <h5 className="ml-2">{item?.name}</h5>
+              </div>
+              {Uid ? (
+                <>
+                  {item?.url === null ? (
+                    <MdOutlineFileUpload
+                      size={20}
+                      onClick={() => handleUploadDocu(item)}
+                      className="document-upload-icon"
+                    />
+                  ) : (
+                    <div className="d-flex">
+                      <div className="mr-3">
+                        <PreviewUniDocu file={item?.url} />
+                      </div>
+
+                      <div>
+                        <DeleteOutlined
+                          className="fs-24px pointer"
+                          onClick={() => handleDeleteDocumentReq(item)}
+                        ></DeleteOutlined>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
-                <div className="d-flex">
-                  <div className="mr-3">
-                    <PreviewUniDocu file={item?.url} />
-                  </div>
-
-                  <div>
-                    <DeleteOutlined
-                      className="fs-24px pointer"
-                      onClick={() => handleDeleteDocumentReq(item)}
-                    ></DeleteOutlined>
-                  </div>
-                </div>
+                <span
+                  className="pointer"
+                  onClick={() => handleRequestEdit(item)}
+                >
+                  <i class="far fa-edit"></i>
+                </span>
               )}
-            </>
-          ) : (
-            <span className="pointer" onClick={() => handleRequestEdit(item)}>
-              <i class="far fa-edit"></i>
-            </span>
-          )}
-        </div>
-      ))}
+            </div>
+          ))}
+        </>
+      )}
 
       <Modal
         isOpen={faqRequestModalOpen}

@@ -3,17 +3,12 @@ import { Modal, ModalBody } from "reactstrap";
 import ButtonForFunctionNonSolid from "../../Components/ButtonForFunctionNonSolid";
 import "react-quill/dist/quill.snow.css";
 import QueAdd from "./QueAdd";
-import TextForm from "../Form/TextForm";
 import Uget from "../../../../helpers/Uget";
-import DateForm from "../Form/DateForm";
-import { QuestionType } from "../Components/QuestionType";
-import DateRangeForm from "../Form/DateRangeForm";
-import SingleChoiceForm from "../Form/SingleChoiceForm";
-import MultiChoiceForm from "../Form/MultiChoiceForm";
 import Typing from "../../../../components/form/Typing";
-import { Col } from "react-bootstrap";
 import Answear from "../Components/Answear";
 import Tag from "../../../../components/ui/Tag";
+import KeyBtn from "../../../../components/buttons/KeyBtn";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
 const QuestionsAdmin = ({
   categoryId,
@@ -28,6 +23,8 @@ const QuestionsAdmin = ({
   const [endDate, setendDate] = useState("");
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [statusId, setStatusId] = useState(0);
+  const [date, setDate] = useState(true);
 
   useEffect(() => {
     if (!isTyping) {
@@ -43,7 +40,13 @@ const QuestionsAdmin = ({
   return (
     <>
       <div className="d-flex align-items-center justify-content-between px-3 pt-3">
-        <div>
+        <div className="d-flex align-items-center">
+          <ButtonForFunctionNonSolid
+            className={"btn btn-faq-add py-2 mr-3"}
+            func={() => setModalOpen(true)}
+            icon={<i className="fas fa-plus"></i>}
+            name={" Add Questions"}
+          />
           <Tag
             title="Category"
             label={categoryName}
@@ -53,69 +56,75 @@ const QuestionsAdmin = ({
             }}
           />
         </div>
-        <div>Date</div>
+        <div
+          className="d-flex align-items-center bg-theme rounded py-1 px-2 pointer"
+          onClick={() => setDate(!date)}
+        >
+          <span className="mr-1 fs-16px">Date</span>
+          <span>
+            <AiOutlineUp
+              className={`d-block ${date ? "text-black" : "text-gray"}`}
+            />
+            <AiOutlineDown
+              className={`d-block ${!date ? "text-black" : "text-gray"}`}
+            />
+          </span>
+          {/* {date ? <AiOutlineUp /> : <AiOutlineDown />} */}
+        </div>
       </div>
 
       <hr />
-      <div className="row align-items-center justify-content-between px-3 pt-3">
-        <Col>
-          <ButtonForFunctionNonSolid
-            className={"btn btn-faq-add py-2"}
-            func={() => setModalOpen(true)}
-            icon={<i className="fas fa-plus"></i>}
-            name={" Add Questions"}
-          />
-        </Col>
-
-        <Col>
+      <div className="d-flex align-items-start justify-content-between px-3">
+        <div>
           <Typing
             placeholder="search by question"
             value={searchStr}
             setValue={setSearchStr}
             setIsTyping={setIsTyping}
           />
-        </Col>
+        </div>
+
+        <div className="text-right">
+          <KeyBtn label="ALL" data={statusId} value={0} action={setStatusId} />
+          <KeyBtn
+            label="Not Answered"
+            data={statusId}
+            value={1}
+            action={setStatusId}
+          />
+          <KeyBtn
+            label="Draft"
+            data={statusId}
+            value={2}
+            action={setStatusId}
+          />
+          <KeyBtn
+            label="Pending"
+            data={statusId}
+            value={3}
+            action={setStatusId}
+          />
+          <KeyBtn
+            label="Published"
+            data={statusId}
+            value={4}
+            action={setStatusId}
+          />
+          <KeyBtn
+            label="Rejected"
+            data={statusId}
+            value={5}
+            action={setStatusId}
+          />
+        </div>
       </div>
+      <hr />
       {data?.map((item, i) => (
         <div key={i}>
           <Answear defaultData={item} refetch={() => {}} />
         </div>
       ))}
-      {/* {data?.map((item, i) => (
-        <div key={i}>
-          {item?.questionType === QuestionType.SingleQuestion ? (
-            <TextForm
-              defaultData={item}
-              deletePath={`question/delete/${item?.id}`}
-              refetch={() => setSuccess(!success)}
-            />
-          ) : item?.questionType === QuestionType.MultipleQuestion ? (
-            <MultiChoiceForm
-              defaultData={item}
-              deletePath={`question/delete/${item?.id}`}
-              refetch={() => setSuccess(!success)}
-            />
-          ) : item?.questionType === QuestionType.SingleChoice ? (
-            <SingleChoiceForm
-              defaultData={item}
-              deletePath={`question/delete/${item?.id}`}
-              refetch={() => setSuccess(!success)}
-            />
-          ) : item?.questionType === QuestionType.DateRange ? (
-            <DateRangeForm
-              defaultData={item}
-              deletePath={`question/delete/${item?.id}`}
-              refetch={() => setSuccess(!success)}
-            />
-          ) : item?.questionType === QuestionType.Date ? (
-            <DateForm
-              defaultData={item}
-              deletePath={`question/delete/${item?.id}`}
-              refetch={() => setSuccess(!success)}
-            />
-          ) : null}
-        </div>
-      ))} */}
+
       <Modal
         isOpen={modalOpen}
         toggle={() => setModalOpen(!modalOpen)}

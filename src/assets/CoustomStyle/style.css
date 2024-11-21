@@ -780,6 +780,10 @@ tbody tr:hover {
   background-color: #f2ecfd !important;
 }
 
+.bg-f2f2f2 {
+  background-color: #f2f2f2 !important;
+}
+
 .bg-gray {
   background: #000;
   opacity: 0.45;
@@ -5641,4 +5645,16 @@ span.ant-upload-list-item-name {
   font-size: 12px !important;
   margin-left: 12px;
   padding: 4px 8px;
+}
+
+.ism-doc {
+  padding-right: 0;
+  padding-bottom: 20px;
+}
+
+@media screen and (min-width: 992px) {
+  .ism-doc {
+    border-left: 1px solid #dee2e6 !important;
+    padding: 0;
+  }
 }

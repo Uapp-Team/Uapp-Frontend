@@ -33,7 +33,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
         <Row>
           <Col lg={3} sm={4} className="p-3">
             {/* {AdminUsers() && (
-              <div className="ml-3">
+              <div className="ml-3 mb-3">
                 <ButtonForFunction
                   func={() => setCategoryModal(!categoryModal)}
                   className={"btn btn-uapp-add py-3 w-100"}
@@ -42,7 +42,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
                 />
               </div>
             )} */}
-            <div className="ml-3 mt-3">
+            <div className="ml-3">
               <DefaultDropdownU
                 label={uniLable}
                 setLabel={setUniLable}
@@ -67,16 +67,29 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
               ))}
             </div>
           </Col>
-          <Col lg={6} sm={8} className="border-left p-0">
-            <QuestionsAdmin
-              categoryId={categoryId}
-              categoryName={categoryName}
-              setCategoryId={setCategoryId}
-              setCategoryName={setCategoryName}
-            />
-          </Col>
+
+          {uniValue > 0 ? (
+            <Col lg={6} sm={8} className="border-left p-0">
+              <QuestionsAdmin
+                categoryId={categoryId}
+                categoryName={categoryName}
+                setCategoryId={setCategoryId}
+                setCategoryName={setCategoryName}
+              />
+            </Col>
+          ) : (
+            <Col lg={9} sm={8} className="border-left p-0">
+              <QuestionsAdmin
+                categoryId={categoryId}
+                categoryName={categoryName}
+                setCategoryId={setCategoryId}
+                setCategoryName={setCategoryName}
+              />
+            </Col>
+          )}
+
           {uniValue > 0 && (
-            <Col lg={3} sm={4} className="border-left p-0">
+            <Col lg={3} sm={12} className="ism-doc">
               <DocumentsRequestFaq Uid={uniValue} />
             </Col>
           )}
