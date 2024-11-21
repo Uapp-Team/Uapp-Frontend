@@ -1,6 +1,6 @@
-import React from "react";
 import { DatePicker } from "antd";
 import moment from "moment";
+import React from "react";
 
 const DMYPicker = ({
   label,
@@ -16,7 +16,7 @@ const DMYPicker = ({
       const day = new Date(e._d).getDate();
       const month = new Date(e._d).getMonth();
       const year = new Date(e._d).getFullYear();
-      const convertedValue = `${year}-${month}-${day}`;
+      const convertedValue = `${year}-${month + 1}-${day}`;
       setValue(convertedValue);
       action && action();
     }

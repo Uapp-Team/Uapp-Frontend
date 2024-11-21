@@ -212,13 +212,11 @@ const StudentApplicationInformation = () => {
 
   //Eu
   const handleDate = (e) => {
-    if (!e) {
+    if (e) {
+      setDate(e);
+    } else {
       setdateError("Date is required");
-      setDate(null);
-      return;
     }
-    const formatDate = e.toDate();
-    setDate(formatDate);
   };
 
   const handleEuManyYears = (e) => {
@@ -348,6 +346,9 @@ const StudentApplicationInformation = () => {
       "RefusalLetterForOtherVisaFile",
       FileList2.length === 0 ? null : FileList2[0]?.originFileObj
     );
+    if (date) {
+      subData.append("dateOfMoveToUk", date);
+    }
     var IsFormValid = validateRegisterForm();
     if (IsFormValid) {
       setButtonStatus(true);
@@ -688,6 +689,7 @@ const StudentApplicationInformation = () => {
                             countryLabel={countryLabel}
                             handleDate={handleDate}
                             dateError={dateError}
+                            setdateError={setdateError}
                             date={date}
                             setLoansForEu={setLoansForEu}
                             loansForEu={loansForEu}

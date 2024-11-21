@@ -4,6 +4,7 @@ import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  CardSubtitle,
   Col,
   FormGroup,
   Input,
@@ -21,10 +22,7 @@ import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import {
-  currentDate,
-  dateFormate,
-} from "../../../../../components/date/calenderFormate";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
@@ -335,7 +333,9 @@ const EducationalInformation = () => {
     const subData = new FormData(event.target);
     console.log("first", subData);
     subData.append("attendedInstitutionFrom", attendedFrom);
-    subData.append("attendedInstitutionTo", attendedTo);
+    if (attendedTo != null) {
+      subData.append("attendedInstitutionTo", attendedTo);
+    }
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
     if (validateRegisterForm()) {
@@ -513,55 +513,59 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              {studentType != 3 && (
-                <Row>
-                  <Col md="4">
-                    <FormGroup>
-                      <span>
-                        {" "}
-                        <span className="text-danger"> *</span>
-                        Have You Ever Studied?{" "}
-                      </span>
+              {studentType != 3 ||
+                (eduDetails.length > 0 && (
+                  <Row>
+                    <Col md="4">
+                      <FormGroup>
+                        <span>
+                          {" "}
+                          <span className="text-danger"> *</span>
+                          Have You Ever Studied?{" "}
+                        </span>
 
-                      <div
-                        className="d-flex flex-wrap form-mt"
-                        style={{ marginLeft: "17px" }}
-                      >
-                        <div>
-                          <Input
-                            type="radio"
-                            name="radioYes"
-                            id="radioYes"
-                            onClick={() => {
-                              setForms(true);
-                            }}
-                            checked={forms === true}
-                          />
-                          <span>
-                            <label style={{ fontSize: "14px" }} for="radioYes">
-                              Yes
-                            </label>
-                          </span>
+                        <div
+                          className="d-flex flex-wrap form-mt"
+                          style={{ marginLeft: "17px" }}
+                        >
+                          <div>
+                            <Input
+                              type="radio"
+                              name="radioYes"
+                              id="radioYes"
+                              onClick={() => {
+                                setForms(true);
+                              }}
+                              checked={forms === true}
+                            />
+                            <span>
+                              <label
+                                style={{ fontSize: "14px" }}
+                                for="radioYes"
+                              >
+                                Yes
+                              </label>
+                            </span>
+                          </div>
+                          <div className="ml-5">
+                            <Input
+                              checked={forms === false}
+                              type="radio"
+                              name="radioNo"
+                              id="radioNo"
+                              onClick={deleteCheckFunction}
+                            />
+                            <span>
+                              <label style={{ fontSize: "14px" }} for="radioNo">
+                                No
+                              </label>
+                            </span>
+                          </div>
                         </div>
-                        <div className="ml-5">
-                          <Input
-                            checked={forms === false}
-                            type="radio"
-                            name="radioNo"
-                            id="radioNo"
-                            onClick={deleteCheckFunction}
-                          />
-                          <span>
-                            <label style={{ fontSize: "14px" }} for="radioNo">
-                              No
-                            </label>
-                          </span>
-                        </div>
-                      </div>
-                    </FormGroup>
-                  </Col>
-                </Row>
-              )}
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                ))}
               {showDeleteOption === true ? (
                 <>
                   <FormGroup row>
@@ -623,6 +627,9 @@ const EducationalInformation = () => {
                                 ) : null}
                               </span>
                             </div>
+                            <CardSubtitle>
+                              {edu?.nameOfInstitution}
+                            </CardSubtitle>
                             <hr />
                             <Row className="text-gray">
                               <Col md="2">
@@ -645,14 +652,14 @@ const EducationalInformation = () => {
                               </Col>
                               <Col md="2">
                                 <p>
-                                  <span>Education Level</span>
-                                  <br />
-                                  <b> {edu?.nameOfInstitution}</b>
-                                </p>
-                                <p>
                                   <span>Qualification Course</span>
                                   <br />
                                   <b> {edu?.qualificationSubject}</b>
+                                </p>
+                                <p>
+                                  <span>Institution Address</span>
+                                  <br />
+                                  <b>{edu?.instituteAddress}</b>
                                 </p>
                               </Col>
                               <Col md="2">
@@ -686,14 +693,9 @@ const EducationalInformation = () => {
                               </Col>
                               <Col md="3">
                                 <p>
-                                  <span>Institute Contact Number</span>
+                                  <span>Institution Contact Number</span>
                                   <br />
-                                  <b>{edu?.instituteContactNumber}</b>
-                                </p>
-                                <p>
-                                  <span>Institute Address</span>
-                                  <br />
-                                  <b>{edu?.instituteAddress}</b>
+                                  <b>+{edu?.instituteContactNumber}</b>
                                 </p>
                               </Col>
                             </Row>

@@ -1,4 +1,4 @@
-import { DatePicker, Modal, Upload } from "antd";
+import { Modal, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
 import PhoneInput from "react-phone-input-2";
@@ -7,7 +7,6 @@ import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 
-import moment from "moment";
 import {
   Card,
   CardBody,
@@ -21,7 +20,7 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { currentDate } from "../../../../../components/date/calenderFormate";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
@@ -228,24 +227,24 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (selectedDate) => {
-    if (!selectedDate) {
-      setDateError("Date of birth is required");
-      setBirthDate("");
-      return;
-    }
-
-    const birthdate = selectedDate.toDate();
-    setBirthDate(birthdate);
-
-    const selectedYear = birthdate.getFullYear();
-    const currentYear = new Date().getFullYear();
-    const calculatedAge = currentYear - selectedYear;
-
-    if (calculatedAge < 15) {
-      setDateError("Age must be more than 15 years");
+    if (selectedDate) {
+      setBirthDate(selectedDate);
     } else {
-      setDateError("");
+      setDateError("Date of birth is required");
     }
+
+    // const birthdate = selectedDate.toDate();
+    // setBirthDate(birthdate);
+
+    // const selectedYear = birthdate.getFullYear();
+    // const currentYear = new Date().getFullYear();
+    // const calculatedAge = currentYear - selectedYear;
+
+    // if (calculatedAge < 15) {
+    //   setDateError("Age must be more than 15 years");
+    // } else {
+    //   setDateError("");
+    // }
   };
   const handlePassport = (e) => {
     setPassport(e.target.value);
@@ -257,37 +256,37 @@ const PersonalInformation = () => {
   };
 
   const handleIssueDate = (e) => {
-    if (!e) {
-      setIssueDateError("Issue Date is required");
-      setIssueDate("");
-      return;
-    }
-    const issuedate = e.toDate();
-    setIssueDate(issuedate);
-    const year = issuedate.getFullYear();
-    if (year.length > 4) {
-      setIssueDateError("Invalid date");
-    } else if (currentDate <= issuedate.toISOString()) {
-      setIssueDateError("Invalid date");
+    if (e) {
+      setIssueDate(e);
     } else {
-      setIssueDateError("");
+      setIssueDateError("Issue Date is required");
     }
+    // const issuedate = e.toDate();
+    // setIssueDate(issuedate);
+    // const year = issuedate.getFullYear();
+    // if (year.length > 4) {
+    //   setIssueDateError("Invalid date");
+    // } else if (currentDate <= issuedate.toISOString()) {
+    //   setIssueDateError("Invalid date");
+    // } else {
+    //   setIssueDateError("");
+    // }
   };
   const handleExpireDate = (e) => {
-    if (!e) {
-      setexpireDateError("Expire Date is required");
-      setexpireDate("");
-      return;
-    }
-
-    const value = e.toDate();
-    setexpireDate(value);
-
-    if (value.toISOString() <= issueDate.toISOString()) {
-      setexpireDateError("Expiry Date cannot same or previous date");
+    if (e) {
+      setexpireDate(e);
     } else {
-      setexpireDateError("");
+      setexpireDateError("Expire Date is required");
     }
+
+    // const value = e.toDate();
+    // setexpireDate(value);
+
+    // if (value.toISOString() <= issueDate.toISOString()) {
+    //   setexpireDateError("Expiry Date cannot same or previous date");
+    // } else {
+    //   setexpireDateError("");
+    // }
   };
 
   const handlePreview = async (file) => {
@@ -402,11 +401,11 @@ const PersonalInformation = () => {
       isFormValid = false;
       setPassportError("Passport Id is required");
     }
-    if (issueDate === "") {
+    if (issueDate === null) {
       isFormValid = false;
       setIssueDateError("Issue Date is required");
     }
-    if (expireDate === "") {
+    if (expireDate === null) {
       isFormValid = false;
       setexpireDateError("Expiry Date is required ");
     }
@@ -436,24 +435,19 @@ const PersonalInformation = () => {
     // }
     return isFormValid;
   };
-  function convertDateFormat(dateString) {
-    // Split the input date string into day, month, and year
-    const [day, month, year] = dateString.split("/");
-
-    // Return the date in yyyy-MM-dd format
-    return `${year}-${month}-${day}`;
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const dateOfBirth = event.target.elements.formDateOfBirth.value;
-    const issueDate = event.target.elements.formIssueDate.value;
-    const expireDate = event.target.elements.formExpireDate.value;
-
     const subData = new FormData(event.target);
-    subData.append("dateOfBirth", convertDateFormat(dateOfBirth));
-    subData.append("issueDate", convertDateFormat(issueDate));
-    subData.append("expireDate", convertDateFormat(expireDate));
+    if (birthDate != null) {
+      subData.append("dateOfBirth", birthDate);
+    }
+    if (issueDate != null) {
+      subData.append("issueDate", issueDate);
+    }
+    if (expireDate != null) {
+      subData.append("expireDate", expireDate);
+    }
     subData.append("phoneNumber", phoneNumber);
     if (FileList.length === 0) {
       subData.append("profileImageFile", null);
@@ -651,24 +645,16 @@ const PersonalInformation = () => {
 
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Date Of Birth
-                    </span>
-                    <DatePicker
-                      onChange={(e) => {
-                        handleDate(e);
-                      }}
-                      format="DD/MM/YYYY"
-                      placeholder="dd/mm/yyyy"
-                      style={{
-                        width: "100%",
-                      }}
-                      value={birthDate ? moment(birthDate) : ""}
-                      name="formDateOfBirth"
-                      id="formDateOfBirth"
+                    <DMYPicker
+                      label="Date Of Birth"
+                      value={birthDate}
+                      setValue={handleDate}
+                      error={dateError}
+                      action={setDateError}
+                      required={false}
+                      name="dateOfBirth"
+                      id="dateOfBirth"
                     />
-                    <span className="text-danger">{dateError}</span>
                   </Col>
                 </FormGroup>
 
@@ -691,67 +677,30 @@ const PersonalInformation = () => {
                 </FormGroup>
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>Issue Date
-                    </span>
-
-                    {/* <Input
-                      type="date"
+                    <DMYPicker
+                      setValue={handleIssueDate}
+                      label="Issue Date"
+                      value={issueDate}
+                      error={issueDateError}
+                      action={setIssueDateError}
                       name="issueDate"
                       id="issueDate"
-                      placeholder="Issue date"
-                      onChange={(e) => {
-                        handleIssueDate(e);
-                      }}
-                      value={issueDate}
-                    /> */}
-
-                    <DatePicker
-                      onChange={(e) => {
-                        handleIssueDate(e);
-                      }}
-                      format="DD/MM/YYYY"
-                      placeholder="dd/mm/yyyy"
-                      style={{
-                        width: "100%",
-                      }}
-                      value={issueDate ? moment(issueDate) : null}
-                      name="formIssueDate"
-                      id="formIssueDate"
+                      required={false}
                     />
-                    <span className="text-danger">{issueDateError}</span>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>Expiry Date
-                    </span>
-
-                    {/* <Input
-                      type="date"
+                    <DMYPicker
+                      label="Expire Date"
+                      setValue={handleExpireDate}
+                      error={expireDateError}
+                      action={setexpireDateError}
+                      required={false}
+                      value={expireDate}
                       name="expireDate"
                       id="expireDate"
-                      placeholder="Enter Passport Number"
-                      onChange={(e) => {
-                        handleExpireDate(e);
-                      }}
-                      value={expireDate}
-                    /> */}
-                    <DatePicker
-                      onChange={(e) => {
-                        handleExpireDate(e);
-                      }}
-                      format="DD/MM/YYYY"
-                      placeholder="dd/mm/yyyy"
-                      style={{
-                        width: "100%",
-                      }}
-                      value={expireDate ? moment(expireDate) : null}
-                      name="formExpireDate"
-                      id="formxpireDate"
                     />
-                    <span className="text-danger">{expireDateError}</span>
                   </Col>
                 </FormGroup>
 

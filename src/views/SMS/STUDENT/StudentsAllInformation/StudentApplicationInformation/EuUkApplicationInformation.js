@@ -1,7 +1,6 @@
-import { DatePicker } from "antd";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { FormGroup, Input, Label } from "reactstrap";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 
 export default function EuUkApplicationInformation({
   applicationStudentId,
@@ -11,6 +10,7 @@ export default function EuUkApplicationInformation({
   handleDate,
   date,
   dateError,
+  setdateError,
   loansForEu,
   setLoansForEu,
   handleEuManyYears,
@@ -107,11 +107,6 @@ export default function EuUkApplicationInformation({
         value={studentTypeValue}
       />
       <FormGroup className="has-icon-left position-relative">
-        <span>
-          <span className="text-danger">*</span> When Did You Move to The{" "}
-          {countryLabel}?
-        </span>
-
         {/* <Input
           className="form-mt"
           type="date"
@@ -123,20 +118,16 @@ export default function EuUkApplicationInformation({
           value={date}
           // min={minDate}
         /> */}
-        <DatePicker
-          onChange={(e) => {
-            handleDate(e);
-          }}
-          format="DD/MM/YYYY"
-          placeholder="dd/mm/yyyy"
-          style={{
-            width: "100%",
-          }}
-          value={date ? moment(date) : ""}
+        <DMYPicker
+          setValue={handleDate}
+          label="When Did You Move to The UK?"
+          value={date}
+          error={dateError}
+          action={setdateError}
           name="DateOfMoveToUk"
           id="DateOfMoveToUk"
+          required={true}
         />
-        <span className="text-danger">{dateError}</span>
       </FormGroup>
 
       <FormGroup className="has-icon-left position-relative">
