@@ -172,7 +172,7 @@ const GeneralInformationForm = ({
               {userTypeId === userTypes?.Consultant.toString() ? (
                 <FormGroup className="has-icon-left position-relative">
                   <span className="mr-2">
-                    {!BranchAdmin() ||
+                    {!BranchAdmin() &
                       (!BranchManager() && (
                         <span className="text-danger">*</span>
                       ))}
@@ -185,10 +185,9 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    {!BranchAdmin() ||
-                      (!BranchManager() && (
-                        <span className="text-danger">*</span>
-                      ))}
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
                     Parent Consultant
                   </span>
 

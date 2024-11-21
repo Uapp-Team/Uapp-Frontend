@@ -382,10 +382,9 @@ const ConsultantRegistration = () => {
 
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    {!BranchAdmin() ||
-                      (!BranchManager() && (
-                        <span className="text-danger">*</span>
-                      ))}
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
                     Parent Consultant
                   </span>
 
