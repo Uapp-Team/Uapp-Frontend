@@ -5,15 +5,12 @@ import Typing from "../../../components/form/Typing";
 import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
 import GroupButton from "../../../components/buttons/GroupButton";
-import Filter from "../../../components/Dropdown/Filter";
 import ISMDocuments from "./ISMDocuments";
 import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 import ButtonForFunction from "../Components/ButtonForFunction";
 
 const ISM = () => {
   const [universityList, setUniversityList] = useState([]);
-  const [uniTypeLabel, setUniTypeLabel] = useState("Select Type");
-  const [uniTypeValue, setUniTypeValue] = useState(0);
   const [uniValue, setUniValue] = useState(0);
   const [uniLable, setUniLable] = useState("Select University");
   const [searchStr, setSearchStr] = useState("");
@@ -68,7 +65,6 @@ const ISM = () => {
               />
             </div>
           )}
-          {/* <h3 className="mb-4">University Information Documents & FAQ</h3> */}
 
           <GroupButton
             list={[
@@ -83,48 +79,19 @@ const ISM = () => {
           {tab === "1" ? (
             <>
               <Row className="d-flex justify-content-between align-items-center">
-                <Col md={6}>
-                  <h5 className="Universities-text-faq">Universities</h5>
+                <Col xs={7}>
+                  <span className="Universities-text-faq fs-24px">
+                    Universities
+                  </span>
                 </Col>
-                <Col md={6}>
-                  <Row>
-                    <Col md={6} className="mb-1">
-                      <Filter
-                        data={[
-                          {
-                            id: 0,
-                            name: "All",
-                          },
-                          {
-                            id: 1,
-                            name: "Home",
-                          },
-                          {
-                            id: 2,
-                            name: "EU/UK",
-                          },
-                          {
-                            id: 3,
-                            name: "International",
-                          },
-                        ]}
-                        label={uniTypeLabel}
-                        setLabel={setUniTypeLabel}
-                        value={uniTypeValue}
-                        setValue={setUniTypeValue}
-                        action={() => {}}
-                      />
-                    </Col>
-                    <Col md={6} className="mb-1">
-                      <Typing
-                        name="search"
-                        placeholder="Search University"
-                        value={searchStr}
-                        setValue={setSearchStr}
-                        setIsTyping={setIsTyping}
-                      />
-                    </Col>
-                  </Row>
+                <Col xs={5} className="mb-1">
+                  <Typing
+                    name="search"
+                    placeholder="Search University"
+                    value={searchStr}
+                    setValue={setSearchStr}
+                    setIsTyping={setIsTyping}
+                  />
                 </Col>
               </Row>
               <hr />

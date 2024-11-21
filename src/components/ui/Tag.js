@@ -5,7 +5,7 @@ const Tag = ({ title, label, action }) => {
     <>
       {label && (
         <>
-          <span className="text-gray">{title}: </span>
+          {title && <span className="text-gray">{title}: </span>}
           <span className="text-dark-green">{label} </span>
           <span
             className="text-dark-green pointer mr-3"

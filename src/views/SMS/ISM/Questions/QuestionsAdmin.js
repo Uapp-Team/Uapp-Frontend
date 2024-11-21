@@ -13,8 +13,14 @@ import MultiChoiceForm from "../Form/MultiChoiceForm";
 import Typing from "../../../../components/form/Typing";
 import { Col } from "react-bootstrap";
 import Answear from "../Components/Answear";
+import Tag from "../../../../components/ui/Tag";
 
-const QuestionsAdmin = ({ categoryId }) => {
+const QuestionsAdmin = ({
+  categoryId,
+  categoryName,
+  setCategoryId,
+  setCategoryName,
+}) => {
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,6 +42,21 @@ const QuestionsAdmin = ({ categoryId }) => {
 
   return (
     <>
+      <div className="d-flex align-items-center justify-content-between px-3 pt-3">
+        <div>
+          <Tag
+            title="Category"
+            label={categoryName}
+            action={() => {
+              setCategoryId(0);
+              setCategoryName("");
+            }}
+          />
+        </div>
+        <div>Date</div>
+      </div>
+
+      <hr />
       <div className="row align-items-center justify-content-between px-3 pt-3">
         <Col>
           <ButtonForFunctionNonSolid
@@ -95,7 +116,6 @@ const QuestionsAdmin = ({ categoryId }) => {
           ) : null}
         </div>
       ))} */}
-
       <Modal
         isOpen={modalOpen}
         toggle={() => setModalOpen(!modalOpen)}

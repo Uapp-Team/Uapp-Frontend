@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "reactstrap";
-import ButtonForFunction from "../Components/ButtonForFunction";
 import ManageCategory from "./ManageCategory/ManageCategory";
 import CategoryAccordion from "./Components/CategoryAccordion";
 import Uget from "../../../helpers/Uget";
 import DocumentsRequestFaq from "./Components/DocumentsRequestFaq";
-import { AdminUsers } from "../../../components/core/User";
 import QuestionsAdmin from "./Questions/QuestionsAdmin";
 import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 
@@ -20,6 +18,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
 
   const [content, setContent] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
+  const [categoryName, setCategoryName] = useState("");
   const [categoryFetch, setCategoryFetch] = useState(false);
 
   useEffect(() => {
@@ -61,6 +60,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
                   content={item}
                   categoryId={categoryId}
                   setCategoryId={setCategoryId}
+                  setCategoryName={setCategoryName}
                   isOpen={openIndex === item?.id}
                   toggleAccordion={() => toggleAccordion(item?.id)}
                 />
@@ -68,7 +68,12 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
             </div>
           </Col>
           <Col lg={6} sm={8} className="border-left p-0">
-            <QuestionsAdmin categoryId={categoryId} />
+            <QuestionsAdmin
+              categoryId={categoryId}
+              categoryName={categoryName}
+              setCategoryId={setCategoryId}
+              setCategoryName={setCategoryName}
+            />
           </Col>
           {uniValue > 0 && (
             <Col lg={3} sm={4} className="border-left p-0">
