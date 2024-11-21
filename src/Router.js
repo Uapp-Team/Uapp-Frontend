@@ -1421,6 +1421,7 @@ const UserContentHub = lazy(() =>
   import("./views/SMS/ContentForUser/ContentHub.js")
 );
 const LiveIntake = lazy(() => import("./views/SMS/LiveIntake/LiveIntake.js"));
+const MenuList = lazy(() => import("./views/SMS/MenuItems/MenuList.js"));
 
 // Affiliate path start
 const AffiliateTransation = lazy(() =>
@@ -2176,6 +2177,15 @@ class AppRouter extends React.Component {
                   />
 
                   {/* Companion paths */}
+
+                  <AppRoute
+                    path="/menu-List"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? MenuList
+                        : NotAuthorized
+                    }
+                  />
 
                   {/* Admission manager project deadline paths */}
 
