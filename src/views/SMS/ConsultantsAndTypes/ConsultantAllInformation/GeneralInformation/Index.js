@@ -3,7 +3,10 @@ import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { BranchAdmin } from "../../../../../components/core/User";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../components/core/User";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
@@ -208,7 +211,7 @@ const GeneralInformation = () => {
     //   setParentError(true);
     // }
 
-    if (BranchAdmin()) {
+    if (BranchAdmin() || BranchManager()) {
       setParentError(false);
     } else {
       if (userTypeId !== userTypes?.Consultant && parentValue === 0) {

@@ -6,7 +6,10 @@ import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { BranchAdmin } from "../../../../../components/core/User";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../components/core/User";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import get from "../../../../../helpers/get";
@@ -155,7 +158,7 @@ const ConsultantRegistration = () => {
       isValid = false;
       setAcceptError(true);
     }
-    if (BranchAdmin()) {
+    if (BranchAdmin() || BranchManager()) {
       setParentError(false);
     } else {
       if (parentValue === 0) {
@@ -379,7 +382,9 @@ const ConsultantRegistration = () => {
 
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    {!BranchAdmin() && <span className="text-danger">*</span>}
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
                     Parent Consultant
                   </span>
 
