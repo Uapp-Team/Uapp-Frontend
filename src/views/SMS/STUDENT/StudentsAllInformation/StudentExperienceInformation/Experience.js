@@ -1,39 +1,34 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  Col,
   Form,
   FormGroup,
-  Col,
   Input,
-  Button,
   Row,
-  Modal,
-  ModalBody,
-  ModalFooter,
   Table,
 } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import remove from "../../../../../helpers/remove";
-import put from "../../../../../helpers/put";
-import ButtonLoader from "../../../Components/ButtonLoader";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import {
   currentDate,
   dateFormate,
 } from "../../../../../components/date/calenderFormate";
+import DMYPicker from "../../../../../components/form/DMYPicker";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
-import { data } from "jquery";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const Experience = () => {
   const { applicationStudentId } = useParams();
@@ -65,9 +60,9 @@ const Experience = () => {
   const [employmentError, setEmploymentError] = useState("");
   const [company, setCompany] = useState("");
   const [companyError, setCompanyError] = useState("");
-  const [startDate, setStartDate] = useState('');
+  const [startDate, setStartDate] = useState("");
   const [startDateError, setStartDateError] = useState("");
-  const [endDate, setEndDate] = useState('');
+  const [endDate, setEndDate] = useState("");
   const [endDateError, setEndDateError] = useState("");
   const minDate = "1950-01-01";
   const userType = localStorage.getItem("userType");
@@ -116,19 +111,29 @@ const Experience = () => {
     }
   };
   const handleStartDate = (e) => {
-    setStartDate(e.target.value);
-    if (e.target.value === "") {
-      setStartDateError("Start date is required");
+    // setStartDate(e.target.value);
+    // if (e.target.value === "") {
+    //   setStartDateError("Start date is required");
+    // } else {
+    //   setStartDateError("");
+    // }
+    if (e) {
+      setStartDate(e);
     } else {
-      setStartDateError("");
+      setStartDateError("Start date is required");
     }
   };
   const handleEndDate = (e) => {
-    setEndDate(e.target.value);
-    if (e.target.value === "") {
-      setEndDateError("End date is required");
+    // setEndDate(e.target.value);
+    // if (e.target.value === "") {
+    //   setEndDateError("End date is required");
+    // } else {
+    //   setEndDateError("");
+    // }
+    if (e) {
+      setEndDate(e);
     } else {
-      setEndDateError("");
+      setEndDateError("End date is required");
     }
   };
 
@@ -163,13 +168,11 @@ const Experience = () => {
 
     const subData = new FormData(event.target);
     subData.append("isStillWorking", working);
-
-    value?.end
-      ? subData.append("endDate", null)
-      : subData.append("endDate", endDate);
-
-    for (var a of subData.values()) {
-      console.log(a);
+    if (startDate) {
+      subData.append("startDate", startDate);
+    }
+    if (endDate) {
+      subData.append("endDate", endDate);
     }
 
     if (validateRegisterForm()) {
@@ -454,7 +457,7 @@ const Experience = () => {
                       <span className="text-danger">{companyError}</span>
                     </FormGroup>
                     <FormGroup className="has-icon-left position-relative">
-                      <span>
+                      {/* <span>
                         <span className="text-danger">*</span> Start Date
                       </span>
 
@@ -469,7 +472,15 @@ const Experience = () => {
                         }}
                         min={minDate}
                       />
-                      <span className="text-danger">{startDateError}</span>
+                      <span className="text-danger">{startDateError}</span> */}
+                      <DMYPicker
+                        setValue={handleStartDate}
+                        label="Start Date"
+                        value={startDate}
+                        error={startDateError}
+                        action={setStartDateError}
+                        required={true}
+                      />
                     </FormGroup>
                     <FormGroup>
                       <Input
@@ -482,7 +493,7 @@ const Experience = () => {
                     </FormGroup>
                     {!working ? (
                       <FormGroup className="has-icon-left position-relative">
-                        <span>
+                        {/* <span>
                           End Date <span className="text-danger">*</span>{" "}
                         </span>
 
@@ -495,7 +506,15 @@ const Experience = () => {
                           min={minDate}
                           value={endDate}
                         />
-                        <span className="text-danger">{endDateError}</span>
+                        <span className="text-danger">{endDateError}</span> */}
+                        <DMYPicker
+                          setValue={handleEndDate}
+                          label="End Date"
+                          value={endDate}
+                          error={endDateError}
+                          action={setEndDateError}
+                          required={true}
+                        />
                       </FormGroup>
                     ) : null}
                   </Col>
