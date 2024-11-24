@@ -1420,6 +1420,7 @@ const UserContent = lazy(() =>
 const UserContentHub = lazy(() =>
   import("./views/SMS/ContentForUser/ContentHub.js")
 );
+const LiveIntake = lazy(() => import("./views/SMS/LiveIntake/LiveIntake.js"));
 
 // Affiliate path start
 const AffiliateTransation = lazy(() =>
@@ -1579,6 +1580,16 @@ const CompanionTeamMembersApplication = lazy(() =>
 const CompanionTeamMembersRegisteredApplication = lazy(() =>
   import(
     "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersRegisteredApplication.js"
+  )
+);
+const AffiliateTeamMembersApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersApplication.js"
+  )
+);
+const AffiliateTeamMembersRegisteredApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersRegisteredApplication.js"
   )
 );
 
@@ -1780,6 +1791,7 @@ class AppRouter extends React.Component {
 
                   <AppRoute path="/content" component={UserContent} />
                   <AppRoute path="/contentHub" component={UserContentHub} />
+                  <AppRoute path="/live-intake" component={LiveIntake} />
 
                   {/* Affiliate paths */}
                   <AppRoute
@@ -1986,6 +1998,14 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/affiliate-student-list/:affiliateId"
                     component={AffiliateStudentListForSystem}
+                  />
+                  <AppRoute
+                    path="/affiliate-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersApplication}
+                  />
+                  <AppRoute
+                    path="/affiliate-registered-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersRegisteredApplication}
                   />
 
                   <AppRoute
