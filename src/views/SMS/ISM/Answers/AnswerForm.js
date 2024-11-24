@@ -202,44 +202,6 @@ const AnswerForm = ({
       <Form onSubmit={handleSubmit(onSubmit)} className="modal-overflow">
         <input type="hidden" {...register("id")} value={defaultData?.id} />
 
-        <Row>
-          <Col>
-            <DDFilterByAppUrlU
-              label="Category"
-              placeholder="Select Category"
-              url="QuestionCategory/get-all"
-              defaultValue={categoryId}
-              action={setCategoryId}
-              setError={() => setCategoryIdError("")}
-              error={categoryIdError}
-            />
-          </Col>
-          <Col>
-            <DDFilterByAppUrlU
-              label="Sub Category"
-              placeholder="Select Sub Category"
-              url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
-              defaultValue={subCategoryId}
-              action={setSubCategoryId}
-              setError={() => setSubCategoryIdError("")}
-              error={subCategoryIdError}
-            />
-          </Col>
-        </Row>
-
-        <Input
-          label="Title"
-          type="text"
-          name="title"
-          defaultValue={defaultData.title}
-          error={titleError}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setTitle(e.target.value);
-            setTitleError("");
-          }}
-        />
-
         <div className="d-flex justify-content-between">
           <p>
             Category <AiOutlineRight /> Subcategory
@@ -258,16 +220,7 @@ const AnswerForm = ({
             setValue={setUserTypeValue}
           />
         </div>
-        <div className="d-flex justify-content-between">
-          <CheckOne
-            name="isRequiredAns"
-            label="Is required answer"
-            defaultValue={ansReq}
-            onChange={(e) => {
-              setAnsReq(e.target.checked);
-            }}
-          />
-
+        <div className="d-flex justify-content-end">
           <CheckOne
             name="isSameForAll"
             label="Same Answer for all type"
