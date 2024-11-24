@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import get from "../../../../../helpers/get";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
@@ -13,19 +12,18 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import moment from "moment";
+import icon_info from "../../../../../assets/img/icons/icon_info.png";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import EuUkApplicationInformation from "./EuUkApplicationInformation";
 import HomeApplicationInformation from "./HomeApplicationInformation";
 import InternationalApplicationInformation from "./InternationalApplicationInformation";
-import EuUkApplicationInformation from "./EuUkApplicationInformation";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import icon_info from "../../../../../assets/img/icons/icon_info.png";
-import Select from "react-select";
-import { useToasts } from "react-toast-notifications";
-import post from "../../../../../helpers/post";
-import { currentDate } from "../../../../../components/date/calenderFormate";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
 const StudentApplicationInformation = () => {
   const history = useHistory();
@@ -41,7 +39,7 @@ const StudentApplicationInformation = () => {
   const [homeResidencyStatus, setHomeResidencyStatus] = useState("");
   const [homeResidencyStatusError, setHomeResidencyStatusError] = useState("");
 
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [dateError, setdateError] = useState("");
   const [residencyForHomeRequire, setResidencyForHomeRequire] = useState(false);
 
@@ -104,7 +102,7 @@ const StudentApplicationInformation = () => {
           setApplicationInformation(res);
           setHowManyYears(res?.loanYearsForHome);
           setHomeResidencyStatus(res?.residencyStatusForHome);
-          setDate(moment(new Date(res?.dateOfMoveToUk)).format("YYYY-MM-DD"));
+          setDate(res?.dateOfMoveToUk);
           setStudentTypeLabel(res?.studentType?.name);
           setLoanYearsForEU(res?.loanYearsForEU);
           setShareCode(res?.shareCode);
@@ -214,11 +212,10 @@ const StudentApplicationInformation = () => {
 
   //Eu
   const handleDate = (e) => {
-    setDate(e.target.value);
-    if (e.target.value === "") {
-      setdateError("Date is required");
+    if (e) {
+      setDate(e);
     } else {
-      setdateError("");
+      setdateError("Date is required");
     }
   };
 
@@ -349,6 +346,9 @@ const StudentApplicationInformation = () => {
       "RefusalLetterForOtherVisaFile",
       FileList2.length === 0 ? null : FileList2[0]?.originFileObj
     );
+    if (date) {
+      subData.append("dateOfMoveToUk", date);
+    }
     var IsFormValid = validateRegisterForm();
     if (IsFormValid) {
       setButtonStatus(true);
@@ -689,6 +689,7 @@ const StudentApplicationInformation = () => {
                             countryLabel={countryLabel}
                             handleDate={handleDate}
                             dateError={dateError}
+                            setdateError={setdateError}
                             date={date}
                             setLoansForEu={setLoansForEu}
                             loansForEu={loansForEu}

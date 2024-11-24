@@ -17,7 +17,7 @@ import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 // import icon_gmt from "../../../../../assets/img/icons/icon-gmt.png";
-import { currentDate } from "../../../../../components/date/calenderFormate";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import GREScore from "./Component/GREScore";
 
@@ -204,17 +204,22 @@ const TestScore = () => {
   };
 
   const handleIeltsExamDate = (e) => {
-    const value = e.target.value;
-    const yearValue = value.split("-")[0];
-    setIeltsExamDate(value);
-    if (value === null) {
-      setIeltsExamDateError("Date is required");
-    } else if (currentDate < value) {
-      setIeltsExamDateError("Invalid Date");
-    } else if (yearValue.length > 4) {
-      setIeltsExamDateError("Invalid Date");
+    // const value = e.target.value;
+    // const yearValue = value.split("-")[0];
+    // setIeltsExamDate(value);
+    // if (value === null) {
+    //   setIeltsExamDateError("Date is required");
+    // } else if (currentDate < value) {
+    //   setIeltsExamDateError("Invalid Date");
+    // } else if (yearValue.length > 4) {
+    //   setIeltsExamDateError("Invalid Date");
+    // } else {
+    //   setIeltsExamDateError(null);
+    // }
+    if (e) {
+      setIeltsExamDate(e);
     } else {
-      setIeltsExamDateError(null);
+      setIeltsExamDateError("Date is required");
     }
   };
   // Ielts validation
@@ -258,17 +263,22 @@ const TestScore = () => {
   };
 
   const handleDuolingoExamDate = (e) => {
-    const value = e.target.value;
-    const yearValue = value.split("-")[0];
-    setDuolingoExamDate(value);
-    if (value === null) {
-      setDuolingoExamDateError("Date of Exam is required");
-    } else if (yearValue.length > 4) {
-      setDuolingoExamDateError("Invalid Date");
-    } else if (currentDate < value) {
-      setDuolingoExamDateError("Invalid Date");
+    // const value = e.target.value;
+    // const yearValue = value.split("-")[0];
+    // setDuolingoExamDate(value);
+    // if (value === null) {
+    //   setDuolingoExamDateError("Date of Exam is required");
+    // } else if (yearValue.length > 4) {
+    //   setDuolingoExamDateError("Invalid Date");
+    // } else if (currentDate < value) {
+    //   setDuolingoExamDateError("Invalid Date");
+    // } else {
+    //   setDuolingoExamDateError(null);
+    // }
+    if (e) {
+      setDuolingoExamDate(e);
     } else {
-      setDuolingoExamDateError(null);
+      setDuolingoExamDateError("Date of Exam is required");
     }
   };
 
@@ -338,17 +348,22 @@ const TestScore = () => {
   };
 
   const handleToeflExamDate = (e) => {
-    const value = e.target.value;
-    const yearValue = value.split("-")[0];
-    setToeflExamDate(value);
-    if (value === null) {
-      setToeflExamDateError("Exam date are required");
-    } else if (yearValue.length > 4) {
-      setToeflExamDateError("Invalid Date");
-    } else if (currentDate < value) {
-      setToeflExamDateError("Invalid Date");
+    // const value = e.target.value;
+    // const yearValue = value.split("-")[0];
+    // setToeflExamDate(value);
+    // if (value === null) {
+    //   setToeflExamDateError("Exam date are required");
+    // } else if (yearValue.length > 4) {
+    //   setToeflExamDateError("Invalid Date");
+    // } else if (currentDate < value) {
+    //   setToeflExamDateError("Invalid Date");
+    // } else {
+    //   setToeflExamDateError(null);
+    // }
+    if (e) {
+      setToeflExamDate(e);
     } else {
-      setToeflExamDateError(null);
+      setToeflExamDateError("Exam date are required");
     }
   };
 
@@ -410,17 +425,22 @@ const TestScore = () => {
   };
 
   const handleFunctionSkillsExamDate = (e) => {
-    const value = e.target.value;
-    const yearValue = value.split("-")[0];
-    setFunctionSkillsExamDate(value);
-    if (value === null) {
-      setFunctionSkillsExamDateError("Exam date are required");
-    } else if (yearValue.length > 4) {
-      setFunctionSkillsExamDateError("Invalid date");
-    } else if (currentDate < value) {
-      setFunctionSkillsExamDateError("Invalid date");
+    // const value = e.target.value;
+    // const yearValue = value.split("-")[0];
+    // setFunctionSkillsExamDate(value);
+    // if (value === null) {
+    //   setFunctionSkillsExamDateError("Exam date are required");
+    // } else if (yearValue.length > 4) {
+    //   setFunctionSkillsExamDateError("Invalid date");
+    // } else if (currentDate < value) {
+    //   setFunctionSkillsExamDateError("Invalid date");
+    // } else {
+    //   setFunctionSkillsExamDateError(null);
+    // }
+    if (e) {
+      setFunctionSkillsExamDate(e);
     } else {
-      setFunctionSkillsExamDateError(null);
+      setFunctionSkillsExamDateError("Exam date are required");
     }
   };
 
@@ -585,9 +605,7 @@ const TestScore = () => {
       setToeflReading(res?.reading ? res?.reading : 0);
       setToeflWriting(res?.writing ? res?.writing : 0);
       setToeflListening(res?.listening ? res?.listening : 0);
-      res?.examDate
-        ? setToeflExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setToeflExamDate(null);
+      res?.examDate ? setToeflExamDate(res?.examDate) : setToeflExamDate(null);
       setLoading(false);
       setToeflOverall(res?.overall ? res?.overall : 0);
       setToeflEquivalentScore(res?.ieltsEquivalent);
@@ -1158,6 +1176,9 @@ const TestScore = () => {
     const subData = new FormData(event.target);
     // console.log(setData.get("speaking"));
     if (ELqualificationLabel === "IELTS") {
+      if (ieltsExamDate) {
+        subData.append("examDate", ieltsExamDate);
+      }
       const isValid = FormIELTSValid();
       if (isValid === true) {
         if (!updateIelts) {
@@ -1218,6 +1239,9 @@ const TestScore = () => {
       }
     } else if (ELqualificationLabel === "DUOLINGO") {
       const isValid = FormDuolingoValid();
+      if (duolingoExamDate) {
+        subData.append("examDate", duolingoExamDate);
+      }
       if (isValid === true) {
         if (!updateDuolingo) {
           setButtonStatus(true);
@@ -1276,6 +1300,9 @@ const TestScore = () => {
       }
     } else if (ELqualificationLabel === "TOEFL") {
       const isValid = FormToeflValid();
+      if (ToeflExamDate) {
+        subData.append("examDate", ToeflExamDate);
+      }
       if (isValid === true) {
         if (!updateToefl) {
           setButtonStatus(true);
@@ -1333,6 +1360,9 @@ const TestScore = () => {
         }
       }
     } else if (ELqualificationLabel === "FUNCTION SKILLS") {
+      if (FunctionSkillsExamDate) {
+        subData.append("examDate", FunctionSkillsExamDate);
+      }
       const isValid = FormFunctionSkillsValid();
       if (isValid === true) {
         if (!updateFunctions) {
@@ -1884,21 +1914,13 @@ const TestScore = () => {
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
-                              <span>
-                                {" "}
-                                Exam Date
-                                <span className="text-danger">*</span>{" "}
-                              </span>
-
-                              <Input
-                                type="date"
-                                name="examDate"
-                                id="examDate"
-                                onChange={(e) => {
-                                  handleIeltsExamDate(e);
-                                }}
-                                defaultValue={ieltsExamDate}
-                                min={minDate}
+                              <DMYPicker
+                                setValue={handleIeltsExamDate}
+                                value={ieltsExamDate}
+                                label="Exam Date"
+                                error={ieltsExamDateError}
+                                action={setIeltsExamDateError}
+                                required={true}
                               />
                               <span className="text-danger">
                                 {ieltsExamDateError && (
@@ -2065,28 +2087,14 @@ const TestScore = () => {
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
-                              <span>
-                                {" "}
-                                Exam Date
-                                <span className="text-danger">*</span>{" "}
-                              </span>
-
-                              <Input
-                                type="date"
-                                name="examDate"
-                                id="examDate"
-                                onChange={(e) => {
-                                  handleToeflExamDate(e);
-                                }}
+                              <DMYPicker
+                                setValue={handleToeflExamDate}
+                                label="Exam Date"
                                 value={ToeflExamDate}
+                                error={ToeflExamDateError}
+                                action={setToeflExamDateError}
+                                required={true}
                               />
-                              <span className="text-danger">
-                                {ToeflExamDateError && (
-                                  <span className="text-danger">
-                                    {ToeflExamDateError}
-                                  </span>
-                                )}
-                              </span>
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -2274,7 +2282,7 @@ const TestScore = () => {
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
-                              <span>
+                              {/* <span>
                                 {" "}
                                 Exam Date
                                 <span className="text-danger">*</span>{" "}
@@ -2293,7 +2301,15 @@ const TestScore = () => {
                                 <span className="text-danger">
                                   {FunctionSkillsExamDateError}
                                 </span>
-                              )}
+                              )} */}
+                              <DMYPicker
+                                setValue={handleFunctionSkillsExamDate}
+                                label="Exam Date"
+                                value={FunctionSkillsExamDate}
+                                error={FunctionSkillsExamDateError}
+                                action={setFunctionSkillsExamDateError}
+                                required={true}
+                              />
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
@@ -2642,7 +2658,7 @@ const TestScore = () => {
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
-                              <span>
+                              {/* <span>
                                 {" "}
                                 Exam Date
                                 <span className="text-danger">*</span>{" "}
@@ -2659,7 +2675,15 @@ const TestScore = () => {
                               />
                               <span className="text-danger">
                                 {duolingoExamDateError}
-                              </span>
+                              </span> */}
+                              <DMYPicker
+                                setValue={handleDuolingoExamDate}
+                                label="Exam Date"
+                                value={duolingoExamDate}
+                                error={duolingoExamDateError}
+                                action={setDuolingoExamDateError}
+                                required={true}
+                              />
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
