@@ -257,7 +257,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [percentageValue, setPercentageValue] = useState(
     AdmissionManagerApplicationPaging?.percentageValue
       ? AdmissionManagerApplicationPaging?.percentageValue
-      : 100
+      : 0
   );
 
   // application list

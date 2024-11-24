@@ -99,7 +99,7 @@ const CompanionTeamMembersRegisteredApplication = () => {
 
   return (
     <div>
-      <BreadCrumb title="Applications naki" backTo="" path="" />
+      <BreadCrumb title="Applications" backTo="" path="" />
 
       <Card className="uapp-employee-search">
         <CardBody>
