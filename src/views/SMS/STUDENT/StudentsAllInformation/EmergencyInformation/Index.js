@@ -262,7 +262,7 @@ const ContactInformation = () => {
       post("StudentEmergency/Address", subData).then((res) => {
         setProgress(false);
         setSuccess(!success);
-        handleCancelAdd()
+        handleCancelAdd();
         // history.push(`/addPersonalStatement/${applicationStudentId}`);
         addToast(res?.data?.message, {
           appearance: res?.data?.isSuccess === true ? "success" : "error",
@@ -315,7 +315,7 @@ const ContactInformation = () => {
       setCity(res?.city);
       setZipCode(res?.zipCode);
       setState(res?.state);
-      setIdValue(res?.id)
+      setIdValue(res?.id);
     });
   };
 
@@ -452,7 +452,7 @@ const ContactInformation = () => {
                         <tr key={index}>
                           <td>{item.personName}</td>
                           <td>{item.relationship}</td>
-                          <td>{item.phoneNumber}</td>
+                          <td>+{item.phoneNumber}</td>
                           <td>{item.emailAddress}</td>
                           <td>{item.countryName}</td>
                           <td>{item.addressLine}</td>
@@ -502,13 +502,8 @@ const ContactInformation = () => {
               </div>
               {oneData.length < 1 || showForm ? (
                 <Form onSubmit={handleSubmit}>
-                  {idValue!=0 ? (
-                    <input
-                      type="hidden"
-                      name="id"
-                      id="id"
-                      value={idValue}
-                    />
+                  {idValue != 0 ? (
+                    <input type="hidden" name="id" id="id" value={idValue} />
                   ) : null}
                   <input
                     type="hidden"
