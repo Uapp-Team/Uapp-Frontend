@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import Typing from "../../../components/form/Typing";
@@ -6,10 +7,10 @@ import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
 import GroupButton from "../../../components/buttons/GroupButton";
 import ISMDocuments from "./ISMDocuments";
-import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 import ButtonForFunction from "../Components/ButtonForFunction";
 
 const ISM = () => {
+  const history = useHistory();
   const [universityList, setUniversityList] = useState([]);
   const [uniValue, setUniValue] = useState(0);
   const [uniLable, setUniLable] = useState("Select University");
@@ -30,17 +31,10 @@ const ISM = () => {
     setUniLable(item?.universityFullName);
     setTab("2");
   };
-  // const redirectRoute = (item) => {
-  //   if (AdminUsers() || AdmissionUsers()) {
-  //     history.push(`/university-information-doc-faq-by-id/${item?.id}`, {
-  //       state: { name: item?.universityFullName, id: item?.id },
-  //     });
-  //   } else {
-  //     history.push(`/users-answer-for-fAQ/${item?.id}`, {
-  //       state: { name: item?.universityFullName, id: item?.id },
-  //     });
-  //   }
-  // };
+
+  const handleManageQueries = () => {
+    history.push("/manageQuery");
+  };
 
   return (
     <div>
@@ -52,19 +46,19 @@ const ISM = () => {
 
       <Card>
         <CardBody>
-          {(AdminUsers() || AdmissionUsers()) && (
-            <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
-              <p className="d-flex align-items-center mr-3 mb-0">
-                Manage Queries for University information manage
-              </p>
-              <ButtonForFunction
-                // func={handleManageQueries}
-                className={"btn btn-uapp-add p-2"}
-                icon={<i class="fas fa-list-ul"></i>}
-                name={"Manage Queries"}
-              />
-            </div>
-          )}
+          {/* {(AdminUsers() || AdmissionUsers()) && ( */}
+          <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
+            <p className="d-flex align-items-center mr-3 mb-0">
+              Manage Queries for University information manage
+            </p>
+            <ButtonForFunction
+              func={handleManageQueries}
+              className={"btn btn-uapp-add p-2"}
+              icon={<i class="fas fa-list-ul"></i>}
+              name={"Manage Queries"}
+            />
+          </div>
+          {/* )} */}
 
           <GroupButton
             list={[

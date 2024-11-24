@@ -13,6 +13,9 @@ import TopicDivider from "../../Components/TopicDivider";
 import MultiSelectU from "../../../../components/form/MultiSelectU";
 import Origine from "../Components/Origine";
 import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
+import { AiOutlineRight } from "react-icons/ai";
+import Filter from "../../../../components/Dropdown/Filter";
+import Pointer from "../../../../components/buttons/Pointer";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -37,7 +40,13 @@ const schema = yup.object().shape({
   ),
 });
 
-const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
+const AnswerForm = ({
+  method,
+  submitPath,
+  defaultData,
+  modalClose,
+  refetch,
+}) => {
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
   const [categoryId, setCategoryId] = useState(defaultData.categoryId);
@@ -66,6 +75,9 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [universityValue, setuniversityValue] = useState(
     defaultData.universities
   );
+
+  const [userTypeLabel, setUserTypeLabel] = useState("All User");
+  const [userTypeValue, setUserTypeValue] = useState(0);
 
   const {
     register,
@@ -229,6 +241,24 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         />
 
         <div className="d-flex justify-content-between">
+          <p>
+            Category <AiOutlineRight /> Subcategory
+          </p>
+
+          <Filter
+            data={[
+              { id: 0, name: `${(<Pointer color="#1890FF" />)} "Hello` },
+              { id: 1, name: "Consultant" },
+              { id: 2, name: "Affiliate" },
+              { id: 3, name: "Companion" },
+            ]}
+            label={userTypeLabel}
+            setLabel={setUserTypeLabel}
+            value={userTypeValue}
+            setValue={setUserTypeValue}
+          />
+        </div>
+        <div className="d-flex justify-content-between">
           <CheckOne
             name="isRequiredAns"
             label="Is required answer"
@@ -331,4 +361,4 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   );
 };
 
-export default QueForm;
+export default AnswerForm;

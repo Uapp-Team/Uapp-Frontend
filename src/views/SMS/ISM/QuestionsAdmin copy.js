@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
-import ButtonForFunctionNonSolid from "../../Components/ButtonForFunctionNonSolid";
+import ButtonForFunctionNonSolid from "../Components/ButtonForFunctionNonSolid";
 import "react-quill/dist/quill.snow.css";
-import QueAdd from "./QueAdd";
-import Uget from "../../../../helpers/Uget";
-import Typing from "../../../../components/form/Typing";
+import QueAdd from "./Questions/QueAdd";
+import Uget from "../../../helpers/Uget";
+import Typing from "../../../components/form/Typing";
 import Answear from "../Components/Answear";
-import Tag from "../../../../components/ui/Tag";
-import KeyBtn from "../../../../components/buttons/KeyBtn";
+import Tag from "../../../components/ui/Tag";
+import KeyBtn from "../../../components/buttons/KeyBtn";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
 const QuestionsAdmin = ({

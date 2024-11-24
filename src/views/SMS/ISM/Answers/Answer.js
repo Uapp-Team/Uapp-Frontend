@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Origine from "./Origine";
+import Origine from "../Components/Origine";
 import DOMPurify from "dompurify";
 import EditBtn from "../../../../components/buttons/EditBtn";
-import Status from "./Status";
+import Status from "../Components/Status";
 import DeleteBtn from "../../../../components/buttons/DeleteBtn";
 import { Modal, ModalBody } from "reactstrap";
-import QueEdit from "../Questions/QueEdit";
+import AnswerEdit from "./AnswerEdit";
 
-const Answear = ({ defaultData, refetch }) => {
+const Answer = ({ defaultData, refetch, byQues = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const createMarkup = (html) => {
@@ -19,14 +19,22 @@ const Answear = ({ defaultData, refetch }) => {
   return (
     <>
       <div className="px-4 mt-3 mb-4">
-        <p className="text-right">
-          <span className="text-gray ml-12px">Arden University</span>
-          <Status statusId={2} className="ml-12px" />
-          <span className="text-gray ml-12px">22 Aug 2024</span>
-          <EditBtn action={() => setModalOpen(!modalOpen)} />
-          <DeleteBtn url="" refetch={refetch} />
-        </p>
-        <p className="card-heading">{defaultData?.title}</p>
+        <div className="d-flex align-items-start justify-content-between">
+          <p className="fs-16px text-gray-70 fw-600">
+            {byQues && <span>Arden University</span>}
+          </p>
+
+          <p className="d-flex justify-content-end">
+            {!byQues && (
+              <span className="text-gray ml-12px">Arden University</span>
+            )}
+            <Status statusId={2} className="ml-12px" />
+            <span className="text-gray ml-12px">22 Aug 2024</span>
+            <EditBtn action={() => setModalOpen(!modalOpen)} />
+            <DeleteBtn url="" refetch={refetch} />
+          </p>
+        </div>
+        {!byQues && <p className="card-heading">{defaultData?.title}</p>}
 
         {defaultData?.isSameForAll === true ? (
           <>
@@ -76,7 +84,7 @@ const Answear = ({ defaultData, refetch }) => {
         className="modal-lg"
       >
         <ModalBody className="p-4">
-          <QueEdit
+          <AnswerEdit
             id={defaultData?.id}
             modalClose={() => setModalOpen(!modalOpen)}
             refetch={refetch}
@@ -87,4 +95,4 @@ const Answear = ({ defaultData, refetch }) => {
   );
 };
 
-export default Answear;
+export default Answer;

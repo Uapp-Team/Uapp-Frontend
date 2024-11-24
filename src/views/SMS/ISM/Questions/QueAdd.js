@@ -11,7 +11,7 @@ const QueAdd = ({ modalClose, refetch }) => {
     title: "",
     isRequiredAns: true,
     isSameForAll: true,
-    answers: "",
+    // answers: "",
     answerList: [
       {
         id: 0,

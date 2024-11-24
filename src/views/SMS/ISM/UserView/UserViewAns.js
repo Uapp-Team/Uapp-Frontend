@@ -3,7 +3,7 @@ import { Col, Row } from "reactstrap";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 import CategoryAccordion from "../Components/CategoryAccordion";
 import Tag from "../../../../components/ui/Tag";
-import Answear from "../Components/Answear";
+import Answer from "../Answers/Answer";
 
 const UserViewAns = ({
   answerData,
@@ -66,7 +66,7 @@ const UserViewAns = ({
 
           {answerData?.map((item, i) => (
             <div key={i}>
-              <Answear defaultData={item} refetch={() => {}} />
+              <Answer defaultData={item} refetch={() => {}} />
             </div>
           ))}
         </Col>

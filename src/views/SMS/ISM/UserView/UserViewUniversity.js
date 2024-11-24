@@ -12,7 +12,7 @@ import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 import BackIcon from "../../../../components/buttons/BackIcon";
 import PreviewUniDocu from "../../../../components/ui/PreviewUniDocu";
 import { AiOutlineFileText } from "react-icons/ai";
-import Answear from "../Components/Answear";
+import Answer from "../Answers/Answer";
 
 const UserViewUniversity = () => {
   const history = useHistory();
@@ -176,7 +176,7 @@ const UserViewUniversity = () => {
                 >
                   {answerData?.map((item, i) => (
                     <div key={i}>
-                      <Answear defaultData={item} refetch={() => {}} />
+                      <Answer defaultData={item} refetch={() => {}} />
                     </div>
                   ))}
                 </div>
