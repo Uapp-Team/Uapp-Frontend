@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
+import { currentDate } from "../../../../../components/date/calenderFormate";
 import DMYPicker from "../../../../../components/form/DMYPicker";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../constants/constants";
@@ -225,17 +226,27 @@ const PersonalInformation = () => {
       setLastNameError("");
     }
   };
+  useEffect(() => {
+    if (!birthDate) {
+      return;
+    }
+    const year = birthDate.split("-")[0];
+    const digitYear = Number(year);
+
+    const currentYear = currentDate.split("-")[0];
+    const digitCurrentYear = Number(currentYear);
+
+    const calculateAge = digitCurrentYear - digitYear;
+
+    if (calculateAge < 15) {
+      setDateError("Birthdate is more than 15 years");
+    } else {
+      setDateError("");
+    }
+  }, [birthDate]);
+
   const handleDate = (selectedDate) => {
     if (selectedDate) {
-      // const year = selectedDate.split("-")[0];
-      // const digitYear = Number(year);
-      // const currentYear = currentDate.split("-")[0];
-      // const digitCurrentYear = Number(currentYear);
-      // const calculateAge = digitCurrentYear - digitYear;
-      // if (calculateAge < 15) {
-      //   setDateError("Birthdate is more than 15 year");
-      //   return;
-      // }
       setBirthDate(selectedDate);
     } else {
       setDateError("Date of birth is required");
