@@ -232,19 +232,6 @@ const PersonalInformation = () => {
     } else {
       setDateError("Date of birth is required");
     }
-
-    // const birthdate = selectedDate.toDate();
-    // setBirthDate(birthdate);
-
-    // const selectedYear = birthdate.getFullYear();
-    // const currentYear = new Date().getFullYear();
-    // const calculatedAge = currentYear - selectedYear;
-
-    // if (calculatedAge < 15) {
-    //   setDateError("Age must be more than 15 years");
-    // } else {
-    //   setDateError("");
-    // }
   };
   const handlePassport = (e) => {
     setPassport(e.target.value);
@@ -261,16 +248,6 @@ const PersonalInformation = () => {
     } else {
       setIssueDateError("Issue Date is required");
     }
-    // const issuedate = e.toDate();
-    // setIssueDate(issuedate);
-    // const year = issuedate.getFullYear();
-    // if (year.length > 4) {
-    //   setIssueDateError("Invalid date");
-    // } else if (currentDate <= issuedate.toISOString()) {
-    //   setIssueDateError("Invalid date");
-    // } else {
-    //   setIssueDateError("");
-    // }
   };
   const handleExpireDate = (e) => {
     if (e) {
@@ -278,15 +255,6 @@ const PersonalInformation = () => {
     } else {
       setexpireDateError("Expire Date is required");
     }
-
-    // const value = e.toDate();
-    // setexpireDate(value);
-
-    // if (value.toISOString() <= issueDate.toISOString()) {
-    //   setexpireDateError("Expiry Date cannot same or previous date");
-    // } else {
-    //   setexpireDateError("");
-    // }
   };
 
   const handlePreview = async (file) => {
