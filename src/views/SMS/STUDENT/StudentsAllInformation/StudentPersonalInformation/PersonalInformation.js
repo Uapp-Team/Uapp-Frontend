@@ -225,9 +225,17 @@ const PersonalInformation = () => {
       setLastNameError("");
     }
   };
-
   const handleDate = (selectedDate) => {
     if (selectedDate) {
+      // const year = selectedDate.split("-")[0];
+      // const digitYear = Number(year);
+      // const currentYear = currentDate.split("-")[0];
+      // const digitCurrentYear = Number(currentYear);
+      // const calculateAge = digitCurrentYear - digitYear;
+      // if (calculateAge < 15) {
+      //   setDateError("Birthdate is more than 15 year");
+      //   return;
+      // }
       setBirthDate(selectedDate);
     } else {
       setDateError("Date of birth is required");
@@ -360,7 +368,7 @@ const PersonalInformation = () => {
       isFormValid = false;
       setLastNameError("Last Name is required");
     }
-    if (!birthDate) {
+    if (birthDate == null) {
       isFormValid = false;
       setDateError("Date of birth is required");
     }
@@ -619,11 +627,10 @@ const PersonalInformation = () => {
                       setValue={handleDate}
                       error={dateError}
                       action={setDateError}
-                      required={false}
-                      name="dateOfBirth"
-                      id="dateOfBirth"
+                      required={true}
                     />
                   </Col>
+                  <Col lg="6" md="8"></Col>
                 </FormGroup>
 
                 <FormGroup row>
