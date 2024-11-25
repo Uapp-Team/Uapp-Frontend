@@ -241,7 +241,7 @@ const MenuList = () => {
             <Col lg="5" md="5" sm="12" xs="12" style={{ marginBottom: "10px" }}>
               {/* {permissions?.includes(permissionList?.Add_Consultant) ? ( */}
               <LinkButton
-                url={"/affiliate-registration"}
+                url={"/menu-add"}
                 className={"btn btn-uapp-add "}
                 name={"Add Menu"}
                 icon={<i className="fas fa-plus"></i>}

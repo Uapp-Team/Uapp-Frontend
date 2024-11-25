@@ -1422,6 +1422,7 @@ const UserContentHub = lazy(() =>
 );
 const LiveIntake = lazy(() => import("./views/SMS/LiveIntake/LiveIntake.js"));
 const MenuList = lazy(() => import("./views/SMS/MenuItems/MenuList.js"));
+const AddMenuForm = lazy(() => import("./views/SMS/MenuItems/AddMenuForm.js"));
 
 // Affiliate path start
 const AffiliateTransation = lazy(() =>
@@ -1459,6 +1460,7 @@ const AffiliateListRegistration = lazy(() =>
     "./views/SMS/Affiliate/AffiliateInformations/NavigationAndRegistration/Registration.js"
   )
 );
+
 const AffiliateProfile = lazy(() =>
   import("./views/SMS/Affiliate/AffiliateProfile/AffiliateProfile.js")
 );
@@ -2183,6 +2185,14 @@ class AppRouter extends React.Component {
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? MenuList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/menu-add"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AddMenuForm
                         : NotAuthorized
                     }
                   />
