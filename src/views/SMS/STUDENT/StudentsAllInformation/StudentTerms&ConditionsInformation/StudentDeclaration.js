@@ -468,7 +468,7 @@ const StudentDeclaration = () => {
                           Mobile Number
                         </td>
                         <td style={{ paddingLeft: "8px" }}>
-                          {studentDetails?.phoneNumber}
+                          +{studentDetails?.phoneNumber}
                         </td>
                       </tr>
                       <tr style={{ border: "1px solid #dee2e6" }}>
