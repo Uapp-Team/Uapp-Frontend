@@ -20,4 +20,4 @@ export const leadUrl = `https://leadapi.uapp.uk/`;
 
 export const leadApi = `${leadUrl}api/v1/`;
 
-export const androidAppUrl = `https://api.uapp.uk/apps_download/uapp.apk`;
+export const androidAppUrl = `https://download.uapp.uk/downloadfile/base.apk`;
