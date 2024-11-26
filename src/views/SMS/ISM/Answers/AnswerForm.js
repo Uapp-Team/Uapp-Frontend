@@ -16,6 +16,8 @@ import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 import { AiOutlineRight } from "react-icons/ai";
 import Filter from "../../../../components/Dropdown/Filter";
 import Pointer from "../../../../components/buttons/Pointer";
+import StatusDD from "../Components/StatusDD";
+import KeyBtn from "../../../../components/buttons/KeyBtn";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -76,8 +78,8 @@ const AnswerForm = ({
     defaultData.universities
   );
 
-  const [userTypeLabel, setUserTypeLabel] = useState("All User");
-  const [userTypeValue, setUserTypeValue] = useState(0);
+  const [statusLabel, setStatusLabel] = useState("Pending");
+  const [statusValue, setStatusValue] = useState(3);
 
   const {
     register,
@@ -201,24 +203,12 @@ const AnswerForm = ({
     <>
       <Form onSubmit={handleSubmit(onSubmit)} className="modal-overflow">
         <input type="hidden" {...register("id")} value={defaultData?.id} />
-
-        <div className="d-flex justify-content-between">
-          <p>
+        <div className="d-flex justify-content-between align-items-center">
+          <span>
             Category <AiOutlineRight /> Subcategory
-          </p>
+          </span>
 
-          <Filter
-            data={[
-              { id: 0, name: `${(<Pointer color="#1890FF" />)} "Hello` },
-              { id: 1, name: "Consultant" },
-              { id: 2, name: "Affiliate" },
-              { id: 3, name: "Companion" },
-            ]}
-            label={userTypeLabel}
-            setLabel={setUserTypeLabel}
-            value={userTypeValue}
-            setValue={setUserTypeValue}
-          />
+          <StatusDD value={statusValue} setValue={setStatusValue} />
         </div>
         <div className="d-flex justify-content-end">
           <CheckOne
@@ -228,7 +218,6 @@ const AnswerForm = ({
             onChange={(e) => setIsSameForAll(e.target.checked)}
           />
         </div>
-
         {isSameForAll === true ? (
           <RichTextArea
             defaultValue={answers}
@@ -280,8 +269,14 @@ const AnswerForm = ({
             ))}
           </>
         )}
+        <KeyBtn
+          label="Arden University"
+          data={1}
+          value={1}
+          // action={setStatusId}
+        />
 
-        <CheckOne
+        {/* <CheckOne
           name="isMandatoryForAll"
           label="Mandatory for all universities"
           defaultValue={check}
@@ -303,10 +298,9 @@ const AnswerForm = ({
               placeholder="Select University"
             />
           </>
-        )}
-
+        )} */}
         <div className="d-flex">
-          <SaveButton text="Add" buttonStatus={isSubmit} />
+          <SaveButton text="Update" buttonStatus={isSubmit} />
           <CancelButton cancel={modalClose} className="ml-3" />
         </div>
       </Form>

@@ -19,11 +19,12 @@ const QueEdit = ({ id, modalClose, refetch }) => {
     categoryId: data?.categoryId,
     subCategoryId: data?.subCategoryId,
     title: data?.title,
-    answers: data?.answers,
-    answerList: data?.answerList,
     isRequiredAns: data?.isRequiredAns,
+    isSameForAll: data?.isSameForAll,
+    answerList: data?.answerList,
     isMandatoryForAll: data?.isMandatoryForAll,
     universities: data?.universities,
+    status: 3,
   };
 
   return (

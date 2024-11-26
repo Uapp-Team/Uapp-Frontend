@@ -18,17 +18,19 @@ const AnswersArea = ({
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [statusId, setStatusId] = useState(0);
-  const [date, setDate] = useState(true);
+  const [date, setDate] = useState(false);
 
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `question/get-paginated?index=${1}&size=${100}&subCategoryId=${categoryId}&searchText=${searchStr}`
+        `question/get-paginated?index=${1}&size=${100}&subCategoryId=${categoryId}&searchText=${searchStr}&sortingdate=${
+          date ? "asc" : "desc"
+        }`
       ).then((res) => {
         setData(res?.items);
       });
     }
-  }, [success, categoryId, isTyping, searchStr]);
+  }, [success, categoryId, isTyping, searchStr, date]);
 
   return (
     <>
@@ -50,10 +52,10 @@ const AnswersArea = ({
           <span className="mr-1 fs-16px">Date</span>
           <span>
             <AiOutlineUp
-              className={`d-block ${date ? "text-black" : "text-gray"}`}
+              className={`d-block ${!date ? "text-black" : "text-gray"}`}
             />
             <AiOutlineDown
-              className={`d-block ${!date ? "text-black" : "text-gray"}`}
+              className={`d-block ${date ? "text-black" : "text-gray"}`}
             />
           </span>
         </div>

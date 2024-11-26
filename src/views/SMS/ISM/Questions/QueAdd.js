@@ -11,26 +11,26 @@ const QueAdd = ({ modalClose, refetch }) => {
     title: "",
     isRequiredAns: true,
     isSameForAll: true,
-    // answers: "",
     answerList: [
       {
         id: 0,
         origineType: 1,
-        answers: "",
+        answer: "",
       },
       {
         id: 0,
         origineType: 2,
-        answers: "",
+        answer: "",
       },
       {
         id: 0,
         origineType: 3,
-        answers: "",
+        answer: "",
       },
     ],
     isMandatoryForAll: false,
     universities: [],
+    status: 3,
   };
 
   return (

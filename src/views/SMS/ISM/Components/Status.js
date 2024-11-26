@@ -6,10 +6,14 @@ const Status = ({ statusId, className }) => {
     <>
       <span className={className}>
         {statusId === 1 ? (
-          <Pointer color="#1890FF" />
+          <Pointer color="#fff" />
         ) : statusId === 2 ? (
-          <Pointer color="#52C41A" />
+          <Pointer color="#D9D9D9" />
         ) : statusId === 3 ? (
+          <Pointer color="#1890FF" />
+        ) : statusId === 4 ? (
+          <Pointer color="#52C41A" />
+        ) : statusId === 5 ? (
           <Pointer color="#FF4D4F" />
         ) : (
           ""
@@ -17,10 +21,14 @@ const Status = ({ statusId, className }) => {
 
         <span className="ml-8px">
           {statusId === 1
-            ? "Pending"
+            ? "Not Answered"
             : statusId === 2
-            ? "Published"
+            ? "Draft"
             : statusId === 3
+            ? "Pending"
+            : statusId === 4
+            ? "Published"
+            : statusId === 5
             ? "Reject"
             : ""}
         </span>

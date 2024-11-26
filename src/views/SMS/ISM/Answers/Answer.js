@@ -24,11 +24,11 @@ const Answer = ({ defaultData, refetch, byQues = false }) => {
             {byQues && <span>Arden University</span>}
           </p>
 
-          <p className="d-flex justify-content-end">
+          <p className="text-right">
             {!byQues && (
               <span className="text-gray ml-12px">Arden University</span>
             )}
-            <Status statusId={2} className="ml-12px" />
+            <Status statusId={4} className="ml-12px" />
             <span className="text-gray ml-12px">22 Aug 2024</span>
             <EditBtn action={() => setModalOpen(!modalOpen)} />
             <DeleteBtn url="" refetch={refetch} />

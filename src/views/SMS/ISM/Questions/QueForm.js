@@ -13,6 +13,8 @@ import TopicDivider from "../../Components/TopicDivider";
 import MultiSelectU from "../../../../components/form/MultiSelectU";
 import Origine from "../Components/Origine";
 import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
+import StatusDD from "../Components/StatusDD";
+import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -48,16 +50,16 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [titleError, setTitleError] = useState("");
   const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
-  const [answers, setAnswers] = useState(defaultData?.answers);
+  const [answers, setAnswers] = useState(defaultData?.answerList[0]?.answer);
   const [answersError, setAnswersError] = useState("");
   const [answers1, setAnswers1] = useState(
-    defaultData?.answerList && defaultData?.answerList[0]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[0]?.answer
   );
   const [answers2, setAnswers2] = useState(
-    defaultData?.answerList && defaultData?.answerList[1]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[1]?.answer
   );
   const [answers3, setAnswers3] = useState(
-    defaultData?.answerList && defaultData?.answerList[2]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[2]?.answer
   );
   const [answers1Error, setAnswers1Error] = useState("");
   const [answers2Error, setAnswers2Error] = useState("");
@@ -66,6 +68,8 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [universityValue, setuniversityValue] = useState(
     defaultData.universities
   );
+
+  const [statusValue, setStatusValue] = useState(defaultData?.status);
 
   const {
     register,
@@ -114,47 +118,47 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const onSubmit = (formData) => {
     if (handleValid()) {
       const submitData = {
-        id: formData.id,
+        id: defaultData.id,
         categoryId: categoryId,
         subCategoryId: subCategoryId,
         title: title,
-        status: 1,
+        status: statusValue,
         isRequiredAns: ansReq,
-        isSameForAll: formData.isSameForAll,
+        isSameForAll: isSameForAll,
         // answers: !isSameForAll ? null : answers,
         answerList: isSameForAll
           ? [
               {
-                id: formData?.answerList[0]?.id,
-                origineType: formData?.answerList[0]?.origineType,
-                answers: answers,
+                id: defaultData?.answerList[0]?.id,
+                origineType: defaultData?.answerList[0]?.origineType,
+                answer: answers,
               },
               {
-                id: formData?.answerList[1]?.id,
-                origineType: formData?.answerList[1]?.origineType,
-                answers: answers,
+                id: defaultData?.answerList[1]?.id,
+                origineType: defaultData?.answerList[1]?.origineType,
+                answer: answers,
               },
               {
-                id: formData?.answerList[2]?.id,
-                origineType: formData?.answerList[2]?.origineType,
-                answers: answers,
+                id: defaultData?.answerList[2]?.id,
+                origineType: defaultData?.answerList[2]?.origineType,
+                answer: answers,
               },
             ]
           : [
               {
-                id: formData?.answerList[0]?.id,
-                origineType: formData?.answerList[0]?.origineType,
-                answers: answers1,
+                id: defaultData?.answerList[0]?.id,
+                origineType: defaultData?.answerList[0]?.origineType,
+                answer: answers1,
               },
               {
-                id: formData?.answerList[1]?.id,
-                origineType: formData?.answerList[1]?.origineType,
-                answers: answers2,
+                id: defaultData?.answerList[1]?.id,
+                origineType: defaultData?.answerList[1]?.origineType,
+                answer: answers2,
               },
               {
-                id: formData?.answerList[2]?.id,
-                origineType: formData?.answerList[2]?.origineType,
-                answers: answers3,
+                id: defaultData?.answerList[2]?.id,
+                origineType: defaultData?.answerList[2]?.origineType,
+                answer: answers3,
               },
             ],
         isMandatoryForAll: check,
@@ -192,7 +196,18 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
         <Row>
           <Col>
-            <DDFilterByAppUrlU
+            <DDByAppUrlU
+              register={() => {}}
+              name="category"
+              label="Category"
+              placeholder="Select Category"
+              url="QuestionCategory/get-all"
+              defaultValue={categoryId}
+              setValue={setCategoryId}
+              action={() => setCategoryIdError("")}
+              error={categoryIdError}
+            />
+            {/* <DDFilterByAppUrlU
               label="Category"
               placeholder="Select Category"
               url="QuestionCategory/get-all"
@@ -200,10 +215,21 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               action={setCategoryId}
               setError={() => setCategoryIdError("")}
               error={categoryIdError}
-            />
+            /> */}
           </Col>
           <Col>
-            <DDFilterByAppUrlU
+            <DDByAppUrlU
+              register={() => {}}
+              name="category"
+              label="Sub Category"
+              placeholder="Select Sub Category"
+              url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
+              defaultValue={subCategoryId}
+              setValue={setSubCategoryId}
+              action={() => setSubCategoryIdError("")}
+              error={subCategoryIdError}
+            />
+            {/* <DDFilterByAppUrlU
               label="Sub Category"
               placeholder="Select Sub Category"
               url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
@@ -211,23 +237,32 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               action={setSubCategoryId}
               setError={() => setSubCategoryIdError("")}
               error={subCategoryIdError}
-            />
+            /> */}
           </Col>
         </Row>
 
-        <Input
-          label="Title"
-          type="text"
-          name="title"
-          defaultValue={defaultData.title}
-          error={titleError}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setTitle(e.target.value);
-            setTitleError("");
-          }}
-        />
+        <div className="d-flex justify-content-between align-items-start">
+          <Input
+            label="Title"
+            type="text"
+            name="title"
+            defaultValue={defaultData.title}
+            error={titleError}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setTitle(e.target.value);
+              setTitleError("");
+            }}
+            className="mb-3 w-75"
+          />
 
+          <StatusDD
+            value={statusValue}
+            setValue={setStatusValue}
+            isAns={false}
+            className="mb-3 w-25 ml-3"
+          />
+        </div>
         <div className="d-flex justify-content-between">
           <CheckOne
             name="isRequiredAns"
@@ -238,63 +273,73 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             }}
           />
 
-          <CheckOne
-            name="isSameForAll"
-            label="Same Answer for all type"
-            defaultValue={isSameForAll}
-            onChange={(e) => setIsSameForAll(e.target.checked)}
-          />
+          {ansReq && (
+            <CheckOne
+              name="isSameForAll"
+              label="Same Answer for all type"
+              defaultValue={isSameForAll}
+              onChange={(e) => setIsSameForAll(e.target.checked)}
+            />
+          )}
         </div>
 
-        {isSameForAll === true ? (
-          <RichTextArea
-            defaultValue={answers}
-            onChange={setAnswers}
-            error={answersError}
-            action={() => setAnswersError("")}
-          />
-        ) : (
+        {ansReq && (
           <>
-            {defaultData?.answerList?.map((item, i) => (
-              <div key={i}>
-                <Origine typeId={item?.origineType} />
-                <Input
-                  register={register}
-                  type="hidden"
-                  name={`answerList.${i}.id`}
-                  defaultValue={item?.id}
-                />
-                <Input
-                  register={register}
-                  type="hidden"
-                  name={`answerList.${i}.origineType`}
-                  defaultValue={item?.origineType}
-                />
+            {isSameForAll === true ? (
+              <RichTextArea
+                defaultValue={answers}
+                onChange={setAnswers}
+                error={answersError}
+                action={() => setAnswersError("")}
+              />
+            ) : (
+              <>
+                {defaultData?.answerList?.map((item, i) => (
+                  <div key={i}>
+                    <Origine typeId={item?.origineType} />
+                    <Input
+                      register={register}
+                      type="hidden"
+                      name={`answerList.${i}.id`}
+                      defaultValue={item?.id}
+                    />
+                    <Input
+                      register={register}
+                      type="hidden"
+                      name={`answerList.${i}.origineType`}
+                      defaultValue={item?.origineType}
+                    />
 
-                <RichTextArea
-                  defaultValue={
-                    i === 0 ? answers1 : i === 1 ? answers2 : answers3
-                  }
-                  onChange={
-                    i === 0 ? setAnswers1 : i === 1 ? setAnswers2 : setAnswers3
-                  }
-                  error={
-                    i === 0
-                      ? answers1Error
-                      : i === 1
-                      ? answers2Error
-                      : answers3Error
-                  }
-                  action={() =>
-                    i === 0
-                      ? setAnswers1Error("")
-                      : i === 1
-                      ? setAnswers2Error("")
-                      : setAnswers3Error("")
-                  }
-                />
-              </div>
-            ))}
+                    <RichTextArea
+                      defaultValue={
+                        i === 0 ? answers1 : i === 1 ? answers2 : answers3
+                      }
+                      onChange={
+                        i === 0
+                          ? setAnswers1
+                          : i === 1
+                          ? setAnswers2
+                          : setAnswers3
+                      }
+                      error={
+                        i === 0
+                          ? answers1Error
+                          : i === 1
+                          ? answers2Error
+                          : answers3Error
+                      }
+                      action={() =>
+                        i === 0
+                          ? setAnswers1Error("")
+                          : i === 1
+                          ? setAnswers2Error("")
+                          : setAnswers3Error("")
+                      }
+                    />
+                  </div>
+                ))}
+              </>
+            )}
           </>
         )}
 
