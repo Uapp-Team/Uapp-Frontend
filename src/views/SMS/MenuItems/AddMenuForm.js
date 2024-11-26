@@ -16,33 +16,37 @@ import ConfirmModal from "../../../components/modal/ConfirmModal";
 import Uget from "../../../helpers/Uget";
 import Filter from "../../../components/Dropdown/Filter";
 
-const AddMenuForm = () => {
-  const { affiliateId, id } = useParams();
-  const userType = localStorage.getItem("userType");
+const AddMenuForm = ({}) => {
+  const [typeList, setTypeList] = useState([
+    {
+      id: "item",
+      name: "Item",
+    },
+    {
+      id: "collapse",
+      name: "Collapse",
+    },
+  ]);
+
+  const [typeLabel, setTypeLabel] = useState("Select Type");
+  const [typeValue, setTypeValue] = useState(0);
   const [parentList, setParentList] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent");
   const [parentValue, setParentValue] = useState(0);
-  const [typeLabel, setTypeLabel] = useState("Select Type");
-  const [typeValue, setTypeValue] = useState(0);
-  console.log(typeValue);
 
   // const [consultantError, setConsultantError] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [icon, setIcon] = useState("");
+  const [displayOrder, setDisplayOrder] = useState("");
+
   // const [parentError, setParentError] = useState(false);
 
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const history = useHistory();
-  const [firstNameError, setFirstNameError] = useState("");
+  const [titleError, setTitleError] = useState("");
   const [title, setTitle] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [registerId, setRegisterId] = useState();
-  const [emailExistError, setEmailExistError] = useState(true);
-  const [phoneNumber, setphoneNumber] = useState("");
-  const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [navLink, setNavLink] = useState("");
+  const [navLinkError, setNavLinkError] = useState("");
 
   useEffect(() => {
     get("MenuItem/GetMenuItems").then((res) => {
@@ -54,65 +58,40 @@ const AddMenuForm = () => {
     label: cons?.title,
     value: cons?.id,
   }));
-
   const selectParent = (label, value) => {
     // setConsultantError(false);
     setParentLabel(label);
     setParentValue(value);
   };
 
+  const typeName = typeList?.map((cons) => ({
+    label: cons?.name,
+    value: cons?.id,
+  }));
+
+  const selectType = (label, value) => {
+    setTypeLabel(label);
+    setTypeValue(value);
+  };
+
   const handleTitleChange = (e) => {
     let data = e.target.value.trimStart();
     setTitle(data);
     if (data === "") {
-      setFirstNameError("First Name is required");
+      setTitleError("First Name is required");
     } else {
-      setFirstNameError("");
+      setTitleError("");
     }
   };
 
-  const handleLastNameChange = (e) => {
+  const handleNavLinkChange = (e) => {
     let data = e.target.value.trimStart();
-    setLastName(data);
+    setNavLink(data);
     if (data === "") {
-      setLastNameError("Last Name is required");
+      setNavLinkError("Last Name is required");
     } else {
-      setLastNameError("");
+      setNavLinkError("");
     }
-  };
-
-  const handleEmailError = (e) => {
-    let data = e.target.value.trimStart();
-    setEmail(data);
-    if (data === "") {
-      setEmailError("Email is required");
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
-    ) {
-      setEmailError("Email is not valid");
-    } else {
-      get(`EmailCheck/EmailCheck/${e.target.value}`).then((res) => {
-        setEmailExistError(res);
-        if (!res) {
-          setEmailError("Email already exists");
-        } else {
-          setEmailError("");
-        }
-      });
-    }
-  };
-
-  const handlePhoneNumber = (value) => {
-    setphoneNumber(value);
-    if (value === "") {
-      setphoneNUmberError("Phone number is required");
-    } else if (value?.length < 9) {
-      setphoneNUmberError("Phone number required minimum 9 digit");
-    } else {
-      setphoneNUmberError("");
-    }
-    // setphoneNumber(value);
-    // setValid(validatePhoneNumber(value));
   };
 
   const ValidateForm = () => {
@@ -120,33 +99,16 @@ const AddMenuForm = () => {
 
     if (!title) {
       isValid = false;
-      setFirstNameError("First Name is required");
-    }
-    if (!lastName) {
-      isValid = false;
-      setLastNameError("Last Name is required");
-    }
-    if (!email) {
-      isValid = false;
-      setEmailError("Email is required");
+      setTitleError("First Name is required");
     }
 
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-      isValid = false;
-      setEmailError("Email is not Valid");
-    }
-
-    if (emailExistError === false) {
-      isValid = false;
-      setEmailExistError(emailExistError);
-    }
     return isValid;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
-    subdata.append("phoneNumber", phoneNumber);
+
     for (var value of subdata) {
       console.log(value);
     }
@@ -154,24 +116,15 @@ const AddMenuForm = () => {
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      setFirstNameError("");
-      setLastNameError("");
-      setEmailError("");
-      post("AffiliateRegister", subdata).then((res) => {
+      setTitleError("");
+
+      post("MenuItem/Create", subdata).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res.status === 200 && res.data.isSuccess === true) {
-          if (userType === userTypes?.Consultant) {
-            history.push(`/affiliateAddSuccess`);
-          } else {
-            setIsModalOpen(true);
-            setRegisterId(res?.data?.result);
-            !affiliateId && setParentValue(0);
-            !affiliateId && setParentLabel("Select Parent Consultant");
-
-            setLastName("");
-            setEmail("");
-          }
+          history.push(`/menu-list`);
+          setNavLink("");
+          setIcon("");
         } else {
           return;
         }
@@ -183,27 +136,9 @@ const AddMenuForm = () => {
     history.push("/menu-list");
   };
 
-  const goToProfile = () => {
-    affiliateId && userType === userTypes?.SystemAdmin
-      ? history.push(`/affiliate-team-List/${affiliateId}`)
-      : affiliateId
-      ? history.push(`/affiliate-team-List`)
-      : history.push(`/affiliatePersonalInfo/${registerId}`);
-  };
-
-  // const goToProfile = () => {
-  //   affiliateId
-  //     ? history.push(`/affiliate-team-List`)
-  //     : history.push(`/affiliatePersonalInfo/${registerId}`);
-  // };
-
   return (
     <div>
-      <BreadCrumb
-        title="Add Affiliate"
-        backTo={"Menu List"}
-        path={"/menu-list"}
-      />
+      <BreadCrumb title="Add Menu" backTo={"Menu List"} path={"/menu-list"} />
 
       <Card>
         <CardBody>
@@ -218,13 +153,6 @@ const AddMenuForm = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                <input
-                  type="hidden"
-                  name="id"
-                  id="id"
-                  // value={installment?.applicationTransactionId}
-                />
-
                 <FormGroup>
                   <span>
                     <span className="text-danger">*</span>Title
@@ -236,12 +164,12 @@ const AddMenuForm = () => {
                       handleTitleChange(e);
                     }}
                     type="text"
-                    name="firstName"
-                    id="firstName"
+                    name="title"
+                    id="title"
                     value={title}
                     placeholder="Enter Title"
                   />
-                  <span className="text-danger">{firstNameError}</span>
+                  <span className="text-danger">{titleError}</span>
                 </FormGroup>
 
                 <FormGroup>
@@ -250,40 +178,32 @@ const AddMenuForm = () => {
                   <Input
                     className="form-mt"
                     onChange={(e) => {
-                      handleLastNameChange(e);
+                      handleNavLinkChange(e);
                     }}
                     type="text"
-                    name="lastName"
-                    id="lastName"
-                    value={lastName}
+                    name="navLink"
+                    id="navLink"
+                    value={navLink}
                     placeholder="Enter NavLink"
                   />
-                  <span className="text-danger">{lastNameError}</span>
+                  <span className="text-danger">{navLinkError}</span>
                 </FormGroup>
 
                 <FormGroup>
                   <span>Type</span>
-
-                  <Filter
-                    data={[
-                      {
-                        id: 1,
-                        name: "Items",
-                      },
-                      {
-                        id: 2,
-                        name: "Collapse",
-                      },
-                    ]}
-                    label={typeLabel}
-                    setLabel={setTypeLabel}
-                    value={typeValue}
-                    setValue={setTypeValue}
-                    action={() => {}}
+                  <Select
+                    options={typeName}
+                    value={{
+                      label: typeLabel,
+                      value: typeValue,
+                    }}
+                    onChange={(opt) => selectType(opt.label, opt.value)}
+                    name="type"
+                    id="Type"
                   />
                 </FormGroup>
 
-                {typeValue === 2 ? (
+                {typeValue === "collapse" ? (
                   <FormGroup>
                     <span>
                       <span className="text-danger">*</span> Parent Name
@@ -296,8 +216,8 @@ const AddMenuForm = () => {
                         value: parentValue,
                       }}
                       onChange={(opt) => selectParent(opt.label, opt.value)}
-                      name="consultantId"
-                      id="consultantId"
+                      name="parentId"
+                      id="parentId"
                     />
                   </FormGroup>
                 ) : null}
@@ -308,15 +228,12 @@ const AddMenuForm = () => {
                   <Input
                     className="form-mt"
                     type="text"
-                    name="email"
-                    id="email"
-                    value={email}
+                    name="icon"
+                    id="icon"
                     placeholder="Enter Icon"
-                    onChange={(e) => {
-                      handleEmailError(e);
-                    }}
+                    onChange={(e) => setIcon(e.target.value)}
+                    defaultValue={icon}
                   />
-                  <span className="text-danger">{emailError}</span>
                 </FormGroup>
 
                 <FormGroup>
@@ -324,32 +241,13 @@ const AddMenuForm = () => {
 
                   <Input
                     className="form-mt"
-                    type="text"
-                    name="email"
-                    id="email"
-                    value={email}
+                    type="number"
+                    name="displayOrder"
+                    id="displayOrder"
+                    onChange={(e) => setIcon(e.target.value)}
+                    defaultValue={displayOrder}
                     placeholder="Enter Display Order"
-                    onChange={(e) => {
-                      handleEmailError(e);
-                    }}
                   />
-                  <span className="text-danger">{emailError}</span>
-                </FormGroup>
-                <FormGroup>
-                  <span>Children</span>
-
-                  <Input
-                    className="form-mt"
-                    type="text"
-                    name="email"
-                    id="email"
-                    value={email}
-                    placeholder="Enter Children"
-                    onChange={(e) => {
-                      handleEmailError(e);
-                    }}
-                  />
-                  <span className="text-danger">{emailError}</span>
                 </FormGroup>
 
                 <FormGroup className="text-right">
@@ -368,19 +266,6 @@ const AddMenuForm = () => {
           </Form>
         </CardBody>
       </Card>
-
-      <ConfirmModal
-        text="Affiliate added successfully"
-        text2="Affiliate account has been created and an email is sent to the affiliate email address with login credentials."
-        isOpen={isModalOpen}
-        toggle={() => setIsModalOpen(!isModalOpen)}
-        buttonStatus={buttonStatus}
-        progress={progress}
-        noText="Add Another"
-        yesText={affiliateId ? "Return" : "Complete Profile"}
-        cancel={() => setIsModalOpen(false)}
-        confirm={goToProfile}
-      />
     </div>
   );
 };

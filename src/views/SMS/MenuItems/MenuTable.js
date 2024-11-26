@@ -25,7 +25,7 @@ const MenuTable = ({
   permissionList,
   userTypeId,
   userTypes,
-  affiliateList,
+  MenuItemList,
   serialNum,
   history,
   handlePass,
@@ -55,6 +55,7 @@ const MenuTable = ({
   buttonStatus,
 }) => {
   const [popoverOpen, setPopoverOpen] = useState("");
+  console.log(MenuItemList, "menuiemlist");
 
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
@@ -76,210 +77,35 @@ const MenuTable = ({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
-          <tr>
-            <td>Dashboard</td>
-            <td>/menu-list</td>
-            <td>Collapse</td>
-            <td>
-              {" "}
-              <img
-                className="Uapp-c-image"
-                src={uapploader}
-                alt="university_logo"
-              />{" "}
-            </td>
-            <td>User Manage</td>
-            <td>4</td>
-            <td>
-              {" "}
-              <ButtonGroup variant="text">
-                <>
-                  <ButtonForFunction
-                    // func={() => handleEdit(affiliate)}
-                    color={"warning"}
-                    className={"mx-1 btn-sm"}
-                    icon={<i className="fas fa-edit"></i>}
-                  />
-                  <ButtonForFunction
-                    color={"danger"}
-                    className={"mx-1 btn-sm"}
-                    // func={() => toggleDanger(affiliate)}
-                    icon={<i className="fas fa-trash-alt"></i>}
-                  />
-                </>
-              </ButtonGroup>
-            </td>
-          </tr>
+          {MenuItemList?.items?.map((menu, i) => (
+            <tr key={menu?.id}>
+              <td>{menu?.title}</td>
+              <td>{menu?.navLink}</td>
+              <td>{menu?.type}</td>
+              <td>{menu?.icon}</td>
+              <td>{menu?.parentName}</td>
+              <td>{menu?.displayOrder}</td>
+              <td>
+                {" "}
+                <ButtonGroup variant="text">
+                  <>
+                    <ButtonForFunction
+                      // func={() => handleEdit(affiliate)}
+                      color={"warning"}
+                      className={"mx-1 btn-sm"}
+                      icon={<i className="fas fa-edit"></i>}
+                    />
+                    <ButtonForFunction
+                      color={"danger"}
+                      className={"mx-1 btn-sm"}
+                      // func={() => toggleDanger(affiliate)}
+                      icon={<i className="fas fa-trash-alt"></i>}
+                    />
+                  </>
+                </ButtonGroup>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
 

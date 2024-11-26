@@ -39,8 +39,8 @@ const MenuList = () => {
   const [tableData, setTableData] = useState([]);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [affiliateList, setAffiliateList] = useState({});
-  console.log(affiliateList, "affiliatelist");
+  const [MenuItemList, setMenuItemList] = useState({});
+
   const [pass, setPass] = useState("");
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
@@ -60,6 +60,9 @@ const MenuList = () => {
   const [delData, setDelData] = useState({});
   const history = useHistory();
   const [check, setCheck] = useState(false);
+  const [parentList, setParentList] = useState([]);
+  const [parentLabel, setParentLabel] = useState("Select Parent");
+  const [parentValue, setParentValue] = useState(0);
 
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
@@ -93,6 +96,22 @@ const MenuList = () => {
   };
 
   useEffect(() => {
+    get("MenuItem/GetMenuItems").then((res) => {
+      setParentList(res);
+    });
+  }, []);
+
+  const parentName = parentList?.map((cons) => ({
+    label: cons?.title,
+    value: cons?.id,
+  }));
+  const selectParent = (label, value) => {
+    // setConsultantError(false);
+    setParentLabel(label);
+    setParentValue(value);
+  };
+
+  useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
     });
@@ -101,16 +120,17 @@ const MenuList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Affiliate/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
+        `MenuItem/paginated-list?&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}&parentId=${parentValue}`
       ).then((res) => {
         console.log(res);
-        setAffiliateList(res?.items);
+        setMenuItemList(res);
         setSerialNum(res?.from);
         setEntity(res?.totalFiltered);
         setLoading(false);
       });
     }
   }, [
+    parentValue,
     currentPage,
     dataPerPage,
     searchStr,
@@ -259,7 +279,7 @@ const MenuList = () => {
             permissionList={permissionList}
             userTypeId={userTypeId}
             userTypes={userTypes}
-            affiliateList={affiliateList}
+            MenuItemList={MenuItemList}
             serialNum={serialNum}
             history={history}
             handlePass={handlePass}
@@ -282,6 +302,10 @@ const MenuList = () => {
             setDeleteModal={setDeleteModal}
             handleDeleteData={handleDeleteData}
             buttonStatus={buttonStatus}
+            parentName={parentName}
+            parentLabel={parentLabel}
+            parentValue={parentValue}
+            selectParent={selectParent}
           />
 
           <Pagination
