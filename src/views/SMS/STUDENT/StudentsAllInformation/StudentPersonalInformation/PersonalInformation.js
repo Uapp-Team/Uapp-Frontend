@@ -20,6 +20,7 @@ import {
 } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
+import { currentDate } from "../../../../../components/date/calenderFormate";
 import DMYPicker from "../../../../../components/form/DMYPicker";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../constants/constants";
@@ -225,6 +226,24 @@ const PersonalInformation = () => {
       setLastNameError("");
     }
   };
+  useEffect(() => {
+    if (!birthDate) {
+      return;
+    }
+    const year = birthDate.split("-")[0];
+    const digitYear = Number(year);
+
+    const currentYear = currentDate.split("-")[0];
+    const digitCurrentYear = Number(currentYear);
+
+    const calculateAge = digitCurrentYear - digitYear;
+
+    if (calculateAge < 15) {
+      setDateError("Birthdate is more than 15 years");
+    } else {
+      setDateError("");
+    }
+  }, [birthDate]);
 
   const handleDate = (selectedDate) => {
     if (selectedDate) {
@@ -232,19 +251,6 @@ const PersonalInformation = () => {
     } else {
       setDateError("Date of birth is required");
     }
-
-    // const birthdate = selectedDate.toDate();
-    // setBirthDate(birthdate);
-
-    // const selectedYear = birthdate.getFullYear();
-    // const currentYear = new Date().getFullYear();
-    // const calculatedAge = currentYear - selectedYear;
-
-    // if (calculatedAge < 15) {
-    //   setDateError("Age must be more than 15 years");
-    // } else {
-    //   setDateError("");
-    // }
   };
   const handlePassport = (e) => {
     setPassport(e.target.value);
@@ -261,16 +267,6 @@ const PersonalInformation = () => {
     } else {
       setIssueDateError("Issue Date is required");
     }
-    // const issuedate = e.toDate();
-    // setIssueDate(issuedate);
-    // const year = issuedate.getFullYear();
-    // if (year.length > 4) {
-    //   setIssueDateError("Invalid date");
-    // } else if (currentDate <= issuedate.toISOString()) {
-    //   setIssueDateError("Invalid date");
-    // } else {
-    //   setIssueDateError("");
-    // }
   };
   const handleExpireDate = (e) => {
     if (e) {
@@ -278,15 +274,6 @@ const PersonalInformation = () => {
     } else {
       setexpireDateError("Expire Date is required");
     }
-
-    // const value = e.toDate();
-    // setexpireDate(value);
-
-    // if (value.toISOString() <= issueDate.toISOString()) {
-    //   setexpireDateError("Expiry Date cannot same or previous date");
-    // } else {
-    //   setexpireDateError("");
-    // }
   };
 
   const handlePreview = async (file) => {
@@ -392,7 +379,7 @@ const PersonalInformation = () => {
       isFormValid = false;
       setLastNameError("Last Name is required");
     }
-    if (!birthDate) {
+    if (birthDate == null) {
       isFormValid = false;
       setDateError("Date of birth is required");
     }
@@ -651,11 +638,10 @@ const PersonalInformation = () => {
                       setValue={handleDate}
                       error={dateError}
                       action={setDateError}
-                      required={false}
-                      name="dateOfBirth"
-                      id="dateOfBirth"
+                      required={true}
                     />
                   </Col>
+                  <Col lg="6" md="8"></Col>
                 </FormGroup>
 
                 <FormGroup row>

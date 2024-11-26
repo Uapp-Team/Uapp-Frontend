@@ -1,11 +1,11 @@
 import React from "react";
 import {} from "reactstrap";
 // import StudentRegisterForm from "./StudentRegisterForm";
-import "../../../../assets/scss/pages/authentication.scss";
-import providerlogo from "../../../../assets/img/providerlogo.svg";
-import "../../../../assets/CoustomStyle/auth.css";
-import AuthFooter from "./components/AuthFooter";
 import { Link } from "react-router-dom";
+import "../../../../assets/CoustomStyle/auth.css";
+import providerlogo from "../../../../assets/img/providerlogo.svg";
+import "../../../../assets/scss/pages/authentication.scss";
+import AuthFooter from "./components/AuthFooter";
 // import { Link } from "react-router-dom";
 const StudentAccountCreateSuccessfully = () => {
   return (
@@ -29,8 +29,9 @@ const StudentAccountCreateSuccessfully = () => {
                 </h1>
 
                 <p style={{ fontSize: "14px" }}>
-                  Your data has been submitted to our team. <br /> Our expert
-                  will reach you very soon.
+                  A verification email has been sent to your email address.
+                  <br />
+                  Follow the instruction from the email to verify your account.
                 </p>
                 <Link className="text-id hover" to="/">
                   Log In to your UAPP Account
