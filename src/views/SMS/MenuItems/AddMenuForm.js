@@ -13,36 +13,29 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
+import Uget from "../../../helpers/Uget";
+import Filter from "../../../components/Dropdown/Filter";
 
 const AddMenuForm = () => {
   const { affiliateId, id } = useParams();
   const userType = localStorage.getItem("userType");
-  const userId = localStorage.getItem("referenceId");
-  const current_user = JSON.parse(localStorage.getItem("current_user"));
-  console.log(current_user);
-  const [consParent, setConsParent] = useState([]);
-  // const [consType, setConsType] = useState([]);
-  const [parentLabel, setParentLabel] = useState("Select Parent Affiliate");
-  const [parentValue, setParentValue] = useState(affiliateId ? affiliateId : 0);
-  // const [branchLabel, setBranchLabel] = useState("Select Branch");
-  // const [branchValue, setBranchValue] = useState(0);
-  // const [branchError, setBranchError] = useState(false);
-  const [consultant, setConsultant] = useState([]);
-  const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
+  const [parentList, setParentList] = useState([]);
+  const [parentLabel, setParentLabel] = useState("Select Parent");
+  const [parentValue, setParentValue] = useState(0);
+  const [typeLabel, setTypeLabel] = useState("Select Type");
+  const [typeValue, setTypeValue] = useState(0);
+  console.log(typeValue);
 
   // const [consultantError, setConsultantError] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   // const [parentError, setParentError] = useState(false);
-  const [titleError, setTitleError] = useState(false);
-  const [title, setTitle] = useState([]);
-  const [titleValue, setTitleValue] = useState(0);
+
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const history = useHistory();
   const [firstNameError, setFirstNameError] = useState("");
-  const [firstName, setFirstName] = useState("");
+  const [title, setTitle] = useState("");
   const [lastName, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,51 +45,25 @@ const AddMenuForm = () => {
   const [phoneNUmberError, setphoneNUmberError] = useState("");
 
   useEffect(() => {
-    get("NameTittleDD/index").then((res) => {
-      setTitle(res);
+    get("MenuItem/GetMenuItems").then((res) => {
+      setParentList(res);
     });
   }, []);
-  useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
-      setConsultant(res);
-    });
-  }, []);
-  useEffect(() => {
-    get("AffiliateDD").then((res) => {
-      setConsParent(res);
 
-      if (affiliateId) {
-        const result = res?.find((ans) => ans?.id.toString() === affiliateId);
-        setParentLabel(result?.name);
-      }
-    });
-  }, [affiliateId]);
-
-  const consParentMenu = consParent?.map((consParentOptions) => ({
-    label: consParentOptions?.name,
-    value: consParentOptions?.id,
+  const parentName = parentList?.map((cons) => ({
+    label: cons?.title,
+    value: cons?.id,
   }));
 
-  const selectParentCons = (label, value) => {
-    // setParentError(false);
+  const selectParent = (label, value) => {
+    // setConsultantError(false);
     setParentLabel(label);
     setParentValue(value);
   };
 
-  const consultantName = consultant?.map((cons) => ({
-    label: cons?.name,
-    value: cons?.id,
-  }));
-
-  const selectConsultant = (label, value) => {
-    // setConsultantError(false);
-    setconsultantLabel(label);
-    setConsultantValue(value);
-  };
-
-  const handleFirstNameChange = (e) => {
+  const handleTitleChange = (e) => {
     let data = e.target.value.trimStart();
-    setFirstName(data);
+    setTitle(data);
     if (data === "") {
       setFirstNameError("First Name is required");
     } else {
@@ -151,23 +118,7 @@ const AddMenuForm = () => {
   const ValidateForm = () => {
     var isValid = true;
 
-    // if (typeValue === 0) {
-    //   isValid = false;
-    //   setConsultantError(true);
-    // }
-    // if (homeAccept === false && ukAccept === false && intAccept === false) {
-    //   isValid = false;
-    //   setAcceptError(true);
-    // }
-    // if (parentValue === 0) {
-    //   isValid = false;
-    //   setParentError(true);
-    // }
-    if (titleValue === 0) {
-      isValid = false;
-      setTitleError(true);
-    }
-    if (!firstName) {
+    if (!title) {
       isValid = false;
       setFirstNameError("First Name is required");
     }
@@ -217,8 +168,7 @@ const AddMenuForm = () => {
             setRegisterId(res?.data?.result);
             !affiliateId && setParentValue(0);
             !affiliateId && setParentLabel("Select Parent Consultant");
-            setTitleValue(0);
-            setFirstName("");
+
             setLastName("");
             setEmail("");
           }
@@ -229,8 +179,8 @@ const AddMenuForm = () => {
     }
   };
 
-  const ToConsultantList = () => {
-    history.push("/affiliate-List");
+  const ToMenuList = () => {
+    history.push("/menu-list");
   };
 
   const goToProfile = () => {
@@ -268,160 +218,34 @@ const AddMenuForm = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                {/* <FormGroup>
-                  <span>Branch</span>
-                  <DefaultDropdown
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                    url="BranchDD/Index"
-                    name="branchId"
-                    error={branchError}
-                    setError={setBranchError}
-                    errorText="Branch is Required"
-                    action={() => {}}
-                  />
-                </FormGroup> */}
-                {userType === userTypes?.Consultant.toString() ? (
-                  <>
-                    {userId && (
-                      <>
-                        <input
-                          type="hidden"
-                          id="consultantId"
-                          name="consultantId"
-                          value={userId}
-                        />
-                        <p className="fw-600">{current_user?.displayName}</p>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {id ? (
-                      <input
-                        type="hidden"
-                        id="consultantId"
-                        name="consultantId"
-                        value={id}
-                      />
-                    ) : (
-                      <>
-                        {userType !== userTypes?.Affiliate && (
-                          <FormGroup>
-                            <span>Consultant</span>
-
-                            <Select
-                              options={consultantName}
-                              value={{
-                                label: consultantLabel,
-                                value: consultantValue,
-                              }}
-                              onChange={(opt) =>
-                                selectConsultant(opt.label, opt.value)
-                              }
-                              name="consultantId"
-                              id="consultantId"
-                            />
-                          </FormGroup>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-
-                {affiliateId ? (
-                  <>
-                    {" "}
-                    <input
-                      type="hidden"
-                      id="parentAffiliateId"
-                      name="parentAffiliateId"
-                      value={affiliateId}
-                    />
-                  </>
-                ) : (
-                  <>
-                    {userType !== userTypes?.Affiliate && (
-                      <FormGroup>
-                        <span>Parent Affiliate</span>
-
-                        <Select
-                          className="form-mt"
-                          options={consParentMenu}
-                          value={{ label: parentLabel, value: parentValue }}
-                          onChange={(opt) =>
-                            selectParentCons(opt.label, opt.value)
-                          }
-                          name="parentAffiliateId"
-                          id="parentAffiliateId"
-                          isDisabled={affiliateId ? true : false}
-                        />
-                      </FormGroup>
-                    )}
-                  </>
-                )}
+                <input
+                  type="hidden"
+                  name="id"
+                  id="id"
+                  // value={installment?.applicationTransactionId}
+                />
 
                 <FormGroup>
                   <span>
-                    {" "}
-                    <span className="text-danger">*</span> Title
-                  </span>
-                  <div>
-                    {title?.map((tt) => (
-                      <>
-                        <input
-                          key={tt?.id}
-                          type="radio"
-                          name="nameTittleId"
-                          id="nameTittleId"
-                          value={tt?.id}
-                          onChange={() => {
-                            setTitleValue(tt?.id);
-                            setTitleError(false);
-                          }}
-                          checked={titleValue === tt?.id ? true : false}
-                        />
-
-                        <label
-                          className="mr-3"
-                          style={{ fontWeight: 500, fontSize: "14px" }}
-                        >
-                          {tt?.name}
-                        </label>
-                      </>
-                    ))}
-                  </div>
-
-                  {titleError && (
-                    <span className="text-danger">Title is required</span>
-                  )}
-                </FormGroup>
-
-                <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span>First Name
+                    <span className="text-danger">*</span>Title
                   </span>
 
                   <Input
                     className="form-mt"
                     onChange={(e) => {
-                      handleFirstNameChange(e);
+                      handleTitleChange(e);
                     }}
                     type="text"
                     name="firstName"
                     id="firstName"
-                    value={firstName}
-                    placeholder="Enter First Name"
+                    value={title}
+                    placeholder="Enter Title"
                   />
                   <span className="text-danger">{firstNameError}</span>
                 </FormGroup>
 
                 <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span> Last Name
-                  </span>
+                  <span>NavLink</span>
 
                   <Input
                     className="form-mt"
@@ -432,23 +256,62 @@ const AddMenuForm = () => {
                     name="lastName"
                     id="lastName"
                     value={lastName}
-                    placeholder="Enter Last Name"
+                    placeholder="Enter NavLink"
                   />
                   <span className="text-danger">{lastNameError}</span>
                 </FormGroup>
 
                 <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span>Email
-                  </span>
+                  <span>Type</span>
+
+                  <Filter
+                    data={[
+                      {
+                        id: 1,
+                        name: "Items",
+                      },
+                      {
+                        id: 2,
+                        name: "Collapse",
+                      },
+                    ]}
+                    label={typeLabel}
+                    setLabel={setTypeLabel}
+                    value={typeValue}
+                    setValue={setTypeValue}
+                    action={() => {}}
+                  />
+                </FormGroup>
+
+                {typeValue === 2 ? (
+                  <FormGroup>
+                    <span>
+                      <span className="text-danger">*</span> Parent Name
+                    </span>
+
+                    <Select
+                      options={parentName}
+                      value={{
+                        label: parentLabel,
+                        value: parentValue,
+                      }}
+                      onChange={(opt) => selectParent(opt.label, opt.value)}
+                      name="consultantId"
+                      id="consultantId"
+                    />
+                  </FormGroup>
+                ) : null}
+
+                <FormGroup>
+                  <span>Icon</span>
 
                   <Input
                     className="form-mt"
-                    type="email"
+                    type="text"
                     name="email"
                     id="email"
                     value={email}
-                    placeholder="Enter Email"
+                    placeholder="Enter Icon"
                     onChange={(e) => {
                       handleEmailError(e);
                     }}
@@ -456,28 +319,41 @@ const AddMenuForm = () => {
                   <span className="text-danger">{emailError}</span>
                 </FormGroup>
 
-                <FormGroup className="phone-input-group">
-                  <span>
-                    <span className="text-danger">*</span>
-                    Phone Number
-                  </span>
-                  <PhoneInput
-                    className="w-100"
-                    type="string"
-                    name="phoneNumber"
-                    id="phoneNumber"
-                    country={"gb"}
-                    enableLongNumbers={true}
-                    onChange={handlePhoneNumber}
-                    value={phoneNumber ? phoneNumber : ""}
-                    inputProps={{
-                      required: true,
+                <FormGroup>
+                  <span>Display Order</span>
+
+                  <Input
+                    className="form-mt"
+                    type="text"
+                    name="email"
+                    id="email"
+                    value={email}
+                    placeholder="Enter Display Order"
+                    onChange={(e) => {
+                      handleEmailError(e);
                     }}
                   />
-                  <span className="text-danger">{phoneNUmberError}</span>{" "}
+                  <span className="text-danger">{emailError}</span>
                 </FormGroup>
+                <FormGroup>
+                  <span>Children</span>
+
+                  <Input
+                    className="form-mt"
+                    type="text"
+                    name="email"
+                    id="email"
+                    value={email}
+                    placeholder="Enter Children"
+                    onChange={(e) => {
+                      handleEmailError(e);
+                    }}
+                  />
+                  <span className="text-danger">{emailError}</span>
+                </FormGroup>
+
                 <FormGroup className="text-right">
-                  <CancelButton cancel={ToConsultantList} />
+                  <CancelButton cancel={ToMenuList} />
 
                   {/* {permissions?.includes(permissionList?.Add_Consultant) && ( */}
                   <SaveButton
