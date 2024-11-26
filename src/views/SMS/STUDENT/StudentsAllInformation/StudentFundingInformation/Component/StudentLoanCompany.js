@@ -200,7 +200,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
             </FormGroup>
             <FormGroup row>
               <Col sm="4">
-                <span>Upload Image:</span>
+                <span>Upload Document:</span>
               </Col>
               <Col sm="4">
                 <Upload
