@@ -1786,6 +1786,15 @@ flexbox-container2 h4 {
   display: inline-block;
 }
 
+.for-intake-table {
+  background: #EDF2F2;
+  font-weight: 400;
+  padding: 0px 12px;
+  border-radius: 19px;
+  margin-right: 7px;
+  display: inline-block;
+}
+
 .pending-invitation {
   background: #f08686;
   color: #f2f1ff;

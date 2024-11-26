@@ -2386,6 +2386,12 @@ th {
   color: #fff;
 }
 
+.intake-university-title-style {
+  font-weight: 600;
+  font-size: 20px;
+  color: #000000;
+}
+
 .university-span-style {
   font-weight: 400;
   font-size: 16px;
@@ -2396,6 +2402,12 @@ th {
   font-weight: 400;
   font-size: 16px;
   color: #fff;
+}
+
+.university-location-intake {
+  font-weight: 400;
+  font-size: 16px;
+  color: #000000;
 }
 
 .university-span-provider {

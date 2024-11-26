@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "reactstrap";
-import "../../../../../assets/scss/pages/dashboard-analytics.scss";
-import plusicon from "../../../../../assets/img/plusicon.svg";
-import get from "../../../../../helpers/get";
 import { useHistory } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 import "../../../../../assets/CoustomStyle/dashboard.css";
+import plusicon from "../../../../../assets/img/plusicon.svg";
+import "../../../../../assets/scss/pages/dashboard-analytics.scss";
+import Filter from "../../../../../components/Dropdown/Filter";
 import DashboardApplication from "../../../../../components/ui/DashboardApplication";
 import DashboardReadyToApply from "../../../../../components/ui/DashboardReadyToApply";
-import ConsultantListForBranch from "./ConsultantListForBranch";
-import CountCard from "./CountCard";
+import get from "../../../../../helpers/get";
 import UserNotices from "../../Component/UserNotices";
-import Filter from "../../../../../components/Dropdown/Filter";
+import CountCard from "./CountCard";
 
 const BranchManager = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -101,7 +100,7 @@ const BranchManager = () => {
       <Row>
         <Col lg={12}>
           <CountCard id={manager?.branchId} intakeRngValue={intakeRngValue} />
-          <ConsultantListForBranch id={manager?.branchId} />
+          {/* <ConsultantListForBranch id={manager?.branchId} /> */}
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}
 
           <DashboardApplication

@@ -1,11 +1,14 @@
+import { DatePicker } from "antd";
+import moment from "moment";
 import React from "react";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
-import Select from "react-select";
-import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import CancelButton from "../../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 
 const EducationalForm = ({
   oneData,
@@ -37,6 +40,8 @@ const EducationalForm = ({
   handleInstitution,
   institutionError,
   handleAttendedTo,
+  setAttendedFromError,
+  setAttendedToError,
   attendedToError,
   handlePercentage,
   percentageError,
@@ -108,22 +113,14 @@ const EducationalForm = ({
               <span className="text-danger">{qualificationSubjectError}</span>
             </FormGroup>
             <FormGroup>
-              <span>
-                <span className="text-danger">*</span> Attended From
-              </span>
-
-              <Input
-                className="form-mt"
-                type="date"
+              <DMYPicker
+                label="Attended From"
                 value={attendedFrom}
-                onChange={(e) => {
-                  handleAttendedFrom(e);
-                }}
-                min={minDate}
-                name="attendedInstitutionFrom"
-                id="attendedInstitutionFrom"
+                setValue={handleAttendedFrom}
+                error={attendedFromError}
+                action={() => setAttendedFromError("")}
+                required={true}
               />
-              <span className="text-danger">{attendedFromError}</span>
             </FormGroup>
             <FormGroup>
               <span>
@@ -161,22 +158,14 @@ const EducationalForm = ({
             {isAchieved && (
               <>
                 <FormGroup>
-                  <span>
-                    <span className="text-danger">*</span> Attended To
-                  </span>
-
-                  <Input
-                    className="form-mt"
-                    type="date"
+                  <DMYPicker
+                    label="Attended To"
                     value={attendedTo}
-                    name="attendedInstitutionTo"
-                    onChange={(e) => {
-                      handleAttendedTo(e);
-                    }}
-                    min={minDate}
-                    id="attendedInstitutionTo"
+                    setValue={handleAttendedTo}
+                    error={attendedToError}
+                    action={() => setAttendedToError("")}
+                    required={true}
                   />
-                  <span className="text-danger">{attendedToError}</span>
                 </FormGroup>
                 <FormGroup>
                   <span>

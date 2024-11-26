@@ -1,5 +1,4 @@
 import { Modal, Upload } from "antd";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
 import PhoneInput from "react-phone-input-2";
@@ -7,6 +6,7 @@ import "react-phone-input-2/lib/style.css";
 import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
+
 import {
   Card,
   CardBody,
@@ -21,6 +21,7 @@ import {
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { currentDate } from "../../../../../components/date/calenderFormate";
+import DMYPicker from "../../../../../components/form/DMYPicker";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
@@ -85,7 +86,7 @@ const PersonalInformation = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthDate, setBirthDate] = useState(null);
   const [issueDate, setIssueDate] = useState(null);
   const [issueDateError, setIssueDateError] = useState("");
   const [expireDate, setexpireDate] = useState(null);
@@ -183,21 +184,9 @@ const PersonalInformation = () => {
         setCountryBirthValue(
           res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
         );
-        setBirthDate(
-          res?.dateOfBirth
-            ? moment(new Date(res.dateOfBirth)).format("YYYY-MM-DD")
-            : null
-        );
-        setIssueDate(
-          res?.issueDate
-            ? moment(new Date(res.issueDate)).format("YYYY-MM-DD")
-            : null
-        );
-        setexpireDate(
-          res?.expireDate
-            ? moment(new Date(res.expireDate)).format("YYYY-MM-DD")
-            : null
-        );
+        setBirthDate(res?.dateOfBirth);
+        setIssueDate(res?.issueDate);
+        setexpireDate(res?.expireDate);
       });
     }
   }, [success, applicationStudentId]);
@@ -237,22 +226,32 @@ const PersonalInformation = () => {
       setLastNameError("");
     }
   };
+  useEffect(() => {
+    if (!birthDate) {
+      return;
+    }
+    const year = birthDate.split("-")[0];
+    const digitYear = Number(year);
 
-  const handleDate = (e) => {
-    const value = e.target.value;
-    setBirthDate(value);
-    const current = new Date(currentDate).getFullYear();
-    const selected = new Date(value).getFullYear();
-    const calculateBirthDate = current - selected;
-    if (value === "") {
-      setDateError("Date of birth is required");
-    } else if (calculateBirthDate < 15) {
-      setDateError("Age must be more than 15 years");
+    const currentYear = currentDate.split("-")[0];
+    const digitCurrentYear = Number(currentYear);
+
+    const calculateAge = digitCurrentYear - digitYear;
+
+    if (calculateAge < 15) {
+      setDateError("Birthdate is more than 15 years");
     } else {
       setDateError("");
     }
-  };
+  }, [birthDate]);
 
+  const handleDate = (selectedDate) => {
+    if (selectedDate) {
+      setBirthDate(selectedDate);
+    } else {
+      setDateError("Date of birth is required");
+    }
+  };
   const handlePassport = (e) => {
     setPassport(e.target.value);
     if (e.target.value === "") {
@@ -263,30 +262,17 @@ const PersonalInformation = () => {
   };
 
   const handleIssueDate = (e) => {
-    const value = e.target.value;
-    setIssueDate(value);
-    const year = value.split("-")[0];
-    if (value === "") {
-      setIssueDateError("Issue Date is required");
-    } else if (year.length > 4) {
-      setIssueDateError("Invalid date");
-    } else if (value > currentDate) {
-      setIssueDateError("Invalid date");
+    if (e) {
+      setIssueDate(e);
     } else {
-      setIssueDateError("");
+      setIssueDateError("Issue Date is required");
     }
   };
   const handleExpireDate = (e) => {
-    const value = e.target.value;
-    setexpireDate(value);
-    const year = value.split("-")[0];
-
-    if (e.target.value === "") {
-      setexpireDateError("Expiry Date is required");
-    } else if (value <= issueDate) {
-      setexpireDateError("Expiry Date cannot same or previous date");
+    if (e) {
+      setexpireDate(e);
     } else {
-      setexpireDateError("");
+      setexpireDateError("Expire Date is required");
     }
   };
 
@@ -393,7 +379,7 @@ const PersonalInformation = () => {
       isFormValid = false;
       setLastNameError("Last Name is required");
     }
-    if (birthDate === "") {
+    if (birthDate == null) {
       isFormValid = false;
       setDateError("Date of birth is required");
     }
@@ -402,11 +388,11 @@ const PersonalInformation = () => {
       isFormValid = false;
       setPassportError("Passport Id is required");
     }
-    if (issueDate === "") {
+    if (issueDate === null) {
       isFormValid = false;
       setIssueDateError("Issue Date is required");
     }
-    if (expireDate === "") {
+    if (expireDate === null) {
       isFormValid = false;
       setexpireDateError("Expiry Date is required ");
     }
@@ -439,20 +425,24 @@ const PersonalInformation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const subData = new FormData(event.target);
+    if (birthDate != null) {
+      subData.append("dateOfBirth", birthDate);
+    }
+    if (issueDate != null) {
+      subData.append("issueDate", issueDate);
+    }
+    if (expireDate != null) {
+      subData.append("expireDate", expireDate);
+    }
+    subData.append("phoneNumber", phoneNumber);
     if (FileList.length === 0) {
       subData.append("profileImageFile", null);
     } else {
       subData.append("profileImageFile", FileList[0]?.originFileObj);
     }
 
-    subData.append("phoneNumber", phoneNumber);
-
     var formIsValid = validateRegisterForm(subData);
-    for (let [key, value] of subData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
@@ -642,31 +632,16 @@ const PersonalInformation = () => {
 
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Date Of Birth
-                    </span>
-
-                    {/* <InputDate
-                      name="dateOfBirth"
+                    <DMYPicker
+                      label="Date Of Birth"
                       value={birthDate}
-                      onChange={(e) => {
-                        handleDate(e);
-                      }}
-                    /> */}
-
-                    <Input
-                      type="date"
-                      name="dateOfBirth"
-                      id="dateOfBirth"
-                      onChange={(e) => {
-                        handleDate(e);
-                      }}
-                      value={birthDate}
-                      // min={minDate}
+                      setValue={handleDate}
+                      error={dateError}
+                      action={setDateError}
+                      required={true}
                     />
-                    <span className="text-danger">{dateError}</span>
                   </Col>
+                  <Col lg="6" md="8"></Col>
                 </FormGroup>
 
                 <FormGroup row>
@@ -688,40 +663,30 @@ const PersonalInformation = () => {
                 </FormGroup>
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>Issue Date
-                    </span>
-
-                    <Input
-                      type="date"
+                    <DMYPicker
+                      setValue={handleIssueDate}
+                      label="Issue Date"
+                      value={issueDate}
+                      error={issueDateError}
+                      action={setIssueDateError}
                       name="issueDate"
                       id="issueDate"
-                      placeholder="Issue date"
-                      onChange={(e) => {
-                        handleIssueDate(e);
-                      }}
-                      value={issueDate}
+                      required={false}
                     />
-                    <span className="text-danger">{issueDateError}</span>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>Expiry Date
-                    </span>
-
-                    <Input
-                      type="date"
+                    <DMYPicker
+                      label="Expire Date"
+                      setValue={handleExpireDate}
+                      error={expireDateError}
+                      action={setexpireDateError}
+                      required={false}
+                      value={expireDate}
                       name="expireDate"
                       id="expireDate"
-                      placeholder="Enter Passport Number"
-                      onChange={(e) => {
-                        handleExpireDate(e);
-                      }}
-                      value={expireDate}
                     />
-                    <span className="text-danger">{expireDateError}</span>
                   </Col>
                 </FormGroup>
 

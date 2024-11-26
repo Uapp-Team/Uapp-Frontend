@@ -22,6 +22,7 @@ import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
+import containsDigit from "../../../../../helpers/nameContainDigit";
 import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
@@ -280,6 +281,8 @@ const Reference = () => {
     setCity(data);
     if (data === "") {
       setCityError("City is required");
+    } else if (containsDigit(data)) {
+      setCityError("City should not contain any digit");
     } else {
       setCityError("");
     }
@@ -290,6 +293,8 @@ const Reference = () => {
     setState(data);
     if (data === "") {
       setStateError("State is required");
+    } else if (containsDigit(data)) {
+      setStateError("State should not contain any digit");
     } else {
       setStateError("");
     }

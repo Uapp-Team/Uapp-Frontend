@@ -1,33 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useToasts } from "react-toast-notifications";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import icon_gmt from "../../../../../../assets/img/icons/icon-gmt.png";
-import {
-  Button,
-  Card,
-  CardBody,
-  Col,
-  Form,
-  FormGroup,
-  Input,
-  Modal,
-  ModalFooter,
-  ModalBody,
-  Row,
-} from "reactstrap";
-import get from "../../../../../../helpers/get";
-import post from "../../../../../../helpers/post";
-import remove from "../../../../../../helpers/remove";
-import put from "../../../../../../helpers/put";
-import ButtonLoader from "../../../../Components/ButtonLoader";
-import moment from "moment";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import { useToasts } from "react-toast-notifications";
+import get from "../../../../../../helpers/get";
+import post from "../../../../../../helpers/post";
+import put from "../../../../../../helpers/put";
+import remove from "../../../../../../helpers/remove";
 
+import moment from "moment";
 import { useHistory } from "react-router-dom";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 import ConfirmModal from "../../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import { currentDate } from "../../../../../../components/date/calenderFormate";
 export default function GREScore({ applicationStudentId }) {
   const [greData, setGreData] = useState({});
   const [gmatData, setGmatData] = useState({});
@@ -62,8 +49,8 @@ export default function GREScore({ applicationStudentId }) {
   const [greWritingRank, setGreWritingRank] = useState(0);
   const [greWritingRankError, setGreWritingRankError] = useState(false);
 
-  const [greExamDate, setGreExamDate] = useState(currentDate);
-  const [greExamDateError, setGreExamDateError] = useState(false);
+  const [greExamDate, setGreExamDate] = useState(null);
+  const [greExamDateError, setGreExamDateError] = useState("");
   ////////////////////////////
   const [GmatTotalScore, setGmatTotalScore] = useState(0);
   const [GmatTotalScoreError, setGmatTotalScoreError] = useState(false);
@@ -86,8 +73,8 @@ export default function GREScore({ applicationStudentId }) {
   const [GmatWritingRank, setGmatWritingRank] = useState(0);
   const [GmatWritingRankError, setGmatWritingRankError] = useState(false);
 
-  const [GmatExamDate, setGmatExamDate] = useState(currentDate);
-  const [GmatExamDateError, setGmatExamDateError] = useState(false);
+  const [GmatExamDate, setGmatExamDate] = useState(null);
+  const [GmatExamDateError, setGmatExamDateError] = useState("");
   ////////////////////////////
 
   const handleForward = () => {
@@ -101,7 +88,6 @@ export default function GREScore({ applicationStudentId }) {
   useEffect(() => {
     get(`GreScore/GetbyStudent/${applicationStudentId}`).then((res) => {
       setGreData(res);
-      console.log(res, "gredata");
       setGreTotalScore(res?.totalScore ? res?.totalScore : 0);
       setGreTotalScoreRank(res?.totalRank ? res?.totalRank : 0);
       setGreVerbal(res?.verbalScore ? res?.verbalScore : 0);
@@ -110,12 +96,7 @@ export default function GREScore({ applicationStudentId }) {
       setGreQuantitativeRank(res?.quantitativeRank ? res?.quantitativeRank : 0);
       setGreWriting(res?.writingScore ? res?.writingScore : 0);
       setGreWritingRank(res?.writingRank ? res?.writingRank : 0);
-
-      res?.greExamDate
-        ? setGreExamDate(
-            moment(new Date(res?.greExamDate)).format("YYYY-MM-DD")
-          )
-        : setGreExamDate(currentDate);
+      setGreExamDate(res?.greExamDate);
     });
 
     get(`GmatScore/GetByStudent/${applicationStudentId}`).then((res) => {
@@ -130,12 +111,7 @@ export default function GREScore({ applicationStudentId }) {
       );
       setGmatWriting(res?.writingScore ? res?.writingScore : 0);
       setGmatWritingRank(res?.writingRank ? res?.writingRank : 0);
-
-      res?.GmatExamDate
-        ? setGmatExamDate(
-            moment(new Date(res?.GmatExamDate)).format("YYYY-MM-DD")
-          )
-        : setGmatExamDate(currentDate);
+      setGmatExamDate(res?.gmatExamDate);
     });
   }, [success, applicationStudentId]);
 
@@ -164,8 +140,8 @@ export default function GREScore({ applicationStudentId }) {
       setGreWritingError(false);
       setGreWritingRank(0);
       setGreWritingRankError(false);
-      setGreExamDate(0);
-      setGreExamDateError(false);
+      setGreExamDate(null);
+      setGreExamDateError("");
     });
   };
 
@@ -242,11 +218,10 @@ export default function GREScore({ applicationStudentId }) {
   };
 
   const handleGreExamDate = (e) => {
-    setGreExamDate(e.target.value);
-    if (e.target.value === "") {
-      setGreExamDateError(true);
+    if (e) {
+      setGreExamDate(e);
     } else {
-      setGreExamDateError(false);
+      setGreExamDateError("Exam Date Is Required");
     }
   };
 
@@ -265,8 +240,8 @@ export default function GREScore({ applicationStudentId }) {
     setGreWritingError(false);
     setGreWritingRank(0);
     setGreWritingRankError(false);
-    setGreExamDate(0);
-    setGreExamDateError(false);
+    setGreExamDate(null);
+    setGreExamDateError("");
   };
 
   const FormGreValid = () => {
@@ -298,9 +273,9 @@ export default function GREScore({ applicationStudentId }) {
       setGreQuantitativeRankError(true);
     }
 
-    if (!new Date(greExamDate).getDate()) {
+    if (greExamDate == null) {
       validation = false;
-      setGreExamDateError(true);
+      setGreExamDateError("Exam Date Is Required");
     }
 
     if (greWriting === "" || greWriting < 0 || greWriting > 6) {
@@ -443,11 +418,10 @@ export default function GREScore({ applicationStudentId }) {
   };
 
   const handleGmatExamDate = (e) => {
-    setGmatExamDate(e.target.value);
-    if (e.target.value === "") {
-      setGmatExamDateError(true);
+    if (e) {
+      setGmatExamDate(e);
     } else {
-      setGmatExamDateError(false);
+      setGmatExamDateError("Exam Date Is Required");
     }
   };
 
@@ -495,9 +469,9 @@ export default function GREScore({ applicationStudentId }) {
       setGmatQuantitativeRankError(true);
     }
 
-    if (!new Date(GmatExamDate).getDate()) {
+    if (GmatExamDate == null) {
       validation = false;
-      setGmatExamDateError(true);
+      setGmatExamDateError("Exam Date Is Required");
     }
 
     if (GmatWriting === "" || GmatWriting < 0 || GmatWriting > 6) {
@@ -535,8 +509,8 @@ export default function GREScore({ applicationStudentId }) {
     setGmatWritingError(false);
     setGmatWritingRank(0);
     setGmatWritingRankError(false);
-    setGmatExamDate(0);
-    setGmatExamDateError(false);
+    setGmatExamDate(null);
+    setGmatExamDateError("");
   };
 
   const handleSubmitUpdateGmat = (event) => {
@@ -544,6 +518,9 @@ export default function GREScore({ applicationStudentId }) {
     const subData = new FormData(event.target);
     const isValid = FormGmatValid();
 
+    if (GmatExamDate) {
+      subData.append("gmatExamDate", GmatExamDate);
+    }
     if (isValid === true) {
       if (gmatData?.id) {
         setButtonStatus(true);
@@ -619,8 +596,8 @@ export default function GREScore({ applicationStudentId }) {
       setGmatWritingError(false);
       setGmatWritingRank(0);
       setGmatWritingRankError(false);
-      setGmatExamDate(0);
-      setGmatExamDateError(false);
+      setGmatExamDate(null);
+      setGmatExamDateError("");
     });
   };
 
@@ -653,7 +630,10 @@ export default function GREScore({ applicationStudentId }) {
                   <div className="d-flex justify-content-between">
                     <div>
                       <span className="bank-account-info-text">
-                        Exam Date: {handleDate(greData?.greExamDate)}
+                        Exam Date:{" "}
+                        {greExamDate
+                          ? moment(greExamDate).format("DD-MM-YYYY")
+                          : "N/A"}
                       </span>
                       <h5 className="card-heading">GRE Result</h5>
                     </div>
@@ -757,7 +737,9 @@ export default function GREScore({ applicationStudentId }) {
               <div className="mt-1 mb-4 d-flex justify-between">
                 <img style={{ height: "100%" }} src={icon_gmt} alt="" />{" "}
                 <div className="pl-3">
-                  <span>GRE Information Not Found. Add Gre Information.</span>
+                  <span>
+                    GRE Information Not Found.Please Add GRE Information.
+                  </span>
                 </div>
               </div>
               {permissions?.includes(permissionList?.Edit_Student) ? (
@@ -807,26 +789,14 @@ export default function GREScore({ applicationStudentId }) {
                   <Row>
                     <Col lg="6" md="8">
                       <FormGroup className="has-icon-left position-relative">
-                        <span>
-                          GRE Exam Date <span className="text-danger">*</span>{" "}
-                        </span>
-
-                        <Input
-                          type="date"
-                          id="greExamDate"
-                          name="greExamDate"
-                          onChange={(e) => {
-                            handleGreExamDate(e);
-                          }}
-                          defaultValue={greExamDate}
+                        <DMYPicker
+                          label="GRE Exam Date"
+                          value={greExamDate}
+                          setValue={handleGreExamDate}
+                          error={greExamDateError}
+                          action={setGreExamDateError}
+                          required={true}
                         />
-                        <span className="text-danger">
-                          {greExamDateError && (
-                            <span className="text-danger">
-                              Exam Date is required
-                            </span>
-                          )}
-                        </span>
                       </FormGroup>
 
                       <FormGroup className="has-icon-left position-relative">
@@ -993,7 +963,7 @@ export default function GREScore({ applicationStudentId }) {
                             <span className="text-danger">
                               {greWritingError && (
                                 <span className="text-danger">
-                                  Enter a valid score from 0 to 6.
+                                  Enter a valid score from 1 to 6.
                                 </span>
                               )}
                             </span>
@@ -1043,7 +1013,10 @@ export default function GREScore({ applicationStudentId }) {
                   <div className="d-flex justify-content-between">
                     <div>
                       <span className="bank-account-info-text">
-                        Exam Date: {handleDate(gmatData?.gmatExamDate)}
+                        Exam Date:{" "}
+                        {GmatExamDate
+                          ? moment(GmatExamDate).format("DD-MM-YYYY")
+                          : "N/A"}
                       </span>
                       <h5 className="card-heading">GMAT Result</h5>
                     </div>
@@ -1146,7 +1119,9 @@ export default function GREScore({ applicationStudentId }) {
               <div className="mt-5 mb-4 d-flex justify-between">
                 <img style={{ height: "100%" }} src={icon_gmt} alt="" />{" "}
                 <div className="pl-3">
-                  <span>GMAT Information Not Found. Add GMAT Information.</span>
+                  <span>
+                    GMAT Information Not Found.Please Add GMAT Information.
+                  </span>
                 </div>
               </div>
               {permissions?.includes(permissionList?.Edit_Student) ? (
@@ -1201,27 +1176,14 @@ export default function GREScore({ applicationStudentId }) {
                       </FormGroup>
 
                       <FormGroup className="has-icon-left position-relative">
-                        <span>
-                          GMAT Exam Date <span className="text-danger">*</span>{" "}
-                        </span>
-
-                        <Input
-                          type="date"
-                          required
-                          id="gmatExamDate"
-                          name="gmatExamDate"
-                          onChange={(e) => {
-                            handleGmatExamDate(e);
-                          }}
-                          defaultValue={GmatExamDate}
+                        <DMYPicker
+                          setValue={handleGmatExamDate}
+                          label="GMAT Exam Date"
+                          value={GmatExamDate}
+                          error={GmatExamDateError}
+                          action={setGmatExamDateError}
+                          required={true}
                         />
-                        <span className="text-danger">
-                          {GmatExamDateError && (
-                            <span className="text-danger">
-                              Exam Date is required
-                            </span>
-                          )}
-                        </span>
                       </FormGroup>
 
                       <FormGroup className="has-icon-left position-relative">

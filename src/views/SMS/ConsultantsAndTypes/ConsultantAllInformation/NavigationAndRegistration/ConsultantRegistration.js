@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
-import { Card, CardBody, Form, FormGroup, Row, Col, Input } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import CancelButton from "../../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../components/core/User";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
 
 const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -154,9 +158,15 @@ const ConsultantRegistration = () => {
       isValid = false;
       setAcceptError(true);
     }
-    if (parentValue === 0) {
-      isValid = false;
-      setParentError(true);
+    if (BranchAdmin() || BranchManager()) {
+      setParentError(false);
+    } else {
+      if (parentValue === 0) {
+        isValid = false;
+        setParentError(true);
+      } else {
+        setParentError(false);
+      }
     }
     if (titleValue === 0) {
       isValid = false;
@@ -372,7 +382,10 @@ const ConsultantRegistration = () => {
 
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    <span className="text-danger">*</span>Parent Consultant
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
+                    Parent Consultant
                   </span>
 
                   <Select
