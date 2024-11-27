@@ -109,7 +109,9 @@ const AnswersArea = ({
       </div>
       <hr />
 
-      {data?.length > 0 ? (
+      <p className="text-center fw-600 my-5">under construction</p>
+
+      {/* {data?.length > 0 ? (
         <>
           {data?.map((item, i) => (
             <div key={i}>
@@ -119,7 +121,7 @@ const AnswersArea = ({
         </>
       ) : (
         <p className="text-center fw-600 my-5">No Data Found</p>
-      )}
+      )} */}
 
       {/* {data?.map((item, i) => (
         <div key={i}>

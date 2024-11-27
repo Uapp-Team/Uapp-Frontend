@@ -395,7 +395,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               </span>
             ))}
             <p className="text-orange fw-500">
-              <span className="fw-600">Warning:</span> Submitting this answer
+              <span className="fw-600">Warning:</span> Submitting this question
               and status will overwrite existing answers for all universities.
               Please review carefully and confirm your decision before clicking
               the Submit button.

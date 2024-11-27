@@ -16,7 +16,7 @@ const ISM = () => {
   const [uniLable, setUniLable] = useState("Select University");
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [tab, setTab] = useState("2");
+  const [tab, setTab] = useState("1");
 
   useEffect(() => {
     if (!isTyping) {
