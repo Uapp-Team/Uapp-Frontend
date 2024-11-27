@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FormGroup, Input, Label } from "reactstrap";
-import get from "../../../../../helpers/get";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
+import get from "../../../../../helpers/get";
 
 export default function HomeApplicationInformation({
   applicationInformation,
@@ -10,6 +10,8 @@ export default function HomeApplicationInformation({
   applicationStudentId,
   hasSLC,
   setHasSLC,
+  haveStartedEducation,
+  setHaveStartedEducation,
   howManyYears,
   setHowManyYears,
   howManyYearsError,
@@ -22,18 +24,19 @@ export default function HomeApplicationInformation({
   handleHomeResidencyStatus,
   showResidency,
   setShowResidency,
+  hasSCLError,
+  haveStartedEducationError,
+  setHasSLCError,
 }) {
-  const [haveStartedEducation, setHaveStartedEducation] = useState(false);
-
   useEffect(() => {
     setHasSLC(
       applicationInformation != null &&
         applicationInformation?.loanfromStudentLoansCompanyForHome === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.loanfromStudentLoansCompanyForHome === null
+          applicationInformation?.loanfromStudentLoansCompanyForHome === false
         ? false
-        : false
+        : null
     );
     setHaveStartedEducation(
       applicationInformation != null &&
@@ -42,9 +45,9 @@ export default function HomeApplicationInformation({
         ? true
         : applicationInformation != null &&
           applicationInformation?.havingUndergraduatePostgraduateCourseForHome ===
-            null
+            false
         ? false
-        : false
+        : null
     );
     get(`ApplicationInfo/Check/${applicationStudentId}/${countryId}`).then(
       (res) => {
@@ -95,7 +98,9 @@ export default function HomeApplicationInformation({
             name="loanfromStudentLoansCompanyForHome"
             value={true}
             checked={hasSLC === true}
-            onChange={() => setHasSLC(!hasSLC)}
+            onChange={() => {
+              setHasSLC(true);
+            }}
           />
           <Label
             className="form-check-label"
@@ -113,7 +118,9 @@ export default function HomeApplicationInformation({
             name="loanfromStudentLoansCompanyForHome"
             value={false}
             checked={hasSLC === false}
-            onChange={() => setHasSLC(!hasSLC)}
+            onChange={() => {
+              setHasSLC(false);
+            }}
           />
           <Label
             className="form-check-label"
@@ -123,6 +130,10 @@ export default function HomeApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
+        {hasSCLError && (
+          <span className="text-danger">Student Loans Company Required</span>
+        )}
       </FormGroup>
 
       {hasSLC === true ? (
@@ -190,7 +201,7 @@ export default function HomeApplicationInformation({
             name="HavingUndergraduatePostgraduateCourseForHome"
             value={true}
             checked={haveStartedEducation === true}
-            onChange={() => setHaveStartedEducation(!haveStartedEducation)}
+            onChange={() => setHaveStartedEducation(true)}
           />
           <Label
             className="form-check-label"
@@ -208,7 +219,7 @@ export default function HomeApplicationInformation({
             name="HavingUndergraduatePostgraduateCourseForHome"
             value={false}
             checked={haveStartedEducation === false}
-            onChange={() => setHaveStartedEducation(!haveStartedEducation)}
+            onChange={() => setHaveStartedEducation(false)}
           />
           <Label
             className="form-check-label"
@@ -218,6 +229,10 @@ export default function HomeApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
+        {haveStartedEducationError && (
+          <span className="text-danger">Select an option is required</span>
+        )}
       </FormGroup>
     </div>
   );

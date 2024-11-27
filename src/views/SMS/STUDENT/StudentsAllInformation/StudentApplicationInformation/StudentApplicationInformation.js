@@ -34,7 +34,7 @@ const StudentApplicationInformation = () => {
   const userType = localStorage.getItem("userType");
   const { addToast } = useToasts();
 
-  const [hasSLC, setHasSLC] = useState(false);
+  const [hasSLC, setHasSLC] = useState(null);
   const [howManyYears, setHowManyYears] = useState("");
   const [howManyYearsError, setHowManyYearsError] = useState("");
   const [homeResidencyStatus, setHomeResidencyStatus] = useState("");
@@ -57,10 +57,10 @@ const StudentApplicationInformation = () => {
   const [dataExist, setDataExist] = useState(false);
   const [previousCountry, setPreviousCountry] = useState(null);
   const [currentCountry, setCurrentCountry] = useState(null);
-  const [loansForEu, setLoansForEu] = useState(false);
+  const [loansForEu, setLoansForEu] = useState(null);
   const [loanYearsForEU, setLoanYearsForEU] = useState("");
   const [loanYearsForEUError, setLoanYearsForEUError] = useState("");
-  const [isSettlementStatus, setIsSettlementStatus] = useState(false);
+  const [isSettlementStatus, setIsSettlementStatus] = useState(null);
   const [shareCode, setShareCode] = useState("");
   const [shareCodeError, setShareCodeError] = useState("");
   const [isApplyingFromInside, setIsApplyingFromInside] = useState(false);
@@ -79,6 +79,24 @@ const StudentApplicationInformation = () => {
   const [possibleStudentTypeById, setPossibleStudentTypeById] = useState([]);
   const [loading, setLoading] = useState(false);
   const [studentTypeError, setStudentTypeError] = useState("");
+  const [haveStartedEducation, setHaveStartedEducation] = useState(null);
+  const [haveStartedEducationError, setHaveStartedEducationError] =
+    useState("");
+  const [hasSCLError, setHasSLCError] = useState("");
+
+  const [isStayedInUkInLast3Years, setIsStayedInUkInLast3Years] =
+    useState(null);
+  const [isStayedInUkInLast3YearsError, setIsStayedInUkInLast3YearsError] =
+    useState("");
+  const [havingUnderGraduateCourseForEU, setHavingUnderGraduateCourseForEU] =
+    useState(null);
+  const [
+    havingUnderGraduateCourseForEUError,
+    setHavingUnderGraduateCourseForEUError,
+  ] = useState("");
+  const [loansForEUError, setLoansForEUError] = useState("");
+  const [isSettlementStatusError, setIsSettlementStatusError] = useState("");
+
   const handleChange = ({ fileList }) => {
     setFileList(fileList);
   };
@@ -128,7 +146,10 @@ const StudentApplicationInformation = () => {
           setCountryLabel(result?.name);
           setCountryValue(result?.id);
           setPreviousCountry(result?.id);
-
+          setHasSLC(applicationInformation?.loanfromStudentLoansCompanyForHome);
+          setHaveStartedEducation(
+            applicationInformation?.havingUndergraduatePostgraduateCourseForHome
+          );
           setDataExist(true);
         } else {
           setDataExist(false);
@@ -278,6 +299,14 @@ const StudentApplicationInformation = () => {
     }
   };
   // Inter
+  useEffect(() => {
+    if (hasSLC !== null) {
+      setHasSLCError("");
+    }
+    if (haveStartedEducation !== null) {
+      setHaveStartedEducationError("");
+    }
+  }, [hasSLC, haveStartedEducation]);
 
   const validateRegisterForm = () => {
     let isFormValid = true;
@@ -299,6 +328,15 @@ const StudentApplicationInformation = () => {
       setStudentTypeError("Student Type is required");
     }
 
+    if (hasSLC === null) {
+      isFormValid = false;
+      setHasSLCError("Student Loan Company (SLC) is required");
+    }
+
+    if (haveStartedEducation === null) {
+      isFormValid = false;
+      setHaveStartedEducationError("Started education is required");
+    }
     // Validate "Home" type
     if (studentTypeLabel === "Home" && hasSLC === true && !howManyYears) {
       isFormValid = false;
@@ -360,6 +398,21 @@ const StudentApplicationInformation = () => {
     ) {
       isFormValid = false;
       setVisaTypeError("Visa Type is required");
+    }
+
+    if (date === null) {
+      isFormValid = false;
+      setdateError("Date is required");
+    }
+
+    if (loansForEu === null) {
+      isFormValid = false;
+      setLoansForEUError("Select any of the options");
+    }
+
+    if (isSettlementStatus === null) {
+      isFormValid = false;
+      setIsSettlementStatusError("Settlement Status is required");
     }
 
     return isFormValid;
@@ -429,6 +482,8 @@ const StudentApplicationInformation = () => {
 
   const selectStudentType = (label, value) => {
     setStudentTypeError("");
+    setHaveStartedEducationError("");
+    setHasSLCError("");
     setStudentTypeLabel(label);
     setStudentTypeValue(value);
   };
@@ -685,6 +740,18 @@ const StudentApplicationInformation = () => {
                                 applicationStudentId={applicationStudentId}
                                 hasSLC={hasSLC}
                                 setHasSLC={setHasSLC}
+                                setHaveStartedEducation={
+                                  setHaveStartedEducation
+                                }
+                                haveStartedEducationError={
+                                  haveStartedEducationError
+                                }
+                                setHaveStartedEducationError={
+                                  setHaveStartedEducationError
+                                }
+                                hasSCLError={hasSCLError}
+                                setHasSCLError={setHasSLCError}
+                                haveStartedEducation={haveStartedEducation}
                                 howManyYears={howManyYears}
                                 setHowManyYears={setHowManyYears}
                                 setHowManyYearsError={setHowManyYearsError}
@@ -742,8 +809,40 @@ const StudentApplicationInformation = () => {
                                 dateError={dateError}
                                 setdateError={setdateError}
                                 date={date}
+                                setHavingUnderGraduateCourseForEUError={
+                                  setHavingUnderGraduateCourseForEUError
+                                }
+                                havingUnderGraduateCourseForEUError={
+                                  havingUnderGraduateCourseForEUError
+                                }
+                                setHavingUnderGraduateCourseForEU={
+                                  setHavingUnderGraduateCourseForEU
+                                }
+                                havingUnderGraduateCourseForEU={
+                                  havingUnderGraduateCourseForEU
+                                }
+                                setIsStayedInUkInLast3YearsError={
+                                  setIsStayedInUkInLast3YearsError
+                                }
+                                isStayedInUkInLast3YearsError={
+                                  isStayedInUkInLast3YearsError
+                                }
+                                isStayedInUkInLast3Years={
+                                  isStayedInUkInLast3Years
+                                }
+                                setIsStayedInUkInLast3Years={
+                                  setIsStayedInUkInLast3Years
+                                }
+                                isSettlementStatusError={
+                                  isSettlementStatusError
+                                }
+                                setIsSettlementStatusError={
+                                  setIsSettlementStatusError
+                                }
                                 setLoansForEu={setLoansForEu}
                                 loansForEu={loansForEu}
+                                loansForEUError={loansForEUError}
+                                setLoansForEUError={setLoansForEUError}
                                 handleEuManyYears={handleEuManyYears}
                                 loanYearsForEU={loanYearsForEU}
                                 loanYearsForEUError={loanYearsForEUError}
