@@ -21,12 +21,12 @@ const AnswersByQue = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `question/get-paginated?index=${1}&size=${100}&searchText=${searchStr}`
+        `question/get-paginated-by-question?questionId=${uId}&index=${1}&size=${100}&searchText=${searchStr}&status=${statusId}`
       ).then((res) => {
         setData(res?.items);
       });
     }
-  }, [success, isTyping, searchStr]);
+  }, [success, isTyping, searchStr, uId, statusId]);
 
   return (
     <>
@@ -34,15 +34,16 @@ const AnswersByQue = () => {
 
       <Card>
         <CardBody>
-          <h3>How to reply to a message</h3>
+          <h3>{data[0]?.title}</h3>
           <p>
-            Category <AiOutlineRight /> Subcategory
+            {data[0]?.categoryName} <AiOutlineRight />
+            {data[0]?.subCategoryName}
           </p>
           <div className="custom-card-border">
             <div className="d-flex align-items-start justify-content-between px-3 mt-3">
               <div>
                 <Typing
-                  placeholder="search by question"
+                  placeholder="search"
                   value={searchStr}
                   setValue={setSearchStr}
                   setIsTyping={setIsTyping}
@@ -89,15 +90,22 @@ const AnswersByQue = () => {
               </div>
             </div>
             <hr />
-            {data?.map((item, i) => (
-              <div key={i}>
-                <Answer
-                  defaultData={item}
-                  refetch={() => setSuccess(!success)}
-                  byQues={true}
-                />
-              </div>
-            ))}
+
+            {data?.length > 0 ? (
+              <>
+                {data?.map((item, i) => (
+                  <div key={i}>
+                    <Answer
+                      defaultData={item}
+                      refetch={() => setSuccess(!success)}
+                      byQues={true}
+                    />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <p className="text-center fw-600 my-5">No Data Found</p>
+            )}
           </div>
         </CardBody>
       </Card>

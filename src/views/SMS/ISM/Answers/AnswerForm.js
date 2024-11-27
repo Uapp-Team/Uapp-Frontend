@@ -18,6 +18,7 @@ import Filter from "../../../../components/Dropdown/Filter";
 import Pointer from "../../../../components/buttons/Pointer";
 import StatusDD from "../Components/StatusDD";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
+import TextArea from "../../../../components/form/TextArea";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -30,7 +31,7 @@ const schema = yup.object().shape({
   answerList: yup.array().of(
     yup.object().shape({
       id: yup.number(),
-      origineType: yup.number(),
+      originType: yup.number(),
       answers: yup.string(),
     })
   ),
@@ -51,35 +52,43 @@ const AnswerForm = ({
 }) => {
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
-  const [categoryId, setCategoryId] = useState(defaultData.categoryId);
-  const [subCategoryId, setSubCategoryId] = useState(defaultData.subCategoryId);
-  const [categoryIdError, setCategoryIdError] = useState("");
-  const [subCategoryIdError, setSubCategoryIdError] = useState("");
-  const [title, setTitle] = useState(defaultData?.title);
-  const [titleError, setTitleError] = useState("");
-  const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
+  // const [categoryId, setCategoryId] = useState(defaultData.categoryId);
+  // const [subCategoryId, setSubCategoryId] = useState(defaultData.subCategoryId);
+  // const [categoryIdError, setCategoryIdError] = useState("");
+  // const [subCategoryIdError, setSubCategoryIdError] = useState("");
+  // const [title, setTitle] = useState(defaultData?.title);
+  // const [titleError, setTitleError] = useState("");
+  // const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
-  const [answers, setAnswers] = useState(defaultData?.answers);
+  const [answers, setAnswers] = useState(
+    defaultData?.answerList && defaultData?.answerList[0]?.answers
+  );
   const [answersError, setAnswersError] = useState("");
   const [answers1, setAnswers1] = useState(
-    defaultData?.answerList && defaultData?.answerList[0]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[0]?.answers
   );
   const [answers2, setAnswers2] = useState(
-    defaultData?.answerList && defaultData?.answerList[1]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[1]?.answers
   );
   const [answers3, setAnswers3] = useState(
-    defaultData?.answerList && defaultData?.answerList[2]?.answers?.[0]
+    defaultData?.answerList && defaultData?.answerList[2]?.answers
   );
   const [answers1Error, setAnswers1Error] = useState("");
   const [answers2Error, setAnswers2Error] = useState("");
   const [answers3Error, setAnswers3Error] = useState("");
-  const [check, setCheck] = useState(defaultData.isMandatoryForAll);
-  const [universityValue, setuniversityValue] = useState(
-    defaultData.universities
-  );
+  // const [check, setCheck] = useState(defaultData.isMandatoryForAll);
+  // const [universityValue, setuniversityValue] = useState(
+  //   defaultData.universities
+  // );
 
-  const [statusLabel, setStatusLabel] = useState("Pending");
-  const [statusValue, setStatusValue] = useState(3);
+  const [statusValue, setStatusValue] = useState(
+    defaultData.status !== 1 && defaultData.status !== 5
+      ? defaultData.status
+      : 3
+  );
+  const [noteShow, setNoteShow] = useState(false);
+  const [note, setNote] = useState("");
+  const [noteError, setNoteError] = useState("");
 
   const {
     register,
@@ -94,32 +103,37 @@ const AnswerForm = ({
   const handleValid = () => {
     var isValid = true;
 
-    if (categoryId === 0) {
-      setCategoryIdError("Category is Required");
-      isValid = false;
-    }
-    if (subCategoryId === 0) {
-      setSubCategoryIdError("Sub Category is Required");
-      isValid = false;
-    }
-    if (title === "") {
-      setTitleError("Title is Required");
-      isValid = false;
-    }
-    if (ansReq && isSameForAll && !answers) {
+    // if (categoryId === 0) {
+    //   setCategoryIdError("Category is Required");
+    //   isValid = false;
+    // }
+    // if (subCategoryId === 0) {
+    //   setSubCategoryIdError("Sub Category is Required");
+    //   isValid = false;
+    // }
+    // if (title === "") {
+    //   setTitleError("Title is Required");
+    //   isValid = false;
+    // }
+    if (isSameForAll && !answers) {
       setAnswersError("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers1) {
+    if (!isSameForAll && !answers1) {
       setAnswers1Error("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers2) {
+    if (!isSameForAll && !answers2) {
       setAnswers2Error("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers3) {
+    if (!isSameForAll && !answers3) {
       setAnswers3Error("Required");
+      isValid = false;
+    }
+
+    if (statusValue === "5") {
+      setNoteError("Rejected note Required");
       isValid = false;
     }
     return isValid;
@@ -128,51 +142,53 @@ const AnswerForm = ({
   const onSubmit = (formData) => {
     if (handleValid()) {
       const submitData = {
-        id: formData.id,
-        categoryId: categoryId,
-        subCategoryId: subCategoryId,
-        title: title,
-        status: 1,
-        isRequiredAns: ansReq,
-        isSameForAll: formData.isSameForAll,
+        id: defaultData.id,
+        universityId: defaultData.universityId,
+        // categoryId: categoryId,
+        // subCategoryId: subCategoryId,
+        // title: title,
+        status: statusValue,
+        // isRequiredAns: ansReq,
+        isSameForAll: isSameForAll,
         // answers: !isSameForAll ? null : answers,
         answerList: isSameForAll
           ? [
               {
-                id: formData?.answerList[0]?.id,
-                origineType: formData?.answerList[0]?.origineType,
+                id: defaultData?.answerList[0]?.id,
+                originType: defaultData?.answerList[0]?.originType,
                 answers: answers,
               },
               {
-                id: formData?.answerList[1]?.id,
-                origineType: formData?.answerList[1]?.origineType,
+                id: defaultData?.answerList[1]?.id,
+                originType: defaultData?.answerList[1]?.originType,
                 answers: answers,
               },
               {
-                id: formData?.answerList[2]?.id,
-                origineType: formData?.answerList[2]?.origineType,
+                id: defaultData?.answerList[2]?.id,
+                originType: defaultData?.answerList[2]?.originType,
                 answers: answers,
               },
             ]
           : [
               {
-                id: formData?.answerList[0]?.id,
-                origineType: formData?.answerList[0]?.origineType,
+                id: defaultData?.answerList[0]?.id,
+                originType: defaultData?.answerList[0]?.originType,
                 answers: answers1,
               },
               {
-                id: formData?.answerList[1]?.id,
-                origineType: formData?.answerList[1]?.origineType,
+                id: defaultData?.answerList[1]?.id,
+                originType: defaultData?.answerList[1]?.originType,
                 answers: answers2,
               },
               {
-                id: formData?.answerList[2]?.id,
-                origineType: formData?.answerList[2]?.origineType,
+                id: defaultData?.answerList[2]?.id,
+                originType: defaultData?.answerList[2]?.originType,
                 answers: answers3,
               },
             ],
-        isMandatoryForAll: check,
-        universities: universityValue,
+        // isMandatoryForAll: check,
+        // universities: universityValue,
+        note: note,
       };
 
       console.log(submitData);
@@ -205,7 +221,8 @@ const AnswerForm = ({
         <input type="hidden" {...register("id")} value={defaultData?.id} />
         <div className="d-flex justify-content-between align-items-center">
           <span>
-            Category <AiOutlineRight /> Subcategory
+            {defaultData?.categoryName} <AiOutlineRight />{" "}
+            {defaultData?.subCategoryName}
           </span>
 
           <StatusDD value={statusValue} setValue={setStatusValue} />
@@ -229,7 +246,7 @@ const AnswerForm = ({
           <>
             {defaultData?.answerList?.map((item, i) => (
               <div key={i}>
-                <Origine typeId={item?.origineType} />
+                <Origine typeId={item?.originType} />
                 <Input
                   register={register}
                   type="hidden"
@@ -239,8 +256,8 @@ const AnswerForm = ({
                 <Input
                   register={register}
                   type="hidden"
-                  name={`answerList.${i}.origineType`}
-                  defaultValue={item?.origineType}
+                  name={`answerList.${i}.originType`}
+                  defaultValue={item?.originType}
                 />
 
                 <RichTextArea
@@ -269,13 +286,14 @@ const AnswerForm = ({
             ))}
           </>
         )}
-        <KeyBtn
-          label="Arden University"
-          data={1}
-          value={1}
-          // action={setStatusId}
-        />
-
+        <div className="mb-3">
+          <KeyBtn
+            label={defaultData?.universityName}
+            data={defaultData?.universityId}
+            value={defaultData?.universityId}
+            // action={setStatusId}
+          />
+        </div>
         {/* <CheckOne
           name="isMandatoryForAll"
           label="Mandatory for all universities"
@@ -299,6 +317,63 @@ const AnswerForm = ({
             />
           </>
         )} */}
+        {defaultData?.notes?.length > 0 && (
+          <>
+            <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
+              <span className="fw-500">Note</span>
+              <span
+                className="fs-12px text-uapp pointer text-underline"
+                onClick={() => setNoteShow(!noteShow)}
+              >
+                {noteShow ? "Hide previous" : "See all"}
+              </span>
+            </div>
+
+            {noteShow ? (
+              <>
+                {defaultData?.notes?.map((item, i) => (
+                  <p className="details-note" key={i}>
+                    <span>{item?.createdOn}</span>
+                    <hr className="my-1" />
+                    <span className="text-gray-70">{item?.note}</span>
+                  </p>
+                ))}
+              </>
+            ) : (
+              <>
+                <p className="details-note">
+                  <span>{defaultData?.notes[0]?.createdOn}</span>
+                  <hr className="my-1" />
+                  <span className="text-gray-70">
+                    {defaultData?.notes[0]?.note}
+                  </span>
+                </p>
+              </>
+            )}
+          </>
+        )}
+        {/* <p className="details-note">
+                  <b>22 Nov 2024</b>
+                  <hr className="my-1" />
+                  <span className="text-gray-70">
+                    Add ansYou can use the reply feature when responding to a
+                    specific message in an individual or group chat. You can use
+                    the reply feature when responding to a specific message
+                    iwers
+                  </span>
+                </p> */}
+
+        {statusValue === 5 && (
+          <TextArea
+            placeholder="Add a note explaining the reason for denial"
+            defaultValue={note}
+            onChange={(e) => {
+              setNote(e.target.value);
+              setNoteError("");
+            }}
+            error={noteError}
+          />
+        )}
         <div className="d-flex">
           <SaveButton text="Update" buttonStatus={isSubmit} />
           <CancelButton cancel={modalClose} className="ml-3" />

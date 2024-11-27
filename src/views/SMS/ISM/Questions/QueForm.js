@@ -15,6 +15,7 @@ import Origine from "../Components/Origine";
 import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 import StatusDD from "../Components/StatusDD";
 import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
+import KeyBtn from "../../../../components/buttons/KeyBtn";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -27,7 +28,7 @@ const schema = yup.object().shape({
   answerList: yup.array().of(
     yup.object().shape({
       id: yup.number(),
-      origineType: yup.number(),
+      originType: yup.number(),
       answers: yup.string(),
     })
   ),
@@ -50,7 +51,9 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [titleError, setTitleError] = useState("");
   const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
-  const [answers, setAnswers] = useState(defaultData?.answerList[0]?.answer);
+  const [answers, setAnswers] = useState(
+    defaultData?.answerList && defaultData?.answerList[0]?.answer
+  );
   const [answersError, setAnswersError] = useState("");
   const [answers1, setAnswers1] = useState(
     defaultData?.answerList && defaultData?.answerList[0]?.answer
@@ -80,6 +83,15 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
     resolver: yupResolver(schema),
     defaultValues: { questionType: defaultData.questionType },
   });
+
+  const handleReqAns = (value) => {
+    setAnsReq(value);
+    if (value === false) {
+      setStatusValue(1);
+    } else {
+      setStatusValue(3);
+    }
+  };
 
   const handleValid = () => {
     var isValid = true;
@@ -130,34 +142,34 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
           ? [
               {
                 id: defaultData?.answerList[0]?.id,
-                origineType: defaultData?.answerList[0]?.origineType,
+                originType: defaultData?.answerList[0]?.originType,
                 answer: answers,
               },
               {
                 id: defaultData?.answerList[1]?.id,
-                origineType: defaultData?.answerList[1]?.origineType,
+                originType: defaultData?.answerList[1]?.originType,
                 answer: answers,
               },
               {
                 id: defaultData?.answerList[2]?.id,
-                origineType: defaultData?.answerList[2]?.origineType,
+                originType: defaultData?.answerList[2]?.originType,
                 answer: answers,
               },
             ]
           : [
               {
                 id: defaultData?.answerList[0]?.id,
-                origineType: defaultData?.answerList[0]?.origineType,
+                originType: defaultData?.answerList[0]?.originType,
                 answer: answers1,
               },
               {
                 id: defaultData?.answerList[1]?.id,
-                origineType: defaultData?.answerList[1]?.origineType,
+                originType: defaultData?.answerList[1]?.originType,
                 answer: answers2,
               },
               {
                 id: defaultData?.answerList[2]?.id,
-                origineType: defaultData?.answerList[2]?.origineType,
+                originType: defaultData?.answerList[2]?.originType,
                 answer: answers3,
               },
             ],
@@ -165,7 +177,8 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         universities: universityValue,
       };
 
-      console.log(submitData);
+      console.log("formData", formData);
+      console.log("submitData", submitData);
 
       setIsSubmit(true);
       method(submitPath, submitData).then((res) => {
@@ -261,6 +274,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             setValue={setStatusValue}
             isAns={false}
             className="mb-3 w-25 ml-3"
+            isDisabled={statusValue === 1 && true}
           />
         </div>
         <div className="d-flex justify-content-between">
@@ -269,7 +283,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             label="Is required answer"
             defaultValue={ansReq}
             onChange={(e) => {
-              setAnsReq(e.target.checked);
+              handleReqAns(e.target.checked);
             }}
           />
 
@@ -296,7 +310,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               <>
                 {defaultData?.answerList?.map((item, i) => (
                   <div key={i}>
-                    <Origine typeId={item?.origineType} />
+                    <Origine typeId={item?.originType} />
                     <Input
                       register={register}
                       type="hidden"
@@ -306,8 +320,8 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
                     <Input
                       register={register}
                       type="hidden"
-                      name={`answerList.${i}.origineType`}
-                      defaultValue={item?.origineType}
+                      name={`answerList.${i}.originType`}
+                      defaultValue={item?.originType}
                     />
 
                     <RichTextArea
@@ -367,8 +381,30 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
           </>
         )}
 
+        {defaultData?.answeredUniversities?.length > 0 && (
+          <div className="mb-3">
+            <p className="fw-500 mb-1"> Answered universities </p>
+            {defaultData?.answeredUniversities?.map((item, i) => (
+              <span key={i}>
+                <KeyBtn
+                  label={item?.label}
+                  data={item?.value}
+                  value={item?.value}
+                  // action={setStatusId}
+                />
+              </span>
+            ))}
+            <p className="text-orange fw-500">
+              <span className="fw-600">Warning:</span> Submitting this answer
+              and status will overwrite existing answers for all universities.
+              Please review carefully and confirm your decision before clicking
+              the Submit button.
+            </p>
+          </div>
+        )}
+
         <div className="d-flex">
-          <SaveButton text="Add" buttonStatus={isSubmit} />
+          <SaveButton text="Submit" buttonStatus={isSubmit} />
           <CancelButton cancel={modalClose} className="ml-3" />
         </div>
       </Form>

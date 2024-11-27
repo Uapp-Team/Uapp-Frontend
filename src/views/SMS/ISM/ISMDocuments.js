@@ -56,6 +56,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
           {uniValue > 0 ? (
             <Col lg={6} sm={8} className="border-left p-0">
               <AnswersArea
+                uniValue={uniValue}
                 categoryId={categoryId}
                 categoryName={categoryName}
                 setCategoryId={setCategoryId}
@@ -65,6 +66,7 @@ const ISMDocuments = ({ uniValue, setUniValue, uniLable, setUniLable }) => {
           ) : (
             <Col lg={9} sm={8} className="border-left p-0">
               <AnswersArea
+                uniValue={uniValue}
                 categoryId={categoryId}
                 categoryName={categoryName}
                 setCategoryId={setCategoryId}

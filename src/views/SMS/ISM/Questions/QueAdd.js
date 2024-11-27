@@ -14,17 +14,17 @@ const QueAdd = ({ modalClose, refetch }) => {
     answerList: [
       {
         id: 0,
-        origineType: 1,
+        originType: 1,
         answer: "",
       },
       {
         id: 0,
-        origineType: 2,
+        originType: 2,
         answer: "",
       },
       {
         id: 0,
-        origineType: 3,
+        originType: 3,
         answer: "",
       },
     ],

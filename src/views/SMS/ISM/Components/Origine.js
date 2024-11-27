@@ -3,7 +3,7 @@ import React from "react";
 const Origine = ({ typeId }) => {
   return (
     <>
-      <p className="text-gray fs-12px mb-1">
+      <p className="text-gray fs-12px mb-1 fw-700">
         <i>
           {typeId === 1
             ? "For Home Students"

@@ -8,8 +8,6 @@ import ButtonForFunction from "../Components/ButtonForFunction";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 
 const ManageQuery = () => {
-  // const [uniLable, setUniLable] = useState("Select University");
-
   const [openIndex, setOpenIndex] = useState(1);
   const [categoryModal, setCategoryModal] = useState(false);
   const toggleAccordion = (index) => {
@@ -33,7 +31,6 @@ const ManageQuery = () => {
       <div className="custom-card-border pr-3">
         <Row>
           <Col lg={3} sm={4} className="p-3">
-            {/* {AdminUsers() && ( */}
             <div className="ml-3 mb-3">
               <ButtonForFunction
                 func={() => setCategoryModal(!categoryModal)}
@@ -42,7 +39,6 @@ const ManageQuery = () => {
                 name={"Manage Category"}
               />
             </div>
-            {/* )} */}
 
             <div className="mt-4 ml-4">
               {content?.map((item, i) => (

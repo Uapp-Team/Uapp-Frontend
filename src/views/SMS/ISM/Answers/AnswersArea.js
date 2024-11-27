@@ -8,6 +8,7 @@ import KeyBtn from "../../../../components/buttons/KeyBtn";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
 const AnswersArea = ({
+  uniValue,
   categoryId,
   categoryName,
   setCategoryId,
@@ -23,14 +24,14 @@ const AnswersArea = ({
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `question/get-paginated?index=${1}&size=${100}&subCategoryId=${categoryId}&searchText=${searchStr}&sortingdate=${
+        `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${searchStr}&sortingdate=${
           date ? "asc" : "desc"
         }`
       ).then((res) => {
         setData(res?.items);
       });
     }
-  }, [success, categoryId, isTyping, searchStr, date]);
+  }, [success, categoryId, isTyping, searchStr, date, uniValue]);
 
   return (
     <>
@@ -107,11 +108,24 @@ const AnswersArea = ({
         </div>
       </div>
       <hr />
-      {data?.map((item, i) => (
+
+      {data?.length > 0 ? (
+        <>
+          {data?.map((item, i) => (
+            <div key={i}>
+              <Answer defaultData={item} refetch={() => setSuccess(!success)} />
+            </div>
+          ))}
+        </>
+      ) : (
+        <p className="text-center fw-600 my-5">No Data Found</p>
+      )}
+
+      {/* {data?.map((item, i) => (
         <div key={i}>
           <Answer defaultData={item} refetch={() => setSuccess(!success)} />
         </div>
-      ))}
+      ))} */}
     </>
   );
 };

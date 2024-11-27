@@ -5,6 +5,7 @@ import { Modal, ModalBody } from "reactstrap";
 import QueEdit from "./QueEdit";
 import { AiOutlineRight } from "react-icons/ai";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import { dateFormate } from "../../../../components/date/calenderFormate";
 
 const Question = ({ defaultData, refetch }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -16,18 +17,37 @@ const Question = ({ defaultData, refetch }) => {
           <p className="card-heading">{defaultData?.title}</p>
 
           <p className="text-right">
-            <EditBtn action={() => setModalOpen(!modalOpen)} />
-            <DeleteBtn url="" refetch={refetch} />
+            {defaultData?.isEdit && (
+              <EditBtn action={() => setModalOpen(!modalOpen)} />
+            )}
+            {defaultData?.isDelete && (
+              <DeleteBtn
+                url={`Question/delete/${defaultData?.id}`}
+                refetch={refetch}
+              />
+            )}
           </p>
         </div>
 
         <div className="d-flex align-items-start justify-content-between ">
           <p className="fs-12px text-gray-70">
-            <span className="mr-3">12 Universities</span>{" "}
-            <span>22 Aug 2024</span>
+            <span className="mr-3">
+              {defaultData?.isCommon ? (
+                "Common"
+              ) : (
+                <>{defaultData?.universityCount} Universities</>
+              )}
+            </span>
+            <span>
+              {dateFormate(
+                defaultData?.updatedOn
+                  ? defaultData?.updatedOn
+                  : defaultData?.createdOn
+              )}
+            </span>
           </p>
 
-          <Link to={`/answersByQue/1`} className="text-black">
+          <Link to={`/answersByQue/${defaultData?.id}`} className="text-black">
             View all answares <AiOutlineRight />
           </Link>
         </div>
