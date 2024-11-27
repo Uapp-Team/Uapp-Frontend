@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
-  Row,
   Col,
   Form,
   FormGroup,
+  Row,
   TabContent,
   TabPane,
 } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
-import put from "../../../../../helpers/put";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import ContactFormComponent from "./Component/ContactFormComponent";
-import ContactFormForPermanent from "./Component/ContactFormForPermanent";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import UpdateContactInformation from "./Component/UpdateContactInformation";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
 import containsDigit from "../../../../../helpers/nameContainDigit";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import Loader from "../../../Search/Loader/Loader";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import ContactFormComponent from "./Component/ContactFormComponent";
+import ContactFormForPermanent from "./Component/ContactFormForPermanent";
+import UpdateContactInformation from "./Component/UpdateContactInformation";
 
 const ContactInformation = () => {
   const { addToast } = useToasts();
@@ -79,31 +80,38 @@ const ContactInformation = () => {
   const [zipCode2, setZipCode2] = useState("");
   const [zipCodeError, setZipCodeError] = useState("");
   const [zipCodeError2, setZipCodeError2] = useState("");
+  const [loading, setLoading] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
-    get("CountryDD/index").then((res) => {
-      setCountry(res);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const countryRes = await get("CountryDD/index");
+        setCountry(countryRes);
 
-    get(`StudentAddress/GetByStudentId/${applicationStudentId}`).then((res) => {
-      setContactList(res);
-      setLivingData(
-        res[0]?.addressTypeId === 1
-          ? res[0]
-          : res[1]?.addressTypeId === 1
-            ? res[1]
-            : null
-      );
-      setPermanentData(
-        res[0]?.addressTypeId === 2
-          ? res[0]
-          : res[1]?.addressTypeId === 2
-            ? res[1]
-            : null
-      );
-    });
+        const studentRes = await get(
+          `StudentAddress/GetByStudentId/${applicationStudentId}`
+        );
+
+        setContactList(studentRes);
+
+        const livingData =
+          studentRes.find((res) => res.addressTypeId === 1) || null;
+        const permanentData =
+          studentRes.find((res) => res.addressTypeId === 2) || null;
+
+        setLivingData(livingData);
+        setPermanentData(permanentData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // End loading
+      }
+    };
+
+    fetchData();
   }, [success, applicationStudentId]);
 
   const countryName = country?.map((branchCountry) => ({
@@ -149,8 +157,7 @@ const ContactInformation = () => {
       setCityError("City is required");
     } else if (containsDigit(data)) {
       setCityError("City should not contain digits");
-    }
-    else {
+    } else {
       setCityError("");
     }
   };
@@ -161,8 +168,7 @@ const ContactInformation = () => {
       setCityError2("City is required");
     } else if (containsDigit(data)) {
       setCityError2("City should not contain digits");
-    }
-    else {
+    } else {
       setCityError2("");
     }
   };
@@ -181,9 +187,8 @@ const ContactInformation = () => {
     if (data === "") {
       setStateError2("State/County is required");
     } else if (containsDigit(data)) {
-      setStateError2('state should not contain digit');
-    }
-    else {
+      setStateError2("state should not contain digit");
+    } else {
       setStateError2("");
     }
   };
@@ -474,373 +479,385 @@ const ContactInformation = () => {
         path={`/studentList`}
       />
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={"2"}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => { }}
-      />
-      <Card>
-        <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="2">
-              {contactList.length > 0 ? (
-                <>
-                  <p className="section-title">Addresses</p>
-                  <div className="row mx-0 mb-3" id="permanentAdd">
-                    {livingdata !== null ? (
-                      <div
-                        className="col-12 border p-2 rounded"
-                        style={{ textAlign: "left" }}
-                      >
-                        <Card>
-                          <CardBody>
-                            <div className="d-flex justify-content-between">
-                              <span className="card-heading">
-                                Mailing Address
-                              </span>
-                              {permissions?.includes(
-                                permissionList?.Edit_Student
-                              ) ? (
-                                <>
-                                  {!showMailingForm && (
-                                    <a href="#mailing-address">
-                                      <span
-                                        className="pointer text-body"
-                                        onClick={() =>
-                                          handleUpdateLiving(
-                                            livingdata?.id,
-                                            "mailing"
-                                          )
-                                        }
-                                      >
-                                        Edit
-                                      </span>
-                                    </a>
-                                  )}
-                                </>
-                              ) : null}
-                            </div>
-                            <hr />
-                            {showMailingForm ? (
-                              <UpdateContactInformation
-                                handleSubmitIndividual={handleSubmitIndividual}
-                                addressTypeLabel2={addressTypeLabel2}
-                                applicationStudentId={applicationStudentId}
-                                oneData={oneData}
-                                addressLine2={addressLine2}
-                                cityN2={cityN2}
-                                state2={state2}
-                                zipCode2={zipCode2}
-                                countryName={countryName}
-                                countryLabel2={countryLabel2}
-                                countryValue2={countryValue2}
-                                selectCountry2={selectCountry2}
-                                countryError2={countryError2}
-                                closeShowForm={closeShowForm}
-                                setAddressLine2={setAddressLine2}
-                                setCityN2={setCityN2}
-                                setState2={setState2}
-                                setZipCode2={setZipCode2}
-                                progress={progress}
-                                buttonStatus={buttonStatus}
-                                handleAddressLine2={handleAddressLine2}
-                                addressLineError2={addressLineError2}
-                                setHouseNo2={setHouseNo2}
-                                houseNo2={houseNo2}
-                                handleCityN2={handleCityN2}
-                                cityError2={cityError2}
-                                handleState2={handleState2}
-                                stateError2={stateError2}
-                                handleZipCode2={handleZipCode2}
-                                zipCodeError2={zipCodeError2}
-                                setCityError2={setCityError2}
-                                setStateError2={setStateError2}
-                                setZipCodeError2={setZipCodeError2}
-                              />
-                            ) : (
-                              <Row className="text-gray">
-                                <Col md="4">
-                                  <p>
-                                    <span>Address Line 1</span>
-                                    <br />
-                                    <b>{livingdata?.addressLine}</b>
-                                  </p>
-                                  <p>
-                                    <span>Address Line 2</span>
-                                    <br />
-                                    <b> {livingdata?.houseNo}</b>
-                                  </p>
-                                </Col>
-                                <Col md="4">
-                                  <p>
-                                    <span>City</span>
-                                    <br />
-                                    <b>{livingdata?.city}</b>
-                                  </p>
-                                  <p>
-                                    <span>State/County</span>
-                                    <br />
-                                    <b>{livingdata?.state}</b>
-                                  </p>
-                                </Col>
-                                <Col md="2">
-                                  <p>
-                                    <span>Zip/Post Code</span>
-                                    <br />
-                                    <b> {livingdata?.zipCode}</b>
-                                  </p>
-                                  <p>
-                                    <span>Country</span>
-                                    <br />
-                                    <b> {livingdata?.country?.name}</b>
-                                  </p>
-                                </Col>
-                              </Row>
-                            )}
-                          </CardBody>
-                        </Card>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={"2"}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <TabContent activeTab={activetab}>
+                <TabPane tabId="2">
+                  {contactList.length > 0 ? (
+                    <>
+                      <p className="section-title">Addresses</p>
+                      <div className="row mx-0 mb-3" id="permanentAdd">
+                        {livingdata !== null ? (
+                          <div
+                            className="col-12 border p-2 rounded"
+                            style={{ textAlign: "left" }}
+                          >
+                            <Card>
+                              <CardBody>
+                                <div className="d-flex justify-content-between">
+                                  <span className="card-heading">
+                                    Mailing Address
+                                  </span>
+                                  {permissions?.includes(
+                                    permissionList?.Edit_Student
+                                  ) ? (
+                                    <>
+                                      {!showMailingForm && (
+                                        <a href="#mailing-address">
+                                          <span
+                                            className="pointer text-body"
+                                            onClick={() =>
+                                              handleUpdateLiving(
+                                                livingdata?.id,
+                                                "mailing"
+                                              )
+                                            }
+                                          >
+                                            Edit
+                                          </span>
+                                        </a>
+                                      )}
+                                    </>
+                                  ) : null}
+                                </div>
+                                <hr />
+                                {showMailingForm ? (
+                                  <UpdateContactInformation
+                                    handleSubmitIndividual={
+                                      handleSubmitIndividual
+                                    }
+                                    addressTypeLabel2={addressTypeLabel2}
+                                    applicationStudentId={applicationStudentId}
+                                    oneData={oneData}
+                                    addressLine2={addressLine2}
+                                    cityN2={cityN2}
+                                    state2={state2}
+                                    zipCode2={zipCode2}
+                                    countryName={countryName}
+                                    countryLabel2={countryLabel2}
+                                    countryValue2={countryValue2}
+                                    selectCountry2={selectCountry2}
+                                    countryError2={countryError2}
+                                    closeShowForm={closeShowForm}
+                                    setAddressLine2={setAddressLine2}
+                                    setCityN2={setCityN2}
+                                    setState2={setState2}
+                                    setZipCode2={setZipCode2}
+                                    progress={progress}
+                                    buttonStatus={buttonStatus}
+                                    handleAddressLine2={handleAddressLine2}
+                                    addressLineError2={addressLineError2}
+                                    setHouseNo2={setHouseNo2}
+                                    houseNo2={houseNo2}
+                                    handleCityN2={handleCityN2}
+                                    cityError2={cityError2}
+                                    handleState2={handleState2}
+                                    stateError2={stateError2}
+                                    handleZipCode2={handleZipCode2}
+                                    zipCodeError2={zipCodeError2}
+                                    setCityError2={setCityError2}
+                                    setStateError2={setStateError2}
+                                    setZipCodeError2={setZipCodeError2}
+                                  />
+                                ) : (
+                                  <Row className="text-gray">
+                                    <Col md="4">
+                                      <p>
+                                        <span>Address Line 1</span>
+                                        <br />
+                                        <b>{livingdata?.addressLine}</b>
+                                      </p>
+                                      <p>
+                                        <span>Address Line 2</span>
+                                        <br />
+                                        <b> {livingdata?.houseNo}</b>
+                                      </p>
+                                    </Col>
+                                    <Col md="4">
+                                      <p>
+                                        <span>City</span>
+                                        <br />
+                                        <b>{livingdata?.city}</b>
+                                      </p>
+                                      <p>
+                                        <span>State/County</span>
+                                        <br />
+                                        <b>{livingdata?.state}</b>
+                                      </p>
+                                    </Col>
+                                    <Col md="2">
+                                      <p>
+                                        <span>Zip/Post Code</span>
+                                        <br />
+                                        <b> {livingdata?.zipCode}</b>
+                                      </p>
+                                      <p>
+                                        <span>Country</span>
+                                        <br />
+                                        <b> {livingdata?.country?.name}</b>
+                                      </p>
+                                    </Col>
+                                  </Row>
+                                )}
+                              </CardBody>
+                            </Card>
+                          </div>
+                        ) : null}
                       </div>
-                    ) : null}
-                  </div>
 
-                  <div className="row mx-0 mb-3">
-                    {permanentData !== null ? (
-                      <div
-                        className="col-12 border p-2 rounded"
-                        style={{ textAlign: "left" }}
-                      >
-                        <Card>
-                          <CardBody>
-                            <div
-                              className="d-flex justify-content-between"
-                              id="permanentAdd"
-                            >
-                              <span className="card-heading">
-                                Permanent Address
-                              </span>
+                      <div className="row mx-0 mb-3">
+                        {permanentData !== null ? (
+                          <div
+                            className="col-12 border p-2 rounded"
+                            style={{ textAlign: "left" }}
+                          >
+                            <Card>
+                              <CardBody>
+                                <div
+                                  className="d-flex justify-content-between"
+                                  id="permanentAdd"
+                                >
+                                  <span className="card-heading">
+                                    Permanent Address
+                                  </span>
 
-                              {permissions?.includes(
-                                permissionList?.Edit_Student
-                              ) ? (
-                                <>
-                                  {" "}
-                                  {!showPermanentForm && (
-                                    <a href="#permanentAdd">
-                                      <span
-                                        className="pointer text-body"
-                                        onClick={() =>
-                                          handleUpdateLiving(
-                                            permanentData?.id,
-                                            "parmanent"
-                                          )
-                                        }
-                                      >
-                                        Edit
-                                      </span>
-                                    </a>
-                                  )}
-                                </>
-                              ) : null}
-                            </div>
-                            <hr />
-                            {showPermanentForm ? (
-                              <UpdateContactInformation
-                                handleSubmitIndividual={handleSubmitIndividual}
-                                addressTypeLabel2={addressTypeLabel2}
-                                applicationStudentId={applicationStudentId}
-                                oneData={oneData}
-                                addressLine2={addressLine2}
-                                houseNo2={houseNo2}
-                                cityN2={cityN2}
-                                state2={state2}
-                                zipCode2={zipCode2}
-                                countryName={countryName}
-                                countryLabel2={countryLabel2}
-                                countryValue2={countryValue2}
-                                selectCountry2={selectCountry2}
-                                countryError2={countryError2}
-                                closeShowForm={closeShowForm}
-                                setAddressLine2={setAddressLine2}
-                                setCityN2={setCityN2}
-                                setState2={setState2}
-                                setZipCode2={setZipCode2}
-                                progress={progress}
-                                buttonStatus={buttonStatus}
-                                handleAddressLine2={handleAddressLine2}
-                                addressLineError2={addressLineError2}
-                                setHouseNo2={setHouseNo2}
-                                handleCityN2={handleCityN2}
-                                cityError2={cityError2}
-                                handleState2={handleState2}
-                                stateError2={stateError2}
-                                handleZipCode2={handleZipCode2}
-                                zipCodeError2={zipCodeError2}
-                                setCityError2={setCityError2}
-                                setStateError2={setStateError2}
-                                setZipCodeError2={setZipCodeError2}
-                              />
-                            ) : (
-                              <Row className="text-gray">
-                                <Col md="4">
-                                  <p>
-                                    <span>Address Line 1</span>
-                                    <br />
-                                    <b>{permanentData?.addressLine}</b>
-                                  </p>
-                                  <p>
-                                    <span>Address Line 2</span>
-                                    <br />
-                                    <b> {permanentData?.houseNo}</b>
-                                  </p>
-                                </Col>
-                                <Col md="4">
-                                  <p>
-                                    <span>City</span>
-                                    <br />
-                                    <b>{permanentData?.city}</b>
-                                  </p>
-                                  <p>
-                                    <span>State/County</span>
-                                    <br />
-                                    <b>{permanentData?.state}</b>
-                                  </p>
-                                </Col>
-                                <Col md="2">
-                                  <p>
-                                    <span>Zip/Post Code</span>
-                                    <br />
-                                    <b> {permanentData?.zipCode}</b>
-                                  </p>
-                                  <p>
-                                    <span>Country</span>
-                                    <br />
-                                    <b> {permanentData?.country?.name}</b>
-                                  </p>
-                                </Col>
-                              </Row>
-                            )}
-                          </CardBody>
-                        </Card>
+                                  {permissions?.includes(
+                                    permissionList?.Edit_Student
+                                  ) ? (
+                                    <>
+                                      {" "}
+                                      {!showPermanentForm && (
+                                        <a href="#permanentAdd">
+                                          <span
+                                            className="pointer text-body"
+                                            onClick={() =>
+                                              handleUpdateLiving(
+                                                permanentData?.id,
+                                                "parmanent"
+                                              )
+                                            }
+                                          >
+                                            Edit
+                                          </span>
+                                        </a>
+                                      )}
+                                    </>
+                                  ) : null}
+                                </div>
+                                <hr />
+                                {showPermanentForm ? (
+                                  <UpdateContactInformation
+                                    handleSubmitIndividual={
+                                      handleSubmitIndividual
+                                    }
+                                    addressTypeLabel2={addressTypeLabel2}
+                                    applicationStudentId={applicationStudentId}
+                                    oneData={oneData}
+                                    addressLine2={addressLine2}
+                                    houseNo2={houseNo2}
+                                    cityN2={cityN2}
+                                    state2={state2}
+                                    zipCode2={zipCode2}
+                                    countryName={countryName}
+                                    countryLabel2={countryLabel2}
+                                    countryValue2={countryValue2}
+                                    selectCountry2={selectCountry2}
+                                    countryError2={countryError2}
+                                    closeShowForm={closeShowForm}
+                                    setAddressLine2={setAddressLine2}
+                                    setCityN2={setCityN2}
+                                    setState2={setState2}
+                                    setZipCode2={setZipCode2}
+                                    progress={progress}
+                                    buttonStatus={buttonStatus}
+                                    handleAddressLine2={handleAddressLine2}
+                                    addressLineError2={addressLineError2}
+                                    setHouseNo2={setHouseNo2}
+                                    handleCityN2={handleCityN2}
+                                    cityError2={cityError2}
+                                    handleState2={handleState2}
+                                    stateError2={stateError2}
+                                    handleZipCode2={handleZipCode2}
+                                    zipCodeError2={zipCodeError2}
+                                    setCityError2={setCityError2}
+                                    setStateError2={setStateError2}
+                                    setZipCodeError2={setZipCodeError2}
+                                  />
+                                ) : (
+                                  <Row className="text-gray">
+                                    <Col md="4">
+                                      <p>
+                                        <span>Address Line 1</span>
+                                        <br />
+                                        <b>{permanentData?.addressLine}</b>
+                                      </p>
+                                      <p>
+                                        <span>Address Line 2</span>
+                                        <br />
+                                        <b> {permanentData?.houseNo}</b>
+                                      </p>
+                                    </Col>
+                                    <Col md="4">
+                                      <p>
+                                        <span>City</span>
+                                        <br />
+                                        <b>{permanentData?.city}</b>
+                                      </p>
+                                      <p>
+                                        <span>State/County</span>
+                                        <br />
+                                        <b>{permanentData?.state}</b>
+                                      </p>
+                                    </Col>
+                                    <Col md="2">
+                                      <p>
+                                        <span>Zip/Post Code</span>
+                                        <br />
+                                        <b> {permanentData?.zipCode}</b>
+                                      </p>
+                                      <p>
+                                        <span>Country</span>
+                                        <br />
+                                        <b> {permanentData?.country?.name}</b>
+                                      </p>
+                                    </Col>
+                                  </Row>
+                                )}
+                              </CardBody>
+                            </Card>
+                          </div>
+                        ) : null}
                       </div>
-                    ) : null}
-                  </div>
-                </>
-              ) : (
-                // Add new form when there will be no data starts here
-                <Form onSubmit={handleSubmit}>
-                  <Row>
-                    <Col lg="6" md="8">
-                      <ContactFormComponent
-                        addressName={"Mailing Address"}
-                        studentId={applicationStudentId}
-                        countryLabel={countryLabel}
-                        countryValue={countryValue}
-                        bothAdressType={bothAdressType}
-                        handleBothAddressType={handleBothAddressType}
-                        countryError={countryError}
-                        countryName={countryName}
-                        selectCountry={selectCountry}
-                        mailingAddressId={mailingAddressId}
-                        houseNo={houseNo}
-                        setHouseNo={setHouseNo}
-                        setAddressLine={setAddressLine}
-                        addressLine={addressLine}
-                        state={state}
-                        setState={setState}
-                        zipCode={zipCode}
-                        setZipCode={setZipCode}
-                        handleAddressLine={handleAddressLine}
-                        addressLineError={addressLineError}
-                        handleCity={handleCity}
-                        cityError={cityError}
-                        city={city}
-                        handleState={handleState}
-                        stateError={stateError}
-                        handleZipCode={handleZipCode}
-                        zipCodeError={zipCodeError}
-                        setCity={setCity}
-                        setAddressLineError={setAddressLineError}
-                        setCityError={setCityError}
-                        setStateError={setStateError}
-                        setZipCodeError={setZipCodeError}
-                        setBothAddressTypeError={setBothAddressTypeError}
-                        bothAdressTypeError={bothAdressTypeError}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg="6" md="8">
-                      {bothAdressType ? (
-                        <ContactFormForPermanent
-                          addressName={"Permanent Address"}
-                          studentId={applicationStudentId}
-                          countryLabel2={countryLabel2}
-                          countryValue2={countryValue2}
-                          countryError2={countryError2}
-                          countryName2={countryName}
-                          selectCountry2={selectCountry2}
-                          permanentAddressId={permanentAddressId}
-                          houseNo2={houseNo2}
-                          setHouseNo2={setHouseNo2}
-                          setAddressLine2={setAddressLine2}
-                          addressLine2={addressLine2}
-                          cityN2={cityN2}
-                          setCityN2={setCityN2}
-                          state2={state2}
-                          setState2={setState2}
-                          zipCode2={zipCode2}
-                          setZipCode2={setZipCode2}
-                          city={city}
-                          handleAddressLine2={handleAddressLine2}
-                          addressLineError2={addressLineError2}
-                          handleState2={handleState2}
-                          stateError2={stateError2}
-                          setStateError2={setStateError2}
-                          handleCityN2={handleCityN2}
-                          setCityError2={setCityError2}
-                          cityError2={cityError2}
-                          handleZipCode2={handleZipCode2}
-                          zipCodeError2={zipCodeError2}
-                          setZipCodeError2={setZipCodeError2}
-                        />
-                      ) : null}
-                    </Col>
-                  </Row>
+                    </>
+                  ) : (
+                    // Add new form when there will be no data starts here
+                    <Form onSubmit={handleSubmit}>
+                      <Row>
+                        <Col lg="6" md="8">
+                          <ContactFormComponent
+                            addressName={"Mailing Address"}
+                            studentId={applicationStudentId}
+                            countryLabel={countryLabel}
+                            countryValue={countryValue}
+                            bothAdressType={bothAdressType}
+                            handleBothAddressType={handleBothAddressType}
+                            countryError={countryError}
+                            countryName={countryName}
+                            selectCountry={selectCountry}
+                            mailingAddressId={mailingAddressId}
+                            houseNo={houseNo}
+                            setHouseNo={setHouseNo}
+                            setAddressLine={setAddressLine}
+                            addressLine={addressLine}
+                            state={state}
+                            setState={setState}
+                            zipCode={zipCode}
+                            setZipCode={setZipCode}
+                            handleAddressLine={handleAddressLine}
+                            addressLineError={addressLineError}
+                            handleCity={handleCity}
+                            cityError={cityError}
+                            city={city}
+                            handleState={handleState}
+                            stateError={stateError}
+                            handleZipCode={handleZipCode}
+                            zipCodeError={zipCodeError}
+                            setCity={setCity}
+                            setAddressLineError={setAddressLineError}
+                            setCityError={setCityError}
+                            setStateError={setStateError}
+                            setZipCodeError={setZipCodeError}
+                            setBothAddressTypeError={setBothAddressTypeError}
+                            bothAdressTypeError={bothAdressTypeError}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg="6" md="8">
+                          {bothAdressType ? (
+                            <ContactFormForPermanent
+                              addressName={"Permanent Address"}
+                              studentId={applicationStudentId}
+                              countryLabel2={countryLabel2}
+                              countryValue2={countryValue2}
+                              countryError2={countryError2}
+                              countryName2={countryName}
+                              selectCountry2={selectCountry2}
+                              permanentAddressId={permanentAddressId}
+                              houseNo2={houseNo2}
+                              setHouseNo2={setHouseNo2}
+                              setAddressLine2={setAddressLine2}
+                              addressLine2={addressLine2}
+                              cityN2={cityN2}
+                              setCityN2={setCityN2}
+                              state2={state2}
+                              setState2={setState2}
+                              zipCode2={zipCode2}
+                              setZipCode2={setZipCode2}
+                              city={city}
+                              handleAddressLine2={handleAddressLine2}
+                              addressLineError2={addressLineError2}
+                              handleState2={handleState2}
+                              stateError2={stateError2}
+                              setStateError2={setStateError2}
+                              handleCityN2={handleCityN2}
+                              setCityError2={setCityError2}
+                              cityError2={cityError2}
+                              handleZipCode2={handleZipCode2}
+                              zipCodeError2={zipCodeError2}
+                              setZipCodeError2={setZipCodeError2}
+                            />
+                          ) : null}
+                        </Col>
+                      </Row>
 
-                  <FormGroup row className=" mt-4">
-                    <Col
-                      lg="6"
-                      md="8"
-                      className="d-flex justify-content-between"
-                    >
+                      <FormGroup row className=" mt-4">
+                        <Col
+                          lg="6"
+                          md="8"
+                          className="d-flex justify-content-between"
+                        >
+                          <PreviousButton action={handlePrevious} />
+                          {permissions?.includes(
+                            permissionList?.Edit_Student
+                          ) ? (
+                            <SaveButton
+                              text="Save and Next"
+                              progress={progress}
+                              buttonStatus={buttonStatus}
+                            />
+                          ) : null}
+                        </Col>
+                      </FormGroup>
+                    </Form>
+                    // Add new form when there will be no data ends here
+                  )}
+
+                  {/* update and particular add form ends here*/}
+
+                  {contactList.length > 0 ? (
+                    <FormGroup className="d-flex justify-content-between mt-4">
                       <PreviousButton action={handlePrevious} />
-                      {permissions?.includes(permissionList?.Edit_Student) ? (
-                        <SaveButton
-                          text="Save and Next"
-                          progress={progress}
-                          buttonStatus={buttonStatus}
-                        />
-                      ) : null}
-                    </Col>
-                  </FormGroup>
-                </Form>
-                // Add new form when there will be no data ends here
-              )}
-
-              {/* update and particular add form ends here*/}
-
-              {contactList.length > 0 ? (
-                <FormGroup className="d-flex justify-content-between mt-4">
-                  <PreviousButton action={handlePrevious} />
-                  <SaveButton text="Next" action={handleNext} />
-                </FormGroup>
-              ) : null}
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+                      <SaveButton text="Next" action={handleNext} />
+                    </FormGroup>
+                  ) : null}
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };

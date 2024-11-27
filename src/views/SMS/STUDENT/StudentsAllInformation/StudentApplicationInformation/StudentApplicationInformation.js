@@ -20,6 +20,7 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
+import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 import EuUkApplicationInformation from "./EuUkApplicationInformation";
 import HomeApplicationInformation from "./HomeApplicationInformation";
@@ -46,7 +47,7 @@ const StudentApplicationInformation = () => {
   const [applicationInformation, setApplicationInformation] = useState([]);
   const [studentTypeValue, setStudentTypeValue] = useState(0);
   const [studentTypeLabel, setStudentTypeLabel] = useState(
-    "Select Student Type"
+    "Select Application Type"
   );
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -76,10 +77,9 @@ const StudentApplicationInformation = () => {
   const [showResidency, setShowResidency] = useState([]);
   const [possibleStudentType, setPossibleStudentType] = useState([]);
   const [possibleStudentTypeById, setPossibleStudentTypeById] = useState([]);
-  console.log(possibleStudentType, "possible type");
-
+  const [loading, setLoading] = useState(false);
+  const [studentTypeError, setStudentTypeError] = useState("");
   const handleChange = ({ fileList }) => {
-    console.log(fileList);
     setFileList(fileList);
   };
   const handleChange2 = ({ fileList }) => {
@@ -87,96 +87,103 @@ const StudentApplicationInformation = () => {
   };
 
   useEffect(() => {
-    get(`StudentType/GetByStudentId/${applicationStudentId}`).then((res) => {
-      setStudentType(res);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const studentTypeRes = await get(
+          `StudentType/GetByStudentId/${applicationStudentId}`
+        );
+        setStudentType(studentTypeRes);
 
-    get(`UniversityCountryDD/ByStudent/${applicationStudentId}`).then((res) => {
-      setCountry(res);
-    });
+        const universityCountryRes = await get(
+          `UniversityCountryDD/ByStudent/${applicationStudentId}`
+        );
+        setCountry(universityCountryRes);
 
-    get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
-      (res) => {
-        console.log(res);
-        if (res !== null) {
-          setApplicationInformation(res);
-          setHowManyYears(res?.loanYearsForHome);
-          setHomeResidencyStatus(res?.residencyStatusForHome);
-          setDate(res?.dateOfMoveToUk);
-          setStudentTypeLabel(res?.studentType?.name);
-          setLoanYearsForEU(res?.loanYearsForEU);
-          setShareCode(res?.shareCode);
-          setVisaType(res?.visaType);
-          setResidencyStatus(res?.currentResidencyStatusForInternational);
-          setStudentTypeValue(res?.studentType?.id);
-          setStatusInUK(res?.currentResidencyStatusForEU);
-          get(`UniversityCountryDD/Index`).then((data) => {
-            const result = data?.find(
-              (answer) => answer?.id === res?.preferredCountry
-            );
-            setCountryLabel(result?.name);
-            setCountryValue(result?.id);
-            setPreviousCountry(result?.id);
-          });
+        // Fetch application info
+        const applicationInfoRes = await get(
+          `ApplicationInfo/GetByStudentId/${applicationStudentId}`
+        );
+
+        if (applicationInfoRes) {
+          setApplicationInformation(applicationInfoRes);
+          setHowManyYears(applicationInfoRes?.loanYearsForHome);
+          setHomeResidencyStatus(applicationInfoRes?.residencyStatusForHome);
+          setDate(applicationInfoRes?.dateOfMoveToUk);
+          setStudentTypeLabel(applicationInfoRes?.studentType?.name);
+
+          setLoanYearsForEU(applicationInfoRes?.loanYearsForEU);
+          setShareCode(applicationInfoRes?.shareCode);
+          setVisaType(applicationInfoRes?.visaType);
+          setResidencyStatus(
+            applicationInfoRes?.currentResidencyStatusForInternational
+          );
+          setStudentTypeValue(applicationInfoRes?.studentType?.id);
+          setStatusInUK(applicationInfoRes?.currentResidencyStatusForEU);
+
+          const countryIndexRes = await get(`UniversityCountryDD/Index`);
+          const result = countryIndexRes?.find(
+            (answer) => answer?.id === applicationInfoRes?.preferredCountry
+          );
+          setCountryLabel(result?.name);
+          setCountryValue(result?.id);
+          setPreviousCountry(result?.id);
 
           setDataExist(true);
         } else {
           setDataExist(false);
-          get(`StudentType/PossibleType/${applicationStudentId}`).then(
-            (data) => {
-              setPossibleStudentType(data);
-              console.log("possible type", data);
-              get(`StudentType/GetByStudentId/${applicationStudentId}`).then(
-                (res) => {
-                  setPossibleStudentTypeById(res?.find((value) => value?.id));
-                  // console.log(
-                  //   res?.find((value) => value?.id),
-                  //   "application type"
-                  // );
-                  const result = res?.find((value) => value?.id === data);
 
-                  if (result) {
-                    setStudentTypeLabel(result?.name);
-                    setStudentTypeValue(result?.id);
-                  } else {
-                    setStudentTypeLabel("Select Student Type");
-                    setStudentTypeValue(0);
-                  }
-
-                  // if (possibleStudentType !== possibleStudentTypeById.id) {
-                  //   setStudentTypeLabel("Select Student Type");
-                  //   setStudentTypeValue(0);
-                  // } else {
-                  //   setStudentTypeLabel(result?.name);
-                  //   setStudentTypeValue(result?.id);
-                  // }
-                }
-              );
-            }
+          // Fetch possible student types
+          const possibleStudentTypeRes = await get(
+            `StudentType/PossibleType/${applicationStudentId}`
           );
-          get(`StudentType/PreferredCountry/${applicationStudentId}`).then(
-            (action) => {
-              // console.log("Console", action);
-              // setDataInfo(action);
+          setPossibleStudentType(possibleStudentTypeRes);
 
-              get(`UniversityCountryDD/ByStudent/${applicationStudentId}`).then(
-                (res) => {
-                  console.log("Second", res);
-                  const result = res?.find(
-                    (answer) => answer?.id === action?.universityCountryId
-                  );
-                  setCountryLabel(result?.name);
-                  setCountryValue(result?.id);
-                  setPreviousCountry(result?.id);
-                  console.log("Result", result);
-                }
-              );
-            }
+          const studentTypeByIdRes = await get(
+            `StudentType/GetByStudentId/${applicationStudentId}`
           );
+          const possibleTypeById = studentTypeByIdRes?.find(
+            (value) => value?.id
+          );
+          setPossibleStudentTypeById(possibleTypeById);
+
+          // const result = studentTypeByIdRes?.find(
+          //   (value) => value?.id === possibleStudentTypeRes
+          // );
+          // if (result) {
+          //   setStudentTypeLabel(result?.name);
+          //   setStudentTypeValue(result?.id);
+          // } else {
+          //   setStudentTypeLabel("Select Student Type");
+          //   setStudentTypeValue(0);
+          // }
+
+          // Fetch preferred country
+          const preferredCountryRes = await get(
+            `StudentType/PreferredCountry/${applicationStudentId}`
+          );
+          const universityCountryRes = await get(
+            `UniversityCountryDD/ByStudent/${applicationStudentId}`
+          );
+          const resultCountry = universityCountryRes?.find(
+            (answer) => answer?.id === preferredCountryRes?.universityCountryId
+          );
+          setCountryLabel(resultCountry?.name);
+          setCountryValue(resultCountry?.id);
+          setPreviousCountry(resultCountry?.id);
         }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-    );
+    };
+
+    if (applicationStudentId) {
+      fetchData();
+    }
   }, [applicationStudentId]);
+
   const studentTypeName = studentType?.map((branchCountry) => ({
     label: branchCountry.name,
     value: branchCountry.id,
@@ -273,7 +280,26 @@ const StudentApplicationInformation = () => {
   // Inter
 
   const validateRegisterForm = () => {
-    var isFormValid = true;
+    let isFormValid = true;
+
+    // Clear existing errors
+    setStudentTypeError("");
+    setHowManyYearsError("");
+    setHomeResidencyStatusError("");
+    setdateError("");
+    setLoanYearsForEUError("");
+    setStatusInUKError("");
+    setShareCodeError("");
+    setResidencyStatusError("");
+    setVisaTypeError("");
+
+    // Validate Student Type
+    if (studentTypeLabel === "Select Application Type") {
+      isFormValid = false;
+      setStudentTypeError("Student Type is required");
+    }
+
+    // Validate "Home" type
     if (studentTypeLabel === "Home" && hasSLC === true && !howManyYears) {
       isFormValid = false;
       setHowManyYearsError("Years is required");
@@ -288,10 +314,12 @@ const StudentApplicationInformation = () => {
       setHomeResidencyStatusError("Residency Status is required");
     }
 
+    // Validate "EU/EEA" type
     if (studentTypeLabel === "EU/EEA" && date === "") {
       isFormValid = false;
       setdateError("Date is required");
     }
+
     if (
       studentTypeLabel === "EU/EEA" &&
       loansForEu === true &&
@@ -300,14 +328,12 @@ const StudentApplicationInformation = () => {
       isFormValid = false;
       setLoanYearsForEUError("Years is required");
     }
-    if (
-      studentTypeLabel === "EU/EEA" &&
-      // isSettlementStatus === false &&
-      !statusInUK
-    ) {
+
+    if (studentTypeLabel === "EU/EEA" && !statusInUK) {
       isFormValid = false;
       setStatusInUKError("Residency Status is required");
     }
+
     if (
       studentTypeLabel === "EU/EEA" &&
       isSettlementStatus === true &&
@@ -316,6 +342,8 @@ const StudentApplicationInformation = () => {
       isFormValid = false;
       setShareCodeError("Share Code is required");
     }
+
+    // Validate "International" type
     if (
       studentTypeLabel === "International" &&
       isApplyingFromInside === true &&
@@ -324,6 +352,7 @@ const StudentApplicationInformation = () => {
       isFormValid = false;
       setResidencyStatusError("Residency Status required");
     }
+
     if (
       studentTypeLabel === "International" &&
       isAppliedForUkVisa === true &&
@@ -332,6 +361,7 @@ const StudentApplicationInformation = () => {
       isFormValid = false;
       setVisaTypeError("Visa Type is required");
     }
+
     return isFormValid;
   };
 
@@ -398,6 +428,7 @@ const StudentApplicationInformation = () => {
   };
 
   const selectStudentType = (label, value) => {
+    setStudentTypeError("");
     setStudentTypeLabel(label);
     setStudentTypeValue(value);
   };
@@ -409,324 +440,352 @@ const StudentApplicationInformation = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={"3"}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <TabContent activeTab={"3"}>
+                <TabPane tabId="3">
+                  <div>
+                    <p className="section-title">Application Information</p>
+                  </div>
+                  <Form onSubmit={handleSubmit}>
+                    <Row>
+                      <Col lg="6" md="8">
+                        <FormGroup className="has-icon-left position-relative">
+                          <span>
+                            {userType === userTypes?.Student
+                              ? "What is your preferred study destination?"
+                              : "Student's preferred study destination"}{" "}
+                          </span>
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={"3"}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => {}}
-      />
-      <Card>
-        <CardBody>
-          <TabContent activeTab={"3"}>
-            <TabPane tabId="3">
-              <div>
-                <p className="section-title">Application Information</p>
-              </div>
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col lg="6" md="8">
-                    <FormGroup className="has-icon-left position-relative">
-                      <span>
-                        {userType === userTypes?.Student
-                          ? "What is your preferred study destination?"
-                          : "Student's preferred study destination"}{" "}
-                      </span>
+                          <Select
+                            className="form-mt"
+                            options={countryOptions}
+                            value={{ label: countryLabel, value: countryValue }}
+                            onChange={(opt) =>
+                              selectCountry(opt.label, opt.value)
+                            }
+                          />
+                        </FormGroup>
+                        <FormGroup className="has-icon-left position-relative">
+                          <span>
+                            <span className="text-danger">*</span> Application
+                            Type
+                          </span>
 
-                      <Select
-                        className="form-mt"
-                        options={countryOptions}
-                        value={{ label: countryLabel, value: countryValue }}
-                        onChange={(opt) => selectCountry(opt.label, opt.value)}
-                      />
-                    </FormGroup>
-                    <FormGroup className="has-icon-left position-relative">
-                      <span>
-                        <span className="text-danger">*</span> Application Type
-                      </span>
+                          <Select
+                            options={studentTypeName}
+                            value={{
+                              label: studentTypeLabel,
+                              value: studentTypeValue,
+                            }}
+                            onChange={(opt) =>
+                              selectStudentType(opt.label, opt.value)
+                            }
+                            name="studentTypeId"
+                            id="studentTypeId"
+                          />
+                          {studentTypeError && (
+                            <span className="text-danger">
+                              Application Type is Required
+                            </span>
+                          )}
 
-                      <Select
-                        options={studentTypeName}
-                        value={{
-                          label: studentTypeLabel,
-                          value: studentTypeValue,
-                        }}
-                        onChange={(opt) =>
-                          selectStudentType(opt.label, opt.value)
-                        }
-                        name="studentTypeId"
-                        id="studentTypeId"
-                      />
-
-                      {studentTypeValue ? null : (
-                        <>
-                          {" "}
-                          {possibleStudentType !==
-                          possibleStudentTypeById.id ? (
+                          {studentTypeValue ? null : (
                             <>
-                              {userType === userTypes?.Student ? (
-                                <div className="mt-1 d-flex justify-between cardborder">
-                                  <img
-                                    style={{ height: "100%" }}
-                                    src={icon_info}
-                                    alt=""
-                                  />{" "}
-                                  <div className="pl-3">
-                                    <span>
-                                      Note : Considering students nationality
-                                      and preferred study country, the student's
-                                      application type{" "}
-                                      <>
-                                        <b>
-                                          {" "}
-                                          {possibleStudentType === 1
-                                            ? " Home"
-                                            : possibleStudentType === 2
-                                            ? " Eu/Uk"
-                                            : possibleStudentType === 3
-                                            ? " International"
-                                            : null}
-                                        </b>
-                                      </>
-                                      . Your application type can not be{" "}
-                                      <>
-                                        <b>
-                                          {" "}
-                                          {possibleStudentType === 1
-                                            ? " Home"
-                                            : possibleStudentType === 2
-                                            ? " Eu/Uk"
-                                            : possibleStudentType === 3
-                                            ? " International"
-                                            : null}
-                                        </b>
-                                      </>
-                                      . According to your consultant
-                                      recruitment type. For further instructions
-                                      please contact administrator.
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : userType === userTypes?.Consultant ? (
-                                <div className="mt-1 d-flex justify-between cardborder">
-                                  <img
-                                    style={{ height: "100%" }}
-                                    src={icon_info}
-                                    alt=""
-                                  />{" "}
-                                  <div className="pl-3">
-                                    <span>
-                                      Note : Considering students nationality
-                                      and preferred study country, the student's
-                                      application type{" "}
-                                      <>
-                                        <b>
-                                          {" "}
-                                          {possibleStudentType === 1
-                                            ? " Home"
-                                            : possibleStudentType === 2
-                                            ? " Eu/Uk"
-                                            : possibleStudentType === 3
-                                            ? " International"
-                                            : null}
-                                        </b>
-                                      </>{" "}
-                                      You can not recruit{" "}
-                                      <>
-                                        <b>
-                                          {" "}
-                                          {possibleStudentType === 1
-                                            ? " Home"
-                                            : possibleStudentType === 2
-                                            ? " Eu/Uk"
-                                            : possibleStudentType === 3
-                                            ? " International"
-                                            : null}
-                                        </b>
-                                      </>{" "}
-                                      student according to your recruitment
-                                      type. For further instructions please
-                                      contact administrator.
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="mt-1 d-flex justify-between cardborder">
-                                  <img
-                                    style={{ height: "100%" }}
-                                    src={icon_info}
-                                    alt=""
-                                  />{" "}
-                                  <div className="pl-3">
-                                    <span>
-                                      Note : Considering students nationality
-                                      and preferred study country, the student's
-                                      application type
-                                      <>
-                                        <b>
-                                          {" "}
-                                          {possibleStudentType === 1
-                                            ? " Home"
-                                            : possibleStudentType === 2
-                                            ? " Eu/Uk"
-                                            : possibleStudentType === 3
-                                            ? " International"
-                                            : null}
-                                        </b>
-                                      </>{" "}
-                                      . The student can not be
-                                      <b>
-                                        {" "}
-                                        {possibleStudentType === 1
-                                          ? " Home"
-                                          : possibleStudentType === 2
-                                          ? " Eu/Uk"
-                                          : possibleStudentType === 3
-                                          ? " International"
-                                          : null}
-                                      </b>
-                                      . According to consultant's recruitment
-                                      type.
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                            </>
-                          ) : null}
-                        </>
-                      )}
-                    </FormGroup>
-
-                    {countryValue !== 0 ? (
-                      <>
-                        {userType === userTypes?.Student ? (
-                          <>
-                            {dataExist === false ? (
-                              <div className="mt-1 mb-4 d-flex justify-between align-items-center cardborder">
-                                <img
-                                  style={{ height: "100%" }}
-                                  src={icon_info}
-                                  alt=""
-                                />{" "}
-                                <div className="pl-3">
-                                  {currentCountry === previousCountry ||
-                                  currentCountry === null ? (
-                                    <span>
-                                      Based on your profile, your application
-                                      type seems to be {studentTypeLabel}. You
-                                      can change your application type.
-                                    </span>
+                              {" "}
+                              {possibleStudentType !==
+                              possibleStudentTypeById.id ? (
+                                <>
+                                  {userType === userTypes?.Student ? (
+                                    <div className="mt-1 d-flex justify-between cardborder">
+                                      <img
+                                        style={{ height: "100%" }}
+                                        src={icon_info}
+                                        alt=""
+                                      />{" "}
+                                      <div className="pl-3">
+                                        <span>
+                                          Note : Considering students
+                                          nationality and preferred study
+                                          country, the student's application
+                                          type{" "}
+                                          <>
+                                            <b>
+                                              {" "}
+                                              {possibleStudentType === 1
+                                                ? " Home"
+                                                : possibleStudentType === 2
+                                                ? " Eu/Uk"
+                                                : possibleStudentType === 3
+                                                ? " International"
+                                                : null}
+                                            </b>
+                                          </>
+                                          . Your application type can not be{" "}
+                                          <>
+                                            <b>
+                                              {" "}
+                                              {possibleStudentType === 1
+                                                ? " Home"
+                                                : possibleStudentType === 2
+                                                ? " Eu/Uk"
+                                                : possibleStudentType === 3
+                                                ? " International"
+                                                : null}
+                                            </b>
+                                          </>
+                                          . According to your consultant
+                                          recruitment type. For further
+                                          instructions please
+                                          contact administrator.
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ) : userType === userTypes?.Consultant ? (
+                                    <div className="mt-1 d-flex justify-between cardborder">
+                                      <img
+                                        style={{ height: "100%" }}
+                                        src={icon_info}
+                                        alt=""
+                                      />{" "}
+                                      <div className="pl-3">
+                                        <span>
+                                          Note : Considering students
+                                          nationality and preferred study
+                                          country, the student's application
+                                          type{" "}
+                                          <>
+                                            <b>
+                                              {" "}
+                                              {possibleStudentType === 1
+                                                ? " Home"
+                                                : possibleStudentType === 2
+                                                ? " Eu/Uk"
+                                                : possibleStudentType === 3
+                                                ? " International"
+                                                : null}
+                                            </b>
+                                          </>{" "}
+                                          You can not recruit{" "}
+                                          <>
+                                            <b>
+                                              {" "}
+                                              {possibleStudentType === 1
+                                                ? " Home"
+                                                : possibleStudentType === 2
+                                                ? " Eu/Uk"
+                                                : possibleStudentType === 3
+                                                ? " International"
+                                                : null}
+                                            </b>
+                                          </>{" "}
+                                          student according to your recruitment
+                                          type. For further instructions please
+                                          contact administrator.
+                                        </span>
+                                      </div>
+                                    </div>
                                   ) : (
-                                    <span>
-                                      You have changed you preferred study
-                                      destination. Your application type might
-                                      also require to be changed.
-                                    </span>
+                                    <div className="mt-1 d-flex justify-between cardborder">
+                                      <img
+                                        style={{ height: "100%" }}
+                                        src={icon_info}
+                                        alt=""
+                                      />{" "}
+                                      <div className="pl-3">
+                                        <span>
+                                          Note : Considering students
+                                          nationality and preferred study
+                                          country, the student's application
+                                          type
+                                          <>
+                                            <b>
+                                              {" "}
+                                              {possibleStudentType === 1
+                                                ? " Home"
+                                                : possibleStudentType === 2
+                                                ? " Eu/Uk"
+                                                : possibleStudentType === 3
+                                                ? " International"
+                                                : null}
+                                            </b>
+                                          </>{" "}
+                                          . The student can not be
+                                          <b>
+                                            {" "}
+                                            {possibleStudentType === 1
+                                              ? " Home"
+                                              : possibleStudentType === 2
+                                              ? " Eu/Uk"
+                                              : possibleStudentType === 3
+                                              ? " International"
+                                              : null}
+                                          </b>
+                                          . According to consultant's
+                                          recruitment type.
+                                        </span>
+                                      </div>
+                                    </div>
                                   )}
-                                </div>
-                              </div>
+                                </>
+                              ) : null}
+                            </>
+                          )}
+                        </FormGroup>
+
+                        {countryValue !== 0 ? (
+                          <>
+                            {userType === userTypes?.Student ? (
+                              <>
+                                {dataExist === false ? (
+                                  <div className="mt-1 mb-4 d-flex justify-between align-items-center cardborder">
+                                    <img
+                                      style={{ height: "100%" }}
+                                      src={icon_info}
+                                      alt=""
+                                    />{" "}
+                                    <div className="pl-3">
+                                      {currentCountry === previousCountry ||
+                                      currentCountry === null ? (
+                                        <span>
+                                          Based on your profile, your
+                                          application type seems to be{" "}
+                                          {studentTypeLabel}. You can change
+                                          your application type.
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          You have changed you preferred study
+                                          destination. Your application type
+                                          might also require to be changed.
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </>
+                            ) : null}
+
+                            {studentTypeLabel === "Home" ? (
+                              <HomeApplicationInformation
+                                applicationInformation={applicationInformation}
+                                countryId={countryValue}
+                                studentTypeValue={studentTypeValue}
+                                applicationStudentId={applicationStudentId}
+                                hasSLC={hasSLC}
+                                setHasSLC={setHasSLC}
+                                howManyYears={howManyYears}
+                                setHowManyYears={setHowManyYears}
+                                setHowManyYearsError={setHowManyYearsError}
+                                howManyYearsError={howManyYearsError}
+                                handleManyYears={handleManyYears}
+                                handleHomeResidencyStatus={
+                                  handleHomeResidencyStatus
+                                }
+                                homeResidencyStatus={homeResidencyStatus}
+                                homeResidencyStatusError={
+                                  homeResidencyStatusError
+                                }
+                                showResidency={showResidency}
+                                setShowResidency={setShowResidency}
+                              />
+                            ) : null}
+
+                            {studentTypeLabel === "International" ? (
+                              <InternationalApplicationInformation
+                                applicationInformation={applicationInformation}
+                                studentTypeValue={studentTypeValue}
+                                countryLabel={countryLabel}
+                                applicationStudentId={applicationStudentId}
+                                FileList={FileList}
+                                FileList2={FileList2}
+                                handleChange={handleChange}
+                                handleChange2={handleChange2}
+                                howManyYearsError={howManyYearsError}
+                                setResidencyForHomeRequire={
+                                  setResidencyForHomeRequire
+                                }
+                                isApplyingFromInside={isApplyingFromInside}
+                                setIsApplyingFromInside={
+                                  setIsApplyingFromInside
+                                }
+                                residencyStatus={residencyStatus}
+                                handleresidencyStatus={handleresidencyStatus}
+                                residencyStatusError={residencyStatusError}
+                                isAppliedForUkVisa={isAppliedForUkVisa}
+                                setIsAppliedForUkVisa={setIsAppliedForUkVisa}
+                                setVisaType={setVisaType}
+                                visaType={visaType}
+                                handleVisaType={handleVisaType}
+                                visaTypeError={visaTypeError}
+                              />
+                            ) : null}
+
+                            {studentTypeLabel === "EU/EEA" ? (
+                              <EuUkApplicationInformation
+                                applicationStudentId={applicationStudentId}
+                                applicationInformation={applicationInformation}
+                                studentTypeValue={studentTypeValue}
+                                countryLabel={countryLabel}
+                                handleDate={handleDate}
+                                dateError={dateError}
+                                setdateError={setdateError}
+                                date={date}
+                                setLoansForEu={setLoansForEu}
+                                loansForEu={loansForEu}
+                                handleEuManyYears={handleEuManyYears}
+                                loanYearsForEU={loanYearsForEU}
+                                loanYearsForEUError={loanYearsForEUError}
+                                isSettlementStatus={isSettlementStatus}
+                                setIsSettlementStatus={setIsSettlementStatus}
+                                shareCodeError={shareCodeError}
+                                shareCode={shareCode}
+                                handleshareCode={handleshareCode}
+                                statusInUK={statusInUK}
+                                statusInUKError={statusInUKError}
+                                handleresidencyStatusUK={
+                                  handleresidencyStatusUK
+                                }
+                              />
                             ) : null}
                           </>
                         ) : null}
-
-                        {studentTypeLabel === "Home" ? (
-                          <HomeApplicationInformation
-                            applicationInformation={applicationInformation}
-                            countryId={countryValue}
-                            studentTypeValue={studentTypeValue}
-                            applicationStudentId={applicationStudentId}
-                            hasSLC={hasSLC}
-                            setHasSLC={setHasSLC}
-                            howManyYears={howManyYears}
-                            setHowManyYears={setHowManyYears}
-                            setHowManyYearsError={setHowManyYearsError}
-                            howManyYearsError={howManyYearsError}
-                            handleManyYears={handleManyYears}
-                            handleHomeResidencyStatus={
-                              handleHomeResidencyStatus
-                            }
-                            homeResidencyStatus={homeResidencyStatus}
-                            homeResidencyStatusError={homeResidencyStatusError}
-                            showResidency={showResidency}
-                            setShowResidency={setShowResidency}
+                      </Col>
+                    </Row>
+                    <FormGroup row className=" mt-4">
+                      <Col
+                        lg="6"
+                        md="4"
+                        className="d-flex justify-content-between"
+                      >
+                        <PreviousButton action={handlePrevious} />
+                        {permissions?.includes(permissionList?.Edit_Student) ? (
+                          <SaveButton
+                            text="Save and Next"
+                            progress={progress}
+                            buttonStatus={buttonStatus}
                           />
                         ) : null}
-
-                        {studentTypeLabel === "International" ? (
-                          <InternationalApplicationInformation
-                            applicationInformation={applicationInformation}
-                            studentTypeValue={studentTypeValue}
-                            countryLabel={countryLabel}
-                            applicationStudentId={applicationStudentId}
-                            FileList={FileList}
-                            FileList2={FileList2}
-                            handleChange={handleChange}
-                            handleChange2={handleChange2}
-                            howManyYearsError={howManyYearsError}
-                            setResidencyForHomeRequire={
-                              setResidencyForHomeRequire
-                            }
-                            isApplyingFromInside={isApplyingFromInside}
-                            setIsApplyingFromInside={setIsApplyingFromInside}
-                            residencyStatus={residencyStatus}
-                            handleresidencyStatus={handleresidencyStatus}
-                            residencyStatusError={residencyStatusError}
-                            isAppliedForUkVisa={isAppliedForUkVisa}
-                            setIsAppliedForUkVisa={setIsAppliedForUkVisa}
-                            setVisaType={setVisaType}
-                            visaType={visaType}
-                            handleVisaType={handleVisaType}
-                            visaTypeError={visaTypeError}
-                          />
-                        ) : null}
-
-                        {studentTypeLabel === "EU/EEA" ? (
-                          <EuUkApplicationInformation
-                            applicationStudentId={applicationStudentId}
-                            applicationInformation={applicationInformation}
-                            studentTypeValue={studentTypeValue}
-                            countryLabel={countryLabel}
-                            handleDate={handleDate}
-                            dateError={dateError}
-                            setdateError={setdateError}
-                            date={date}
-                            setLoansForEu={setLoansForEu}
-                            loansForEu={loansForEu}
-                            handleEuManyYears={handleEuManyYears}
-                            loanYearsForEU={loanYearsForEU}
-                            loanYearsForEUError={loanYearsForEUError}
-                            isSettlementStatus={isSettlementStatus}
-                            setIsSettlementStatus={setIsSettlementStatus}
-                            shareCodeError={shareCodeError}
-                            shareCode={shareCode}
-                            handleshareCode={handleshareCode}
-                            statusInUK={statusInUK}
-                            statusInUKError={statusInUKError}
-                            handleresidencyStatusUK={handleresidencyStatusUK}
-                          />
-                        ) : null}
-                      </>
-                    ) : null}
-                  </Col>
-                </Row>
-                <FormGroup row className=" mt-4">
-                  <Col lg="6" md="4" className="d-flex justify-content-between">
-                    <PreviousButton action={handlePrevious} />
-                    {permissions?.includes(permissionList?.Edit_Student) ? (
-                      <SaveButton
-                        text="Save and Next"
-                        progress={progress}
-                        buttonStatus={buttonStatus}
-                      />
-                    ) : null}
-                  </Col>
-                </FormGroup>
-              </Form>
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+                      </Col>
+                    </FormGroup>
+                  </Form>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };
