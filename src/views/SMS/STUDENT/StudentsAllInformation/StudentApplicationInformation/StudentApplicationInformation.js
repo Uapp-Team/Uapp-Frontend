@@ -63,10 +63,10 @@ const StudentApplicationInformation = () => {
   const [isSettlementStatus, setIsSettlementStatus] = useState(null);
   const [shareCode, setShareCode] = useState("");
   const [shareCodeError, setShareCodeError] = useState("");
-  const [isApplyingFromInside, setIsApplyingFromInside] = useState(false);
+  const [isApplyingFromInside, setIsApplyingFromInside] = useState(null);
   const [residencyStatus, setResidencyStatus] = useState("");
   const [residencyStatusError, setResidencyStatusError] = useState("");
-  const [isAppliedForUkVisa, setIsAppliedForUkVisa] = useState(false);
+  const [isAppliedForUkVisa, setIsAppliedForUkVisa] = useState(null);
   const [visaType, setVisaType] = useState("");
   const [visaTypeError, setVisaTypeError] = useState("");
   const [FileList, setFileList] = useState([]);
@@ -96,6 +96,15 @@ const StudentApplicationInformation = () => {
   ] = useState("");
   const [loansForEUError, setLoansForEUError] = useState("");
   const [isSettlementStatusError, setIsSettlementStatusError] = useState("");
+  const [IsApplyingFromInsideError, setIsApplyingFromInsideError] =
+    useState("");
+  const [isAppliedForUkVisaError, setIsAppliedForUkVisaError] = useState("");
+  const [isRefusedForOtherVisaError, setIsRefusedForOtherVisaError] =
+    useState("");
+  const [isRefusedForUKVisa, setIsRefusedForUKVisa] = useState(null);
+  const [isRefusedForOtherVisa, setIsRefusedForOtherVisa] = useState(null);
+  const [fileList1Error, setFileList1Error] = useState("");
+  const [fileList2Error, setFileList2Error] = useState("");
 
   const handleChange = ({ fileList }) => {
     setFileList(fileList);
@@ -306,11 +315,55 @@ const StudentApplicationInformation = () => {
     if (haveStartedEducation !== null) {
       setHaveStartedEducationError("");
     }
-  }, [hasSLC, haveStartedEducation]);
+    if (isStayedInUkInLast3Years !== null) {
+      setIsStayedInUkInLast3YearsError("");
+    }
+    if (loansForEu !== null) {
+      setLoansForEUError("");
+    }
+    if (isSettlementStatus !== null) {
+      setIsSettlementStatusError("");
+    }
+    if (havingUnderGraduateCourseForEU !== null) {
+      setHavingUnderGraduateCourseForEUError("");
+    }
+    if (isApplyingFromInside !== null) {
+      setIsApplyingFromInsideError("");
+    }
+
+    if (isAppliedForUkVisa !== null) {
+      setIsAppliedForUkVisaError("");
+    }
+    // if (visaType != "") {
+    //   setVisaTypeError("");
+    // }
+    if (isRefusedForOtherVisa !== null) {
+      setIsRefusedForOtherVisaError("");
+    }
+    if (FileList.length === 1) {
+      setFileList1Error("");
+    }
+    if (FileList2.length === 1) {
+      setFileList2Error("");
+    }
+  }, [
+    hasSLC,
+    haveStartedEducation,
+    isStayedInUkInLast3Years,
+    loansForEu,
+    isSettlementStatus,
+    havingUnderGraduateCourseForEU,
+    isApplyingFromInside,
+    isAppliedForUkVisa,
+    // visaType,
+    isRefusedForOtherVisa,
+    FileList,
+    FileList2,
+  ]);
 
   const validateRegisterForm = () => {
     let isFormValid = true;
-
+    console.log("first");
     // Clear existing errors
     setStudentTypeError("");
     setHowManyYearsError("");
@@ -321,6 +374,11 @@ const StudentApplicationInformation = () => {
     setShareCodeError("");
     setResidencyStatusError("");
     setVisaTypeError("");
+    setdateError("");
+    setLoansForEUError("");
+    setIsSettlementStatusError("");
+    setIsStayedInUkInLast3YearsError("");
+    setHavingUnderGraduateCourseForEUError("");
 
     // Validate Student Type
     if (studentTypeLabel === "Select Application Type") {
@@ -328,12 +386,12 @@ const StudentApplicationInformation = () => {
       setStudentTypeError("Student Type is required");
     }
 
-    if (hasSLC === null) {
+    if (studentTypeLabel === "Home" && hasSLC === null) {
       isFormValid = false;
       setHasSLCError("Student Loan Company (SLC) is required");
     }
 
-    if (haveStartedEducation === null) {
+    if (studentTypeLabel === "Home" && haveStartedEducation === null) {
       isFormValid = false;
       setHaveStartedEducationError("Started education is required");
     }
@@ -391,30 +449,70 @@ const StudentApplicationInformation = () => {
       setResidencyStatusError("Residency Status required");
     }
 
-    if (
-      studentTypeLabel === "International" &&
-      isAppliedForUkVisa === true &&
-      !visaType
-    ) {
+    if (studentTypeLabel === "International" && visaType === "") {
       isFormValid = false;
       setVisaTypeError("Visa Type is required");
     }
 
-    if (date === null) {
+    if (studentTypeLabel === "EU/EEA" && date === null) {
       isFormValid = false;
       setdateError("Date is required");
     }
 
-    if (loansForEu === null) {
+    if (studentTypeLabel === "EU/EEA" && loansForEu === null) {
       isFormValid = false;
       setLoansForEUError("Select any of the options");
     }
 
-    if (isSettlementStatus === null) {
+    if (studentTypeLabel === "EU/EEA" && isSettlementStatus === null) {
       isFormValid = false;
       setIsSettlementStatusError("Settlement Status is required");
     }
 
+    if (studentTypeLabel === "EU/EEA" && isStayedInUkInLast3Years === null) {
+      isFormValid = false;
+      setIsStayedInUkInLast3YearsError("Please Select any option");
+    }
+    if (
+      studentTypeLabel === "EU/EEA" &&
+      havingUnderGraduateCourseForEU === null
+    ) {
+      isFormValid = false;
+      setHavingUnderGraduateCourseForEUError("Select any options");
+    }
+
+    if (studentTypeLabel === "International" && isApplyingFromInside === null) {
+      isFormValid = false;
+      setIsApplyingFromInsideError("Please select any option");
+    }
+
+    if (studentTypeLabel === "International" && isAppliedForUkVisa === null) {
+      isFormValid = false;
+      setIsAppliedForUkVisaError("Please select any option");
+    }
+    if (
+      studentTypeLabel === "International" &&
+      isRefusedForOtherVisa === null
+    ) {
+      isFormValid = false;
+      setIsRefusedForOtherVisaError("Please select any opptions");
+    }
+    if (
+      studentTypeLabel === "International" &&
+      isRefusedForUKVisa === null &&
+      FileList.length < 1
+    ) {
+      isFormValid = false;
+      setFileList1Error("File are required");
+    }
+    if (
+      studentTypeLabel === "International" &&
+      isRefusedForOtherVisa === null &&
+      FileList2.length < 1
+    ) {
+      isFormValid = false;
+      setFileList2Error("File are required");
+    }
     return isFormValid;
   };
 
@@ -484,6 +582,11 @@ const StudentApplicationInformation = () => {
     setStudentTypeError("");
     setHaveStartedEducationError("");
     setHasSLCError("");
+    setdateError("");
+    setLoansForEUError("");
+    setIsSettlementStatusError("");
+    setIsStayedInUkInLast3YearsError("");
+    setHavingUnderGraduateCourseForEUError("");
     setStudentTypeLabel(label);
     setStudentTypeValue(value);
   };
@@ -796,6 +899,34 @@ const StudentApplicationInformation = () => {
                                 visaType={visaType}
                                 handleVisaType={handleVisaType}
                                 visaTypeError={visaTypeError}
+                                IsApplyingFromInsideError={
+                                  IsApplyingFromInsideError
+                                }
+                                setIsApplyingFromInsideError={
+                                  setIsApplyingFromInsideError
+                                }
+                                setIsAppliedForUkVisaError={
+                                  setIsAppliedForUkVisaError
+                                }
+                                isAppliedForUkVisaError={
+                                  isAppliedForUkVisaError
+                                }
+                                isRefusedForOtherVisaError={
+                                  isRefusedForOtherVisaError
+                                }
+                                setIsRefusedForOtherVisaError={
+                                  setIsRefusedForOtherVisaError
+                                }
+                                isRefusedForOtherVisa={isRefusedForOtherVisa}
+                                setIsRefusedForOtherVisa={
+                                  setIsRefusedForOtherVisa
+                                }
+                                isRefusedForUKVisa={isRefusedForUKVisa}
+                                setIsRefusedForUKVisa={setIsRefusedForUKVisa}
+                                fileList1Error={fileList1Error}
+                                setFileList1Error={setFileList1Error}
+                                fileList2Error={fileList2Error}
+                                setFileList2Error={setFileList2Error}
                               />
                             ) : null}
 

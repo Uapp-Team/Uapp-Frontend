@@ -1,9 +1,9 @@
 import { Upload } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
-import { rootUrl } from "../../../../../constants/constants";
-import UploadButton from "../../../../../components/buttons/UploadButton";
 import DownloadButton from "../../../../../components/buttons/DownloadButton";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import { rootUrl } from "../../../../../constants/constants";
 
 export default function InternationalApplicationInformation({
   applicationInformation,
@@ -24,46 +24,57 @@ export default function InternationalApplicationInformation({
   visaType,
   handleVisaType,
   visaTypeError,
+  IsApplyingFromInsideError,
+  setIsApplyingFromInsideError,
+  isAppliedForUkVisaError,
+  setIsAppliedForUkVisaError,
+  isRefusedForOtherVisaError,
+  setIsRefusedForOtherVisaError,
+  isRefusedForOtherVisa,
+  setIsRefusedForOtherVisa,
+  isRefusedForUKVisa,
+  setIsRefusedForUKVisa,
+  fileList1Error,
+  setFileList1Error,
+  fileList2Error,
+  setFileList2Error,
 }) {
-  const [isRefusedForUKVisa, setIsRefusedForUKVisa] = useState(false);
-  const [isRefusedForOtherVisa, setIsRefusedForOtherVisa] = useState(false);
-
   useEffect(() => {
     setIsApplyingFromInside(
       applicationInformation != null &&
         applicationInformation?.IsApplyingFromInside === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.IsApplyingFromInside === null
+          applicationInformation?.IsApplyingFromInside === false
         ? false
-        : false
+        : null
     );
     setIsAppliedForUkVisa(
       applicationInformation != null &&
         applicationInformation?.isAppliedForUkVisa === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.isAppliedForUkVisa === null
+          applicationInformation?.isAppliedForUkVisa === false
         ? false
-        : false
+        : null
     );
     setIsRefusedForUKVisa(
       applicationInformation != null &&
         applicationInformation?.isRefusedForUKVisa === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.isRefusedForUKVisa === null
+          applicationInformation?.isRefusedForUKVisa === false
         ? false
-        : false
+        : null
     );
     setIsRefusedForOtherVisa(
       applicationInformation != null &&
         applicationInformation?.isRefusedForOtherVisa === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.isRefusedForOtherVisa === null
+          applicationInformation?.isRefusedForOtherVisa === false
         ? false
-        : false
+        : null
     );
   }, [applicationInformation, setIsAppliedForUkVisa, setIsApplyingFromInside]);
   return (
@@ -106,7 +117,7 @@ export default function InternationalApplicationInformation({
             name="IsApplyingFromInside"
             value={true}
             checked={isApplyingFromInside === true}
-            onChange={() => setIsApplyingFromInside(!isApplyingFromInside)}
+            onChange={() => setIsApplyingFromInside(true)}
           />
           <Label
             className="form-check-label"
@@ -124,7 +135,7 @@ export default function InternationalApplicationInformation({
             name="IsApplyingFromInside"
             value={false}
             checked={isApplyingFromInside === false}
-            onChange={() => setIsApplyingFromInside(!isApplyingFromInside)}
+            onChange={() => setIsApplyingFromInside(false)}
           />
           <Label
             className="form-check-label"
@@ -134,6 +145,8 @@ export default function InternationalApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
+        <span className="text-danger">{IsApplyingFromInsideError}</span>
       </FormGroup>
       {isApplyingFromInside === true ? (
         <FormGroup className="has-icon-left position-relative">
@@ -171,7 +184,7 @@ export default function InternationalApplicationInformation({
                 name="IsAppliedForUkVisa"
                 value={true}
                 checked={isAppliedForUkVisa === true}
-                onChange={() => setIsAppliedForUkVisa(!isAppliedForUkVisa)}
+                onChange={() => setIsAppliedForUkVisa(true)}
               />
               <Label
                 className="form-check-label"
@@ -189,7 +202,7 @@ export default function InternationalApplicationInformation({
                 name="IsAppliedForUkVisa"
                 value={false}
                 checked={isAppliedForUkVisa === false}
-                onChange={() => setIsAppliedForUkVisa(!isAppliedForUkVisa)}
+                onChange={() => setIsAppliedForUkVisa(false)}
               />
               <Label
                 className="form-check-label"
@@ -199,6 +212,8 @@ export default function InternationalApplicationInformation({
                 No
               </Label>
             </FormGroup>
+            <br />
+            <span className="text-danger">{isAppliedForUkVisaError}</span>
           </FormGroup>
 
           {isAppliedForUkVisa === true ? (
@@ -236,7 +251,7 @@ export default function InternationalApplicationInformation({
                     name="IsRefusedForUKVisa"
                     value={true}
                     checked={isRefusedForUKVisa === true}
-                    onChange={() => setIsRefusedForUKVisa(!isRefusedForUKVisa)}
+                    onChange={() => setIsRefusedForUKVisa(true)}
                   />
                   <Label
                     className="form-check-label"
@@ -254,7 +269,7 @@ export default function InternationalApplicationInformation({
                     name="IsRefusedForUKVisa"
                     value={false}
                     checked={isRefusedForUKVisa === false}
-                    onChange={() => setIsRefusedForUKVisa(!isRefusedForUKVisa)}
+                    onChange={() => setIsRefusedForUKVisa(false)}
                   />
                   <Label
                     className="form-check-label"
@@ -304,6 +319,7 @@ export default function InternationalApplicationInformation({
                         ) : null}
                       </Col>
                     </Row>
+                    <span className="text-danger">{fileList1Error}</span>
                   </>
                 </FormGroup>
               ) : null}
@@ -324,9 +340,7 @@ export default function InternationalApplicationInformation({
                 name="IsRefusedForOtherVisa"
                 value={true}
                 checked={isRefusedForOtherVisa === true}
-                onChange={() =>
-                  setIsRefusedForOtherVisa(!isRefusedForOtherVisa)
-                }
+                onChange={() => setIsRefusedForOtherVisa(true)}
               />
               <Label
                 className="form-check-label"
@@ -344,9 +358,7 @@ export default function InternationalApplicationInformation({
                 name="IsRefusedForOtherVisa"
                 value={false}
                 checked={isRefusedForOtherVisa === false}
-                onChange={() =>
-                  setIsRefusedForOtherVisa(!isRefusedForOtherVisa)
-                }
+                onChange={() => setIsRefusedForOtherVisa(false)}
               />
               <Label
                 className="form-check-label"
@@ -356,6 +368,8 @@ export default function InternationalApplicationInformation({
                 No
               </Label>
             </FormGroup>
+            <br />
+            <span className="text-danger">{isRefusedForOtherVisaError}</span>
           </FormGroup>
 
           {isRefusedForOtherVisa === true ? (
@@ -398,9 +412,7 @@ export default function InternationalApplicationInformation({
                     ) : null}
                   </Col>
                 </Row>
-                <div class="col-4">
-                  {/* <span style="height:20px;width:20px;border-radius:10px; background: color;margin-left:10px"></span> <span>1-4</span> */}
-                </div>
+                <span className="text-danger">{fileList2Error}</span>
               </>
             </FormGroup>
           ) : null}

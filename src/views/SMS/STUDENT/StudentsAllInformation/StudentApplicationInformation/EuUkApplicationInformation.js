@@ -198,7 +198,6 @@ export default function EuUkApplicationInformation({
             }}
             value={loanYearsForEU}
           />
-          <br />
           <span className="text-danger">{loanYearsForEUError}</span>
         </FormGroup>
       ) : null}
@@ -372,6 +371,8 @@ export default function EuUkApplicationInformation({
                 No
               </Label>
             </FormGroup>
+            <br />
+            <span className="text-danger">{isStayedInUkInLast3YearsError}</span>
           </FormGroup>
         </>
       ) : isSettlementStatus === false ? (
@@ -438,8 +439,11 @@ export default function EuUkApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
         {havingUnderGraduateCourseForEUError && (
-          <span className="text-danger">Please select an option</span>
+          <span className="text-danger">
+            {havingUnderGraduateCourseForEUError}
+          </span>
         )}
       </FormGroup>
     </div>

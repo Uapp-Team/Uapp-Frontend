@@ -131,9 +131,7 @@ export default function HomeApplicationInformation({
           </Label>
         </FormGroup>
         <br />
-        {hasSCLError && (
-          <span className="text-danger">Student Loans Company Required</span>
-        )}
+        {hasSCLError && <span className="text-danger">{hasSCLError}</span>}
       </FormGroup>
 
       {hasSLC === true ? (
@@ -231,7 +229,7 @@ export default function HomeApplicationInformation({
         </FormGroup>
         <br />
         {haveStartedEducationError && (
-          <span className="text-danger">Select an option is required</span>
+          <span className="text-danger">{haveStartedEducationError}</span>
         )}
       </FormGroup>
     </div>
