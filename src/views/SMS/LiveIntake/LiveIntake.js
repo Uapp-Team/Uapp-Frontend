@@ -77,14 +77,16 @@ const LiveIntake = () => {
   }, [setIntake, setIntakeRngDD]);
 
   useEffect(() => {
-    Uget(
-      `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
-        recruitmentValue ? recruitmentValue : 0
-      }&searchText=${searchStr}`
-    ).then((res) => {
-      setLiveIntakeList(res?.items);
-      setEntity(res?.total);
-    });
+    if (!isTyping) {
+      Uget(
+        `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
+          recruitmentValue ? recruitmentValue : 0
+        }&searchText=${searchStr}`
+      ).then((res) => {
+        setLiveIntakeList(res?.items);
+        setEntity(res?.total);
+      });
+    }
   }, [
     campusValue,
     currentPage,
@@ -94,6 +96,7 @@ const LiveIntake = () => {
     searchStr,
     universityValue,
     recruitmentValue,
+    isTyping,
   ]);
 
   useEffect(() => {
