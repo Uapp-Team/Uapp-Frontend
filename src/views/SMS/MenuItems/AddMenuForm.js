@@ -15,8 +15,12 @@ import SaveButton from "../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
 import Uget from "../../../helpers/Uget";
 import Filter from "../../../components/Dropdown/Filter";
+import { useToasts } from "react-toast-notifications";
+import put from "../../../helpers/put";
 
-const AddMenuForm = ({}) => {
+const AddMenuForm = () => {
+  const { menuId } = useParams();
+  const { addToast } = useToasts();
   const [typeList, setTypeList] = useState([
     {
       id: "item",
@@ -27,19 +31,13 @@ const AddMenuForm = ({}) => {
       name: "Collapse",
     },
   ]);
-
   const [typeLabel, setTypeLabel] = useState("Select Type");
   const [typeValue, setTypeValue] = useState(0);
   const [parentList, setParentList] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent");
   const [parentValue, setParentValue] = useState(0);
-
-  // const [consultantError, setConsultantError] = useState(false);
   const [icon, setIcon] = useState("");
   const [displayOrder, setDisplayOrder] = useState("");
-
-  // const [parentError, setParentError] = useState(false);
-
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const history = useHistory();
@@ -54,12 +52,25 @@ const AddMenuForm = ({}) => {
     });
   }, []);
 
+  useEffect(() => {
+    get(`MenuItem/get/${menuId}`).then((res) => {
+      console.log(res);
+      setTitle(res?.title);
+      setNavLink(res?.navLink);
+      setIcon(res?.icon);
+      setDisplayOrder(res?.displayOrder);
+      setTypeLabel(res?.type);
+      setTypeValue(res?.type);
+      setParentValue(res?.parentId);
+      setParentLabel(res?.parentName);
+    });
+  }, [menuId]);
+
   const parentName = parentList?.map((cons) => ({
     label: cons?.title,
     value: cons?.id,
   }));
   const selectParent = (label, value) => {
-    // setConsultantError(false);
     setParentLabel(label);
     setParentValue(value);
   };
@@ -113,22 +124,73 @@ const AddMenuForm = ({}) => {
       console.log(value);
     }
 
+    // if (ValidateForm()) {
+    //   setButtonStatus(true);
+    //   setProgress(true);
+    //   setTitleError("");
+
+    //   post("MenuItem/Create", subdata).then((res) => {
+    //     setProgress(false);
+    //     setButtonStatus(false);
+    //     if (res.status === 200 && res.data.isSuccess === true) {
+    //       history.push(`/menu-list`);
+    //       setNavLink("");
+    //       setIcon("");
+    //     } else {
+    //       return;
+    //     }
+    //   });
+    // }
+
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
       setTitleError("");
+      if (menuId !== undefined) {
+        setButtonStatus(true);
+        setProgress(true);
+        post("MenuItem/Update", subdata).then((res) => {
+          setButtonStatus(false);
+          setProgress(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
 
-      post("MenuItem/Create", subdata).then((res) => {
-        setProgress(false);
-        setButtonStatus(false);
-        if (res.status === 200 && res.data.isSuccess === true) {
-          history.push(`/menu-list`);
-          setNavLink("");
-          setIcon("");
-        } else {
-          return;
-        }
-      });
+            history.push(`/menu-list`);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else {
+        setButtonStatus(true);
+        setProgress(true);
+        post("MenuItem/Create", subdata).then((res) => {
+          setButtonStatus(false);
+          setProgress(false);
+          const uniID = res?.data?.result?.id;
+
+          if (res.status === 200 && res.data.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            history.push({
+              pathname: `/menu-list`,
+              id: uniID,
+            });
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
+        });
+      }
     }
   };
 
@@ -152,6 +214,11 @@ const AddMenuForm = ({}) => {
               </div>
             </div>
             <Row>
+              {menuId !== undefined ? (
+                <>
+                  <input type="hidden" name="id" id="id" value={menuId} />
+                </>
+              ) : null}
               <Col lg="6" md="6">
                 <FormGroup>
                   <span>
@@ -205,9 +272,7 @@ const AddMenuForm = ({}) => {
 
                 {typeValue === "collapse" ? (
                   <FormGroup>
-                    <span>
-                      <span className="text-danger">*</span> Parent Name
-                    </span>
+                    <span>Parent Name</span>
 
                     <Select
                       options={parentName}
@@ -244,7 +309,7 @@ const AddMenuForm = ({}) => {
                     type="number"
                     name="displayOrder"
                     id="displayOrder"
-                    onChange={(e) => setIcon(e.target.value)}
+                    onChange={(e) => setDisplayOrder(e.target.value)}
                     defaultValue={displayOrder}
                     placeholder="Enter Display Order"
                   />

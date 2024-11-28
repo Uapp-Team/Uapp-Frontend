@@ -2188,8 +2188,9 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
                   <AppRoute
-                    path="/menu-add"
+                    path="/menu-add/:menuId?"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? AddMenuForm

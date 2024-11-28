@@ -15,6 +15,10 @@ import LinkButton from "../Components/LinkButton";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 import Pagination from "../Pagination/Pagination";
+import Typing from "../../../components/form/Typing";
+import Select from "react-select";
+import TagButton from "../../../components/buttons/TagButton";
+import PrintFile from "../Affiliate/AffiliateList/PrintFile";
 
 const MenuList = () => {
   const userType = localStorage.getItem("userType");
@@ -51,8 +55,8 @@ const MenuList = () => {
   const [entity, setEntity] = useState(0);
 
   const [serialNum, setSerialNum] = useState(0);
-
   const [deleteModal, setDeleteModal] = useState(false);
+
   const { addToast } = useToasts();
   const [passModal, setPassModal] = useState(false);
   const [passData, setPassData] = useState({});
@@ -213,10 +217,8 @@ const MenuList = () => {
   };
 
   const handleReset = () => {
-    setStatusLabel("Status");
-    setStatusValue(0);
-    setconsultantLabel("Select Consultant");
-    setConsultantValue(0);
+    setParentLabel("Select Parent");
+    setParentValue(0);
     setSearchStr("");
     setCurrentPage(1);
   };
@@ -225,51 +227,105 @@ const MenuList = () => {
     history.push(`/affiliatePersonalInfo/${data?.id}`);
   };
 
-  const toggleDanger = (p) => {
-    setDelData(p);
-    setDeleteModal(true);
-  };
-
-  const handleDeleteData = () => {
-    setButtonStatus(true);
-    setProgress(true);
-    Uremove(`Affiliate/Delete/${delData?.id}`).then((res) => {
-      setProgress(false);
-      setButtonStatus(false);
-      addToast(res?.data?.title, {
-        appearance: "error",
-        autoDismiss: true,
-      });
-      setDeleteModal(false);
-      setSuccess(!success);
-    });
-  };
-
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  console.log("dataPerPage", dataPerPage);
-  console.log("entity", entity);
+
   return (
     <div>
       <BreadCrumb title="Menu List" backTo="" path="/" />
+      <Card className="uapp-employee-search zindex-100">
+        <CardBody>
+          <Row>
+            <Col className="uapp-mb mb-2" md="3" sm="12">
+              <Select
+                options={parentName}
+                value={{
+                  label: parentLabel,
+                  value: parentValue,
+                }}
+                onChange={(opt) => selectParent(opt.label, opt.value)}
+                name="parentId"
+                id="parentId"
+              />
+            </Col>
+            <Col className="uapp-mb mb-2" md="3" sm="12">
+              <Typing
+                name="search"
+                placeholder="Search Title"
+                value={searchStr}
+                setValue={setSearchStr}
+                setIsTyping={setIsTyping}
+                onKeyDown={handleKeyDown}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg="12" md="12" sm="12" xs="12">
+              <div className="d-flex justify-between-start">
+                <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                  {parentValue !== 0 && (
+                    <TagButton
+                      label={parentLabel}
+                      setValue={() => setParentValue(0)}
+                      setLabel={() => setParentLabel("Select Parent")}
+                    ></TagButton>
+                  )}
+                </div>
+
+                <div className="mt-1 mx-0 d-flex btn-clear mb-2">
+                  {parentValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleReset}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
 
       <Card className="uapp-employee-search">
         <CardBody>
           {/* new */}
           <Row className="mb-3">
             <Col lg="5" md="5" sm="12" xs="12" style={{ marginBottom: "10px" }}>
-              {/* {permissions?.includes(permissionList?.Add_Consultant) ? ( */}
               <LinkButton
                 url={"/menu-add"}
                 className={"btn btn-uapp-add "}
                 name={"Add Menu"}
                 icon={<i className="fas fa-plus"></i>}
               />
-              {/* ) : null} */}
             </Col>
 
-            <Col lg="7" md="7" sm="12" xs="12"></Col>
+            <Col lg="7" md="7" sm="12" xs="12">
+              <div className="d-flex justify-content-end">
+                {/* Dropdown number start */}
+                <div className="mr-3">
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">Showing :</div>
+                    <div className="ddzindex">
+                      <Select
+                        options={dataSizeName}
+                        value={{ label: dataPerPage, value: dataPerPage }}
+                        onChange={(opt) => selectDataSize(opt.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* Dropdown number end */}
+
+                <PrintFile
+                  dropdownOpen={dropdownOpen}
+                  toggle={toggle}
+                  componentRef={componentRef}
+                ></PrintFile>
+              </div>
+            </Col>
           </Row>
 
           <MenuTable
@@ -297,15 +353,15 @@ const MenuList = () => {
             userType={userType}
             redirectToConsultantDashboard={redirectToConsultantDashboard}
             handleEdit={handleEdit}
-            toggleDanger={toggleDanger}
             deleteModal={deleteModal}
             setDeleteModal={setDeleteModal}
-            handleDeleteData={handleDeleteData}
             buttonStatus={buttonStatus}
             parentName={parentName}
             parentLabel={parentLabel}
             parentValue={parentValue}
             selectParent={selectParent}
+            setSuccess={setSuccess}
+            success={success}
           />
 
           <Pagination

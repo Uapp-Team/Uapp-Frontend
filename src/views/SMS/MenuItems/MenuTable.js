@@ -17,6 +17,9 @@ import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../components/modal/ConfirmModal";
 import uapploader from "../../../assets/img/Uapp_fav.png";
+import Uremove from "../../../helpers/Uremove";
+import { useToasts } from "react-toast-notifications";
+import remove from "../../../helpers/remove";
 
 const MenuTable = ({
   componentRef,
@@ -39,7 +42,7 @@ const MenuTable = ({
   verifyPass,
   confirmPassword,
   setPassModal,
-  progress,
+
   passError,
   handleDate,
   redirectToApplications,
@@ -47,19 +50,37 @@ const MenuTable = ({
   redirectToConsultantProfile,
   userType,
   redirectToConsultantDashboard,
-  handleEdit,
-  toggleDanger,
   deleteModal,
   setDeleteModal,
-  handleDeleteData,
-  buttonStatus,
+  setSuccess,
+  success,
 }) => {
-  const [popoverOpen, setPopoverOpen] = useState("");
-  console.log(MenuItemList, "menuiemlist");
+  const { addToast } = useToasts();
+  const [delData, setDelData] = useState({});
+  const [buttonStatus, setButtonStatus] = useState(false);
+  const [progress, setProgress] = useState(false);
 
-  const adminPermission =
-    userType === userTypes?.SystemAdmin.toString() ||
-    userType === userTypes?.Admin.toString();
+  const handleEdit = (data) => {
+    history.push(`/menu-add/${data?.id}`);
+  };
+
+  const toggleDanger = (p) => {
+    setDelData(p);
+    setDeleteModal(true);
+  };
+  const handleDeleteData = () => {
+    remove(`MenuItem/Delete/${delData?.id}`).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      addToast(res, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setDeleteModal(false);
+      setSuccess(!success);
+    });
+  };
+
   return (
     <div className="table-responsive fixedhead mb-2" ref={componentRef}>
       <Table id="table-to-xls" className="table-sm table-bordered">
@@ -86,23 +107,24 @@ const MenuTable = ({
               <td>{menu?.parentName}</td>
               <td>{menu?.displayOrder}</td>
               <td>
-                {" "}
-                <ButtonGroup variant="text">
-                  <>
-                    <ButtonForFunction
-                      // func={() => handleEdit(affiliate)}
-                      color={"warning"}
-                      className={"mx-1 btn-sm"}
-                      icon={<i className="fas fa-edit"></i>}
-                    />
-                    <ButtonForFunction
-                      color={"danger"}
-                      className={"mx-1 btn-sm"}
-                      // func={() => toggleDanger(affiliate)}
-                      icon={<i className="fas fa-trash-alt"></i>}
-                    />
-                  </>
-                </ButtonGroup>
+                {menu?.isPredefined === true ? null : (
+                  <ButtonGroup variant="text">
+                    <>
+                      <ButtonForFunction
+                        func={() => handleEdit(menu)}
+                        color={"warning"}
+                        className={"mx-1 btn-sm"}
+                        icon={<i className="fas fa-edit"></i>}
+                      />
+                      <ButtonForFunction
+                        color={"danger"}
+                        className={"mx-1 btn-sm"}
+                        func={() => toggleDanger(menu)}
+                        icon={<i className="fas fa-trash-alt"></i>}
+                      />
+                    </>
+                  </ButtonGroup>
+                )}
               </td>
             </tr>
           ))}
@@ -110,7 +132,7 @@ const MenuTable = ({
       </Table>
 
       <ConfirmModal
-        text="Do You Want To Delete This Affiliate ? Once Deleted it can't be Undone!"
+        text="Do You Want To Delete This Menu ? Once Deleted it can't be Undone!"
         isOpen={deleteModal}
         toggle={() => setDeleteModal(!deleteModal)}
         confirm={handleDeleteData}
