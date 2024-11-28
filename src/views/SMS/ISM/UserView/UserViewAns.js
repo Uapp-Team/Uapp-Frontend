@@ -65,10 +65,10 @@ const UserViewAns = ({
           />
 
           <hr />
-          <span className="text-gray-70 fs-12px">
+          {/* <span className="text-gray-70 fs-12px">
             Results 1-7 of 7 for university
           </span>
-          <hr />
+          <hr /> */}
 
           {loading ? (
             <Loader />
