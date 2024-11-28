@@ -27,15 +27,9 @@ const AddMissionManagerClear = ({
   providerId,
   setIsTyping,
   setSearchStr,
+  branch,
+  setBranch,
 }) => {
-  const [branch, setBranch] = useState([]);
-
-  useEffect(() => {
-    get(`BranchDD/Index`).then((res) => {
-      setBranch(res);
-    });
-  }, [setBranchLabel, setBranchValue]);
-
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
