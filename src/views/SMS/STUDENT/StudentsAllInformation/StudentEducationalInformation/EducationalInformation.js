@@ -513,12 +513,11 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              {studentType != 3 && eduDetails.length > 0 && (
+              {studentType != 3 && eduDetails.length === 0 && (
                 <Row>
                   <Col md="4">
                     <FormGroup>
                       <span>
-                        {" "}
                         <span className="text-danger"> *</span>
                         Have You Ever Studied?{" "}
                       </span>
