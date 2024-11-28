@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Row } from "reactstrap";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 import CategoryAccordion from "../Components/CategoryAccordion";
 import Tag from "../../../../components/ui/Tag";
 import Answer from "../Answers/Answer";
+import Pagination from "../../Pagination/Pagination";
+import Loader from "../../Search/Loader/Loader";
 
 const UserViewAns = ({
+  loading,
   answerData,
   uniLable,
   setUniLable,
@@ -18,6 +21,9 @@ const UserViewAns = ({
   setCategoryId,
   openIndex,
   setOpenIndex,
+  currentPage,
+  setCurrentPage,
+  res,
 }) => {
   const toggleAccordion = (index) => {
     setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -64,11 +70,38 @@ const UserViewAns = ({
           </span>
           <hr />
 
-          {answerData?.map((item, i) => (
-            <div key={i}>
+          {loading ? (
+            <Loader />
+          ) : answerData?.length > 0 ? (
+            <>
+              {answerData?.map((item, i) => (
+                <div key={i}>
+                  <Answer
+                    defaultData={item}
+                    refetch={() => {}}
+                    isPublic={true}
+                  />
+                </div>
+              ))}
+            </>
+          ) : (
+            <p className="text-center fw-600 my-5">No Data Found</p>
+          )}
+
+          {/* {answerData?.map((item, i) => (
+            <div key={i}> 
               <Answer defaultData={item} refetch={() => {}} />
             </div>
-          ))}
+          ))} */}
+
+          <div className="mx-4">
+            <Pagination
+              dataPerPage={30}
+              totalData={res?.totalFiltered}
+              paginate={setCurrentPage}
+              currentPage={currentPage}
+            />
+          </div>
         </Col>
       </Row>
     </>

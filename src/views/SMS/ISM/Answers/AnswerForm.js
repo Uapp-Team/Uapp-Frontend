@@ -286,15 +286,19 @@ const AnswerForm = ({
             ))}
           </>
         )}
-        <div className="mb-3">
-          <KeyBtn
-            label={defaultData?.universityName}
-            data={defaultData?.universityId}
-            value={defaultData?.universityId}
-            // action={setStatusId}
-          />
-        </div>
-        {/* <CheckOne
+
+        {defaultData?.universityName && (
+          <div className="mb-3">
+            <KeyBtn
+              label={defaultData?.universityName}
+              data={defaultData?.universityId}
+              value={defaultData?.universityId}
+              // action={setStatusId}
+            />
+          </div>
+        )}
+        {/* 
+        <CheckOne
           name="isMandatoryForAll"
           label="Mandatory for all universities"
           defaultValue={check}

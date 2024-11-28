@@ -6,6 +6,8 @@ import Answer from "./Answer";
 import Tag from "../../../../components/ui/Tag";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import Loader from "../../Search/Loader/Loader";
+import Pagination from "../../Pagination/Pagination";
 
 const AnswersArea = ({
   uniValue,
@@ -14,24 +16,43 @@ const AnswersArea = ({
   setCategoryId,
   setCategoryName,
 }) => {
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [res, setRes] = useState({});
   const [data, setData] = useState([]);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [statusId, setStatusId] = useState(0);
   const [date, setDate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    setLoading(true);
     if (!isTyping) {
       Uget(
-        `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${searchStr}&sortingdate=${
+        `question/get-paginated-by-university?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${statusId}&searchText=${searchStr}&sortingDate=${
           date ? "asc" : "desc"
         }`
       ).then((res) => {
+        setRes(res);
         setData(res?.items);
+        setLoading(false);
       });
     }
-  }, [success, categoryId, isTyping, searchStr, date, uniValue]);
+  }, [
+    success,
+    categoryId,
+    isTyping,
+    searchStr,
+    date,
+    uniValue,
+    statusId,
+    currentPage,
+  ]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [uniValue, categoryId, statusId]);
 
   return (
     <>
@@ -109,9 +130,11 @@ const AnswersArea = ({
       </div>
       <hr />
 
-      <p className="text-center fw-600 my-5">under construction</p>
+      {/* <p className="text-center fw-600 my-5">under construction</p> */}
 
-      {/* {data?.length > 0 ? (
+      {loading ? (
+        <Loader />
+      ) : data?.length > 0 ? (
         <>
           {data?.map((item, i) => (
             <div key={i}>
@@ -121,7 +144,16 @@ const AnswersArea = ({
         </>
       ) : (
         <p className="text-center fw-600 my-5">No Data Found</p>
-      )} */}
+      )}
+
+      <div className="mx-4">
+        <Pagination
+          dataPerPage={30}
+          totalData={res?.totalFiltered}
+          paginate={setCurrentPage}
+          currentPage={currentPage}
+        />
+      </div>
 
       {/* {data?.map((item, i) => (
         <div key={i}>

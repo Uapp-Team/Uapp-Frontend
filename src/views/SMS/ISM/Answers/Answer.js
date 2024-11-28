@@ -9,7 +9,7 @@ import AnswerEdit from "./AnswerEdit";
 import { dateFormate } from "../../../../components/date/calenderFormate";
 import SaveButton from "../../../../components/buttons/SaveButton";
 
-const Answer = ({ defaultData, refetch, byQues = false }) => {
+const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const createMarkup = (html) => {
@@ -17,8 +17,6 @@ const Answer = ({ defaultData, refetch, byQues = false }) => {
       __html: DOMPurify.sanitize(html),
     };
   };
-
-  console.log(defaultData);
 
   return (
     <>
@@ -46,18 +44,26 @@ const Answer = ({ defaultData, refetch, byQues = false }) => {
                 </span>
               )}
 
-              <Status statusId={defaultData?.status} className="ml-12px" />
-              <span className="text-gray ml-12px">
+              {!isPublic && (
+                <Status statusId={defaultData?.status} className="ml-12px" />
+              )}
+              <span className="text-gray-70 ml-12px">
                 {dateFormate(
                   defaultData?.updatedOn
                     ? defaultData?.updatedOn
                     : defaultData?.createdOn
                 )}
               </span>
-              {defaultData?.isEdit && (
-                <EditBtn action={() => setModalOpen(!modalOpen)} />
+              {!isPublic && (
+                <>
+                  {defaultData?.isEdit && (
+                    <EditBtn action={() => setModalOpen(!modalOpen)} />
+                  )}
+                  {defaultData?.isDelete && (
+                    <DeleteBtn url="" refetch={refetch} />
+                  )}
+                </>
               )}
-              {defaultData?.isDelete && <DeleteBtn url="" refetch={refetch} />}
             </p>
           )}
         </div>
@@ -109,7 +115,7 @@ const Answer = ({ defaultData, refetch, byQues = false }) => {
         <ModalBody className="p-4">
           <AnswerEdit
             id={defaultData?.id}
-            uId={defaultData?.universityId}
+            uId={defaultData?.universityId ? defaultData?.universityId : 0}
             modalClose={() => setModalOpen(!modalOpen)}
             refetch={refetch}
           />

@@ -11,6 +11,7 @@ import Uget from "../../../../helpers/Uget";
 
 const UserView = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const [noFilter, setNoFilter] = useState(true);
   const [uniLable, setUniLable] = useState("Select University");
   const [uniValue, setUniValue] = useState(0);
@@ -21,6 +22,8 @@ const UserView = () => {
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [openIndex, setOpenIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [res, setRes] = useState({});
   const [answerData, setAnswerData] = useState([]);
 
   const redirectRoute = (label, value) => {
@@ -30,15 +33,27 @@ const UserView = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (!isTyping) {
       Uget(
-        `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${keyword}`
+        `question/get-paginated-by-university?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${4}&searchText=${keyword}`
       ).then((res) => {
-        console.log(res?.items);
+        setRes(res);
         setAnswerData(res?.items);
+        setLoading(false);
       });
     }
-  }, [categoryId, isTyping, keyword, uniValue]);
+  }, [categoryId, currentPage, isTyping, keyword, uniValue]);
+  // useEffect(() => {
+  //   if (!isTyping) {
+  //     Uget(
+  //       `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${keyword}`
+  //     ).then((res) => {
+  //       console.log(res?.items);
+  //       setAnswerData(res?.items);
+  //     });
+  //   }
+  // }, [categoryId, isTyping, keyword, uniValue]);
 
   useEffect(() => {
     Uget(`QuestionCategory/get-all`).then((res) => {
@@ -131,6 +146,7 @@ const UserView = () => {
               </Row>
             ) : (
               <UserViewAns
+                loading={loading}
                 answerData={answerData}
                 uniLable={uniLable}
                 setUniLable={setUniLable}
@@ -143,6 +159,9 @@ const UserView = () => {
                 setCategoryId={setCategoryId}
                 openIndex={openIndex}
                 setOpenIndex={setOpenIndex}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                res={res}
               />
             )}
           </div>

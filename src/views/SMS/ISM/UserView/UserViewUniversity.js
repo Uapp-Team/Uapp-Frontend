@@ -13,6 +13,8 @@ import BackIcon from "../../../../components/buttons/BackIcon";
 import PreviewUniDocu from "../../../../components/ui/PreviewUniDocu";
 import { AiOutlineFileText } from "react-icons/ai";
 import Answer from "../Answers/Answer";
+import Loader from "../../Search/Loader/Loader";
+import Pagination from "../../Pagination/Pagination";
 
 const UserViewUniversity = () => {
   const history = useHistory();
@@ -20,6 +22,7 @@ const UserViewUniversity = () => {
   const [isDocTyping, setIsDocTyping] = useState(false);
   const [searchStr, setSearchStr] = useState("");
   const [uniDocument, setUniDocument] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [noFilter, setNoFilter] = useState(true);
   const [uniLable, setUniLable] = useState(data?.name);
   const [uniValue, setUniValue] = useState(data?.id);
@@ -31,19 +34,22 @@ const UserViewUniversity = () => {
   const [subCategoryId, setSubCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("Select Category");
   const [subCategoryName, setSubCategoryName] = useState("Select Sub Category");
-  const [openIndex, setOpenIndex] = useState(0);
+  const [res, setRes] = useState({});
   const [answerData, setAnswerData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    setLoading(true);
     if (!isTyping) {
       Uget(
-        `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${keyword}`
+        `question/get-paginated-public-view?index=${currentPage}&size=${30}&universityId=${uniValue}&categoryId=${categoryId}&subCategoryId=${subCategoryId}&status=${4}&searchText=${keyword}`
       ).then((res) => {
-        console.log(res?.items);
+        setRes(res);
         setAnswerData(res?.items);
+        setLoading(false);
       });
     }
-  }, [categoryId, isTyping, keyword, uniValue]);
+  }, [categoryId, currentPage, isTyping, keyword, subCategoryId, uniValue]);
 
   useEffect(() => {
     if (!isDocTyping) {
@@ -75,11 +81,11 @@ const UserViewUniversity = () => {
 
               <div className="ml-3">
                 <h2 className="text-white fw-600">{uniLable}</h2>
-                <p className="text-white">
+                {/* <p className="text-white">
                   <span className="mr-2">Category (12)</span>
                   <span className="mr-2">Sub-category (12)</span>
                   <span className="mr-2">Documents (30)</span>
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -162,10 +168,10 @@ const UserViewUniversity = () => {
                   </Col>
                   <Col>
                     <Typing
-                      placeholder="Search Documents"
-                      value={searchStr}
-                      setValue={setSearchStr}
-                      setIsTyping={setIsDocTyping}
+                      placeholder="Search"
+                      value={keyword}
+                      setValue={setKeyword}
+                      setIsTyping={setIsTyping}
                     />
                   </Col>
                 </Row>
@@ -174,11 +180,38 @@ const UserViewUniversity = () => {
                   className="overflowY"
                   style={{ height: "calc(100vh - 300px)" }}
                 >
-                  {answerData?.map((item, i) => (
+                  {/* {answerData?.map((item, i) => (
                     <div key={i}>
                       <Answer defaultData={item} refetch={() => {}} />
                     </div>
-                  ))}
+                  ))} */}
+
+                  {loading ? (
+                    <Loader />
+                  ) : answerData?.length > 0 ? (
+                    <>
+                      {answerData?.map((item, i) => (
+                        <div key={i}>
+                          <Answer
+                            defaultData={item}
+                            refetch={() => {}}
+                            isPublic={true}
+                          />
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <p className="text-center fw-600 my-5">No Data Found</p>
+                  )}
+
+                  <div className="mx-4">
+                    <Pagination
+                      dataPerPage={30}
+                      totalData={res?.totalFiltered}
+                      paginate={setCurrentPage}
+                      currentPage={currentPage}
+                    />
+                  </div>
                 </div>
               </div>
             </Col>
