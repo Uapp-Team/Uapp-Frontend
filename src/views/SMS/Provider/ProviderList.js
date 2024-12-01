@@ -802,7 +802,8 @@ const ProviderList = () => {
                           ) ? (
                             <>
                               {userTypeId === userTypes?.SystemAdmin ||
-                              userTypeId === userTypes?.Admin ? (
+                              userTypeId === userTypes?.Admin ||
+                              userTypeId === userTypes?.BranchAdmin ? (
                                 <>
                                   {tableData[2]?.isActive ? (
                                     <th>Password</th>
@@ -882,7 +883,8 @@ const ProviderList = () => {
                             ) ? (
                               <>
                                 {userTypeId === userTypes?.SystemAdmin ||
-                                userTypeId === userTypes?.Admin ? (
+                                userTypeId === userTypes?.Admin ||
+                                userTypeId === userTypes?.BranchAdmin ? (
                                   <>
                                     {tableData[2]?.isActive ? (
                                       <td>
