@@ -38,14 +38,15 @@ export default function InternationalApplicationInformation({
   setFileList1Error,
   fileList2Error,
   setFileList2Error,
+  isRefusedForUKVisaError,
 }) {
   useEffect(() => {
     setIsApplyingFromInside(
       applicationInformation != null &&
-        applicationInformation?.IsApplyingFromInside === true
+        applicationInformation?.isApplyingFromInside === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.IsApplyingFromInside === false
+          applicationInformation?.isApplyingFromInside === false
         ? false
         : null
     );
@@ -279,6 +280,8 @@ export default function InternationalApplicationInformation({
                     No
                   </Label>
                 </FormGroup>
+                <br />
+                <span className="text-danger">{isRefusedForUKVisaError}</span>
               </FormGroup>
 
               {isRefusedForUKVisa === true ? (
