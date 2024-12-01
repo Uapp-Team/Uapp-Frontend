@@ -75,7 +75,7 @@ const EducationalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
   const [studentType, setStudentType] = useState(null);
-  const [summary, setSummary] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -93,7 +93,7 @@ const EducationalInformation = () => {
     );
     get(`EducationInformation/GetSummery/${applicationStudentId}`).then(
       (res) => {
-        setSummary(res);
+        setSelectedOption(res?.result);
       }
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
@@ -174,6 +174,7 @@ const EducationalInformation = () => {
   };
   const goForward = () => {
     history.push(`/addTestScore/${applicationStudentId}`);
+    checkFunction();
   };
 
   const handleQualificationSubject = (e) => {
@@ -495,6 +496,17 @@ const EducationalInformation = () => {
     setDurationError("");
   };
 
+  const handleYesClick = () => {
+    setSelectedOption(true);
+    setShowForm(true);
+  };
+
+  const handleNoClick = () => {
+    setSelectedOption(false);
+    setShowForm(false);
+    deleteCheckFunction();
+  };
+
   return (
     <div>
       <BreadCrumb
@@ -534,10 +546,8 @@ const EducationalInformation = () => {
                             type="radio"
                             name="radioYes"
                             id="radioYes"
-                            onClick={() => {
-                              setForms(true);
-                            }}
-                            checked={summary?.result}
+                            onClick={handleYesClick}
+                            checked={selectedOption === true}
                           />
                           <span>
                             <label style={{ fontSize: "14px" }} for="radioYes">
@@ -547,11 +557,11 @@ const EducationalInformation = () => {
                         </div>
                         <div className="ml-5">
                           <Input
-                            checked={summary?.result}
+                            checked={selectedOption === false}
                             type="radio"
                             name="radioNo"
                             id="radioNo"
-                            onClick={deleteCheckFunction}
+                            onClick={handleNoClick}
                           />
                           <span>
                             <label style={{ fontSize: "14px" }} for="radioNo">
@@ -842,7 +852,8 @@ const EducationalInformation = () => {
               eduDetails?.length === 0 ? (
                 <>
                   <PreviousButton action={goPrevious} />
-                  {permissions?.includes(permissionList?.Edit_Student) ? (
+                  {permissions?.includes(permissionList?.Edit_Student) &&
+                  selectedOption === false ? (
                     <SaveButton text="Save and Next" action={goForward} />
                   ) : null}
                 </>
