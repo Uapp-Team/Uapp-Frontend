@@ -58,6 +58,14 @@ const PersonalStatement = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+    if (file.type !== "text/plain") {
+      setStateMentError("Invalid File Type. Please Select a .txt File");
+      return;
+    }
+    setStateMentError("");
     setFileName(file.name);
     if (file) {
       const reader = new FileReader();

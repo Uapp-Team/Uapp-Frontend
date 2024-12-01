@@ -1,18 +1,19 @@
 import { Modal, Upload } from "antd";
 import React, { useEffect, useState } from "react";
-import { Col, FormGroup, Form, Row } from "reactstrap";
+import { Col, Form, FormGroup, Row } from "reactstrap";
 
-import { rootUrl } from "../../../../../../constants/constants";
-import { useToasts } from "react-toast-notifications";
-import post from "../../../../../../helpers/post";
-import get from "../../../../../../helpers/get";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import { EyeOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import UploadButton from "../../../../../../components/buttons/UploadButton";
+import { useToasts } from "react-toast-notifications";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
-import { EyeOutlined } from '@ant-design/icons';
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../constants/constants";
+import get from "../../../../../../helpers/get";
+import post from "../../../../../../helpers/post";
+import put from "../../../../../../helpers/put";
 
 const FamilyFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -45,10 +46,10 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
       setFileList2([
         {
           uid: familyFunding?.id,
-          name: 'Attachement',
-          status: 'done',
+          name: "Attachement",
+          status: "done",
           url: rootUrl + familyFunding?.attachement,
-        }
+        },
       ]);
     }
   }, [familyFunding]);
@@ -70,33 +71,33 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
   const handlePreview1 = async (file) => {
     // Infer file type if it's not provided
     const inferFileType = (file) => {
-      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
       switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-          return 'image/jpeg';
-        case 'pdf':
-          return 'application/pdf';
-        case 'doc':
-          return 'application/msword';
-        case 'docx':
-          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         default:
-          return 'unknown';
+          return "unknown";
       }
     };
 
     const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith('image')) {
+    if (fileType.startsWith("image")) {
       // If it's an image
       file.preview = await getBase64(file.originFileObj || file.url);
       setPreviewImage(file.preview || file.url);
       setPreviewFileType(fileType);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
-    } else if (fileType === 'application/pdf') {
+    } else if (fileType === "application/pdf") {
       // If it's a PDF
       const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
       setPreviewImage(pdfPreview);
@@ -104,18 +105,21 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
       setPreviewFileType(fileType);
       setPreviewTitle(file.name);
     } else if (
-      fileType === 'application/msword' ||
-      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
       // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
       setPreviewImage(googleViewer);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
       setPreviewFileType(fileType);
     } else {
       // Handle unsupported file types
-      alert('Preview not available for this file type');
+      alert("Preview not available for this file type");
     }
   };
 
@@ -126,24 +130,44 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
     const subData = new FormData(event.target);
     subData.append("familyFundedFile", FileList2[0]?.originFileObj);
     // setButtonStatus(true);
-    setProgress(true);
-    post(`FamilyFunded/Create`, subData).then((res) => {
-      // setButtonStatus(false);
-      setProgress(false);
-      if (res?.status === 200 && res?.data?.isSuccess === true) {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
+    if (!FileList2) {
+      setFamilyError("Please Upload Attatchment");
+    } else {
+      if (familyFunding?.id) {
+        setProgress(true);
+        put(`FamilyFunded/Update`, subData).then((res) => {
+          setProgress(false);
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
         });
+        setFamilyFunding({});
         setSuccess(!success);
-        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
+        get(`FamilyFunded/GetByStudentId/${studentid}`).then((res) => {
+          setFamilyFunding(res);
+        });
       } else {
-        addToast(res?.data?.message, {
-          appearance: "error",
-          autoDismiss: true,
+        setProgress(true);
+        post(`FamilyFunded/Create`, subData).then((res) => {
+          // setButtonStatus(false);
+          setProgress(false);
+          if (res?.status === 200 && res?.data?.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+            setSuccess(!success);
+            history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
+          } else {
+            addToast(res?.data?.message, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }
         });
       }
-    });
+    }
   };
 
   const handlePrevious = () => {
@@ -159,7 +183,9 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
           id="studentId"
           value={studentid}
         />
-
+        {familyFunding?.id ? (
+          <input type="hidden" name="id" id="id" value={familyFunding?.id} />
+        ) : null}
         <Row>
           <Col lg="6" md="8">
             <FormGroup>
@@ -179,10 +205,10 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
                   onChange={handleChange1}
                   beforeUpload={(file) => false}
                   itemRender={(originNode, file) => (
-                    <div style={{ display: 'flex', alignItems: 'baseLine' }}>
+                    <div style={{ display: "flex", alignItems: "baseLine" }}>
                       {originNode}
                       <EyeOutlined
-                        style={{ marginLeft: '8px', cursor: 'pointer' }}
+                        style={{ marginLeft: "8px", cursor: "pointer" }}
                         onClick={() => handlePreview1(file)}
                       />
                     </div>
@@ -198,14 +224,18 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
                     footer={null}
                     onCancel={() => setPreviewVisible(false)}
                   >
-                    {previewFileType === 'application/pdf' ? (
+                    {previewFileType === "application/pdf" ? (
                       <iframe
                         src={previewImage}
-                        style={{ width: '100%', height: '80vh' }}
+                        style={{ width: "100%", height: "80vh" }}
                         frameBorder="0"
                       ></iframe>
                     ) : (
-                      <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
+                      <img
+                        alt={previewTitle}
+                        src={previewImage}
+                        style={{ width: "100%" }}
+                      />
                     )}
                   </Modal>
                 )}

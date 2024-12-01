@@ -1,22 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Button, Card, CardBody, Table } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import ReactToPrint from "react-to-print";
 import { useToasts } from "react-toast-notifications";
-import put from "../../../../../helpers/put";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import ButtonLoader from "../../../Components/ButtonLoader";
-import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import { Button, Card, CardBody, Table } from "reactstrap";
 import icon_warning from "../../../../../assets/img/icons/icon_warning.png";
 import icon_success from "../../../../../assets/img/icons/icons_success.png";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import ProfilePreview from "../../StudentProfile/ProfilePreview";
-import { rootUrl } from "../../../../../constants/constants";
-import { useLocation } from "react-router-dom";
-import ReactToPrint from "react-to-print";
 import logoLg from "../../../../../assets/img/Logo.svg";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import { rootUrl } from "../../../../../constants/constants";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import ButtonLoader from "../../../Components/ButtonLoader";
+import ProfilePreview from "../../StudentProfile/ProfilePreview";
+import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const StudentDeclaration = () => {
   const location = useLocation();
@@ -34,7 +33,7 @@ const StudentDeclaration = () => {
   //////////////////////////
   const [studentDetails, setStudentDetails] = useState({});
   const [contactData, setContactData] = useState([]);
-  const [emergencyContactList, setEmergencyContactList] = useState({});
+  const [emergencyContactList, setEmergencyContactList] = useState([]);
   const [applicationData, setApplicationData] = useState({});
   const [fundingData, setFundingData] = useState({});
   const [educationalInfos, setEducationalInfos] = useState([]);
@@ -469,7 +468,7 @@ const StudentDeclaration = () => {
                           Mobile Number
                         </td>
                         <td style={{ paddingLeft: "8px" }}>
-                          {studentDetails?.phoneNumber}
+                          +{studentDetails?.phoneNumber}
                         </td>
                       </tr>
                       <tr style={{ border: "1px solid #dee2e6" }}>
@@ -732,79 +731,85 @@ const StudentDeclaration = () => {
                       </td>
                     </thead>
                   </Table>
-
-                  <Table style={{ marginBottom: "2 rem" }}>
-                    <tbody>
-                      <tr style={{ border: "1px solid #dee2e6" }}>
-                        <td
-                          style={{
-                            borderRight: "1px solid #dee2e6",
-                            paddingLeft: "8px",
-                            width: "50%",
-                          }}
-                        >
-                          Name
-                        </td>
-                        <td style={{ paddingLeft: "8px" }}>
-                          {emergencyContactList?.personName}
-                        </td>
-                      </tr>
-                      <tr style={{ border: "1px solid #dee2e6" }}>
-                        <td
-                          style={{
-                            borderRight: "1px solid #dee2e6",
-                            paddingLeft: "8px",
-                          }}
-                        >
-                          Relation
-                        </td>
-                        <td style={{ paddingLeft: "8px" }}>
-                          {emergencyContactList?.relationship}
-                        </td>
-                      </tr>
-                      <tr style={{ border: "1px solid #dee2e6" }}>
-                        <td
-                          style={{
-                            borderRight: "1px solid #dee2e6",
-                            paddingLeft: "8px",
-                          }}
-                        >
-                          Address
-                        </td>
-                        <td style={{ paddingLeft: "8px" }}>
-                          {emergencyContactList?.addressLine} <br />
-                          {emergencyContactList?.city} <br />
-                          {emergencyContactList?.state}
-                        </td>
-                      </tr>
-                      <tr style={{ border: "1px solid #dee2e6" }}>
-                        <td
-                          style={{
-                            borderRight: "1px solid #dee2e6",
-                            paddingLeft: "8px",
-                          }}
-                        >
-                          Phone
-                        </td>
-                        <td style={{ paddingLeft: "8px" }}>
-                          {emergencyContactList?.phoneNumber}
-                        </td>
-                      </tr>
-                      <tr style={{ border: "1px solid #dee2e6" }}>
-                        <td
-                          style={{
-                            borderRight: "1px solid #dee2e6",
-                            paddingLeft: "8px",
-                          }}
-                        >
-                          Email
-                        </td>
-                        <td style={{ paddingLeft: "8px" }}>
-                          {emergencyContactList?.emailAddress}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </Table>
+                  {emergencyContactList?.map((contact, i) => (
+                    <>
+                      <span className="card-heading">
+                        Emergency Contact {i + 1}
+                      </span>
+                      <Table style={{ marginBottom: "2 rem" }}>
+                        <tbody>
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
+                                width: "50%",
+                              }}
+                            >
+                              Name
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {contact?.personName}
+                            </td>
+                          </tr>
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
+                              }}
+                            >
+                              Relation
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {contact?.relationship}
+                            </td>
+                          </tr>
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
+                              }}
+                            >
+                              Address
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {contact?.addressLine} <br />
+                              {contact?.city} <br />
+                              {contact?.state}
+                            </td>
+                          </tr>
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
+                              }}
+                            >
+                              Phone
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {contact?.phoneNumber}
+                            </td>
+                          </tr>
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
+                              }}
+                            >
+                              Email
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {contact?.emailAddress}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </>
+                  ))}
                 </div>
 
                 {/*Emergency Contact information */}
@@ -864,7 +869,7 @@ const StudentDeclaration = () => {
                 {/* application information */}
 
                 {/* Funding information */}
-                <div style={{ marginBottom: "20px", marginTop: "700px" }}>
+                <div style={{ marginBottom: "20px" }}>
                   <Table style={{ marginBottom: "15px" }}>
                     <thead style={{ backgroundColor: "#045d5e " }}>
                       <td>

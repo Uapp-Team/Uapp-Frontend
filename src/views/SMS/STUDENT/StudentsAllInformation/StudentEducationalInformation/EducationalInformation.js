@@ -4,6 +4,7 @@ import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  CardSubtitle,
   Col,
   FormGroup,
   Input,
@@ -17,15 +18,11 @@ import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
-import moment from "moment";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import {
-  currentDate,
-  dateFormate,
-} from "../../../../../components/date/calenderFormate";
+import { dateFormate } from "../../../../../components/date/calenderFormate";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
@@ -61,9 +58,9 @@ const EducationalInformation = () => {
   const [qualificationSubject, setQualificationSubject] = useState("");
   const [qualificationSubjectError, setQualificationSubjectError] =
     useState("");
-  const [attendedFrom, setAttendedFrom] = useState("");
+  const [attendedFrom, setAttendedFrom] = useState(null);
   const [attendedFromError, setAttendedFromError] = useState("");
-  const [attendedTo, setAttendedTo] = useState("");
+  const [attendedTo, setAttendedTo] = useState(null);
   const [attendedToError, setAttendedToError] = useState("");
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
@@ -185,32 +182,59 @@ const EducationalInformation = () => {
       setQualificationSubjectError("");
     }
   };
+
+  function convertDateFormat(dateString) {
+    // Split the input date string into day, month, and year
+    const [day, month, year] = dateString.split("/");
+
+    // Return the date in yyyy-MM-dd format
+    return `${year}-${month}-${day}`;
+  }
+
+  // const handleAttendedFrom = (e) => {
+  //   if (!e) {
+  //     setAttendedFromError("Attended From is required");
+  //     setAttendedFrom(null);
+  //     return;
+  //   }
+  //   const value = e.toDate();
+  //   const formatedDate = convertDateFormat(value.toISOString().split("T")[0]);
+  //   setAttendedFrom(formatedDate);
+  //   if (currentDate < value.toISOString()) {
+  //     setAttendedFromError("Invalid Date");
+  //   } else {
+  //     setAttendedFromError("");
+  //   }
+  // };
   const handleAttendedFrom = (e) => {
-    const value = e.target.value;
-    setAttendedFrom(value);
-    if (e.target.value === "") {
-      setAttendedFromError("Date is required");
-    } else if (currentDate < value) {
-      setAttendedFromError("Invalid Date");
+    if (e) {
+      setAttendedFrom(e);
     } else {
-      setAttendedFromError("");
+      setAttendedFromError("Attended From is required");
     }
   };
   const handleAttendedTo = (e) => {
-    const value = e.target.value;
-    setAttendedTo(value);
-    if (e.target.value === "") {
-      setAttendedToError("Date is required");
-    } else if (currentDate < value) {
-      setAttendedToError("Invalid Date");
-    } else if (attendedFrom > value) {
-      setAttendedToError(
-        "Attended to date should be greater than Attended from date"
-      );
+    if (e) {
+      setAttendedTo(e);
     } else {
-      setAttendedToError("");
+      setAttendedToError("Attended To is required");
     }
   };
+  // const handleAttendedTo = (e) => {
+  //   if (!e) {
+  //     setAttendedToError("Attended To is required");
+  //     setAttendedTo(null);
+  //     return;
+  //   }
+  //   const value = e.toDate();
+  //   const formateDate = convertDateFormat(value.toISOString().split("T")[0]);
+  //   setAttendedTo(formateDate);
+  //   if (currentDate < value.toISOString()) {
+  //     setAttendedToError("Invalid Date");
+  //   } else {
+  //     setAttendedToError("");
+  //   }
+  // };
 
   const handleDuration = (e) => {
     let data = e.target.value.trimStart();
@@ -307,9 +331,13 @@ const EducationalInformation = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
+    console.log("first", subData);
+    subData.append("attendedInstitutionFrom", attendedFrom);
+    if (attendedTo != null) {
+      subData.append("attendedInstitutionTo", attendedTo);
+    }
     subData.append("qualificationAchieved", isAchieved);
     subData.append("instituteContactNumber", instituteContactNumber);
-
     if (validateRegisterForm()) {
       if (oneData?.id) {
         setButtonStatus(true);
@@ -330,7 +358,7 @@ const EducationalInformation = () => {
           setQualificationSubject("");
           setDuration("");
           setInstitution("");
-          setAttendedFrom(currentDate);
+          setAttendedFrom(null);
           setShowForm(false);
         });
       } else {
@@ -351,11 +379,12 @@ const EducationalInformation = () => {
           setDuration("");
           setInstitution("");
 
-          setAttendedFrom(currentDate);
+          setAttendedFrom(null);
           setSuccess(!success);
           setCountryLabel("Select Country");
           setCountryValue(0);
           setShowForm(false);
+
           setForms(true);
         });
       }
@@ -380,8 +409,8 @@ const EducationalInformation = () => {
       setSuccess(!success);
       setDeleteData({});
       setOneData({});
-      setAttendedFrom(currentDate);
-      setAttendedTo(currentDate);
+      setAttendedFrom(null);
+      setAttendedTo(null);
       setCountryLabel("Select Country");
       setCountryValue(0);
       setEducationLevelLabel("Select Education Level");
@@ -415,15 +444,11 @@ const EducationalInformation = () => {
       setInstituteAddress(res?.instituteAddress);
 
       res?.attendedInstitutionFrom
-        ? setAttendedFrom(
-            moment(new Date(res?.attendedInstitutionFrom)).format("YYYY-MM-DD")
-          )
+        ? setAttendedFrom(res?.attendedInstitutionFrom)
         : setAttendedFrom("");
 
       res?.attendedInstitutionTo
-        ? setAttendedTo(
-            moment(new Date(res?.attendedInstitutionTo)).format("YYYY-MM-DD")
-          )
+        ? setAttendedTo(res?.attendedInstitutionTo)
         : setAttendedTo("");
     });
     setShowForm(true);
@@ -446,8 +471,8 @@ const EducationalInformation = () => {
   const onShow = () => {
     setSuccess(!success);
     setShowForm(true);
-    setAttendedFrom(currentDate);
-    setAttendedTo(currentDate);
+    setAttendedFrom(null);
+    setAttendedTo(null);
     setCountryLabel("Select Country");
     setCountryValue(0);
     setEducationLevelLabel("Select Education Level");
@@ -488,12 +513,11 @@ const EducationalInformation = () => {
             <TabPane tabId="5">
               <p className="section-title">Education Informations</p>
 
-              {studentType != 3 && (
+              {studentType != 3 && eduDetails.length === 0 && (
                 <Row>
                   <Col md="4">
                     <FormGroup>
                       <span>
-                        {" "}
                         <span className="text-danger"> *</span>
                         Have You Ever Studied?{" "}
                       </span>
@@ -598,6 +622,9 @@ const EducationalInformation = () => {
                                 ) : null}
                               </span>
                             </div>
+                            <CardSubtitle>
+                              {edu?.nameOfInstitution}
+                            </CardSubtitle>
                             <hr />
                             <Row className="text-gray">
                               <Col md="2">
@@ -620,14 +647,14 @@ const EducationalInformation = () => {
                               </Col>
                               <Col md="2">
                                 <p>
-                                  <span>Education Level</span>
-                                  <br />
-                                  <b> {edu?.nameOfInstitution}</b>
-                                </p>
-                                <p>
                                   <span>Qualification Course</span>
                                   <br />
                                   <b> {edu?.qualificationSubject}</b>
+                                </p>
+                                <p>
+                                  <span>Institution Address</span>
+                                  <br />
+                                  <b>{edu?.instituteAddress}</b>
                                 </p>
                               </Col>
                               <Col md="2">
@@ -661,14 +688,9 @@ const EducationalInformation = () => {
                               </Col>
                               <Col md="3">
                                 <p>
-                                  <span>Institute Contact Number</span>
+                                  <span>Institution Contact Number</span>
                                   <br />
-                                  <b>{edu?.instituteContactNumber}</b>
-                                </p>
-                                <p>
-                                  <span>Institute Address</span>
-                                  <br />
-                                  <b>{edu?.instituteAddress}</b>
+                                  <b>+{edu?.instituteContactNumber}</b>
                                 </p>
                               </Col>
                             </Row>
@@ -712,6 +734,8 @@ const EducationalInformation = () => {
                       setAchieved={setAchieved}
                       handleQualificationSubject={handleQualificationSubject}
                       qualificationSubjectError={qualificationSubjectError}
+                      setAttendedToError={setAttendedToError}
+                      setAttendedFromError={setAttendedFromError}
                       handleAttendedFrom={handleAttendedFrom}
                       attendedFromError={attendedFromError}
                       handleDuration={handleDuration}
@@ -770,6 +794,8 @@ const EducationalInformation = () => {
                       handleInstitution={handleInstitution}
                       institutionError={institutionError}
                       handleAttendedTo={handleAttendedTo}
+                      setAttendedToError={setAttendedToError}
+                      setAttendedFromError={setAttendedFromError}
                       attendedToError={attendedToError}
                       handlePercentage={handlePercentage}
                       percentageError={percentageError}
