@@ -75,6 +75,7 @@ const EducationalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
   const [studentType, setStudentType] = useState(null);
+  const [summary, setSummary] = useState(null);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -88,6 +89,11 @@ const EducationalInformation = () => {
     get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
         setEduDetails(res);
+      }
+    );
+    get(`EducationInformation/GetSummery/${applicationStudentId}`).then(
+      (res) => {
+        setSummary(res);
       }
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
@@ -119,20 +125,17 @@ const EducationalInformation = () => {
   };
   const checkFunction = () => {
     setForms(false);
-    if (eduDetails?.length > 0) {
-      setForms(false);
-      get(
-        `EducationInformation/DeleteByStudentId/${applicationStudentId}`
-      ).then((res) => {
-        addToast("Educational details deleted successfully", {
-          appearance: "error",
-          autoDismiss: "true",
-        });
-        setSuccess(!success);
-        setShowDeleteOption(false);
-        history.push(`/addTestScore/${applicationStudentId}`);
+    remove(
+      `EducationInformation/DeleteByStudentId/${applicationStudentId}`
+    ).then((res) => {
+      addToast("Educational details deleted successfully", {
+        appearance: "error",
+        autoDismiss: "true",
       });
-    }
+      setSuccess(!success);
+      setShowDeleteOption(false);
+      history.push(`/addTestScore/${applicationStudentId}`);
+    });
   };
 
   const educationLevelName = educationLevel?.map((edu) => ({
@@ -534,7 +537,7 @@ const EducationalInformation = () => {
                             onClick={() => {
                               setForms(true);
                             }}
-                            checked={forms === true}
+                            checked={summary?.result}
                           />
                           <span>
                             <label style={{ fontSize: "14px" }} for="radioYes">
@@ -544,7 +547,7 @@ const EducationalInformation = () => {
                         </div>
                         <div className="ml-5">
                           <Input
-                            checked={forms === false}
+                            checked={summary?.result}
                             type="radio"
                             name="radioNo"
                             id="radioNo"

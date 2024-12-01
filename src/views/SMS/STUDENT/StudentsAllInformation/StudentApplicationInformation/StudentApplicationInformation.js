@@ -676,7 +676,7 @@ const StudentApplicationInformation = () => {
                             </span>
                           )}
 
-                          {studentTypeValue ? null : (
+                          {/* {studentTypeValue ? null : (
                             <>
                               {" "}
                               {possibleStudentType !==
@@ -816,7 +816,7 @@ const StudentApplicationInformation = () => {
                                 </>
                               ) : null}
                             </>
-                          )}
+                          )} */}
                         </FormGroup>
 
                         {countryValue !== 0 ? (
