@@ -34,33 +34,63 @@ const Index = () => {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
-
-  const userTypeId = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const [providerHelperId, setProviderHelperId] = useState(undefined);
-  // const [managerDDForm, setManagerDDForm] = useState([]);
-  // const [managerFormLabel, setManagerFormLabel] = useState(
-  //   "Select Admission Manager"
-  // );
-  // const [managerFormValue, setManagerFormValue] = useState(0);
-  // const [managerFormError, setManagerFormError] = useState(false);
+  const [managerDDForm, setManagerDDForm] = useState([]);
+  const [managerFormLabel, setManagerFormLabel] = useState(
+    "Select Admission Manager"
+  );
+  const [managerFormValue, setManagerFormValue] = useState(0);
+  const [managerFormError, setManagerFormError] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
 
-    get("ProviderDD/index").then((res) => {
-      setProvider(res);
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
     });
+  }, []);
 
+  useEffect(() => {
+    if (userType === userTypes?.BranchAdmin) {
+      get(`ProviderDD/Index/${branchId}`).then((res) => {
+        setProvider(res);
+      });
+    } else {
+      get(`ProviderDD/Index/${branchValue}`).then((res) => {
+        setProvider(res);
+      });
+    }
+  }, [branchValue, userType]);
+
+  useEffect(() => {
+    get(`AdmissionManagerDD/Index/${providerValue}`).then((res) => {
+      setManagerDDForm(res);
+    });
+  }, [providerValue]);
+
+  useEffect(() => {
     get(
       `AdmissionOfficerInformation/GetGeneralInformation/${admissionOfficerId}`
     ).then((res) => {
       console.log("dataaa", res);
       setProviderValue(res?.providerId);
       setProviderLabel(res?.provider?.providerName);
+      setBranchValue(res?.branchId);
+      setBranchLabel(res?.branch?.name);
+      setManagerFormValue(res?.admissionManagerId);
+
+      setManagerFormLabel(
+        `${res?.admissionManager.firstName} ${res?.admissionManager.lastName}`
+      );
       setTitleValue(res?.nameTittle?.id);
       setFirstName(res?.firstName);
       setLastName(res?.lastName);
@@ -69,45 +99,55 @@ const Index = () => {
   }, [admissionOfficerId]);
 
   useEffect(() => {
-    if (userTypeId === userTypes?.ProviderAdmin.toString()) {
-      get(`ProviderHelper/GetProviderId/${userTypeId}/${userId}`).then(
-        (res) => {
-          console.log("providerId", res);
-          setProviderHelperId(res);
-        }
-      );
-      // get(`AdmissionManagerDD/Index/${providerHelperId}`).then((res) => {
-      //   console.log(res);
-      //   setManagerDDForm(res);
-      // });
+    if (userType === userTypes?.ProviderAdmin.toString()) {
+      get(`ProviderHelper/GetProviderId/${userType}/${userId}`).then((res) => {
+        console.log("providerId", res);
+        setProviderHelperId(res);
+      });
+      get(`AdmissionManagerDD/Index/${providerHelperId}`).then((res) => {
+        console.log(res);
+        setManagerDDForm(res);
+      });
     }
-  }, [userTypeId, userId, providerHelperId]);
+  }, [userType, userId, providerHelperId]);
 
   const providerOptions = provider?.map((b) => ({
     label: b.name,
     value: b.id,
   }));
-  // const managerMenuForm = managerDDForm.map((managerForm) => ({
-  //   label: managerForm?.name,
-  //   value: managerForm?.id,
-  // }));
+
+  const managerMenuForm = managerDDForm.map((managerForm) => ({
+    label: managerForm?.name,
+    value: managerForm?.id,
+  }));
 
   const selectProvider = (label, value) => {
     setProviderError(false);
     setProviderLabel(label);
     setProviderValue(value);
-    // setManagerFormLabel("Select Admission Manager");
-    // setManagerFormValue(0);
-    // get(`AdmissionManagerDD/Index/${value}`).then((res) => {
-    //   setManagerDDForm(res);
-    // });
+    setManagerFormLabel("Select Admission Manager");
+    setManagerFormValue(0);
   };
 
-  // const selectManagerForm = (label, value) => {
-  //   setManagerFormError(false);
-  //   setManagerFormLabel(label);
-  //   setManagerFormValue(value);
-  // };
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+
+    setProviderValue(0);
+    setProviderLabel("Select Provider");
+  };
+
+  const selectManagerForm = (label, value) => {
+    setManagerFormError(false);
+    setManagerFormLabel(label);
+    setManagerFormValue(value);
+  };
 
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
@@ -132,7 +172,16 @@ const Index = () => {
     let isFormValid = true;
 
     if (
-      userTypeId !== userTypes?.ProviderAdmin.toString() &&
+      userType !== userTypes?.BranchAdmin &&
+      userType !== userTypes?.BranchManager &&
+      branchValue === 0
+    ) {
+      setBranchError(true);
+      isFormValid = false;
+    }
+
+    if (
+      userType !== userTypes?.ProviderAdmin.toString() &&
       providerValue === 0
     ) {
       isFormValid = false;
@@ -217,7 +266,33 @@ const Index = () => {
               <Col md="6">
                 <input type="hidden" name="id" value={admissionOfficerId} />
 
-                {userTypeId !== userTypes?.ProviderAdmin.toString() ? (
+                {userType !== userTypes?.AdmissionManager &&
+                userType !== userTypes?.ProviderAdmin.toString() &&
+                userType !== userTypes?.BranchAdmin &&
+                userType !== userTypes?.BranchManager ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                    </span>
+
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      // name="BranchId"
+                      // id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
+
+                {userType !== userTypes?.AdmissionManager.toString() &&
+                userType !== userTypes?.ProviderAdmin.toString() ? (
                   <FormGroup>
                     <span>
                       <span className="text-danger">*</span> Provider
@@ -245,31 +320,34 @@ const Index = () => {
                   />
                 )}
 
-                <input type="hidden" name="admissionManagerId" value={0} />
-                {/* <FormGroup>
-                  <span>
-                    Admission Manager <span className="text-danger">*</span>{" "}
-                  </span>
+                {/* <input type="hidden" name="admissionManagerId" value={0} /> */}
 
-                  <Select
-                    options={managerMenuForm}
-                    value={{
-                      label: managerFormLabel,
-                      value: managerFormValue,
-                    }}
-                 
-                    onChange={(opt) => selectManagerForm(opt.label, opt.value)}
-                    name="admissionManagerId"
-                    id="admissionManagerId"
-                    type="hidden"
-                  />
-
-                  {managerFormError ? (
-                    <span className="text-danger">
-                      Admission manager is required
+                {userType !== userTypes?.AdmissionManager ? (
+                  <FormGroup>
+                    <span>
+                      Admission Manager <span className="text-danger">*</span>{" "}
                     </span>
-                  ) : null}
-                </FormGroup> */}
+
+                    <Select
+                      options={managerMenuForm}
+                      value={{
+                        label: managerFormLabel,
+                        value: managerFormValue,
+                      }}
+                      onChange={(opt) =>
+                        selectManagerForm(opt.label, opt.value)
+                      }
+                      name="admissionManagerId"
+                      id="admissionManagerId"
+                    />
+
+                    {managerFormError ? (
+                      <span className="text-danger">
+                        Admission manager is required
+                      </span>
+                    ) : null}
+                  </FormGroup>
+                ) : null}
 
                 <FormGroup>
                   <span>

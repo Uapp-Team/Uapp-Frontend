@@ -27,8 +27,8 @@ const AdmissionManagerRegister = () => {
   const [title, setTitle] = useState([]);
   const { providerId } = useParams();
   const { commonId } = useParams();
+  const userType = localStorage.getItem("userType");
 
-  const userTypeId = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const [providerHelperId, setProviderHelperId] = useState(undefined);
   const [firstName, setFirstName] = useState("");
@@ -41,15 +41,30 @@ const AdmissionManagerRegister = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [admissionManagerId, setAdmissionManagerId] = useState();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
-    get("ProviderDD/index").then((res) => {
-      setProvider(res);
-    });
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
-  }, []);
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+    });
+
+    if (userType === userTypes?.BranchAdmin) {
+      get(`ProviderDD/Index/${branchId}`).then((res) => {
+        setProvider(res);
+      });
+    } else {
+      get(`ProviderDD/Index/${branchValue}`).then((res) => {
+        setProvider(res);
+      });
+    }
+  }, [branchValue, userType]);
 
   useEffect(() => {
     const filterData = provider.filter((status) => {
@@ -63,24 +78,33 @@ const AdmissionManagerRegister = () => {
   }, [provider, commonId]);
 
   useEffect(() => {
-    if (userTypeId === userTypes?.ProviderAdmin.toString()) {
-      get(`ProviderHelper/GetProviderId/${userTypeId}/${userId}`).then(
-        (res) => {
-          setProviderHelperId(res);
-        }
-      );
+    if (userType === userTypes?.ProviderAdmin.toString()) {
+      get(`ProviderHelper/GetProviderId/${userType}/${userId}`).then((res) => {
+        setProviderHelperId(res);
+      });
     }
-  }, [userTypeId, userId]);
+  }, [userType, userId]);
 
-  const branchOptions = provider?.map((b) => ({
+  const providerOptions = provider?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectProvider = (label, value) => {
+    setProviderError(false);
+    setProviderLabel(label);
+    setProviderValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
     label: b.name,
     value: b.id,
   }));
 
   const selectBranch = (label, value) => {
-    setProviderError(false);
-    setProviderLabel(label);
-    setProviderValue(value);
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
   };
 
   // const handleEmail = (e) => {
@@ -132,8 +156,17 @@ const AdmissionManagerRegister = () => {
     let isFormValid = true;
 
     if (
+      userType !== userTypes?.BranchAdmin &&
+      userType !== userTypes?.BranchManager &&
+      branchValue === 0
+    ) {
+      setBranchError(true);
+      isFormValid = false;
+    }
+
+    if (
       commonId === undefined &&
-      userTypeId !== userTypes?.ProviderAdmin.toString() &&
+      userType !== userTypes?.ProviderAdmin.toString() &&
       providerValue === 0
     ) {
       isFormValid = false;
@@ -308,20 +341,44 @@ const AdmissionManagerRegister = () => {
                   </FormGroup>
                 ) : null} */}
 
+                {userType !== userTypes?.BranchAdmin &&
+                userType !== userTypes?.BranchManager ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                      <span className="text-danger"></span>
+                    </span>
+
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      // name="BranchId"
+                      // id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
+
                 {commonId === undefined &&
-                userTypeId !== userTypes?.ProviderAdmin.toString() ? (
+                userType !== userTypes?.ProviderAdmin.toString() ? (
                   <FormGroup>
                     <span>
                       <span className="text-danger">*</span> Provider
                     </span>
 
                     <Select
-                      options={branchOptions}
+                      options={providerOptions}
                       value={{
                         label: providerLabel,
                         value: providerValue,
                       }}
-                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      onChange={(opt) => selectProvider(opt.label, opt.value)}
                       name="providerId"
                       id="providerId"
                     />
@@ -329,7 +386,7 @@ const AdmissionManagerRegister = () => {
                       <span className="text-danger">Provider is required</span>
                     ) : null}
                   </FormGroup>
-                ) : userTypeId === userTypes?.ProviderAdmin.toString() ? (
+                ) : userType === userTypes?.ProviderAdmin.toString() ? (
                   <input
                     type="hidden"
                     name="providerId"
