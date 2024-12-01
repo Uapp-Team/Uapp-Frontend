@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Col, Form, Row } from "reactstrap";
+import { Form } from "reactstrap";
 import Input from "../../../../components/form/Input";
 import { useForm } from "react-hook-form";
 import SaveButton from "../../../../components/buttons/SaveButton";
@@ -9,13 +9,8 @@ import { useToasts } from "react-toast-notifications";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import CheckOne from "../../../../components/form/CheckOne";
 import RichTextArea from "../../../../components/form/RichTextArea";
-import TopicDivider from "../../Components/TopicDivider";
-import MultiSelectU from "../../../../components/form/MultiSelectU";
 import Origine from "../Components/Origine";
-import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 import { AiOutlineRight } from "react-icons/ai";
-import Filter from "../../../../components/Dropdown/Filter";
-import Pointer from "../../../../components/buttons/Pointer";
 import StatusDD from "../Components/StatusDD";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 import TextArea from "../../../../components/form/TextArea";
@@ -52,13 +47,6 @@ const AnswerForm = ({
 }) => {
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
-  // const [categoryId, setCategoryId] = useState(defaultData.categoryId);
-  // const [subCategoryId, setSubCategoryId] = useState(defaultData.subCategoryId);
-  // const [categoryIdError, setCategoryIdError] = useState("");
-  // const [subCategoryIdError, setSubCategoryIdError] = useState("");
-  // const [title, setTitle] = useState(defaultData?.title);
-  // const [titleError, setTitleError] = useState("");
-  // const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
   const [answers, setAnswers] = useState(
     defaultData?.answerList && defaultData?.answerList[0]?.answers
@@ -76,10 +64,6 @@ const AnswerForm = ({
   const [answers1Error, setAnswers1Error] = useState("");
   const [answers2Error, setAnswers2Error] = useState("");
   const [answers3Error, setAnswers3Error] = useState("");
-  // const [check, setCheck] = useState(defaultData.isMandatoryForAll);
-  // const [universityValue, setuniversityValue] = useState(
-  //   defaultData.universities
-  // );
 
   const [statusValue, setStatusValue] = useState(
     defaultData.status !== 1 && defaultData.status !== 5
@@ -90,12 +74,7 @@ const AnswerForm = ({
   const [note, setNote] = useState("");
   const [noteError, setNoteError] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    // formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { questionType: defaultData.questionType },
   });
@@ -103,18 +82,6 @@ const AnswerForm = ({
   const handleValid = () => {
     var isValid = true;
 
-    // if (categoryId === 0) {
-    //   setCategoryIdError("Category is Required");
-    //   isValid = false;
-    // }
-    // if (subCategoryId === 0) {
-    //   setSubCategoryIdError("Sub Category is Required");
-    //   isValid = false;
-    // }
-    // if (title === "") {
-    //   setTitleError("Title is Required");
-    //   isValid = false;
-    // }
     if (isSameForAll && !answers) {
       setAnswersError("Required");
       isValid = false;
@@ -144,13 +111,8 @@ const AnswerForm = ({
       const submitData = {
         id: defaultData.id,
         universityId: defaultData.universityId,
-        // categoryId: categoryId,
-        // subCategoryId: subCategoryId,
-        // title: title,
         status: statusValue,
-        // isRequiredAns: ansReq,
         isSameForAll: isSameForAll,
-        // answers: !isSameForAll ? null : answers,
         answerList: isSameForAll
           ? [
               {
@@ -186,12 +148,8 @@ const AnswerForm = ({
                 answers: answers3,
               },
             ],
-        // isMandatoryForAll: check,
-        // universities: universityValue,
         note: note,
       };
-
-      console.log(submitData);
 
       setIsSubmit(true);
       method(submitPath, submitData).then((res) => {
@@ -293,34 +251,10 @@ const AnswerForm = ({
               label={defaultData?.universityName}
               data={defaultData?.universityId}
               value={defaultData?.universityId}
-              // action={setStatusId}
             />
           </div>
         )}
-        {/* 
-        <CheckOne
-          name="isMandatoryForAll"
-          label="Mandatory for all universities"
-          defaultValue={check}
-          onChange={(e) => {
-            setCheck(e.target.checked);
-          }}
-          className="mb-3 fw-600"
-        />
 
-        {!check && (
-          <>
-            <TopicDivider text="Or" />
-            <MultiSelectU
-              url="University/get-dd"
-              value={universityValue}
-              setValue={setuniversityValue}
-              name="userTypeIds"
-              className="mb-3"
-              placeholder="Select University"
-            />
-          </>
-        )} */}
         {defaultData?.notes?.length > 0 && (
           <>
             <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
@@ -356,16 +290,6 @@ const AnswerForm = ({
             )}
           </>
         )}
-        {/* <p className="details-note">
-                  <b>22 Nov 2024</b>
-                  <hr className="my-1" />
-                  <span className="text-gray-70">
-                    Add ansYou can use the reply feature when responding to a
-                    specific message in an individual or group chat. You can use
-                    the reply feature when responding to a specific message
-                    iwers
-                  </span>
-                </p> */}
 
         {statusValue === 5 && (
           <TextArea

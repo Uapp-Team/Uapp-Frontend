@@ -3473,7 +3473,14 @@ class AppRouter extends React.Component {
                     path="/universityList-sharing-faq"
                     component={ISM}
                   />
-                  <AppRoute path="/manageQuery" component={ManageQuery} />
+                  <AppRoute
+                    path="/manageQuery"
+                    component={
+                      permissions?.includes(permissionList?.View_Queries)
+                        ? ManageQuery
+                        : NotAuthorized
+                    }
+                  />
                   <AppRoute
                     path="/answersByQue/:uId"
                     component={AnswersByQue}

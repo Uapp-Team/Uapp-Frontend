@@ -8,6 +8,7 @@ import Typing from "../../../../components/form/Typing";
 import Tag from "../../../../components/ui/Tag";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 import Question from "./Question";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const QuestionsArea = ({
   categoryId,
@@ -15,6 +16,7 @@ const QuestionsArea = ({
   setCategoryId,
   setCategoryName,
 }) => {
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,12 +38,15 @@ const QuestionsArea = ({
     <>
       <div className="d-flex align-items-center justify-content-between px-3 pt-3">
         <div className="d-flex align-items-center">
-          <ButtonForFunctionNonSolid
-            className={"btn btn-faq-add py-2 mr-3"}
-            func={() => setModalOpen(true)}
-            icon={<i className="fas fa-plus"></i>}
-            name={" Add Questions"}
-          />
+          {permissions?.includes(permissionList?.Add_Question) && (
+            <ButtonForFunctionNonSolid
+              className={"btn btn-faq-add py-2 mr-3"}
+              func={() => setModalOpen(true)}
+              icon={<i className="fas fa-plus"></i>}
+              name={" Add Questions"}
+            />
+          )}
+
           <Tag
             title="Category"
             label={categoryName}

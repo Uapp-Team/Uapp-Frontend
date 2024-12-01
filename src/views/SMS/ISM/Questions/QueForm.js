@@ -14,7 +14,6 @@ import MultiSelectU from "../../../../components/form/MultiSelectU";
 import Origine from "../Components/Origine";
 import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 import StatusDD from "../Components/StatusDD";
-import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 
 const schema = yup.object().shape({
@@ -41,6 +40,7 @@ const schema = yup.object().shape({
 });
 
 const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
+  console.log(defaultData);
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
   const [categoryId, setCategoryId] = useState(defaultData.categoryId);
@@ -52,17 +52,17 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const [ansReq, setAnsReq] = useState(defaultData.isRequiredAns);
   const [isSameForAll, setIsSameForAll] = useState(defaultData?.isSameForAll);
   const [answers, setAnswers] = useState(
-    defaultData?.answerList && defaultData?.answerList[0]?.answer
+    defaultData?.answerList && defaultData?.answerList[0]?.answers
   );
   const [answersError, setAnswersError] = useState("");
   const [answers1, setAnswers1] = useState(
-    defaultData?.answerList && defaultData?.answerList[0]?.answer
+    defaultData?.answerList && defaultData?.answerList[0]?.answers
   );
   const [answers2, setAnswers2] = useState(
-    defaultData?.answerList && defaultData?.answerList[1]?.answer
+    defaultData?.answerList && defaultData?.answerList[1]?.answers
   );
   const [answers3, setAnswers3] = useState(
-    defaultData?.answerList && defaultData?.answerList[2]?.answer
+    defaultData?.answerList && defaultData?.answerList[2]?.answers
   );
   const [answers1Error, setAnswers1Error] = useState("");
   const [answers2Error, setAnswers2Error] = useState("");
@@ -74,12 +74,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
   const [statusValue, setStatusValue] = useState(defaultData?.status);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    // formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { questionType: defaultData.questionType },
   });
@@ -96,11 +91,11 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   const handleValid = () => {
     var isValid = true;
 
-    if (categoryId === 0) {
+    if (categoryId.toString() === "0") {
       setCategoryIdError("Category is Required");
       isValid = false;
     }
-    if (subCategoryId === 0) {
+    if (subCategoryId.toString() === "0") {
       setSubCategoryIdError("Sub Category is Required");
       isValid = false;
     }
@@ -137,7 +132,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         status: statusValue,
         isRequiredAns: ansReq,
         isSameForAll: isSameForAll,
-        // answers: !isSameForAll ? null : answers,
         answerList: isSameForAll
           ? [
               {
@@ -177,9 +171,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         universities: universityValue,
       };
 
-      console.log("formData", formData);
-      console.log("submitData", submitData);
-
       setIsSubmit(true);
       method(submitPath, submitData).then((res) => {
         setIsSubmit(false);
@@ -209,7 +200,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
         <Row>
           <Col>
-            <DDByAppUrlU
+            {/* <DDByAppUrlU
               register={() => {}}
               name="category"
               label="Category"
@@ -219,8 +210,8 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               setValue={setCategoryId}
               action={() => setCategoryIdError("")}
               error={categoryIdError}
-            />
-            {/* <DDFilterByAppUrlU
+            /> */}
+            <DDFilterByAppUrlU
               label="Category"
               placeholder="Select Category"
               url="QuestionCategory/get-all"
@@ -228,10 +219,10 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               action={setCategoryId}
               setError={() => setCategoryIdError("")}
               error={categoryIdError}
-            /> */}
+            />
           </Col>
           <Col>
-            <DDByAppUrlU
+            {/* <DDByAppUrlU
               register={() => {}}
               name="category"
               label="Sub Category"
@@ -241,8 +232,8 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               setValue={setSubCategoryId}
               action={() => setSubCategoryIdError("")}
               error={subCategoryIdError}
-            />
-            {/* <DDFilterByAppUrlU
+            /> */}
+            <DDFilterByAppUrlU
               label="Sub Category"
               placeholder="Select Sub Category"
               url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
@@ -250,7 +241,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               action={setSubCategoryId}
               setError={() => setSubCategoryIdError("")}
               error={subCategoryIdError}
-            /> */}
+            />
           </Col>
         </Row>
 

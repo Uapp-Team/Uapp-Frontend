@@ -3,12 +3,9 @@ import { useHistory } from "react-router";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ismhero from "../../../../assets/img/ismhero.png";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import Typing from "../../../../components/form/Typing";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import UserViewAns from "./UserViewAns";
 import Uget from "../../../../helpers/Uget";
-import DDByAppUrlU from "../../../../components/form/DDByAppUrlU";
 import BackIcon from "../../../../components/buttons/BackIcon";
 import PreviewUniDocu from "../../../../components/ui/PreviewUniDocu";
 import { AiOutlineFileText } from "react-icons/ai";
@@ -26,7 +23,6 @@ const UserViewUniversity = () => {
   const [noFilter, setNoFilter] = useState(true);
   const [uniLable, setUniLable] = useState(data?.name);
   const [uniValue, setUniValue] = useState(data?.id);
-  const [uniModal, setUniModal] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState("");
   // const [category, setCategory] = useState([]);
@@ -64,6 +60,7 @@ const UserViewUniversity = () => {
   useEffect(() => {
     keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
   }, [categoryId, keyword]);
+
   return (
     <>
       <BreadCrumb title={uniLable + " Information"} backTo="" path="/" />

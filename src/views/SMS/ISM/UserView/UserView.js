@@ -19,12 +19,15 @@ const UserView = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState([]);
+  const [university, setUniversity] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [openIndex, setOpenIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [res, setRes] = useState({});
   const [answerData, setAnswerData] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
+  const [search, setSearch] = useState([]);
 
   const redirectRoute = (label, value) => {
     history.push(`/informationViewUniversity`, {
@@ -33,10 +36,19 @@ const UserView = () => {
   };
 
   useEffect(() => {
+    Uget(`QuestionCategory/get-all`).then((res) => {
+      setCategory(res?.data);
+    });
+    Uget(`University/get-dd`).then((res) => {
+      setUniversity(res?.data);
+    });
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     if (!isTyping) {
       Uget(
-        `question/get-paginated-by-university?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${4}&searchText=${keyword}`
+        `question/get-paginated-public-view?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${4}&searchText=${keyword}`
       ).then((res) => {
         setRes(res);
         setAnswerData(res?.items);
@@ -44,22 +56,22 @@ const UserView = () => {
       });
     }
   }, [categoryId, currentPage, isTyping, keyword, uniValue]);
-  // useEffect(() => {
-  //   if (!isTyping) {
-  //     Uget(
-  //       `question/get-paginated-by-university?index=${1}&size=${100}&universityId=${uniValue}&subCategoryId=${categoryId}&searchText=${keyword}`
-  //     ).then((res) => {
-  //       console.log(res?.items);
-  //       setAnswerData(res?.items);
-  //     });
-  //   }
-  // }, [categoryId, isTyping, keyword, uniValue]);
 
   useEffect(() => {
-    Uget(`QuestionCategory/get-all`).then((res) => {
-      setCategory(res?.data);
+    Uget(
+      `question/get-paginated-titles?index=${1}&size=${15}&searchText=${keyword}`
+    ).then((res) => {
+      setSearch(res?.items);
     });
-  }, []);
+  }, [keyword]);
+
+  useEffect(() => {
+    if (!isTyping) {
+      setTimeout(() => {
+        setIsSearch(false);
+      }, 3000);
+    }
+  }, [isTyping]);
 
   useEffect(() => {
     keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
@@ -84,17 +96,61 @@ const UserView = () => {
                 Search or browse through the category below to find answers.
               </p>
             )}
-            <div className="w-50 my-3 mx-auto">
+            <div className="w-50 my-3 mx-auto relative">
               <Typing
-                name=""
                 placeholder="Search here ..."
+                value={keyword}
                 setValue={setKeyword}
                 setIsTyping={setIsTyping}
                 isIcon={true}
+                onKeyDown={() => {
+                  setIsSearch(true);
+                }}
               />
+              <div className="absolute zindex-100 w-100">
+                {isSearch &&
+                  search?.map((item, i) => (
+                    <p
+                      key={i}
+                      onClick={() => {
+                        setKeyword(item.title);
+                        setIsSearch(false);
+                      }}
+                      className="search-help mx-5"
+                    >
+                      {item.title}
+                    </p>
+                  ))}
+              </div>
             </div>
 
             {noFilter && (
+              <div
+                className="w-50 my-3 mx-auto relative"
+                onMouseLeave={() => setUniModal(false)}
+              >
+                <p className="text-white text-center pointer mb-0">
+                  <span onClick={() => setUniModal(!uniModal)}>
+                    University wise information <FaRegArrowAltCircleRight />
+                  </span>
+                </p>
+
+                {uniModal && (
+                  <div className="absolute zindex-100 w-100 overflowY-300px">
+                    {university?.map((item, i) => (
+                      <p
+                        key={i}
+                        onClick={() => redirectRoute(item.name, item.id)}
+                        className="search-help"
+                      >
+                        {item.name}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {/* {noFilter && (
               <div>
                 {uniModal ? (
                   <div
@@ -117,9 +173,10 @@ const UserView = () => {
                       University wise information <FaRegArrowAltCircleRight />
                     </span>
                   </p>
+
                 )}
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="w-75 mx-auto">

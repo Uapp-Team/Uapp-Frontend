@@ -15,10 +15,10 @@ const DDFilterByAppUrlU = ({
   className = "mb-3",
 }) => {
   const [data, setData] = useState([]);
-  const [title, setTitle] = useState(placeholder);
 
   useEffect(() => {
     Uget(url).then((res) => {
+      console.log(res);
       setData(res);
     });
   }, [url]);
@@ -35,15 +35,6 @@ const DDFilterByAppUrlU = ({
     setError && setError("");
   };
 
-  useEffect(() => {
-    const filterData = option?.filter(
-      (item) => item.value.toString() === defaultValue.toString()
-    );
-    filterData?.length === 1
-      ? setTitle(filterData[0].label)
-      : setTitle(placeholder);
-  }, [option, defaultValue, placeholder]);
-
   return (
     <>
       <Form.Group className={className}>
@@ -51,11 +42,7 @@ const DDFilterByAppUrlU = ({
 
         <Select
           options={option}
-          value={{
-            label: title,
-            value: defaultValue,
-          }}
-          // defaultValue={defaultValue}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           onChange={handleChange}
         />

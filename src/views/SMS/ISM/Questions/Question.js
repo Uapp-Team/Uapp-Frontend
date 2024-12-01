@@ -6,10 +6,11 @@ import QueEdit from "./QueEdit";
 import { AiOutlineRight } from "react-icons/ai";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { dateFormate } from "../../../../components/date/calenderFormate";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const Question = ({ defaultData, refetch }) => {
   const [modalOpen, setModalOpen] = useState(false);
-
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
     <>
       <div className="px-4 mt-3 mb-4">
@@ -17,15 +18,17 @@ const Question = ({ defaultData, refetch }) => {
           <p className="card-heading">{defaultData?.title}</p>
 
           <p className="text-right">
-            {defaultData?.isEdit && (
-              <EditBtn action={() => setModalOpen(!modalOpen)} />
-            )}
-            {defaultData?.isDelete && (
-              <DeleteBtn
-                url={`Question/delete/${defaultData?.id}`}
-                refetch={refetch}
-              />
-            )}
+            {permissions?.includes(permissionList?.Update_Question) &&
+              defaultData?.isEdit && (
+                <EditBtn action={() => setModalOpen(!modalOpen)} />
+              )}
+            {permissions?.includes(permissionList?.Delete_Question) &&
+              defaultData?.isDelete && (
+                <DeleteBtn
+                  url={`Question/delete/${defaultData?.id}`}
+                  refetch={refetch}
+                />
+              )}
           </p>
         </div>
 
@@ -48,7 +51,8 @@ const Question = ({ defaultData, refetch }) => {
           </p>
 
           <Link to={`/answersByQue/${defaultData?.id}`} className="text-black">
-            View all answares <AiOutlineRight />
+            {defaultData?.isCommon ? "View answar" : "View all answares"}{" "}
+            <AiOutlineRight />
           </Link>
         </div>
       </div>

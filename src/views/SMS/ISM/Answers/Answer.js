@@ -8,10 +8,11 @@ import { Modal, ModalBody } from "reactstrap";
 import AnswerEdit from "./AnswerEdit";
 import { dateFormate } from "../../../../components/date/calenderFormate";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
-
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const createMarkup = (html) => {
     return {
       __html: DOMPurify.sanitize(html),
@@ -56,12 +57,14 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
               </span>
               {!isPublic && (
                 <>
-                  {defaultData?.isEdit && (
-                    <EditBtn action={() => setModalOpen(!modalOpen)} />
-                  )}
-                  {defaultData?.isDelete && (
-                    <DeleteBtn url="" refetch={refetch} />
-                  )}
+                  {permissions?.includes(permissionList?.AddOrUpdate_Answer) &&
+                    defaultData?.isEdit && (
+                      <EditBtn action={() => setModalOpen(!modalOpen)} />
+                    )}
+                  {permissions?.includes(permissionList?.Delete_Answer) &&
+                    defaultData?.isDelete && (
+                      <DeleteBtn url="" refetch={refetch} />
+                    )}
                 </>
               )}
             </p>

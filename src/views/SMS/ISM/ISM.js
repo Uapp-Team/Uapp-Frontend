@@ -8,9 +8,11 @@ import { rootUrl } from "../../../constants/constants";
 import GroupButton from "../../../components/buttons/GroupButton";
 import ISMDocuments from "./ISMDocuments";
 import ButtonForFunction from "../Components/ButtonForFunction";
+import { permissionList } from "../../../constants/AuthorizationConstant";
 
 const ISM = () => {
   const history = useHistory();
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [universityList, setUniversityList] = useState([]);
   const [uniValue, setUniValue] = useState(0);
   const [uniLable, setUniLable] = useState("Select University");
@@ -46,19 +48,19 @@ const ISM = () => {
 
       <Card>
         <CardBody>
-          {/* {(AdminUsers() || AdmissionUsers()) && ( */}
-          <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
-            <p className="d-flex align-items-center mr-3 mb-0">
-              Manage Queries for University information manage
-            </p>
-            <ButtonForFunction
-              func={handleManageQueries}
-              className={"btn btn-uapp-add p-2"}
-              icon={<i class="fas fa-list-ul"></i>}
-              name={"Manage Queries"}
-            />
-          </div>
-          {/* )} */}
+          {permissions?.includes(permissionList?.View_Queries) && (
+            <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
+              <p className="d-flex align-items-center mr-3 mb-0">
+                Manage Queries for University information manage
+              </p>
+              <ButtonForFunction
+                func={handleManageQueries}
+                className={"btn btn-uapp-add p-2"}
+                icon={<i class="fas fa-list-ul"></i>}
+                name={"Manage Queries"}
+              />
+            </div>
+          )}
 
           <GroupButton
             list={[

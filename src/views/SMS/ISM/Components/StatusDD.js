@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { AdminUsers, AdmissionUsers } from "../../../../components/core/User";
-import Status from "./Status";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const StatusDD = ({
   value,
@@ -11,7 +10,7 @@ const StatusDD = ({
   isAns = true,
 }) => {
   const [label, setLabel] = useState("");
-
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const allStatus = [
     {
       label: "No Answer",
@@ -91,13 +90,13 @@ const StatusDD = ({
   ];
 
   const options =
-    isAns && AdminUsers()
+    isAns && permissions?.includes(permissionList?.ApproveOrReject_Answer)
       ? adminAns
-      : isAns && AdmissionUsers()
+      : isAns
       ? userAns
-      : !isAns && AdminUsers()
+      : !isAns && permissions?.includes(permissionList?.ApproveOrReject_Answer)
       ? adminQue
-      : !isAns && AdmissionUsers()
+      : !isAns
       ? userQue
       : [
           {
@@ -108,24 +107,18 @@ const StatusDD = ({
 
   useEffect(() => {
     const filterData = allStatus?.filter((item) => item.value === value);
-    console.log(filterData);
     filterData.length === 1 && setLabel(filterData[0].label);
-  }, [allStatus, label, value]);
+  }, [allStatus, value]);
 
   const select = (label, value) => {
     setLabel(label);
     setValue(value);
   };
-  console.log("value", value);
   return (
     <>
-      {/* {isAns && AdmissionUsers() ? (
-        <Status statusId={value} className="mr-3" />
-      ) : ( */}
       <div className={className}>
         {!isAns && <span className="d-block">Status</span>}
         <Select
-          // className={className}
           styles={{ height: "33px !important" }}
           options={options}
           value={{
@@ -136,7 +129,6 @@ const StatusDD = ({
           isDisabled={isDisabled}
         />
       </div>
-      {/* )} */}
     </>
   );
 };
