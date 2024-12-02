@@ -9,6 +9,7 @@ import Tag from "../../../../components/ui/Tag";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 import Question from "./Question";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import Loader from "../../Search/Loader/Loader";
 
 const QuestionsArea = ({
   categoryId,
@@ -17,6 +18,7 @@ const QuestionsArea = ({
   setCategoryName,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,10 +28,12 @@ const QuestionsArea = ({
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `question/get-paginated-queries?index=${1}&size=${100}&subCategoryId=${categoryId}&searchText=${searchStr}&questionType=${statusId}`
       ).then((res) => {
         setData(res?.items);
+        setLoading(false);
       });
     }
   }, [success, categoryId, isTyping, searchStr, statusId]);
@@ -87,7 +91,9 @@ const QuestionsArea = ({
       </div>
       <hr />
 
-      {data?.length > 0 ? (
+      {loading ? (
+        <Loader />
+      ) : data?.length > 0 ? (
         <>
           {data?.map((item, i) => (
             <div key={i}>
@@ -101,12 +107,6 @@ const QuestionsArea = ({
       ) : (
         <p className="text-center fw-600 my-5">No Data Found</p>
       )}
-
-      {/* {data?.map((item, i) => (
-        <div key={i}>
-          <Question defaultData={item} refetch={() => setSuccess(!success)} />
-        </div>
-      ))} */}
 
       <Modal
         isOpen={modalOpen}

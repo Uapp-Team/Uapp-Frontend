@@ -217,13 +217,6 @@ const UserViewUniversity = lazy(() =>
   import("./views/SMS/ISM/UserView/UserViewUniversity.js")
 );
 
-const UsersAnswerForFAQ = lazy(() =>
-  import("./views/SMS/ISM/UsersAnswerForFaq/UsersAnswerForFAQ.js")
-);
-
-const UniversityDetails = lazy(() =>
-  import("./views/SMS/University/UniversityDetails.jsx")
-);
 const UniversityProfile = lazy(() =>
   import("./views/SMS/University/UniversityProfile/UniversityProfile")
 );
@@ -3520,10 +3513,6 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/university-information-doc-faq"
                     component={ISMDocuments}
-                  />
-                  <AppRoute
-                    path="/users-answer-for-fAQ/:Uid"
-                    component={UsersAnswerForFAQ}
                   />
 
                   {/* University For Sharing & FAQ starts here */}

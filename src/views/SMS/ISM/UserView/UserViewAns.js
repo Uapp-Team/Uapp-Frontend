@@ -88,12 +88,6 @@ const UserViewAns = ({
             <p className="text-center fw-600 my-5">No Data Found</p>
           )}
 
-          {/* {answerData?.map((item, i) => (
-            <div key={i}> 
-              <Answer defaultData={item} refetch={() => {}} />
-            </div>
-          ))} */}
-
           <div className="mx-4">
             <Pagination
               dataPerPage={30}

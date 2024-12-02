@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ismhero from "../../../../assets/img/ismhero.png";
-import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import Typing from "../../../../components/form/Typing";
 import { Card, CardBody, Col, Row } from "reactstrap";
@@ -45,8 +44,8 @@ const UserView = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `question/get-paginated-public-view?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${4}&searchText=${keyword}`
       ).then((res) => {

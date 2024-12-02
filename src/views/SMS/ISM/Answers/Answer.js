@@ -30,7 +30,6 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
           <p className="fs-16px text-gray-70 fw-600">
             {byQues && (
               <span>
-                {" "}
                 {defaultData?.universityName
                   ? defaultData?.universityName
                   : "No University Selected"}
@@ -63,7 +62,10 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
                     )}
                   {permissions?.includes(permissionList?.Delete_Answer) &&
                     defaultData?.isDelete && (
-                      <DeleteBtn url="" refetch={refetch} />
+                      <DeleteBtn
+                        url={`Question/delete-answer?questionId=${defaultData?.id}&universityId=${defaultData?.universityId}`}
+                        refetch={refetch}
+                      />
                     )}
                 </>
               )}

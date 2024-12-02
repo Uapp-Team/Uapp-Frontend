@@ -27,8 +27,8 @@ const AnswersArea = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    setLoading(true);
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `question/get-paginated-by-university?index=${currentPage}&size=${30}&universityId=${uniValue}&subCategoryId=${categoryId}&status=${statusId}&searchText=${searchStr}&sortingDate=${
           date ? "asc" : "desc"
@@ -130,8 +130,6 @@ const AnswersArea = ({
       </div>
       <hr />
 
-      {/* <p className="text-center fw-600 my-5">under construction</p> */}
-
       {loading ? (
         <Loader />
       ) : data?.length > 0 ? (
@@ -154,12 +152,6 @@ const AnswersArea = ({
           currentPage={currentPage}
         />
       </div>
-
-      {/* {data?.map((item, i) => (
-        <div key={i}>
-          <Answer defaultData={item} refetch={() => setSuccess(!success)} />
-        </div>
-      ))} */}
     </>
   );
 };

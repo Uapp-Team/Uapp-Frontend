@@ -81,20 +81,19 @@ const AnswerForm = ({
 
   const handleValid = () => {
     var isValid = true;
-
     if (isSameForAll && !answers) {
       setAnswersError("Required");
       isValid = false;
     }
-    if (!isSameForAll && !answers1) {
+    if (!isSameForAll && defaultData?.answerList[0] && !answers1) {
       setAnswers1Error("Required");
       isValid = false;
     }
-    if (!isSameForAll && !answers2) {
+    if (!isSameForAll && defaultData?.answerList[1] && !answers2) {
       setAnswers2Error("Required");
       isValid = false;
     }
-    if (!isSameForAll && !answers3) {
+    if (!isSameForAll && defaultData?.answerList[2] && !answers3) {
       setAnswers3Error("Required");
       isValid = false;
     }
@@ -106,7 +105,7 @@ const AnswerForm = ({
     return isValid;
   };
 
-  const onSubmit = (formData) => {
+  const onSubmit = () => {
     if (handleValid()) {
       const submitData = {
         id: defaultData.id,

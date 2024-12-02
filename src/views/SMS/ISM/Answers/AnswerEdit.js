@@ -10,7 +10,6 @@ const AnswerEdit = ({ id, uId, modalClose, refetch }) => {
   useEffect(() => {
     Uget(`question/get-answer?questionId=${id}&universityId=${uId}`).then(
       (res) => {
-        console.log(res?.data);
         setData(res?.data);
       }
     );

@@ -9,10 +9,12 @@ import GroupButton from "../../../components/buttons/GroupButton";
 import ISMDocuments from "./ISMDocuments";
 import ButtonForFunction from "../Components/ButtonForFunction";
 import { permissionList } from "../../../constants/AuthorizationConstant";
+import Loader from "../Search/Loader/Loader";
 
 const ISM = () => {
   const history = useHistory();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [loading, setLoading] = useState(false);
   const [universityList, setUniversityList] = useState([]);
   const [uniValue, setUniValue] = useState(0);
   const [uniLable, setUniLable] = useState("Select University");
@@ -22,8 +24,10 @@ const ISM = () => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(`University/get?&searchText=${searchStr}`).then((res) => {
         setUniversityList(res?.data);
+        setLoading(false);
       });
     }
   }, [isTyping, searchStr]);
@@ -93,35 +97,47 @@ const ISM = () => {
               <hr />
 
               <Row>
-                {universityList?.map((item, i) => (
-                  <Col key={i} lg={2} sm={6} className="pb-4 click-faq">
-                    <div
-                      onClick={() => redirectRoute(item)}
-                      className="pointer"
-                    >
-                      <div className="university-card-faq">
-                        <p class="text-right mt-2 mr-1 mb-0">
-                          <span className="bg-fb532e text-white p-1 rounded">
-                            {item?.totalQuestionCount >= 100
-                              ? "99+"
-                              : item?.totalQuestionCount}
-                          </span>
-                        </p>
-
-                        <div className="university-card-img-faq d-flex align-items-center justify-content-center">
-                          <img
-                            src={rootUrl + item?.universityLogoImage}
-                            alt=""
-                          />
-                        </div>
-                        <hr className="my-2" />
-                        <h6 className="text-center text-ellipsis">
-                          {item?.universityFullName}
-                        </h6>
-                      </div>
-                    </div>
+                {loading ? (
+                  <Col>
+                    <Loader />
                   </Col>
-                ))}
+                ) : universityList?.length > 0 ? (
+                  <>
+                    {universityList?.map((item, i) => (
+                      <Col key={i} lg={2} sm={6} className="pb-4 click-faq">
+                        <div
+                          onClick={() => redirectRoute(item)}
+                          className="pointer"
+                        >
+                          <div className="university-card-faq">
+                            <p class="text-right mt-2 mr-1 mb-0">
+                              <span className="bg-fb532e text-white p-1 rounded">
+                                {item?.totalQuestionCount >= 100
+                                  ? "99+"
+                                  : item?.totalQuestionCount}
+                              </span>
+                            </p>
+
+                            <div className="university-card-img-faq d-flex align-items-center justify-content-center">
+                              <img
+                                src={rootUrl + item?.universityLogoImage}
+                                alt=""
+                              />
+                            </div>
+                            <hr className="my-2" />
+                            <h6 className="text-center text-ellipsis">
+                              {item?.universityFullName}
+                            </h6>
+                          </div>
+                        </div>
+                      </Col>
+                    ))}
+                  </>
+                ) : (
+                  <Col>
+                    <p className="text-center fw-600 my-5">No Data Found</p>
+                  </Col>
+                )}
               </Row>
             </>
           ) : (

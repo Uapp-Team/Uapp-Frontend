@@ -107,22 +107,22 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
       setAnswersError("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers1) {
+    if (ansReq && !isSameForAll && defaultData?.answerList[0] && !answers1) {
       setAnswers1Error("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers2) {
+    if (ansReq && !isSameForAll && defaultData?.answerList[1] && !answers2) {
       setAnswers2Error("Required");
       isValid = false;
     }
-    if (ansReq && !isSameForAll && !answers3) {
+    if (ansReq && !isSameForAll && defaultData?.answerList[2] && !answers3) {
       setAnswers3Error("Required");
       isValid = false;
     }
     return isValid;
   };
 
-  const onSubmit = (formData) => {
+  const onSubmit = () => {
     if (handleValid()) {
       const submitData = {
         id: defaultData.id,
@@ -200,17 +200,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
         <Row>
           <Col>
-            {/* <DDByAppUrlU
-              register={() => {}}
-              name="category"
-              label="Category"
-              placeholder="Select Category"
-              url="QuestionCategory/get-all"
-              defaultValue={categoryId}
-              setValue={setCategoryId}
-              action={() => setCategoryIdError("")}
-              error={categoryIdError}
-            /> */}
             <DDFilterByAppUrlU
               label="Category"
               placeholder="Select Category"
@@ -222,17 +211,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             />
           </Col>
           <Col>
-            {/* <DDByAppUrlU
-              register={() => {}}
-              name="category"
-              label="Sub Category"
-              placeholder="Select Sub Category"
-              url={`QuestionSubCategory/get-sub-categories/${categoryId}`}
-              defaultValue={subCategoryId}
-              setValue={setSubCategoryId}
-              action={() => setSubCategoryIdError("")}
-              error={subCategoryIdError}
-            /> */}
             <DDFilterByAppUrlU
               label="Sub Category"
               placeholder="Select Sub Category"
@@ -381,7 +359,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
                   label={item?.label}
                   data={item?.value}
                   value={item?.value}
-                  // action={setStatusId}
                 />
               </span>
             ))}

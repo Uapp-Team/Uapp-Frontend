@@ -50,18 +50,6 @@ const CategoryForm = ({
   });
 
   const onSubmit = (formData) => {
-    //   // const submitData = new FormData();
-    //   // submitData.append("image", imgFile);
-    //   const submitData = {
-    //     id: formData.id,
-    //     eventId: formData.eventId,
-    //     name: formData.name,
-    //     designation: formData.designation,
-    //     introUrl: formData.introUrl,
-    //     image: imgFile,
-    //   };
-
-    console.log(formData);
     setIsSubmit(true);
 
     method(submitPath, formData).then((res) => {
@@ -150,31 +138,6 @@ const CategoryForm = ({
                 )}
               </span>
             ) : null}
-            {/* {add ? (
-              <IconBtn
-                Icon={FaCirclePlus}
-                color="#045d5e"
-                buttonStatus={isSubmit}
-              />
-            ) : isEdit ? (
-              <IconBtn Icon={FaCheck} color="#22C55E" buttonStatus={isSubmit} />
-            ) : toggleAccordion && defaultData?.subCategories?.length > 0 ? (
-              <span>
-                {isOpen ? (
-                  <i
-                    class="fas fa-chevron-up pointer"
-                    onClick={toggleAccordion}
-                  ></i>
-                ) : (
-                  <i
-                    class="fas fa-chevron-down pointer"
-                    onClick={toggleAccordion}
-                  ></i>
-                )}
-              </span>
-            ) : (
-              <DeleteBtn url={deletePath} refetch={refetch} />
-            )} */}
           </Col>
         </Row>
       </Form>

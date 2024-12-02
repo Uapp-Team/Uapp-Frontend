@@ -20,11 +20,6 @@ const CategoryAccordion = ({
       >
         <div>
           <span>{content?.name}</span>
-          {/* <span
-            className={`${isOpen ? `bg-white` : `bg-f2f2f2`} category-count`}
-          >
-            00
-          </span> */}
         </div>
 
         <span>

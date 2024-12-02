@@ -8,22 +8,25 @@ import Answer from "./Answers/Answer";
 import KeyBtn from "../../../components/buttons/KeyBtn";
 import { Card, CardBody } from "reactstrap";
 import { AiOutlineRight } from "react-icons/ai";
+import Loader from "../Search/Loader/Loader";
 
 const AnswersByQue = () => {
   const { uId } = useParams();
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [statusId, setStatusId] = useState(0);
 
-  console.log(uId);
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `question/get-paginated-by-question?questionId=${uId}&index=${1}&size=${100}&searchText=${searchStr}&status=${statusId}`
       ).then((res) => {
         setData(res?.items);
+        setLoading(false);
       });
     }
   }, [success, isTyping, searchStr, uId, statusId]);
@@ -91,7 +94,9 @@ const AnswersByQue = () => {
             </div>
             <hr />
 
-            {data?.length > 0 ? (
+            {loading ? (
+              <Loader />
+            ) : data?.length > 0 ? (
               <>
                 {data?.map((item, i) => (
                   <div key={i}>

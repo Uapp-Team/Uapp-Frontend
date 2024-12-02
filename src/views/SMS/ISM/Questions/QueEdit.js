@@ -9,7 +9,6 @@ const QueEdit = ({ id, modalClose, refetch }) => {
 
   useEffect(() => {
     Uget(`question/get-by-id/${id}`).then((res) => {
-      console.log(res?.data);
       setData(res?.data);
     });
   }, [id]);
@@ -44,7 +43,7 @@ const QueEdit = ({ id, modalClose, refetch }) => {
     isMandatoryForAll: data?.isMandatoryForAll,
     universities: data?.universities,
     answeredUniversities: data?.answeredUniversities,
-    status: data?.status ? data?.status : 3,
+    status: !data?.isRequiredAns ? 1 : data?.status ? data?.status : 3,
   };
 
   return (
