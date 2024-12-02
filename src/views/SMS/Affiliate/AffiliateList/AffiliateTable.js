@@ -54,6 +54,7 @@ const AffiliateTable = ({
   buttonStatus,
 }) => {
   const [popoverOpen, setPopoverOpen] = useState("");
+  console.log(affiliateList, "affiliateList");
 
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
