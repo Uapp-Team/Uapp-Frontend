@@ -208,26 +208,15 @@ const UniversityList = lazy(() =>
   import("./views/SMS/University/UniversityList.js")
 );
 
-const UniversityListForSharingFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UniversityListForSharingFAQ.js"
-  )
-);
-const UniversityInformationDocumentsFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UniversityInformationDocumentsFAQ.js"
-  )
+const ISM = lazy(() => import("./views/SMS/ISM/ISM.js"));
+const ManageQuery = lazy(() => import("./views/SMS/ISM/ManageQuery.js"));
+const AnswersByQue = lazy(() => import("./views/SMS/ISM/AnswersByQue.js"));
+const ISMDocuments = lazy(() => import("./views/SMS/ISM/ISMDocuments.js"));
+const ISMUserView = lazy(() => import("./views/SMS/ISM/UserView/UserView.js"));
+const UserViewUniversity = lazy(() =>
+  import("./views/SMS/ISM/UserView/UserViewUniversity.js")
 );
 
-const UsersAnswerForFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UsersAnswerForFaq/UsersAnswerForFAQ.js"
-  )
-);
-
-const UniversityDetails = lazy(() =>
-  import("./views/SMS/University/UniversityDetails.jsx")
-);
 const UniversityProfile = lazy(() =>
   import("./views/SMS/University/UniversityProfile/UniversityProfile")
 );
@@ -3496,20 +3485,34 @@ class AppRouter extends React.Component {
                   {/* University For Sharing & FAQ starts here */}
                   <AppRoute
                     path="/universityList-sharing-faq"
-                    component={UniversityListForSharingFAQ}
+                    component={ISM}
+                  />
+                  <AppRoute
+                    path="/manageQuery"
+                    component={
+                      permissions?.includes(permissionList?.View_Queries)
+                        ? ManageQuery
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/answersByQue/:uId"
+                    component={AnswersByQue}
+                  />
+
+                  <AppRoute path="/informationView" component={ISMUserView} />
+                  <AppRoute
+                    path="/informationViewUniversity"
+                    component={UserViewUniversity}
                   />
 
                   <AppRoute
-                    path="/university-information-doc-faq"
-                    component={UniversityInformationDocumentsFAQ}
-                  />
-                  <AppRoute
                     path="/university-information-doc-faq-by-id/:Uid"
-                    component={UniversityInformationDocumentsFAQ}
+                    component={ISMDocuments}
                   />
                   <AppRoute
-                    path="/users-answer-for-fAQ/:Uid"
-                    component={UsersAnswerForFAQ}
+                    path="/university-information-doc-faq"
+                    component={ISMDocuments}
                   />
 
                   {/* University For Sharing & FAQ starts here */}

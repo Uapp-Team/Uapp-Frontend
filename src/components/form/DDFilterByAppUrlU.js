@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 import ErrorText from "./ErrorText";
-import get from "../../helpers/get";
+import Uget from "../../helpers/Uget";
 
-const DDFilterByAppUrl = ({
+const DDFilterByAppUrlU = ({
   label,
   url,
   defaultValue,
@@ -15,15 +15,17 @@ const DDFilterByAppUrl = ({
   className = "mb-3",
 }) => {
   const [data, setData] = useState([]);
+  const [title, setTitle] = useState(placeholder);
 
   useEffect(() => {
-    get(url).then((res) => {
-      console.log(res);
+    Uget(url).then((res) => {
       setData(res);
     });
   }, [url]);
 
-  const option = data?.map((item) => ({
+  const list = data?.data;
+
+  const option = list?.map((item) => ({
     label: item?.name,
     value: item?.id,
   }));
@@ -33,6 +35,15 @@ const DDFilterByAppUrl = ({
     setError && setError("");
   };
 
+  useEffect(() => {
+    const filterData = option?.filter(
+      (item) => item.value.toString() === defaultValue.toString()
+    );
+    filterData?.length === 1
+      ? setTitle(filterData[0].label)
+      : setTitle(placeholder);
+  }, [option, defaultValue, placeholder]);
+
   return (
     <>
       <Form.Group className={className}>
@@ -40,7 +51,11 @@ const DDFilterByAppUrl = ({
 
         <Select
           options={option}
-          defaultValue={defaultValue}
+          value={{
+            label: title,
+            value: defaultValue,
+          }}
+          // defaultValue={defaultValue}
           placeholder={placeholder}
           onChange={handleChange}
         />
@@ -50,4 +65,4 @@ const DDFilterByAppUrl = ({
   );
 };
 
-export default DDFilterByAppUrl;
+export default DDFilterByAppUrlU;
