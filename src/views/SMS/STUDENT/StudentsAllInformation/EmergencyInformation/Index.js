@@ -81,7 +81,6 @@ const ContactInformation = () => {
       setCountryLabel(filterData[0]?.name);
     }
   }, [country, countryValue]);
-
   useEffect(() => {
     get(`StudentEmergency/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
@@ -744,7 +743,9 @@ const ContactInformation = () => {
               <Row className="mt-4 ">
                 <Col className="d-flex justify-content-between">
                   <PreviousButton action={handlePrevious} />
-                  <SaveButton text="Next" action={goForward} />
+                  {oneData.length > 0 && (
+                    <SaveButton text="Next" action={goForward} />
+                  )}
                 </Col>
               </Row>
             </TabPane>

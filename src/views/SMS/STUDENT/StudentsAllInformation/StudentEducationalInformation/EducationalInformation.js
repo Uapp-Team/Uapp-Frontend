@@ -76,6 +76,7 @@ const EducationalInformation = () => {
   const userType = localStorage.getItem("userType");
   const [studentType, setStudentType] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [summary, setSummary] = useState(null);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -93,7 +94,7 @@ const EducationalInformation = () => {
     );
     get(`EducationInformation/GetSummery/${applicationStudentId}`).then(
       (res) => {
-        setSelectedOption(res?.result);
+        setSummary(res);
       }
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
@@ -498,11 +499,13 @@ const EducationalInformation = () => {
 
   const handleYesClick = () => {
     setSelectedOption(true);
+    setSummary(true);
     setShowForm(true);
   };
 
   const handleNoClick = () => {
     setSelectedOption(false);
+    setSummary(false);
     setShowForm(false);
     deleteCheckFunction();
   };
@@ -547,7 +550,7 @@ const EducationalInformation = () => {
                             name="radioYes"
                             id="radioYes"
                             onClick={handleYesClick}
-                            checked={selectedOption === true}
+                            checked={summary === true}
                           />
                           <span>
                             <label style={{ fontSize: "14px" }} for="radioYes">
@@ -557,7 +560,7 @@ const EducationalInformation = () => {
                         </div>
                         <div className="ml-5">
                           <Input
-                            checked={selectedOption === false}
+                            checked={summary === false}
                             type="radio"
                             name="radioNo"
                             id="radioNo"
@@ -853,7 +856,7 @@ const EducationalInformation = () => {
                 <>
                   <PreviousButton action={goPrevious} />
                   {permissions?.includes(permissionList?.Edit_Student) &&
-                  selectedOption === false ? (
+                  summary === false ? (
                     <SaveButton text="Save and Next" action={goForward} />
                   ) : null}
                 </>

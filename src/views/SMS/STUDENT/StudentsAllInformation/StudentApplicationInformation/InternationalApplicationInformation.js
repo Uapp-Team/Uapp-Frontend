@@ -303,7 +303,7 @@ export default function InternationalApplicationInformation({
                           }}
                           style={{ height: "32px" }}
                         >
-                          {FileList.length < 1 ? <UploadButton /> : ""}
+                          {FileList.length === 0 ? <UploadButton /> : ""}
                         </Upload>
                       </Col>
                       <Col md="4">

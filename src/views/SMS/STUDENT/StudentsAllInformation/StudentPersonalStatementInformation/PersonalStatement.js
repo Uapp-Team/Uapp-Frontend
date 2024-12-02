@@ -29,10 +29,12 @@ const PersonalStatement = () => {
   const [fileName, setFileName] = useState("");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
+  const [personalStatementResult, setPersonalStatementResult] = useState(null);
 
   useEffect(() => {
     get(`PersonalStatement/GetByStudentId/${applicationStudentId}`).then(
       (res) => {
+        setPersonalStatementResult(res);
         setRequireRecheck(res?.requireRecheck ? res?.requireRecheck : true);
         setStatement(res?.statement);
         setStatement(res?.statement);
@@ -355,7 +357,9 @@ const PersonalStatement = () => {
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goPrevious} />
-            <SaveButton text="Next" action={goNext} />
+            {personalStatementResult && (
+              <SaveButton text="Next" action={goNext} />
+            )}
           </FormGroup>
         </CardBody>
       </Card>

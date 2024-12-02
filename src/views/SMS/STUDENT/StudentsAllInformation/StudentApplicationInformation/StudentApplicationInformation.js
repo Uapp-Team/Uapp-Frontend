@@ -341,7 +341,7 @@ const StudentApplicationInformation = () => {
     if (isRefusedForOtherVisa !== null) {
       setIsRefusedForOtherVisaError("");
     }
-    if (FileList.length === 1) {
+    if (FileList.length > 0) {
       setFileList1Error("");
     }
     if (FileList2.length === 1) {
@@ -384,7 +384,7 @@ const StudentApplicationInformation = () => {
     setIsStayedInUkInLast3YearsError("");
     setHavingUnderGraduateCourseForEUError("");
     setIsRefusedForUKVisaError("");
-
+    console.log("first");
     // Validate Student Type
     if (studentTypeLabel === "Select Application Type") {
       isFormValid = false;
@@ -454,9 +454,13 @@ const StudentApplicationInformation = () => {
       setResidencyStatusError("Residency Status required");
     }
 
-    if (studentTypeLabel === "International" && visaType === "") {
+    if (
+      studentTypeLabel === "International" &&
+      isAppliedForUkVisa === true &&
+      !visaType
+    ) {
       isFormValid = false;
-      setVisaTypeError("Visa Type is required");
+      setVisaTypeError("Visa Type is require");
     }
 
     if (studentTypeLabel === "EU/EEA" && date === null) {
@@ -474,7 +478,28 @@ const StudentApplicationInformation = () => {
       setIsSettlementStatusError("Settlement Status is required");
     }
 
-    if (studentTypeLabel === "EU/EEA" && isStayedInUkInLast3Years === null) {
+    if (
+      studentTypeLabel === "EU/EEA" &&
+      isSettlementStatus === true &&
+      isStayedInUkInLast3Years === null
+    ) {
+      isFormValid = false;
+      setIsStayedInUkInLast3YearsError("Residency Status is required");
+    }
+    if (
+      studentTypeLabel === "EU/EEA" &&
+      isSettlementStatus === true &&
+      statusInUK === ""
+    ) {
+      isFormValid = false;
+      setStatusInUKError("Status is required");
+    }
+    if (
+      studentTypeLabel === "EU/EEA" &&
+      isSettlementStatus === false &&
+      !setStatusInUK &&
+      isStayedInUkInLast3Years === null
+    ) {
       isFormValid = false;
       setIsStayedInUkInLast3YearsError("Please Select any option");
     }
@@ -502,26 +527,32 @@ const StudentApplicationInformation = () => {
       isFormValid = false;
       setIsRefusedForOtherVisaError("Please select any opptions");
     }
+
     if (
       studentTypeLabel === "International" &&
-      isRefusedForUKVisa === null &&
-      FileList.length < 1
+      isAppliedForUkVisa === true &&
+      isRefusedForUKVisa === true &&
+      FileList.length === 0
     ) {
       isFormValid = false;
       setFileList1Error("File are required");
     }
     if (
       studentTypeLabel === "International" &&
-      isRefusedForOtherVisa === null &&
-      FileList2.length < 1
+      isRefusedForOtherVisa === true &&
+      FileList2.length === 0
     ) {
       isFormValid = false;
       setFileList2Error("File are required");
     }
-    if (studentTypeLabel === "International" && isRefusedForUKVisa === null) {
-      isFormValid = false;
-      setIsRefusedForUKVisaError("Please select any option");
-    }
+    // if (
+    //   studentTypeLabel === "International" &&
+    //   isAppliedForUkVisa === true &&
+    //   isRefusedForUKVisa === null
+    // ) {
+    //   isFormValid = false;
+    //   setIsRefusedForUKVisaError("Please select any option");
+    // }
     return isFormValid;
   };
 
@@ -566,6 +597,7 @@ const StudentApplicationInformation = () => {
     }
   };
 
+  console.log(FileList, "fileList");
   const selectCountry = (label, value) => {
     setCountryLabel(label);
     setCountryValue(value);

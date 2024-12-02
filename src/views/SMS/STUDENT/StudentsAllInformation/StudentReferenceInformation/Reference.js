@@ -74,13 +74,11 @@ const Reference = () => {
     });
 
     get(`Reference/GetByStudentId/${applicationStudentId}`).then((res) => {
-      console.log(res);
-      setRefList(res);
+      setRefList(res, "response");
     });
 
     get(`ReferenceTypeDD/Index`).then((res) => {
       setReference(res);
-      console.log(res, "reference");
     });
   }, [success, applicationStudentId]);
 
@@ -766,7 +764,9 @@ const Reference = () => {
           <Row className="mt-4 ">
             <Col className="d-flex justify-content-between mt-4">
               <PreviousButton action={goPrevious} />
-              <SaveButton text="Next" action={goForward} />
+              {refList.length > 0 && (
+                <SaveButton text="Next" action={goForward} />
+              )}
             </Col>
           </Row>
         </CardBody>
