@@ -18,7 +18,6 @@ const Registration = () => {
   const userType = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const current_user = JSON.parse(localStorage.getItem("current_user"));
-  console.log(current_user);
   const [consParent, setConsParent] = useState([]);
   // const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Affiliate");
@@ -49,19 +48,30 @@ const Registration = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const [phoneNumber, setphoneNumber] = useState("");
   const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
-  }, []);
-  useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
-      setConsultant(res);
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
   }, []);
+
   useEffect(() => {
-    get("AffiliateDD").then((res) => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+      res?.length === 1 && setConsultantValue(res[0].id);
+    });
+  }, [branchValue]);
+
+  useEffect(() => {
+    get(`AffiliateDD/Index/${consultantValue}`).then((res) => {
       setConsParent(res);
 
       if (affiliateId) {
@@ -69,7 +79,7 @@ const Registration = () => {
         setParentLabel(result?.name);
       }
     });
-  }, [affiliateId]);
+  }, [affiliateId, consultantValue]);
 
   const consParentMenu = consParent?.map((consParentOptions) => ({
     label: consParentOptions?.name,
@@ -80,6 +90,17 @@ const Registration = () => {
     // setParentError(false);
     setParentLabel(label);
     setParentValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
   };
 
   const consultantName = consultant?.map((cons) => ({
@@ -292,6 +313,30 @@ const Registration = () => {
                     action={() => {}}
                   />
                 </FormGroup> */}
+                {userType === userTypes?.SystemAdmin.toString() ||
+                userType === userTypes?.Admin.toString() ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                      <span className="text-danger"></span>
+                    </span>
+
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      // name="BranchId"
+                      // id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
+
                 {userType === userTypes?.Consultant.toString() ? (
                   <>
                     {userId && (

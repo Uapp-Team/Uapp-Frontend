@@ -47,7 +47,6 @@ const Index = () => {
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
-  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -56,20 +55,15 @@ const Index = () => {
 
     get("BranchDD/index").then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
   }, []);
 
   useEffect(() => {
-    if (userType === userTypes?.BranchAdmin) {
-      get(`ProviderDD/Index/${branchId}`).then((res) => {
-        setProvider(res);
-      });
-    } else {
-      get(`ProviderDD/Index/${branchValue}`).then((res) => {
-        setProvider(res);
-      });
-    }
-  }, [branchValue, userType]);
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
+      setProvider(res);
+    });
+  }, [branchValue]);
 
   useEffect(() => {
     get(`AdmissionManagerDD/Index/${providerValue}`).then((res) => {

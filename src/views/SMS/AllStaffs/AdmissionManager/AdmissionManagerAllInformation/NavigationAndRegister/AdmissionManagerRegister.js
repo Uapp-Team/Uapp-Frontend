@@ -45,7 +45,7 @@ const AdmissionManagerRegister = () => {
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
-  const branchId = branch.map((brn) => brn.id);
+  // const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -53,18 +53,15 @@ const AdmissionManagerRegister = () => {
     });
     get("BranchDD/index").then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
+  }, []);
 
-    if (userType === userTypes?.BranchAdmin) {
-      get(`ProviderDD/Index/${branchId}`).then((res) => {
-        setProvider(res);
-      });
-    } else {
-      get(`ProviderDD/Index/${branchValue}`).then((res) => {
-        setProvider(res);
-      });
-    }
-  }, [branchValue, userType]);
+  useEffect(() => {
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
+      setProvider(res);
+    });
+  }, [branchValue]);
 
   useEffect(() => {
     const filterData = provider.filter((status) => {
@@ -156,6 +153,7 @@ const AdmissionManagerRegister = () => {
     let isFormValid = true;
 
     if (
+      userType !== userTypes?.ProviderAdmin &&
       userType !== userTypes?.BranchAdmin &&
       userType !== userTypes?.BranchManager &&
       branchValue === 0
@@ -342,6 +340,7 @@ const AdmissionManagerRegister = () => {
                 ) : null} */}
 
                 {userType !== userTypes?.BranchAdmin &&
+                userType !== userTypes?.ProviderAdmin &&
                 userType !== userTypes?.BranchManager ? (
                   <FormGroup className="has-icon-left position-relative">
                     <span>

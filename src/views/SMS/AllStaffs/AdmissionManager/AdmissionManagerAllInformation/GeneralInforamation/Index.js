@@ -52,19 +52,15 @@ const Index = () => {
 
     get("BranchDD/index").then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
   }, []);
+
   useEffect(() => {
-    if (userType === userTypes?.BranchAdmin) {
-      get(`ProviderDD/Index/${branchId}`).then((res) => {
-        setProvider(res);
-      });
-    } else {
-      get(`ProviderDD/Index/${branchValue}`).then((res) => {
-        setProvider(res);
-      });
-    }
-  }, [branchValue, userType]);
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
+      setProvider(res);
+    });
+  }, [branchValue]);
 
   useEffect(() => {
     get(`AdmissionManager/GetGeneralInformation/${admissionManagerId}`).then(

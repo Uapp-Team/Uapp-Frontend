@@ -82,6 +82,11 @@ const PersonalForm = ({
   consultantValue,
   consultantLabel,
   consultantName,
+  branchOptions,
+  branchValue,
+  branchError,
+  branchLabel,
+  selectBranch,
 }) => {
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -116,28 +121,30 @@ const PersonalForm = ({
       <Form onSubmit={handleSubmit}>
         <p className="section-title">Personal Details </p>
         <input type="hidden" name="id" id="id" value={affiliateId} />
-        {userType !== userTypes?.Affiliate ? (
+
+        {userType === userTypes?.SystemAdmin.toString() ||
+        userType === userTypes?.Admin.toString() ? (
           <FormGroup row className="has-icon-left position-relative">
             <Col lg="6" md="8">
-              <span>Parent Affiliate</span>
+              {" "}
+              <span>
+                <span className="text-danger">*</span> Branch{" "}
+              </span>
               <Select
                 className="form-mt"
-                options={consParentMenu}
-                value={{ label: parentLabel, value: parentValue }}
-                onChange={(opt) => selectParentCons(opt.label, opt.value)}
-                name="parentAffiliateId"
-                id="parentAffiliateId"
+                options={branchOptions}
+                value={{ label: branchLabel, value: branchValue }}
+                onChange={(opt) => selectBranch(opt.label, opt.value)}
+                // name="BranchId"
+                // id="BranchId"
+                // isDisabled={branchId ? true : false}
               />
+              {branchError && (
+                <span className="text-danger">Branch is required</span>
+              )}
             </Col>
           </FormGroup>
-        ) : (
-          <input
-            type="hidden"
-            name="parentAffiliateId"
-            id="parentAffiliateId"
-            value={parentValue}
-          />
-        )}
+        ) : null}
 
         {userType !== userTypes?.Affiliate &&
         userType !== userTypes?.Consultant ? (
@@ -168,6 +175,30 @@ const PersonalForm = ({
             value={consultantValue}
           />
         )}
+
+        {userType !== userTypes?.Affiliate ? (
+          <FormGroup row className="has-icon-left position-relative">
+            <Col lg="6" md="8">
+              <span>Parent Affiliate</span>
+              <Select
+                className="form-mt"
+                options={consParentMenu}
+                value={{ label: parentLabel, value: parentValue }}
+                onChange={(opt) => selectParentCons(opt.label, opt.value)}
+                name="parentAffiliateId"
+                id="parentAffiliateId"
+              />
+            </Col>
+          </FormGroup>
+        ) : (
+          <input
+            type="hidden"
+            name="parentAffiliateId"
+            id="parentAffiliateId"
+            value={parentValue}
+          />
+        )}
+
         <FormGroup row>
           <Col lg="6" md="8">
             <span>
