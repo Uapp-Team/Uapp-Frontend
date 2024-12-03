@@ -30,19 +30,31 @@ const PersonalStatement = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
   const [personalStatementResult, setPersonalStatementResult] = useState(null);
+  const [nav, setNav] = useState({});
 
   useEffect(() => {
-    get(`PersonalStatement/GetByStudentId/${applicationStudentId}`).then(
-      (res) => {
-        setPersonalStatementResult(res);
-        setRequireRecheck(res?.requireRecheck ? res?.requireRecheck : true);
-        setStatement(res?.statement);
-        setStatement(res?.statement);
-        setStringData(countWords(res?.statement));
-        setId(res?.studentId);
-        setScanId(res?.scanId);
+    const fetchData = async () => {
+      try {
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
+        get(`PersonalStatement/GetByStudentId/${applicationStudentId}`).then(
+          (res) => {
+            setPersonalStatementResult(res);
+            setRequireRecheck(res?.requireRecheck ? res?.requireRecheck : true);
+            setStatement(res?.statement);
+            setStatement(res?.statement);
+            setStringData(countWords(res?.statement));
+            setId(res?.studentId);
+            setScanId(res?.scanId);
+          }
+        );
+      } catch (error) {
+        console.log(error);
       }
-    );
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   useEffect(() => {
@@ -124,6 +136,7 @@ const PersonalStatement = () => {
             appearance: "success",
             autoDismiss: true,
           });
+          history.push(`/addOtherInformation/${applicationStudentId}`);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -357,7 +370,7 @@ const PersonalStatement = () => {
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goPrevious} />
-            {personalStatementResult && (
+            {personalStatementResult && nav?.others && (
               <SaveButton text="Next" action={goNext} />
             )}
           </FormGroup>

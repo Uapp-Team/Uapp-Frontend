@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
-import loadingImages from "../../../../../assets/img/data.svg";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
@@ -19,6 +18,7 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 // import icon_gmt from "../../../../../assets/img/icons/icon-gmt.png";
 import DMYPicker from "../../../../../components/form/DMYPicker";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import Loader from "../../../Search/Loader/Loader";
 import GREScore from "./Component/GREScore";
 
 const TestScore = () => {
@@ -75,7 +75,7 @@ const TestScore = () => {
   const [testError, setTestError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
-  const [isQualification, setIsQualifiacation] = useState(false);
+  const [isQualification, setIsQualifiacation] = useState(null);
   const [ieltsExamDate, setIeltsExamDate] = useState(null);
   const [ieltsExamDateError, setIeltsExamDateError] = useState(null);
   const [duolingoExamDate, setDuolingoExamDate] = useState(null);
@@ -143,6 +143,7 @@ const TestScore = () => {
   const [OthersEquivalentScore, setOthersEquivalentScore] = useState(0);
   const [OthersEquivalentScoreError, setOthersEquivalentScoreError] =
     useState(false);
+  const [nav, setNav] = useState({});
 
   const minDate = "1950-01-01";
 
@@ -565,94 +566,112 @@ const TestScore = () => {
   ];
 
   useEffect(() => {
-    get(`Ielts/Index/${applicationStudentId}`).then((res) => {
-      console.log(res);
-      setIelts(res);
-      setIeltsSpeaking(res?.speaking ? res?.speaking : 0);
-      setIeltsReading(res?.reading ? res?.reading : 0);
-      setIeltsWriting(res?.writing ? res?.writing : 0);
-      setIeltsListening(res?.listening ? res?.listening : 0);
-      res?.examDate
-        ? setIeltsExamDate(moment(new Date(res?.examDate)).format("YYYY-MM-DD"))
-        : setIeltsExamDate("");
-      setLoading(false);
-      setIeltsOverall(res?.overall ? res?.overall : 0);
-      // setScoreInfo(res);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await get(`Ielts/Index/${applicationStudentId}`).then((res) => {
+          console.log(res);
+          setIelts(res);
+          setIeltsSpeaking(res?.speaking ? res?.speaking : 0);
+          setIeltsReading(res?.reading ? res?.reading : 0);
+          setIeltsWriting(res?.writing ? res?.writing : 0);
+          setIeltsListening(res?.listening ? res?.listening : 0);
+          res?.examDate
+            ? setIeltsExamDate(
+                moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+              )
+            : setIeltsExamDate("");
+          setLoading(false);
+          setIeltsOverall(res?.overall ? res?.overall : 0);
+          // setScoreInfo(res);
+        });
 
-    get(`Duolingo/Index/${applicationStudentId}`).then((res) => {
-      setDuolingo(res);
-      setLoading(false);
-      setDuoLingoLiteracy(res?.leteracy ? res?.leteracy : 10);
-      setDuoLingoComprehension(res?.comprehension ? res?.comprehension : 10);
-      setDuoLingoConversation(res?.conversation ? res?.conversation : 10);
-      setDuoLingoProduction(res?.production ? res?.production : 10);
-      res?.examDate
-        ? setDuolingoExamDate(
-            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-          )
-        : setDuolingoExamDate(null);
-      setDuolingoOverall(res?.overall ? res?.overall : 10);
-      setDuolingoEquivalentScore(res?.ieltsEquivalent);
-      // setScoreInfo(res);
-    });
+        await get(`Duolingo/Index/${applicationStudentId}`).then((res) => {
+          setDuolingo(res);
+          setLoading(false);
+          setDuoLingoLiteracy(res?.leteracy ? res?.leteracy : 10);
+          setDuoLingoComprehension(
+            res?.comprehension ? res?.comprehension : 10
+          );
+          setDuoLingoConversation(res?.conversation ? res?.conversation : 10);
+          setDuoLingoProduction(res?.production ? res?.production : 10);
+          res?.examDate
+            ? setDuolingoExamDate(
+                moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+              )
+            : setDuolingoExamDate(null);
+          setDuolingoOverall(res?.overall ? res?.overall : 10);
+          setDuolingoEquivalentScore(res?.ieltsEquivalent);
+          // setScoreInfo(res);
+        });
 
-    get(`Toefl/Index/${applicationStudentId}`).then((res) => {
-      setToefl(res);
-      console.log(res, "oma");
-      setLoading(false);
-      setToeflSpeaking(res?.speaking ? res?.speaking : 0);
-      setToeflReading(res?.reading ? res?.reading : 0);
-      setToeflWriting(res?.writing ? res?.writing : 0);
-      setToeflListening(res?.listening ? res?.listening : 0);
-      res?.examDate ? setToeflExamDate(res?.examDate) : setToeflExamDate(null);
-      setLoading(false);
-      setToeflOverall(res?.overall ? res?.overall : 0);
-      setToeflEquivalentScore(res?.ieltsEquivalent);
-      // setScoreInfo(res);
-    });
+        await get(`Toefl/Index/${applicationStudentId}`).then((res) => {
+          setToefl(res);
+          console.log(res, "oma");
+          setLoading(false);
+          setToeflSpeaking(res?.speaking ? res?.speaking : 0);
+          setToeflReading(res?.reading ? res?.reading : 0);
+          setToeflWriting(res?.writing ? res?.writing : 0);
+          setToeflListening(res?.listening ? res?.listening : 0);
+          res?.examDate
+            ? setToeflExamDate(res?.examDate)
+            : setToeflExamDate(null);
+          setLoading(false);
+          setToeflOverall(res?.overall ? res?.overall : 0);
+          setToeflEquivalentScore(res?.ieltsEquivalent);
+          // setScoreInfo(res);
+        });
 
-    get(`FunctionalSkill/Index/${applicationStudentId}`).then((res) => {
-      setFunctions(res);
-      setLoading(false);
-      setFunctionSkillsSpeaking(res?.speaking ? res?.speaking : 0);
-      setFunctionSkillsReading(res?.reading ? res?.reading : 0);
-      setFunctionSkillsWriting(res?.writing ? res?.writing : 0);
-      setFunctionSkillsListening(res?.listening ? res?.listening : 0);
-      res?.examDate
-        ? setFunctionSkillsExamDate(
-            moment(new Date(res?.examDate)).format("YYYY-MM-DD")
-          )
-        : setFunctionSkillsExamDate(null);
-      setLoading(false);
-      setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
-      setFunctionSkillsEquivalentScore(res?.ieltsEquivalent);
-    });
+        await get(`FunctionalSkill/Index/${applicationStudentId}`).then(
+          (res) => {
+            setFunctions(res);
+            setLoading(false);
+            setFunctionSkillsSpeaking(res?.speaking ? res?.speaking : 0);
+            setFunctionSkillsReading(res?.reading ? res?.reading : 0);
+            setFunctionSkillsWriting(res?.writing ? res?.writing : 0);
+            setFunctionSkillsListening(res?.listening ? res?.listening : 0);
+            res?.examDate
+              ? setFunctionSkillsExamDate(
+                  moment(new Date(res?.examDate)).format("YYYY-MM-DD")
+                )
+              : setFunctionSkillsExamDate(null);
+            setLoading(false);
+            setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
+            setFunctionSkillsEquivalentScore(res?.ieltsEquivalent);
+          }
+        );
 
-    get(`Gcse/Index/${applicationStudentId}`).then((res) => {
-      setGcse(res);
-      setLoading(false);
-      setGCSEResult(res?.result ? res?.result : 1);
-      setGCSEEquivalentScore(res?.ieltsEquivalent);
-      // setScoreInfo(res);
-    });
+        await get(`Gcse/Index/${applicationStudentId}`).then((res) => {
+          setGcse(res);
+          setLoading(false);
+          setGCSEResult(res?.result ? res?.result : 1);
+          setGCSEEquivalentScore(res?.ieltsEquivalent);
+          // setScoreInfo(res);
+        });
 
-    get(`Pearson/Index/${applicationStudentId}`).then((res) => {
-      setPearson(res);
-      setLoading(false);
-      setPEARSONResult(res?.result ? res?.result : 10);
-      setPEARSONEquivalentScore(res?.ieltsEquivalent);
-      // setScoreInfo(res);
-    });
+        await get(`Pearson/Index/${applicationStudentId}`).then((res) => {
+          setPearson(res);
+          setLoading(false);
+          setPEARSONResult(res?.result ? res?.result : 10);
+          setPEARSONEquivalentScore(res?.ieltsEquivalent);
+          // setScoreInfo(res);
+        });
 
-    get(`Other/Index/${applicationStudentId}`).then((res) => {
-      setOthers(res);
-      setLoading(false);
-      // setScoreInfo(res);
-      setOthersTestName(res?.testName);
-      setOthersScoreOverall(res?.scoreOverall);
-      setOthersEquivalentScore(res?.ieltsEquivalent);
-    });
+        await get(`Other/Index/${applicationStudentId}`).then((res) => {
+          setOthers(res);
+          setLoading(false);
+          // setScoreInfo(res);
+          setOthersTestName(res?.testName);
+          setOthersScoreOverall(res?.scoreOverall);
+          setOthersEquivalentScore(res?.ieltsEquivalent);
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   const deleteEnglishTestScore = () => {
@@ -1620,19 +1639,18 @@ const TestScore = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
-      <StudentNavigation
-        activetab={"6"}
-        studentid={applicationStudentId}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => {}}
-      />
       {loading ? (
-        <div className="text-center">
-          <img src={loadingImages} alt="" />
-        </div>
+        <Loader />
       ) : (
         <>
+          <StudentNavigation
+            activetab={"6"}
+            studentid={applicationStudentId}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+
           <Card>
             <CardBody>
               <p className="section-title">English Test Score</p>
@@ -1670,14 +1688,14 @@ const TestScore = () => {
                       type="radio"
                       value="Yes"
                       onClick={() => setIsQualifiacation(true)}
-                      checked={isQualification === true && true}
+                      checked={isQualification === true}
                     />
                     <label className="mt-2 px-2">Yes</label>
                     <input
                       type="radio"
                       value="No"
                       onClick={() => setIsQualifiacation(false)}
-                      checked={isQualification === false && true}
+                      checked={isQualification === false}
                     />
                     <label className="mt-2 px-2">No</label>
                   </div>

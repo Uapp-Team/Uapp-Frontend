@@ -83,6 +83,7 @@ const ContactInformation = () => {
   const [loading, setLoading] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
+  const [nav, setNav] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,10 +92,14 @@ const ContactInformation = () => {
         const countryRes = await get("CountryDD/index");
         setCountry(countryRes);
 
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
+
         const studentRes = await get(
           `StudentAddress/GetByStudentId/${applicationStudentId}`
         );
-
         setContactList(studentRes);
 
         const livingData =
@@ -846,7 +851,7 @@ const ContactInformation = () => {
 
                   {/* update and particular add form ends here*/}
 
-                  {contactList.length > 0 ? (
+                  {contactList.length > 0 && nav?.application ? (
                     <FormGroup className="d-flex justify-content-between mt-4">
                       <PreviousButton action={handlePrevious} />
                       <SaveButton text="Next" action={handleNext} />

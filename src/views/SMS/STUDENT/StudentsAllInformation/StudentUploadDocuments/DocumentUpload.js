@@ -82,6 +82,7 @@ const DocumentUpload = () => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [previewFileType, setPreviewFileType] = useState("");
   const [previewImage, setPreviewImage] = useState("");
+  const [nav, setNav] = useState({});
 
   const handleChange1 = ({ fileList }) => {
     setUploadError(false);
@@ -157,18 +158,32 @@ const DocumentUpload = () => {
   };
 
   useEffect(() => {
-    get(`StudentUploadDocument/Index/${applicationStudentId}`).then((res) => {
-      console.log(res);
-      setUploadedDocuData(res);
-    });
+    const fetchData = async () => {
+      try {
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
 
-    get(`DocumentStatusDD/index`).then((res) => {
-      setDocuDD(res);
-    });
+        get(`StudentUploadDocument/Index/${applicationStudentId}`).then(
+          (res) => {
+            console.log(res);
+            setUploadedDocuData(res);
+          }
+        );
 
-    get("DocumentDD/Index").then((res) => {
-      setDocuType(res);
-    });
+        get(`DocumentStatusDD/index`).then((res) => {
+          setDocuDD(res);
+        });
+
+        get("DocumentDD/Index").then((res) => {
+          setDocuType(res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   const docuTypeDD = docuType.map((docu) => ({
@@ -858,7 +873,9 @@ const DocumentUpload = () => {
           <Row>
             <Col className="d-flex justify-content-between mt-4">
               <PreviousButton action={goPrevious} />
-              <SaveButton text="Next" action={goForward} />
+              {nav?.declaration && (
+                <SaveButton text="Next" action={goForward} />
+              )}
             </Col>
           </Row>
         </CardBody>

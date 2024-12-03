@@ -516,42 +516,39 @@ const StudentApplicationInformation = () => {
       setIsApplyingFromInsideError("Please select any option");
     }
 
-    if (studentTypeLabel === "International" && isAppliedForUkVisa === null) {
+    if (
+      studentTypeLabel === "International" &&
+      isApplyingFromInside === false &&
+      isAppliedForUkVisa === null
+    ) {
       isFormValid = false;
       setIsAppliedForUkVisaError("Please select any option");
     }
     if (
       studentTypeLabel === "International" &&
+      isApplyingFromInside === false &&
       isRefusedForOtherVisa === null
     ) {
       isFormValid = false;
       setIsRefusedForOtherVisaError("Please select any opptions");
     }
 
-    if (
-      studentTypeLabel === "International" &&
-      isAppliedForUkVisa === true &&
-      isRefusedForUKVisa === true &&
-      FileList.length === 0
-    ) {
-      isFormValid = false;
-      setFileList1Error("File are required");
-    }
-    if (
-      studentTypeLabel === "International" &&
-      isRefusedForOtherVisa === true &&
-      FileList2.length === 0
-    ) {
-      isFormValid = false;
-      setFileList2Error("File are required");
-    }
     // if (
     //   studentTypeLabel === "International" &&
     //   isAppliedForUkVisa === true &&
-    //   isRefusedForUKVisa === null
+    //   isRefusedForUKVisa === true &&
+    //   FileList.length === 0
     // ) {
     //   isFormValid = false;
-    //   setIsRefusedForUKVisaError("Please select any option");
+    //   setFileList1Error("File are required");
+    // }
+    // if (
+    //   studentTypeLabel === "International" &&
+    //   isRefusedForOtherVisa === true &&
+    //   FileList2.length === 0
+    // ) {
+    //   isFormValid = false;
+    //   setFileList2Error("File are required");
     // }
     return isFormValid;
   };

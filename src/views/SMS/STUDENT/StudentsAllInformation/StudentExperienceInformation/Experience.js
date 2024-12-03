@@ -66,6 +66,7 @@ const Experience = () => {
   const [endDateError, setEndDateError] = useState("");
   const minDate = "1950-01-01";
   const userType = localStorage.getItem("userType");
+  const [nav, setNav] = useState({});
 
   const handleChange = (e) => {
     let isChecked = e.target.checked;
@@ -73,10 +74,20 @@ const Experience = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     get(`Experience/GetByStudentId/${applicationStudentId}`).then((res) => {
       setInfo(res);
-      console.log(res);
     });
+    fetchData();
   }, [success, applicationStudentId]);
 
   const handleCancelAdd = () => {
@@ -558,7 +569,7 @@ const Experience = () => {
           <Row className="mt-4 ">
             <Col className="d-flex justify-content-between">
               <PreviousButton action={goPrevious} />
-              {action?.reference && (
+              {action?.reference && nav?.reference && (
                 <SaveButton text="Next" action={goForward} />
               )}
             </Col>
