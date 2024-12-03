@@ -599,7 +599,7 @@ const TestScore = () => {
             ? setDuolingoExamDate(
                 moment(new Date(res?.examDate)).format("YYYY-MM-DD")
               )
-            : setDuolingoExamDate(null);
+            : setDuolingoExamDate("");
           setDuolingoOverall(res?.overall ? res?.overall : 10);
           setDuolingoEquivalentScore(res?.ieltsEquivalent);
           // setScoreInfo(res);
@@ -615,7 +615,7 @@ const TestScore = () => {
           setToeflListening(res?.listening ? res?.listening : 0);
           res?.examDate
             ? setToeflExamDate(res?.examDate)
-            : setToeflExamDate(null);
+            : setToeflExamDate("");
           setLoading(false);
           setToeflOverall(res?.overall ? res?.overall : 0);
           setToeflEquivalentScore(res?.ieltsEquivalent);
@@ -634,7 +634,7 @@ const TestScore = () => {
               ? setFunctionSkillsExamDate(
                   moment(new Date(res?.examDate)).format("YYYY-MM-DD")
                 )
-              : setFunctionSkillsExamDate(null);
+              : setFunctionSkillsExamDate("");
             setLoading(false);
             setFunctionSkillsOverall(res?.overall ? res?.overall : 0);
             setFunctionSkillsEquivalentScore(res?.ieltsEquivalent);
@@ -1125,7 +1125,7 @@ const TestScore = () => {
 
     if (!new Date(FunctionSkillsExamDate).getDate()) {
       validation = false;
-      setFunctionSkillsExamDateError(null);
+      setFunctionSkillsExamDateError("Exam Date are required");
     }
 
     if (FunctionSkillsOverall < 0 || FunctionSkillsOverall > 90) {
@@ -1257,10 +1257,10 @@ const TestScore = () => {
         }
       }
     } else if (ELqualificationLabel === "DUOLINGO") {
-      const isValid = FormDuolingoValid();
       if (duolingoExamDate) {
         subData.append("examDate", duolingoExamDate);
       }
+      const isValid = FormDuolingoValid();
       if (isValid === true) {
         if (!updateDuolingo) {
           setButtonStatus(true);
@@ -1940,13 +1940,6 @@ const TestScore = () => {
                                 action={setIeltsExamDateError}
                                 required={true}
                               />
-                              <span className="text-danger">
-                                {ieltsExamDateError && (
-                                  <span className="text-danger">
-                                    {ieltsExamDateError}
-                                  </span>
-                                )}
-                              </span>
                             </FormGroup>
 
                             <FormGroup className="has-icon-left position-relative">
