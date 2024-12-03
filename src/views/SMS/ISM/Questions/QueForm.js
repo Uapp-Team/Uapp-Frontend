@@ -225,7 +225,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
         <div className="d-flex justify-content-between align-items-start">
           <Input
-            label="Title"
+            label="Question"
             type="text"
             name="title"
             defaultValue={defaultData.title}
