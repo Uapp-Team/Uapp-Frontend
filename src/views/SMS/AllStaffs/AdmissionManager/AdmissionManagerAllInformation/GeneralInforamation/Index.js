@@ -107,7 +107,6 @@ const Index = () => {
     setBranchError(false);
     setBranchLabel(label);
     setBranchValue(value);
-
     setProviderValue(0);
     setProviderLabel("Select Provider");
     setMultiProvider([]);

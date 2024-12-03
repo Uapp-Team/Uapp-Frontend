@@ -38,7 +38,7 @@ const PersonalInformation = () => {
   const [maritalStatusError, setMaritalStatusError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [Dates, SetDate] = useState(currentDate);
-  const [companionPersonalInfo, setAffiliatePersonalInfo] = useState({});
+  const [companionPersonalInfo, setCompanionPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
   const [navVisibility, setNavVisibility] = useState({});
   const { companionId } = useParams();
@@ -75,6 +75,11 @@ const PersonalInformation = () => {
   const [consultantValue, setConsultantValue] = useState(0);
   const [consultantError, setConsultantError] = useState(false);
 
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
+
   const companionParentMenu = companionParent?.map(
     (companionParentOptions) => ({
       label: companionParentOptions?.name,
@@ -99,10 +104,22 @@ const PersonalInformation = () => {
     setConsultantValue(value);
   };
 
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setconsultantLabel("Select Consultant");
+    setCompanionParentValue(0);
+    setCompanionParentLabel("Select Parent Affiliate");
+  };
+
   useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
-      setConsultant(res);
-    });
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
@@ -114,14 +131,30 @@ const PersonalInformation = () => {
     get("GenderDD/Index").then((res) => {
       setGender(res);
     });
+  }, []);
 
-    get("CompanionDD").then((res) => {
-      setCompanionParent(res);
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
     });
 
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+    });
+
+    get(`CompanionDD/Index/${consultantValue}`).then((res) => {
+      setCompanionParent(res);
+    });
+  }, [branchValue, consultantValue]);
+
+  useEffect(() => {
     Uget(`Companion/get-by/${companionId}`).then((res) => {
       console.log("personalInfo", res?.data);
-      setAffiliatePersonalInfo(res);
+      setCompanionPersonalInfo(res);
+      setBranchValue(res?.data?.branchId == null ? 0 : res?.data?.branchId);
+      setBranchLabel(
+        res?.data?.branchName == "" ? "Select Branch" : res?.data?.branchName
+      );
       setCompanionParentValue(
         res?.data?.parentCompanionId == null ? 0 : res?.data?.parentCompanionId
       );
@@ -469,6 +502,11 @@ const PersonalInformation = () => {
                 consultantValue={consultantValue}
                 selectConsultant={selectConsultant}
                 consultantError={consultantError}
+                branchOptions={branchOptions}
+                branchValue={branchValue}
+                branchError={branchError}
+                branchLabel={branchLabel}
+                selectBranch={selectBranch}
               ></PersonalForm>
             </TabPane>
           </TabContent>

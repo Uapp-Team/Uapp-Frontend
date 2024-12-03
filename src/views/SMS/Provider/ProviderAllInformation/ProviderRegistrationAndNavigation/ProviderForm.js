@@ -9,6 +9,8 @@ import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import Select from "react-select";
 
 const ProviderForm = (props) => {
   const history = useHistory();
@@ -29,16 +31,37 @@ const ProviderForm = (props) => {
   const [providerId, setProviderId] = useState();
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const userType = localStorage.getItem("userType");
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
 
   const backtoList = () => {
     history.push(`/providerList`);
   };
 
   useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
   }, []);
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+  };
 
   const handleProviderNameChange = (e) => {
     setName(e.target.value);
@@ -90,6 +113,11 @@ const ProviderForm = (props) => {
   const validateRegisterForm = () => {
     var isFormValid = true;
 
+    if (branchValue === 0) {
+      setBranchError(true);
+      isFormValid = false;
+    }
+
     if (!name) {
       setProviderNameError("Company or institution name");
       isFormValid = false;
@@ -127,6 +155,7 @@ const ProviderForm = (props) => {
     event.preventDefault();
 
     const formData = new FormData();
+    formData.append("BranchId", branchValue);
     formData.append("ProviderName", name);
     formData.append("NameTitleId", titleValue);
     formData.append("AdminEmail", email);
@@ -197,6 +226,29 @@ const ProviderForm = (props) => {
           <form onSubmit={handleSubmit}>
             <Row>
               <Col md="4">
+                {userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.Admin ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                      <span className="text-danger"></span>
+                    </span>
+
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      name="BranchId"
+                      id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
                 <FormGroup>
                   <span>
                     {" "}

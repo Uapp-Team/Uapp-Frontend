@@ -106,12 +106,6 @@ const PersonalInformation = () => {
   }, [branchValue, consultantValue]);
 
   useEffect(() => {
-    // get(`ConsultantNavBar/Get/${affiliateId}`).then((res) => {
-    //   //
-    //   console.log("consNav", res);
-    //   setNavVisibility(res);
-    // });
-
     Uget(`Affiliate/get-by/${affiliateId}`).then((res) => {
       console.log("personalInfo", res?.data);
       setAffiliatePersonalInfo(res);
