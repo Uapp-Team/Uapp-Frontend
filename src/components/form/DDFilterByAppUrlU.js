@@ -47,7 +47,7 @@ const DDFilterByAppUrlU = ({
   return (
     <>
       <Form.Group className={className}>
-        {label && <Form.Label>{label}</Form.Label>}
+        {label && <span>{label}</span>}
 
         <Select
           options={option}

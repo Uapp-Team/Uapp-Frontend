@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Col, Form, Row } from "reactstrap";
@@ -15,6 +15,9 @@ import Origine from "../Components/Origine";
 import DDFilterByAppUrlU from "../../../../components/form/DDFilterByAppUrlU";
 import StatusDD from "../Components/StatusDD";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
+import Uget from "../../../../helpers/Uget";
+import Typing from "../../../../components/form/Typing";
+import ErrorText from "../../../../components/form/ErrorText";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -100,7 +103,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
       isValid = false;
     }
     if (title === "") {
-      setTitleError("Title is Required");
+      setTitleError("Question is Required");
       isValid = false;
     }
     if (ansReq && isSameForAll && !answers) {
@@ -192,6 +195,25 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
       setIsSubmit(false);
     }
   };
+  const [isTyping, setIsTyping] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [search, setSearch] = useState([]);
+
+  useEffect(() => {
+    if (!isTyping) {
+      Uget(
+        `question/get-paginated-titles?index=${1}&size=${5}&searchText=${title}`
+      ).then((res) => {
+        setSearch(res?.items);
+      });
+    }
+  }, [isTyping, title]);
+
+  const handleKeyword = (e) => {
+    setTitle(e.target.value);
+    setTitleError("");
+    e.key === "Enter" ? setIsSearch(false) : setIsSearch(true);
+  };
 
   return (
     <>
@@ -224,19 +246,50 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         </Row>
 
         <div className="d-flex justify-content-between align-items-start">
-          <Input
+          <div className="relative w-100">
+            <span>Question</span>
+            <Typing
+              placeholder="Search here ..."
+              value={title}
+              setValue={setTitle}
+              setIsTyping={setIsTyping}
+              onKeyDown={(e) => handleKeyword(e)}
+              onBlur={() =>
+                setTimeout(() => {
+                  setIsSearch(false);
+                }, 500)
+              }
+            />
+
+            {isSearch && search.length > 0 && (
+              <div className="custom-card-border absolute zindex-100 w-100 px-4">
+                <p className="text-warning fw-500 mb-2">
+                  Similar questions are not allowed.
+                </p>
+
+                {search?.map((item, i) => (
+                  <p className="mb-1" key={i}>
+                    {item.title}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            <ErrorText error={titleError} />
+          </div>
+
+          {/* <Input
             label="Question"
             type="text"
             name="title"
-            defaultValue={defaultData.title}
+            defaultValue={title}
             error={titleError}
             onChange={(e) => {
-              console.log(e.target.value);
               setTitle(e.target.value);
               setTitleError("");
             }}
             className="mb-3 w-75"
-          />
+          /> */}
 
           <StatusDD
             value={statusValue}

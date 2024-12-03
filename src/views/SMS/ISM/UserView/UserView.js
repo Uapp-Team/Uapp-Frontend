@@ -58,7 +58,7 @@ const UserView = () => {
 
   useEffect(() => {
     Uget(
-      `question/get-paginated-titles?index=${1}&size=${5}&searchText=${keyword}`
+      `question/get-paginated-titles?index=${1}&size=${5}&status=${4}&searchText=${keyword}`
     ).then((res) => {
       setSearch(res?.items);
     });

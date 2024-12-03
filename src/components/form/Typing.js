@@ -44,7 +44,6 @@ const Typing = ({
           <CiSearch size={30} />
           <Input
             className="border-0"
-            style={{ height: "2.7rem" }}
             type="text"
             name={name}
             value={value}
@@ -57,7 +56,6 @@ const Typing = ({
         </div>
       ) : (
         <Input
-          style={{ height: "2.7rem" }}
           type="text"
           name={name}
           value={value}

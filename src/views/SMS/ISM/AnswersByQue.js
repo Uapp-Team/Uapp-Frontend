@@ -46,7 +46,7 @@ const AnswersByQue = () => {
             <div className="d-flex align-items-start justify-content-between px-3 mt-3">
               <div>
                 <Typing
-                  placeholder="search"
+                  placeholder="search by answer"
                   value={searchStr}
                   setValue={setSearchStr}
                   setIsTyping={setIsTyping}
