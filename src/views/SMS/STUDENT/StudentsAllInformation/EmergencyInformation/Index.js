@@ -26,6 +26,7 @@ import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import remove from "../../../../../helpers/remove";
+import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const ContactInformation = () => {
@@ -66,6 +67,7 @@ const ContactInformation = () => {
   const [action, setAction] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
   const [delData, setDelData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -82,20 +84,30 @@ const ContactInformation = () => {
     }
   }, [country, countryValue]);
   useEffect(() => {
-    get(`StudentEmergency/GetByStudentId/${applicationStudentId}`).then(
-      (res) => {
-        setOneData(res);
-        setCountryValue(res?.countryId ? res?.countryId : 0);
-        setReferenceName(res?.personName);
-        setRelationship(res?.relationship);
-        setPhoneNumber(res?.phoneNumber);
-        setEmail(res?.emailAddress);
-        setAddressLine(res?.addressLine);
-        setCity(res?.city);
-        setZipCode(res?.zipCode);
-        setState(res?.state);
+    const fetchData = async () => {
+      setLoading(false);
+      try {
+        await get(
+          `StudentEmergency/GetByStudentId/${applicationStudentId}`
+        ).then((res) => {
+          setOneData(res);
+          setCountryValue(res?.countryId ? res?.countryId : 0);
+          setReferenceName(res?.personName);
+          setRelationship(res?.relationship);
+          setPhoneNumber(res?.phoneNumber);
+          setEmail(res?.emailAddress);
+          setAddressLine(res?.addressLine);
+          setCity(res?.city);
+          setZipCode(res?.zipCode);
+          setState(res?.state);
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-    );
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   const countryName = country?.map((branchCountry) => ({
@@ -416,279 +428,299 @@ const ContactInformation = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={activetab}
+            success={success}
+            setSuccess={setSuccess}
+            action={setAction}
+          />
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={activetab}
-        success={success}
-        setSuccess={setSuccess}
-        action={setAction}
-      />
-
-      <Card>
-        <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="8.1">
-              <p className="section-title">Emergency Contact</p>
-              <div className="row mx-0 mb-3">
-                {oneData.length > 0 && (
-                  <Table responsive className="table-bordered">
-                    <thead className="tablehead">
-                      <tr>
-                        <th>Person Name</th>
-                        <th>Relationship</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Country</th>
-                        <th>Address Line</th>
-                        <th>City</th>
-                        <th>State/County</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {oneData.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.personName}</td>
-                          <td>{item.relationship}</td>
-                          <td>+{item.phoneNumber}</td>
-                          <td>{item.emailAddress}</td>
-                          <td>{item.countryName}</td>
-                          <td>{item.addressLine}</td>
-                          <td>{item.city}</td>
-                          <td>{item.state}</td>
-                          <td>
-                            <span>
-                              {permissions?.includes(
-                                permissionList?.Edit_Student
-                              ) ? (
-                                <a href="#experience-form">
-                                  <span
-                                    className="pointer text-body"
-                                    onClick={() => handleUpdate(item?.id)}
-                                  >
-                                    Edit
-                                  </span>
-                                </a>
-                              ) : null}{" "}
-                              |{" "}
-                              {permissions?.includes(
-                                permissionList?.Edit_Student
-                              ) ? (
-                                <span
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() => toggleDanger(item?.id)}
-                                >
-                                  Delete
+          <Card>
+            <CardBody>
+              <TabContent activeTab={activetab}>
+                <TabPane tabId="8.1">
+                  <p className="section-title">Emergency Contact</p>
+                  <div className="row mx-0 mb-3">
+                    {oneData.length > 0 && (
+                      <Table responsive className="table-bordered">
+                        <thead className="tablehead">
+                          <tr>
+                            <th>Person Name</th>
+                            <th>Relationship</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Country</th>
+                            <th>Address Line</th>
+                            <th>City</th>
+                            <th>State/County</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {oneData.map((item, index) => (
+                            <tr key={index}>
+                              <td>{item.personName}</td>
+                              <td>{item.relationship}</td>
+                              <td>+{item.phoneNumber}</td>
+                              <td>{item.emailAddress}</td>
+                              <td>{item.countryName}</td>
+                              <td>{item.addressLine}</td>
+                              <td>{item.city}</td>
+                              <td>{item.state}</td>
+                              <td>
+                                <span>
+                                  {permissions?.includes(
+                                    permissionList?.Edit_Student
+                                  ) ? (
+                                    <a href="#experience-form">
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() => handleUpdate(item?.id)}
+                                      >
+                                        Edit
+                                      </span>
+                                    </a>
+                                  ) : null}{" "}
+                                  |{" "}
+                                  {permissions?.includes(
+                                    permissionList?.Edit_Student
+                                  ) ? (
+                                    <span
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => toggleDanger(item?.id)}
+                                    >
+                                      Delete
+                                    </span>
+                                  ) : null}
                                 </span>
-                              ) : null}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    )}
+                    <ConfirmModal
+                      text="Do You Want To Delete Emergency Contact Information?"
+                      isOpen={deleteModal}
+                      toggle={() => setDeleteModal(!deleteModal)}
+                      confirm={handleDeletePermission}
+                      buttonStatus={buttonStatus}
+                      progress={progress}
+                      cancel={() => setDeleteModal(false)}
+                    />
+                  </div>
+                  {oneData.length < 1 || showForm ? (
+                    <Form onSubmit={handleSubmit}>
+                      {idValue != 0 ? (
+                        <input
+                          type="hidden"
+                          name="id"
+                          id="id"
+                          value={idValue}
+                        />
+                      ) : null}
+                      <input
+                        type="hidden"
+                        name="studentId"
+                        id="studentId"
+                        value={applicationStudentId}
+                      />
+
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Person Name
+                          </span>
+
+                          <Input
+                            type="text"
+                            name="personName"
+                            id="personName"
+                            placeholder="Enter Reference Name"
+                            onChange={(e) => {
+                              handleReferenceName(e);
+                            }}
+                            value={referenceName}
+                          />
+                          <span className="text-danger">
+                            {referenceNameError}
+                          </span>
+                        </Col>
+                      </FormGroup>
+
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Relationship
+                          </span>
+
+                          <Input
+                            type="text"
+                            name="relationship"
+                            id="relationship"
+                            placeholder="Enter Relationship"
+                            onChange={(e) => {
+                              handleInstitute(e);
+                            }}
+                            value={relationship}
+                          />
+                          <span className="text-danger">
+                            {relationshipError}
+                          </span>
+                        </Col>
+                      </FormGroup>
+
+                      <FormGroup row>
+                        <Col lg="6" md="8" className="phone-input-group">
+                          <span>
+                            <span className="text-danger">*</span>
+                            Phone Number
+                          </span>
+                          <PhoneInput
+                            className="w-100"
+                            type="string"
+                            name="phoneNumber"
+                            id="phoneNumber"
+                            country={"gb"}
+                            enableLongNumbers={true}
+                            onChange={handlePhoneNumber}
+                            value={phoneNumber ? phoneNumber : ""}
+                            inputProps={{
+                              required: true,
+                            }}
+                          />
+
+                          <span className="text-danger">
+                            {phoneNumberError}
+                          </span>
+                        </Col>
+                      </FormGroup>
+
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Email
+                          </span>
+
+                          <Input
+                            type="text"
+                            name="emailAddress"
+                            id="emailAddress"
+                            placeholder="Enter Email"
+                            onChange={(e) => {
+                              handleEmailError(e);
+                            }}
+                            value={email}
+                          />
+                          <span className="text-danger">{emailError}</span>
+                        </Col>
+                      </FormGroup>
+
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Country
+                          </span>
+                          <Select
+                            options={countryName}
+                            value={{ label: countryLabel, value: countryValue }}
+                            onChange={(opt) =>
+                              selectCountry(opt.label, opt.value)
+                            }
+                            name="countryId"
+                            id="countryId"
+                            required
+                          />
+                          {countryError && (
+                            <span className="text-danger">
+                              Country is required
                             </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                )}
-                <ConfirmModal
-                  text="Do You Want To Delete Emergency Contact Information?"
-                  isOpen={deleteModal}
-                  toggle={() => setDeleteModal(!deleteModal)}
-                  confirm={handleDeletePermission}
-                  buttonStatus={buttonStatus}
-                  progress={progress}
-                  cancel={() => setDeleteModal(false)}
-                />
-              </div>
-              {oneData.length < 1 || showForm ? (
-                <Form onSubmit={handleSubmit}>
-                  {idValue != 0 ? (
-                    <input type="hidden" name="id" id="id" value={idValue} />
-                  ) : null}
-                  <input
-                    type="hidden"
-                    name="studentId"
-                    id="studentId"
-                    value={applicationStudentId}
-                  />
+                          )}
+                        </Col>
+                      </FormGroup>
 
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Person Name
-                      </span>
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Address Line
+                          </span>
 
-                      <Input
-                        type="text"
-                        name="personName"
-                        id="personName"
-                        placeholder="Enter Reference Name"
-                        onChange={(e) => {
-                          handleReferenceName(e);
-                        }}
-                        value={referenceName}
-                      />
-                      <span className="text-danger">{referenceNameError}</span>
-                    </Col>
-                  </FormGroup>
+                          <Input
+                            type="text"
+                            name="addressLine"
+                            id="addressLine"
+                            placeholder="Enter Address Line"
+                            onChange={(e) => {
+                              handleAddressLine(e);
+                            }}
+                            value={addressLine}
+                          />
+                          <span className="text-danger">
+                            {addressLineError}
+                          </span>
+                        </Col>
+                      </FormGroup>
 
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Relationship
-                      </span>
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> City
+                          </span>
 
-                      <Input
-                        type="text"
-                        name="relationship"
-                        id="relationship"
-                        placeholder="Enter Relationship"
-                        onChange={(e) => {
-                          handleInstitute(e);
-                        }}
-                        value={relationship}
-                      />
-                      <span className="text-danger">{relationshipError}</span>
-                    </Col>
-                  </FormGroup>
+                          <Input
+                            type="text"
+                            name="city"
+                            id="city"
+                            placeholder="Enter City"
+                            onChange={(e) => {
+                              handleCity(e);
+                            }}
+                            value={city}
+                          />
+                          <span className="text-danger">{cityError}</span>
+                        </Col>
+                      </FormGroup>
 
-                  <FormGroup row>
-                    <Col lg="6" md="8" className="phone-input-group">
-                      <span>
-                        <span className="text-danger">*</span>
-                        Phone Number
-                      </span>
-                      <PhoneInput
-                        className="w-100"
-                        type="string"
-                        name="phoneNumber"
-                        id="phoneNumber"
-                        country={"gb"}
-                        enableLongNumbers={true}
-                        onChange={handlePhoneNumber}
-                        value={phoneNumber ? phoneNumber : ""}
-                        inputProps={{
-                          required: true,
-                        }}
-                      />
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>State/County</span>
+                          <Input
+                            type="text"
+                            name="state"
+                            id="state"
+                            onChange={(e) => {
+                              handleState(e);
+                            }}
+                            placeholder="Enter State/County"
+                            value={state}
+                          />
+                        </Col>
+                      </FormGroup>
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            <span className="text-danger">*</span> Zip/Post Code
+                          </span>
+                          <Input
+                            type="text"
+                            placeholder="Enter Post/Zip Code"
+                            id="zipCode"
+                            name="zipCode"
+                            onChange={(e) => {
+                              handleZipCode(e);
+                            }}
+                            value={zipCode}
+                          />
+                          <span className="text-danger">{zipCodeError}</span>
+                        </Col>
+                      </FormGroup>
 
-                      <span className="text-danger">{phoneNumberError}</span>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Email
-                      </span>
-
-                      <Input
-                        type="text"
-                        name="emailAddress"
-                        id="emailAddress"
-                        placeholder="Enter Email"
-                        onChange={(e) => {
-                          handleEmailError(e);
-                        }}
-                        value={email}
-                      />
-                      <span className="text-danger">{emailError}</span>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Country
-                      </span>
-                      <Select
-                        options={countryName}
-                        value={{ label: countryLabel, value: countryValue }}
-                        onChange={(opt) => selectCountry(opt.label, opt.value)}
-                        name="countryId"
-                        id="countryId"
-                        required
-                      />
-                      {countryError && (
-                        <span className="text-danger">Country is required</span>
-                      )}
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Address Line
-                      </span>
-
-                      <Input
-                        type="text"
-                        name="addressLine"
-                        id="addressLine"
-                        placeholder="Enter Address Line"
-                        onChange={(e) => {
-                          handleAddressLine(e);
-                        }}
-                        value={addressLine}
-                      />
-                      <span className="text-danger">{addressLineError}</span>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> City
-                      </span>
-
-                      <Input
-                        type="text"
-                        name="city"
-                        id="city"
-                        placeholder="Enter City"
-                        onChange={(e) => {
-                          handleCity(e);
-                        }}
-                        value={city}
-                      />
-                      <span className="text-danger">{cityError}</span>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>State/County</span>
-                      <Input
-                        type="text"
-                        name="state"
-                        id="state"
-                        onChange={(e) => {
-                          handleState(e);
-                        }}
-                        placeholder="Enter State/County"
-                        value={state}
-                      />
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        <span className="text-danger">*</span> Zip/Post Code
-                      </span>
-                      <Input
-                        type="text"
-                        placeholder="Enter Post/Zip Code"
-                        id="zipCode"
-                        name="zipCode"
-                        onChange={(e) => {
-                          handleZipCode(e);
-                        }}
-                        value={zipCode}
-                      />
-                      <span className="text-danger">{zipCodeError}</span>
-                    </Col>
-                  </FormGroup>
-
-                  {/* <Row>
+                      {/* <Row>
                     <Col lg="6" md="8">
                       <FormGroup className="d-flex justify-content-between mt-4">
                         <PreviousButton action={handlePrevious} />
@@ -703,55 +735,61 @@ const ContactInformation = () => {
                     </Col>
                   </Row> */}
 
-                  <FormGroup row className="mt-2">
-                    <Col lg="6" md="8" className="text-right">
-                      {oneData.length > 0 && (
-                        <CancelButton cancel={handleCancelAdd} />
-                      )}
-                      {permissions?.includes(permissionList?.Edit_Student) ? (
-                        <SaveButton
-                          progress={progress}
-                          buttonStatus={buttonStatus}
-                        />
-                      ) : null}
-                    </Col>
-                  </FormGroup>
-                </Form>
-              ) : (
-                <>
-                  {oneData.length > 0 && !showForm ? (
+                      <FormGroup row className="mt-2">
+                        <Col lg="6" md="8" className="text-right">
+                          {oneData.length > 0 && (
+                            <CancelButton cancel={handleCancelAdd} />
+                          )}
+                          {permissions?.includes(
+                            permissionList?.Edit_Student
+                          ) ? (
+                            <SaveButton
+                              progress={progress}
+                              buttonStatus={buttonStatus}
+                            />
+                          ) : null}
+                        </Col>
+                      </FormGroup>
+                    </Form>
+                  ) : (
                     <>
-                      {permissions?.includes(permissionList?.Edit_Student) ? (
-                        <a
-                          href="#experience-form"
-                          className="text-decoration-none"
-                        >
-                          <button
-                            className="add-button"
-                            onClick={onShow}
-                            permission={6}
-                          >
-                            Add Emergency Contact
-                          </button>
-                        </a>
+                      {oneData.length > 0 && !showForm ? (
+                        <>
+                          {permissions?.includes(
+                            permissionList?.Edit_Student
+                          ) ? (
+                            <a
+                              href="#experience-form"
+                              className="text-decoration-none"
+                            >
+                              <button
+                                className="add-button"
+                                onClick={onShow}
+                                permission={6}
+                              >
+                                Add Emergency Contact
+                              </button>
+                            </a>
+                          ) : null}
+                        </>
                       ) : null}
                     </>
-                  ) : null}
-                </>
-              )}
-
-              <Row className="mt-4 ">
-                <Col className="d-flex justify-content-between">
-                  <PreviousButton action={handlePrevious} />
-                  {oneData.length > 0 && (
-                    <SaveButton text="Next" action={goForward} />
                   )}
-                </Col>
-              </Row>
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+
+                  <Row className="mt-4 ">
+                    <Col className="d-flex justify-content-between">
+                      <PreviousButton action={handlePrevious} />
+                      {oneData.length > 0 && (
+                        <SaveButton text="Next" action={goForward} />
+                      )}
+                    </Col>
+                  </Row>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };

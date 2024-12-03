@@ -448,9 +448,7 @@ const DocumentUpload = () => {
     history.push(`/addOtherInformation/${applicationStudentId}`);
   };
   const goForward = () => {
-    if (validateRegisterForm === true) {
-      history.push(`/studentDeclaration/${applicationStudentId}`);
-    }
+    history.push(`/studentDeclaration/${applicationStudentId}`);
   };
 
   return (
