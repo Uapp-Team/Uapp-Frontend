@@ -9,6 +9,7 @@ const Typing = ({
   setValue,
   setIsTyping,
   onKeyDown,
+  onBlur,
   isIcon = false,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
@@ -51,6 +52,7 @@ const Typing = ({
             placeholder={placeholder}
             onChange={(e) => handleChange(e)}
             onKeyDown={onKeyDown}
+            onBlur={onBlur}
           />
         </div>
       ) : (
@@ -63,6 +65,7 @@ const Typing = ({
           placeholder={placeholder}
           onChange={(e) => handleChange(e)}
           onKeyDown={onKeyDown}
+          onBlur={onBlur}
         />
       )}
     </>

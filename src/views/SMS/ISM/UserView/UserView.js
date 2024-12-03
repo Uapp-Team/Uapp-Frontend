@@ -58,19 +58,15 @@ const UserView = () => {
 
   useEffect(() => {
     Uget(
-      `question/get-paginated-titles?index=${1}&size=${15}&searchText=${keyword}`
+      `question/get-paginated-titles?index=${1}&size=${5}&searchText=${keyword}`
     ).then((res) => {
       setSearch(res?.items);
     });
   }, [keyword]);
 
-  useEffect(() => {
-    if (!isTyping) {
-      setTimeout(() => {
-        setIsSearch(false);
-      }, 3000);
-    }
-  }, [isTyping]);
+  const handleKeyword = (e) => {
+    e.key === "Enter" ? setIsSearch(false) : setIsSearch(true);
+  };
 
   useEffect(() => {
     keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
@@ -102,10 +98,14 @@ const UserView = () => {
                 setValue={setKeyword}
                 setIsTyping={setIsTyping}
                 isIcon={true}
-                onKeyDown={() => {
-                  setIsSearch(true);
-                }}
+                onKeyDown={(e) => handleKeyword(e)}
+                onBlur={() =>
+                  setTimeout(() => {
+                    setIsSearch(false);
+                  }, 500)
+                }
               />
+
               <div className="absolute zindex-100 w-100">
                 {isSearch &&
                   search?.map((item, i) => (
@@ -149,33 +149,6 @@ const UserView = () => {
                 )}
               </div>
             )}
-            {/* {noFilter && (
-              <div>
-                {uniModal ? (
-                  <div
-                    className="w-50 mx-auto"
-                    onMouseLeave={() => setUniModal(!uniModal)}
-                  >
-                    <DefaultDropdownU
-                      label={uniLable}
-                      setLabel={setUniLable}
-                      value={uniValue}
-                      setValue={setUniValue}
-                      url="University/get-dd"
-                      className="w-100"
-                      action={(label, value) => redirectRoute(label, value)}
-                    />
-                  </div>
-                ) : (
-                  <p className="text-white text-center pointer">
-                    <span onClick={() => setUniModal(!uniModal)}>
-                      University wise information <FaRegArrowAltCircleRight />
-                    </span>
-                  </p>
-
-                )}
-              </div>
-            )} */}
           </div>
 
           <div className="w-75 mx-auto">
