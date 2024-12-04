@@ -37,8 +37,8 @@ import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const AddUniversity = (props) => {
   const { univerId, provideId } = useParams();
-  const permissions = JSON.parse(localStorage.getItem("permissions"));
 
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [univerSityCountries, setUniverSityCountries] = useState([]);
   const [universityTypes, setUniversitiesType] = useState([]);
   const [universityStates, setUniversityStates] = useState([]);
@@ -192,6 +192,7 @@ const AddUniversity = (props) => {
     );
   };
   console.log(userType, referenceId);
+
   useEffect(() => {
     get(`ProviderHelper/GetProviderId/${userType}/${referenceId}`).then(
       (res) => {
@@ -829,7 +830,7 @@ const AddUniversity = (props) => {
                             </span>
 
                             <Select
-                              isDisabled
+                              // isDisabled
                               value={{
                                 label: providerTypeLabel,
                                 value: providerTypeValue,

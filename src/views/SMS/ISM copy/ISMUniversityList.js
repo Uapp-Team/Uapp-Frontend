@@ -8,7 +8,7 @@ import Uget from "../../../helpers/Uget";
 import { rootUrl } from "../../../constants/constants";
 import { AdminUsers, AdmissionUsers } from "../../../components/core/User";
 
-const UniversityListForSharingFAQ = () => {
+const ISMUniversityList = () => {
   const [universityList, setUniversityList] = useState([]);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -108,4 +108,4 @@ const UniversityListForSharingFAQ = () => {
   );
 };
 
-export default UniversityListForSharingFAQ;
+export default ISMUniversityList;

@@ -1,10 +1,11 @@
 import React from "react";
 
-const AccordionForFaqCategory = ({
+const CategoryAccordion = ({
   key,
   content,
   categoryId,
   setCategoryId,
+  setCategoryName,
   isOpen,
   toggleAccordion,
 }) => {
@@ -13,11 +14,13 @@ const AccordionForFaqCategory = ({
       <div
         key={key}
         className={`${
-          isOpen ? `accordion-header-faq-open` : `accordion-header-faq`
-        } d-flex justify-content-between`}
+          isOpen ? `bg-f2f2f2` : `bg-white`
+        } d-flex justify-content-between category-accordian`}
         onClick={toggleAccordion}
       >
-        <span>{content?.name}</span>
+        <div>
+          <span>{content?.name}</span>
+        </div>
 
         <span>
           {isOpen ? (
@@ -29,15 +32,22 @@ const AccordionForFaqCategory = ({
       </div>
       {isOpen && (
         <>
-          <div className="faq-category-list pl-3 border-left">
+          <div className="faq-category-list">
             {content?.subCategories?.map((item, i) => (
               <li
                 key={i}
-                className="faq-sub-category mb-3 pointer"
-                onClick={() => setCategoryId(item?.id)}
+                className={`py-2 pl-3 pointer ${
+                  categoryId === item?.id
+                    ? "border-left-367D7E"
+                    : "border-left-e9e9e9"
+                }`}
+                onClick={() => {
+                  setCategoryId(item?.id);
+                  setCategoryName && setCategoryName(item?.name);
+                }}
               >
                 {categoryId === item?.id ? (
-                  <b>{item?.name}</b>
+                  <span className="fw-500">{item?.name}</span>
                 ) : (
                   <span>{item?.name}</span>
                 )}
@@ -50,4 +60,4 @@ const AccordionForFaqCategory = ({
   );
 };
 
-export default AccordionForFaqCategory;
+export default CategoryAccordion;

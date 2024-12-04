@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 import ErrorText from "./ErrorText";
-import get from "../../helpers/get";
+import Uget from "../../helpers/Uget";
 
-const DDFilterByAppUrl = ({
+const DDFilterByAppUrlU = ({
   label,
   url,
   defaultValue,
@@ -17,13 +17,15 @@ const DDFilterByAppUrl = ({
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    get(url).then((res) => {
+    Uget(url).then((res) => {
       console.log(res);
       setData(res);
     });
   }, [url]);
 
-  const option = data?.map((item) => ({
+  const list = data?.data;
+
+  const option = list?.map((item) => ({
     label: item?.name,
     value: item?.id,
   }));
@@ -50,4 +52,4 @@ const DDFilterByAppUrl = ({
   );
 };
 
-export default DDFilterByAppUrl;
+export default DDFilterByAppUrlU;
