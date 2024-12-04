@@ -75,7 +75,9 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   );
 
   const [statusValue, setStatusValue] = useState(defaultData?.status);
-  // const [statusValue, setStatusValue] = useState(defaultData?.status);
+  const [isDeletePreAns, setIsDeletePreAns] = useState(
+    defaultData?.isDeletePreAns
+  );
 
   const { register, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
@@ -261,7 +263,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
               }
             />
 
-            {isSearch && search.length > 0 && (
+            {isSearch && search?.length > 0 && (
               <div className="custom-card-border absolute zindex-100 w-100 px-4">
                 <p className="text-warning fw-500 mb-2">
                   Similar questions are not allowed.
@@ -269,7 +271,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
                 {search?.map((item, i) => (
                   <p className="mb-1" key={i}>
-                    {item.title}
+                    {item.title !== defaultData?.title && item.title}
                   </p>
                 ))}
               </div>
@@ -277,19 +279,6 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
             <ErrorText error={titleError} />
           </div>
-
-          {/* <Input
-            label="Question"
-            type="text"
-            name="title"
-            defaultValue={title}
-            error={titleError}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              setTitleError("");
-            }}
-            className="mb-3 w-75"
-          /> */}
 
           <StatusDD
             value={statusValue}
@@ -299,135 +288,140 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             isDisabled={statusValue === 1 && true}
           />
         </div>
-
-        <CheckOne
-          name="isRequiredAns"
-          label="Is required answer"
-          defaultValue={ansReq}
-          onChange={(e) => handleReqAns(e.target.checked)}
-        />
-
-        <div className="d-flex justify-content-between">
+        {defaultData?.id !== 0 && (
           <CheckOne
-            name="isRequiredAns"
-            label="Is required answer"
-            defaultValue={ansReq}
-            onChange={(e) => handleReqAns(e.target.checked)}
+            name="isDeletePreAns"
+            label="Delete all existing answers for this question across all universities?"
+            defaultValue={isDeletePreAns}
+            onChange={(e) => setIsDeletePreAns(e.target.checked)}
           />
+        )}
 
-          {ansReq && (
-            <CheckOne
-              name="isSameForAll"
-              label="Same Answer for all type"
-              defaultValue={isSameForAll}
-              onChange={(e) => setIsSameForAll(e.target.checked)}
-            />
-          )}
-        </div>
-
-        {ansReq && (
+        {isDeletePreAns && (
           <>
-            {isSameForAll === true ? (
-              <RichTextArea
-                defaultValue={answers}
-                onChange={setAnswers}
-                error={answersError}
-                action={() => setAnswersError("")}
+            <div className="d-flex justify-content-between">
+              <CheckOne
+                name="isRequiredAns"
+                label="Is required answer"
+                defaultValue={ansReq}
+                onChange={(e) => handleReqAns(e.target.checked)}
               />
-            ) : (
-              <>
-                {defaultData?.answerList?.map((item, i) => (
-                  <div key={i}>
-                    <Origine typeId={item?.originType} />
-                    <Input
-                      register={register}
-                      type="hidden"
-                      name={`answerList.${i}.id`}
-                      defaultValue={item?.id}
-                    />
-                    <Input
-                      register={register}
-                      type="hidden"
-                      name={`answerList.${i}.originType`}
-                      defaultValue={item?.originType}
-                    />
 
-                    <RichTextArea
-                      defaultValue={
-                        i === 0 ? answers1 : i === 1 ? answers2 : answers3
-                      }
-                      onChange={
-                        i === 0
-                          ? setAnswers1
-                          : i === 1
-                          ? setAnswers2
-                          : setAnswers3
-                      }
-                      error={
-                        i === 0
-                          ? answers1Error
-                          : i === 1
-                          ? answers2Error
-                          : answers3Error
-                      }
-                      action={() =>
-                        i === 0
-                          ? setAnswers1Error("")
-                          : i === 1
-                          ? setAnswers2Error("")
-                          : setAnswers3Error("")
-                      }
-                    />
-                  </div>
-                ))}
+              {ansReq && (
+                <CheckOne
+                  name="isSameForAll"
+                  label="Same Answer for all type"
+                  defaultValue={isSameForAll}
+                  onChange={(e) => setIsSameForAll(e.target.checked)}
+                />
+              )}
+            </div>
+
+            {ansReq && (
+              <>
+                {isSameForAll === true ? (
+                  <RichTextArea
+                    defaultValue={answers}
+                    onChange={setAnswers}
+                    error={answersError}
+                    action={() => setAnswersError("")}
+                  />
+                ) : (
+                  <>
+                    {defaultData?.answerList?.map((item, i) => (
+                      <div key={i}>
+                        <Origine typeId={item?.originType} />
+                        <Input
+                          register={register}
+                          type="hidden"
+                          name={`answerList.${i}.id`}
+                          defaultValue={item?.id}
+                        />
+                        <Input
+                          register={register}
+                          type="hidden"
+                          name={`answerList.${i}.originType`}
+                          defaultValue={item?.originType}
+                        />
+
+                        <RichTextArea
+                          defaultValue={
+                            i === 0 ? answers1 : i === 1 ? answers2 : answers3
+                          }
+                          onChange={
+                            i === 0
+                              ? setAnswers1
+                              : i === 1
+                              ? setAnswers2
+                              : setAnswers3
+                          }
+                          error={
+                            i === 0
+                              ? answers1Error
+                              : i === 1
+                              ? answers2Error
+                              : answers3Error
+                          }
+                          action={() =>
+                            i === 0
+                              ? setAnswers1Error("")
+                              : i === 1
+                              ? setAnswers2Error("")
+                              : setAnswers3Error("")
+                          }
+                        />
+                      </div>
+                    ))}
+                  </>
+                )}
               </>
             )}
-          </>
-        )}
 
-        <CheckOne
-          name="isMandatoryForAll"
-          label="Mandatory for all universities"
-          defaultValue={check}
-          onChange={(e) => {
-            setCheck(e.target.checked);
-          }}
-          className="mb-3 fw-600"
-        />
-
-        {!check && (
-          <>
-            <TopicDivider text="Or" />
-            <MultiSelectU
-              url="University/get-dd"
-              value={universityValue}
-              setValue={setuniversityValue}
-              name="userTypeIds"
-              className="mb-3"
-              placeholder="Select University"
+            <CheckOne
+              name="isMandatoryForAll"
+              label="Mandatory for all universities"
+              defaultValue={check}
+              onChange={(e) => {
+                setCheck(e.target.checked);
+              }}
+              className="mb-3 fw-600"
             />
-          </>
-        )}
 
-        {defaultData?.answeredUniversities?.length > 0 && (
-          <div className="mb-3">
-            <p className="fw-500 mb-1"> Answered universities </p>
-            {defaultData?.answeredUniversities?.map((item, i) => (
-              <span key={i}>
-                <KeyBtn
-                  label={item?.label}
-                  data={item?.value}
-                  value={item?.value}
+            {!check && (
+              <>
+                <TopicDivider text="Or" />
+                <MultiSelectU
+                  url="University/get-dd"
+                  value={universityValue}
+                  setValue={setuniversityValue}
+                  name="userTypeIds"
+                  className="mb-3"
+                  placeholder="Select University"
                 />
-              </span>
-            ))}
-            <p className="text-orange fw-500">
-              <span className="fw-600">Warning:</span> Submitting this question
-              and status will overwrite existing answers for all universities.
-              Please review carefully and confirm your decision before clicking
-              the Submit button.
-            </p>
-          </div>
+              </>
+            )}
+
+            {defaultData?.answeredUniversities?.length > 0 && (
+              <div className="mb-3">
+                <p className="fw-500 mb-1"> Answered universities </p>
+                {defaultData?.answeredUniversities?.map((item, i) => (
+                  <span key={i}>
+                    <KeyBtn
+                      label={item?.label}
+                      data={item?.value}
+                      value={item?.value}
+                    />
+                  </span>
+                ))}
+                <p className="text-orange fw-500">
+                  <span className="fw-600">Warning:</span> Submitting this
+                  question and status will overwrite existing answers for all
+                  universities. Please review carefully and confirm your
+                  decision before clicking the Submit button.
+                </p>
+              </div>
+            )}
+          </>
         )}
 
         <div className="d-flex">

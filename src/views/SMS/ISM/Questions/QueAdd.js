@@ -31,6 +31,7 @@ const QueAdd = ({ modalClose, refetch }) => {
     isMandatoryForAll: false,
     universities: [],
     status: 3,
+    isDeletePreAns: true,
   };
 
   return (
