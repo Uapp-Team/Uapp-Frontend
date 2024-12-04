@@ -132,6 +132,8 @@ const Registration = () => {
     setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
+    setCompanionParentValue(0);
+    setCompanionParentLabel("Select Parent Companion");
   };
 
   const handleFirstNameChange = (e) => {
@@ -442,32 +444,33 @@ const Registration = () => {
                   />
                 ) : (
                   <>
-                    {userType !== userTypes?.Companion &&
-                      userType !== userTypes?.Consultant && (
-                        <FormGroup>
-                          <span>Parent Companion</span>
-                          <Select
-                            className="form-mt"
-                            options={companionParentMenu}
-                            value={{
-                              label: companionParentLabel,
-                              value: companionParentValue,
-                            }}
-                            onChange={(opt) =>
-                              selectParentCompanion(opt.label, opt.value)
-                            }
-                            name="parentCompanionId"
-                            id="parentCompanionId"
-                            isDisabled={companionId ? true : false}
-                          />
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Companion ||
+                    userType === userTypes?.Consultant ? (
+                      <FormGroup>
+                        <span>Parent Companion</span>
+                        <Select
+                          className="form-mt"
+                          options={companionParentMenu}
+                          value={{
+                            label: companionParentLabel,
+                            value: companionParentValue,
+                          }}
+                          onChange={(opt) =>
+                            selectParentCompanion(opt.label, opt.value)
+                          }
+                          name="parentCompanionId"
+                          id="parentCompanionId"
+                          isDisabled={companionId ? true : false}
+                        />
 
-                          {parentError && (
-                            <span className="text-danger">
-                              Parent Companion is required.
-                            </span>
-                          )}
-                        </FormGroup>
-                      )}
+                        {parentError && (
+                          <span className="text-danger">
+                            Parent Companion is required.
+                          </span>
+                        )}
+                      </FormGroup>
+                    ) : null}
                   </>
                 )}
 

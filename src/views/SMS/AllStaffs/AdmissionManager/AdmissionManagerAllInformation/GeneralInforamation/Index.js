@@ -241,7 +241,8 @@ const Index = () => {
                     <span className="text-danger">Provider is required</span>
                   )}
                 </FormGroup> */}
-                {userType !== userTypes?.BranchAdmin &&
+                {userType !== userTypes?.ProviderAdmin.toString() &&
+                userType !== userTypes?.BranchAdmin &&
                 userType !== userTypes?.BranchManager ? (
                   <FormGroup className="has-icon-left position-relative">
                     <span>

@@ -49,8 +49,8 @@ const AddAdmissionOfficerReg = () => {
   const [isEmailAvailable, setIsEmailAvailable] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
-  const [branchValue, setBranchValue] = useState(0);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
   const [branchError, setBranchError] = useState(false);
   const branchId = branch.map((brn) => brn.id);
 
@@ -129,6 +129,8 @@ const AddAdmissionOfficerReg = () => {
     setBranchError(false);
     setBranchLabel(label);
     setBranchValue(value);
+    setProviderLabel("Select Provider");
+    setProviderValue(0);
   };
 
   const selectProvider = (label, value) => {

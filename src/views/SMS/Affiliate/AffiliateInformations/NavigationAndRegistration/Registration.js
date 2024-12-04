@@ -116,6 +116,8 @@ const Registration = () => {
     setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
+    setParentValue(0);
+    setParentLabel("Select Parent Affiliate");
   };
 
   const handleFirstNameChange = (e) => {
@@ -438,7 +440,9 @@ const Registration = () => {
                   </>
                 ) : (
                   <>
-                    {userType !== userTypes?.Affiliate && (
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Affiliate ||
+                    userType === userTypes?.Consultant ? (
                       <FormGroup>
                         <span>Parent Affiliate</span>
 
@@ -454,7 +458,7 @@ const Registration = () => {
                           isDisabled={affiliateId ? true : false}
                         />
                       </FormGroup>
-                    )}
+                    ) : null}
                   </>
                 )}
 
