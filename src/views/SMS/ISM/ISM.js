@@ -110,13 +110,13 @@ const ISM = () => {
                           className="pointer"
                         >
                           <div className="university-card-faq">
-                            <p class="text-right mt-2 mr-1 mb-0">
+                            {/* <p class="text-right mt-2 mr-1 mb-0">
                               <span className="bg-fb532e text-white p-1 rounded">
                                 {item?.totalQuestionCount >= 100
                                   ? "99+"
                                   : item?.totalQuestionCount}
                               </span>
-                            </p>
+                            </p> */}
 
                             <div className="university-card-img-faq d-flex align-items-center justify-content-center">
                               <img

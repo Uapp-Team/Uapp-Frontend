@@ -20,7 +20,6 @@ const UserViewUniversity = () => {
   const [searchStr, setSearchStr] = useState("");
   const [uniDocument, setUniDocument] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [noFilter, setNoFilter] = useState(true);
   const [uniLable, setUniLable] = useState(data?.name);
   const [uniValue, setUniValue] = useState(data?.id);
   const [isTyping, setIsTyping] = useState(false);
@@ -56,10 +55,6 @@ const UserViewUniversity = () => {
       });
     }
   }, [isDocTyping, searchStr, uniValue]);
-
-  useEffect(() => {
-    keyword === "" && categoryId === 0 ? setNoFilter(true) : setNoFilter(false);
-  }, [categoryId, keyword]);
 
   return (
     <>
@@ -245,46 +240,6 @@ const UserViewUniversity = () => {
               </div>
             </Col>
           </Row>
-
-          {/* <div className="w-75 mx-auto">
-            {noFilter ? (
-              <Row>
-                {category.map((item, i) => (
-                  <>
-                    {item?.subCategories[0]?.id && (
-                      <Col xl={2} lg={3} md={4} xs={6} key={i}>
-                        <div
-                          onClick={() => {
-                            setCategoryId(item?.subCategories[0]?.id);
-                            setCategoryName(item?.subCategories[0]?.name);
-                            setOpenIndex(item?.id);
-                          }}
-                          className="ism-category-card pointer"
-                        >
-                          {item?.name}
-                        </div>
-                      </Col>
-                    )}
-                  </>
-                ))}
-              </Row>
-            ) : (
-              <UserViewAns
-                answerData={answerData}
-                uniLable={uniLable}
-                setUniLable={setUniLable}
-                uniValue={uniValue}
-                setUniValue={setUniValue}
-                category={category}
-                categoryName={categoryName}
-                setCategoryName={setCategoryName}
-                categoryId={categoryId}
-                setCategoryId={setCategoryId}
-                openIndex={openIndex}
-                setOpenIndex={setOpenIndex}
-              />
-            )}
-          </div> */}
         </CardBody>
       </Card>
     </>

@@ -12,12 +12,19 @@ import Loader from "../Search/Loader/Loader";
 
 const AnswersByQue = () => {
   const { uId } = useParams();
+  const [university, setUniversity] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [statusId, setStatusId] = useState(0);
+
+  useEffect(() => {
+    Uget(`question/get-by-id/${uId}`).then((res) => {
+      setUniversity(res?.data);
+    });
+  }, [uId]);
 
   useEffect(() => {
     if (!isTyping) {
@@ -37,16 +44,16 @@ const AnswersByQue = () => {
 
       <Card>
         <CardBody>
-          <h3>{data[0]?.title}</h3>
+          <h3>{university?.title}</h3>
           <p>
-            {data[0]?.categoryName} <AiOutlineRight />
-            {data[0]?.subCategoryName}
+            {university?.categoryName} <AiOutlineRight />
+            {university?.subCategoryName}
           </p>
           <div className="custom-card-border">
             <div className="d-flex align-items-start justify-content-between px-3 mt-3">
               <div>
                 <Typing
-                  placeholder="search"
+                  placeholder="search by answer"
                   value={searchStr}
                   setValue={setSearchStr}
                   setIsTyping={setIsTyping}

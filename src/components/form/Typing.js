@@ -9,6 +9,7 @@ const Typing = ({
   setValue,
   setIsTyping,
   onKeyDown,
+  onBlur,
   isIcon = false,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
@@ -43,7 +44,6 @@ const Typing = ({
           <CiSearch size={30} />
           <Input
             className="border-0"
-            style={{ height: "2.7rem" }}
             type="text"
             name={name}
             value={value}
@@ -51,11 +51,11 @@ const Typing = ({
             placeholder={placeholder}
             onChange={(e) => handleChange(e)}
             onKeyDown={onKeyDown}
+            onBlur={onBlur}
           />
         </div>
       ) : (
         <Input
-          style={{ height: "2.7rem" }}
           type="text"
           name={name}
           value={value}
@@ -63,6 +63,7 @@ const Typing = ({
           placeholder={placeholder}
           onChange={(e) => handleChange(e)}
           onKeyDown={onKeyDown}
+          onBlur={onBlur}
         />
       )}
     </>

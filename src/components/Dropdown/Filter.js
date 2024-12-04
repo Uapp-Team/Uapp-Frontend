@@ -18,8 +18,8 @@ const Filter = ({
   }));
 
   const select = (label, value) => {
-    setLabel(label);
-    setValue(value);
+    setLabel && setLabel(label);
+    setValue && setValue(value);
     action && action();
     onChange && onChange(label, value);
   };

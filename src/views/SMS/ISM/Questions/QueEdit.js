@@ -18,7 +18,7 @@ const QueEdit = ({ id, modalClose, refetch }) => {
     categoryId: data?.categoryId,
     subCategoryId: data?.subCategoryId,
     title: data?.title,
-    isRequiredAns: data?.isRequiredAns,
+    isRequiredAns: false,
     isSameForAll: data?.isSameForAll,
     answerList:
       data?.answerList?.length > 0
@@ -44,6 +44,7 @@ const QueEdit = ({ id, modalClose, refetch }) => {
     universities: data?.universities,
     answeredUniversities: data?.answeredUniversities,
     status: !data?.isRequiredAns ? 1 : data?.status ? data?.status : 3,
+    isDeletePreAns: false,
   };
 
   return (

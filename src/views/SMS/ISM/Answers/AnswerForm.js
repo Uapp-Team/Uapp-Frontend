@@ -14,6 +14,7 @@ import { AiOutlineRight } from "react-icons/ai";
 import StatusDD from "../Components/StatusDD";
 import KeyBtn from "../../../../components/buttons/KeyBtn";
 import TextArea from "../../../../components/form/TextArea";
+import { dateFormate } from "../../../../components/date/calenderFormate";
 
 const schema = yup.object().shape({
   id: yup.number(),
@@ -270,7 +271,7 @@ const AnswerForm = ({
               <>
                 {defaultData?.notes?.map((item, i) => (
                   <p className="details-note" key={i}>
-                    <span>{item?.createdOn}</span>
+                    <span>{dateFormate(item?.createdOn)}</span>
                     <hr className="my-1" />
                     <span className="text-gray-70">{item?.note}</span>
                   </p>
@@ -279,7 +280,7 @@ const AnswerForm = ({
             ) : (
               <>
                 <p className="details-note">
-                  <span>{defaultData?.notes[0]?.createdOn}</span>
+                  <span>{dateFormate(defaultData?.notes[0]?.createdOn)}</span>
                   <hr className="my-1" />
                   <span className="text-gray-70">
                     {defaultData?.notes[0]?.note}
