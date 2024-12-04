@@ -285,46 +285,55 @@ export default function InternationalApplicationInformation({
               </FormGroup>
 
               {isRefusedForUKVisa === true ? (
-                <FormGroup className="has-icon-left position-relative">
-                  <Row>
-                    <Col md="6">
-                      <span>Attach the refusal letter</span>{" "}
-                    </Col>
-                  </Row>
-                  <>
+                <>
+                  <input
+                    type="number"
+                    hidden
+                    name="RefusedForOtherVisaId"
+                    id="RefusedForOtherVisaId"
+                    value={applicationInformation?.refusedForOtherVisaId}
+                  />
+                  <FormGroup className="has-icon-left position-relative">
                     <Row>
-                      <Col md="4">
-                        <Upload
-                          multiple={false}
-                          fileList={FileList}
-                          onChange={handleChange}
-                          beforeUpload={(file) => {
-                            return false;
-                          }}
-                          style={{ height: "32px" }}
-                        >
-                          {FileList.length === 0 ? <UploadButton /> : ""}
-                        </Upload>
-                      </Col>
-                      <Col md="4">
-                        {applicationInformation?.refusalLetterForUKVisa
-                          ?.fileUrl ? (
-                          <a
-                            href={
-                              rootUrl +
-                              applicationInformation?.refusalLetterForUKVisa
-                                ?.fileUrl
-                            }
-                            target="blank"
-                          >
-                            <DownloadButton />
-                          </a>
-                        ) : null}
+                      <Col md="6">
+                        <span>Attach the refusal letter</span>{" "}
                       </Col>
                     </Row>
-                    <span className="text-danger">{fileList1Error}</span>
-                  </>
-                </FormGroup>
+                    <>
+                      <Row>
+                        <Col md="4">
+                          <Upload
+                            multiple={false}
+                            fileList={FileList}
+                            onChange={handleChange}
+                            beforeUpload={(file) => {
+                              return false;
+                            }}
+                            style={{ height: "32px" }}
+                          >
+                            {FileList.length === 0 ? <UploadButton /> : ""}
+                          </Upload>
+                        </Col>
+                        <Col md="4">
+                          {applicationInformation?.refusalLetterForUKVisa
+                            ?.fileUrl ? (
+                            <a
+                              href={
+                                rootUrl +
+                                applicationInformation?.refusalLetterForUKVisa
+                                  ?.fileUrl
+                              }
+                              target="blank"
+                            >
+                              <DownloadButton />
+                            </a>
+                          ) : null}
+                        </Col>
+                      </Row>
+                      <span className="text-danger">{fileList1Error}</span>
+                    </>
+                  </FormGroup>
+                </>
               ) : null}
             </>
           ) : null}
