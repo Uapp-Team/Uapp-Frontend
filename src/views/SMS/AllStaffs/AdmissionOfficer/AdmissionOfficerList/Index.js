@@ -90,6 +90,8 @@ const Index = () => {
   const [manager, setManager] = useState([]);
   const [mId, setMId] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
+  const [branch, setBranch] = useState([]);
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     const tableColumnAdmissionOfficer = JSON.parse(
@@ -142,6 +144,12 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
+    });
+  }, []);
+
+  useEffect(() => {
     if (admissionManagerId) {
       get("AdmissionManagerDD/index").then((res) => {
         setManager(res);
@@ -150,11 +158,15 @@ const Index = () => {
         setManagerValue(result?.id);
       });
     } else {
+      get("AdmissionManagerDD/ByUser").then((res) => {
+        setManager(res);
+      });
       get("ConsultantDD/ByUser").then((res) => {
         setManager(res);
       });
     }
   }, [admissionManagerId]);
+
   useEffect(() => {
     if (providerId) {
       get("ProviderDD/Index").then((res) => {
@@ -173,9 +185,15 @@ const Index = () => {
         }
       });
     } else {
-      get("ProviderDD/Index").then((res) => {
-        setProviderDD(res);
-      });
+      if (userType === userTypes?.BranchAdmin) {
+        get(`ProviderDD/Index/${branchId}`).then((res) => {
+          setProviderDD(res);
+        });
+      } else {
+        get(`ProviderDD/Index/${branchValue}`).then((res) => {
+          setProviderDD(res);
+        });
+      }
     }
     if (!isTyping) {
       if (providerId !== undefined && managerId !== undefined) {
@@ -470,6 +488,7 @@ const Index = () => {
           setProValue={setProValue}
           setIsTyping={setIsTyping}
           setSearchStr={setSearchStr}
+          branch={branch}
         ></SelectAndClear>
 
         <Card className="uapp-employee-search">

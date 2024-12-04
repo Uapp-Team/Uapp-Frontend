@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Card, CardBody, Form, Label, FormGroup, Col, Input } from "reactstrap";
-import get from "../../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
+import { Card, CardBody, Col, Form, FormGroup, Input, Label } from "reactstrap";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const OtherInformation = () => {
   const { applicationStudentId, update } = useParams();
   const [progress, setProgress] = useState(false);
   const history = useHistory();
-  const [disability, setDisability] = useState(false);
-  const [crime, setCrime] = useState(false);
+  const [disability, setDisability] = useState(null);
+  const [disabilityError, setDisabilityError] = useState("");
+  const [crime, setCrime] = useState(null);
+  const [crimeError, setCrimeError] = useState("");
   const [id, setId] = useState(0);
   const [success, setSuccess] = useState(false);
   const { addToast } = useToasts();
@@ -39,17 +41,17 @@ const OtherInformation = () => {
         setDisability(
           res != null && res?.isHaveDisability === true
             ? true
-            : res != null && res?.isHaveDisability === null
-              ? false
-              : false
+            : res != null && res?.isHaveDisability === false
+            ? false
+            : null
         );
 
         setCrime(
           res != null && res?.isHaveCriminalConvictions === true
             ? true
-            : res != null && res?.isHaveCriminalConvictions === null
-              ? false
-              : false
+            : res != null && res?.isHaveCriminalConvictions === false
+            ? false
+            : null
         );
 
         setData(res);
@@ -77,11 +79,28 @@ const OtherInformation = () => {
     }
   };
 
+  useEffect(() => {
+    if (disability !== null) {
+      setDisabilityError("");
+    }
+    if (crime !== null) {
+      setCrimeError("");
+    }
+  }, [crime, disability]);
+
   const validateRegisterForm = () => {
     var isFormValid = true;
+    if (disability === null) {
+      isFormValid = false;
+      setDisabilityError("Select one options");
+    }
     if (disability === true && !disabilityDes) {
       isFormValid = false;
       setDisabilityDesError("Disability description is required");
+    }
+    if (crime === null) {
+      isFormValid = false;
+      setCrimeError("Select one options");
     }
     if (crime === true && !criminal) {
       isFormValid = false;
@@ -165,7 +184,7 @@ const OtherInformation = () => {
         activetab={"10"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -184,7 +203,8 @@ const OtherInformation = () => {
             <FormGroup row>
               <Col lg="6" md="8">
                 <span>
-                  <span className="text-danger">*</span> Do you have any disabilities?
+                  <span className="text-danger">*</span> Do you have any
+                  disabilities?
                 </span>
                 <div>
                   <FormGroup check inline>
@@ -192,7 +212,7 @@ const OtherInformation = () => {
                       className="form-check-input"
                       type="radio"
                       id="isHaveDisability"
-                      onChange={() => setDisability(!disability)}
+                      onChange={() => setDisability(true)}
                       name="isHaveDisability"
                       value={true}
                       checked={disability === true}
@@ -211,7 +231,7 @@ const OtherInformation = () => {
                       className="form-check-input"
                       type="radio"
                       id="isHaveDisability"
-                      onChange={() => setDisability(!disability)}
+                      onChange={() => setDisability(false)}
                       name="isHaveDisability"
                       value={false}
                       checked={disability === false}
@@ -225,6 +245,7 @@ const OtherInformation = () => {
                     </Label>
                   </FormGroup>
                 </div>
+                <span className="text-danger">{disabilityError}</span>
               </Col>
             </FormGroup>
 
@@ -265,7 +286,7 @@ const OtherInformation = () => {
                       className="form-check-input"
                       type="radio"
                       id="isHaveCriminalConvictions"
-                      onChange={() => setCrime(!crime)}
+                      onChange={() => setCrime(true)}
                       name="isHaveCriminalConvictions"
                       value={true}
                       checked={crime === true}
@@ -284,7 +305,7 @@ const OtherInformation = () => {
                       className="form-check-input"
                       type="radio"
                       id="isHaveCriminalConvictions"
-                      onChange={() => setCrime(!crime)}
+                      onChange={() => setCrime(false)}
                       name="isHaveCriminalConvictions"
                       value={false}
                       checked={crime === false}
@@ -298,6 +319,9 @@ const OtherInformation = () => {
                     </Label>
                   </FormGroup>
                 </div>
+                <span className="text-danger">
+                  {<span className="text-danger">{crimeError}</span>}
+                </span>
               </Col>
             </FormGroup>
 

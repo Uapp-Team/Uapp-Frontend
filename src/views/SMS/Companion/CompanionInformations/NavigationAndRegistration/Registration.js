@@ -63,25 +63,52 @@ const Registration = () => {
   const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
   const [consultantError, setConsultantError] = useState(false);
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
+
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
   }, []);
 
   useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsultant(res);
+      res?.length === 1 && setConsultantValue(res[0].id);
     });
+  }, [branchValue]);
 
-    get("CompanionDD").then((res) => {
+  useEffect(() => {
+    get(`CompanionDD/Index/${consultantValue}`).then((res) => {
       setCompanionParent(res);
       if (companionId) {
         const result = res?.find((ans) => ans?.id.toString() === companionId);
         setCompanionParentLabel(result?.name);
       }
     });
-  }, [companionId]);
+  }, [companionId, consultantValue]);
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setconsultantLabel("Select Consultant");
+    setCompanionParentValue(0);
+    setCompanionParentLabel("Select Parent Companion");
+  };
 
   const companionParentMenu = companionParent?.map(
     (companionParentOptions) => ({
@@ -105,6 +132,8 @@ const Registration = () => {
     setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
+    setCompanionParentValue(0);
+    setCompanionParentLabel("Select Parent Companion");
   };
 
   const handleFirstNameChange = (e) => {
@@ -180,6 +209,17 @@ const Registration = () => {
     //   isValid = false;
     //   setParentError(true);
     // }
+
+    if (branchValue === 0) {
+      setBranchError(true);
+      isValid = false;
+    }
+
+    if (!companionId && consultantValue === 0) {
+      setConsultantError(true);
+      isValid = false;
+    }
+
     if (titleValue === 0) {
       isValid = false;
       setTitleError(true);
@@ -213,6 +253,11 @@ const Registration = () => {
     if (emailExistError === false) {
       isValid = false;
       setEmailExistError(emailExistError);
+    }
+
+    if (!phoneNumber) {
+      isValid = false;
+      setphoneNUmberError("Phone number is required");
     }
     return isValid;
   };
@@ -297,48 +342,93 @@ const Registration = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                {userType === userTypes?.Consultant.toString() ? (
+                {!companionId && (
                   <>
-                    {userId && (
-                      <>
-                        <input
-                          type="hidden"
-                          id="consultantId"
-                          name="consultantId"
-                          value={userId}
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Admin.toString() ? (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>
+                          <span className="text-danger">*</span> Branch{" "}
+                        </span>
+
+                        <Select
+                          className="form-mt"
+                          options={branchOptions}
+                          value={{ label: branchLabel, value: branchValue }}
+                          onChange={(opt) => selectBranch(opt.label, opt.value)}
+                          // name="BranchId"
+                          // id="BranchId"
+                          // isDisabled={branchId ? true : false}
                         />
-                        <p className="fw-600">{current_user?.displayName}</p>
-                      </>
-                    )}
+
+                        {branchError && (
+                          <span className="text-danger">
+                            Branch is required
+                          </span>
+                        )}
+                      </FormGroup>
+                    ) : null}
                   </>
-                ) : (
+                )}
+
+                {!companionId && (
                   <>
-                    {id ? (
-                      <input
-                        type="hidden"
-                        id="consultantId"
-                        name="consultantId"
-                        value={id}
-                      />
+                    {" "}
+                    {userType === userTypes?.Consultant.toString() ? (
+                      <>
+                        {userId && (
+                          <>
+                            <input
+                              type="hidden"
+                              id="consultantId"
+                              name="consultantId"
+                              value={userId}
+                            />
+                            <p className="fw-600">
+                              {current_user?.displayName}
+                            </p>
+                          </>
+                        )}
+                      </>
                     ) : (
                       <>
-                        {userType !== userTypes?.Companion && (
-                          <FormGroup>
-                            <span>Consultant</span>
+                        {id ? (
+                          <input
+                            type="hidden"
+                            id="consultantId"
+                            name="consultantId"
+                            value={id}
+                          />
+                        ) : (
+                          <>
+                            {userType !== userTypes?.Companion && (
+                              <FormGroup>
+                                <span>
+                                  {" "}
+                                  <span className="text-danger">*</span>
+                                  Consultant
+                                </span>
 
-                            <Select
-                              options={consultantName}
-                              value={{
-                                label: consultantLabel,
-                                value: consultantValue,
-                              }}
-                              onChange={(opt) =>
-                                selectConsultant(opt.label, opt.value)
-                              }
-                              name="consultantId"
-                              id="consultantId"
-                            />
-                          </FormGroup>
+                                <Select
+                                  options={consultantName}
+                                  value={{
+                                    label: consultantLabel,
+                                    value: consultantValue,
+                                  }}
+                                  onChange={(opt) =>
+                                    selectConsultant(opt.label, opt.value)
+                                  }
+                                  name="consultantId"
+                                  id="consultantId"
+                                />
+                                {consultantError && (
+                                  <span className="text-danger">
+                                    Consultant is required
+                                  </span>
+                                )}
+                              </FormGroup>
+                            )}
+                          </>
                         )}
                       </>
                     )}
@@ -354,32 +444,33 @@ const Registration = () => {
                   />
                 ) : (
                   <>
-                    {userType !== userTypes?.Companion &&
-                      userType !== userTypes?.Consultant && (
-                        <FormGroup>
-                          <span>Parent Companion</span>
-                          <Select
-                            className="form-mt"
-                            options={companionParentMenu}
-                            value={{
-                              label: companionParentLabel,
-                              value: companionParentValue,
-                            }}
-                            onChange={(opt) =>
-                              selectParentCompanion(opt.label, opt.value)
-                            }
-                            name="parentCompanionId"
-                            id="parentCompanionId"
-                            isDisabled={companionId ? true : false}
-                          />
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Companion ||
+                    userType === userTypes?.Consultant ? (
+                      <FormGroup>
+                        <span>Parent Companion</span>
+                        <Select
+                          className="form-mt"
+                          options={companionParentMenu}
+                          value={{
+                            label: companionParentLabel,
+                            value: companionParentValue,
+                          }}
+                          onChange={(opt) =>
+                            selectParentCompanion(opt.label, opt.value)
+                          }
+                          name="parentCompanionId"
+                          id="parentCompanionId"
+                          isDisabled={companionId ? true : false}
+                        />
 
-                          {parentError && (
-                            <span className="text-danger">
-                              Parent Companion is required.
-                            </span>
-                          )}
-                        </FormGroup>
-                      )}
+                        {parentError && (
+                          <span className="text-danger">
+                            Parent Companion is required.
+                          </span>
+                        )}
+                      </FormGroup>
+                    ) : null}
                   </>
                 )}
 

@@ -72,33 +72,12 @@ const PersonalInformation = () => {
   const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
   const [consultantError, setConsultantError] = useState(false);
-
-  const consParentMenu = consParent?.map((consParentOptions) => ({
-    label: consParentOptions?.name,
-    value: consParentOptions?.id,
-  }));
-
-  const selectParentCons = (label, value) => {
-    setParentError(false);
-    setParentLabel(label);
-    setParentValue(value);
-  };
-
-  const consultantName = consultant?.map((cons) => ({
-    label: cons?.name,
-    value: cons?.id,
-  }));
-
-  const selectConsultant = (label, value) => {
-    setConsultantError(false);
-    setconsultantLabel(label);
-    setConsultantValue(value);
-  };
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
 
   useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
-      setConsultant(res);
-    });
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
@@ -110,20 +89,30 @@ const PersonalInformation = () => {
     get("GenderDD/Index").then((res) => {
       setGender(res);
     });
+  }, []);
 
-    get("AffiliateDD").then((res) => {
-      setConsParent(res);
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
     });
 
-    // get(`ConsultantNavBar/Get/${affiliateId}`).then((res) => {
-    //   //
-    //   console.log("consNav", res);
-    //   setNavVisibility(res);
-    // });
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+    });
 
+    get(`AffiliateDD/Index/${consultantValue}`).then((res) => {
+      setConsParent(res);
+    });
+  }, [branchValue, consultantValue]);
+
+  useEffect(() => {
     Uget(`Affiliate/get-by/${affiliateId}`).then((res) => {
       console.log("personalInfo", res?.data);
       setAffiliatePersonalInfo(res);
+      setBranchValue(res?.data?.branchId == null ? 0 : res?.data?.branchId);
+      setBranchLabel(
+        res?.data?.branchName == "" ? "Select Branch" : res?.data?.branchName
+      );
       setParentValue(
         res?.data?.parentAffiliateId == null ? 0 : res?.data?.parentAffiliateId
       );
@@ -159,6 +148,43 @@ const PersonalInformation = () => {
         );
     });
   }, [success, affiliateId]);
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setconsultantLabel("Select Consultant");
+    setParentValue(0);
+    setParentLabel("Select Parent Affiliate");
+  };
+
+  const consParentMenu = consParent?.map((consParentOptions) => ({
+    label: consParentOptions?.name,
+    value: consParentOptions?.id,
+  }));
+
+  const selectParentCons = (label, value) => {
+    setParentError(false);
+    setParentLabel(label);
+    setParentValue(value);
+  };
+
+  const consultantName = consultant?.map((cons) => ({
+    label: cons?.name,
+    value: cons?.id,
+  }));
+
+  const selectConsultant = (label, value) => {
+    setConsultantError(false);
+    setconsultantLabel(label);
+    setConsultantValue(value);
+  };
 
   const handleCancel1 = () => {
     setPreviewVisible1(false);
@@ -457,6 +483,11 @@ const PersonalInformation = () => {
                 consultantValue={consultantValue}
                 selectConsultant={selectConsultant}
                 consultantError={consultantError}
+                branchOptions={branchOptions}
+                branchValue={branchValue}
+                branchError={branchError}
+                branchLabel={branchLabel}
+                selectBranch={selectBranch}
               ></PersonalForm>
             </TabPane>
           </TabContent>

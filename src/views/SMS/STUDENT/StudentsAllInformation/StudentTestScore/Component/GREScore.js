@@ -76,6 +76,7 @@ export default function GREScore({ applicationStudentId }) {
   const [GmatExamDate, setGmatExamDate] = useState(null);
   const [GmatExamDateError, setGmatExamDateError] = useState("");
   ////////////////////////////
+  const [nav, setNav] = useState({});
 
   const handleForward = () => {
     history.push(`/addExperience/${applicationStudentId}/${1}`);
@@ -84,35 +85,51 @@ export default function GREScore({ applicationStudentId }) {
   const goBackward = () => {
     history.push(`/addStudentEducationalInformation/${applicationStudentId}`);
   };
-
   useEffect(() => {
-    get(`GreScore/GetbyStudent/${applicationStudentId}`).then((res) => {
-      setGreData(res);
-      setGreTotalScore(res?.totalScore ? res?.totalScore : 0);
-      setGreTotalScoreRank(res?.totalRank ? res?.totalRank : 0);
-      setGreVerbal(res?.verbalScore ? res?.verbalScore : 0);
-      setGreVerbalRank(res?.verbalRank ? res?.verbalRank : 0);
-      setGreQuantitative(res?.quantitativeScore ? res?.quantitativeScore : 0);
-      setGreQuantitativeRank(res?.quantitativeRank ? res?.quantitativeRank : 0);
-      setGreWriting(res?.writingScore ? res?.writingScore : 0);
-      setGreWritingRank(res?.writingRank ? res?.writingRank : 0);
-      setGreExamDate(res?.greExamDate);
-    });
+    const fetchApplicationStudent = async () => {
+      try {
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
+        get(`GreScore/GetbyStudent/${applicationStudentId}`).then((res) => {
+          setGreData(res);
+          setGreTotalScore(res?.totalScore ? res?.totalScore : 0);
+          setGreTotalScoreRank(res?.totalRank ? res?.totalRank : 0);
+          setGreVerbal(res?.verbalScore ? res?.verbalScore : 0);
+          setGreVerbalRank(res?.verbalRank ? res?.verbalRank : 0);
+          setGreQuantitative(
+            res?.quantitativeScore ? res?.quantitativeScore : 0
+          );
+          setGreQuantitativeRank(
+            res?.quantitativeRank ? res?.quantitativeRank : 0
+          );
+          setGreWriting(res?.writingScore ? res?.writingScore : 0);
+          setGreWritingRank(res?.writingRank ? res?.writingRank : 0);
+          setGreExamDate(res?.greExamDate);
+        });
 
-    get(`GmatScore/GetByStudent/${applicationStudentId}`).then((res) => {
-      setGmatData(res);
-      setGmatTotalScore(res?.totalScore ? res?.totalScore : 0);
-      setGmatTotalScoreRank(res?.totalRank ? res?.totalRank : 0);
-      setGmatVerbal(res?.verbalScore ? res?.verbalScore : 0);
-      setGmatVerbalRank(res?.verbalRank ? res?.verbalRank : 0);
-      setGmatQuantitative(res?.quantitativeScore ? res?.quantitativeScore : 0);
-      setGmatQuantitativeRank(
-        res?.quantitativeRank ? res?.quantitativeRank : 0
-      );
-      setGmatWriting(res?.writingScore ? res?.writingScore : 0);
-      setGmatWritingRank(res?.writingRank ? res?.writingRank : 0);
-      setGmatExamDate(res?.gmatExamDate);
-    });
+        get(`GmatScore/GetByStudent/${applicationStudentId}`).then((res) => {
+          setGmatData(res);
+          setGmatTotalScore(res?.totalScore ? res?.totalScore : 0);
+          setGmatTotalScoreRank(res?.totalRank ? res?.totalRank : 0);
+          setGmatVerbal(res?.verbalScore ? res?.verbalScore : 0);
+          setGmatVerbalRank(res?.verbalRank ? res?.verbalRank : 0);
+          setGmatQuantitative(
+            res?.quantitativeScore ? res?.quantitativeScore : 0
+          );
+          setGmatQuantitativeRank(
+            res?.quantitativeRank ? res?.quantitativeRank : 0
+          );
+          setGmatWriting(res?.writingScore ? res?.writingScore : 0);
+          setGmatWritingRank(res?.writingRank ? res?.writingRank : 0);
+          setGmatExamDate(res?.gmatExamDate);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchApplicationStudent();
   }, [success, applicationStudentId]);
 
   const handleDeleteGreData = (data) => {
@@ -1400,7 +1417,7 @@ export default function GREScore({ applicationStudentId }) {
       <Row>
         <Col className="d-flex justify-content-between mt-4">
           <PreviousButton action={goBackward} />
-          <SaveButton text="Next" action={handleForward} />
+          {nav?.experience && <SaveButton text="Next" action={handleForward} />}
         </Col>
       </Row>
     </>
