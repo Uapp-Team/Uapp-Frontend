@@ -45,8 +45,19 @@ const StudentRegister = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const [registerId, setRegisterId] = useState();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
 
   //api part starts here
+
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
 
   useEffect(() => {
     // get("UniversityCountryDD/Index").then((res) => {
@@ -57,14 +68,14 @@ const StudentRegister = () => {
       if (consultantId) {
         setConsultantValue(consultantId);
       } else {
-        get("consultantdd/ActiveConsultant").then((res) => {
+        get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
           setConsultant(res);
         });
       }
     } else {
       setConsultantValue(referenceId);
     }
-  }, [consultantId, referenceId, userTypeId]);
+  }, [consultantId, referenceId, userTypeId, branchValue]);
 
   useEffect(() => {
     get(
@@ -89,6 +100,19 @@ const StudentRegister = () => {
     setStudentError(false);
     setStudentTypeLabel(label);
     setStudentTypeValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setconsultantLabel("Select Consultant");
   };
 
   const consultantName = consultant?.map((cons) => ({
@@ -153,6 +177,11 @@ const StudentRegister = () => {
     var isValid = true;
     if (studentTypeValue === 0) {
       setStudentError(true);
+      isValid = false;
+    }
+
+    if (branchValue === 0) {
+      setBranchError(true);
       isValid = false;
     }
 
@@ -276,6 +305,30 @@ const StudentRegister = () => {
           <Form onSubmit={handleRegisterStudent} className="mt-4">
             <Row>
               <Col lg="6" md="8">
+                <>
+                  {userTypeId === userTypes?.SystemAdmin.toString() ||
+                  userTypeId === userTypes?.Admin.toString() ? (
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span> Branch{" "}
+                      </span>
+
+                      <Select
+                        className="form-mt"
+                        options={branchOptions}
+                        value={{ label: branchLabel, value: branchValue }}
+                        onChange={(opt) => selectBranch(opt.label, opt.value)}
+                        // name="BranchId"
+                        // id="BranchId"
+                        // isDisabled={branchId ? true : false}
+                      />
+
+                      {branchError && (
+                        <span className="text-danger">Branch is required</span>
+                      )}
+                    </FormGroup>
+                  ) : null}
+                </>
                 {/* Conditional rendering on consultant type start */}
                 {!consultantId &&
                 userTypeId !== userTypes?.Consultant &&

@@ -65,6 +65,7 @@ const PersonalInformation = () => {
   const [consultant, setConsultant] = useState([]);
   const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
+  const [consultantError, setConsultantError] = useState(false);
   const [email, setEmail] = useState("");
   const [passport, setPassport] = useState("");
   const [passportError, setPassportError] = useState("");
@@ -99,6 +100,10 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
 
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
@@ -137,13 +142,25 @@ const PersonalInformation = () => {
       setCountryResidence(res);
       // setNationality(res);
     });
+  }, []);
 
-    get("ConsultantDD/ByUser").then((res) => {
-      setConsultant(res);
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
     });
 
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+    });
+  }, [branchValue, consultantValue]);
+
+  useEffect(() => {
     if (applicationStudentId) {
       get(`Student/Get/${applicationStudentId}`).then((res) => {
+        setBranchValue(res?.branchId == null ? 0 : res?.branchId);
+        setBranchLabel(
+          res?.branchName == "" ? "Select Branch" : res?.branchName
+        );
         setConsultantLabel(
           res?.consultant?.firstName + " " + res?.consultant?.lastName
         );
@@ -347,8 +364,22 @@ const PersonalInformation = () => {
 
   // select  Consultant
   const selectConsultant = (label, value) => {
+    setConsultantError(false);
     setConsultantLabel(label);
     setConsultantValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setConsultantLabel("Select Consultant");
   };
 
   const validateRegisterForm = () => {
@@ -365,6 +396,17 @@ const PersonalInformation = () => {
     if (countryBirthValue === 0) {
       isFormValid = false;
       setCountryOfBirthError(true);
+    }
+
+    if (
+      userType !== userTypes?.Consultant &&
+      userType !== userTypes?.AdmissionManager &&
+      userType !== userTypes?.AdmissionOfficer &&
+      userType !== userTypes?.ProviderAdmin &&
+      consultantValue === 0
+    ) {
+      setConsultantError(true);
+      isFormValid = false;
     }
 
     if (genderValue === 0) {
@@ -517,8 +559,37 @@ const PersonalInformation = () => {
                   value={applicationStudentId}
                 />
 
+                <>
+                  {userType === userTypes?.SystemAdmin.toString() ||
+                  userType === userTypes?.Admin.toString() ? (
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        {" "}
+                        <span>
+                          <span className="text-danger">*</span> Branch{" "}
+                        </span>
+                        <Select
+                          className="form-mt"
+                          options={branchOptions}
+                          value={{ label: branchLabel, value: branchValue }}
+                          onChange={(opt) => selectBranch(opt.label, opt.value)}
+                          // name="BranchId"
+                          // id="BranchId"
+                          // isDisabled={branchId ? true : false}
+                        />
+                        {branchError && (
+                          <span className="text-danger">
+                            Branch is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+                  ) : null}
+                </>
+
                 {userType === userTypes?.SystemAdmin.toString() ||
                 userType === userTypes?.Admin.toString() ||
+                userType === userTypes?.BranchAdmin.toString() ||
                 userType === userTypes?.ComplianceManager.toString() ? (
                   <FormGroup row>
                     <Col lg="6" md="8">
@@ -540,6 +611,11 @@ const PersonalInformation = () => {
                         id="consultantId"
                         required
                       />
+                      {consultantError && (
+                        <span className="text-danger">
+                          Consultant is required
+                        </span>
+                      )}
                     </Col>
                   </FormGroup>
                 ) : (
