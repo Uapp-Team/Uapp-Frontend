@@ -14,9 +14,9 @@ const RichTextArea = ({
 }) => {
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ font: [] }],
-      [{ size: [] }],
+      // [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      // [{ font: [] }],
+      // [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { list: "ordered" },
@@ -37,12 +37,12 @@ const RichTextArea = ({
   return (
     <Form.Group className={`mb-3 ${className}`}>
       {label && <span>{label}</span>}
-      <div className="h-300px">
+      <div className="h-250px">
         <ReactQuill
           theme="snow"
           value={defaultValue}
           modules={modules}
-          className="h-75"
+          className="h-83"
           onChange={hangleChange}
         />
       </div>

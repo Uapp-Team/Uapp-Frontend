@@ -3,7 +3,7 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import ButtonForFunction from "../Components/ButtonForFunction";
 import ManageCategory from "./ManageCategory/ManageCategory";
-import AccordionForFaqCategory from "./Components/AccordionForFaqCategory";
+import CategoryAccordion from "./Components/CategoryAccordion";
 import Uget from "../../../helpers/Uget";
 import DocumentsRequestFaq from "./Components/DocumentsRequestFaq";
 import Questions from "./Questions/Questions";
@@ -11,7 +11,7 @@ import { useHistory, useParams } from "react-router";
 import { AdminUsers } from "../../../components/core/User";
 import QuestionsAdmin from "./Questions/QuestionsAdmin";
 
-const UniversityInformationDocumentsFAQ = () => {
+const ISMDocuments = () => {
   const { Uid } = useParams();
 
   const history = useHistory();
@@ -61,7 +61,7 @@ const UniversityInformationDocumentsFAQ = () => {
 
                 <div className="mt-4 ml-4">
                   {content?.map((item, i) => (
-                    <AccordionForFaqCategory
+                    <CategoryAccordion
                       key={i}
                       content={item}
                       categoryId={categoryId}
@@ -99,4 +99,4 @@ const UniversityInformationDocumentsFAQ = () => {
   );
 };
 
-export default UniversityInformationDocumentsFAQ;
+export default ISMDocuments;

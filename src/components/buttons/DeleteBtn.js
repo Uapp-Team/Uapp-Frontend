@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ButtonForFunction from "../../views/SMS/Components/ButtonForFunction";
 import ConfirmModal from "../modal/ConfirmModal";
 import { useToasts } from "react-toast-notifications";
 import Uremove from "../../helpers/Uremove";
@@ -24,7 +23,7 @@ const DeleteBtn = ({ url, refetch }) => {
   return (
     <>
       <span
-        className="pointer text-danger ml-4px"
+        className="pointer text-gray ml-4px"
         onClick={() => setDeleteModal(true)}
       >
         <AiOutlineDelete size={20} />
