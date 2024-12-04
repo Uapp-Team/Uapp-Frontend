@@ -43,7 +43,6 @@ const schema = yup.object().shape({
 });
 
 const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
-  console.log(defaultData);
   const { addToast } = useToasts();
   const [isSubmit, setIsSubmit] = useState(false);
   const [categoryId, setCategoryId] = useState(defaultData.categoryId);
@@ -76,6 +75,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
   );
 
   const [statusValue, setStatusValue] = useState(defaultData?.status);
+  // const [statusValue, setStatusValue] = useState(defaultData?.status);
 
   const { register, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
@@ -299,14 +299,20 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             isDisabled={statusValue === 1 && true}
           />
         </div>
+
+        <CheckOne
+          name="isRequiredAns"
+          label="Is required answer"
+          defaultValue={ansReq}
+          onChange={(e) => handleReqAns(e.target.checked)}
+        />
+
         <div className="d-flex justify-content-between">
           <CheckOne
             name="isRequiredAns"
             label="Is required answer"
             defaultValue={ansReq}
-            onChange={(e) => {
-              handleReqAns(e.target.checked);
-            }}
+            onChange={(e) => handleReqAns(e.target.checked)}
           />
 
           {ansReq && (

@@ -30,8 +30,12 @@ const RichTextArea = ({
   };
 
   const hangleChange = (value) => {
-    onChange(value);
-    action && action();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(value, "text/html");
+    const textContent = doc.body.textContent.trim();
+
+    textContent ? onChange(value) : onChange("");
+    textContent && action && action();
   };
 
   return (

@@ -407,7 +407,7 @@ const AddMissionManagerAdd = ({
             <>
               {loading ? (
                 <Loader />
-              ) : managerList.length === 0 ? (
+              ) : managerList?.length === 0 ? (
                 <h3 className="text-center">No Data Found</h3>
               ) : (
                 <div className="table-responsive fixedhead" ref={componentRef}>
