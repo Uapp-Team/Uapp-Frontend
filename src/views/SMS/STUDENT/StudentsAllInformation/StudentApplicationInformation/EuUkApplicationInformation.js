@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FormGroup, Input, Label } from "reactstrap";
 import DMYPicker from "../../../../../components/form/DMYPicker";
 
@@ -17,6 +17,8 @@ export default function EuUkApplicationInformation({
   loanYearsForEUError,
   loanYearsForEU,
   isSettlementStatus,
+  isSettlementStatusError,
+  setIsSettlementStatusError,
   setIsSettlementStatus,
   shareCode,
   handleshareCode,
@@ -24,21 +26,26 @@ export default function EuUkApplicationInformation({
   statusInUK,
   statusInUKError,
   handleresidencyStatusUK,
+  setHavingUnderGraduateCourseForEUError,
+  havingUnderGraduateCourseForEUError,
+  setHavingUnderGraduateCourseForEU,
+  havingUnderGraduateCourseForEU,
+  setIsStayedInUkInLast3YearsError,
+  isStayedInUkInLast3YearsError,
+  isStayedInUkInLast3Years,
+  setIsStayedInUkInLast3Years,
+  loansForEUError,
+  setLoansForEUError,
 }) {
-  const [isStayedInUkInLast3Years, setIsStayedInUkInLast3Years] =
-    useState(false);
-  const [havingUnderGraduateCourseForEU, setHavingUnderGraduateCourseForEU] =
-    useState(false);
-  const minDate = "1950-01-01";
   useEffect(() => {
     setLoansForEu(
       applicationInformation != null &&
         applicationInformation?.loanfromStudentLoansCompanyForEU === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.loanfromStudentLoansCompanyForEU === null
+          applicationInformation?.loanfromStudentLoansCompanyForEU === false
         ? false
-        : false
+        : null
     );
 
     setIsSettlementStatus(
@@ -46,18 +53,18 @@ export default function EuUkApplicationInformation({
         applicationInformation?.isHavePre_Settlementstatus === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.isHavePre_Settlementstatus === null
+          applicationInformation?.isHavePre_Settlementstatus === false
         ? false
-        : false
+        : null
     );
     setIsStayedInUkInLast3Years(
       applicationInformation != null &&
         applicationInformation?.isStayedInsideInUkinLast3Years === true
         ? true
         : applicationInformation != null &&
-          applicationInformation?.isStayedInsideInUkinLast3Years === null
+          applicationInformation?.isStayedInsideInUkinLast3Years === false
         ? false
-        : false
+        : null
     );
     setHavingUnderGraduateCourseForEU(
       applicationInformation != null &&
@@ -66,9 +73,9 @@ export default function EuUkApplicationInformation({
         ? true
         : applicationInformation != null &&
           applicationInformation?.havingUndergraduatePostgraduateCourseForEU ===
-            null
+            false
         ? false
-        : false
+        : null
     );
   }, [applicationInformation]);
 
@@ -124,8 +131,6 @@ export default function EuUkApplicationInformation({
           value={date}
           error={dateError}
           action={setdateError}
-          name="DateOfMoveToUk"
-          id="DateOfMoveToUk"
           required={true}
         />
       </FormGroup>
@@ -144,7 +149,7 @@ export default function EuUkApplicationInformation({
             name="loanfromStudentLoansCompanyForEU"
             value={true}
             checked={loansForEu === true}
-            onChange={() => setLoansForEu(!loansForEu)}
+            onChange={() => setLoansForEu(true)}
           />
           <Label
             className="form-check-label"
@@ -162,7 +167,7 @@ export default function EuUkApplicationInformation({
             name="loanfromStudentLoansCompanyForEU"
             value={false}
             checked={loansForEu === false}
-            onChange={() => setLoansForEu(!loansForEu)}
+            onChange={() => setLoansForEu(false)}
           />
           <Label
             className="form-check-label"
@@ -172,6 +177,8 @@ export default function EuUkApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
+        <span className="text-danger">{loansForEUError}</span>
       </FormGroup>
 
       {loansForEu === true ? (
@@ -209,7 +216,7 @@ export default function EuUkApplicationInformation({
             type="radio"
             name="IsHavePre_Settlementstatus"
             value={true}
-            onChange={() => setIsSettlementStatus(!isSettlementStatus)}
+            onChange={() => setIsSettlementStatus(true)}
             checked={isSettlementStatus === true}
           />
           <Label
@@ -230,7 +237,7 @@ export default function EuUkApplicationInformation({
             type="radio"
             name="IsHavePre_Settlementstatus"
             value={false}
-            onChange={() => setIsSettlementStatus(!isSettlementStatus)}
+            onChange={() => setIsSettlementStatus(false)}
             checked={isSettlementStatus === false}
           />
           <Label
@@ -241,6 +248,8 @@ export default function EuUkApplicationInformation({
             <span style={{ fontSize: "13px" }}>I have other status</span>
           </Label>
         </FormGroup>
+        <br />
+        <span className="text-danger">{isSettlementStatusError}</span>
       </FormGroup>
 
       {isSettlementStatus === true ? (
@@ -333,9 +342,7 @@ export default function EuUkApplicationInformation({
                 type="radio"
                 name="isStayedInsideInUkinLast3Years"
                 value={true}
-                onChange={() =>
-                  setIsStayedInUkInLast3Years(!isStayedInUkInLast3Years)
-                }
+                onChange={() => setIsStayedInUkInLast3Years(true)}
                 checked={isStayedInUkInLast3Years === true}
               />
               <Label
@@ -353,9 +360,7 @@ export default function EuUkApplicationInformation({
                 type="radio"
                 name="isStayedInsideInUkinLast3Years"
                 value={false}
-                onChange={() =>
-                  setIsStayedInUkInLast3Years(!isStayedInUkInLast3Years)
-                }
+                onChange={() => setIsStayedInUkInLast3Years(false)}
                 checked={isStayedInUkInLast3Years === false}
               />
               <Label
@@ -366,6 +371,8 @@ export default function EuUkApplicationInformation({
                 No
               </Label>
             </FormGroup>
+            <br />
+            <span className="text-danger">{isStayedInUkInLast3YearsError}</span>
           </FormGroup>
         </>
       ) : isSettlementStatus === false ? (
@@ -403,9 +410,7 @@ export default function EuUkApplicationInformation({
             type="radio"
             name="HavingUndergraduatePostgraduateCourseForEU"
             value={true}
-            onChange={() =>
-              setHavingUnderGraduateCourseForEU(!havingUnderGraduateCourseForEU)
-            }
+            onChange={() => setHavingUnderGraduateCourseForEU(true)}
             checked={havingUnderGraduateCourseForEU === true}
           />
           <Label
@@ -423,9 +428,7 @@ export default function EuUkApplicationInformation({
             type="radio"
             name="HavingUndergraduatePostgraduateCourseForEU"
             value={false}
-            onChange={() =>
-              setHavingUnderGraduateCourseForEU(!havingUnderGraduateCourseForEU)
-            }
+            onChange={() => setHavingUnderGraduateCourseForEU(false)}
             checked={havingUnderGraduateCourseForEU === false}
           />
           <Label
@@ -436,6 +439,12 @@ export default function EuUkApplicationInformation({
             No
           </Label>
         </FormGroup>
+        <br />
+        {havingUnderGraduateCourseForEUError && (
+          <span className="text-danger">
+            {havingUnderGraduateCourseForEUError}
+          </span>
+        )}
       </FormGroup>
     </div>
   );

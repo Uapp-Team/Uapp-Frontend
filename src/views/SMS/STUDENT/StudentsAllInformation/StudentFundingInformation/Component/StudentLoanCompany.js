@@ -68,7 +68,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
   }
   // Dynamic3  code end
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
@@ -78,7 +78,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
       FileList1.length === 0 ? null : FileList1[0]?.originFileObj
     );
 
-    if (!FileList1) {
+    if (FileList1.length === 0) {
       setSelfError("Please select a file");
     } else {
       if (studentFunding?.id) {
@@ -92,6 +92,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
         });
         setStudentFunding({});
         setSuccess(!success);
+        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
         get(`StudentLoanCompany/GetByStudentId/${studentid}`).then((res) => {
           setStudentFunding(res);
         });

@@ -27,6 +27,7 @@ import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
+import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const PersonalInformation = () => {
@@ -100,11 +101,15 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+<<<<<<< HEAD
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
 
+=======
+  const [loading, setLoading] = useState(false);
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
       setFileList([
@@ -125,18 +130,19 @@ const PersonalInformation = () => {
   }, [consultantValue]);
 
   useEffect(() => {
-    get("NameTittleDD/index").then((res) => {
-      setTitle(res);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const titleRes = await get("NameTittleDD/index");
+        setTitle(titleRes);
 
-    get("MaritalStatusDD/Index").then((res) => {
-      setMaritalStatus(res);
-    });
+        const maritalStatusRes = await get("MaritalStatusDD/Index");
+        setMaritalStatus(maritalStatusRes);
 
-    get("GenderDD/Index").then((res) => {
-      setGender(res);
-    });
+        const genderRes = await get("GenderDD/Index");
+        setGender(genderRes);
 
+<<<<<<< HEAD
     get("CountryDD/index").then((res) => {
       setCountryBirth(res);
       setCountryResidence(res);
@@ -206,6 +212,55 @@ const PersonalInformation = () => {
         setexpireDate(res?.expireDate);
       });
     }
+=======
+        const countryRes = await get("CountryDD/index");
+        setCountryBirth(countryRes);
+        setCountryResidence(countryRes);
+
+        const consultantRes = await get("ConsultantDD/ByUser");
+        setConsultant(consultantRes);
+
+        if (applicationStudentId) {
+          const studentRes = await get(`Student/Get/${applicationStudentId}`);
+          setConsultantLabel(
+            `${studentRes?.consultant?.firstName || ""} ${
+              studentRes?.consultant?.lastName || ""
+            }`
+          );
+          setOneData(studentRes);
+          setConsultantValue(studentRes?.consultantId);
+          setFirstName(studentRes?.firstName);
+          setLastName(studentRes?.lastName);
+          setEmail(studentRes?.email);
+          setTitleValue(studentRes?.nameTittle?.id || 0);
+          setphoneNumber(studentRes?.phoneNumber);
+          setPassport(studentRes?.passportNumber);
+          setGenderValue(studentRes?.gender?.id || 0);
+          setMaritalStatusValue(studentRes?.maritalStatus?.id || 0);
+          setNationalityLabel(
+            studentRes?.nationality?.name || "Select Nationality"
+          );
+          setNationalityValue(studentRes?.nationality?.id || 0);
+          setCountryResidenceLabel(
+            studentRes?.country?.name || "Select Residence Country"
+          );
+          setCountryResidenceValue(studentRes?.country?.id || 0);
+          setCountryBirthLabel(
+            studentRes?.countryOfBirth?.name || "Select Birth Country"
+          );
+          setCountryBirthValue(studentRes?.countryOfBirth?.id || 0);
+          setBirthDate(studentRes?.dateOfBirth);
+          setIssueDate(studentRes?.issueDate);
+          setexpireDate(studentRes?.expireDate);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   }, [success, applicationStudentId]);
 
   // Trial start
@@ -539,26 +594,31 @@ const PersonalInformation = () => {
         path={`/studentList`}
       />
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={"1"}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => {}}
-      />
-      <Card>
-        <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="1">
-              <p className="section-title">Personal Information</p>
-              <Form onSubmit={handleSubmit}>
-                <input
-                  type="hidden"
-                  name="id"
-                  id="id"
-                  value={applicationStudentId}
-                />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={"1"}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <TabContent activeTab={activetab}>
+                <TabPane tabId="1">
+                  <p className="section-title">Personal Information</p>
+                  <Form onSubmit={handleSubmit}>
+                    <input
+                      type="hidden"
+                      name="id"
+                      id="id"
+                      value={applicationStudentId}
+                    />
 
+<<<<<<< HEAD
                 <>
                   {userType === userTypes?.SystemAdmin.toString() ||
                   userType === userTypes?.Admin.toString() ? (
@@ -597,20 +657,41 @@ const PersonalInformation = () => {
                         {" "}
                         <span className="text-danger">*</span> Consultant
                       </span>
+=======
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Admin.toString() ||
+                    userType === userTypes?.ComplianceManager.toString() ? (
+                      <FormGroup row>
+                        <Col lg="6" md="8">
+                          <span>
+                            {" "}
+                            <span className="text-danger">*</span> Consultant
+                          </span>
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
 
-                      <Select
-                        options={consultantName}
-                        value={{
-                          label: consultantLabel,
-                          value: consultantValue,
-                        }}
-                        onChange={(opt) =>
-                          selectConsultant(opt.label, opt.value)
-                        }
+                          <Select
+                            options={consultantName}
+                            value={{
+                              label: consultantLabel,
+                              value: consultantValue,
+                            }}
+                            onChange={(opt) =>
+                              selectConsultant(opt.label, opt.value)
+                            }
+                            name="consultantId"
+                            id="consultantId"
+                            required
+                          />
+                        </Col>
+                      </FormGroup>
+                    ) : (
+                      <input
+                        type="hidden"
                         name="consultantId"
                         id="consultantId"
-                        required
+                        value={consultantValue}
                       />
+<<<<<<< HEAD
                       {consultantError && (
                         <span className="text-danger">
                           Consultant is required
@@ -660,405 +741,455 @@ const PersonalInformation = () => {
 
                     {titleError && (
                       <span className="text-danger">Title is required</span>
+=======
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
                     )}
-                  </Col>
-                </FormGroup>
 
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      First Name
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      placeholder="Enter First Name"
-                      onChange={(e) => {
-                        handleFirstNameChange(e);
-                      }}
-                      value={firstName}
-                    />
-                    <span className="text-danger">{firstNameError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Last Name
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder="Enter Last Name"
-                      onChange={(e) => {
-                        handleLastNameChange(e);
-                      }}
-                      value={lastName}
-                    />
-                    <span className="text-danger">{lastNameError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <DMYPicker
-                      label="Date Of Birth"
-                      value={birthDate}
-                      setValue={handleDate}
-                      error={dateError}
-                      action={setDateError}
-                      required={true}
-                    />
-                  </Col>
-                  <Col lg="6" md="8"></Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span> Passport/ID
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="passportNumber"
-                      id="passportNumber"
-                      placeholder="Enter Passport Number"
-                      onChange={(e) => handlePassport(e)}
-                      value={passport}
-                    />
-                    <span className="text-danger">{passportError}</span>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <DMYPicker
-                      setValue={handleIssueDate}
-                      label="Issue Date"
-                      value={issueDate}
-                      error={issueDateError}
-                      action={setIssueDateError}
-                      name="issueDate"
-                      id="issueDate"
-                      required={false}
-                    />
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <DMYPicker
-                      label="Expire Date"
-                      setValue={handleExpireDate}
-                      error={expireDateError}
-                      action={setexpireDateError}
-                      required={false}
-                      value={expireDate}
-                      name="expireDate"
-                      id="expireDate"
-                    />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Gender
-                    </span>
-
-                    <div>
-                      {gender?.map((tt) => (
-                        <>
-                          <input
-                            type="radio"
-                            name="genderId"
-                            id="genderId"
-                            value={tt?.id}
-                            onClick={() => {
-                              setGenderValue(tt?.id);
-                              setGenderError(false);
-                            }}
-                            checked={genderValue === tt?.id ? true : false}
-                          />
-
-                          <label
-                            className="mr-3"
-                            style={{ fontWeight: 500, fontSize: "14px" }}
-                          >
-                            {tt?.name}
-                          </label>
-                        </>
-                      ))}
-                    </div>
-                    {genderError && (
-                      <span className="text-danger">Gender is required</span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      {" "}
-                      <span className="text-danger">*</span>
-                      Marital Status
-                    </span>
-
-                    <div>
-                      {maritalStatus?.map((tt) => (
-                        <>
-                          <input
-                            type="radio"
-                            name="maritalStatusId"
-                            id="maritalStatusId"
-                            value={tt?.id}
-                            onClick={() => {
-                              setMaritalStatusValue(tt?.id);
-                              setMaritalStatusError(false);
-                            }}
-                            checked={
-                              maritalStatusValue === tt?.id ? true : false
-                            }
-                          />
-
-                          <label
-                            className="mr-3"
-                            style={{ fontWeight: 500, fontSize: "14px" }}
-                          >
-                            {tt?.name}
-                          </label>
-                        </>
-                      ))}
-                    </div>
-
-                    {maritalStatusError && (
-                      <span className="text-danger">
-                        Marital status is required
-                      </span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8" className="phone-input-group">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Phone Number
-                    </span>
-                    <PhoneInput
-                      className="w-100"
-                      type="string"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      country={"gb"}
-                      enableLongNumbers={true}
-                      onChange={handlePhoneNumber}
-                      value={phoneNumber ? phoneNumber : ""}
-                      inputProps={{
-                        required: true,
-                      }}
-                    />
-
-                    <span className="text-danger">{phoneNUmberError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Email
-                    </span>
-
-                    <Input type="email" name="email" id="email" value={email} />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    {" "}
-                    <span>
-                      <span className="text-danger">*</span> Country of Birth
-                    </span>
-                    <Select
-                      options={countryBirthName}
-                      value={{
-                        label: countryBirthLabel,
-                        value: countryBirthValue,
-                      }}
-                      onChange={(opt) =>
-                        selectCountryBirth(opt.label, opt.value)
-                      }
-                      name="countryOfBirthId"
-                      id="countryOfBirthId"
-                      required
-                    />
-                    {countryOfBirthError && (
-                      <span className="text-danger">
-                        Country Of Birth is required
-                      </span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Country Of Residence{" "}
-                    </span>
-
-                    <Select
-                      options={countryResidenceName}
-                      value={{
-                        label: countryResidenceLabel,
-                        value: countryResidenceValue,
-                      }}
-                      onChange={(opt) =>
-                        selectCountryResidence(opt.label, opt.value)
-                      }
-                      name="countryOfCitizenship"
-                      id="countryOfCitizenship"
-                      required
-                    />
-                    {countryOfResidenceError && (
-                      <span className="text-danger">
-                        Country Of Residence is required
-                      </span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Country Of Nationality
-                    </span>
-
-                    <Select
-                      options={nationalityName}
-                      value={{
-                        label: nationalityLabel,
-                        value: nationalityValue,
-                      }}
-                      onChange={(opt) =>
-                        selectNationality(opt.label, opt.value)
-                      }
-                      name="nationalityId"
-                      id="nationalityId"
-                      required
-                    />
-
-                    {nationalityError && (
-                      <span className="text-danger">
-                        Nationality is required
-                      </span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <Row>
-                  <Col lg="6" md="8">
                     <FormGroup row>
-                      <Col md="3">
-                        {/* <span>
+                      <Col lg="6" md="8">
+                        <span>
+                          {" "}
+                          <span className="text-danger">*</span> Title
+                        </span>
+                        <div>
+                          {title?.map((tt) => (
+                            <>
+                              <input
+                                type="radio"
+                                name="nameTittleId"
+                                id="nameTittleId"
+                                value={tt?.id}
+                                onClick={() => {
+                                  setTitleValue(tt?.id);
+                                  setTitleError(false);
+                                }}
+                                checked={titleValue === tt?.id ? true : false}
+                              />
+
+                              <label
+                                className="mr-3"
+                                style={{ fontWeight: 500, fontSize: "14px" }}
+                              >
+                                {tt?.name}
+                              </label>
+                            </>
+                          ))}
+                        </div>
+
+                        {titleError && (
+                          <span className="text-danger">Title is required</span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          First Name
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="firstName"
+                          id="firstName"
+                          placeholder="Enter First Name"
+                          onChange={(e) => {
+                            handleFirstNameChange(e);
+                          }}
+                          value={firstName}
+                        />
+                        <span className="text-danger">{firstNameError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Last Name
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="lastName"
+                          id="lastName"
+                          placeholder="Enter Last Name"
+                          onChange={(e) => {
+                            handleLastNameChange(e);
+                          }}
+                          value={lastName}
+                        />
+                        <span className="text-danger">{lastNameError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <DMYPicker
+                          label="Date Of Birth"
+                          value={birthDate}
+                          setValue={handleDate}
+                          error={dateError}
+                          action={setDateError}
+                          required={true}
+                        />
+                      </Col>
+                      <Col lg="6" md="8"></Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span> Passport/ID
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="passportNumber"
+                          id="passportNumber"
+                          placeholder="Enter Passport Number"
+                          onChange={(e) => handlePassport(e)}
+                          value={passport}
+                        />
+                        <span className="text-danger">{passportError}</span>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <DMYPicker
+                          setValue={handleIssueDate}
+                          label="Issue Date"
+                          value={issueDate}
+                          error={issueDateError}
+                          action={setIssueDateError}
+                          name="issueDate"
+                          id="issueDate"
+                          required={false}
+                        />
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <DMYPicker
+                          label="Expire Date"
+                          setValue={handleExpireDate}
+                          error={expireDateError}
+                          action={setexpireDateError}
+                          required={false}
+                          value={expireDate}
+                          name="expireDate"
+                          id="expireDate"
+                        />
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Gender
+                        </span>
+
+                        <div>
+                          {gender?.map((tt) => (
+                            <>
+                              <input
+                                type="radio"
+                                name="genderId"
+                                id="genderId"
+                                value={tt?.id}
+                                onClick={() => {
+                                  setGenderValue(tt?.id);
+                                  setGenderError(false);
+                                }}
+                                checked={genderValue === tt?.id ? true : false}
+                              />
+
+                              <label
+                                className="mr-3"
+                                style={{ fontWeight: 500, fontSize: "14px" }}
+                              >
+                                {tt?.name}
+                              </label>
+                            </>
+                          ))}
+                        </div>
+                        {genderError && (
+                          <span className="text-danger">
+                            Gender is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          {" "}
+                          <span className="text-danger">*</span>
+                          Marital Status
+                        </span>
+
+                        <div>
+                          {maritalStatus?.map((tt) => (
+                            <>
+                              <input
+                                type="radio"
+                                name="maritalStatusId"
+                                id="maritalStatusId"
+                                value={tt?.id}
+                                onClick={() => {
+                                  setMaritalStatusValue(tt?.id);
+                                  setMaritalStatusError(false);
+                                }}
+                                checked={
+                                  maritalStatusValue === tt?.id ? true : false
+                                }
+                              />
+
+                              <label
+                                className="mr-3"
+                                style={{ fontWeight: 500, fontSize: "14px" }}
+                              >
+                                {tt?.name}
+                              </label>
+                            </>
+                          ))}
+                        </div>
+
+                        {maritalStatusError && (
+                          <span className="text-danger">
+                            Marital status is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8" className="phone-input-group">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Phone Number
+                        </span>
+                        <PhoneInput
+                          className="w-100"
+                          type="string"
+                          name="phoneNumber"
+                          id="phoneNumber"
+                          country={"gb"}
+                          enableLongNumbers={true}
+                          onChange={handlePhoneNumber}
+                          value={phoneNumber ? phoneNumber : ""}
+                          inputProps={{
+                            required: true,
+                          }}
+                        />
+
+                        <span className="text-danger">{phoneNUmberError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Email
+                        </span>
+
+                        <Input
+                          type="email"
+                          name="email"
+                          id="email"
+                          value={email}
+                        />
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        {" "}
+                        <span>
+                          <span className="text-danger">*</span> Country of
+                          Birth
+                        </span>
+                        <Select
+                          options={countryBirthName}
+                          value={{
+                            label: countryBirthLabel,
+                            value: countryBirthValue,
+                          }}
+                          onChange={(opt) =>
+                            selectCountryBirth(opt.label, opt.value)
+                          }
+                          name="countryOfBirthId"
+                          id="countryOfBirthId"
+                          required
+                        />
+                        {countryOfBirthError && (
+                          <span className="text-danger">
+                            Country Of Birth is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Country Of Residence{" "}
+                        </span>
+
+                        <Select
+                          options={countryResidenceName}
+                          value={{
+                            label: countryResidenceLabel,
+                            value: countryResidenceValue,
+                          }}
+                          onChange={(opt) =>
+                            selectCountryResidence(opt.label, opt.value)
+                          }
+                          name="countryOfCitizenship"
+                          id="countryOfCitizenship"
+                          required
+                        />
+                        {countryOfResidenceError && (
+                          <span className="text-danger">
+                            Country Of Residence is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Country Of Nationality
+                        </span>
+
+                        <Select
+                          options={nationalityName}
+                          value={{
+                            label: nationalityLabel,
+                            value: nationalityValue,
+                          }}
+                          onChange={(opt) =>
+                            selectNationality(opt.label, opt.value)
+                          }
+                          name="nationalityId"
+                          id="nationalityId"
+                          required
+                        />
+
+                        {nationalityError && (
+                          <span className="text-danger">
+                            Nationality is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <Row>
+                      <Col lg="6" md="8">
+                        <FormGroup row>
+                          <Col md="3">
+                            {/* <span>
                           {userId === applicationStudentId && (
                             <span className="text-danger mr-1">*</span>
                           )}
                           Profile Image
                         </span> */}
-                        <span>Profile Image</span>
-                      </Col>
-                      <Col md="5">
-                        <div className="row">
-                          <div className="col-md-6 pb-2 pr-3">
-                            <Upload
-                              listType="picture-card"
-                              multiple={false}
-                              fileList={FileList}
-                              onPreview={handlePreview}
-                              onChange={handleChange}
-                              beforeUpload={(file) => {
-                                return false;
-                              }}
-                            >
-                              {FileList.length < 1 ? (
-                                <div
-                                  className="text-danger"
-                                  style={{ marginTop: 8 }}
+                            <span>Profile Image</span>
+                          </Col>
+                          <Col md="5">
+                            <div className="row">
+                              <div className="col-md-6 pb-2 pr-3">
+                                <Upload
+                                  listType="picture-card"
+                                  multiple={false}
+                                  fileList={FileList}
+                                  onPreview={handlePreview}
+                                  onChange={handleChange}
+                                  beforeUpload={(file) => {
+                                    return false;
+                                  }}
                                 >
-                                  <Icon.Upload />
-                                  {/* <br />
+                                  {FileList.length < 1 ? (
+                                    <div
+                                      className="text-danger"
+                                      style={{ marginTop: 8 }}
+                                    >
+                                      <Icon.Upload />
+                                      {/* <br />
                                   <span>Upload Here</span> */}
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                            </Upload>
-                            <Modal
-                              visible={previewVisible}
-                              title={previewTitle}
-                              footer={null}
-                              onCancel={handleCancel}
-                            >
-                              <img
-                                alt="example"
-                                style={{ width: "100%" }}
-                                src={previewImage}
-                              />
-                            </Modal>
-                            <span className="text-danger d-block">{error}</span>
-                          </div>
-                        </div>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </Upload>
+                                <Modal
+                                  visible={previewVisible}
+                                  title={previewTitle}
+                                  footer={null}
+                                  onCancel={handleCancel}
+                                >
+                                  <img
+                                    alt="example"
+                                    style={{ width: "100%" }}
+                                    src={previewImage}
+                                  />
+                                </Modal>
+                                <span className="text-danger d-block">
+                                  {error}
+                                </span>
+                              </div>
+                            </div>
 
-                        {userType !== userTypes?.SystemAdmin.toString() ? (
-                          <>
-                            {" "}
-                            {oneData?.profileImageId === null ? (
+                            {userType !== userTypes?.SystemAdmin.toString() ? (
                               <>
                                 {" "}
-                                {imgError ? (
-                                  <span className="text-danger">
-                                    Profile picture is required
-                                  </span>
+                                {oneData?.profileImageId === null ? (
+                                  <>
+                                    {" "}
+                                    {imgError ? (
+                                      <span className="text-danger">
+                                        Profile picture is required
+                                      </span>
+                                    ) : null}
+                                  </>
                                 ) : null}
                               </>
                             ) : null}
-                          </>
+                          </Col>
+                          <Col md="4" className="pt-4">
+                            <span className="text-gray">
+                              File size less than 2MB, keep visual elements
+                              centered
+                            </span>
+                          </Col>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <FormGroup row className="mt-4 text-right">
+                      <Col lg="6" md="8">
+                        {permissions?.includes(permissionList?.Edit_Student) ? (
+                          <SaveButton
+                            text="Save and Next"
+                            progress={progress}
+                            buttonStatus={buttonStatus}
+                          />
                         ) : null}
                       </Col>
-                      <Col md="4" className="pt-4">
-                        <span className="text-gray">
-                          File size less than 2MB, keep visual elements centered
-                        </span>
-                      </Col>
                     </FormGroup>
-                  </Col>
-                </Row>
-                <FormGroup row className="mt-4 text-right">
-                  <Col lg="6" md="8">
-                    {permissions?.includes(permissionList?.Edit_Student) ? (
-                      <SaveButton
-                        text="Save and Next"
-                        progress={progress}
-                        buttonStatus={buttonStatus}
-                      />
-                    ) : null}
-                  </Col>
-                </FormGroup>
-              </Form>
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+                  </Form>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };
