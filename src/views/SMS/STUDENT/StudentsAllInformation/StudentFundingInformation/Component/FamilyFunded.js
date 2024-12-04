@@ -125,7 +125,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
 
   // Dynamic2  code end
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("familyFundedFile", FileList2[0]?.originFileObj);
@@ -135,7 +135,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
     } else {
       if (familyFunding?.id) {
         setProgress(true);
-        put(`FamilyFunded/Update`, subData).then((res) => {
+        await put(`FamilyFunded/Update`, subData).then((res) => {
           setProgress(false);
           addToast(res?.data?.message, {
             appearance: "success",
@@ -144,12 +144,13 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
         });
         setFamilyFunding({});
         setSuccess(!success);
+        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
         get(`FamilyFunded/GetByStudentId/${studentid}`).then((res) => {
           setFamilyFunding(res);
         });
       } else {
         setProgress(true);
-        post(`FamilyFunded/Create`, subData).then((res) => {
+        await post(`FamilyFunded/Create`, subData).then((res) => {
           // setButtonStatus(false);
           setProgress(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {

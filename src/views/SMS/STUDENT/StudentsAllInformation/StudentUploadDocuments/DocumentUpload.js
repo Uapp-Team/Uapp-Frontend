@@ -4,42 +4,39 @@ import { useHistory, useParams } from "react-router-dom";
 // import "react-pdf/dist/Page/AnnotationLayer.css";
 // import "react-pdf/dist/Page/TextLayer.css";
 
+import { EyeOutlined } from "@ant-design/icons";
+import { Modal, Upload } from "antd";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Button,
   Card,
   CardBody,
   Col,
   Form,
-  ModalHeader,
-  ModalBody,
   FormGroup,
   Input,
-  Row,
   Label,
+  ModalBody,
+  ModalHeader,
+  Row,
 } from "reactstrap";
-import Select from "react-select";
-import * as Icon from "react-feather";
+import doc from "../../../../../assets/icon/doc.png";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../components/buttons/UploadButton";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal";
+import Download from "../../../../../components/ui/Download";
+import Preview from "../../../../../components/ui/Preview";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
-import { useToasts } from "react-toast-notifications";
-import { Upload, Modal as AntdModal, Modal } from "antd";
 import post from "../../../../../helpers/post";
-import { rootUrl } from "../../../../../constants/constants";
+import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
 import ButtonLoader from "../../../Components/ButtonLoader";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import put from "../../../../../helpers/put";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import doc from "../../../../../assets/icon/doc.png";
-import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal";
-import Preview from "../../../../../components/ui/Preview";
-import Download from "../../../../../components/ui/Download";
-import UploadButton from "../../../../../components/buttons/UploadButton";
-import { EyeOutlined } from '@ant-design/icons';
-
 
 const DocumentUpload = () => {
   const history = useHistory();
@@ -80,10 +77,12 @@ const DocumentUpload = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [documentTitle, setDocumentTitle] = useState("");
   const [documentTitleError, setDocumentTitleError] = useState("");
-  const [addDoc, setAddDoc] = useState(false);
+  const [addDoc, setAddDoc] = useState(null);
+  const [addDocError, setAddDocError] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [previewFileType, setPreviewFileType] = useState("");
   const [previewImage, setPreviewImage] = useState("");
+  const [nav, setNav] = useState({});
 
   const handleChange1 = ({ fileList }) => {
     setUploadError(false);
@@ -106,33 +105,33 @@ const DocumentUpload = () => {
   const handlePreview1 = async (file) => {
     // Infer file type if it's not provided
     const inferFileType = (file) => {
-      const extension = file.url ? file.url.split('.').pop().toLowerCase() : '';
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
       switch (extension) {
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-          return 'image/jpeg';
-        case 'pdf':
-          return 'application/pdf';
-        case 'doc':
-          return 'application/msword';
-        case 'docx':
-          return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         default:
-          return 'unknown';
+          return "unknown";
       }
     };
 
     const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith('image')) {
+    if (fileType.startsWith("image")) {
       // If it's an image
       file.preview = await getBase64(file.originFileObj || file.url);
       setPreviewImage(file.preview || file.url);
       setPreviewFileType(fileType);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
-    } else if (fileType === 'application/pdf') {
+    } else if (fileType === "application/pdf") {
       // If it's a PDF
       const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
       setPreviewImage(pdfPreview);
@@ -140,34 +139,51 @@ const DocumentUpload = () => {
       setPreviewFileType(fileType);
       setPreviewTitle(file.name);
     } else if (
-      fileType === 'application/msword' ||
-      fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
       // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${file.url || URL.createObjectURL(file.originFileObj)}&embedded=true`;
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
       setPreviewImage(googleViewer);
       setPreviewVisible(true);
       setPreviewTitle(file.name);
       setPreviewFileType(fileType);
     } else {
       // Handle unsupported file types
-      alert('Preview not available for this file type');
+      alert("Preview not available for this file type");
     }
   };
 
   useEffect(() => {
-    get(`StudentUploadDocument/Index/${applicationStudentId}`).then((res) => {
-      console.log(res);
-      setUploadedDocuData(res);
-    });
+    const fetchData = async () => {
+      try {
+        const navigation = await get(
+          `StudentNavbar/Get/${applicationStudentId}`
+        );
+        setNav(navigation);
 
-    get(`DocumentStatusDD/index`).then((res) => {
-      setDocuDD(res);
-    });
+        get(`StudentUploadDocument/Index/${applicationStudentId}`).then(
+          (res) => {
+            console.log(res);
+            setUploadedDocuData(res);
+          }
+        );
 
-    get("DocumentDD/Index").then((res) => {
-      setDocuType(res);
-    });
+        get(`DocumentStatusDD/index`).then((res) => {
+          setDocuDD(res);
+        });
+
+        get("DocumentDD/Index").then((res) => {
+          setDocuType(res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   const docuTypeDD = docuType.map((docu) => ({
@@ -191,6 +207,12 @@ const DocumentUpload = () => {
     }
   };
 
+  useEffect(() => {
+    if (addDoc !== null) {
+      setAddDocError("");
+    }
+  }, [addDoc]);
+
   const validateRegisterForm = () => {
     var isFormValid = true;
     if (docuTypeValue === 0) {
@@ -204,6 +226,10 @@ const DocumentUpload = () => {
     if (FileList1.length === 0) {
       isFormValid = false;
       setUploadError(true);
+    }
+    if (addDoc === null) {
+      isFormValid = false;
+      setAddDocError("Please select an options");
     }
     return isFormValid;
   };
@@ -235,7 +261,7 @@ const DocumentUpload = () => {
           setDocumentTitle("");
           setDocuTypeLabel("Select Document Type");
           setDocuTypeValue(0);
-          setAddDoc(!addDoc)
+          setAddDoc(null);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -316,7 +342,6 @@ const DocumentUpload = () => {
     setStudentDocuId(doc);
     // setStudentDocuId(doc?.studentDocumentLevelId);
   };
-  console.log(studentDocuId);
   const handleCardUpload = () => {
     const subData = new FormData();
     subData.append("studentId", applicationStudentId);
@@ -426,7 +451,6 @@ const DocumentUpload = () => {
     history.push(`/studentDeclaration/${applicationStudentId}`);
   };
 
-  console.log(uploadedDocuData);
   return (
     <div>
       <BreadCrumb
@@ -440,7 +464,7 @@ const DocumentUpload = () => {
         activetab={"11"}
         success={success}
         setSuccess={setSuccess}
-        action={() => { }}
+        action={() => {}}
       />
       <Card className="">
         <CardBody>
@@ -521,17 +545,17 @@ const DocumentUpload = () => {
                               <div>
                                 {(userType === userTypes?.SystemAdmin ||
                                   userType === userTypes?.Admin) && (
-                                    <>
-                                      {permissions?.includes(
-                                        permissionList?.Delete_Student_Document
-                                      ) ? (
-                                        <i
-                                          class="fas fa-trash pointer text-danger "
-                                          onClick={() => toggleDanger(docu)}
-                                        ></i>
-                                      ) : null}
-                                    </>
-                                  )}
+                                  <>
+                                    {permissions?.includes(
+                                      permissionList?.Delete_Student_Document
+                                    ) ? (
+                                      <i
+                                        class="fas fa-trash pointer text-danger "
+                                        onClick={() => toggleDanger(docu)}
+                                      ></i>
+                                    ) : null}
+                                  </>
+                                )}
                               </div>
                             </div>
                           </Col>
@@ -550,7 +574,7 @@ const DocumentUpload = () => {
 
                               <span className="text-gray">
                                 {docu?.createdBy} at{" "}
-                                {handleDate(docu?.createdOn)} { }
+                                {handleDate(docu?.createdOn)} {}
                               </span>
 
                               {permissions?.includes(
@@ -672,7 +696,7 @@ const DocumentUpload = () => {
                     className="form-check-input"
                     type="radio"
                     id="isHaveDisability"
-                    onChange={() => setAddDoc(!addDoc)}
+                    onChange={() => setAddDoc(true)}
                     name="isHaveDisability"
                     value={true}
                     checked={addDoc === true}
@@ -691,7 +715,7 @@ const DocumentUpload = () => {
                     className="form-check-input"
                     type="radio"
                     id="isHaveDisability"
-                    onChange={() => setAddDoc(!addDoc)}
+                    onChange={() => setAddDoc(false)}
                     name="isHaveDisability"
                     value={false}
                     checked={addDoc === false}
@@ -705,6 +729,9 @@ const DocumentUpload = () => {
                   </Label>
                 </FormGroup>
               </div>
+              {addDocError && (
+                <span className="text-danger">{addDocError}</span>
+              )}
             </Col>
           </Row>
 
@@ -778,10 +805,15 @@ const DocumentUpload = () => {
                           onChange={handleChange1}
                           beforeUpload={(file) => false}
                           itemRender={(originNode, file) => (
-                            <div style={{ display: 'flex', alignItems: 'baseLine' }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "baseLine",
+                              }}
+                            >
                               {originNode}
                               <EyeOutlined
-                                style={{ marginLeft: '8px', cursor: 'pointer' }}
+                                style={{ marginLeft: "8px", cursor: "pointer" }}
                                 onClick={() => handlePreview1(file)}
                               />
                             </div>
@@ -797,14 +829,18 @@ const DocumentUpload = () => {
                             footer={null}
                             onCancel={() => setPreviewVisible(false)}
                           >
-                            {previewFileType === 'application/pdf' ? (
+                            {previewFileType === "application/pdf" ? (
                               <iframe
                                 src={previewImage}
-                                style={{ width: '100%', height: '80vh' }}
+                                style={{ width: "100%", height: "80vh" }}
                                 frameBorder="0"
                               ></iframe>
                             ) : (
-                              <img alt={previewTitle} src={previewImage} style={{ width: '100%' }} />
+                              <img
+                                alt={previewTitle}
+                                src={previewImage}
+                                style={{ width: "100%" }}
+                              />
                             )}
                           </Modal>
                         )}
@@ -835,7 +871,9 @@ const DocumentUpload = () => {
           <Row>
             <Col className="d-flex justify-content-between mt-4">
               <PreviousButton action={goPrevious} />
-              <SaveButton text="Next" action={goForward} />
+              {nav?.declaration && (
+                <SaveButton text="Next" action={goForward} />
+              )}
             </Col>
           </Row>
         </CardBody>

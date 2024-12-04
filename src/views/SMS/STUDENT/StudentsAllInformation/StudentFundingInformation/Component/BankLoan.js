@@ -122,7 +122,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
     setBLoanError("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("bankLoanFile", FileList1[0]?.originFileObj);
@@ -132,7 +132,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
     } else {
       if (bankFunding?.id) {
         setProgress(true);
-        put(`BankLoan/Update`, subData).then((res) => {
+        await put(`BankLoan/Update`, subData).then((res) => {
           setProgress(false);
           addToast(res?.data?.message, {
             appearance: "success",
@@ -141,6 +141,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
         });
         setBankFunding({});
         setSuccess(!success);
+        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
         get(`BankLoan/GetByStudentId/${studentid}`).then((res) => {
           setBankFunding(res);
         });
