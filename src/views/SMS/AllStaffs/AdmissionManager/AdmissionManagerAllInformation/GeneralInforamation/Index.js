@@ -17,8 +17,8 @@ const Index = () => {
   const activetab = "1";
   const { admissionManagerId } = useParams();
   const [provider, setProvider] = useState([]);
-  const [providerLabel, setProviderLabel] = useState("Select Provider");
   const [providerValue, setProviderValue] = useState(0);
+  const [providerLabel, setProviderLabel] = useState("Select Provider");
   const [providerError, setProviderError] = useState(false);
   const [titleValue, setTitleValue] = useState(0);
   const [titleError, setTitleError] = useState(false);
@@ -39,20 +39,36 @@ const Index = () => {
   const userId = localStorage.getItem("referenceId");
   const [providerHelperId, setProviderHelperId] = useState(undefined);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
 
-    get("ProviderDD/index").then((res) => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
+
+  useEffect(() => {
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
       setProvider(res);
     });
+  }, [branchValue]);
 
+  useEffect(() => {
     get(`AdmissionManager/GetGeneralInformation/${admissionManagerId}`).then(
       (res) => {
         setProviderValue(res?.providerId);
         setProviderLabel(res?.provider?.providerName);
+        setBranchValue(res?.branchId);
+        setBranchLabel(res?.branch?.name);
         setMultiProvider(res?.providerList);
         setTitleValue(res?.nameTittle?.id);
         setFirstName(res?.firstName);
@@ -82,6 +98,20 @@ const Index = () => {
     setProviderValue(value);
   };
 
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setProviderValue(0);
+    setProviderLabel("Select Provider");
+    setMultiProvider([]);
+  };
+
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setFirstName(data);
@@ -103,6 +133,15 @@ const Index = () => {
 
   const validateRegisterForm = () => {
     let isFormValid = true;
+
+    if (
+      userType !== userTypes?.BranchAdmin &&
+      userType !== userTypes?.BranchManager &&
+      branchValue === 0
+    ) {
+      setBranchError(true);
+      isFormValid = false;
+    }
 
     if (
       userTypeId !== userTypes?.ProviderAdmin.toString() &&
@@ -202,9 +241,31 @@ const Index = () => {
                     <span className="text-danger">Provider is required</span>
                   )}
                 </FormGroup> */}
+                {userType !== userTypes?.ProviderAdmin.toString() &&
+                userType !== userTypes?.BranchAdmin &&
+                userType !== userTypes?.BranchManager ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                    </span>
 
-                {userTypeId === userTypes?.SystemAdmin.toString() ||
-                userTypeId === userTypes?.Admin.toString() ? (
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      // name="BranchId"
+                      // id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
+
+                {userType !== userTypes?.ProviderAdmin.toString() ? (
                   <FormGroup>
                     <span>
                       <span className="text-danger">*</span>

@@ -66,6 +66,7 @@ const PersonalInformation = () => {
   const [consultant, setConsultant] = useState([]);
   const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
+  const [consultantError, setConsultantError] = useState(false);
   const [email, setEmail] = useState("");
   const [passport, setPassport] = useState("");
   const [passportError, setPassportError] = useState("");
@@ -100,7 +101,15 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
+<<<<<<< HEAD
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
+
+=======
   const [loading, setLoading] = useState(false);
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
       setFileList([
@@ -133,6 +142,77 @@ const PersonalInformation = () => {
         const genderRes = await get("GenderDD/Index");
         setGender(genderRes);
 
+<<<<<<< HEAD
+    get("CountryDD/index").then((res) => {
+      setCountryBirth(res);
+      setCountryResidence(res);
+      // setNationality(res);
+    });
+  }, []);
+
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+    });
+
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+    });
+  }, [branchValue, consultantValue]);
+
+  useEffect(() => {
+    if (applicationStudentId) {
+      get(`Student/Get/${applicationStudentId}`).then((res) => {
+        setBranchValue(res?.branchId == null ? 0 : res?.branchId);
+        setBranchLabel(
+          res?.branchName == "" ? "Select Branch" : res?.branchName
+        );
+        setConsultantLabel(
+          res?.consultant?.firstName + " " + res?.consultant?.lastName
+        );
+        setOneData(res);
+        setConsultantValue(res?.consultantId);
+        setFirstName(res?.firstName);
+        setLastName(res?.lastName);
+        setEmail(res?.email);
+        setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
+        // setPhoneNumber(res?.phoneNumber);
+        setphoneNumber(res?.phoneNumber);
+        setPassport(res?.passportNumber);
+        setGenderValue(res?.gender?.id == null ? 0 : res?.gender?.id);
+        setMaritalStatusValue(
+          res?.maritalStatus?.id == null ? 0 : res?.maritalStatus?.id
+        );
+        setNationalityLabel(
+          res?.nationality?.name == null
+            ? "Select Nationality"
+            : res?.nationality?.name
+        );
+        setNationalityValue(
+          res?.nationality?.id == null ? 0 : res?.nationality?.id
+        );
+        setCountryResidenceLabel(
+          res?.country?.name == null
+            ? "Select Residence Country"
+            : res?.country?.name
+        );
+        setCountryResidenceValue(
+          res?.country?.id == null ? 0 : res?.country?.id
+        );
+        setCountryBirthLabel(
+          res?.countryOfBirth?.name == null
+            ? "Select Birth Country"
+            : res?.countryOfBirth?.name
+        );
+        setCountryBirthValue(
+          res?.countryOfBirth?.id == null ? 0 : res?.countryOfBirth?.id
+        );
+        setBirthDate(res?.dateOfBirth);
+        setIssueDate(res?.issueDate);
+        setexpireDate(res?.expireDate);
+      });
+    }
+=======
         const countryRes = await get("CountryDD/index");
         setCountryBirth(countryRes);
         setCountryResidence(countryRes);
@@ -180,6 +260,7 @@ const PersonalInformation = () => {
       }
     };
     fetchData();
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   }, [success, applicationStudentId]);
 
   // Trial start
@@ -338,8 +419,22 @@ const PersonalInformation = () => {
 
   // select  Consultant
   const selectConsultant = (label, value) => {
+    setConsultantError(false);
     setConsultantLabel(label);
     setConsultantValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setConsultantLabel("Select Consultant");
   };
 
   const validateRegisterForm = () => {
@@ -356,6 +451,17 @@ const PersonalInformation = () => {
     if (countryBirthValue === 0) {
       isFormValid = false;
       setCountryOfBirthError(true);
+    }
+
+    if (
+      userType !== userTypes?.Consultant &&
+      userType !== userTypes?.AdmissionManager &&
+      userType !== userTypes?.AdmissionOfficer &&
+      userType !== userTypes?.ProviderAdmin &&
+      consultantValue === 0
+    ) {
+      setConsultantError(true);
+      isFormValid = false;
     }
 
     if (genderValue === 0) {
@@ -512,6 +618,46 @@ const PersonalInformation = () => {
                       value={applicationStudentId}
                     />
 
+<<<<<<< HEAD
+                <>
+                  {userType === userTypes?.SystemAdmin.toString() ||
+                  userType === userTypes?.Admin.toString() ? (
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        {" "}
+                        <span>
+                          <span className="text-danger">*</span> Branch{" "}
+                        </span>
+                        <Select
+                          className="form-mt"
+                          options={branchOptions}
+                          value={{ label: branchLabel, value: branchValue }}
+                          onChange={(opt) => selectBranch(opt.label, opt.value)}
+                          // name="BranchId"
+                          // id="BranchId"
+                          // isDisabled={branchId ? true : false}
+                        />
+                        {branchError && (
+                          <span className="text-danger">
+                            Branch is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+                  ) : null}
+                </>
+
+                {userType === userTypes?.SystemAdmin.toString() ||
+                userType === userTypes?.Admin.toString() ||
+                userType === userTypes?.BranchAdmin.toString() ||
+                userType === userTypes?.ComplianceManager.toString() ? (
+                  <FormGroup row>
+                    <Col lg="6" md="8">
+                      <span>
+                        {" "}
+                        <span className="text-danger">*</span> Consultant
+                      </span>
+=======
                     {userType === userTypes?.SystemAdmin.toString() ||
                     userType === userTypes?.Admin.toString() ||
                     userType === userTypes?.ComplianceManager.toString() ? (
@@ -521,6 +667,7 @@ const PersonalInformation = () => {
                             {" "}
                             <span className="text-danger">*</span> Consultant
                           </span>
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
 
                           <Select
                             options={consultantName}
@@ -544,6 +691,58 @@ const PersonalInformation = () => {
                         id="consultantId"
                         value={consultantValue}
                       />
+<<<<<<< HEAD
+                      {consultantError && (
+                        <span className="text-danger">
+                          Consultant is required
+                        </span>
+                      )}
+                    </Col>
+                  </FormGroup>
+                ) : (
+                  <input
+                    type="hidden"
+                    name="consultantId"
+                    id="consultantId"
+                    value={consultantValue}
+                  />
+                )}
+
+                <FormGroup row>
+                  <Col lg="6" md="8">
+                    <span>
+                      {" "}
+                      <span className="text-danger">*</span> Title
+                    </span>
+                    <div>
+                      {title?.map((tt) => (
+                        <>
+                          <input
+                            type="radio"
+                            name="nameTittleId"
+                            id="nameTittleId"
+                            value={tt?.id}
+                            onClick={() => {
+                              setTitleValue(tt?.id);
+                              setTitleError(false);
+                            }}
+                            checked={titleValue === tt?.id ? true : false}
+                          />
+
+                          <label
+                            className="mr-3"
+                            style={{ fontWeight: 500, fontSize: "14px" }}
+                          >
+                            {tt?.name}
+                          </label>
+                        </>
+                      ))}
+                    </div>
+
+                    {titleError && (
+                      <span className="text-danger">Title is required</span>
+=======
+>>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
                     )}
 
                     <FormGroup row>

@@ -112,6 +112,10 @@ const AddUniversity = (props) => {
   // const [OfficialWebsiteError, setOfficialWebsiteError] = useState("");
   const [CollectionWebsite, setCollectionWebsite] = useState("");
   // const [CollectionWebsiteError, setCollectionWebsiteError] = useState("");
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
 
   const handleChange1 = ({ fileList }) => {
     console.log("fileList", fileList);
@@ -199,6 +203,13 @@ const AddUniversity = (props) => {
   }, [userType, referenceId]);
 
   useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
+
+  useEffect(() => {
     get("UniversityCountryDD/Index")
       .then((res) => {
         setUniverSityCountries(res);
@@ -217,7 +228,7 @@ const AddUniversity = (props) => {
   }, [univerId, provideId, providerValue]);
 
   useEffect(() => {
-    get("ProviderDD/Index")
+    get(`ProviderDD/Index/${branchValue}`)
       .then((res) => {
         setProvider(res);
         if (provideId) {
@@ -232,7 +243,7 @@ const AddUniversity = (props) => {
         }
       })
       .catch();
-  }, [provideId, providerValue]);
+  }, [provideId, providerValue, branchValue]);
 
   useEffect(() => {
     if (univerId !== undefined) {
@@ -244,6 +255,8 @@ const AddUniversity = (props) => {
         setContractTypeLabel(res?.contractType?.name);
         setContractTypeValue(res?.contractType?.id);
         setUniversityData(res);
+        setBranchValue(res?.branchId);
+        setBranchLabel(res?.branchName);
         setProviderTypeLabel(res?.provider?.name);
         setProviderTypeValue(res?.provider?.id);
         setUniTypeLabel(res?.universityType?.name);
@@ -266,6 +279,19 @@ const AddUniversity = (props) => {
       setLoading(false);
     }
   }, [univerId]);
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setProviderTypeValue(0);
+    setProviderTypeLabel("Select Provider");
+  };
 
   const selectProviderType = (label, value) => {
     setProviderTypeError(false);
@@ -732,6 +758,37 @@ const AddUniversity = (props) => {
                         <input type="hidden" name="id" id="id" value={uniId} />
                       </>
                     ) : null}
+                    <Row>
+                      {userType === userTypes?.SystemAdmin.toString() ||
+                      userType === userTypes?.Admin.toString() ? (
+                        <Col md="4">
+                          {" "}
+                          <FormGroup className="has-icon-left position-relative">
+                            <span>
+                              <span className="text-danger">*</span> Branch{" "}
+                            </span>
+
+                            <Select
+                              className="form-mt"
+                              options={branchOptions}
+                              value={{ label: branchLabel, value: branchValue }}
+                              onChange={(opt) =>
+                                selectBranch(opt.label, opt.value)
+                              }
+                              // name="BranchId"
+                              // id="BranchId"
+                              // isDisabled={branchId ? true : false}
+                            />
+
+                            {branchError && (
+                              <span className="text-danger">
+                                Branch is required
+                              </span>
+                            )}
+                          </FormGroup>
+                        </Col>
+                      ) : null}
+                    </Row>
 
                     <Row>
                       {userType === userTypes?.SystemAdmin.toString() ||

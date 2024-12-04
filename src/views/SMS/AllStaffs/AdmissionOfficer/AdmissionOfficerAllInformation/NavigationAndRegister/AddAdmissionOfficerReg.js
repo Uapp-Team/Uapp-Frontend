@@ -37,7 +37,7 @@ const AddAdmissionOfficerReg = () => {
   const [admissionOfficerId, setAdmissionOfficerId] = useState();
 
   const { commonId } = useParams();
-  const userTypeId = localStorage.getItem("userType");
+  const userType = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const [providerHelperId, setProviderHelperId] = useState(undefined);
   const [managerDDForm, setManagerDDForm] = useState([]);
@@ -48,15 +48,28 @@ const AddAdmissionOfficerReg = () => {
   const [managerFormError, setManagerFormError] = useState(false);
   const [isEmailAvailable, setIsEmailAvailable] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
-    get("ProviderDD/index").then((res) => {
-      setProvider(res);
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
+
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
   }, []);
+
+  useEffect(() => {
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
+      setProvider(res);
+    });
+  }, [branchValue]);
 
   useEffect(() => {
     const filterData = provider.filter((status) => {
@@ -78,24 +91,22 @@ const AddAdmissionOfficerReg = () => {
     }
 
     if (
-      userTypeId === userTypes?.ProviderAdmin.toString() ||
-      userTypeId === userTypes?.AdmissionManager.toString()
+      userType === userTypes?.ProviderAdmin.toString() ||
+      userType === userTypes?.AdmissionManager.toString()
     ) {
-      get(`ProviderHelper/GetProviderId/${userTypeId}/${userId}`).then(
-        (res) => {
-          setProviderHelperId(res);
-        }
-      );
+      get(`ProviderHelper/GetProviderId/${userType}/${userId}`).then((res) => {
+        setProviderHelperId(res);
+      });
 
       get(`AdmissionManagerDD/Index/${providerHelperId}`).then((res) => {
         console.log(res);
         setManagerDDForm(res);
       });
     }
-  }, [commonId, userTypeId, userId, providerHelperId]);
+  }, [commonId, userType, userId, providerHelperId]);
 
   console.log("commonId", commonId);
-  console.log("userTypeId", userTypeId);
+  console.log("userTypeId", userType);
   console.log("userId", userId);
   console.log("providerHelperId", providerHelperId);
 
@@ -108,6 +119,19 @@ const AddAdmissionOfficerReg = () => {
     label: managerForm?.name,
     value: managerForm?.id,
   }));
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setProviderLabel("Select Provider");
+    setProviderValue(0);
+  };
 
   const selectProvider = (label, value) => {
     setProviderError(false);
@@ -166,11 +190,21 @@ const AddAdmissionOfficerReg = () => {
 
   const validateRegisterForm = () => {
     let isFormValid = true;
+    if (
+      userType !== userTypes?.ProviderAdmin &&
+      userType !== userTypes?.AdmissionManager &&
+      userType !== userTypes?.BranchAdmin &&
+      userType !== userTypes?.BranchManager &&
+      branchValue === 0
+    ) {
+      setBranchError(true);
+      isFormValid = false;
+    }
 
     if (
       commonId === undefined &&
-      userTypeId !== userTypes?.ProviderAdmin.toString() &&
-      userTypeId !== userTypes?.AdmissionManager.toString() &&
+      userType !== userTypes?.ProviderAdmin.toString() &&
+      userType !== userTypes?.AdmissionManager.toString() &&
       providerValue === 0
     ) {
       isFormValid = false;
@@ -178,7 +212,7 @@ const AddAdmissionOfficerReg = () => {
     }
     if (
       managerFormValue === 0 &&
-      userTypeId !== userTypes?.AdmissionManager.toString()
+      userType !== userTypes?.AdmissionManager.toString()
     ) {
       isFormValid = false;
       setManagerFormError(true);
@@ -355,9 +389,35 @@ const AddAdmissionOfficerReg = () => {
                   </FormGroup>
                 ) : null} */}
 
+                {userType !== userTypes?.AdmissionManager.toString() &&
+                userType !== userTypes?.ProviderAdmin.toString() &&
+                userType !== userTypes?.BranchAdmin &&
+                userType !== userTypes?.BranchManager ? (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      <span className="text-danger">*</span> Branch{" "}
+                      <span className="text-danger"></span>
+                    </span>
+
+                    <Select
+                      className="form-mt"
+                      options={branchOptions}
+                      value={{ label: branchLabel, value: branchValue }}
+                      onChange={(opt) => selectBranch(opt.label, opt.value)}
+                      // name="BranchId"
+                      // id="BranchId"
+                      // isDisabled={branchId ? true : false}
+                    />
+
+                    {branchError && (
+                      <span className="text-danger">Branch is required</span>
+                    )}
+                  </FormGroup>
+                ) : null}
+
                 {commonId === undefined &&
-                userTypeId !== userTypes?.AdmissionManager.toString() &&
-                userTypeId !== userTypes?.ProviderAdmin.toString() ? (
+                userType !== userTypes?.AdmissionManager.toString() &&
+                userType !== userTypes?.ProviderAdmin.toString() ? (
                   <FormGroup>
                     <span>
                       Provider <span className="text-danger">*</span>{" "}
@@ -377,8 +437,8 @@ const AddAdmissionOfficerReg = () => {
                       <span className="text-danger">Provider is required</span>
                     ) : null}
                   </FormGroup>
-                ) : userTypeId === userTypes?.ProviderAdmin.toString() ||
-                  userTypeId === userTypes?.AdmissionManager.toString() ? (
+                ) : userType === userTypes?.ProviderAdmin.toString() ||
+                  userType === userTypes?.AdmissionManager.toString() ? (
                   <input
                     type="hidden"
                     name="providerId"
@@ -399,7 +459,7 @@ const AddAdmissionOfficerReg = () => {
                   </FormGroup>
                 )}
 
-                {userTypeId === userTypes?.AdmissionManager.toString() ? (
+                {userType === userTypes?.AdmissionManager.toString() ? (
                   <input
                     type="hidden"
                     name="admissionManagerId"
