@@ -29,6 +29,7 @@ import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
 import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import { app } from "firebase";
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -101,15 +102,12 @@ const PersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [countryOfBirthError, setCountryOfBirthError] = useState(false);
-<<<<<<< HEAD
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
 
-=======
   const [loading, setLoading] = useState(false);
->>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   useEffect(() => {
     if (oneData?.profileImage?.fileUrl) {
       setFileList([
@@ -121,7 +119,7 @@ const PersonalInformation = () => {
         },
       ]);
     }
-  }, [oneData, rootUrl]);
+  }, [oneData]);
 
   useEffect(() => {
     get(`RecruitmentFrom/ByConsultant/${consultantValue}`).then((res) => {
@@ -133,6 +131,9 @@ const PersonalInformation = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const branchRes = await get("BranchDD/index");
+        setBranch(branchRes);
+
         const titleRes = await get("NameTittleDD/index");
         setTitle(titleRes);
 
@@ -142,23 +143,63 @@ const PersonalInformation = () => {
         const genderRes = await get("GenderDD/Index");
         setGender(genderRes);
 
-<<<<<<< HEAD
-    get("CountryDD/index").then((res) => {
-      setCountryBirth(res);
-      setCountryResidence(res);
-      // setNationality(res);
-    });
+        get("CountryDD/index").then((res) => {
+          setCountryBirth(res);
+          setCountryResidence(res);
+          // setNationality(res);
+        });
+
+        const countryRes = await get("CountryDD/index");
+        setCountryBirth(countryRes);
+        setCountryResidence(countryRes);
+
+        // if (applicationStudentId) {
+        //   const studentRes = await get(`Student/Get/${applicationStudentId}`);
+        //   setConsultantLabel(
+        //     `${studentRes?.consultant?.firstName || ""} ${
+        //       studentRes?.consultant?.lastName || ""
+        //     }`
+        //   );
+        //   setOneData(studentRes);
+        //   setConsultantValue(studentRes?.consultantId);
+        //   setFirstName(studentRes?.firstName);
+        //   setLastName(studentRes?.lastName);
+        //   setEmail(studentRes?.email);
+        //   setTitleValue(studentRes?.nameTittle?.id || 0);
+        //   setphoneNumber(studentRes?.phoneNumber);
+        //   setPassport(studentRes?.passportNumber);
+        //   setGenderValue(studentRes?.gender?.id || 0);
+        //   setMaritalStatusValue(studentRes?.maritalStatus?.id || 0);
+        //   setNationalityLabel(
+        //     studentRes?.nationality?.name || "Select Nationality"
+        //   );
+        //   setNationalityValue(studentRes?.nationality?.id || 0);
+        //   setCountryResidenceLabel(
+        //     studentRes?.country?.name || "Select Residence Country"
+        //   );
+        //   setCountryResidenceValue(studentRes?.country?.id || 0);
+        //   setCountryBirthLabel(
+        //     studentRes?.countryOfBirth?.name || "Select Birth Country"
+        //   );
+        //   setCountryBirthValue(studentRes?.countryOfBirth?.id || 0);
+        //   setBirthDate(studentRes?.dateOfBirth);
+        //   setIssueDate(studentRes?.issueDate);
+        //   setexpireDate(studentRes?.expireDate);
+        // }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
-    get("BranchDD/index").then((res) => {
-      setBranch(res);
-    });
-
     get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsultant(res);
     });
-  }, [branchValue, consultantValue]);
+  }, [branchValue]);
 
   useEffect(() => {
     if (applicationStudentId) {
@@ -212,55 +253,6 @@ const PersonalInformation = () => {
         setexpireDate(res?.expireDate);
       });
     }
-=======
-        const countryRes = await get("CountryDD/index");
-        setCountryBirth(countryRes);
-        setCountryResidence(countryRes);
-
-        const consultantRes = await get("ConsultantDD/ByUser");
-        setConsultant(consultantRes);
-
-        if (applicationStudentId) {
-          const studentRes = await get(`Student/Get/${applicationStudentId}`);
-          setConsultantLabel(
-            `${studentRes?.consultant?.firstName || ""} ${
-              studentRes?.consultant?.lastName || ""
-            }`
-          );
-          setOneData(studentRes);
-          setConsultantValue(studentRes?.consultantId);
-          setFirstName(studentRes?.firstName);
-          setLastName(studentRes?.lastName);
-          setEmail(studentRes?.email);
-          setTitleValue(studentRes?.nameTittle?.id || 0);
-          setphoneNumber(studentRes?.phoneNumber);
-          setPassport(studentRes?.passportNumber);
-          setGenderValue(studentRes?.gender?.id || 0);
-          setMaritalStatusValue(studentRes?.maritalStatus?.id || 0);
-          setNationalityLabel(
-            studentRes?.nationality?.name || "Select Nationality"
-          );
-          setNationalityValue(studentRes?.nationality?.id || 0);
-          setCountryResidenceLabel(
-            studentRes?.country?.name || "Select Residence Country"
-          );
-          setCountryResidenceValue(studentRes?.country?.id || 0);
-          setCountryBirthLabel(
-            studentRes?.countryOfBirth?.name || "Select Birth Country"
-          );
-          setCountryBirthValue(studentRes?.countryOfBirth?.id || 0);
-          setBirthDate(studentRes?.dateOfBirth);
-          setIssueDate(studentRes?.issueDate);
-          setexpireDate(studentRes?.expireDate);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
->>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
   }, [success, applicationStudentId]);
 
   // Trial start
@@ -618,48 +610,39 @@ const PersonalInformation = () => {
                       value={applicationStudentId}
                     />
 
-<<<<<<< HEAD
-                <>
-                  {userType === userTypes?.SystemAdmin.toString() ||
-                  userType === userTypes?.Admin.toString() ? (
-                    <FormGroup row>
-                      <Col lg="6" md="8">
-                        {" "}
-                        <span>
-                          <span className="text-danger">*</span> Branch{" "}
-                        </span>
-                        <Select
-                          className="form-mt"
-                          options={branchOptions}
-                          value={{ label: branchLabel, value: branchValue }}
-                          onChange={(opt) => selectBranch(opt.label, opt.value)}
-                          // name="BranchId"
-                          // id="BranchId"
-                          // isDisabled={branchId ? true : false}
-                        />
-                        {branchError && (
-                          <span className="text-danger">
-                            Branch is required
-                          </span>
-                        )}
-                      </Col>
-                    </FormGroup>
-                  ) : null}
-                </>
+                    <>
+                      {userType === userTypes?.SystemAdmin.toString() ||
+                      userType === userTypes?.Admin.toString() ? (
+                        <FormGroup row>
+                          <Col lg="6" md="8">
+                            {" "}
+                            <span>
+                              <span className="text-danger">*</span> Branch{" "}
+                            </span>
+                            <Select
+                              className="form-mt"
+                              options={branchOptions}
+                              value={{ label: branchLabel, value: branchValue }}
+                              onChange={(opt) =>
+                                selectBranch(opt.label, opt.value)
+                              }
+                              // name="BranchId"
+                              // id="BranchId"
+                              // isDisabled={branchId ? true : false}
+                            />
+                            {branchError && (
+                              <span className="text-danger">
+                                Branch is required
+                              </span>
+                            )}
+                          </Col>
+                        </FormGroup>
+                      ) : null}
+                    </>
 
-                {userType === userTypes?.SystemAdmin.toString() ||
-                userType === userTypes?.Admin.toString() ||
-                userType === userTypes?.BranchAdmin.toString() ||
-                userType === userTypes?.ComplianceManager.toString() ? (
-                  <FormGroup row>
-                    <Col lg="6" md="8">
-                      <span>
-                        {" "}
-                        <span className="text-danger">*</span> Consultant
-                      </span>
-=======
                     {userType === userTypes?.SystemAdmin.toString() ||
                     userType === userTypes?.Admin.toString() ||
+                    userType === userTypes?.BranchAdmin.toString() ||
                     userType === userTypes?.ComplianceManager.toString() ? (
                       <FormGroup row>
                         <Col lg="6" md="8">
@@ -667,7 +650,6 @@ const PersonalInformation = () => {
                             {" "}
                             <span className="text-danger">*</span> Consultant
                           </span>
->>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
 
                           <Select
                             options={consultantName}
@@ -682,6 +664,12 @@ const PersonalInformation = () => {
                             id="consultantId"
                             required
                           />
+
+                          {consultantError && (
+                            <span className="text-danger">
+                              Consultant is required
+                            </span>
+                          )}
                         </Col>
                       </FormGroup>
                     ) : (
@@ -691,59 +679,42 @@ const PersonalInformation = () => {
                         id="consultantId"
                         value={consultantValue}
                       />
-<<<<<<< HEAD
-                      {consultantError && (
-                        <span className="text-danger">
-                          Consultant is required
-                        </span>
-                      )}
-                    </Col>
-                  </FormGroup>
-                ) : (
-                  <input
-                    type="hidden"
-                    name="consultantId"
-                    id="consultantId"
-                    value={consultantValue}
-                  />
-                )}
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      {" "}
-                      <span className="text-danger">*</span> Title
-                    </span>
-                    <div>
-                      {title?.map((tt) => (
-                        <>
-                          <input
-                            type="radio"
-                            name="nameTittleId"
-                            id="nameTittleId"
-                            value={tt?.id}
-                            onClick={() => {
-                              setTitleValue(tt?.id);
-                              setTitleError(false);
-                            }}
-                            checked={titleValue === tt?.id ? true : false}
-                          />
-
-                          <label
-                            className="mr-3"
-                            style={{ fontWeight: 500, fontSize: "14px" }}
-                          >
-                            {tt?.name}
-                          </label>
-                        </>
-                      ))}
-                    </div>
-
-                    {titleError && (
-                      <span className="text-danger">Title is required</span>
-=======
->>>>>>> 0053f00d4c9dea0552a848954e81174a4176e62c
                     )}
+
+                    {/* <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          {" "}
+                          <span className="text-danger">*</span> Title
+                        </span>
+                        <div>
+                          {title?.map((tt) => (
+                            <>
+                              <input
+                                type="radio"
+                                name="nameTittleId"
+                                id="nameTittleId"
+                                value={tt?.id}
+                                onClick={() => {
+                                  setTitleValue(tt?.id);
+                                  setTitleError(false);
+                                }}
+                                checked={titleValue === tt?.id ? true : false}
+                              />
+
+                              <label
+                                className="mr-3"
+                                style={{ fontWeight: 500, fontSize: "14px" }}
+                              >
+                                {tt?.name}
+                              </label>
+                            </>
+                          ))}
+                        </div>
+
+                        {titleError && (
+                          <span className="text-danger">Title is required</span>
+                        )} */}
 
                     <FormGroup row>
                       <Col lg="6" md="8">
@@ -768,7 +739,10 @@ const PersonalInformation = () => {
 
                               <label
                                 className="mr-3"
-                                style={{ fontWeight: 500, fontSize: "14px" }}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: "14px",
+                                }}
                               >
                                 {tt?.name}
                               </label>
@@ -908,7 +882,10 @@ const PersonalInformation = () => {
 
                               <label
                                 className="mr-3"
-                                style={{ fontWeight: 500, fontSize: "14px" }}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: "14px",
+                                }}
                               >
                                 {tt?.name}
                               </label>
@@ -950,7 +927,10 @@ const PersonalInformation = () => {
 
                               <label
                                 className="mr-3"
-                                style={{ fontWeight: 500, fontSize: "14px" }}
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: "14px",
+                                }}
                               >
                                 {tt?.name}
                               </label>
@@ -1183,6 +1163,8 @@ const PersonalInformation = () => {
                         ) : null}
                       </Col>
                     </FormGroup>
+                    {/* </Col>
+                    </FormGroup> */}
                   </Form>
                 </TabPane>
               </TabContent>
