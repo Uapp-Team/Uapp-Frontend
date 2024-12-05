@@ -341,9 +341,7 @@ const AdmissionManagerRegister = () => {
                   </FormGroup>
                 ) : null} */}
 
-                {userType !== userTypes?.BranchAdmin &&
-                userType !== userTypes?.ProviderAdmin &&
-                userType !== userTypes?.BranchManager ? (
+                {userType === userTypes?.SystemAdmin ? (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       <span className="text-danger">*</span> Branch{" "}

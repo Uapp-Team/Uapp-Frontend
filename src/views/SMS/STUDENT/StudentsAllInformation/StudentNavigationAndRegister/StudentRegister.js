@@ -306,8 +306,7 @@ const StudentRegister = () => {
             <Row>
               <Col lg="6" md="8">
                 <>
-                  {userTypeId === userTypes?.SystemAdmin.toString() ||
-                  userTypeId === userTypes?.Admin.toString() ? (
+                  {userTypeId === userTypes?.SystemAdmin.toString() ? (
                     <FormGroup className="has-icon-left position-relative">
                       <span>
                         <span className="text-danger">*</span> Branch{" "}

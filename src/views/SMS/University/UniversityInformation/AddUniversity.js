@@ -759,8 +759,7 @@ const AddUniversity = (props) => {
                       </>
                     ) : null}
                     <Row>
-                      {userType === userTypes?.SystemAdmin.toString() ||
-                      userType === userTypes?.Admin.toString() ? (
+                      {userType === userTypes?.SystemAdmin.toString() ? (
                         <Col md="4">
                           {" "}
                           <FormGroup className="has-icon-left position-relative">
