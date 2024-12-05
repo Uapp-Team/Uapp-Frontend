@@ -179,16 +179,19 @@ export default function ApplicationList({
 
   return (
     <div>
-      <Card style={{ marginTop: "24px" }}>
-        <CardBody
-          style={{
-            height: "200px",
-            borderRadius: "0.5rem",
-            backgroundSize: "cover",
-            backgroundImage: `url(${StdDashBoardUperCarousel1})`,
-          }}
-        ></CardBody>
-      </Card>
+      {stdDashboard?.isProfileCompleted === true && (
+        <Card style={{ marginTop: "24px" }}>
+          <CardBody
+            style={{
+              height: "200px",
+              borderRadius: "0.5rem",
+              backgroundSize: "cover",
+              backgroundImage: `url(${StdDashBoardUperCarousel1})`,
+            }}
+          ></CardBody>
+        </Card>
+      )}
+
       <>
         {" "}
         {applicationInfo.map((appinfo) => (
