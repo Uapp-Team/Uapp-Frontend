@@ -932,7 +932,7 @@ const ProfilePreview = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              Medium of Instruction
+                              Language of Institution
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {edu?.languageOfInstitution}
@@ -1219,7 +1219,7 @@ const ProfilePreview = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {ielts?.reading}
@@ -1422,7 +1422,7 @@ const ProfilePreview = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {toefl?.reading}
@@ -1530,7 +1530,7 @@ const ProfilePreview = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {functions?.reading}
@@ -1776,7 +1776,7 @@ const ProfilePreview = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {pte?.reading}
@@ -2008,7 +2008,8 @@ const ProfilePreview = ({
                           </td>
 
                           <td style={{ paddingLeft: "8px" }}>
-                            +{ref?.phoneNumber}
+                            {ref?.phoneNumber && "+"}
+                            {ref?.phoneNumber}
                           </td>
                         </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>

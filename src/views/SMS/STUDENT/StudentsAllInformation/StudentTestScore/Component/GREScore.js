@@ -755,7 +755,7 @@ export default function GREScore({ applicationStudentId }) {
                 <img style={{ height: "100%" }} src={icon_gmt} alt="" />{" "}
                 <div className="pl-3">
                   <span>
-                    GRE Information Not Found.Please Add GRE Information.
+                    GRE Information has not been found. Add GRE Information.
                   </span>
                 </div>
               </div>
@@ -1137,7 +1137,7 @@ export default function GREScore({ applicationStudentId }) {
                 <img style={{ height: "100%" }} src={icon_gmt} alt="" />{" "}
                 <div className="pl-3">
                   <span>
-                    GMAT Information Not Found.Please Add GMAT Information.
+                    GMAT Information has not been found. Add GMAT Information.
                   </span>
                 </div>
               </div>

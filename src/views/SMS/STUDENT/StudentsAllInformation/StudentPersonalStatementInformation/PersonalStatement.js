@@ -136,7 +136,6 @@ const PersonalStatement = () => {
             appearance: "success",
             autoDismiss: true,
           });
-          history.push(`/addOtherInformation/${applicationStudentId}`);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",

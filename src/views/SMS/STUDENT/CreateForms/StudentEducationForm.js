@@ -342,7 +342,7 @@ const StudentEducationForm = () => {
 
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="3">
-                    <span>Medium of Instruction</span>
+                    <span>Language of Institution</span>
                   </Col>
                   <Col md="6">
                     <Input

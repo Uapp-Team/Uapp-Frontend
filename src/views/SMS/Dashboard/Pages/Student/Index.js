@@ -222,141 +222,48 @@ const Student = () => {
       <div className="row">
         <div className="col-md-8">
           <Department />
-          {/* {info ? (
-            <Card style={{ marginTop: "24px", backgroundColor: "#1890FF" }}>
-              <CardBody>
-                <div
-                  style={{ height: "60px" }}
-                  className="d-flex flex-wrap align-items-center justify-content-between px-4"
-                >
-                  <span className="text-white fw-500">
-                    You become a consultant of UAPP.
-                    <br /> Do you want to login to your consultant account?
-                  </span>
-
-                  <button
-                    className="become-consultant text-dark"
-                    onClick={convertAccount}
-                  >
-                    <i class="fas fa-sync"></i> Switch to consultant
-                  </button>
-                </div>
-              </CardBody>
-            </Card>
-          ) : (
-            <>
-              {canConsultant ? (
-                <>
-                  <img src={banner} className="w-100" alt="" />
-
-                  <Card style={{ marginTop: "24px" }}>
-                    <CardBody className="waiting-for">
-                      <div
-                        style={{ height: "60px" }}
-                        className="d-flex flex-wrap align-items-center justify-content-between px-4"
-                      >
-                        <span className="std-dashboard-style-why">
-                          Why you waiting for?
-                        </span>
-
-                        <button
-                          className="become-consultant"
-                          onClick={makeStudentConsultant}
-                        >
-                          Become Consultant
-                        </button>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </>
-              ) : null}
-            </>
-          )} */}
         </div>
         <div className="col-md-4">
-          <Card className="p-4">
-            <div className="d-flex justify-between-start">
-              {consultantData?.consultantProfileImageMedia == null ? (
-                <img
-                  src={profileImage}
-                  alt="profile_img"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50px",
-                  }}
-                />
-              ) : (
-                <img
-                  src={
-                    rootUrl +
-                    consultantData?.consultantProfileImageMedia?.fileUrl
-                  }
-                  alt="profile_img"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50px",
-                  }}
-                />
-              )}
-              <div>
-                <div className="consultant-info-style-std-dashboard">
-                  <span
-                    className="consultant-name-style-student-dashboard"
-                    onClick={redirectConsultantProfile}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {consultantData?.fullName}
-                  </span>
-                  <br />
-                  <span className="consultant-role-student-dashboard">
-                    Hello, I’m your consultant
-                  </span>
-                  <br />
-                  <span className="consultant-role-student-dashboard">
-                    I am here to assist you.
-                    <br /> Connect me when necessary
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Row>
-              <Col>
-                <ul className="uapp-ul ">
-                  {consultantData?.email === null ? null : (
-                    <li>
-                      {" "}
-                      <i className="far fa-envelope pr-2"></i>{" "}
-                      {consultantData?.email}{" "}
-                    </li>
-                  )}
+          <div className="custom-card-border p-4 mb-3 ">
+            <div className="d-flex justify-content-between">
+              <Row>
+                <Col md="3">
+                  <div className="user-profile-pic">
+                    {consultantData?.consultantProfileImageMedia == null ? (
+                      <img src={profileImage} alt="profile_img" />
+                    ) : (
+                      <img
+                        src={
+                          rootUrl +
+                          consultantData?.consultantProfileImageMedia?.fileUrl
+                        }
+                        alt="profile_img"
+                      />
+                    )}
+                  </div>
+                </Col>
+                <Col md="9">
+                  <div>
+                    <h5>Consultant</h5>
 
-                  {consultantData?.phoneNumber == null ? null : (
-                    <li>
-                      {" "}
-                      <i className="fas fa-phone pr-2"></i>{" "}
-                      {consultantData?.phoneNumber}{" "}
-                    </li>
-                  )}
-                </ul>
-              </Col>
-            </Row>
-
-            {/* <div className="necessary-link-student-dashboard">
-                    <Link style={{ textDecorationColor: "#1E98B0" }}>
-                      <span className="consultant-role-student-dashboard2">
+                    <p>{consultantData?.fullName}</p>
+                    <ul className="uapp-ul">
+                      <li>
+                        <i className="far fa-envelope pr-2 pb-2"></i>
                         {consultantData?.email}
-                      </span>
-                    </Link>
-                    <br />
-                    <Link style={{ textDecorationColor: "#1E98B0" }}>
-                      <span className="consultant-role-student-dashboard2">
-                        {consultantData?.phoneNumber}
-                      </span>
-                    </Link>
-                  </div> */}
-          </Card>
+                      </li>
+                      {consultantData?.phoneNumber == null ? null : (
+                        <li>
+                          <i className="fas fa-phone pr-2"></i>
+                          {consultantData?.phoneNumber}
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </div>
 
           <Consent
             sId={referenceId}
