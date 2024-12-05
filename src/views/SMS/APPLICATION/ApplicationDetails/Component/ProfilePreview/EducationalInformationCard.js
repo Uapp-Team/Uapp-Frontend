@@ -59,12 +59,12 @@ const EducationalInformationCard = ({
                 <Row className="text-gray">
                   <Col md="3">
                     <p>
-                      <span>Attended From</span>
+                      <span>Course Beginning Date</span>
                       <br />
                       <b>{dateFormate(edu?.attendedInstitutionFrom)}</b>
                     </p>
                     <p>
-                      <span>Attended To</span>
+                      <span>Course Ending Date</span>
                       <br />
                       <b>
                         {edu?.qualificationAchieved === true &&
@@ -103,7 +103,7 @@ const EducationalInformationCard = ({
                       <b> {edu?.countryOfEducation?.name}</b>
                     </p>
                     <p>
-                      <span>Language of Institution</span>
+                      <span>Medium of Instruction</span>
                       <br />
                       <b>{edu?.languageOfInstitution}</b>
                     </p>

@@ -210,7 +210,8 @@ const StudentEducationForm = () => {
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="3">
                     <span>
-                      Attended From <span className="text-danger">*</span>{" "}
+                      Course Beginning Date{" "}
+                      <span className="text-danger">*</span>{" "}
                     </span>
                   </Col>
                   <Col md="6">
@@ -224,7 +225,7 @@ const StudentEducationForm = () => {
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="3">
                     <span>
-                      Attended To <span className="text-danger">*</span>{" "}
+                      Course Ending Date <span className="text-danger">*</span>{" "}
                     </span>
                   </Col>
                   <Col md="6">
@@ -341,7 +342,7 @@ const StudentEducationForm = () => {
 
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="3">
-                    <span>Language of Institution</span>
+                    <span>Medium of Instruction</span>
                   </Col>
                   <Col md="6">
                     <Input

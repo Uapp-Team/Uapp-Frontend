@@ -17,16 +17,6 @@ const EducationalInformationCard = ({
     });
   }, [sId, setEducationalInfos]);
 
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
-
-  console.log(educationalInfos, sId);
-
   return (
     <div>
       <Table>
@@ -54,7 +44,9 @@ const EducationalInformationCard = ({
           >
             <Card>
               <CardBody>
-                <span className="card-heading">{edu?.educationLevel?.name}</span>
+                <span className="card-heading">
+                  {edu?.educationLevel?.name}
+                </span>
                 <div className="d-flex text-gray-70">
                   <span className="pr-4">
                     <i className="fas fa-map-marker-alt pr-2"></i>
@@ -69,12 +61,12 @@ const EducationalInformationCard = ({
                 <Row className="text-gray">
                   <Col md="3">
                     <p>
-                      <span>Attended From</span>
+                      <span>Course Beginning Date</span>
                       <br />
                       <b>{dateFormate(edu?.attendedInstitutionFrom)}</b>
                     </p>
                     <p>
-                      <span>Attended To</span>
+                      <span>Course Ending Date</span>
                       <br />
                       <b>
                         {edu?.qualificationAchieved === true &&
@@ -113,7 +105,7 @@ const EducationalInformationCard = ({
                       <b> {edu?.countryOfEducation?.name}</b>
                     </p>
                     <p>
-                      <span>Language of Institution</span>
+                      <span>Medium of Instruction</span>
                       <br />
                       <b>{edu?.languageOfInstitution}</b>
                     </p>

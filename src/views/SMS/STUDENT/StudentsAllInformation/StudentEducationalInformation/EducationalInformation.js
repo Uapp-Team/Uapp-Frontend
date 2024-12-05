@@ -215,7 +215,7 @@ const EducationalInformation = () => {
 
   // const handleAttendedFrom = (e) => {
   //   if (!e) {
-  //     setAttendedFromError("Attended From is required");
+  //     setAttendedFromError("Course Beginning Date is required");
   //     setAttendedFrom(null);
   //     return;
   //   }
@@ -232,19 +232,19 @@ const EducationalInformation = () => {
     if (e) {
       setAttendedFrom(e);
     } else {
-      setAttendedFromError("Attended From is required");
+      setAttendedFromError("Course Beginning Date is required");
     }
   };
   const handleAttendedTo = (e) => {
     if (e) {
       setAttendedTo(e);
     } else {
-      setAttendedToError("Attended To is required");
+      setAttendedToError("Course Ending Date is required");
     }
   };
   // const handleAttendedTo = (e) => {
   //   if (!e) {
-  //     setAttendedToError("Attended To is required");
+  //     setAttendedToError("Course Ending Date is required");
   //     setAttendedTo(null);
   //     return;
   //   }
@@ -671,7 +671,7 @@ const EducationalInformation = () => {
                                 <Row className="text-gray">
                                   <Col md="2">
                                     <p>
-                                      <span>Attended From</span>
+                                      <span>Course Beginning Date</span>
                                       <br />
                                       <b>
                                         {dateFormate(
@@ -680,7 +680,7 @@ const EducationalInformation = () => {
                                       </b>
                                     </p>
                                     <p>
-                                      <span>Attended To</span>
+                                      <span>Course Ending Date</span>
                                       <br />
                                       <b>
                                         {edu?.qualificationAchieved === true
@@ -727,7 +727,7 @@ const EducationalInformation = () => {
                                       <b> {edu?.countryOfEducation?.name}</b>
                                     </p>
                                     <p>
-                                      <span>Language of Institution</span>
+                                      <span>Medium of Instruction</span>
                                       <br />
                                       <b>{edu?.languageOfInstitution}</b>
                                     </p>

@@ -716,7 +716,7 @@ const Consent = ({
                                 width: "50%",
                               }}
                             >
-                              Attended From
+                              Course Beginning Date
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {dateFormate(edu?.attendedInstitutionFrom)}
@@ -729,7 +729,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              Attended To
+                              Course Ending Date
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {edu?.qualificationAchieved === true &&
@@ -810,7 +810,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              Language of Institution
+                              Medium of Instruction
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {edu?.languageOfInstitution}
@@ -1886,7 +1886,7 @@ const Consent = ({
                           </td>
 
                           <td style={{ paddingLeft: "8px" }}>
-                            {ref?.phoneNumber}
+                            +{ref?.phoneNumber}
                           </td>
                         </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>
