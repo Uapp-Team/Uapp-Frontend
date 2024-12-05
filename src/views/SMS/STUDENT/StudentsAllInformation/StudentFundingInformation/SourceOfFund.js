@@ -117,8 +117,8 @@ const SourceOfFund = ({ destination }) => {
                   {update ? (
                     <FormGroup>
                       <span>
-                        <span className="text-danger">*</span> How will you fund
-                        your study?
+                        <span className="text-danger">*</span> How do you intend
+                        to finance your education?
                       </span>
 
                       <Select

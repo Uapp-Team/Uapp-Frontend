@@ -344,8 +344,7 @@ const Registration = () => {
               <Col lg="6" md="6">
                 {!companionId && (
                   <>
-                    {userType === userTypes?.SystemAdmin.toString() ||
-                    userType === userTypes?.Admin.toString() ? (
+                    {userType === userTypes?.SystemAdmin.toString() ? (
                       <FormGroup className="has-icon-left position-relative">
                         <span>
                           <span className="text-danger">*</span> Branch{" "}
@@ -445,6 +444,7 @@ const Registration = () => {
                 ) : (
                   <>
                     {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Admin.toString() ||
                     userType === userTypes?.Companion ||
                     userType === userTypes?.Consultant ? (
                       <FormGroup>

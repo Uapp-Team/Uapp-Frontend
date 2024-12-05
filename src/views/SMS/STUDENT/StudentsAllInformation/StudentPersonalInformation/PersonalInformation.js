@@ -611,8 +611,7 @@ const PersonalInformation = () => {
                     />
 
                     <>
-                      {userType === userTypes?.SystemAdmin.toString() ||
-                      userType === userTypes?.Admin.toString() ? (
+                      {userType === userTypes?.SystemAdmin.toString() ? (
                         <FormGroup row>
                           <Col lg="6" md="8">
                             {" "}

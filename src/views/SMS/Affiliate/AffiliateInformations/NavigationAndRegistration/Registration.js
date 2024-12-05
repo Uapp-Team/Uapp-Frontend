@@ -337,8 +337,7 @@ const Registration = () => {
                 </FormGroup> */}
                 {!affiliateId && (
                   <>
-                    {userType === userTypes?.SystemAdmin.toString() ||
-                    userType === userTypes?.Admin.toString() ? (
+                    {userType === userTypes?.SystemAdmin.toString() ? (
                       <FormGroup className="has-icon-left position-relative">
                         <span>
                           <span className="text-danger">*</span> Branch{" "}
@@ -441,6 +440,7 @@ const Registration = () => {
                 ) : (
                   <>
                     {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Admin.toString() ||
                     userType === userTypes?.Affiliate ||
                     userType === userTypes?.Consultant ? (
                       <FormGroup>

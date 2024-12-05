@@ -135,6 +135,8 @@ const Index = () => {
 
     setProviderValue(0);
     setProviderLabel("Select Provider");
+    setManagerFormLabel("Select Admission Manager");
+    setManagerFormValue(0);
   };
 
   const selectManagerForm = (label, value) => {
@@ -172,6 +174,14 @@ const Index = () => {
     ) {
       setBranchError(true);
       isFormValid = false;
+    }
+
+    if (
+      managerFormValue === 0 &&
+      userType !== userTypes?.AdmissionManager.toString()
+    ) {
+      isFormValid = false;
+      setManagerFormError(true);
     }
 
     if (
@@ -260,10 +270,7 @@ const Index = () => {
               <Col md="6">
                 <input type="hidden" name="id" value={admissionOfficerId} />
 
-                {userType !== userTypes?.AdmissionManager &&
-                userType !== userTypes?.ProviderAdmin.toString() &&
-                userType !== userTypes?.BranchAdmin &&
-                userType !== userTypes?.BranchManager ? (
+                {userType === userTypes?.SystemAdmin ? (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       <span className="text-danger">*</span> Branch{" "}

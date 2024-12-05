@@ -335,6 +335,11 @@ const PersonalInformation = () => {
         isValid = false;
         setGenderError(true);
       }
+      if (!companionId || consultantValue === 0) {
+        setConsultantError(true);
+        isValid = false;
+      }
+
       if (birthDate === null) {
         isValid = false;
         setDateError("Date of birth is required");

@@ -94,6 +94,7 @@ const PersonalInformation = () => {
   useEffect(() => {
     get("BranchDD/index").then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
 
     get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
@@ -329,6 +330,10 @@ const PersonalInformation = () => {
       if (genderValue === 0) {
         isValid = false;
         setGenderError(true);
+      }
+      if (!affiliateId || consultantValue === 0) {
+        setConsultantError(true);
+        isValid = false;
       }
       if (birthDate === null) {
         isValid = false;

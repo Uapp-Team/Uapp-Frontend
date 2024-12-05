@@ -82,59 +82,91 @@ const EducationalInformation = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await get("EducationLevelDD/Index").then((res) => {
-          setEducationLevel(res);
-        });
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevel(res);
+    });
 
-        await get("CountryDD/index").then((res) => {
-          setCountry(res);
-        });
-        const navigation = await get(
-          `StudentNavbar/Get/${applicationStudentId}`
-        );
-        setNav(navigation);
+    get("CountryDD/index").then((res) => {
+      setCountry(res);
+    });
 
-        await get(
-          `EducationInformation/GetByStudentId/${applicationStudentId}`
-        ).then((res) => {
-          setEduDetails(res);
-        });
-        await get(
-          `EducationInformation/GetSummery/${applicationStudentId}`
-        ).then((res) => {
-          setSummary(res);
-        });
-        await get(
-          `ApplicationInfo/GetByStudentId/${applicationStudentId}`
-        ).then((res) => {
-          setStudentType(res?.studentTypeId);
-          if (res?.studentTypeId == 3) {
-            setForms(true);
-          } else {
-            setForms(false);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
+    get(`EducationInformation/GetSummery/${applicationStudentId}`).then(
+      (res) => {
+        setSummary(res);
       }
-    };
-    fetchData();
+    );
+    get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
+      (res) => {
+        setStudentType(res?.studentTypeId);
+        if (res?.studentTypeId == 3) {
+          setForms(true);
+        } else {
+          setForms(false);
+        }
+      }
+    );
+  }, [applicationStudentId]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    get(`StudentNavbar/Get/${applicationStudentId}`).then((res) => {
+      setNav(res);
+    });
+
+    get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
+      (res) => {
+        setEduDetails(res);
+      }
+    );
+
+    setLoading(false);
   }, [success, applicationStudentId]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       await get("EducationLevelDD/Index").then((res) => {
+  //         setEducationLevel(res);
+  //       });
 
-  // date handling
+  //       await get("CountryDD/index").then((res) => {
+  //         setCountry(res);
+  //       });
+  //       const navigation = await get(
+  //         `StudentNavbar/Get/${applicationStudentId}`
+  //       );
+  //       setNav(navigation);
 
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
+  //       await get(
+  //         `EducationInformation/GetByStudentId/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setEduDetails(res);
+  //       });
+  //       await get(
+  //         `EducationInformation/GetSummery/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setSummary(res);
+  //       });
+  //       await get(
+  //         `ApplicationInfo/GetByStudentId/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setStudentType(res?.studentTypeId);
+  //         if (res?.studentTypeId == 3) {
+  //           setForms(true);
+  //         } else {
+  //           setForms(false);
+  //         }
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [success, applicationStudentId]);
+
   const deleteCheckFunction = () => {
     setForms(false);
     if (eduDetails?.length > 0) {
@@ -192,7 +224,6 @@ const EducationalInformation = () => {
   };
   const goForward = () => {
     history.push(`/addTestScore/${applicationStudentId}`);
-    checkFunction();
   };
 
   const handleQualificationSubject = (e) => {
@@ -205,17 +236,17 @@ const EducationalInformation = () => {
     }
   };
 
-  function convertDateFormat(dateString) {
-    // Split the input date string into day, month, and year
-    const [day, month, year] = dateString.split("/");
+  // function convertDateFormat(dateString) {
+  //   // Split the input date string into day, month, and year
+  //   const [day, month, year] = dateString.split("/");
 
-    // Return the date in yyyy-MM-dd format
-    return `${year}-${month}-${day}`;
-  }
+  //   // Return the date in yyyy-MM-dd format
+  //   return `${year}-${month}-${day}`;
+  // }
 
   // const handleAttendedFrom = (e) => {
   //   if (!e) {
-  //     setAttendedFromError("Attended From is required");
+  //     setAttendedFromError("Course Beginning Date is required");
   //     setAttendedFrom(null);
   //     return;
   //   }
@@ -232,19 +263,19 @@ const EducationalInformation = () => {
     if (e) {
       setAttendedFrom(e);
     } else {
-      setAttendedFromError("Attended From is required");
+      setAttendedFromError("Course Beginning Date is required");
     }
   };
   const handleAttendedTo = (e) => {
     if (e) {
       setAttendedTo(e);
     } else {
-      setAttendedToError("Attended To is required");
+      setAttendedToError("Course Ending Date is required");
     }
   };
   // const handleAttendedTo = (e) => {
   //   if (!e) {
-  //     setAttendedToError("Attended To is required");
+  //     setAttendedToError("Course Ending Date is required");
   //     setAttendedTo(null);
   //     return;
   //   }
@@ -449,7 +480,6 @@ const EducationalInformation = () => {
 
   const handleUpdate = (id) => {
     get(`EducationInformation/Get/${id}`).then((res) => {
-      console.log(res);
       setOneData(res);
       setEducationLevelLabel(res?.educationLevel?.name);
       setEducationLevelValue(res?.educationLevel?.id);
@@ -474,7 +504,6 @@ const EducationalInformation = () => {
         : setAttendedTo("");
     });
     setShowForm(true);
-    setSuccess(!success);
     setProgramError(false);
     setCountryError(false);
     setQualificationSubjectError("");
@@ -491,7 +520,6 @@ const EducationalInformation = () => {
   }
 
   const onShow = () => {
-    setSuccess(!success);
     setShowForm(true);
     setAttendedFrom(null);
     setAttendedTo(null);
@@ -642,14 +670,12 @@ const EducationalInformation = () => {
                                     {permissions?.includes(
                                       permissionList?.Edit_Student
                                     ) ? (
-                                      <a href="#student-educational-form">
-                                        <span
-                                          className="pointer text-body"
-                                          onClick={() => handleUpdate(edu.id)}
-                                        >
-                                          Edit
-                                        </span>
-                                      </a>
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() => handleUpdate(edu.id)}
+                                      >
+                                        Edit
+                                      </span>
                                     ) : null}
                                     {" | "}
                                     {permissions?.includes(
@@ -664,14 +690,14 @@ const EducationalInformation = () => {
                                     ) : null}
                                   </span>
                                 </div>
-                                <CardSubtitle>
+                                {/* <CardSubtitle>
                                   {edu?.nameOfInstitution}
-                                </CardSubtitle>
+                                </CardSubtitle> */}
                                 <hr />
                                 <Row className="text-gray">
                                   <Col md="2">
                                     <p>
-                                      <span>Attended From</span>
+                                      <span>Course Beginning Date</span>
                                       <br />
                                       <b>
                                         {dateFormate(
@@ -680,7 +706,7 @@ const EducationalInformation = () => {
                                       </b>
                                     </p>
                                     <p>
-                                      <span>Attended To</span>
+                                      <span>Course Ending Date</span>
                                       <br />
                                       <b>
                                         {edu?.qualificationAchieved === true
@@ -693,14 +719,14 @@ const EducationalInformation = () => {
                                   </Col>
                                   <Col md="2">
                                     <p>
+                                      <span>Institution Name</span>
+                                      <br />
+                                      <b>{edu?.nameOfInstitution}</b>
+                                    </p>
+                                    <p>
                                       <span>Qualification Course</span>
                                       <br />
                                       <b> {edu?.qualificationSubject}</b>
-                                    </p>
-                                    <p>
-                                      <span>Institution Address</span>
-                                      <br />
-                                      <b>{edu?.instituteAddress}</b>
                                     </p>
                                   </Col>
                                   <Col md="2">
@@ -736,7 +762,16 @@ const EducationalInformation = () => {
                                     <p>
                                       <span>Institution Contact Number</span>
                                       <br />
-                                      <b>+{edu?.instituteContactNumber}</b>
+                                      <b>
+                                        {edu?.instituteContactNumber && "+"}
+                                        {edu?.instituteContactNumber}
+                                      </b>
+                                    </p>
+
+                                    <p>
+                                      <span>Institution Address</span>
+                                      <br />
+                                      <b>{edu?.instituteAddress}</b>
                                     </p>
                                   </Col>
                                 </Row>
@@ -893,12 +928,15 @@ const EducationalInformation = () => {
                       <PreviousButton action={goPrevious} />
                       {permissions?.includes(permissionList?.Edit_Student) &&
                       summary === false ? (
-                        <SaveButton text="Save and Next" action={goForward} />
+                        <SaveButton
+                          text="Save and Next"
+                          action={checkFunction}
+                        />
                       ) : null}
                     </>
                   ) : null}
 
-                  {eduDetails.length > 0 ? (
+                  {eduDetails?.length > 0 ? (
                     <Row className="mt-4">
                       <Col className="d-flex justify-content-between">
                         <PreviousButton action={goPrevious} />
