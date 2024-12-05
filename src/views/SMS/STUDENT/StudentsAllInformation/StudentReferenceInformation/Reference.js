@@ -483,7 +483,10 @@ const Reference = () => {
                           <td>{ref?.referenceName}</td>
                           <td>{ref?.referenceType.name}</td>
                           <td>{ref?.institute_Company}</td>
-                          <td>+{ref?.phoneNumber}</td>
+                          <td>
+                            {ref?.phoneNumber && "+"}
+                            {ref?.phoneNumber}
+                          </td>
                           <td>{ref?.emailAddress}</td>
                           <td>
                             {permissions?.includes(

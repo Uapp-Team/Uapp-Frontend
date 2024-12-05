@@ -55,6 +55,17 @@ const UserViewAns = ({
           ))}
         </Col>
         <Col md={8}>
+          {uniLable !== "Select University" && (
+            <Tag
+              title="University"
+              label={uniLable}
+              action={() => {
+                setUniValue(0);
+                setUniLable("Select University");
+              }}
+            />
+          )}
+
           <Tag
             title="Category"
             label={categoryName}

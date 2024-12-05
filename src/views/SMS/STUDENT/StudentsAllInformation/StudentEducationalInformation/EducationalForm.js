@@ -114,7 +114,7 @@ const EducationalForm = ({
             </FormGroup>
             <FormGroup>
               <DMYPicker
-                label="Attended From"
+                label="Course Beginning Date"
                 value={attendedFrom}
                 setValue={handleAttendedFrom}
                 error={attendedFromError}
@@ -159,7 +159,7 @@ const EducationalForm = ({
               <>
                 <FormGroup>
                   <DMYPicker
-                    label="Attended To"
+                    label="Course Ending Date"
                     value={attendedTo}
                     setValue={handleAttendedTo}
                     error={attendedToError}
@@ -230,7 +230,7 @@ const EducationalForm = ({
               <span className="text-danger">{institutionError}</span>
             </FormGroup>
             <FormGroup>
-              <span>Language of Institution / MOI</span>
+              <span>Medium of Instruction (MOI)</span>
 
               <Input
                 className="form-mt"
