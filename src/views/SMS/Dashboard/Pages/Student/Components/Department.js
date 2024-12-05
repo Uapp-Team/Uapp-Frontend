@@ -72,7 +72,7 @@ const Department = () => {
                   departmentInfo?.map((item, i) => (
                     <div class="item" key={i}>
                       <div className="dep-card">
-                        <div className="w-100 text-center">
+                        <div className="w-100 text-center mb-2">
                           <Link to={`/searchBydepartment/${item.id}`}>
                             <img
                               src={rootUrl + item?.departmentImage?.fileUrl}
@@ -83,7 +83,7 @@ const Department = () => {
                         </div>
                         <Link
                           to={`/searchBydepartment/${item.id}`}
-                          className="dep-title pt-2"
+                          className="dep-title"
                         >
                           {item?.name?.slice(0, 25)}
                           {item?.name?.length > 25 && "..."}
