@@ -77,13 +77,13 @@ const Department = () => {
                             <img
                               src={rootUrl + item?.departmentImage?.fileUrl}
                               alt=""
-                              className="dep-img"
+                              // className="dep-img"
                             />
                           </Link>
                         </div>
                         <Link
                           to={`/searchBydepartment/${item.id}`}
-                          className="dep-title"
+                          className="dep-title pt-2"
                         >
                           {item?.name?.slice(0, 25)}
                           {item?.name?.length > 25 && "..."}
