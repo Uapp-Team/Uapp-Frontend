@@ -348,8 +348,7 @@ const UpdateProvider = () => {
           <p className="section-title">Company or Institution Details</p>
           <form onSubmit={handleSubmit}>
             <input type="hidden" name="id" id="id" value={providerInfo?.id} />
-            {userType === userTypes?.SystemAdmin ||
-            userType === userTypes?.Admin ? (
+            {userType === userTypes?.SystemAdmin ? (
               <FormGroup row className="has-icon-left position-relative">
                 <Col lg="6" md="8">
                   {" "}

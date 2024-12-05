@@ -123,8 +123,7 @@ const PersonalForm = ({
         <p className="section-title">Personal Details </p>
         <input type="hidden" name="id" id="id" value={companionId} />
 
-        {userType === userTypes?.SystemAdmin.toString() ||
-        userType === userTypes?.Admin.toString() ? (
+        {userType === userTypes?.SystemAdmin.toString() ? (
           <FormGroup row className="has-icon-left position-relative">
             <Col lg="6" md="8">
               {" "}
@@ -151,7 +150,9 @@ const PersonalForm = ({
         userType !== userTypes?.Consultant ? (
           <FormGroup row>
             <Col lg="6" md="8">
-              <span>Consultant</span>
+              <span>
+                <span className="text-danger">*</span>Consultant
+              </span>
               <Select
                 className="form-mt"
                 options={consultantName}

@@ -226,8 +226,7 @@ const ProviderForm = (props) => {
           <form onSubmit={handleSubmit}>
             <Row>
               <Col md="4">
-                {userType === userTypes?.SystemAdmin ||
-                userType === userTypes?.Admin ? (
+                {userType === userTypes?.SystemAdmin ? (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       <span className="text-danger">*</span> Branch{" "}
