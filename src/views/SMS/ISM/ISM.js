@@ -55,7 +55,7 @@ const ISM = () => {
           {permissions?.includes(permissionList?.View_Queries) && (
             <div className="d-flex justify-content-between align-items-center University-information-list-text mb-4">
               <p className="d-flex align-items-center mr-3 mb-0">
-                Manage Queries for University information manage
+                Manage queries for University Information
               </p>
               <ButtonForFunction
                 func={handleManageQueries}
@@ -68,8 +68,8 @@ const ISM = () => {
 
           <GroupButton
             list={[
-              { id: "1", name: "University" },
-              { id: "2", name: "All Question" },
+              { id: "1", name: "Universities" },
+              { id: "2", name: "All Questions" },
             ]}
             value={tab}
             setValue={setTab}

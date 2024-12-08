@@ -15,7 +15,7 @@ const Question = ({ defaultData, refetch }) => {
     <>
       <div className="px-4 mt-3 mb-4">
         <div className="d-flex align-items-start justify-content-between ">
-          <p className="card-heading">{defaultData?.title}</p>
+          <p className="ism-question-title">{defaultData?.title}</p>
 
           <p className="text-right">
             {permissions?.includes(permissionList?.Update_Question) &&
@@ -51,7 +51,7 @@ const Question = ({ defaultData, refetch }) => {
           </p>
 
           <Link to={`/answersByQue/${defaultData?.id}`} className="text-black">
-            {defaultData?.isCommon ? "View answar" : "View all answares"}{" "}
+            {defaultData?.isCommon ? "View answer" : "View all answers"}{" "}
             <AiOutlineRight />
           </Link>
         </div>
