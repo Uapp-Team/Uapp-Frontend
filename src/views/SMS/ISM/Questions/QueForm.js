@@ -84,6 +84,15 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
     defaultValues: { questionType: defaultData.questionType },
   });
 
+  const handleDelete = (value) => {
+    setIsDeletePreAns(value);
+    if (value === true && ansReq === false) {
+      setStatusValue(1);
+    } else {
+      setStatusValue(3);
+    }
+  };
+
   const handleReqAns = (value) => {
     setAnsReq(value);
     if (value === false) {
@@ -174,6 +183,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             ],
         isMandatoryForAll: check,
         universities: universityValue,
+        isDeletePreAns: isDeletePreAns,
       };
 
       setIsSubmit(true);
@@ -293,7 +303,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
             name="isDeletePreAns"
             label="Delete all existing answers for this question across all universities?"
             defaultValue={isDeletePreAns}
-            onChange={(e) => setIsDeletePreAns(e.target.checked)}
+            onChange={(e) => handleDelete(e.target.checked)}
           />
         )}
 

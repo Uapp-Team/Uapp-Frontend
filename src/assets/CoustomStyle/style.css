@@ -5643,6 +5643,13 @@ span.ant-upload-list-item-name {
 }
 
 /* ISM */
+
+.ism-question-title {
+  font-weight: 600;
+  font-size: 18px;
+  color: #019088;
+}
+
 .ism-category-card {
   background-color: #edf2f2;
   border: 0.5px solid #689e9e;

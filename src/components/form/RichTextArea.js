@@ -25,7 +25,9 @@ const RichTextArea = ({
         { indent: "-1" },
         { indent: "+1" },
       ],
-      ["link", "image", "video"],
+      // [{ align: ["left"] }],
+      // [{ align: ["center", "left", "right"] }],
+      ["link", "image"],
     ],
   };
 

@@ -72,7 +72,7 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
             </p>
           )}
         </div>
-        {!byQues && <p className="card-heading">{defaultData?.title}</p>}
+        {!byQues && <p className="ism-question-title">{defaultData?.title}</p>}
 
         {defaultData?.status !== 1 ? (
           <>
