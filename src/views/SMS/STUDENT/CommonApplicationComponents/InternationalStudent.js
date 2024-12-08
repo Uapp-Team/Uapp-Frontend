@@ -448,7 +448,7 @@
 
 //             <FormGroup className="has-icon-left position-relative">
 //               <span className="aaa">
-//                 Have You Ever Been Refused Visa to Any Other Country?{" "}
+//                 Have you ever had a visa application refused by any other country?{" "}
 //                 <span className="text-danger">*</span>{" "}
 //               </span>
 

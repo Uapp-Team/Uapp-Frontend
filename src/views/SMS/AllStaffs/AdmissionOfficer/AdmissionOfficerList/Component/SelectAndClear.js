@@ -34,14 +34,8 @@ const SelectAndClear = ({
   setProValue,
   setIsTyping,
   setSearchStr,
+  branch,
 }) => {
-  const [branch, setBranch] = useState([]);
-
-  useEffect(() => {
-    get(`BranchDD/Index`).then((res) => {
-      setBranch(res);
-    });
-  }, [setBranchLabel, setBranchValue]);
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
@@ -89,7 +83,7 @@ const SelectAndClear = ({
               <Typing
                 name="search"
                 id="search"
-                placeholder="Name"
+                placeholder="Name, Email"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

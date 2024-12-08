@@ -248,16 +248,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : 0
   );
 
-  // const [percentageLabel, setPercentageLabel] = useState(
-  //   AdmissionManagerApplicationPaging?.percentageLabel
-  //     ? AdmissionManagerApplicationPaging?.percentageLabel
-  //     : "Assesment percentage"
-  // );
-  // const [percentageValue, setPercentageValue] = useState(
-  //   AdmissionManagerApplicationPaging?.percentageValue
-  //     ? AdmissionManagerApplicationPaging?.percentageValue
-  //     : 0
-  // );
+  const [percentageLabel, setPercentageLabel] = useState(
+    AdmissionManagerApplicationPaging?.percentageLabel
+      ? AdmissionManagerApplicationPaging?.percentageLabel
+      : "Assesment percentage"
+  );
+
+  const [percentageValue, setPercentageValue] = useState(
+    AdmissionManagerApplicationPaging?.percentageValue
+      ? AdmissionManagerApplicationPaging?.percentageValue
+      : 0
+  );
 
   // application list
   const [applicationList, setApplicationList] = useState([]);
@@ -322,8 +323,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         orderValue: orderValue && orderValue,
         documentStatusLabel: documentStatusLabel && documentStatusLabel,
         documentStatusValue: documentStatusValue && documentStatusValue,
-        // percentageLabel: percentageLabel && percentageLabel,
-        // percentageValue: percentageValue && percentageValue,
+        percentageLabel: percentageLabel && percentageLabel,
+        percentageValue: percentageValue && percentageValue,
       })
     );
   }, [
@@ -359,8 +360,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     intake,
     documentStatusLabel,
     documentStatusValue,
-    // percentageLabel,
-    // percentageValue,
+    percentageLabel,
+    percentageValue,
   ]);
 
   // for all dropdown
@@ -620,7 +621,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     if (currentUser !== undefined) {
       if (universityId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${100}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -630,7 +631,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         });
       } else if (consultantId !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${100}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -640,7 +641,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         });
       } else {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${100}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -675,7 +676,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     selector,
     intakeRngValue,
     documentStatusValue,
-    // percentageValue,
+    percentageValue,
   ]);
 
   // Function for open delete modal
@@ -934,7 +935,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     action={() => {}}
                   />
                 </Col>
-                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Filter
                     data={[
                       {
@@ -943,33 +944,32 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                       },
                       {
                         id: 20,
-                        name: '20%'
+                        name: "20%",
                       },
                       {
                         id: 40,
-                        name: '40%'
+                        name: "40%",
                       },
                       {
                         id: 60,
-                        name: '60%'
+                        name: "60%",
                       },
                       {
                         id: 80,
-                        name: '80%'
+                        name: "80%",
                       },
                       {
                         id: 100,
-                        name: '100%'
+                        name: "100%",
                       },
-                
                     ]}
                     label={percentageLabel}
                     setLabel={setPercentageLabel}
                     value={percentageValue}
                     setValue={setPercentageValue}
-                    action={() => { }}
+                    action={() => {}}
                   />
-                </Col> */}
+                </Col>
               </>
             ) : null}
           </Row>

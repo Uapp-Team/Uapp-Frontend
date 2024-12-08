@@ -27,6 +27,9 @@ const CompanionTeamMembersApplication = () => {
   const [dataPerPage, setDataPerPage] = useState(15);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [enrollDD, setEnrollDD] = useState([]);
+  const [enrollLabel, setEnrollLabel] = useState("Enrolment Status");
+  const [enrollValue, setEnrollValue] = useState(0);
   const [entity, setEntity] = useState(0);
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -52,8 +55,14 @@ const CompanionTeamMembersApplication = () => {
   }, []);
 
   useEffect(() => {
+    get("EnrollmentStatusDD/Index").then((res) => {
+      setEnrollDD(res);
+    });
+  }, []);
+
+  useEffect(() => {
     get(
-      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}`
+      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${false}`
     ).then((res) => {
       setLoading(false);
       setApplicationList(res?.models);
@@ -61,13 +70,17 @@ const CompanionTeamMembersApplication = () => {
       // setEntity(res?.totalEntity);
       // setSerialNumber(res?.firstSerialNumber);
     });
-  }, [currentPage, dataPerPage, companionId]);
+  }, [currentPage, dataPerPage, companionId, enrollValue]);
 
   // toggle1 dropdown
   const toggle1 = () => {
     setDropdownOpen1((prev) => !prev);
   };
 
+  const selectEnrollDD = (label, value) => {
+    setEnrollLabel(label);
+    setEnrollValue(value);
+  };
   // toggle dropdown
   const toggle = () => {
     setDropdownOpen((prev) => !prev);

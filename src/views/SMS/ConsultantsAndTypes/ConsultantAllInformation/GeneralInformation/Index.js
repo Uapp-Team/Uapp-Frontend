@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../components/core/User";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import GeneralInformationForm from "./Component/GeneralInformationForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 
 const GeneralInformation = () => {
   const [nameTitle, setNameTitle] = useState([]);
@@ -55,20 +59,23 @@ const GeneralInformation = () => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
 
-    get("ConsultantDD/ByUser").then((res) => {
+  useEffect(() => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsParent(res);
     });
 
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
+  }, [branchValue]);
 
-    get("BranchDD/index").then((res) => {
-      //
-      setBranch(res);
-    });
-
+  useEffect(() => {
     get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
@@ -80,11 +87,15 @@ const GeneralInformation = () => {
         // setSubmitData(true);
         setTypeValue(res?.consultantType?.id);
         setTypeLabel(res?.consultantType?.name);
-        setParentValue(res?.parentConsultant?.id);
+        setParentValue(
+          res?.parentConsultant?.id ? res?.parentConsultant?.id : 0
+        );
         setParentLabel(
-          res?.parentConsultant?.firstName +
-            " " +
-            res?.parentConsultant?.lastName
+          res?.parentConsultant?.firstName
+            ? res?.parentConsultant?.firstName +
+                " " +
+                res?.parentConsultant?.lastName
+            : "Select Parent Consultant"
         );
         setBranchValue(res?.branch?.id);
         setBranchLabel(res?.branch?.name);
@@ -140,6 +151,10 @@ const GeneralInformation = () => {
     setBranchError(false);
     setBranchLabel(label);
     setBranchValue(value);
+    setTypeLabel("Select Consultant Type");
+    setTypeValue(0);
+    setParentLabel("Select Parent Consultant");
+    setParentValue(0);
   };
 
   const handleFirstNameChange = (e) => {
@@ -198,15 +213,21 @@ const GeneralInformation = () => {
     //   setAcceptError(true);
     // }
 
-    if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
-      isValid = false;
-      setParentError(true);
-    }
-
-    // if (parentValue === 0) {
+    // if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
     //   isValid = false;
     //   setParentError(true);
     // }
+
+    if (BranchAdmin() || BranchManager()) {
+      setParentError(false);
+    } else {
+      if (userTypeId !== userTypes?.Consultant && parentValue === 0) {
+        isValid = false;
+        setParentError(true);
+      } else {
+        setParentError(false);
+      }
+    }
 
     if (titleValue === 0) {
       isValid = false;

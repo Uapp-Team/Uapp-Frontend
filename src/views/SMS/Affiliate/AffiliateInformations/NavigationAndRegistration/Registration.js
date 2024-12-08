@@ -18,12 +18,13 @@ const Registration = () => {
   const userType = localStorage.getItem("userType");
   const userId = localStorage.getItem("referenceId");
   const current_user = JSON.parse(localStorage.getItem("current_user"));
-  console.log(current_user);
   const [consParent, setConsParent] = useState([]);
   // const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Affiliate");
   const [parentValue, setParentValue] = useState(affiliateId ? affiliateId : 0);
-
+  // const [branchLabel, setBranchLabel] = useState("Select Branch");
+  // const [branchValue, setBranchValue] = useState(0);
+  // const [branchError, setBranchError] = useState(false);
   const [consultant, setConsultant] = useState([]);
   const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
@@ -31,7 +32,7 @@ const Registration = () => {
   const [consultantError, setConsultantError] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-  const [parentError, setParentError] = useState(false);
+  // const [parentError, setParentError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [title, setTitle] = useState([]);
   const [titleValue, setTitleValue] = useState(0);
@@ -47,17 +48,30 @@ const Registration = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const [phoneNumber, setphoneNumber] = useState("");
   const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("London office");
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchError, setBranchError] = useState(false);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
-  }, []);
-  useEffect(() => {
-    get("consultantdd/ActiveConsultant").then((res) => {
-      setConsultant(res);
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
-    get("AffiliateDD").then((res) => {
+  }, []);
+
+  useEffect(() => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+      setConsultant(res);
+      res?.length === 1 && setConsultantValue(res[0].id);
+    });
+  }, [branchValue]);
+
+  useEffect(() => {
+    get(`AffiliateDD/Index/${consultantValue}`).then((res) => {
       setConsParent(res);
 
       if (affiliateId) {
@@ -65,7 +79,7 @@ const Registration = () => {
         setParentLabel(result?.name);
       }
     });
-  }, [affiliateId]);
+  }, [affiliateId, consultantValue]);
 
   const consParentMenu = consParent?.map((consParentOptions) => ({
     label: consParentOptions?.name,
@@ -73,9 +87,24 @@ const Registration = () => {
   }));
 
   const selectParentCons = (label, value) => {
-    setParentError(false);
+    // setParentError(false);
     setParentLabel(label);
     setParentValue(value);
+  };
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+    setConsultantValue(0);
+    setconsultantLabel("Select Consultant");
+    setParentValue(0);
+    setParentLabel("Select Parent Affiliate");
   };
 
   const consultantName = consultant?.map((cons) => ({
@@ -87,6 +116,8 @@ const Registration = () => {
     setConsultantError(false);
     setconsultantLabel(label);
     setConsultantValue(value);
+    setParentValue(0);
+    setParentLabel("Select Parent Affiliate");
   };
 
   const handleFirstNameChange = (e) => {
@@ -158,6 +189,17 @@ const Registration = () => {
     //   isValid = false;
     //   setParentError(true);
     // }
+
+    if (branchValue === 0) {
+      setBranchError(true);
+      isValid = false;
+    }
+
+    if (!affiliateId && consultantValue === 0) {
+      setConsultantError(true);
+      isValid = false;
+    }
+
     if (titleValue === 0) {
       isValid = false;
       setTitleError(true);
@@ -183,6 +225,11 @@ const Registration = () => {
     if (emailExistError === false) {
       isValid = false;
       setEmailExistError(emailExistError);
+    }
+
+    if (!phoneNumber) {
+      isValid = false;
+      setphoneNUmberError("Phone number is required");
     }
     return isValid;
   };
@@ -273,48 +320,107 @@ const Registration = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                {userType === userTypes?.Consultant.toString() ? (
+                {/* <FormGroup>
+                  <span>Branch</span>
+                  <DefaultDropdown
+                    label={branchLabel}
+                    setLabel={setBranchLabel}
+                    value={branchValue}
+                    setValue={setBranchValue}
+                    url="BranchDD/Index"
+                    name="branchId"
+                    error={branchError}
+                    setError={setBranchError}
+                    errorText="Branch is Required"
+                    action={() => {}}
+                  />
+                </FormGroup> */}
+                {!affiliateId && (
                   <>
-                    {userId && (
-                      <>
-                        <input
-                          type="hidden"
-                          id="consultantId"
-                          name="consultantId"
-                          value={userId}
+                    {userType === userTypes?.SystemAdmin.toString() ? (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>
+                          <span className="text-danger">*</span> Branch{" "}
+                        </span>
+
+                        <Select
+                          className="form-mt"
+                          options={branchOptions}
+                          value={{ label: branchLabel, value: branchValue }}
+                          onChange={(opt) => selectBranch(opt.label, opt.value)}
+                          // name="BranchId"
+                          // id="BranchId"
+                          // isDisabled={branchId ? true : false}
                         />
-                        <p className="fw-600">{current_user?.displayName}</p>
-                      </>
-                    )}
+
+                        {branchError && (
+                          <span className="text-danger">
+                            Branch is required
+                          </span>
+                        )}
+                      </FormGroup>
+                    ) : null}
                   </>
-                ) : (
+                )}
+
+                {!affiliateId && (
                   <>
-                    {id ? (
-                      <input
-                        type="hidden"
-                        id="consultantId"
-                        name="consultantId"
-                        value={id}
-                      />
+                    {" "}
+                    {userType === userTypes?.Consultant.toString() ? (
+                      <>
+                        {userId && (
+                          <>
+                            <input
+                              type="hidden"
+                              id="consultantId"
+                              name="consultantId"
+                              value={userId}
+                            />
+                            <p className="fw-600">
+                              {current_user?.displayName}
+                            </p>
+                          </>
+                        )}
+                      </>
                     ) : (
                       <>
-                        {userType !== userTypes?.Affiliate && (
-                          <FormGroup>
-                            <span>Consultant</span>
+                        {id ? (
+                          <input
+                            type="hidden"
+                            id="consultantId"
+                            name="consultantId"
+                            value={id}
+                          />
+                        ) : (
+                          <>
+                            {userType !== userTypes?.Affiliate && (
+                              <FormGroup>
+                                <span>
+                                  {" "}
+                                  <span className="text-danger">*</span>
+                                  Consultant
+                                </span>
 
-                            <Select
-                              options={consultantName}
-                              value={{
-                                label: consultantLabel,
-                                value: consultantValue,
-                              }}
-                              onChange={(opt) =>
-                                selectConsultant(opt.label, opt.value)
-                              }
-                              name="consultantId"
-                              id="consultantId"
-                            />
-                          </FormGroup>
+                                <Select
+                                  options={consultantName}
+                                  value={{
+                                    label: consultantLabel,
+                                    value: consultantValue,
+                                  }}
+                                  onChange={(opt) =>
+                                    selectConsultant(opt.label, opt.value)
+                                  }
+                                  name="consultantId"
+                                  id="consultantId"
+                                />
+                                {consultantError && (
+                                  <span className="text-danger">
+                                    Consultant is required
+                                  </span>
+                                )}
+                              </FormGroup>
+                            )}
+                          </>
                         )}
                       </>
                     )}
@@ -333,7 +439,10 @@ const Registration = () => {
                   </>
                 ) : (
                   <>
-                    {userType !== userTypes?.Affiliate && (
+                    {userType === userTypes?.SystemAdmin.toString() ||
+                    userType === userTypes?.Admin.toString() ||
+                    userType === userTypes?.Affiliate ||
+                    userType === userTypes?.Consultant ? (
                       <FormGroup>
                         <span>Parent Affiliate</span>
 
@@ -349,7 +458,7 @@ const Registration = () => {
                           isDisabled={affiliateId ? true : false}
                         />
                       </FormGroup>
-                    )}
+                    ) : null}
                   </>
                 )}
 

@@ -208,26 +208,15 @@ const UniversityList = lazy(() =>
   import("./views/SMS/University/UniversityList.js")
 );
 
-const UniversityListForSharingFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UniversityListForSharingFAQ.js"
-  )
-);
-const UniversityInformationDocumentsFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UniversityInformationDocumentsFAQ.js"
-  )
+const ISM = lazy(() => import("./views/SMS/ISM/ISM.js"));
+const ManageQuery = lazy(() => import("./views/SMS/ISM/ManageQuery.js"));
+const AnswersByQue = lazy(() => import("./views/SMS/ISM/AnswersByQue.js"));
+const ISMDocuments = lazy(() => import("./views/SMS/ISM/ISMDocuments.js"));
+const ISMUserView = lazy(() => import("./views/SMS/ISM/UserView/UserView.js"));
+const UserViewUniversity = lazy(() =>
+  import("./views/SMS/ISM/UserView/UserViewUniversity.js")
 );
 
-const UsersAnswerForFAQ = lazy(() =>
-  import(
-    "./views/SMS/UniversityInformationSharing&FAQ/UsersAnswerForFaq/UsersAnswerForFAQ.js"
-  )
-);
-
-const UniversityDetails = lazy(() =>
-  import("./views/SMS/University/UniversityDetails.jsx")
-);
 const UniversityProfile = lazy(() =>
   import("./views/SMS/University/UniversityProfile/UniversityProfile")
 );
@@ -1420,6 +1409,9 @@ const UserContent = lazy(() =>
 const UserContentHub = lazy(() =>
   import("./views/SMS/ContentForUser/ContentHub.js")
 );
+const LiveIntake = lazy(() => import("./views/SMS/LiveIntake/LiveIntake.js"));
+const MenuList = lazy(() => import("./views/SMS/MenuItems/MenuList.js"));
+const AddMenuForm = lazy(() => import("./views/SMS/MenuItems/AddMenuForm.js"));
 
 // Affiliate path start
 const AffiliateTransation = lazy(() =>
@@ -1457,6 +1449,7 @@ const AffiliateListRegistration = lazy(() =>
     "./views/SMS/Affiliate/AffiliateInformations/NavigationAndRegistration/Registration.js"
   )
 );
+
 const AffiliateProfile = lazy(() =>
   import("./views/SMS/Affiliate/AffiliateProfile/AffiliateProfile.js")
 );
@@ -1574,6 +1567,21 @@ const CompanionApplicationListForSystem = lazy(() =>
 const CompanionTeamMembersApplication = lazy(() =>
   import(
     "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersApplication.js"
+  )
+);
+const CompanionTeamMembersRegisteredApplication = lazy(() =>
+  import(
+    "./views/SMS/Companion/CompanionTeammembersApplication/CompanionTeamMembersRegisteredApplication.js"
+  )
+);
+const AffiliateTeamMembersApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersApplication.js"
+  )
+);
+const AffiliateTeamMembersRegisteredApplication = lazy(() =>
+  import(
+    "./views/SMS/Affiliate/AffiliateTeammembersApplication/AffiliateTeamMembersRegisteredApplication.js"
   )
 );
 
@@ -1775,6 +1783,7 @@ class AppRouter extends React.Component {
 
                   <AppRoute path="/content" component={UserContent} />
                   <AppRoute path="/contentHub" component={UserContentHub} />
+                  <AppRoute path="/live-intake" component={LiveIntake} />
 
                   {/* Affiliate paths */}
                   <AppRoute
@@ -1982,6 +1991,14 @@ class AppRouter extends React.Component {
                     path="/affiliate-student-list/:affiliateId"
                     component={AffiliateStudentListForSystem}
                   />
+                  <AppRoute
+                    path="/affiliate-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersApplication}
+                  />
+                  <AppRoute
+                    path="/affiliate-registered-application-List-Team-Members/:affiliateId"
+                    component={AffiliateTeamMembersRegisteredApplication}
+                  />
 
                   <AppRoute
                     path="/companion-earning"
@@ -2003,6 +2020,10 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/companion-application-List-Team-Members/:companionId"
                     component={CompanionTeamMembersApplication}
+                  />
+                  <AppRoute
+                    path="/companion-registered-application-List-Team-Members/:companionId"
+                    component={CompanionTeamMembersRegisteredApplication}
                   />
                   <AppRoute
                     path="/companion-team-List"
@@ -2147,6 +2168,24 @@ class AppRouter extends React.Component {
                   />
 
                   {/* Companion paths */}
+
+                  <AppRoute
+                    path="/menu-List"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? MenuList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/menu-add/:menuId?"
+                    component={
+                      permissions?.includes(permissionList?.View_Consultant)
+                        ? AddMenuForm
+                        : NotAuthorized
+                    }
+                  />
 
                   {/* Admission manager project deadline paths */}
 
@@ -3446,20 +3485,34 @@ class AppRouter extends React.Component {
                   {/* University For Sharing & FAQ starts here */}
                   <AppRoute
                     path="/universityList-sharing-faq"
-                    component={UniversityListForSharingFAQ}
+                    component={ISM}
+                  />
+                  <AppRoute
+                    path="/manageQuery"
+                    component={
+                      permissions?.includes(permissionList?.View_Queries)
+                        ? ManageQuery
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/answersByQue/:uId"
+                    component={AnswersByQue}
+                  />
+
+                  <AppRoute path="/informationView" component={ISMUserView} />
+                  <AppRoute
+                    path="/informationViewUniversity"
+                    component={UserViewUniversity}
                   />
 
                   <AppRoute
-                    path="/university-information-doc-faq"
-                    component={UniversityInformationDocumentsFAQ}
-                  />
-                  <AppRoute
                     path="/university-information-doc-faq-by-id/:Uid"
-                    component={UniversityInformationDocumentsFAQ}
+                    component={ISMDocuments}
                   />
                   <AppRoute
-                    path="/users-answer-for-fAQ/:Uid"
-                    component={UsersAnswerForFAQ}
+                    path="/university-information-doc-faq"
+                    component={ISMDocuments}
                   />
 
                   {/* University For Sharing & FAQ starts here */}

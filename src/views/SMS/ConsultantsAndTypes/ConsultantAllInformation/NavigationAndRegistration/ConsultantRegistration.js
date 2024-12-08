@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
-import { Card, CardBody, Form, FormGroup, Row, Col, Input } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import CancelButton from "../../../../../components/buttons/CancelButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../components/core/User";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -45,30 +50,27 @@ const ConsultantRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [registerId, setRegisterId] = useState();
   const [emailExistError, setEmailExistError] = useState(true);
+  const userTypeId = localStorage.getItem("userType");
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
 
-    get("ConsultantDD/ByUser").then((res) => {
+  useEffect(() => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsParent(res);
     });
 
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
-
-    get("BranchDD/index").then((res) => {
-      setBranch(res);
-      setBranchValue(res[0]?.id);
-      if (branchId) {
-        const result = res?.find((ans) => ans?.id.toString() === branchId);
-        setBranchLabel(result?.name);
-        setBranchValue(result?.id);
-      }
-    });
-  }, [branchId]);
+  }, [branchValue]);
 
   const consParentMenu = consParent?.map((consParentOptions) => ({
     label: consParentOptions?.name,
@@ -100,6 +102,10 @@ const ConsultantRegistration = () => {
     setBranchError(false);
     setBranchLabel(label);
     setBranchValue(value);
+    setTypeLabel("Select Consultant Type");
+    setTypeValue(0);
+    setParentLabel("Select Parent Consultant");
+    setParentValue(0);
   };
 
   const handleFirstNameChange = (e) => {
@@ -154,9 +160,15 @@ const ConsultantRegistration = () => {
       isValid = false;
       setAcceptError(true);
     }
-    if (parentValue === 0) {
-      isValid = false;
-      setParentError(true);
+    if (BranchAdmin() || BranchManager()) {
+      setParentError(false);
+    } else {
+      if (parentValue === 0) {
+        isValid = false;
+        setParentError(true);
+      } else {
+        setParentError(false);
+      }
     }
     if (titleValue === 0) {
       isValid = false;
@@ -260,34 +272,42 @@ const ConsultantRegistration = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                {branch.length > 1 ? (
-                  <FormGroup className="has-icon-left position-relative">
-                    <span>
-                      Branch <span className="text-danger"></span>
-                    </span>
+                {userTypeId === userTypes?.SystemAdmin ? (
+                  <>
+                    {" "}
+                    {branch.length > 1 ? (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>
+                          Branch <span className="text-danger"></span>
+                        </span>
 
-                    <Select
-                      className="form-mt"
-                      options={branchOptions}
-                      value={{ label: branchLabel, value: branchValue }}
-                      onChange={(opt) => selectBranch(opt.label, opt.value)}
-                      name="BranchId"
-                      id="BranchId"
-                      isDisabled={branchId ? true : false}
-                    />
+                        <Select
+                          className="form-mt"
+                          options={branchOptions}
+                          value={{ label: branchLabel, value: branchValue }}
+                          onChange={(opt) => selectBranch(opt.label, opt.value)}
+                          name="BranchId"
+                          id="BranchId"
+                          isDisabled={branchId ? true : false}
+                        />
 
-                    {branchError && (
-                      <span className="text-danger">Branch is required</span>
+                        {branchError && (
+                          <span className="text-danger">
+                            Branch is required
+                          </span>
+                        )}
+                      </FormGroup>
+                    ) : (
+                      <input
+                        type="hidden"
+                        name="BranchId"
+                        id="BranchId"
+                        value={branchValue}
+                      />
                     )}
-                  </FormGroup>
-                ) : (
-                  <input
-                    type="hidden"
-                    name="BranchId"
-                    id="BranchId"
-                    value={branchValue}
-                  />
-                )}
+                  </>
+                ) : null}
+
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     <span className="text-danger">*</span>Consultant Type
@@ -372,7 +392,10 @@ const ConsultantRegistration = () => {
 
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    <span className="text-danger">*</span>Parent Consultant
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
+                    Parent Consultant
                   </span>
 
                   <Select

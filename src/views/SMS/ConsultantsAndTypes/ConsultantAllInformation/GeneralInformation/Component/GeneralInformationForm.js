@@ -1,7 +1,11 @@
 import React from "react";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import Select from "react-select";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
+import {
+  BranchAdmin,
+  BranchManager,
+} from "../../../../../../components/core/User";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const GeneralInformationForm = ({
@@ -78,6 +82,30 @@ const GeneralInformationForm = ({
 
         <Row>
           <Col lg="6" md="8">
+            {userTypeId === userTypes?.Consultant ? (
+              <input type="hidden" value={branchValue} />
+            ) : branchOptions.length > 1 ? (
+              <FormGroup className="has-icon-left position-relative">
+                <span>
+                  <span className="text-danger">*</span>
+                  Branch
+                </span>
+
+                <Select
+                  className="form-mt"
+                  options={branchOptions}
+                  value={{ label: branchLabel, value: branchValue }}
+                  onChange={(opt) => selectBranch(opt.label, opt.value)}
+                  name="BranchId"
+                  id="BranchId"
+                />
+
+                {branchError && (
+                  <span className="text-danger">Branch is required</span>
+                )}
+              </FormGroup>
+            ) : null}
+
             {userTypeId === userTypes?.Consultant ? null : (
               <FormGroup className="has-icon-left position-relative">
                 <span>
@@ -168,7 +196,9 @@ const GeneralInformationForm = ({
               {userTypeId === userTypes?.Consultant.toString() ? (
                 <FormGroup className="has-icon-left position-relative">
                   <span className="mr-2">
-                    <span className="text-danger">*</span>
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
                     Parent Consultant
                   </span>
                   {consData?.parentConsultant?.firstName}{" "}
@@ -178,7 +208,9 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    <span className="text-danger">*</span>
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
                     Parent Consultant
                   </span>
 
@@ -200,30 +232,6 @@ const GeneralInformationForm = ({
               )}
             </>
             {/* )} */}
-
-            {userTypeId === userTypes?.Consultant ? (
-              <input type="hidden" value={branchValue} />
-            ) : branchOptions.length > 1 ? (
-              <FormGroup className="has-icon-left position-relative">
-                <span>
-                  <span className="text-danger">*</span>
-                  Branch
-                </span>
-
-                <Select
-                  className="form-mt"
-                  options={branchOptions}
-                  value={{ label: branchLabel, value: branchValue }}
-                  onChange={(opt) => selectBranch(opt.label, opt.value)}
-                  name="BranchId"
-                  id="BranchId"
-                />
-
-                {branchError && (
-                  <span className="text-danger">Branch is required</span>
-                )}
-              </FormGroup>
-            ) : null}
 
             <FormGroup>
               <span>

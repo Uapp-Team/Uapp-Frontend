@@ -67,10 +67,16 @@ const UpdateProvider = () => {
   const [imgError, setImgError] = useState(false);
   const [coverImgError, setCoverImgError] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branch, setBranch] = useState([]);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchError, setBranchError] = useState(false);
 
   useEffect(() => {
     get(`Provider/GetViewModel/${id}`).then((res) => {
       console.log(res);
+      setBranchValue(res?.branchId);
+      setBranchLabel(res?.branchName);
       setProviderInfo(res);
       setProviderTypeLabel(res?.providerType?.name);
       setProviderTypeValue(res?.providerType?.id);
@@ -100,6 +106,23 @@ const UpdateProvider = () => {
       setProviderStatus(res);
     });
   }, []);
+
+  useEffect(() => {
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+    });
+  }, []);
+
+  const branchOptions = branch?.map((b) => ({
+    label: b.name,
+    value: b.id,
+  }));
+
+  const selectBranch = (label, value) => {
+    setBranchError(false);
+    setBranchLabel(label);
+    setBranchValue(value);
+  };
 
   const ProStatus = providerStatus?.map((proStatus) => ({
     label: proStatus.name,
@@ -325,6 +348,29 @@ const UpdateProvider = () => {
           <p className="section-title">Company or Institution Details</p>
           <form onSubmit={handleSubmit}>
             <input type="hidden" name="id" id="id" value={providerInfo?.id} />
+            {userType === userTypes?.SystemAdmin ? (
+              <FormGroup row className="has-icon-left position-relative">
+                <Col lg="6" md="8">
+                  {" "}
+                  <span>
+                    <span className="text-danger">*</span> Branch{" "}
+                    <span className="text-danger"></span>
+                  </span>
+                  <Select
+                    className="form-mt"
+                    options={branchOptions}
+                    value={{ label: branchLabel, value: branchValue }}
+                    onChange={(opt) => selectBranch(opt.label, opt.value)}
+                    name="BranchId"
+                    id="BranchId"
+                    // isDisabled={branchId ? true : false}
+                  />
+                  {branchError && (
+                    <span className="text-danger">Branch is required</span>
+                  )}
+                </Col>
+              </FormGroup>
+            ) : null}
 
             {userType === userTypes.ProviderAdmin.toString() ? null : (
               <>

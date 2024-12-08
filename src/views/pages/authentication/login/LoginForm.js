@@ -5,12 +5,12 @@ import { history } from "../../../../history";
 import axios from "axios";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-import { rootUrl } from "../../../../constants/constants";
+import { androidAppUrl, rootUrl } from "../../../../constants/constants";
 import SetStorage from "../../../SMS/TableColumn/SetStorage";
 import get from "../../../../helpers/get";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -201,13 +201,16 @@ const LoginForm = () => {
         >
           <InputGroup>
             <Input
-              type={isPasswordVisible ? 'text' : 'password'}
+              type={isPasswordVisible ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => handlePassword(e)}
               style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
             />
-            <InputGroupText onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
+            <InputGroupText
+              onClick={togglePasswordVisibility}
+              style={{ cursor: "pointer" }}
+            >
               {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
             </InputGroupText>
           </InputGroup>
@@ -262,6 +265,40 @@ const LoginForm = () => {
           <Link to="/providerRegister" className="register-button-hover">
             Provider
           </Link>
+        </div>
+      </div>
+
+      <div className="Download-app-section">
+        <h4 className="mb-3">Download for mobile</h4>
+
+        <div className="d-flex">
+          {/* <a href={androidAppUrl}>
+            {" "}
+            <div className="apple-download mr-2 d-flex justify-content-center align-items-center">
+              <i class="fab fa-app-store-ios"></i>
+              <div className="mt-2">
+                {" "}
+                <p className="ml-2">
+                  <span>Download for the</span>
+                  <br />
+                  Apple users
+                </p>
+              </div>
+            </div>
+          </a> */}
+
+          <a href={androidAppUrl}>
+            <div className="android-download d-flex justify-content-center align-items-center">
+              <i class="fab fa-android"></i>
+              <div className="mt-2">
+                <p className="ml-2">
+                  <span>GET IT ON</span>
+                  <br />
+                  Android users
+                </p>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
 

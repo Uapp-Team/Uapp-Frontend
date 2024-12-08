@@ -183,7 +183,7 @@ const AllScoresCard = ({
                   <p>
                     <span>Exam Date</span>
                     <br />
-                    <b> {handleDate(duolingo?.examDate)}</b>
+                    <b> {dateFormate(duolingo?.examDate)}</b>
                   </p>
                 </Col>
                 <Col lg="3">
@@ -273,7 +273,7 @@ const AllScoresCard = ({
                   <p>
                     <span> Exam Date</span>
                     <br />
-                    <b> {handleDate(toefl?.examDate)}</b>
+                    <b> {dateFormate(toefl?.examDate)}</b>
                   </p>
                 </Col>
                 <Col lg="3">
@@ -361,7 +361,7 @@ const AllScoresCard = ({
                   <p>
                     <span> Exam Date</span>
                     <br />
-                    <b> {handleDate(functions?.examDate)}</b>
+                    <b> {dateFormate(functions?.examDate)}</b>
                   </p>
                 </Col>
                 <Col lg="3">
@@ -644,7 +644,7 @@ const AllScoresCard = ({
         }}
       ></FormGroup>
 
-      {(ielts !== null ||
+      {((ielts !== null ||
         duolingo !== null ||
         toefl !== null ||
         functions !== null ||
@@ -652,7 +652,8 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-      isQualification === false ? (
+        isQualification === false) ||
+      isQualification === null ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (

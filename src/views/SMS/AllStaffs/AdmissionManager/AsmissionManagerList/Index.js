@@ -105,8 +105,10 @@ const Index = () => {
   const [progress, setProgress] = useState(false);
   const [mId, setMId] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-
+  const [branch, setBranch] = useState([]);
   const [tableData, setTableData] = useState([]);
+
+  const branchId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     const tableColumnAdmissionManager = JSON.parse(
@@ -153,10 +155,26 @@ const Index = () => {
   ]);
 
   useEffect(() => {
-    get("ProviderDD/Index").then((res) => {
-      setProviderDD(res);
-      setLoading(false);
+    get(`BranchDD/Index`).then((res) => {
+      setBranch(res);
     });
+
+    if (userType === userTypes?.BranchAdmin) {
+      get(`ProviderDD/Index/${branchId}`).then((res) => {
+        setProviderDD(res);
+        setLoading(false);
+      });
+    } else {
+      get(`ProviderDD/Index/${branchValue}`).then((res) => {
+        setProviderDD(res);
+        setLoading(false);
+      });
+    }
+
+    // get(`ProviderDD/Index/${branchValue}`).then((res) => {
+    //   setProviderDD(res);
+    //   setLoading(false);
+    // });
 
     get("NameTittleDD/index").then((res) => {
       setNameTitleDD(res);
@@ -187,6 +205,7 @@ const Index = () => {
         setLoading(false);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     currentPage,
     userType,
@@ -579,6 +598,8 @@ const Index = () => {
           handleKeyDown={handleKeyDown}
           handleClearSearch={handleClearSearch}
           setIsTyping={setIsTyping}
+          branch={branch}
+          setBranch={setBranch}
         ></AddMissionManagerClear>
 
         <AddMissionManagerAdd

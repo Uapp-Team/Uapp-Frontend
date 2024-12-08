@@ -29,6 +29,9 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
+  const [enrollDD, setEnrollDD] = useState([]);
+  const [enrollLabel, setEnrollLabel] = useState("Enrolment Status");
+  const [enrollValue, setEnrollValue] = useState(0);
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -54,7 +57,7 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
 
   useEffect(() => {
     get(
-      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}`
+      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${false}`
     ).then((res) => {
       setLoading(false);
       setApplicationList(res?.models);
@@ -62,7 +65,17 @@ const CompanionApplicationListForSystem = ({ currentUser }) => {
       // setEntity(res?.totalEntity);
       // setSerialNumber(res?.firstSerialNumber);
     });
-  }, [currentPage, currentUser, dataPerPage, companionId]);
+  }, [currentPage, currentUser, dataPerPage, companionId, enrollValue]);
+
+  useEffect(() => {
+    get("EnrollmentStatusDD/Index").then((res) => {
+      setEnrollDD(res);
+    });
+  }, []);
+  const selectEnrollDD = (label, value) => {
+    setEnrollLabel(label);
+    setEnrollValue(value);
+  };
 
   // toggle1 dropdown
   const toggle1 = () => {
