@@ -8,7 +8,7 @@ async function remove(url, authToken = "") {
     expireDateHandler();
     const res = await Axios.delete(`${rootUrl}${url}`, {
       headers: {
-        "authorization": AuthStr,
+        authorization: AuthStr,
       },
     });
     return await res?.data?.message;

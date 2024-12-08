@@ -59,20 +59,23 @@ const GeneralInformation = () => {
     get("NameTittleDD/index").then((res) => {
       setTitle(res);
     });
+    get("BranchDD/index").then((res) => {
+      setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
+    });
+  }, []);
 
-    get("ConsultantDD/ByUser").then((res) => {
+  useEffect(() => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsParent(res);
     });
 
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
+  }, [branchValue]);
 
-    get("BranchDD/index").then((res) => {
-      //
-      setBranch(res);
-    });
-
+  useEffect(() => {
     get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
@@ -148,6 +151,10 @@ const GeneralInformation = () => {
     setBranchError(false);
     setBranchLabel(label);
     setBranchValue(value);
+    setTypeLabel("Select Consultant Type");
+    setTypeValue(0);
+    setParentLabel("Select Parent Consultant");
+    setParentValue(0);
   };
 
   const handleFirstNameChange = (e) => {

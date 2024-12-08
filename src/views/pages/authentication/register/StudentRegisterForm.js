@@ -1,19 +1,27 @@
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Col } from "reactstrap";
-import { rootUrl } from "../../../../constants/constants";
-import { cms } from "../../../../constants/constants";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
-import notify from "../../../../assets/img/notify.png";
-import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import post from "../../../../helpers/post";
-import get from "../../../../helpers/get";
-import containsDigit from '../../../../helpers/nameContainDigit';
-import { EyeOutlined, EyeInvisibleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Spin } from "antd";
-
+import { Link, useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
+import {
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupText,
+  Label,
+} from "reactstrap";
+import notify from "../../../../assets/img/notify.png";
+import { rootUrl } from "../../../../constants/constants";
+import containsDigit from "../../../../helpers/nameContainDigit";
 
 const StudentRegisterForm = () => {
   const { invitationcode, email } = useParams();
@@ -44,7 +52,8 @@ const StudentRegisterForm = () => {
   const [valid, setValid] = useState(true);
   const [emailExistError, setEmailExistError] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
   const [progress, setProgress] = useState(false);
 
   useEffect(() => {
@@ -113,8 +122,7 @@ const StudentRegisterForm = () => {
       setLastNameError("Last name is required");
     } else if (containsDigit(value)) {
       setLastNameError("Last name cannot contain digits");
-    }
-    else {
+    } else {
       setLastNameError("");
     }
   };
@@ -180,26 +188,31 @@ const StudentRegisterForm = () => {
     const password = e.target.value;
     setPassword(password);
 
-    // Separate regex checks for each condition
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[@$!%*?&]/.test(password);
-    const isValidLength = password.length >= 8;
-
-    // Set error messages for specific cases
+    // Define validation conditions
+    const errors = [];
     if (password === "") {
-      setPasswordError("Provide a valid password");
-    } else if (!isValidLength) {
-      setPasswordError("Password must be at least 8 characters long");
-    } else if (!hasUpperCase) {
-      setPasswordError("Password must contain at least one uppercase letter");
-    } else if (!hasLowerCase) {
-      setPasswordError("Password must contain at least one lowercase letter");
-    } else if (!hasNumber) {
-      setPasswordError("Password must contain at least one number");
-    } else if (!hasSpecialChar) {
-      setPasswordError("Password must contain at least one special character (@, $, !, %, *, ?, &)");
+      errors.push("Password is required");
+    } else {
+      if (password.length < 8) {
+        errors.push("At least 8 characters");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("One uppercase letter");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("One lowercase letter");
+      }
+      if (!/\d/.test(password)) {
+        errors.push("One number");
+      }
+      if (!/[@$!%*?&]/.test(password)) {
+        errors.push("One special character");
+      }
+    }
+
+    // Join errors into a single message or clear the error
+    if (errors.length > 0) {
+      setPasswordError(errors.join(" & "));
     } else {
       setPasswordError(""); // Clear the error if everything is valid
     }
@@ -211,8 +224,7 @@ const StudentRegisterForm = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setIsConfirmPasswordVisible((prevState) => !prevState);
-  }
-
+  };
 
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
@@ -330,7 +342,7 @@ const StudentRegisterForm = () => {
             appearance: "success",
             autoDismiss: true,
           });
-          history.push('/studentAccountCreated')
+          history.push("/studentAccountCreated");
         } else {
           addToast(data?.message || "Registration Failed", {
             appearance: "error",
@@ -338,15 +350,17 @@ const StudentRegisterForm = () => {
           });
         }
       } catch (error) {
-        addToast("An error occurred while registering. Please try again later.", {
-          appearance: "error",
-          autoDismiss: true,
-        });
+        addToast(
+          "An error occurred while registering. Please try again later.",
+          {
+            appearance: "error",
+            autoDismiss: true,
+          }
+        );
         return;
       } finally {
         setProgress(false);
       }
-
     }
   };
 
@@ -541,13 +555,16 @@ const StudentRegisterForm = () => {
           >
             <InputGroup>
               <Input
-                type={isPasswordVisible ? 'text' : 'password'}
+                type={isPasswordVisible ? "text" : "password"}
                 placeholder="Enter Password"
                 value={password}
                 onChange={handlePassword}
-                style={{ height: 'calc(1.5em + 1.3rem + 2px)' }}
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
               />
-              <InputGroupText onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
+              <InputGroupText
+                onClick={togglePasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
                 {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
               </InputGroupText>
             </InputGroup>
@@ -562,7 +579,7 @@ const StudentRegisterForm = () => {
             <InputGroup>
               <Input
                 className="inside-placeholder"
-                type={isConfirmPasswordVisible ? 'text' : 'password'}
+                type={isConfirmPasswordVisible ? "text" : "password"}
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => {
@@ -570,8 +587,15 @@ const StudentRegisterForm = () => {
                 }}
                 style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
               />
-              <InputGroupText onClick={toggleConfirmPasswordVisibility} style={{ cursor: 'pointer' }}>
-                {isConfirmPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              <InputGroupText
+                onClick={toggleConfirmPasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {isConfirmPasswordVisible ? (
+                  <EyeOutlined />
+                ) : (
+                  <EyeInvisibleOutlined />
+                )}
               </InputGroupText>
             </InputGroup>
             <span className="text-danger">{confirmPasswordError}</span>

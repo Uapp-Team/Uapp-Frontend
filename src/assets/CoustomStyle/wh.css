@@ -411,6 +411,10 @@
   width: 290px;
 }
 
+.w-400px {
+  width: 400px;
+}
+
 .mw-70px {
   min-width: 70px;
 }

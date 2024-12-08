@@ -14,9 +14,9 @@ const RichTextArea = ({
 }) => {
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ font: [] }],
-      [{ size: [] }],
+      // [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      // [{ font: [] }],
+      // [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { list: "ordered" },
@@ -25,24 +25,30 @@ const RichTextArea = ({
         { indent: "-1" },
         { indent: "+1" },
       ],
-      ["link", "image", "video"],
+      // [{ align: ["left"] }],
+      // [{ align: ["center", "left", "right"] }],
+      ["link", "image"],
     ],
   };
 
   const hangleChange = (value) => {
-    onChange(value);
-    action && action();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(value, "text/html");
+    const textContent = doc.body.textContent.trim();
+
+    textContent ? onChange(value) : onChange("");
+    textContent && action && action();
   };
 
   return (
     <Form.Group className={`mb-3 ${className}`}>
       {label && <span>{label}</span>}
-      <div className="h-300px">
+      <div className="h-250px">
         <ReactQuill
           theme="snow"
           value={defaultValue}
           modules={modules}
-          className="h-75"
+          className="h-83"
           onChange={hangleChange}
         />
       </div>

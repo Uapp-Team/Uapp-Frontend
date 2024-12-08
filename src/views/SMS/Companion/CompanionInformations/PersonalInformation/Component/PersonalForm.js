@@ -83,6 +83,11 @@ const PersonalForm = ({
   consultantValue,
   consultantLabel,
   consultantName,
+  branchOptions,
+  branchValue,
+  branchError,
+  branchLabel,
+  selectBranch,
 }) => {
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -118,6 +123,61 @@ const PersonalForm = ({
         <p className="section-title">Personal Details </p>
         <input type="hidden" name="id" id="id" value={companionId} />
 
+        {userType === userTypes?.SystemAdmin.toString() ? (
+          <FormGroup row className="has-icon-left position-relative">
+            <Col lg="6" md="8">
+              {" "}
+              <span>
+                <span className="text-danger">*</span> Branch{" "}
+              </span>
+              <Select
+                className="form-mt"
+                options={branchOptions}
+                value={{ label: branchLabel, value: branchValue }}
+                onChange={(opt) => selectBranch(opt.label, opt.value)}
+                // name="BranchId"
+                // id="BranchId"
+                // isDisabled={branchId ? true : false}
+              />
+              {branchError && (
+                <span className="text-danger">Branch is required</span>
+              )}
+            </Col>
+          </FormGroup>
+        ) : null}
+
+        {userType !== userTypes?.Companion &&
+        userType !== userTypes?.Consultant ? (
+          <FormGroup row>
+            <Col lg="6" md="8">
+              <span>
+                <span className="text-danger">*</span>Consultant
+              </span>
+              <Select
+                className="form-mt"
+                options={consultantName}
+                value={{
+                  label: consultantLabel,
+                  value: consultantValue,
+                }}
+                onChange={(opt) => selectConsultant(opt.label, opt.value)}
+                name="consultantId"
+                id="consultantId"
+              />
+              {consultantError && (
+                <span className="text-danger">Consultant is required.</span>
+              )}
+            </Col>
+          </FormGroup>
+        ) : (
+          <input
+            type="hidden"
+            name="consultantId"
+            id="consultantId"
+            value={consultantValue}
+          />
+        )}
+
         {userType !== userTypes?.Companion ? (
           <FormGroup row>
             <Col lg="6" md="8">
@@ -149,35 +209,6 @@ const PersonalForm = ({
           />
         )}
 
-        {userType !== userTypes?.Companion &&
-        userType !== userTypes?.Consultant ? (
-          <FormGroup row>
-            <Col lg="6" md="8">
-              <span>Consultant</span>
-              <Select
-                className="form-mt"
-                options={consultantName}
-                value={{
-                  label: consultantLabel,
-                  value: consultantValue,
-                }}
-                onChange={(opt) => selectConsultant(opt.label, opt.value)}
-                name="consultantId"
-                id="consultantId"
-              />
-              {consultantError && (
-                <span className="text-danger">Consultant is required.</span>
-              )}
-            </Col>
-          </FormGroup>
-        ) : (
-          <input
-            type="hidden"
-            name="consultantId"
-            id="consultantId"
-            value={consultantValue}
-          />
-        )}
         <FormGroup row>
           <Col lg="6" md="8">
             <span>

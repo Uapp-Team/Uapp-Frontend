@@ -716,7 +716,7 @@ const Consent = ({
                                 width: "50%",
                               }}
                             >
-                              Attended From
+                              Course Beginning Date
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {dateFormate(edu?.attendedInstitutionFrom)}
@@ -729,7 +729,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              Attended To
+                              Course Ending Date
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {edu?.qualificationAchieved === true &&
@@ -1097,7 +1097,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {ielts?.reading}
@@ -1300,7 +1300,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {toefl?.reading}
@@ -1408,7 +1408,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {functions?.reading}
@@ -1654,7 +1654,7 @@ const Consent = ({
                                 paddingLeft: "8px",
                               }}
                             >
-                              reading
+                              Reading
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {pte?.reading}
@@ -1886,6 +1886,7 @@ const Consent = ({
                           </td>
 
                           <td style={{ paddingLeft: "8px" }}>
+                            {ref?.phoneNumber && "+"}
                             {ref?.phoneNumber}
                           </td>
                         </tr>
