@@ -356,6 +356,12 @@
   width: 40%;
   min-height: 100vh;
   overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.right-container::-webkit-scrollbar {
+  display: none;
 }
 
 @media (max-width: 767.98px) {

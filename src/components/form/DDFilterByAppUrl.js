@@ -14,8 +14,6 @@ const DDFilterByAppUrl = ({
   setError,
   className = "mb-3",
 }) => {
-  // const { data } = Get("key", url);
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -25,15 +23,6 @@ const DDFilterByAppUrl = ({
     });
   }, [url]);
 
-  // const list = data?.data;
-  // const list = [
-  //   {
-  //     id: 0,
-  //     name: "All ",
-  //   },
-  //   ...fetchData,
-  // ];
-  console.log(data);
   const option = data?.map((item) => ({
     label: item?.name,
     value: item?.id,

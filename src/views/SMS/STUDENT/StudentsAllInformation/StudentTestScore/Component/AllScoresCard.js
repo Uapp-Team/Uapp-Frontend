@@ -644,7 +644,7 @@ const AllScoresCard = ({
         }}
       ></FormGroup>
 
-      {(ielts !== null ||
+      {((ielts !== null ||
         duolingo !== null ||
         toefl !== null ||
         functions !== null ||
@@ -652,7 +652,8 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-      isQualification === false ? (
+        isQualification === false) ||
+      isQualification === null ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (

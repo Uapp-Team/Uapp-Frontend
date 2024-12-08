@@ -31,7 +31,7 @@ const DefaultDropdown = ({
     setError(false);
     setLabel(label);
     setValue(value);
-    action(value);
+    action && action(label, value);
   };
 
   return (

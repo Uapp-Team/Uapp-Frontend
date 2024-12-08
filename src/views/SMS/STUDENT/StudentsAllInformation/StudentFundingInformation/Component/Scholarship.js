@@ -120,7 +120,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     // setButtonStatus(true);
@@ -130,7 +130,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
     } else {
       if (scholarshipFunding?.id) {
         setProgress(true);
-        put(`Scholarship/Update`, subData).then((res) => {
+        await put(`Scholarship/Update`, subData).then((res) => {
           setProgress(false);
           addToast(res?.data?.message, {
             appearance: "success",
@@ -139,11 +139,12 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
         });
         setScholarshipFunding({});
         setSuccess(!success);
+        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
         get(`Scholarship/GetByStudentId/${studentid}`).then((res) => {
           setScholarshipFunding(res);
         });
       } else {
-        post(`Scholarship/Create`, subData).then((res) => {
+        await post(`Scholarship/Create`, subData).then((res) => {
           // setButtonStatus(false);
           setProgress(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {

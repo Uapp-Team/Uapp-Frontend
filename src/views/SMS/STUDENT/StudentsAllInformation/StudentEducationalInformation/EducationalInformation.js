@@ -4,7 +4,6 @@ import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
-  CardSubtitle,
   Col,
   FormGroup,
   Input,
@@ -26,6 +25,7 @@ import { dateFormate } from "../../../../../components/date/calenderFormate";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import Loader from "../../../Search/Loader/Loader";
 import EducationalForm from "./EducationalForm";
 
 const EducationalInformation = () => {
@@ -75,6 +75,10 @@ const EducationalInformation = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
   const [studentType, setStudentType] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [summary, setSummary] = useState(null);
+  const [nav, setNav] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     get("EducationLevelDD/Index").then((res) => {
@@ -85,9 +89,9 @@ const EducationalInformation = () => {
       setCountry(res);
     });
 
-    get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
+    get(`EducationInformation/GetSummery/${applicationStudentId}`).then(
       (res) => {
-        setEduDetails(res);
+        setSummary(res);
       }
     );
     get(`ApplicationInfo/GetByStudentId/${applicationStudentId}`).then(
@@ -100,17 +104,68 @@ const EducationalInformation = () => {
         }
       }
     );
+  }, [applicationStudentId]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    get(`StudentNavbar/Get/${applicationStudentId}`).then((res) => {
+      setNav(res);
+    });
+
+    get(`EducationInformation/GetByStudentId/${applicationStudentId}`).then(
+      (res) => {
+        setEduDetails(res);
+      }
+    );
+
+    setLoading(false);
   }, [success, applicationStudentId]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       await get("EducationLevelDD/Index").then((res) => {
+  //         setEducationLevel(res);
+  //       });
 
-  // date handling
+  //       await get("CountryDD/index").then((res) => {
+  //         setCountry(res);
+  //       });
+  //       const navigation = await get(
+  //         `StudentNavbar/Get/${applicationStudentId}`
+  //       );
+  //       setNav(navigation);
 
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
+  //       await get(
+  //         `EducationInformation/GetByStudentId/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setEduDetails(res);
+  //       });
+  //       await get(
+  //         `EducationInformation/GetSummery/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setSummary(res);
+  //       });
+  //       await get(
+  //         `ApplicationInfo/GetByStudentId/${applicationStudentId}`
+  //       ).then((res) => {
+  //         setStudentType(res?.studentTypeId);
+  //         if (res?.studentTypeId == 3) {
+  //           setForms(true);
+  //         } else {
+  //           setForms(false);
+  //         }
+  //       });
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [success, applicationStudentId]);
+
   const deleteCheckFunction = () => {
     setForms(false);
     if (eduDetails?.length > 0) {
@@ -119,20 +174,17 @@ const EducationalInformation = () => {
   };
   const checkFunction = () => {
     setForms(false);
-    if (eduDetails?.length > 0) {
-      setForms(false);
-      get(
-        `EducationInformation/DeleteByStudentId/${applicationStudentId}`
-      ).then((res) => {
-        addToast("Educational details deleted successfully", {
-          appearance: "error",
-          autoDismiss: "true",
-        });
-        setSuccess(!success);
-        setShowDeleteOption(false);
-        history.push(`/addTestScore/${applicationStudentId}`);
+    remove(
+      `EducationInformation/DeleteByStudentId/${applicationStudentId}`
+    ).then((res) => {
+      addToast("Educational details Updated successfully", {
+        appearance: "success",
+        autoDismiss: "true",
       });
-    }
+      setSuccess(!success);
+      setShowDeleteOption(false);
+      history.push(`/addTestScore/${applicationStudentId}`);
+    });
   };
 
   const educationLevelName = educationLevel?.map((edu) => ({
@@ -183,17 +235,17 @@ const EducationalInformation = () => {
     }
   };
 
-  function convertDateFormat(dateString) {
-    // Split the input date string into day, month, and year
-    const [day, month, year] = dateString.split("/");
+  // function convertDateFormat(dateString) {
+  //   // Split the input date string into day, month, and year
+  //   const [day, month, year] = dateString.split("/");
 
-    // Return the date in yyyy-MM-dd format
-    return `${year}-${month}-${day}`;
-  }
+  //   // Return the date in yyyy-MM-dd format
+  //   return `${year}-${month}-${day}`;
+  // }
 
   // const handleAttendedFrom = (e) => {
   //   if (!e) {
-  //     setAttendedFromError("Attended From is required");
+  //     setAttendedFromError("Course Beginning Date is required");
   //     setAttendedFrom(null);
   //     return;
   //   }
@@ -210,19 +262,19 @@ const EducationalInformation = () => {
     if (e) {
       setAttendedFrom(e);
     } else {
-      setAttendedFromError("Attended From is required");
+      setAttendedFromError("Course Beginning Date is required");
     }
   };
   const handleAttendedTo = (e) => {
     if (e) {
       setAttendedTo(e);
     } else {
-      setAttendedToError("Attended To is required");
+      setAttendedToError("Course Ending Date is required");
     }
   };
   // const handleAttendedTo = (e) => {
   //   if (!e) {
-  //     setAttendedToError("Attended To is required");
+  //     setAttendedToError("Course Ending Date is required");
   //     setAttendedTo(null);
   //     return;
   //   }
@@ -427,7 +479,6 @@ const EducationalInformation = () => {
 
   const handleUpdate = (id) => {
     get(`EducationInformation/Get/${id}`).then((res) => {
-      console.log(res);
       setOneData(res);
       setEducationLevelLabel(res?.educationLevel?.name);
       setEducationLevelValue(res?.educationLevel?.id);
@@ -452,7 +503,6 @@ const EducationalInformation = () => {
         : setAttendedTo("");
     });
     setShowForm(true);
-    setSuccess(!success);
     setProgramError(false);
     setCountryError(false);
     setQualificationSubjectError("");
@@ -469,7 +519,6 @@ const EducationalInformation = () => {
   }
 
   const onShow = () => {
-    setSuccess(!success);
     setShowForm(true);
     setAttendedFrom(null);
     setAttendedTo(null);
@@ -492,6 +541,19 @@ const EducationalInformation = () => {
     setDurationError("");
   };
 
+  const handleYesClick = () => {
+    setSelectedOption(true);
+    setSummary(true);
+    setShowForm(true);
+  };
+
+  const handleNoClick = () => {
+    setSelectedOption(false);
+    setSummary(false);
+    setShowForm(false);
+    deleteCheckFunction();
+  };
+
   return (
     <div>
       <BreadCrumb
@@ -499,364 +561,396 @@ const EducationalInformation = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={"5"}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <TabContent activeTab={activetab}>
+                <TabPane tabId="5">
+                  <p className="section-title">Education Informations</p>
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={"5"}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => {}}
-      />
-      <Card>
-        <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="5">
-              <p className="section-title">Education Informations</p>
-
-              {studentType != 3 && eduDetails.length === 0 && (
-                <Row>
-                  <Col md="4">
-                    <FormGroup>
-                      <span>
-                        <span className="text-danger"> *</span>
-                        Have You Ever Studied?{" "}
-                      </span>
-
-                      <div
-                        className="d-flex flex-wrap form-mt"
-                        style={{ marginLeft: "17px" }}
-                      >
-                        <div>
-                          <Input
-                            type="radio"
-                            name="radioYes"
-                            id="radioYes"
-                            onClick={() => {
-                              setForms(true);
-                            }}
-                            checked={forms === true}
-                          />
+                  {studentType != 3 && eduDetails.length === 0 && (
+                    <Row>
+                      <Col md="4">
+                        <FormGroup>
                           <span>
-                            <label style={{ fontSize: "14px" }} for="radioYes">
-                              Yes
-                            </label>
+                            <span className="text-danger"> *</span>
+                            Have You Ever Studied?{" "}
                           </span>
-                        </div>
-                        <div className="ml-5">
-                          <Input
-                            checked={forms === false}
-                            type="radio"
-                            name="radioNo"
-                            id="radioNo"
-                            onClick={deleteCheckFunction}
-                          />
-                          <span>
-                            <label style={{ fontSize: "14px" }} for="radioNo">
-                              No
-                            </label>
-                          </span>
-                        </div>
-                      </div>
-                    </FormGroup>
-                  </Col>
-                </Row>
-              )}
-              {showDeleteOption === true ? (
-                <>
-                  <FormGroup row>
-                    <Col>
-                      <CancelButton
-                        cancel={() => {
-                          setForms(true);
-                          setShowDeleteOption(false);
-                        }}
-                      />
-                      <SaveButton
-                        progress={progress}
-                        buttonStatus={buttonStatus}
-                        action={checkFunction}
-                      />
-                    </Col>
-                  </FormGroup>
-                </>
-              ) : null}
-              {showDeleteOption === true ? null : (
-                <>
-                  <div className="row mx-0">
-                    {eduDetails?.map((edu, i) => (
-                      <div
-                        className="col-12 border p-2 rounded mb-3"
-                        key={edu.id}
-                        style={{ textAlign: "left" }}
-                      >
-                        <Card>
-                          <CardBody>
-                            <div className="d-flex justify-content-between">
-                              <span className="card-heading">
-                                {edu?.educationLevel?.name}
-                              </span>
 
+                          <div
+                            className="d-flex flex-wrap form-mt"
+                            style={{ marginLeft: "17px" }}
+                          >
+                            <div>
+                              <Input
+                                type="radio"
+                                name="radioYes"
+                                id="radioYes"
+                                onClick={handleYesClick}
+                                checked={summary === true}
+                              />
                               <span>
-                                {permissions?.includes(
-                                  permissionList?.Edit_Student
-                                ) ? (
-                                  <a href="#student-educational-form">
-                                    <span
-                                      className="pointer text-body"
-                                      onClick={() => handleUpdate(edu.id)}
-                                    >
-                                      Edit
-                                    </span>
-                                  </a>
-                                ) : null}
-                                {" | "}
-                                {permissions?.includes(
-                                  permissionList?.Edit_Student
-                                ) ? (
-                                  <span
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => toggleDanger(edu)}
-                                  >
-                                    Delete
-                                  </span>
-                                ) : null}
+                                <label
+                                  style={{ fontSize: "14px" }}
+                                  for="radioYes"
+                                >
+                                  Yes
+                                </label>
                               </span>
                             </div>
-                            <CardSubtitle>
-                              {edu?.nameOfInstitution}
-                            </CardSubtitle>
-                            <hr />
-                            <Row className="text-gray">
-                              <Col md="2">
-                                <p>
-                                  <span>Attended From</span>
-                                  <br />
-                                  <b>
-                                    {dateFormate(edu?.attendedInstitutionFrom)}
-                                  </b>
-                                </p>
-                                <p>
-                                  <span>Attended To</span>
-                                  <br />
-                                  <b>
-                                    {edu?.qualificationAchieved === true
-                                      ? dateFormate(edu?.attendedInstitutionTo)
-                                      : "Continue..."}
-                                  </b>
-                                </p>
-                              </Col>
-                              <Col md="2">
-                                <p>
-                                  <span>Qualification Course</span>
-                                  <br />
-                                  <b> {edu?.qualificationSubject}</b>
-                                </p>
-                                <p>
-                                  <span>Institution Address</span>
-                                  <br />
-                                  <b>{edu?.instituteAddress}</b>
-                                </p>
-                              </Col>
-                              <Col md="2">
-                                <p>
-                                  <span>Duration</span>
-                                  <br />
-                                  <b>{edu?.duration}</b>
-                                </p>
-
-                                <p>
-                                  <span>Result In Percentage</span>
-                                  <br />
-                                  <b>
-                                    {edu?.qualificationAchieved === true
-                                      ? edu?.finalGrade
-                                      : "N/A"}
-                                  </b>
-                                </p>
-                              </Col>
-                              <Col md="3">
-                                <p>
-                                  <span>Country of Education</span>
-                                  <br />
-                                  <b> {edu?.countryOfEducation?.name}</b>
-                                </p>
-                                <p>
-                                  <span>Language of Institution</span>
-                                  <br />
-                                  <b>{edu?.languageOfInstitution}</b>
-                                </p>
-                              </Col>
-                              <Col md="3">
-                                <p>
-                                  <span>Institution Contact Number</span>
-                                  <br />
-                                  <b>+{edu?.instituteContactNumber}</b>
-                                </p>
-                              </Col>
-                            </Row>
-                          </CardBody>
-                        </Card>
-                      </div>
-                    ))}
-
-                    <ConfirmModal
-                      text="Do You Want To Delete Educational Information?"
-                      isOpen={deleteModal}
-                      toggle={() => setDeleteModal(!deleteModal)}
-                      buttonStatus={buttonStatus}
-                      progress={progress}
-                      cancel={() => setDeleteModal(false)}
-                      confirm={handleDeletePermission}
-                    />
-                  </div>
-
-                  {showForm && (
-                    <EducationalForm
-                      oneData={oneData}
-                      attendedFrom={attendedFrom}
-                      attendedTo={attendedTo}
-                      handleSubmit={handleSubmit}
-                      applicationStudentId={applicationStudentId}
-                      educationLevelName={educationLevelName}
-                      educationLevelLabel={educationLevelLabel}
-                      educationLevelValue={educationLevelValue}
-                      selectEducationLevel={selectEducationLevel}
-                      programError={programError}
-                      countryName={countryName}
-                      countryLabel={countryLabel}
-                      countryValue={countryValue}
-                      selectCountry={selectCountry}
-                      countryError={countryError}
-                      handleCancelForm={handleCancelShowForm}
-                      progress={progress}
-                      buttonStatus={buttonStatus}
-                      isAchieved={isAchieved}
-                      setAchieved={setAchieved}
-                      handleQualificationSubject={handleQualificationSubject}
-                      qualificationSubjectError={qualificationSubjectError}
-                      setAttendedToError={setAttendedToError}
-                      setAttendedFromError={setAttendedFromError}
-                      handleAttendedFrom={handleAttendedFrom}
-                      attendedFromError={attendedFromError}
-                      handleDuration={handleDuration}
-                      durationError={durationError}
-                      handleInstitution={handleInstitution}
-                      institutionError={institutionError}
-                      handleAttendedTo={handleAttendedTo}
-                      attendedToError={attendedToError}
-                      handlePercentage={handlePercentage}
-                      percentageError={percentageError}
-                      minDate={minDate}
-                      qualificationSubject={qualificationSubject}
-                      percentage={percentage}
-                      duration={duration}
-                      institution={institution}
-                      instituteContactNumber={instituteContactNumber}
-                      showForm={showForm}
-                      instituteLanguage={instituteLanguage}
-                      handleInstitutionLanguage={handleInstitutionLanguage}
-                      setInstituteAddress={setInstituteAddress}
-                      instituteAddress={instituteAddress}
-                      handleInstitutionContactNumber={
-                        handleInstitutionContactNumber
-                      }
-                      handleInstitutionAddress={handleInstitutionAddress}
-                    />
+                            <div className="ml-5">
+                              <Input
+                                checked={summary === false}
+                                type="radio"
+                                name="radioNo"
+                                id="radioNo"
+                                onClick={handleNoClick}
+                              />
+                              <span>
+                                <label
+                                  style={{ fontSize: "14px" }}
+                                  for="radioNo"
+                                >
+                                  No
+                                </label>
+                              </span>
+                            </div>
+                          </div>
+                        </FormGroup>
+                      </Col>
+                    </Row>
                   )}
-
-                  {forms && eduDetails?.length < 1 && (
-                    <EducationalForm
-                      handleSubmit={handleSubmit}
-                      attendedFrom={attendedFrom}
-                      attendedTo={attendedTo}
-                      applicationStudentId={applicationStudentId}
-                      educationLevelName={educationLevelName}
-                      educationLevelLabel={educationLevelLabel}
-                      educationLevelValue={educationLevelValue}
-                      selectEducationLevel={selectEducationLevel}
-                      programError={programError}
-                      countryName={countryName}
-                      countryLabel={countryLabel}
-                      countryValue={countryValue}
-                      selectCountry={selectCountry}
-                      countryError={countryError}
-                      handleCancelForm={handleCancelForm}
-                      progress={progress}
-                      buttonStatus={buttonStatus}
-                      isAchieved={isAchieved}
-                      setAchieved={setAchieved}
-                      handleQualificationSubject={handleQualificationSubject}
-                      qualificationSubjectError={qualificationSubjectError}
-                      handleAttendedFrom={handleAttendedFrom}
-                      attendedFromError={attendedFromError}
-                      handleDuration={handleDuration}
-                      durationError={durationError}
-                      handleInstitution={handleInstitution}
-                      institutionError={institutionError}
-                      handleAttendedTo={handleAttendedTo}
-                      setAttendedToError={setAttendedToError}
-                      setAttendedFromError={setAttendedFromError}
-                      attendedToError={attendedToError}
-                      handlePercentage={handlePercentage}
-                      percentageError={percentageError}
-                      minDate={minDate}
-                      qualificationSubject={qualificationSubject}
-                      percentage={percentage}
-                      duration={duration}
-                      institution={institution}
-                      instituteContactNumber={instituteContactNumber}
-                      showForm={showForm}
-                      instituteLanguage={instituteLanguage}
-                      handleInstitutionLanguage={handleInstitutionLanguage}
-                      setInstituteAddress={setInstituteAddress}
-                      instituteAddress={instituteAddress}
-                      handleInstitutionContactNumber={
-                        handleInstitutionContactNumber
-                      }
-                      handleInstitutionAddress={handleInstitutionAddress}
-                    />
-                  )}
-
-                  {eduDetails?.length > 0 && !showForm ? (
+                  {showDeleteOption === true ? (
                     <>
-                      {permissions?.includes(permissionList?.Edit_Student) ? (
-                        <button
-                          className="add-button"
-                          onClick={onShow}
-                          permission={6}
-                        >
-                          Add Another
-                        </button>
+                      <FormGroup row>
+                        <Col>
+                          <CancelButton
+                            cancel={() => {
+                              setForms(true);
+                              setShowDeleteOption(false);
+                            }}
+                          />
+                          <SaveButton
+                            progress={progress}
+                            buttonStatus={buttonStatus}
+                            action={checkFunction}
+                          />
+                        </Col>
+                      </FormGroup>
+                    </>
+                  ) : null}
+                  {showDeleteOption === true ? null : (
+                    <>
+                      <div className="row mx-0">
+                        {eduDetails?.map((edu, i) => (
+                          <div
+                            className="col-12 border p-2 rounded mb-3"
+                            key={edu.id}
+                            style={{ textAlign: "left" }}
+                          >
+                            <Card>
+                              <CardBody>
+                                <div className="d-flex justify-content-between">
+                                  <span className="card-heading">
+                                    {edu?.educationLevel?.name}
+                                  </span>
+
+                                  <span>
+                                    {permissions?.includes(
+                                      permissionList?.Edit_Student
+                                    ) ? (
+                                      <span
+                                        className="pointer text-body"
+                                        onClick={() => handleUpdate(edu.id)}
+                                      >
+                                        Edit
+                                      </span>
+                                    ) : null}
+                                    {" | "}
+                                    {permissions?.includes(
+                                      permissionList?.Edit_Student
+                                    ) ? (
+                                      <span
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => toggleDanger(edu)}
+                                      >
+                                        Delete
+                                      </span>
+                                    ) : null}
+                                  </span>
+                                </div>
+                                {/* <CardSubtitle>
+                                  {edu?.nameOfInstitution}
+                                </CardSubtitle> */}
+                                <hr />
+                                <Row className="text-gray">
+                                  <Col md="2">
+                                    <p>
+                                      <span>Course Beginning Date</span>
+                                      <br />
+                                      <b>
+                                        {dateFormate(
+                                          edu?.attendedInstitutionFrom
+                                        )}
+                                      </b>
+                                    </p>
+                                    <p>
+                                      <span>Course Ending Date</span>
+                                      <br />
+                                      <b>
+                                        {edu?.qualificationAchieved === true
+                                          ? dateFormate(
+                                              edu?.attendedInstitutionTo
+                                            )
+                                          : "Continue..."}
+                                      </b>
+                                    </p>
+                                  </Col>
+                                  <Col md="2">
+                                    <p>
+                                      <span>Institution Name</span>
+                                      <br />
+                                      <b>{edu?.nameOfInstitution}</b>
+                                    </p>
+                                    <p>
+                                      <span>Qualification Course</span>
+                                      <br />
+                                      <b> {edu?.qualificationSubject}</b>
+                                    </p>
+                                  </Col>
+                                  <Col md="2">
+                                    <p>
+                                      <span>Duration</span>
+                                      <br />
+                                      <b>{edu?.duration}</b>
+                                    </p>
+
+                                    <p>
+                                      <span>Result In Percentage</span>
+                                      <br />
+                                      <b>
+                                        {edu?.qualificationAchieved === true
+                                          ? edu?.finalGrade
+                                          : "N/A"}
+                                      </b>
+                                    </p>
+                                  </Col>
+                                  <Col md="3">
+                                    <p>
+                                      <span>Country of Education</span>
+                                      <br />
+                                      <b> {edu?.countryOfEducation?.name}</b>
+                                    </p>
+                                    <p>
+                                      <span>Language of Institution</span>
+                                      <br />
+                                      <b>{edu?.languageOfInstitution}</b>
+                                    </p>
+                                  </Col>
+                                  <Col md="3">
+                                    <p>
+                                      <span>Institution Contact Number</span>
+                                      <br />
+                                      <b>
+                                        {edu?.instituteContactNumber && "+"}
+                                        {edu?.instituteContactNumber}
+                                      </b>
+                                    </p>
+
+                                    <p>
+                                      <span>Institution Address</span>
+                                      <br />
+                                      <b>{edu?.instituteAddress}</b>
+                                    </p>
+                                  </Col>
+                                </Row>
+                              </CardBody>
+                            </Card>
+                          </div>
+                        ))}
+
+                        <ConfirmModal
+                          text="Do You Want To Delete Educational Information?"
+                          isOpen={deleteModal}
+                          toggle={() => setDeleteModal(!deleteModal)}
+                          buttonStatus={buttonStatus}
+                          progress={progress}
+                          cancel={() => setDeleteModal(false)}
+                          confirm={handleDeletePermission}
+                        />
+                      </div>
+
+                      {showForm && (
+                        <EducationalForm
+                          oneData={oneData}
+                          attendedFrom={attendedFrom}
+                          attendedTo={attendedTo}
+                          handleSubmit={handleSubmit}
+                          applicationStudentId={applicationStudentId}
+                          educationLevelName={educationLevelName}
+                          educationLevelLabel={educationLevelLabel}
+                          educationLevelValue={educationLevelValue}
+                          selectEducationLevel={selectEducationLevel}
+                          programError={programError}
+                          countryName={countryName}
+                          countryLabel={countryLabel}
+                          countryValue={countryValue}
+                          selectCountry={selectCountry}
+                          countryError={countryError}
+                          handleCancelForm={handleCancelShowForm}
+                          progress={progress}
+                          buttonStatus={buttonStatus}
+                          isAchieved={isAchieved}
+                          setAchieved={setAchieved}
+                          handleQualificationSubject={
+                            handleQualificationSubject
+                          }
+                          qualificationSubjectError={qualificationSubjectError}
+                          setAttendedToError={setAttendedToError}
+                          setAttendedFromError={setAttendedFromError}
+                          handleAttendedFrom={handleAttendedFrom}
+                          attendedFromError={attendedFromError}
+                          handleDuration={handleDuration}
+                          durationError={durationError}
+                          handleInstitution={handleInstitution}
+                          institutionError={institutionError}
+                          handleAttendedTo={handleAttendedTo}
+                          attendedToError={attendedToError}
+                          handlePercentage={handlePercentage}
+                          percentageError={percentageError}
+                          minDate={minDate}
+                          qualificationSubject={qualificationSubject}
+                          percentage={percentage}
+                          duration={duration}
+                          institution={institution}
+                          instituteContactNumber={instituteContactNumber}
+                          showForm={showForm}
+                          instituteLanguage={instituteLanguage}
+                          handleInstitutionLanguage={handleInstitutionLanguage}
+                          setInstituteAddress={setInstituteAddress}
+                          instituteAddress={instituteAddress}
+                          handleInstitutionContactNumber={
+                            handleInstitutionContactNumber
+                          }
+                          handleInstitutionAddress={handleInstitutionAddress}
+                        />
+                      )}
+
+                      {forms && eduDetails?.length < 1 && (
+                        <EducationalForm
+                          handleSubmit={handleSubmit}
+                          attendedFrom={attendedFrom}
+                          attendedTo={attendedTo}
+                          applicationStudentId={applicationStudentId}
+                          educationLevelName={educationLevelName}
+                          educationLevelLabel={educationLevelLabel}
+                          educationLevelValue={educationLevelValue}
+                          selectEducationLevel={selectEducationLevel}
+                          programError={programError}
+                          countryName={countryName}
+                          countryLabel={countryLabel}
+                          countryValue={countryValue}
+                          selectCountry={selectCountry}
+                          countryError={countryError}
+                          handleCancelForm={handleCancelForm}
+                          progress={progress}
+                          buttonStatus={buttonStatus}
+                          isAchieved={isAchieved}
+                          setAchieved={setAchieved}
+                          handleQualificationSubject={
+                            handleQualificationSubject
+                          }
+                          qualificationSubjectError={qualificationSubjectError}
+                          handleAttendedFrom={handleAttendedFrom}
+                          attendedFromError={attendedFromError}
+                          handleDuration={handleDuration}
+                          durationError={durationError}
+                          handleInstitution={handleInstitution}
+                          institutionError={institutionError}
+                          handleAttendedTo={handleAttendedTo}
+                          setAttendedToError={setAttendedToError}
+                          setAttendedFromError={setAttendedFromError}
+                          attendedToError={attendedToError}
+                          handlePercentage={handlePercentage}
+                          percentageError={percentageError}
+                          minDate={minDate}
+                          qualificationSubject={qualificationSubject}
+                          percentage={percentage}
+                          duration={duration}
+                          institution={institution}
+                          instituteContactNumber={instituteContactNumber}
+                          showForm={showForm}
+                          instituteLanguage={instituteLanguage}
+                          handleInstitutionLanguage={handleInstitutionLanguage}
+                          setInstituteAddress={setInstituteAddress}
+                          instituteAddress={instituteAddress}
+                          handleInstitutionContactNumber={
+                            handleInstitutionContactNumber
+                          }
+                          handleInstitutionAddress={handleInstitutionAddress}
+                        />
+                      )}
+
+                      {eduDetails?.length > 0 && !showForm ? (
+                        <>
+                          {permissions?.includes(
+                            permissionList?.Edit_Student
+                          ) ? (
+                            <button
+                              className="add-button"
+                              onClick={onShow}
+                              permission={6}
+                            >
+                              Add Another
+                            </button>
+                          ) : null}
+                        </>
+                      ) : null}
+                    </>
+                  )}
+
+                  {showDeleteOption === false &&
+                  forms === false &&
+                  showForm === false &&
+                  eduDetails?.length === 0 ? (
+                    <>
+                      <PreviousButton action={goPrevious} />
+                      {permissions?.includes(permissionList?.Edit_Student) &&
+                      summary === false ? (
+                        <SaveButton
+                          text="Save and Next"
+                          action={checkFunction}
+                        />
                       ) : null}
                     </>
                   ) : null}
-                </>
-              )}
 
-              {showDeleteOption === false &&
-              forms === false &&
-              showForm === false &&
-              eduDetails?.length === 0 ? (
-                <>
-                  <PreviousButton action={goPrevious} />
-                  {permissions?.includes(permissionList?.Edit_Student) ? (
-                    <SaveButton text="Save and Next" action={goForward} />
+                  {eduDetails?.length > 0 ? (
+                    <Row className="mt-4">
+                      <Col className="d-flex justify-content-between">
+                        <PreviousButton action={goPrevious} />
+                        {nav?.testScore && (
+                          <SaveButton text="Next" action={goForward} />
+                        )}
+                      </Col>
+                    </Row>
                   ) : null}
-                </>
-              ) : null}
-
-              {eduDetails.length > 0 ? (
-                <Row className="mt-4">
-                  <Col className="d-flex justify-content-between">
-                    <PreviousButton action={goPrevious} />
-                    <SaveButton text="Next" action={goForward} />
-                  </Col>
-                </Row>
-              ) : null}
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };

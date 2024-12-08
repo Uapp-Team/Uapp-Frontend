@@ -123,7 +123,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
     setPreviewVisible(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append(
@@ -136,7 +136,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
       // setButtonStatus(true);
       if (selfFunding?.id) {
         setProgress(true);
-        put("SelfFunded/Update", subData).then((res) => {
+        await put("SelfFunded/Update", subData).then((res) => {
           setProgress(false);
           addToast(res?.data?.message, {
             appearance: "success",
@@ -145,12 +145,13 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
         });
         setSelfFunding({});
         setSuccess(!success);
+        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
         get(`SelfFunded/GetByStudentId/${studentid}`).then((res) => {
           setSelfFunding(res);
         });
       } else {
         setProgress(true);
-        post(`SelfFunded/Create`, subData).then((res) => {
+        await post(`SelfFunded/Create`, subData).then((res) => {
           // setButtonStatus(false);
           setProgress(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {

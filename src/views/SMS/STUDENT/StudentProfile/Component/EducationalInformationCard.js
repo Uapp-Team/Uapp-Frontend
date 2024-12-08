@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Row, Table } from "reactstrap";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import get from "../../../../../helpers/get";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
 
 const EducationalInformationCard = ({
   sId,
@@ -16,16 +16,6 @@ const EducationalInformationCard = ({
       setEducationalInfos(res);
     });
   }, [sId, setEducationalInfos]);
-
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
-
-  console.log(educationalInfos, sId);
 
   return (
     <div>
@@ -54,14 +44,16 @@ const EducationalInformationCard = ({
           >
             <Card>
               <CardBody>
-                <span className="card-heading">{edu?.educationLevel?.name}</span>
+                <span className="card-heading">
+                  {edu?.educationLevel?.name}
+                </span>
                 <div className="d-flex text-gray-70">
                   <span className="pr-4">
                     <i className="fas fa-map-marker-alt pr-2"></i>
                     {edu?.instituteAddress}
                   </span>
                   <span>
-                    <i className="fas fa-phone pr-2"></i>
+                    <i className="fas fa-phone pr-2"></i>+
                     {edu?.instituteContactNumber}
                   </span>
                 </div>
@@ -69,16 +61,17 @@ const EducationalInformationCard = ({
                 <Row className="text-gray">
                   <Col md="3">
                     <p>
-                      <span>Attended From</span>
+                      <span>Course Beginning Date</span>
                       <br />
                       <b>{dateFormate(edu?.attendedInstitutionFrom)}</b>
                     </p>
                     <p>
-                      <span>Attended To</span>
+                      <span>Course Ending Date</span>
                       <br />
                       <b>
-                        {edu?.qualificationAchieved === true &&
-                          dateFormate(edu?.attendedInstitutionTo)}
+                        {edu?.qualificationAchieved === true
+                          ? dateFormate(edu?.attendedInstitutionTo)
+                          : "Continue"}
                       </b>
                     </p>
                   </Col>
@@ -103,7 +96,9 @@ const EducationalInformationCard = ({
                     <p>
                       <span>Result In Percentage</span>
                       <br />
-                      <b>{edu?.finalGrade}</b>
+                      <b>
+                        {edu?.qualificationAchieved ? edu?.finalGrade : "N/A"}
+                      </b>
                     </p>
                   </Col>
                   <Col md="3">

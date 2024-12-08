@@ -26,6 +26,7 @@ import containsDigit from "../../../../../helpers/nameContainDigit";
 import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
+import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
 const Reference = () => {
@@ -67,21 +68,32 @@ const Reference = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    get("CountryDD/index").then((res) => {
-      setCountry(res);
-    });
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        await get("CountryDD/index").then((res) => {
+          setCountry(res);
+        });
 
-    get(`Reference/GetByStudentId/${applicationStudentId}`).then((res) => {
-      console.log(res);
-      setRefList(res);
-    });
+        await get(`Reference/GetByStudentId/${applicationStudentId}`).then(
+          (res) => {
+            setRefList(res, "response");
+          }
+        );
 
-    get(`ReferenceTypeDD/Index`).then((res) => {
-      setReference(res);
-      console.log(res, "reference");
-    });
+        await get(`ReferenceTypeDD/Index`).then((res) => {
+          setReference(res);
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [success, applicationStudentId]);
 
   const countryName = country?.map((branchCountry) => ({
@@ -438,339 +450,371 @@ const Reference = () => {
         backTo={userType === userTypes?.Student ? null : "Student"}
         path={`/studentList`}
       />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StudentNavigation
+            studentid={applicationStudentId}
+            activetab={"8"}
+            success={success}
+            setSuccess={setSuccess}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <p className="section-title">Reference Information</p>
+              <div className="row mx-1 mb-3">
+                {refList.length > 0 && (
+                  <Table responsive className="table-bordered">
+                    <thead className="tablehead">
+                      <tr>
+                        <th>Name</th>
+                        <th>Relation</th>
+                        <th>Institute/Company</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {refList?.map((ref, i) => (
+                        <tr key={ref.id}>
+                          <td>{ref?.referenceName}</td>
+                          <td>{ref?.referenceType.name}</td>
+                          <td>{ref?.institute_Company}</td>
+                          <td>
+                            {ref?.phoneNumber && "+"}
+                            {ref?.phoneNumber}
+                          </td>
+                          <td>{ref?.emailAddress}</td>
+                          <td>
+                            {permissions?.includes(
+                              permissionList?.Edit_Student
+                            ) ? (
+                              <a href="#reference-form">
+                                <span
+                                  className="pointer text-body"
+                                  onClick={() => handleUpdate(ref.id)}
+                                >
+                                  Edit
+                                </span>
+                              </a>
+                            ) : null}
+                            |{" "}
+                            {permissions?.includes(
+                              permissionList?.Edit_Student
+                            ) ? (
+                              <span
+                                style={{ cursor: "pointer" }}
+                                onClick={() => toggleDanger(ref)}
+                              >
+                                Delete
+                              </span>
+                            ) : null}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
 
-      <StudentNavigation
-        studentid={applicationStudentId}
-        activetab={"8"}
-        success={success}
-        setSuccess={setSuccess}
-        action={() => {}}
-      />
-      <Card>
-        <CardBody>
-          <p className="section-title">Reference Information</p>
-          <div className="row mx-1 mb-3">
-            {refList.length > 0 && (
-              <Table responsive className="table-bordered">
-                <thead className="tablehead">
-                  <tr>
-                    <th>Name</th>
-                    <th>Relation</th>
-                    <th>Institute/Company</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {refList?.map((ref, i) => (
-                    <tr key={ref.id}>
-                      <td>{ref?.referenceName}</td>
-                      <td>{ref?.referenceType.name}</td>
-                      <td>{ref?.institute_Company}</td>
-                      <td>+{ref?.phoneNumber}</td>
-                      <td>{ref?.emailAddress}</td>
-                      <td>
-                        {permissions?.includes(permissionList?.Edit_Student) ? (
-                          <a href="#reference-form">
-                            <span
-                              className="pointer text-body"
-                              onClick={() => handleUpdate(ref.id)}
-                            >
-                              Edit
-                            </span>
-                          </a>
-                        ) : null}
-                        |{" "}
-                        {permissions?.includes(permissionList?.Edit_Student) ? (
-                          <span
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleDanger(ref)}
-                          >
-                            Delete
-                          </span>
-                        ) : null}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
-
-            <ConfirmModal
-              text="Do You Want To Delete Reference Information?"
-              isOpen={deleteModal}
-              toggle={() => setDeleteModal(!deleteModal)}
-              buttonStatus={buttonStatus}
-              progress={progress}
-              cancel={() => setDeleteModal(false)}
-              confirm={handleDeletePermission}
-            />
-          </div>
-
-          {showForm || refList?.length < 1 ? (
-            <div id="reference-form" className={showForm ? "form-top" : ""}>
-              <Form onSubmit={handleRegisterReference}>
-                <input
-                  type="hidden"
-                  name="studentId"
-                  id="studentId"
-                  value={applicationStudentId}
+                <ConfirmModal
+                  text="Do You Want To Delete Reference Information?"
+                  isOpen={deleteModal}
+                  toggle={() => setDeleteModal(!deleteModal)}
+                  buttonStatus={buttonStatus}
+                  progress={progress}
+                  cancel={() => setDeleteModal(false)}
+                  confirm={handleDeletePermission}
                 />
+              </div>
 
-                {oneData?.id ? (
-                  <input type="hidden" name="id" id="id" value={oneData?.id} />
-                ) : null}
-                <Row>
-                  <Col lg="4" md="6" sm="8">
-                    <FormGroup>
-                      <span>
-                        <span className="text-danger">*</span> Reference Type
-                      </span>
+              {showForm || refList?.length < 1 ? (
+                <div id="reference-form" className={showForm ? "form-top" : ""}>
+                  <Form onSubmit={handleRegisterReference}>
+                    <input
+                      type="hidden"
+                      name="studentId"
+                      id="studentId"
+                      value={applicationStudentId}
+                    />
 
-                      <div>
-                        {reference?.map((tt) => (
-                          <>
-                            <input
-                              type="radio"
-                              name="referenceTypeId"
-                              id="referenceTypeId"
-                              value={tt?.id}
-                              onClick={() => {
-                                setReferenceValue(tt?.id);
-                                setReferenceError(false);
-                              }}
-                              checked={referenceValue === tt?.id ? true : false}
-                            />
+                    {oneData?.id ? (
+                      <input
+                        type="hidden"
+                        name="id"
+                        id="id"
+                        value={oneData?.id}
+                      />
+                    ) : null}
+                    <Row>
+                      <Col lg="4" md="6" sm="8">
+                        <FormGroup>
+                          <span>
+                            <span className="text-danger">*</span> Reference
+                            Type
+                          </span>
 
-                            <label
-                              className="mr-3"
-                              style={{ fontWeight: 500, fontSize: "14px" }}
-                            >
-                              {tt?.name}
-                            </label>
-                          </>
-                        ))}
-                      </div>
+                          <div>
+                            {reference?.map((tt) => (
+                              <>
+                                <input
+                                  type="radio"
+                                  name="referenceTypeId"
+                                  id="referenceTypeId"
+                                  value={tt?.id}
+                                  onClick={() => {
+                                    setReferenceValue(tt?.id);
+                                    setReferenceError(false);
+                                  }}
+                                  checked={
+                                    referenceValue === tt?.id ? true : false
+                                  }
+                                />
 
-                      {referenceError && (
-                        <span className="text-danger">
-                          Reference type is required
+                                <label
+                                  className="mr-3"
+                                  style={{ fontWeight: 500, fontSize: "14px" }}
+                                >
+                                  {tt?.name}
+                                </label>
+                              </>
+                            ))}
+                          </div>
+
+                          {referenceError && (
+                            <span className="text-danger">
+                              Reference type is required
+                            </span>
+                          )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span> Reference Name
                         </span>
-                      )}
-                    </FormGroup>
-                  </Col>
-                </Row>
 
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span> Reference Name
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="referenceName"
-                      id="referenceName"
-                      placeholder="Enter Reference Name"
-                      onChange={(e) => {
-                        handleReferenceName(e);
-                      }}
-                      value={referenceName}
-                    />
-                    <span className="text-danger">{referenceNameError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      <>
-                        {referenceValue === 1
-                          ? " Institute"
-                          : " Institute/Company"}
-                      </>
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="institute_Company"
-                      id="institute_Company"
-                      placeholder="Enter Institute/Company"
-                      onChange={(e) => {
-                        handleInstitute(e);
-                      }}
-                      value={institute}
-                    />
-                    <span className="text-danger">{instituteError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8" className="phone-input-group">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Phone Number
-                    </span>
-                    <PhoneInput
-                      className="w-100"
-                      type="string"
-                      name="phoneNumber"
-                      id="phoneNumber"
-                      country={"gb"}
-                      enableLongNumbers={true}
-                      onChange={handlePhoneNumber}
-                      value={phoneNumber ? phoneNumber : ""}
-                      inputProps={{
-                        required: true,
-                      }}
-                    />
-
-                    <span className="text-danger">{phoneNumberError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span>
-                      Professional/Institutional Email
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="emailAddress"
-                      id="emailAddress"
-                      placeholder="Enter Email"
-                      onChange={(e) => {
-                        handleEmailError(e);
-                      }}
-                      value={email}
-                    />
-                    <span className="text-danger">{emailError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    {" "}
-                    <span>
-                      <span className="text-danger">*</span> Country
-                    </span>
-                    <Select
-                      options={countryName}
-                      value={{ label: countryLabel, value: countryValue }}
-                      onChange={(opt) => selectCountry(opt.label, opt.value)}
-                      name="countryId"
-                      id="countryId"
-                      required
-                    />
-                    {countryError && (
-                      <span className="text-danger">Country is required</span>
-                    )}
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span> Address Line
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="addressLine"
-                      id="addressLine"
-                      placeholder="Enter Address Line"
-                      onChange={(e) => {
-                        handleAddressLine(e);
-                      }}
-                      value={addressLine}
-                    />
-                    <span className="text-danger">{addressLineError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    <span>
-                      <span className="text-danger">*</span> City
-                    </span>
-
-                    <Input
-                      type="text"
-                      name="city"
-                      id="city"
-                      placeholder="Enter City"
-                      onChange={(e) => {
-                        handleCity(e);
-                      }}
-                      value={city}
-                    />
-                    <span className="text-danger">{cityError}</span>
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row>
-                  <Col lg="6" md="8">
-                    {" "}
-                    <span>
-                      <span className="text-danger">*</span>State/County
-                    </span>
-                    <Input
-                      type="text"
-                      name="stateName"
-                      id="stateName"
-                      placeholder="Enter State/County"
-                      onChange={(e) => {
-                        handleState(e);
-                      }}
-                      value={state}
-                    />
-                    <span className="text-danger">{stateError}</span>
-                  </Col>
-                </FormGroup>
-
-                <Row className="text-right">
-                  <Col lg="6" md="8">
-                    <FormGroup className="mt-2">
-                      {refList.length > 0 && <CancelButton cancel={offShow} />}
-                      {permissions?.includes(permissionList?.Edit_Student) ? (
-                        <SaveButton
-                          progress={progress}
-                          buttonStatus={buttonStatus}
+                        <Input
+                          type="text"
+                          name="referenceName"
+                          id="referenceName"
+                          placeholder="Enter Reference Name"
+                          onChange={(e) => {
+                            handleReferenceName(e);
+                          }}
+                          value={referenceName}
                         />
-                      ) : null}
+                        <span className="text-danger">
+                          {referenceNameError}
+                        </span>
+                      </Col>
                     </FormGroup>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-          ) : (
-            <FormGroup>
-              {permissions?.includes(permissionList?.Edit_Student) ? (
-                <a href="#reference-form" className="text-decoration-none">
-                  <button
-                    className="add-button"
-                    onClick={onShow}
-                    permission={6}
-                  >
-                    Add Another
-                  </button>
-                </a>
-              ) : null}
-            </FormGroup>
-          )}
 
-          <Row className="mt-4 ">
-            <Col className="d-flex justify-content-between mt-4">
-              <PreviousButton action={goPrevious} />
-              <SaveButton text="Next" action={goForward} />
-            </Col>
-          </Row>
-        </CardBody>
-      </Card>
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          <>
+                            {referenceValue === 1
+                              ? " Institute"
+                              : " Institute/Company"}
+                          </>
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="institute_Company"
+                          id="institute_Company"
+                          placeholder="Enter Institute/Company"
+                          onChange={(e) => {
+                            handleInstitute(e);
+                          }}
+                          value={institute}
+                        />
+                        <span className="text-danger">{instituteError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8" className="phone-input-group">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Phone Number
+                        </span>
+                        <PhoneInput
+                          className="w-100"
+                          type="string"
+                          name="phoneNumber"
+                          id="phoneNumber"
+                          country={"gb"}
+                          enableLongNumbers={true}
+                          onChange={handlePhoneNumber}
+                          value={phoneNumber ? phoneNumber : ""}
+                          inputProps={{
+                            required: true,
+                          }}
+                        />
+
+                        <span className="text-danger">{phoneNumberError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span>
+                          Professional/Institutional Email
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="emailAddress"
+                          id="emailAddress"
+                          placeholder="Enter Email"
+                          onChange={(e) => {
+                            handleEmailError(e);
+                          }}
+                          value={email}
+                        />
+                        <span className="text-danger">{emailError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        {" "}
+                        <span>
+                          <span className="text-danger">*</span> Country
+                        </span>
+                        <Select
+                          options={countryName}
+                          value={{ label: countryLabel, value: countryValue }}
+                          onChange={(opt) =>
+                            selectCountry(opt.label, opt.value)
+                          }
+                          name="countryId"
+                          id="countryId"
+                          required
+                        />
+                        {countryError && (
+                          <span className="text-danger">
+                            Country is required
+                          </span>
+                        )}
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span> Address Line
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="addressLine"
+                          id="addressLine"
+                          placeholder="Enter Address Line"
+                          onChange={(e) => {
+                            handleAddressLine(e);
+                          }}
+                          value={addressLine}
+                        />
+                        <span className="text-danger">{addressLineError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        <span>
+                          <span className="text-danger">*</span> City
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="city"
+                          id="city"
+                          placeholder="Enter City"
+                          onChange={(e) => {
+                            handleCity(e);
+                          }}
+                          value={city}
+                        />
+                        <span className="text-danger">{cityError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <FormGroup row>
+                      <Col lg="6" md="8">
+                        {" "}
+                        <span>
+                          <span className="text-danger">*</span>State/County
+                        </span>
+                        <Input
+                          type="text"
+                          name="stateName"
+                          id="stateName"
+                          placeholder="Enter State/County"
+                          onChange={(e) => {
+                            handleState(e);
+                          }}
+                          value={state}
+                        />
+                        <span className="text-danger">{stateError}</span>
+                      </Col>
+                    </FormGroup>
+
+                    <Row className="text-right">
+                      <Col lg="6" md="8">
+                        <FormGroup className="mt-2">
+                          {refList.length > 0 && (
+                            <CancelButton cancel={offShow} />
+                          )}
+                          {permissions?.includes(
+                            permissionList?.Edit_Student
+                          ) ? (
+                            <SaveButton
+                              progress={progress}
+                              buttonStatus={buttonStatus}
+                            />
+                          ) : null}
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </Form>
+                </div>
+              ) : (
+                <FormGroup>
+                  {permissions?.includes(permissionList?.Edit_Student) ? (
+                    <a href="#reference-form" className="text-decoration-none">
+                      <button
+                        className="add-button"
+                        onClick={onShow}
+                        permission={6}
+                      >
+                        Add Another
+                      </button>
+                    </a>
+                  ) : null}
+                </FormGroup>
+              )}
+
+              <Row className="mt-4 ">
+                <Col className="d-flex justify-content-between mt-4">
+                  <PreviousButton action={goPrevious} />
+                  {refList.length > 0 && (
+                    <SaveButton text="Next" action={goForward} />
+                  )}
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };

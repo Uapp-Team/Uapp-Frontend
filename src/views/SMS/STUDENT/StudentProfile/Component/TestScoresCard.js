@@ -261,7 +261,7 @@ const TestScoresCard = ({
                   </Col>
                   <Col lg="3">
                     <p>
-                      <span> reading</span>
+                      <span> Reading</span>
                       <br />
                       <b> {ielts?.reading}</b>
                     </p>
@@ -388,7 +388,7 @@ const TestScoresCard = ({
                   </Col>
                   <Col lg="3">
                     <p>
-                      <span>reading</span>
+                      <span>Reading</span>
                       <br />
                       <b>{toefl?.reading}</b>
                     </p>
@@ -454,7 +454,7 @@ const TestScoresCard = ({
                   </Col>
                   <Col lg="3">
                     <p>
-                      <span>reading</span>
+                      <span>Reading</span>
                       <br />
                       <b> {functions?.reading}</b>
                     </p>
@@ -634,7 +634,7 @@ const TestScoresCard = ({
                   </Col>
                   <Col lg="3">
                     <p>
-                      <span>reading</span>
+                      <span>Reading</span>
                       <br />
                       <b> {pte?.reading}</b>
                     </p>
