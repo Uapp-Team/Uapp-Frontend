@@ -10,18 +10,18 @@
   bottom: 0px;
 }
 
-  .auth-footer .credit a {
-    color: #707070;
-    font-size: 13px;
-    font-weight: 500;
-    padding-right: 14px;
-  }
+.auth-footer .credit a {
+  color: #707070;
+  font-size: 13px;
+  font-weight: 500;
+  padding-right: 14px;
+}
 
-  .auth-footer .copyright {
-    color: #1e98b0;
-    font-size: 13px;
-    font-weight: 600;
-  }
+.auth-footer .copyright {
+  color: #1e98b0;
+  font-size: 13px;
+  font-weight: 600;
+}
 
 .btn-login {
   border-radius: 5px;
@@ -33,10 +33,10 @@
   transition: 0.3s ease-out;
 }
 
-  .btn-login:hover {
-    background: #c8f1ec !important;
-    color: #1e98b0 !important;
-  }
+.btn-login:hover {
+  background: #c8f1ec !important;
+  color: #1e98b0 !important;
+}
 
 .reset-pass {
   text-decoration: none;
@@ -47,31 +47,31 @@
   transition: 0.4s;
 }
 
-  .reset-pass:hover {
-    color: rgb(189 2 0);
-    font-size: 16px;
-    font-weight: 500;
-    transition: 0.4s;
-    text-decoration: none;
-  }
+.reset-pass:hover {
+  color: rgb(189 2 0);
+  font-size: 16px;
+  font-weight: 500;
+  transition: 0.4s;
+  text-decoration: none;
+}
 
 .link-new-register {
   margin-top: 50px;
 }
 
-  .link-new-register .title {
-    color: #7f7f7f;
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 0px !important;
-  }
+.link-new-register .title {
+  color: #7f7f7f;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 0px !important;
+}
 
-  .link-new-register .title-second {
-    color: #7f7f7f;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 15px;
-  }
+.link-new-register .title-second {
+  color: #7f7f7f;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
 
 .link-register {
   color: #1e98b0;
@@ -83,14 +83,14 @@
   text-decoration: none;
 }
 
-  .link-register:hover {
-    position: relative;
-    margin-top: -15px;
-    padding: 15px;
-    background: #c8f1ec !important;
-    color: #1e98b0 !important;
-    text-decoration: none;
-  }
+.link-register:hover {
+  position: relative;
+  margin-top: -15px;
+  padding: 15px;
+  background: #c8f1ec !important;
+  color: #1e98b0 !important;
+  text-decoration: none;
+}
 
 @media (max-width: 767.98px) {
   .credit {
@@ -101,9 +101,9 @@
     display: block !important;
   }
 
-    .auth-footer .copyright {
-      text-align: center;
-    }
+  .auth-footer .copyright {
+    text-align: center;
+  }
 
   .btn-login {
     padding: 4px 30px !important;
@@ -240,20 +240,20 @@
   margin-bottom: 20px;
 }
 
-  .btn-register-lg:hover {
-    transition: 0.5s ease-out !important;
-    color: #fff !important;
-    background: #fc7300 !important;
-    border: 2px solid #fc7300 !important;
-  }
+.btn-register-lg:hover {
+  transition: 0.5s ease-out !important;
+  color: #fff !important;
+  background: #fc7300 !important;
+  border: 2px solid #fc7300 !important;
+}
 
-  .btn-register-lg:disabled {
-    transition: 0.5s ease-out !important;
-    color: #fff !important;
-    background: #01908987 !important;
-    border: 2px solid #01908987 !important;
-    cursor: not-allowed;
-  }
+.btn-register-lg:disabled {
+  transition: 0.5s ease-out !important;
+  color: #fff !important;
+  background: #01908987 !important;
+  border: 2px solid #01908987 !important;
+  cursor: not-allowed;
+}
 
 /* register footer */
 .register-footer-link {
@@ -269,10 +269,10 @@
   font-size: 13px;
 }
 
-  .register-footer-credit span {
-    color: #252525 !important;
-    font-weight: 400;
-  }
+.register-footer-credit span {
+  color: #252525 !important;
+  font-weight: 400;
+}
 
 .register-form-container {
   position: relative;
@@ -360,9 +360,9 @@
   -ms-overflow-style: none;
 }
 
-  .right-container::-webkit-scrollbar {
-    display: none;
-  }
+.right-container::-webkit-scrollbar {
+  display: none;
+}
 
 @media (max-width: 767.98px) {
   .w-sm-90 {
@@ -390,33 +390,33 @@
   margin-top: 120px;
 }
 
-  /* .register-links-section {
+/* .register-links-section {
   margin-top: 60px;
 } */
 
-  .register-links-section h1 {
-    color: #7f7f7f;
-    font-size: 16px;
-    font-weight: 500;
-  }
+.register-links-section h1 {
+  color: #7f7f7f;
+  font-size: 16px;
+  font-weight: 500;
+}
 
 /* register header */
 .register-header {
   display: block;
 }
 
-  .register-header h1 {
-    color: #111111;
-    font-size: 30px;
-    font-weight: 600;
-  }
+.register-header h1 {
+  color: #111111;
+  font-size: 30px;
+  font-weight: 600;
+}
 
-  .register-header p {
-    font-size: 11px;
-    font-weight: 500;
-    color: #252525;
-    opacity: 0.7;
-  }
+.register-header p {
+  font-size: 11px;
+  font-weight: 500;
+  color: #252525;
+  opacity: 0.7;
+}
 
 .form-items {
   margin-top: 60px;
@@ -481,10 +481,10 @@
   font-weight: 600;
 }
 
-  .register-button-hover:hover {
-    color: #045d5e;
-    text-decoration: none;
-  }
+.register-button-hover:hover {
+  color: #045d5e;
+  text-decoration: none;
+}
 
 .maintenance-text {
   font-size: 16px;
