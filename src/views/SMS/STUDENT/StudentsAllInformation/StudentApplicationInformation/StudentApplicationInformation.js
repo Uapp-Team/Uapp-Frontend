@@ -12,7 +12,6 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
@@ -850,7 +849,7 @@ const StudentApplicationInformation = () => {
 
                         {countryValue !== 0 ? (
                           <>
-                            {userType === userTypes?.Student ? (
+                            {/* {userType === userTypes?.Student ? (
                               <>
                                 {dataExist === false ? (
                                   <div className="mt-1 mb-4 d-flex justify-between align-items-center cardborder">
@@ -879,7 +878,7 @@ const StudentApplicationInformation = () => {
                                   </div>
                                 ) : null}
                               </>
-                            ) : null}
+                            ) : null} */}
 
                             {studentTypeLabel === "Home" ? (
                               <HomeApplicationInformation

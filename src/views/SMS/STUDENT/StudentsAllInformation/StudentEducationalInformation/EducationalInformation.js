@@ -4,7 +4,6 @@ import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
-  CardSubtitle,
   Col,
   FormGroup,
   Input,
@@ -178,8 +177,8 @@ const EducationalInformation = () => {
     remove(
       `EducationInformation/DeleteByStudentId/${applicationStudentId}`
     ).then((res) => {
-      addToast("Educational details deleted successfully", {
-        appearance: "error",
+      addToast("Educational details Updated successfully", {
+        appearance: "success",
         autoDismiss: "true",
       });
       setSuccess(!success);
