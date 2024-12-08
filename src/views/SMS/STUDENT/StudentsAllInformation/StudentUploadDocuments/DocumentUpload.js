@@ -488,7 +488,12 @@ const DocumentUpload = () => {
                               </div>
 
                               <div>
-                                <b> {docu?.documentLevelName} </b>
+                                <b>
+                                  {docu?.isRequired && (
+                                    <span className="text-danger">*</span>
+                                  )}{" "}
+                                  {docu?.documentLevelName}{" "}
+                                </b>
                               </div>
                             </div>
                           </Col>

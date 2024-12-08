@@ -78,44 +78,40 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
       FileList1.length === 0 ? null : FileList1[0]?.originFileObj
     );
 
-    if (FileList1.length === 0) {
-      setSelfError("Please select a file");
+    if (studentFunding?.id) {
+      setProgress(true);
+      put(`StudentLoanCompany/Update`, subData).then((res) => {
+        setProgress(false);
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+      });
+      setStudentFunding({});
+      setSuccess(!success);
+      history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
+      get(`StudentLoanCompany/GetByStudentId/${studentid}`).then((res) => {
+        setStudentFunding(res);
+      });
     } else {
-      if (studentFunding?.id) {
-        setProgress(true);
-        put(`StudentLoanCompany/Update`, subData).then((res) => {
-          setProgress(false);
+      setProgress(true);
+      post(`StudentLoanCompany/Create`, subData).then((res) => {
+        // setButtonStatus(false);
+        setProgress(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
           });
-        });
-        setStudentFunding({});
-        setSuccess(!success);
-        history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
-        get(`StudentLoanCompany/GetByStudentId/${studentid}`).then((res) => {
-          setStudentFunding(res);
-        });
-      } else {
-        setProgress(true);
-        post(`StudentLoanCompany/Create`, subData).then((res) => {
-          // setButtonStatus(false);
-          setProgress(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setSuccess(!success);
-            history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
-      }
+          setSuccess(!success);
+          history.push(`/addStudentEducationalInformation/${studentid}/${1}`);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
     }
     // setButtonStatus(true);
   };
@@ -220,7 +216,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
                     </div>
                   )}
                 >
-                  {FileList1.length < 1 ? <UploadButton /> : ""}
+                  {FileList1.length === 0 ? <UploadButton /> : ""}
                 </Upload>
 
                 {previewVisible && (
