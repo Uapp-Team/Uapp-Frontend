@@ -25,6 +25,7 @@ const AddMissionManagerClear = ({
   setProviderLabel,
   setProviderValue,
   providerId,
+  branchId,
   setIsTyping,
   setSearchStr,
   branch,
@@ -84,16 +85,34 @@ const AddMissionManagerClear = ({
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="mt-1">
-                  {!providerId && providerValue !== 0 && (
+                  {(!providerId && providerValue !== 0) ||
+                  (userType === userTypes?.SystemAdmin && branchValue !== 0)
+                    ? ""
+                    : ""}
+
+                  {!providerId && providerValue !== 0 ? (
                     <TagButton
                       label={providerLabel}
                       setValue={() => setProviderValue(0)}
                       setLabel={() => setProviderLabel("Select Provider")}
                     ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {providerValue !== 0 && branchValue !== 0 ? "" : ""}
+                  {userType === userTypes?.SystemAdmin && branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select branch")}
+                    />
+                  ) : (
+                    ""
                   )}
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
-                  {!providerId && providerValue !== 0 ? (
+                  {(!providerId && providerValue !== 0) ||
+                  (userType === userTypes?.SystemAdmin && branchValue !== 0) ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>
