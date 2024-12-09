@@ -20,7 +20,9 @@ const Index = () => {
   const AdmissionManagerPaging = JSON.parse(
     sessionStorage.getItem("admissionManager")
   );
-  const { providerId } = useParams();
+  const { branchId, providerId } = useParams();
+  console.log(branchId, providerId);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
@@ -58,16 +60,18 @@ const Index = () => {
       : 0
   );
 
-  const [branchLabel, setBranchLabel] = useState(
-    AdmissionManagerPaging?.branchLabel
-      ? AdmissionManagerPaging?.branchLabel
-      : "Select Branch"
-  );
   const [branchValue, setBranchValue] = useState(
     AdmissionManagerPaging?.branchValue
       ? AdmissionManagerPaging?.branchValue
       : 0
   );
+
+  const [branchLabel, setBranchLabel] = useState(
+    AdmissionManagerPaging?.branchLabel
+      ? AdmissionManagerPaging?.branchLabel
+      : "Select branch"
+  );
+
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
   const [providerValue2, setProviderValue2] = useState(0);
   const [providerError, setProviderError] = useState(false);
@@ -108,7 +112,7 @@ const Index = () => {
   const [branch, setBranch] = useState([]);
   const [tableData, setTableData] = useState([]);
 
-  const branchId = branch.map((brn) => brn.id);
+  const branchValueId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     const tableColumnAdmissionManager = JSON.parse(
@@ -160,7 +164,7 @@ const Index = () => {
     });
 
     if (userType === userTypes?.BranchAdmin) {
-      get(`ProviderDD/Index/${branchId}`).then((res) => {
+      get(`ProviderDD/Index/${branchValueId}`).then((res) => {
         setProviderDD(res);
         setLoading(false);
       });
@@ -341,8 +345,10 @@ const Index = () => {
 
   // on clear
   const handleClearSearch = () => {
-    !providerId && setProviderLabel("Provider");
+    !providerId && setProviderLabel("Select Provider");
     !providerId && setProviderValue(0);
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setCallApi((prev) => !prev);
     setSearchStr("");
     setCurrentPage(1);
@@ -442,7 +448,7 @@ const Index = () => {
     setUniCountryValue(0);
     setUniStateLabel("Select State");
     setUniStateValue(0);
-    setProviderLabel("Provider");
+    setProviderLabel("Select Provider");
     setProviderValue(0);
     setProviderLabel2("Select Provider");
     setProviderValue2(0);
@@ -593,6 +599,7 @@ const Index = () => {
           setSearchStr={setSearchStr}
           searchValue={searchValue}
           providerId={providerId}
+          branchId={branchId}
           setProviderLabel={setProviderLabel}
           setProviderValue={setProviderValue}
           handleKeyDown={handleKeyDown}

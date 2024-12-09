@@ -5,8 +5,10 @@ import TagButton from "../../../../../../components/buttons/TagButton";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../../components/form/Typing";
 import { AdminUsers } from "../../../../../../components/core/User";
+import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const SelectAndClear = ({
+  userType,
   empOptiopns,
   empLabel,
   empValue,
@@ -78,7 +80,10 @@ const SelectAndClear = ({
           <Col lg="12" md="12" sm="12" xs="12">
             <div className="d-flex justify-between-start">
               <div className="mt-1 mx-1" style={{ display: "flex" }}>
-                {empValue !== 0 || branchValue !== 0 ? "" : ""}
+                {empValue !== 0 ||
+                (userType === userTypes?.SystemAdmin && branchValue !== 0)
+                  ? ""
+                  : ""}
                 {empValue !== 0 ? (
                   <TagButton
                     label={empLabel}
@@ -89,7 +94,7 @@ const SelectAndClear = ({
                   ""
                 )}{" "}
                 {empValue !== 0 && branchValue !== 0 ? "" : ""}
-                {!branchId && branchValue !== 0 ? (
+                {userType === userTypes?.SystemAdmin && branchValue !== 0 ? (
                   <TagButton
                     label={branchLabel}
                     setValue={() => setBranchValue(0)}
@@ -101,7 +106,8 @@ const SelectAndClear = ({
               </div>
 
               <div className="mt-1 mx-0 d-flex btn-clear mb-2">
-                {empValue !== 0 || (!branchId && branchValue !== 0) ? (
+                {empValue !== 0 ||
+                (userType === userTypes?.SystemAdmin && branchValue !== 0) ? (
                   <button className="tag-clear" onClick={handleReset}>
                     Clear All
                   </button>
