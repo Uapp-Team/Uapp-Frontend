@@ -8,6 +8,7 @@ import PreviousButton from "../../../../../../components/buttons/PreviousButton"
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 
 const PersonalForm = ({
   dateError,
@@ -52,6 +53,7 @@ const PersonalForm = ({
   phoneNUmberError,
   handlePrevious,
   birthDate,
+  setDateError,
   minDate,
   phoneNumber,
 }) => {
@@ -66,23 +68,14 @@ const PersonalForm = ({
 
         <FormGroup row>
           <Col lg="6" md="8">
-            <span>
-              {" "}
-              <span className="text-danger">*</span>
-              Date Of Birth
-            </span>
-
-            <Input
-              type="date"
-              name="dateOfBirth"
-              id="dateOfBirth"
-              onChange={(e) => {
-                handleDate(e);
-              }}
+            <DMYPicker
+              label="Date Of Birth"
               value={birthDate}
-              min={minDate}
+              setValue={handleDate}
+              error={dateError}
+              action={setDateError}
+              required={true}
             />
-            <span className="text-danger">{dateError}</span>
           </Col>
         </FormGroup>
 
