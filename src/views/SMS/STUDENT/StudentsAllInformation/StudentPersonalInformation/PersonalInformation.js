@@ -29,7 +29,6 @@ import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
 import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
-import { app } from "firebase";
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -838,7 +837,7 @@ const PersonalInformation = () => {
                           action={setIssueDateError}
                           name="issueDate"
                           id="issueDate"
-                          required={false}
+                          required={true}
                         />
                       </Col>
                     </FormGroup>
@@ -849,7 +848,7 @@ const PersonalInformation = () => {
                           setValue={handleExpireDate}
                           error={expireDateError}
                           action={setexpireDateError}
-                          required={false}
+                          required={true}
                           value={expireDate}
                           name="expireDate"
                           id="expireDate"

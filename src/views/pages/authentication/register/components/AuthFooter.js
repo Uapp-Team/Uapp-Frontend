@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function AuthFooter() {
   return (
     <div>
-      <div className="d-flex justify-content-between mb-4">
+      <div className="d-flex justify-content-between mb-4 mr-3">
         <div>
           <Link to={"/"} className="register-footer-link">
             Privacy

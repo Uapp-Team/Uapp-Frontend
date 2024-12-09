@@ -70,7 +70,7 @@ const PersonalInformationCard = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Phone Number</td>
-            <td>{studentDetails?.phoneNumber}</td>
+            <td>+{studentDetails?.phoneNumber}</td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Email</td>

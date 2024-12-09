@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Row, Table } from "reactstrap";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import get from "../../../../../helpers/get";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
 
 const EducationalInformationCard = ({
   sId,
@@ -53,7 +53,7 @@ const EducationalInformationCard = ({
                     {edu?.instituteAddress}
                   </span>
                   <span>
-                    <i className="fas fa-phone pr-2"></i>
+                    <i className="fas fa-phone pr-2"></i>+
                     {edu?.instituteContactNumber}
                   </span>
                 </div>
@@ -69,8 +69,9 @@ const EducationalInformationCard = ({
                       <span>Course Ending Date</span>
                       <br />
                       <b>
-                        {edu?.qualificationAchieved === true &&
-                          dateFormate(edu?.attendedInstitutionTo)}
+                        {edu?.qualificationAchieved === true
+                          ? dateFormate(edu?.attendedInstitutionTo)
+                          : "Continue"}
                       </b>
                     </p>
                   </Col>
@@ -95,7 +96,9 @@ const EducationalInformationCard = ({
                     <p>
                       <span>Result In Percentage</span>
                       <br />
-                      <b>{edu?.finalGrade}</b>
+                      <b>
+                        {edu?.qualificationAchieved ? edu?.finalGrade : "N/A"}
+                      </b>
                     </p>
                   </Col>
                   <Col md="3">

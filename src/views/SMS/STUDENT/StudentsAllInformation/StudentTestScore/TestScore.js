@@ -145,8 +145,6 @@ const TestScore = () => {
     useState(false);
   const [nav, setNav] = useState({});
 
-  const minDate = "1950-01-01";
-
   // Ielts validation
 
   const handleIeltsSpeaking = (e) => {
@@ -156,6 +154,7 @@ const TestScore = () => {
       setIeltsSpeaking(value);
       setIeltsSpeakingError(false);
     } else {
+      setIeltsSpeaking(value);
       setIeltsSpeakingError(true);
     }
   };
@@ -167,6 +166,7 @@ const TestScore = () => {
       setIeltsReading(value);
       setIeltsReadingError(false);
     } else {
+      setIeltsReading(value);
       setIeltsReadingError(true);
     }
   };
@@ -178,6 +178,7 @@ const TestScore = () => {
       setIeltsWriting(value);
       setIeltsWritingError(false);
     } else {
+      setIeltsWriting(value);
       setIeltsWritingError(true);
     }
   };
@@ -189,6 +190,7 @@ const TestScore = () => {
       setIeltsListening(value);
       setIeltsListeningError(false);
     } else {
+      setIeltsListening(value);
       setIeltsListeningError(true);
     }
   };
@@ -200,6 +202,7 @@ const TestScore = () => {
       setIeltsOverall(value);
       setIeltsOverallError(false);
     } else {
+      setIeltsOverall(value);
       setIeltsOverallError(true);
     }
   };
@@ -1002,19 +1005,40 @@ const TestScore = () => {
 
   const FormIELTSValid = () => {
     var validation = true;
-    if (ieltsSpeaking === "" || ieltsSpeaking <= 0 || ieltsSpeaking > 9) {
+    const regex = /^(?:[1-9](?:\.0|\.5)?)$/;
+    if (
+      ieltsSpeaking === "" ||
+      ieltsSpeaking <= 0 ||
+      ieltsSpeaking > 9 ||
+      regex.test(ieltsSpeaking) === false
+    ) {
       validation = false;
       setIeltsSpeakingError(true);
     }
-    if (ieltsReading === "" || ieltsReading <= 0 || ieltsReading > 9) {
+    if (
+      ieltsReading === "" ||
+      ieltsReading <= 0 ||
+      ieltsReading > 9 ||
+      regex.test(ieltsReading) === false
+    ) {
       validation = false;
       setIeltsReadingError(true);
     }
-    if (ieltsWriting === "" || ieltsWriting <= 0 || ieltsWriting > 9) {
+    if (
+      ieltsWriting === "" ||
+      ieltsWriting <= 0 ||
+      ieltsWriting > 9 ||
+      regex.test(ieltsWriting) === false
+    ) {
       validation = false;
       setIeltsWritingError(true);
     }
-    if (ieltsListening === "" || ieltsListening <= 0 || ieltsListening > 9) {
+    if (
+      ieltsListening === "" ||
+      ieltsListening <= 0 ||
+      ieltsListening > 9 ||
+      regex.test(ieltsListening) === false
+    ) {
       validation = false;
       setIeltsListeningError(true);
     }
@@ -1024,7 +1048,12 @@ const TestScore = () => {
       setIeltsExamDateError("Exam Date is required");
     }
 
-    if (ieltsOverall === "" || ieltsOverall <= 0 || ieltsOverall > 9) {
+    if (
+      ieltsOverall === "" ||
+      ieltsOverall <= 0 ||
+      ieltsOverall > 9 ||
+      regex.test(ieltsOverall) === false
+    ) {
       validation = false;
       setIeltsOverallError(true);
     }
