@@ -10,6 +10,7 @@ import notify from "../../../../assets/img/notify.png";
 import axios from "axios";
 import { Upload } from "antd";
 import UploadButton from "../../../../components/buttons/UploadButton";
+import containsDigit from "../../../../helpers/nameContainDigit";
 
 const ConsultantRegisterForm = () => {
   const [parameter, setParameter] = useState("");
@@ -70,6 +71,8 @@ const ConsultantRegisterForm = () => {
     setLastName(e.target.value);
     if (e.target.value === "") {
       setLastNameError("Last name is required");
+    } else if (containsDigit(e.target.value)) {
+      setLastNameError("Last name cannot contain digits");
     } else {
       setLastNameError("");
     }
@@ -90,6 +93,8 @@ const ConsultantRegisterForm = () => {
     setFirstName(e.target.value);
     if (e.target.value === "") {
       setFirstNameError("First name is required");
+    } else if (containsDigit(e.target.value)) {
+      setFirstNameError("First name cannot contain digits");
     } else {
       setFirstNameError("");
     }
@@ -136,9 +141,20 @@ const ConsultantRegisterForm = () => {
       isFormValid = false;
       setFirstNameError("First name is required");
     }
+
+    if (containsDigit(firstName)) {
+      isFormValid = false;
+      setFirstNameError("First name cannot contain digits");
+    }
+
     if (lastName === "") {
       isFormValid = false;
       setLastNameError("Last name is required");
+    }
+
+    if (containsDigit(lastName)) {
+      isFormValid = false;
+      setLastNameError("Last name cannot contain digits");
     }
     if (linkedFacebook === "") {
       isFormValid = false;
