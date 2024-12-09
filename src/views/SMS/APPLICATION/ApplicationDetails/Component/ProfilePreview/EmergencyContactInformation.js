@@ -49,7 +49,7 @@ const EmergencyContactInformation = ({
                     <p>
                       <span>Phone</span>
                       <br />
-                      <b> {contact?.phoneNumber}</b>
+                      <b>+{contact?.phoneNumber}</b>
                     </p>
                     <p>
                       <span>Email</span>
@@ -68,7 +68,7 @@ const EmergencyContactInformation = ({
                     <p>
                       <span>Country</span>
                       <br />
-                      <b> {contact?.country?.name}</b>
+                      <b> {contact?.countryName}</b>
                     </p>
                   </Col>
                 </Row>
