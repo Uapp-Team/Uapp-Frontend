@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Table } from "reactstrap";
-import get from "../../../../../../helpers/get";
 import { dateFormate } from "../../../../../../components/date/calenderFormate";
+import get from "../../../../../../helpers/get";
 
 const PersonalInformationCard = ({
   sId,
@@ -40,7 +40,7 @@ const PersonalInformationCard = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Mobile Number</td>
-            <td>{studentDetails?.phoneNumber}</td>
+            <td>+{studentDetails?.phoneNumber}</td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Email Address</td>
