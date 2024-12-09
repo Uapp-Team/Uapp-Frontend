@@ -53,8 +53,9 @@ const AffiliateList = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("Select Branch");
-  const [branchValue, setBranchValue] = useState(0);
+  const [branchValue, setBranchValue] = useState(1);
+  const [branchLabel, setBranchLabel] = useState("London Office");
+
   const [entity, setEntity] = useState(0);
 
   const [serialNum, setSerialNum] = useState(0);
@@ -274,6 +275,8 @@ const AffiliateList = () => {
   };
 
   const handleReset = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setStatusLabel("Status");
     setStatusValue(0);
     setconsultantLabel("Select Consultant");
@@ -381,6 +384,15 @@ const AffiliateList = () => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div className="d-flex justify-between-start">
                 <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                  {userType === userTypes?.SystemAdmin && branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select branch")}
+                    />
+                  ) : (
+                    ""
+                  )}
                   {adminPermission && consultantValue !== 0 ? (
                     <TagButton
                       label={consultantLabel}
@@ -389,7 +401,8 @@ const AffiliateList = () => {
                     ></TagButton>
                   ) : (
                     ""
-                  )}{" "}
+                  )}
+
                   {consultantValue !== 0 && statusValue !== 0 ? "" : ""}
                   {statusValue !== 0 ? (
                     <TagButton
@@ -403,7 +416,8 @@ const AffiliateList = () => {
                 </div>
 
                 <div className="mt-1 mx-0 d-flex btn-clear mb-2">
-                  {(adminPermission && consultantValue !== 0) ||
+                  {(userType === userTypes?.SystemAdmin && branchValue !== 0) ||
+                  (adminPermission && consultantValue !== 0) ||
                   statusValue !== 0 ? (
                     <button className="tag-clear" onClick={handleReset}>
                       Clear All

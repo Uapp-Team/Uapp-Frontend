@@ -21,7 +21,7 @@ import put from "../../../helpers/put";
 const AddMenuForm = () => {
   const { menuId } = useParams();
   const { addToast } = useToasts();
-  const [typeList, setTypeList] = useState([
+  const typeList = [
     {
       id: "item",
       name: "Item",
@@ -30,9 +30,12 @@ const AddMenuForm = () => {
       id: "collapse",
       name: "Collapse",
     },
-  ]);
+  ];
   const [typeLabel, setTypeLabel] = useState("Select Type");
-  const [typeValue, setTypeValue] = useState(0);
+  const [typeValue, setTypeValue] = useState("");
+  console.log(typeValue);
+
+  const [typeError, setTypeError] = useState(false);
   const [parentList, setParentList] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent");
   const [parentValue, setParentValue] = useState(0);
@@ -45,6 +48,7 @@ const AddMenuForm = () => {
   const [title, setTitle] = useState("");
   const [navLink, setNavLink] = useState("");
   const [navLinkError, setNavLinkError] = useState("");
+  const [isSysAdmin, setIsSysAdmin] = useState(false);
 
   useEffect(() => {
     get("MenuItem/GetMenuItems").then((res) => {
@@ -63,6 +67,7 @@ const AddMenuForm = () => {
       setTypeValue(res?.type);
       setParentValue(res?.parentId);
       setParentLabel(res?.parentName);
+      setIsSysAdmin(res?.assignSysAdmin);
     });
   }, [menuId]);
 
@@ -81,6 +86,7 @@ const AddMenuForm = () => {
   }));
 
   const selectType = (label, value) => {
+    setTypeError(false);
     setTypeLabel(label);
     setTypeValue(value);
   };
@@ -112,6 +118,10 @@ const AddMenuForm = () => {
       isValid = false;
       setTitleError("First Name is required");
     }
+    if (!typeValue) {
+      setTypeError(true);
+      isValid = false;
+    }
 
     return isValid;
   };
@@ -119,6 +129,7 @@ const AddMenuForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
+    subdata.append("assignSysAdmin", isSysAdmin);
 
     for (var value of subdata) {
       console.log(value);
@@ -268,6 +279,9 @@ const AddMenuForm = () => {
                     name="type"
                     id="Type"
                   />
+                  {typeError && (
+                    <span className="text-danger">Type is required</span>
+                  )}
                 </FormGroup>
 
                 {typeValue === "collapse" ? (
@@ -286,6 +300,36 @@ const AddMenuForm = () => {
                     />
                   </FormGroup>
                 ) : null}
+
+                <FormGroup>
+                  <span> Is Assigned For System Admin?</span>
+
+                  <div
+                    className="d-flex flex-wrap form-mt"
+                    style={{ marginLeft: "17px" }}
+                  >
+                    <div>
+                      <Input
+                        type="radio"
+                        onClick={() => {
+                          setIsSysAdmin(true);
+                        }}
+                        checked={isSysAdmin === true}
+                      />
+                      <span>Yes</span>
+                    </div>
+                    <div className="ml-5">
+                      <Input
+                        checked={isSysAdmin === false}
+                        type="radio"
+                        onClick={() => {
+                          setIsSysAdmin(false);
+                        }}
+                      />
+                      <span>No</span>
+                    </div>
+                  </div>
+                </FormGroup>
 
                 <FormGroup>
                   <span>Icon</span>
