@@ -63,15 +63,13 @@ const Index = () => {
   const [branchValue, setBranchValue] = useState(
     AdmissionManagerPaging?.branchValue
       ? AdmissionManagerPaging?.branchValue
-      : 1
+      : 0
   );
 
   const [branchLabel, setBranchLabel] = useState(
-    branchValue === 1
-      ? "London Office"
-      : AdmissionManagerPaging?.branchLabel
+    AdmissionManagerPaging?.branchLabel
       ? AdmissionManagerPaging?.branchLabel
-      : "London Office"
+      : "Select branch"
   );
 
   const [providerLabel2, setProviderLabel2] = useState("Select Provider");
