@@ -103,6 +103,15 @@ const SelectAndClear = ({
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="d-flex mt-1">
+                  {userType === userTypes?.SystemAdmin && branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select branch")}
+                    />
+                  ) : (
+                    ""
+                  )}
                   {!providerId &&
                   proValue !== 0 &&
                   userType !== userTypes?.ProviderAdmin &&
@@ -134,6 +143,7 @@ const SelectAndClear = ({
                     proValue !== 0 &&
                     userType !== userTypes?.ProviderAdmin &&
                     userType !== userTypes?.AdmissionManager) ||
+                  (userType === userTypes?.SystemAdmin && branchValue !== 0) ||
                   (managerValue !== 0 &&
                     userType !== userTypes?.AdmissionManager) ? (
                     <button className="tag-clear" onClick={handleClearSearch}>

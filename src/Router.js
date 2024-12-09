@@ -2292,6 +2292,17 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     exact
+                    path="/admissionManagerList/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList.View_AdmissionManager_list
+                      )
+                        ? AdmissionManagerList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    exact
                     path="/admissionManagerList/:providerId"
                     component={
                       permissions?.includes(

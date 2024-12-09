@@ -23,6 +23,7 @@ import Loader from "../../../Search/Loader/Loader.js";
 
 const Index = (props) => {
   const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
+  const userType = localStorage.getItem("userType");
   const { type, branchId } = useParams();
   const location = useLocation();
   const history = useHistory();
@@ -69,17 +70,22 @@ const Index = (props) => {
   const [tableData, setTableData] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState(
-    StaffPaging?.branchLabel ? StaffPaging?.branchLabel : "Select Branch"
-  );
+
   const [branchValue, setBranchValue] = useState(
     branchId
       ? branchId
       : StaffPaging?.branchValue
       ? StaffPaging?.branchValue
-      : 0
+      : 1
   );
 
+  const [branchLabel, setBranchLabel] = useState(
+    branchValue === 1
+      ? "London Office"
+      : StaffPaging?.branchLabel
+      ? StaffPaging?.branchLabel
+      : "London Office"
+  );
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   // user select data per page
@@ -383,6 +389,7 @@ const Index = (props) => {
       <BreadCrumb title="Staff List" backTo="" path="/" />
       <div>
         <SelectAndClear
+          userType={userType}
           empOptiopns={empOptiopns}
           empLabel={empLabel}
           empValue={empValue}
