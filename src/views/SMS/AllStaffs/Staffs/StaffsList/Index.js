@@ -76,15 +76,11 @@ const Index = (props) => {
       ? branchId
       : StaffPaging?.branchValue
       ? StaffPaging?.branchValue
-      : 1
+      : 0
   );
 
   const [branchLabel, setBranchLabel] = useState(
-    branchValue === 1
-      ? "London Office"
-      : StaffPaging?.branchLabel
-      ? StaffPaging?.branchLabel
-      : "London Office"
+    StaffPaging?.branchLabel ? StaffPaging?.branchLabel : "Select branch"
   );
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 

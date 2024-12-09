@@ -53,8 +53,8 @@ const AffiliateList = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchValue, setBranchValue] = useState(1);
-  const [branchLabel, setBranchLabel] = useState("London Office");
+  const [branchValue, setBranchValue] = useState(0);
+  const [branchLabel, setBranchLabel] = useState("Select branch");
 
   const [entity, setEntity] = useState(0);
 
