@@ -45,16 +45,18 @@ const Index = () => {
   const [officerId, setOfficerId] = useState(0);
   const [deleteData, setDeleteData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
-  const [managerLabel, setManagerLabel] = useState(
-    AdmissionOfficerPaging?.managerLabel
-      ? AdmissionOfficerPaging?.managerLabel
-      : "Select Admission Manager"
-  );
+
   const [managerValue, setManagerValue] = useState(
     AdmissionOfficerPaging?.managerValue
       ? AdmissionOfficerPaging?.managerValue
       : 0
   );
+  const [managerLabel, setManagerLabel] = useState(
+    AdmissionOfficerPaging?.managerLabel
+      ? AdmissionOfficerPaging?.managerLabel
+      : "Select Admission Manager"
+  );
+
   const [nameTitleDD, setNameTitleDD] = useState([]);
   const [providerDD, setProviderDD] = useState([]);
   const [managerDDForm, setManagerDDForm] = useState([]);
@@ -73,16 +75,19 @@ const Index = () => {
       ? AdmissionOfficerPaging?.proLabel
       : "Select Provider"
   );
-  const [branchLabel, setBranchLabel] = useState(
-    AdmissionOfficerPaging?.branchLabel
-      ? AdmissionOfficerPaging?.branchLabel
-      : "Select Branch"
-  );
+
   const [branchValue, setBranchValue] = useState(
     AdmissionOfficerPaging?.branchValue
       ? AdmissionOfficerPaging?.branchValue
       : 0
   );
+
+  const [branchLabel, setBranchLabel] = useState(
+    AdmissionOfficerPaging?.branchLabel
+      ? AdmissionOfficerPaging?.branchLabel
+      : "Select branch"
+  );
+
   const [proValue, setProValue] = useState(
     AdmissionOfficerPaging?.proValue ? AdmissionOfficerPaging?.proValue : 0
   );
@@ -146,6 +151,7 @@ const Index = () => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
   }, []);
 
@@ -343,6 +349,8 @@ const Index = () => {
 
   // on clear
   const handleClearSearch = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setManagerLabel("Select Admission Manager");
     setManagerValue(0);
     !providerId && setProLabel("Select Provider");
