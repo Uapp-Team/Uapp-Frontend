@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Form, FormGroup, Input, Row, Label } from "reactstrap";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
@@ -96,13 +96,10 @@ const BankInformationForm = ({
               <span className="text-danger">{accountNumberError}</span>
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
-              <span>
-                {" "}
-                <span className="text-danger">*</span> Sort Code
-              </span>
+              <span>Sort Code</span>
 
               <Input
-                type="text"
+                type="number"
                 name="sortCode"
                 id="sortCode"
                 placeholder="Enter Sort Code"
@@ -114,13 +111,13 @@ const BankInformationForm = ({
               <span className="text-danger">{shortCodeError}</span>
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
-              <span>Swift </span>
+              <span>SWIFT Code</span>
 
               <Input
                 type="text"
                 name="swift"
                 id="swift"
-                placeholder="Enter Swift"
+                placeholder="Enter SWIFT Code"
                 defaultValue={fetchedData?.swift}
               />
             </FormGroup>
