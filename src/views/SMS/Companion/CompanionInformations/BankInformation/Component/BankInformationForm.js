@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Col, Form, FormGroup, Input, Row, Label } from "reactstrap";
+import React from "react";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
@@ -114,7 +114,7 @@ const BankInformationForm = ({
               <span className="text-danger">{shortCodeError}</span>
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
-              <span>Swift </span>
+              <span>SWIFT </span>
 
               <Input
                 type="text"
