@@ -112,7 +112,7 @@ const Index = () => {
   const [branch, setBranch] = useState([]);
   const [tableData, setTableData] = useState([]);
 
-  const branchValueId = branch.map((brn) => brn.id);
+  // const branchValueId = branch.map((brn) => brn.id);
 
   useEffect(() => {
     const tableColumnAdmissionManager = JSON.parse(
@@ -161,24 +161,13 @@ const Index = () => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
 
-    if (userType === userTypes?.BranchAdmin) {
-      get(`ProviderDD/Index/${branchValueId}`).then((res) => {
-        setProviderDD(res);
-        setLoading(false);
-      });
-    } else {
-      get(`ProviderDD/Index/${branchValue}`).then((res) => {
-        setProviderDD(res);
-        setLoading(false);
-      });
-    }
-
-    // get(`ProviderDD/Index/${branchValue}`).then((res) => {
-    //   setProviderDD(res);
-    //   setLoading(false);
-    // });
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
+      setProviderDD(res);
+      setLoading(false);
+    });
 
     get("NameTittleDD/index").then((res) => {
       setNameTitleDD(res);

@@ -127,7 +127,7 @@ const CompanionMyTeamList = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnConsultant", JSON.stringify(values));
+    localStorage.setItem("ColumnCompanionTeam", JSON.stringify(values));
   };
 
   const handlePass = (data) => {

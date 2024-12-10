@@ -51,6 +51,7 @@ const AssignUniversity = () => {
 
   // for hide/unhide column
   const [checkSlNo, setCheckSlNo] = useState(true);
+  const [checkPro, setCheckPro] = useState(true);
   const [checkName, setCheckName] = useState(true);
   const [checkType, setCheckType] = useState(true);
   const [checkAction, setCheckAction] = useState(true);
@@ -126,6 +127,9 @@ const AssignUniversity = () => {
 
   const handleCheckedSLNO = (e) => {
     setCheckSlNo(e.target.checked);
+  };
+  const handleCheckedPro = (e) => {
+    setCheckPro(e.target.checked);
   };
   const handleCheckedName = (e) => {
     setCheckName(e.target.checked);
@@ -253,6 +257,24 @@ const AssignUniversity = () => {
                                 handleCheckedSLNO(e);
                               }}
                               defaultChecked={checkSlNo}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <Col md="8" className="">
+                          <p className="">Provider</p>
+                        </Col>
+
+                        <Col md="4" className="text-center">
+                          <FormGroup check inline>
+                            <Input
+                              className="form-check-input"
+                              type="checkbox"
+                              onChange={(e) => {
+                                handleCheckedPro(e);
+                              }}
+                              defaultChecked={checkPro}
                             />
                           </FormGroup>
                         </Col>
@@ -409,19 +431,23 @@ const AssignUniversity = () => {
                 {uniList?.map((uni, i) => (
                   <tr key={uni?.id} style={{ textAlign: "center" }}>
                     {checkSlNo ? <td>{i + 1}</td> : null}
-                    <td>
-                      {userType === userTypes?.SystemAdmin.toString() ||
-                      userType === userTypes?.Admin.toString() ? (
-                        <Link
-                          className="text-id hover"
-                          to={`/providerDetails/${uni?.university?.providerId}`}
-                        >
-                          {uni?.providerName}
-                        </Link>
-                      ) : (
-                        <span>{uni?.providerName}</span>
-                      )}
-                    </td>
+
+                    {checkPro ? (
+                      <td>
+                        {userType === userTypes?.SystemAdmin.toString() ||
+                        userType === userTypes?.Admin.toString() ? (
+                          <Link
+                            className="text-id hover"
+                            to={`/providerDetails/${uni?.university?.providerId}`}
+                          >
+                            {uni?.providerName}
+                          </Link>
+                        ) : (
+                          <span>{uni?.providerName}</span>
+                        )}
+                      </td>
+                    ) : null}
+
                     {checkName ? (
                       <td>
                         <Link

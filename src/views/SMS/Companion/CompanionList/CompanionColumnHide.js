@@ -11,6 +11,7 @@ import {
 import ColumnAffiliate from "../../TableColumn/ColumnAffiliate";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ColumnCompanions from "../../TableColumn/ColumnCompanions";
+import { userTypes } from "../../../../constants/userTypeConstant";
 
 const CompanionColumnHide = ({
   dropdownOpen1,
@@ -20,6 +21,7 @@ const CompanionColumnHide = ({
   handleChecked,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const userType = localStorage.getItem("userType");
 
   useEffect(() => {
     const tableColumnCompanionsTeam = JSON.parse(
@@ -33,6 +35,10 @@ const CompanionColumnHide = ({
       );
     !tableColumnCompanionsTeam && setTableData(ColumnCompanions);
   }, [setTableData]);
+
+  const adminPermission =
+    userType === userTypes?.SystemAdmin.toString() ||
+    userType === userTypes?.Admin.toString();
 
   return (
     <div className="d-block">
@@ -49,26 +55,53 @@ const CompanionColumnHide = ({
         <DropdownMenu className="bg-dd-1">
           {tableData.map((table, i) => (
             <div key={i}>
-              <div className="d-flex justify-content-between">
-                <Col md="8" className="">
-                  <p className="">{table?.title}</p>
-                </Col>
+              {i === 5 ? (
+                <>
+                  {adminPermission && (
+                    <div className="d-flex justify-content-between">
+                      <Col md="8" className="">
+                        <p className="">{table?.title}</p>
+                      </Col>
 
-                <Col md="4" className="text-center">
-                  <FormGroup check inline>
-                    <Input
-                      className="form-check-input"
-                      type="checkbox"
-                      id=""
-                      name="check"
-                      onChange={(e) => {
-                        handleChecked(e, i);
-                      }}
-                      defaultChecked={table?.isActive}
-                    />
-                  </FormGroup>
-                </Col>
-              </div>
+                      <Col md="4" className="text-center">
+                        <FormGroup check inline>
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id=""
+                            name="isAcceptHome"
+                            onChange={(e) => {
+                              handleChecked(e, i);
+                            }}
+                            defaultChecked={table?.isActive}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="d-flex justify-content-between">
+                  <Col md="8" className="">
+                    <p className="">{table?.title}</p>
+                  </Col>
+
+                  <Col md="4" className="text-center">
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="checkbox"
+                        id=""
+                        name="check"
+                        onChange={(e) => {
+                          handleChecked(e, i);
+                        }}
+                        defaultChecked={table?.isActive}
+                      />
+                    </FormGroup>
+                  </Col>
+                </div>
+              )}
             </div>
           ))}
         </DropdownMenu>

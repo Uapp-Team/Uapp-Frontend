@@ -4,6 +4,7 @@ import LiveIntakeDropdownAndSearch from "./LiveIntakeDropdownAndSearch";
 import get from "../../../helpers/get";
 import LiveIntakeTable from "./LiveIntakeTable";
 import Uget from "../../../helpers/Uget";
+import ColumnLiveIntake from "../TableColumn/ColumnLiveIntake";
 
 const LiveIntake = () => {
   const [isTyping, setIsTyping] = useState(false);
@@ -60,6 +61,19 @@ const LiveIntake = () => {
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+
+  useEffect(() => {
+    const tableColumnLiveIntake = JSON.parse(
+      localStorage.getItem("ColumnLiveIntake")
+    );
+    tableColumnLiveIntake && setTableData(tableColumnLiveIntake);
+    !tableColumnLiveIntake &&
+      localStorage.setItem(
+        "ColumnLiveIntake",
+        JSON.stringify(ColumnLiveIntake)
+      );
+    !tableColumnLiveIntake && setTableData(ColumnLiveIntake);
+  }, []);
 
   useEffect(() => {
     get(`UniversityCampus/GetByUniversity/${universityValue}`).then((res) => {
@@ -139,7 +153,7 @@ const LiveIntake = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnAdmissionManager", JSON.stringify(values));
+    localStorage.setItem("ColumnLiveIntake", JSON.stringify(values));
   };
 
   const handleReset = () => {
