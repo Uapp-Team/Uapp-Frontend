@@ -1,17 +1,13 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
-import Navigation from "../NavigationAndRegistration/Navigation";
-import moment from "moment";
-import EligibilityForm from "./Component/EligibilityForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../components/date/calenderFormate";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import Uget from "../../../../../helpers/Uget";
-import { EyeOutlined } from "@ant-design/icons";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import EligibilityForm from "./Component/EligibilityForm";
 
 const EligibilityInformation = () => {
   const activetab = "5";
@@ -25,7 +21,8 @@ const EligibilityInformation = () => {
   const [uniCountryLabel2, setUniCountryLabel2] = useState("Select Residence");
   const [uniCountryValue2, setUniCountryValue2] = useState(0);
   const [errorc2, setErrorC2] = useState("");
-  const [exDate, setExDate] = useState(currentDate);
+  const [exDate, setExDate] = useState(null);
+  const [exDateError, setExDateError] = useState("");
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -100,7 +97,7 @@ const EligibilityInformation = () => {
       setExDate(
         res?.data?.expireDate
           ? moment(new Date(res?.data?.expireDate)).format("YYYY-MM-DD")
-          : currentDate
+          : null
       );
       setVisa(res?.data?.visaType);
       // setDate(res?.expireDate);
@@ -361,8 +358,8 @@ const EligibilityInformation = () => {
     }
   };
   const handleDate = (e) => {
-    setExDate(e.target.value);
-    if (e.target.value === "") {
+    setExDate(e);
+    if (e === "") {
       setDateError("Expiry Date of Your BRP/TRP or Visa required");
     } else {
       setDateError("");
@@ -486,6 +483,7 @@ const EligibilityInformation = () => {
                 residencyError={residencyError}
                 residencyLabel={residencyLabel}
                 exDate={exDate}
+                exDateError={exDateError}
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
                 FileList3={FileList3}
@@ -510,6 +508,7 @@ const EligibilityInformation = () => {
                 visaError={visaError}
                 handlevisaType={handlevisaType}
                 dateError={dateError}
+                setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
               ></EligibilityForm>
