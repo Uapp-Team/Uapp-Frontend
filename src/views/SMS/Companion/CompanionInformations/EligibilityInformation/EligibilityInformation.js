@@ -419,6 +419,9 @@ const EligibilityInformation = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
+    if (exDate) {
+      subData.append("expireDate", exDate);
+    }
     console.log(subData);
     if (ValidateForm()) {
       setButtonStatus(true);
