@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
-import get from "../../../../../../helpers/get";
 import { dateFormate } from "../../../../../../components/date/calenderFormate";
+import get from "../../../../../../helpers/get";
 
 const EducationalInformationCard = ({
   sId,
@@ -51,7 +51,7 @@ const EducationalInformationCard = ({
                     {edu?.instituteAddress}
                   </span>
                   <span>
-                    <i className="fas fa-phone pr-2"></i>
+                    <i className="fas fa-phone pr-2"></i>+
                     {edu?.instituteContactNumber}
                   </span>
                 </div>
@@ -67,8 +67,9 @@ const EducationalInformationCard = ({
                       <span>Course Ending Date</span>
                       <br />
                       <b>
-                        {edu?.qualificationAchieved === true &&
-                          dateFormate(edu?.attendedInstitutionTo)}
+                        {edu?.qualificationAchieved === true
+                          ? dateFormate(edu?.attendedInstitutionTo)
+                          : "Continue..."}
                       </b>
                     </p>
                   </Col>
@@ -93,7 +94,7 @@ const EducationalInformationCard = ({
                     <p>
                       <span>Result In Percentage</span>
                       <br />
-                      <b>{edu?.finalGrade}</b>
+                      <b>{edu?.finalGrade ? edu?.finalGrade : "N/A"}</b>
                     </p>
                   </Col>
                   <Col md="3">

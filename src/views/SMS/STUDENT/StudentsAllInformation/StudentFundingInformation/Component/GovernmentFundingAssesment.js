@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import { Col, FormGroup, Input, Form, Row } from "reactstrap";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
-import { useHistory } from "react-router-dom";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const GovernmentFundingAssesment = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -110,8 +110,8 @@ const GovernmentFundingAssesment = ({ studentid, success, setSuccess }) => {
                   checked={check}
                 />{" "}
                 <span>
-                  I confirm that all the information provided about my source
-                  fund is true, complete and accurate.
+                  I hereby affirm that all the information provided regarding my
+                  source of funds is true, complete and accurate.
                 </span>
               </div>
             </FormGroup>
