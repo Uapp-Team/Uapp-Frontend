@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
-import {
-  Col,
-  Input,
-  Table,
-  Modal,
-  ModalBody,
-  FormGroup,
-  Form,
-  Row,
-} from "reactstrap";
 import { Upload } from "antd";
-import get from "../../../../../helpers/get";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-import post from "../../../../../helpers/post";
-import SpanButton from "../../../Components/SpanButton";
-import put from "../../../../../helpers/put";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import CancelButton from "../../../../../components/buttons/CancelButton";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import ApplicationStatus from "./Status/ApplicationStatus";
-import moment from "moment";
+import {
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Modal,
+  ModalBody,
+  Row,
+  Table,
+} from "reactstrap";
 import AddButton from "../../../../../components/buttons/AddButton";
+import CancelButton from "../../../../../components/buttons/CancelButton";
+import DownloadButton from "../../../../../components/buttons/DownloadButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../components/buttons/UploadButton";
 import {
   currentDate,
   dateFormate,
 } from "../../../../../components/date/calenderFormate";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../constants/constants";
-import UploadButton from "../../../../../components/buttons/UploadButton";
-import { Link } from "react-router-dom";
-import DownloadButton from "../../../../../components/buttons/DownloadButton";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import SpanButton from "../../../Components/SpanButton";
+import ApplicationStatus from "./Status/ApplicationStatus";
 
 const ApplicationInfo = ({
   handleScroll,
@@ -1741,25 +1741,28 @@ const ApplicationInfo = ({
                   <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                     <td>Loan From Student Loans Company</td>
                     <td>
-                      {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                      {applicationProfileData?.loanfromStudentLoansCompanyForEU ===
                       false
                         ? "No"
                         : "Yes"}
                     </td>
                   </tr>
-                  {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                  {applicationProfileData?.loanfromStudentLoansCompanyForEU ===
                     true && (
                     <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                       <td>Loan Years</td>
                       <td>{applicationProfileData?.loanYearsForEU}</td>
                     </tr>
                   )}
-                  {applicationProfileData?.havingUndergraduatePostgraduateCourseForEU ===
+                  {applicationProfileData?.isHavePre_Settlementstatus ===
                     false && (
                     <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                       <td>Settled or Pre-settled status</td>
                       <td>
-                        {applicationProfileData?.currentResidencyStatusForEU}
+                        {applicationProfileData?.isHavePre_Settlementstatus ===
+                        false
+                          ? "No"
+                          : "Yes"}
                       </td>
                     </tr>
                   )}
