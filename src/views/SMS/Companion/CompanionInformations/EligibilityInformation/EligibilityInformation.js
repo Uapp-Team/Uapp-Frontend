@@ -1,17 +1,14 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
+import { currentDate } from "../../../../../components/date/calenderFormate";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
-import Navigation from "../NavigationAndRegistration/Navigation";
-import moment from "moment";
-import EligibilityForm from "./Component/EligibilityForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../components/date/calenderFormate";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import Uget from "../../../../../helpers/Uget";
-import { EyeOutlined } from "@ant-design/icons";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import EligibilityForm from "./Component/EligibilityForm";
 
 const EligibilityInformation = () => {
   const activetab = "5";
@@ -410,18 +407,30 @@ const EligibilityInformation = () => {
       "idOrPassportFile",
       FileList3.length === 0 ? null : FileList3[0]?.originFileObj
     );
+    if (FileList3.length !== 0) {
+      subData.append("idOrPassportId", eligibilityData?.idOrPassportId);
+    }
     subData.append(
       "proofOfAddressFile",
       FileList4.length === 0 ? null : FileList4[0]?.originFileObj
     );
+    if (FileList4.length !== 0) {
+      subData.append("proofOfAddressId", eligibilityData?.proofOfAddressId);
+    }
     subData.append(
       "BRPFile",
       FileList5.length === 0 ? null : FileList5[0]?.originFileObj
     );
+    if (FileList5.length !== 0) {
+      subData.append("brpId", eligibilityData?.brpId);
+    }
     subData.append(
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
+    if (FileList6.length !== 0) {
+      subData.append("cvId", eligibilityData?.cvId);
+    }
     console.log(subData);
     if (ValidateForm()) {
       setButtonStatus(true);
