@@ -578,7 +578,7 @@ const AdmissionManagerWiseAssignedSubject = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
-                    {/* {checkSlNo ? <th>SL/NO</th> : null} */}
+                    {checkSlNo ? <th>SL/NO</th> : null}
                     {checkSubject ? <th>Course</th> : null}
                     {checkAction ? <th>Action</th> : null}
                   </tr>

@@ -141,143 +141,26 @@ const LiveIntakeTable = ({
                     <DropdownMenu className="bg-dd-1">
                       {tableData?.map((table, i) => (
                         <div key={i}>
-                          {i === 2 ? (
-                            <>
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
+                          <div className="d-flex justify-content-between">
+                            <Col md="8" className="">
+                              <p className="">{table?.title}</p>
+                            </Col>
 
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="isAcceptHome"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            </>
-                          ) : i === 5 ? (
-                            <>
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
-
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="isAcceptHome"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            </>
-                          ) : i === 6 ? (
-                            <>
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
-
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="isAcceptHome"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            </>
-                          ) : i === 7 ? (
-                            <>
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
-
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="isAcceptHome"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            </>
-                          ) : i === 10 ? (
-                            <>
-                              <div className="d-flex justify-content-between">
-                                <Col md="8" className="">
-                                  <p className="">{table?.title}</p>
-                                </Col>
-
-                                <Col md="4" className="text-center">
-                                  <FormGroup check inline>
-                                    <Input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      id=""
-                                      name="isAcceptHome"
-                                      onChange={(e) => {
-                                        handleChecked(e, i);
-                                      }}
-                                      defaultChecked={table?.isActive}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="d-flex justify-content-between">
-                              <Col md="8" className="">
-                                <p className="">{table?.title}</p>
-                              </Col>
-
-                              <Col md="4" className="text-center">
-                                <FormGroup check inline>
-                                  <Input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id=""
-                                    name="isAcceptHome"
-                                    onChange={(e) => {
-                                      handleChecked(e, i);
-                                    }}
-                                    defaultChecked={table?.isActive}
-                                  />
-                                </FormGroup>
-                              </Col>
-                            </div>
-                          )}
+                            <Col md="4" className="text-center">
+                              <FormGroup check inline>
+                                <Input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id=""
+                                  name="isAcceptHome"
+                                  onChange={(e) => {
+                                    handleChecked(e, i);
+                                  }}
+                                  defaultChecked={table?.isActive}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </div>
                         </div>
                       ))}
                     </DropdownMenu>
@@ -300,65 +183,82 @@ const LiveIntakeTable = ({
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="tablehead">
                   <tr style={{ textAlign: "center" }}>
-                    <th>University</th>
-                    <th>Intake</th>
-                    <th>Campus</th>
-                    <th>Recruitment Type</th>
-                    <th>Delivery Pattern</th>
-                    <th>Course</th>
-                    <th style={{ width: "8%" }} className="text-center">
-                      Action
-                    </th>
+                    {tableData[0]?.isActive ? <th>University</th> : null}
+                    {tableData[1]?.isActive ? <th>Intake</th> : null}
+                    {tableData[2]?.isActive ? <th>Campus</th> : null}
+                    {tableData[3]?.isActive ? <th>Recruitment Type</th> : null}
+                    {tableData[4]?.isActive ? <th>Delivery Pattern</th> : null}
+                    {tableData[5]?.isActive ? <th>Course</th> : null}
+                    {tableData[6]?.isActive ? (
+                      <th style={{ width: "8%" }} className="text-center">
+                        Action
+                      </th>
+                    ) : null}
                   </tr>
                 </thead>
                 <tbody>
                   {liveIntakeList?.map((liveIntake, i) => (
                     <tr key={i} style={{ textAlign: "center" }}>
-                      <td>{liveIntake?.universityName}</td>
-                      <td>
-                        <MoreData
-                          data={liveIntake?.intakeNames}
-                          action={() => handleUpdate(liveIntake)}
-                        />
-                      </td>
-                      <td>
-                        <MoreData
-                          data={liveIntake?.campusNames}
-                          action={() => handleUpdate(liveIntake)}
-                        />
-                      </td>
-                      <td>
-                        {liveIntake?.isAcceptHome === true ? (
-                          <span className="for-intake-table">Home</span>
-                        ) : null}
-                        {liveIntake?.isAcceptEU_UK === true ? (
-                          <span className="for-intake-table">Eu/Uk</span>
-                        ) : null}
-                        {liveIntake?.isAcceptInternational === true ? (
+                      {tableData[0]?.isActive ? (
+                        <td>{liveIntake?.universityName}</td>
+                      ) : null}
+                      {tableData[1]?.isActive ? (
+                        <td>
+                          <MoreData
+                            data={liveIntake?.intakeNames}
+                            action={() => handleUpdate(liveIntake)}
+                          />
+                        </td>
+                      ) : null}
+                      {tableData[2]?.isActive ? (
+                        <td>
+                          <MoreData
+                            data={liveIntake?.campusNames}
+                            action={() => handleUpdate(liveIntake)}
+                          />
+                        </td>
+                      ) : null}
+                      {tableData[3]?.isActive ? (
+                        <td>
+                          {liveIntake?.isAcceptHome === true ? (
+                            <span className="for-intake-table">Home</span>
+                          ) : null}
+                          {liveIntake?.isAcceptEU_UK === true ? (
+                            <span className="for-intake-table">Eu/Uk</span>
+                          ) : null}
+                          {liveIntake?.isAcceptInternational === true ? (
+                            <span className="for-intake-table">
+                              International
+                            </span>
+                          ) : null}
+                        </td>
+                      ) : null}
+                      {tableData[4]?.isActive ? (
+                        <td>
+                          {" "}
+                          {/* <span className="for-intake-table">
+                               
+                             </span> */}
+                          {liveIntake?.deliveryPatternNames}
+                        </td>
+                      ) : null}
+                      {tableData[5]?.isActive ? (
+                        <td>
                           <span className="for-intake-table">
-                            International
+                            {liveIntake?.courseCount}{" "}
                           </span>
-                        ) : null}
-                      </td>
-                      <td>
-                        {" "}
-                        {/* <span className="for-intake-table">
-                          
-                        </span> */}
-                        {liveIntake?.deliveryPatternNames}
-                      </td>
-                      <td>
-                        <span className="for-intake-table">
-                          {liveIntake?.courseCount}{" "}
-                        </span>
-                      </td>
-                      <td
-                        className="cursor-pointer"
-                        onClick={() => handleUpdate(liveIntake)}
-                      >
-                        {" "}
-                        More Info<i class="fa-solid fa-chevron-right ml-2"></i>
-                      </td>
+                        </td>
+                      ) : null}
+                      {tableData[6]?.isActive ? (
+                        <td
+                          className="cursor-pointer"
+                          onClick={() => handleUpdate(liveIntake)}
+                        >
+                          {" "}
+                          More Info
+                          <i class="fa-solid fa-chevron-right ml-2"></i>
+                        </td>
+                      ) : null}
                     </tr>
                   ))}
                 </tbody>
