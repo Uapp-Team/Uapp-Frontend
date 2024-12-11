@@ -510,12 +510,16 @@ const Apply = ({
                 )}
 
                 {modalDeliveryOptions.length === 0 ? (
-                  <input
-                    type="hidden"
-                    name="deliveryPatternId"
-                    id="deliveryPatternId"
-                    value={3}
-                  />
+                  <>
+                    <p className="text-yellow">No Delivery pattern available</p>
+
+                    {/* <input
+                      type="hidden"
+                      name="deliveryPatternId"
+                      id="deliveryPatternId"
+                      value={3}
+                    /> */}
+                  </>
                 ) : modalDeliveryOptions.length === 1 ? (
                   <div>
                     <p>
