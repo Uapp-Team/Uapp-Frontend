@@ -4,7 +4,11 @@ const ColumnBranch = [
     isActive: true,
   },
   {
-    title: "Name",
+    title: "Branch Name",
+    isActive: true,
+  },
+  {
+    title: "Admin Name",
     isActive: true,
   },
   {

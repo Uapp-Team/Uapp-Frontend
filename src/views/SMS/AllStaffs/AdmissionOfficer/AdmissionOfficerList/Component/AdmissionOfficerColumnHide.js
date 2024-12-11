@@ -112,7 +112,7 @@ const AdmissionOfficerColumnHide = ({
                     </div>
                   )}
                 </>
-              ) : i === 7 ? (
+              ) : i === 10 ? (
                 <>
                   {" "}
                   {permissions?.includes(
