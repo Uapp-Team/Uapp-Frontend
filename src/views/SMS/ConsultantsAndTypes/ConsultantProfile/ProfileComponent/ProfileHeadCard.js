@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Upload } from "antd";
@@ -24,14 +25,10 @@ import put from "../../../../../helpers/put";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import ButtonLoader from "../../../Components/ButtonLoader";
-import roundimg from "../../../../../assets/img/roundimg.svg";
 import Loader from "../../../Search/Loader/Loader";
-import { dateFormate } from "../../../../../components/date/calenderFormate";
 import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCrop";
-import { AdminUsers } from "../../../../../components/core/User";
 import Filter from "../../../../../components/Dropdown/Filter";
 import { consultantTier } from "../../../../../constants/presetData";
-import post from "../../../../../helpers/post";
 
 const ProfileHeadCard = ({ id, status = false }) => {
   const userType = localStorage.getItem("userType");
@@ -39,19 +36,13 @@ const ProfileHeadCard = ({ id, status = false }) => {
   const [success, setSuccess] = useState(false);
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const userTypeId = localStorage.getItem("userType");
   const [statusType, setStatusType] = useState([]);
   const [statusLabel, setStatusLabel] = useState("Account Status");
   const [statusValue, setStatusValue] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [FileList, setFileList] = useState([]);
   const [error, setError] = useState(false);
-  const [text, setText] = useState("");
   const [buttonStatus1, setButtonStatus1] = useState(false);
   const [previewVisible1, setPreviewVisible1] = useState(false);
   const [previewImage1, setPreviewImage1] = useState("");
@@ -140,7 +131,6 @@ const ProfileHeadCard = ({ id, status = false }) => {
   // on Close Modal
   const closeModal = () => {
     setModalOpen(false);
-    setFileList([]);
     setError(false);
   };
 
@@ -158,39 +148,6 @@ const ProfileHeadCard = ({ id, status = false }) => {
       reader.onerror = (error) => reject(error);
     });
   }
-
-  const handleCancel = () => {
-    setPreviewVisible(false);
-  };
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || file.preview);
-    setPreviewVisible(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
-  };
-
-  const handleChange = ({ fileList }) => {
-    if (
-      fileList.length > 0 &&
-      fileList[0]?.type !== "image/jpeg" &&
-      fileList[0]?.type !== "image/jpg" &&
-      fileList[0]?.type !== "image/png"
-    ) {
-      setFileList([]);
-      setText("Only jpeg, jpg, png image is allowed");
-    } else {
-      setFileList(fileList);
-      setText("");
-      setError(false);
-      setButtonStatus(false);
-    }
-  };
 
   const handleSubmitCoverPhoto = (event) => {
     event.preventDefault();
@@ -217,7 +174,6 @@ const ProfileHeadCard = ({ id, status = false }) => {
           appearance: "success",
           autoDismiss: true,
         });
-        setFileList([]);
         setModalOpen(false);
         setSuccess(!success);
       } else {
@@ -336,6 +292,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
               </div>
             </div>
 
+            {/* cover photo edit modal starts here */}
             <ImageUploadCrop
               modalOpen={modalOpen}
               closeModal={closeModal}
@@ -348,106 +305,6 @@ const ProfileHeadCard = ({ id, status = false }) => {
               progress={progress}
               buttonStatus={buttonStatus}
             />
-
-            {/* cover photo edit modal starts here */}
-            {/* <Modal
-              isOpen={modalOpen}
-              toggle={closeModal}
-              className="uapp-modal"
-            >
-              <ModalHeader>Update Cover Photo</ModalHeader>
-
-              <ModalBody>
-                <form onSubmit={handleSubmitCoverPhoto}>
-                  <input
-                    type="hidden"
-                    name="id"
-                    id="id"
-                    value={id ? id : userId}
-                  />
-
-                  <FormGroup row className="has-icon-left position-relative">
-                    <Col className="ml-5" md="4">
-                      <span>
-                        Cover Photo <span className="text-danger">*</span>{" "}
-                      </span>
-                    </Col>
-                    <Col md="6">
-                      <div className="row d-flex">
-                        <div className="col-md-6">
-                          <>
-                            <Upload
-                              listType="picture-card"
-                              multiple={false}
-                              fileList={FileList}
-                              onPreview={handlePreview}
-                              onChange={handleChange}
-                              beforeUpload={(file) => {
-                                return false;
-                              }}
-                            >
-                              {FileList.length < 1 ? (
-                                <div
-                                  className="text-danger"
-                                  style={{ marginTop: 8 }}
-                                >
-                                  <Icon.Upload />
-                                  <br />
-                                  <span>Upload Image Here</span>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                            </Upload>
-                            <Modal
-                              visible={previewVisible}
-                              title={previewTitle}
-                              footer={null}
-                              onCancel={handleCancel}
-                            >
-                              <img
-                                alt="example"
-                                style={{ width: "100%" }}
-                                src={previewImage}
-                              />
-                            </Modal>
-
-                            <span className="text-danger d-block">{text}</span>
-
-                            {error && (
-                              <span className="text-danger">
-                                Cover photo is required
-                              </span>
-                            )}
-                          </>
-                        </div>
-                      </div>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="12">
-                      <div className="d-flex justify-content-end">
-                        <Button
-                          color="danger"
-                          onClick={closeModal}
-                          className="mr-1 mt-3"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          className="ml-1 mt-3"
-                          color="primary"
-                          disabled={buttonStatus}
-                        >
-                          {progress ? <ButtonLoader /> : "Update"}
-                        </Button>
-                      </div>
-                    </Col>
-                  </FormGroup>
-                </form>
-              </ModalBody>
-            </Modal> */}
             {/* cover photo edit modal ends here */}
             <CardBody>
               <div className="uapp-employee-profile-image-edit">
@@ -614,46 +471,45 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             ></i>
                             {headData?.rating}
                           </p>
-                          {userTypeId ===
-                          userTypes?.Consultant.toString() ? null : (
-                            <>
-                              {headData?.email === null ? null : (
-                                <p>
-                                  <i class="far fa-envelope pr-2"></i>
-                                  {headData?.email}
-                                </p>
-                              )}
 
-                              {headData?.phoneNumber === null ? null : (
-                                <p>
-                                  <i className="fas fa-phone pr-2"></i>
-                                  {headData?.phoneNumber}
-                                </p>
-                              )}
-                              {headData?.linkTypeId === null ? null : (
-                                <p>
-                                  <a
-                                    href={headData?.linkedIn_Facebook}
-                                    target="blank"
-                                  >
-                                    {headData?.linkTypeId === 1 && (
-                                      <>
-                                        <i class="fab fa-linkedin-in pr-2"></i>
-                                        Linkedin
-                                      </>
-                                    )}
-                                    {headData?.linkTypeId === 2 && (
-                                      <>
-                                        <i class="fab fa-facebook-f pr-2"></i>
-                                        Facebook
-                                      </>
-                                    )}
-                                    {/* {headData?.linkedIn_Facebook} */}
-                                  </a>
-                                </p>
-                              )}
-                            </>
-                          )}
+                          <>
+                            {headData?.email === null ? null : (
+                              <p>
+                                <i class="far fa-envelope pr-2"></i>
+                                {headData?.email}
+                              </p>
+                            )}
+
+                            {headData?.phoneNumber === null ? null : (
+                              <p>
+                                <i className="fas fa-phone pr-2"></i>
+                                {headData?.phoneNumber && "+"}
+                                {headData?.phoneNumber}
+                              </p>
+                            )}
+                            {headData?.linkTypeId === null ? null : (
+                              <p>
+                                <a
+                                  href={headData?.linkedIn_Facebook}
+                                  target="blank"
+                                >
+                                  {headData?.linkTypeId === 1 && (
+                                    <>
+                                      <i class="fab fa-linkedin-in pr-2"></i>
+                                      Linkedin
+                                    </>
+                                  )}
+                                  {headData?.linkTypeId === 2 && (
+                                    <>
+                                      <i class="fab fa-facebook-f pr-2"></i>
+                                      Facebook
+                                    </>
+                                  )}
+                                  {/* {headData?.linkedIn_Facebook} */}
+                                </a>
+                              </p>
+                            )}
+                          </>
                         </div>
 
                         <div
