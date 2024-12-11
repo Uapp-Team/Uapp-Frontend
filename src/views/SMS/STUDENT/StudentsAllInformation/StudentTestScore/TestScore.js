@@ -668,6 +668,12 @@ const TestScore = () => {
           setOthersScoreOverall(res?.scoreOverall);
           setOthersEquivalentScore(res?.ieltsEquivalent);
         });
+
+        await get(`StudentTestScoreSummery/Get/${applicationStudentId}`).then(
+          (res) => {
+            setIsQualifiacation(res?.hasTestScore);
+          }
+        );
       } catch (error) {
         console.log(error);
       } finally {
@@ -1661,6 +1667,29 @@ const TestScore = () => {
 
   // Gre data update
 
+  const handleNotest = () => {
+    post("StudentTestScoreSummery/Submit", {
+      studentId: applicationStudentId,
+      hasTestScore: false,
+    }).then((res) => {
+      setButtonStatus(false);
+      setProgress(false);
+
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <BreadCrumb
@@ -1728,6 +1757,9 @@ const TestScore = () => {
                     />
                     <label className="mt-2 px-2">No</label>
                   </div>
+                  {isQualification === false && (
+                    <SaveButton action={() => handleNotest()} />
+                  )}
                 </FormGroup>
               ) : null}
 
