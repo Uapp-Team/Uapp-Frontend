@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
-import { currentDate } from "../../../../../components/date/calenderFormate";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import Uget from "../../../../../helpers/Uget";
@@ -22,7 +21,8 @@ const EligibilityInformation = () => {
   const [uniCountryLabel2, setUniCountryLabel2] = useState("Select Residence");
   const [uniCountryValue2, setUniCountryValue2] = useState(0);
   const [errorc2, setErrorC2] = useState("");
-  const [exDate, setExDate] = useState(currentDate);
+  const [exDate, setExDate] = useState(null);
+  const [exDateError, setExDateError] = useState("");
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -97,7 +97,7 @@ const EligibilityInformation = () => {
       setExDate(
         res?.data?.expireDate
           ? moment(new Date(res?.data?.expireDate)).format("YYYY-MM-DD")
-          : currentDate
+          : null
       );
       setVisa(res?.data?.visaType);
       // setDate(res?.expireDate);
@@ -358,8 +358,8 @@ const EligibilityInformation = () => {
     }
   };
   const handleDate = (e) => {
-    setExDate(e.target.value);
-    if (e.target.value === "") {
+    setExDate(e);
+    if (e === "") {
       setDateError("Expiry Date of Your BRP/TRP or Visa required");
     } else {
       setDateError("");
@@ -431,6 +431,9 @@ const EligibilityInformation = () => {
     if (FileList6.length !== 0) {
       subData.append("cvId", eligibilityData?.cvId);
     }
+    if (exDate) {
+      subData.append("expireDate", exDate);
+    }
     console.log(subData);
     if (ValidateForm()) {
       setButtonStatus(true);
@@ -495,6 +498,7 @@ const EligibilityInformation = () => {
                 residencyError={residencyError}
                 residencyLabel={residencyLabel}
                 exDate={exDate}
+                exDateError={exDateError}
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
                 FileList3={FileList3}
@@ -519,6 +523,7 @@ const EligibilityInformation = () => {
                 visaError={visaError}
                 handlevisaType={handlevisaType}
                 dateError={dateError}
+                setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
               ></EligibilityForm>

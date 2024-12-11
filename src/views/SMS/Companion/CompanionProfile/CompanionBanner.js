@@ -3,17 +3,16 @@ import banner from "../../../../assets/img/affiliate-banner.png";
 import editbtn from "../../../../assets/img/editbtn.png";
 // import user1 from "../../../../assets/img/user-1.svg";
 // import user2 from "../../../../assets/img/user-2.svg";
-import user3 from "../../../../assets/img/user-3.svg";
+import { Select } from "antd";
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import { dateFormate } from "../../../../components/date/calenderFormate";
-import { rootUrl } from "../../../../constants/constants";
-import { Col, Row } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
+import { Col, Row } from "reactstrap";
+import user3 from "../../../../assets/img/user-3.svg";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../constants/constants";
+import { userTypes } from "../../../../constants/userTypeConstant";
 import put from "../../../../helpers/put";
 import Uget from "../../../../helpers/Uget";
-import { permissionList } from "../../../../constants/AuthorizationConstant";
-import { Select } from "antd";
-import { userTypes } from "../../../../constants/userTypeConstant";
 
 const CompanionBanner = ({
   companionProfileData,
@@ -121,7 +120,7 @@ const CompanionBanner = ({
 
               {/* {studentDetails?.phoneNumber === null ? null : ( */}
               <p className="mb-2">
-                <i className="fas fa-phone pr-2"></i>
+                <i className="fas fa-phone pr-2"></i>+
                 {companionProfileData?.data?.phoneNumber}
               </p>
               {/* )} */}

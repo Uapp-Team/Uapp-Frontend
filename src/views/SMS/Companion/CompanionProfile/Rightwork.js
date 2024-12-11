@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "reactstrap";
+import React from "react";
 import { Link } from "react-router-dom";
-import get from "../../../../helpers/get";
-import { rootUrl } from "../../../../constants/constants";
+import { Table } from "reactstrap";
 import { dateFormate } from "../../../../components/date/calenderFormate";
+import { rootUrl } from "../../../../constants/constants";
 import { userTypes } from "../../../../constants/userTypeConstant";
 
 const Rightwork = ({ companionId, companionProfileData, referenceId }) => {
@@ -69,10 +68,12 @@ const Rightwork = ({ companionId, companionProfileData, referenceId }) => {
                   <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                     <td>Expiry Date of Your BRP/TRP or Visa</td>
                     <td>
-                      {dateFormate(
-                        companionProfileData?.data?.rightToWork
-                          ?.expiryDateOfVisa
-                      )}
+                      {companionProfileData?.data?.rightToWork?.expiryDateOfVisa
+                        ? dateFormate(
+                            companionProfileData?.data?.rightToWork
+                              ?.expiryDateOfVisa
+                          )
+                        : "N/A"}
                     </td>
                   </tr>
                 </>

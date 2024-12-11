@@ -188,8 +188,8 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    setBirthDate(e.target.value);
-    if (e.target.value === "") {
+    setBirthDate(e);
+    if (e === "") {
       setDateError("Date of birth is required");
     } else {
       setDateError("");
@@ -203,6 +203,7 @@ const PersonalInformation = () => {
     subdata.append("consultantProfileFile", FileList1[0]?.originFileObj);
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
+    subdata.append("dateOfBirth", birthDate);
 
     let CheckFileIsValid = () => {
       if (consPersonalInfo?.consultantProfileImage === null) {
@@ -333,6 +334,7 @@ const PersonalInformation = () => {
                 phoneNumber={phoneNumber}
                 dateError={dateError}
                 handleDate={handleDate}
+                setDateError={setDateError}
                 handlePrevious={handlePrevious}
                 birthDate={birthDate}
                 minDate={minDate}
