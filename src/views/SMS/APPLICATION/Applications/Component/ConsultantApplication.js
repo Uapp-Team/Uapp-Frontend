@@ -1221,6 +1221,7 @@ const ConsultantApplication = ({ currentUser }) => {
 
                               {tableData[3]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
+                                  {app?.studentPhone && "+"}
                                   {app?.studentPhone} <br />
                                   {app?.studentEmail}
                                 </td>

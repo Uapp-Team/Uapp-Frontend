@@ -685,7 +685,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             ) : null}
                           </div>
 
-                          <div className="ml-1">
+                          {/* <div className="ml-1">
                             <Link
                               to={
                                 id === undefined
@@ -699,7 +699,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
                                 className="img-fluid"
                               />
                             </Link>
-                          </div>
+                          </div> */}
                         </div>
                       </li>
                       <li></li>

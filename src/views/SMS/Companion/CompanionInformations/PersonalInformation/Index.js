@@ -297,8 +297,8 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    setBirthDate(e.target.value);
-    if (e.target.value === "") {
+    setBirthDate(e);
+    if (e === "") {
       setDateError("Date of birth is required");
     } else {
       setDateError("");
@@ -310,6 +310,7 @@ const PersonalInformation = () => {
     event.preventDefault();
     console.log(arrLink, "arrlink");
     const subdata = new FormData(event.target);
+    subdata.append("dateOfBirth", birthDate);
     subdata.append("ProfileImageFile", FileList1[0]?.originFileObj);
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
@@ -495,6 +496,7 @@ const PersonalInformation = () => {
                 phoneNumber={phoneNumber}
                 dateError={dateError}
                 handleDate={handleDate}
+                setDateError={setDateError}
                 birthDate={birthDate}
                 minDate={minDate}
                 arrLink={arrLink}

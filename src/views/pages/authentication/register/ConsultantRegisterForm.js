@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, FormGroup, Input, Label } from "reactstrap";
+import {
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupText,
+  Label,
+} from "reactstrap";
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 import { rootUrl } from "../../../../constants/constants";
@@ -10,6 +23,7 @@ import notify from "../../../../assets/img/notify.png";
 import axios from "axios";
 import { Upload } from "antd";
 import UploadButton from "../../../../components/buttons/UploadButton";
+import containsDigit from "../../../../helpers/nameContainDigit";
 
 const ConsultantRegisterForm = () => {
   const [parameter, setParameter] = useState("");
@@ -37,6 +51,9 @@ const ConsultantRegisterForm = () => {
   const [cvFile, setCvFile] = useState([]);
   const [cvError, setCvError] = useState("");
   const [loansForEu, setLoansForEu] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
 
   useEffect(() => {
     setParameter(invitationcode);
@@ -70,6 +87,8 @@ const ConsultantRegisterForm = () => {
     setLastName(e.target.value);
     if (e.target.value === "") {
       setLastNameError("Last name is required");
+    } else if (containsDigit(e.target.value)) {
+      setLastNameError("Last name cannot contain digits");
     } else {
       setLastNameError("");
     }
@@ -90,6 +109,8 @@ const ConsultantRegisterForm = () => {
     setFirstName(e.target.value);
     if (e.target.value === "") {
       setFirstNameError("First name is required");
+    } else if (containsDigit(e.target.value)) {
+      setFirstNameError("First name cannot contain digits");
     } else {
       setFirstNameError("");
     }
@@ -103,18 +124,47 @@ const ConsultantRegisterForm = () => {
     }
   };
   const handlePassword = (e) => {
-    setPassword(e.target.value);
-    if (e.target.value === "") {
-      setPasswordError("Provide a valid password");
+    const password = e.target.value;
+    setPassword(password);
+
+    // Define validation conditions
+    const errors = [];
+    if (password === "") {
+      errors.push("Password is required");
     } else {
-      setPasswordError("");
+      if (password.length < 8) {
+        errors.push("At least 8 characters");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("One uppercase letter");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("One lowercase letter");
+      }
+      if (!/\d/.test(password)) {
+        errors.push("One number");
+      }
+      if (!/[@$!%*?&]/.test(password)) {
+        errors.push("One special character");
+      }
     }
-    // if (confirmPassword && e.target.value !== confirmPassword) {
-    //   setPasswordError("Password doesn't match");
-    // } else {
-    //   setPasswordError("");
-    // }
+
+    // Join errors into a single message or clear the error
+    if (errors.length > 0) {
+      setPasswordError(errors.join(" & "));
+    } else {
+      setPasswordError(""); // Clear the error if everything is valid
+    }
   };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevState) => !prevState);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible((prevState) => !prevState);
+  };
+
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
     if (e.target.value === "") {
@@ -136,9 +186,20 @@ const ConsultantRegisterForm = () => {
       isFormValid = false;
       setFirstNameError("First name is required");
     }
+
+    if (containsDigit(firstName)) {
+      isFormValid = false;
+      setFirstNameError("First name cannot contain digits");
+    }
+
     if (lastName === "") {
       isFormValid = false;
       setLastNameError("Last name is required");
+    }
+
+    if (containsDigit(lastName)) {
+      isFormValid = false;
+      setLastNameError("Last name cannot contain digits");
     }
     if (linkedFacebook === "") {
       isFormValid = false;
@@ -416,13 +477,28 @@ const ConsultantRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <Input
+            {/* <Input
               className="inside-placeholder"
               type="password"
               placeholder="Enter Password"
               onChange={(e) => handlePassword(e)}
               style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            />
+            /> */}
+            <InputGroup>
+              <Input
+                type={isPasswordVisible ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password}
+                onChange={handlePassword}
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+              />
+              <InputGroupText
+                onClick={togglePasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              </InputGroupText>
+            </InputGroup>
             <span className="text-danger">{passwordError}</span>
           </FormGroup>
         </div>
@@ -432,22 +508,45 @@ const ConsultantRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <Input
+            {/* <Input
               className="inside-placeholder"
               type="password"
               placeholder="Confirm Password"
               onChange={(e) => handleConfirmPassword(e)}
               style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            />
+            /> */}
+            <InputGroup>
+              <Input
+                className="inside-placeholder"
+                type={isConfirmPasswordVisible ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  handleConfirmPassword(e);
+                }}
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+              />
+              <InputGroupText
+                onClick={toggleConfirmPasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {isConfirmPasswordVisible ? (
+                  <EyeOutlined />
+                ) : (
+                  <EyeInvisibleOutlined />
+                )}
+              </InputGroupText>
+            </InputGroup>
             <span className="text-danger">{confirmPasswordError}</span>
           </FormGroup>
         </div>
 
         <FormGroup>
           <div className="d-flex align-items-center">
-            {" "}
             <Col sm={4} style={{ paddingLeft: "1px" }}>
-              <span>CV File : </span>
+              <span>
+                <span className="text-danger">*</span>CV File :
+              </span>
             </Col>
             <Col sm={8}>
               <Upload

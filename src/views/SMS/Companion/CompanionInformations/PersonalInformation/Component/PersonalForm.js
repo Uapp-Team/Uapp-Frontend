@@ -9,6 +9,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import Select from "react-select";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 
 const PersonalForm = ({
   arrLinkError,
@@ -88,6 +89,7 @@ const PersonalForm = ({
   branchError,
   branchLabel,
   selectBranch,
+  setDateError,
 }) => {
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -306,23 +308,14 @@ const PersonalForm = ({
         </FormGroup>
         <FormGroup row>
           <Col lg="6" md="8">
-            <span>
-              {" "}
-              <span className="text-danger">*</span>
-              Date Of Birth
-            </span>
-
-            <Input
-              type="date"
-              name="dateOfBirth"
-              id="dateOfBirth"
-              onChange={(e) => {
-                handleDate(e);
-              }}
+            <DMYPicker
+              label="Date Of Birth"
               value={birthDate}
-              min={minDate}
+              setValue={handleDate}
+              error={dateError}
+              action={setDateError}
+              required={true}
             />
-            <span className="text-danger">{dateError}</span>
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -432,7 +425,9 @@ const PersonalForm = ({
           </Col>
         </FormGroup>
         <div>
-          <span>Digital Portfolio Information</span>
+          <span>
+            <span className="text-danger">*</span> Digital Portfolio Information
+          </span>
           <FormGroup row className="mt-3 mb-5">
             <Col lg="6">
               <Row

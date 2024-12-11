@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Col, Row } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
@@ -170,8 +170,8 @@ const ConsultantBankDetails = () => {
   const handleShortCode = (e) => {
     let data = e.target.value.trimStart();
     setShortCode(data);
-    if (data === "") {
-      setShortCodeError("Short code is required");
+    if (data.length > 6) {
+      setShortCodeError("Sort Code is not more than 6 digit");
     } else {
       setShortCodeError("");
     }
@@ -192,9 +192,14 @@ const ConsultantBankDetails = () => {
       isValid = false;
       setAccountNumberError("Account number is required");
     }
-    if (!shortCode) {
+    // if (!shortCode) {
+    //   isValid = false;
+    //   setShortCodeError("Sort Code is required");
+    // }
+
+    if (shortCode?.length > 6) {
       isValid = false;
-      setShortCodeError("Short code is required");
+      setShortCodeError("Sort Code is not more than 6 digit");
     }
     return isValid;
   };

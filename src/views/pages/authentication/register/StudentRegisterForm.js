@@ -251,9 +251,19 @@ const StudentRegisterForm = () => {
       setFirstNameError("First name is required");
     }
 
+    if (containsDigit(subData.FirstName)) {
+      isFormValid = false;
+      setFirstNameError("First name cannot contain digits");
+    }
+
     if (subData.LastName === "") {
       isFormValid = false;
       setLastNameError("Last name is required");
+    }
+
+    if (containsDigit(subData.LastName)) {
+      isFormValid = false;
+      setLastNameError("Last name cannot contain digits");
     }
 
     if (!phoneNumber) {
