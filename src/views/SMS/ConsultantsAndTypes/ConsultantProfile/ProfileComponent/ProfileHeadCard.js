@@ -614,46 +614,44 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             ></i>
                             {headData?.rating}
                           </p>
-                          {userTypeId ===
-                          userTypes?.Consultant.toString() ? null : (
-                            <>
-                              {headData?.email === null ? null : (
-                                <p>
-                                  <i class="far fa-envelope pr-2"></i>
-                                  {headData?.email}
-                                </p>
-                              )}
 
-                              {headData?.phoneNumber === null ? null : (
-                                <p>
-                                  <i className="fas fa-phone pr-2"></i>
-                                  {headData?.phoneNumber}
-                                </p>
-                              )}
-                              {headData?.linkTypeId === null ? null : (
-                                <p>
-                                  <a
-                                    href={headData?.linkedIn_Facebook}
-                                    target="blank"
-                                  >
-                                    {headData?.linkTypeId === 1 && (
-                                      <>
-                                        <i class="fab fa-linkedin-in pr-2"></i>
-                                        Linkedin
-                                      </>
-                                    )}
-                                    {headData?.linkTypeId === 2 && (
-                                      <>
-                                        <i class="fab fa-facebook-f pr-2"></i>
-                                        Facebook
-                                      </>
-                                    )}
-                                    {/* {headData?.linkedIn_Facebook} */}
-                                  </a>
-                                </p>
-                              )}
-                            </>
-                          )}
+                          <>
+                            {headData?.email === null ? null : (
+                              <p>
+                                <i class="far fa-envelope pr-2"></i>
+                                {headData?.email}
+                              </p>
+                            )}
+
+                            {headData?.phoneNumber === null ? null : (
+                              <p>
+                                <i className="fas fa-phone pr-2"></i>
+                                {headData?.phoneNumber}
+                              </p>
+                            )}
+                            {headData?.linkTypeId === null ? null : (
+                              <p>
+                                <a
+                                  href={headData?.linkedIn_Facebook}
+                                  target="blank"
+                                >
+                                  {headData?.linkTypeId === 1 && (
+                                    <>
+                                      <i class="fab fa-linkedin-in pr-2"></i>
+                                      Linkedin
+                                    </>
+                                  )}
+                                  {headData?.linkTypeId === 2 && (
+                                    <>
+                                      <i class="fab fa-facebook-f pr-2"></i>
+                                      Facebook
+                                    </>
+                                  )}
+                                  {/* {headData?.linkedIn_Facebook} */}
+                                </a>
+                              </p>
+                            )}
+                          </>
                         </div>
 
                         <div

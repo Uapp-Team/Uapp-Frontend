@@ -354,6 +354,7 @@ const AssociateProfileHead = ({ id }) => {
                   {headData?.phoneNumber === null ? null : (
                     <p>
                       <i className="fas fa-phone pr-2"></i>
+                      {headData?.phoneNumber && "+"}
                       {headData?.phoneNumber}
                     </p>
                   )}
