@@ -7,6 +7,7 @@ import Typing from "../../../../components/form/Typing";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import UserViewAns from "./UserViewAns";
 import Uget from "../../../../helpers/Uget";
+import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 
 const UserView = () => {
   const history = useHistory();
@@ -18,7 +19,7 @@ const UserView = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [category, setCategory] = useState([]);
-  const [university, setUniversity] = useState([]);
+  // const [university, setUniversity] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
   const [categoryName, setCategoryName] = useState("");
   const [openIndex, setOpenIndex] = useState(0);
@@ -38,9 +39,9 @@ const UserView = () => {
     Uget(`QuestionCategory/get-all`).then((res) => {
       setCategory(res?.data);
     });
-    Uget(`University/get-dd`).then((res) => {
-      setUniversity(res?.data);
-    });
+    // Uget(`University/get-dd`).then((res) => {
+    //   setUniversity(res?.data);
+    // });
   }, []);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const UserView = () => {
 
   useEffect(() => {
     Uget(
-      `question/get-paginated-titles?index=${1}&size=${5}&status=${4}&searchText=${keyword}`
+      `question/get-paginated-titles?index=${1}&size=${10}&status=${4}&searchText=${keyword}`
     ).then((res) => {
       setSearch(res?.items);
     });
@@ -122,8 +123,33 @@ const UserView = () => {
                   ))}
               </div>
             </div>
-
             {noFilter && (
+              <div>
+                {uniModal ? (
+                  <div
+                    className="w-50 mx-auto"
+                    onMouseLeave={() => setUniModal(!uniModal)}
+                  >
+                    <DefaultDropdownU
+                      label={uniLable}
+                      setLabel={setUniLable}
+                      value={uniValue}
+                      setValue={setUniValue}
+                      url="University/get-dd"
+                      className="w-100"
+                      action={(label, value) => redirectRoute(label, value)}
+                    />
+                  </div>
+                ) : (
+                  <p className="text-white text-center pointer">
+                    <span onClick={() => setUniModal(!uniModal)}>
+                      University wise information <FaRegArrowAltCircleRight />
+                    </span>
+                  </p>
+                )}
+              </div>
+            )}
+            {/* {noFilter && (
               <div
                 className="w-50 my-3 mx-auto relative"
                 onMouseLeave={() => setUniModal(false)}
@@ -148,7 +174,7 @@ const UserView = () => {
                   </div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="w-75 mx-auto">

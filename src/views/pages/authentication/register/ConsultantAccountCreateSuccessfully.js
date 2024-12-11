@@ -28,9 +28,10 @@ const ConsultantAccountCreateSuccessfully = () => {
                 </h1>
 
                 <p style={{ fontSize: "14px" }}>
-                  Your consultant account has been created. We have send a
-                  verification email to your email address. To continue to the
-                  next steps please verify your email first.
+                  Your consultant account has been successfully created. A
+                  verification email has been sent to your registered email
+                  address. Kindly verify your email to proceed with the next
+                  steps.
                 </p>
               </div>
 

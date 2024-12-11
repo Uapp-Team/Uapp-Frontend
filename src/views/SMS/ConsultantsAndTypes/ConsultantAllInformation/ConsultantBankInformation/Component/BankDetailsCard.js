@@ -30,7 +30,6 @@ const BankDetailsCard = ({
           {permissions?.includes(permissionList?.Edit_Consultant) && (
             <span>
               <a href="#bank-details">
-                {" "}
                 <span
                   className="pointer text-body"
                   onClick={() => handleEdit(details)}
@@ -41,6 +40,7 @@ const BankDetailsCard = ({
 
               {details?.isDefault === false && (
                 <>
+                  {" "}
                   |{" "}
                   <span
                     style={{ cursor: "pointer" }}

@@ -33,7 +33,12 @@ const ConsultantBankInformation = ({ id }) => {
           >
             <Card>
               <CardBody>
-                <span className="card-heading">{bankInfo?.bankName}</span>
+                <spa>
+                  <span className="card-heading">{bankInfo?.bankName}</span>
+                  {bankInfo?.isDefault === true ? (
+                    <span className="ml-2 badge badge-secondary">Default</span>
+                  ) : null}
+                </spa>
 
                 <hr />
                 <Row className="text-gray">

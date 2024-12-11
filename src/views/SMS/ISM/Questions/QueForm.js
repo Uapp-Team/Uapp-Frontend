@@ -258,7 +258,7 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
         </Row>
 
         <div className="d-flex justify-content-between align-items-start">
-          <div className="relative w-100">
+          <div className="relative w-100 mb-3">
             <span>Question</span>
             <Typing
               placeholder="Search here ..."
@@ -289,14 +289,15 @@ const QueForm = ({ method, submitPath, defaultData, modalClose, refetch }) => {
 
             <ErrorText error={titleError} />
           </div>
-
-          <StatusDD
-            value={statusValue}
-            setValue={setStatusValue}
-            isAns={false}
-            className="mb-3 w-25 ml-3"
-            isDisabled={statusValue === 1 && true}
-          />
+          {isDeletePreAns && (
+            <StatusDD
+              value={statusValue}
+              setValue={setStatusValue}
+              isAns={false}
+              className="mb-3 w-25 ml-3"
+              isDisabled={statusValue === 1 && true}
+            />
+          )}
         </div>
         {defaultData?.id !== 0 && (
           <CheckOne
