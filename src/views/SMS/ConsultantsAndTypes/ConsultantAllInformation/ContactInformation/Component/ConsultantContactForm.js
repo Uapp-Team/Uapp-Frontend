@@ -109,26 +109,8 @@ const ConsultantContactForm = ({
   return (
     <Row>
       <Col lg="6" md="8">
-        {/* <FormGroup className="has-icon-left position-relative">
-          <span>
-            <span className="text-danger">*</span>
-            Phone Number
-          </span>
-
-          <Input
-            type="text"
-            onChange={(e) => {
-              handlePhoneNumber(e);
-            }}
-            value={phoneNumber}
-            placeholder="Enter Phone Number"
-          />
-          <span className="text-danger">{phoneNumberError}</span>
-        </FormGroup> */}
-
         <FormGroup className="has-icon-left position-relative">
           <span>
-            {" "}
             <span className="text-danger">*</span>
             Address Line 1
           </span>
@@ -136,7 +118,7 @@ const ConsultantContactForm = ({
           <Input
             type="text"
             id="address"
-            placeholder="Enter house no."
+            placeholder="Enter Address Line"
             onChange={(e) => {
               handleHouse(e);
             }}
@@ -191,7 +173,7 @@ const ConsultantContactForm = ({
 
         <FormGroup className="has-icon-left position-relative">
           <span>
-            <span className="text-danger">*</span> Zip/Post Code
+            <span className="text-danger">*</span> Zip/Postal Code
           </span>
 
           <Input

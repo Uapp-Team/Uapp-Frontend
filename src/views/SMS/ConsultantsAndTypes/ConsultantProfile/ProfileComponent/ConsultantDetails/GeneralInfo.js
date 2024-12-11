@@ -14,18 +14,6 @@ const GeneralInfo = ({ id }) => {
       setData(res);
     });
   }, [id]);
-  console.log(data);
-
-  const handleDate = (e) => {
-    let format =
-      new Date(e).getDate() +
-      "-" +
-      (new Date(e).getMonth() + 1) +
-      "-" +
-      new Date(e).getFullYear();
-
-    return format;
-  };
 
   return (
     <>
@@ -62,13 +50,15 @@ const GeneralInfo = ({ id }) => {
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Recruitment Type</td>
             <td>
-              {data?.isAcceptedEU_UK === true
-                ? " Eu/Uk"
-                : data?.isAcceptedHome === true
-                ? "Home"
-                : data?.isAcceptedInternational === true
-                ? " International"
-                : null}
+              {data?.isAcceptedHome === true && "Home"}
+              {data?.isAcceptedHome &&
+                (data?.isAcceptedEU_UK || data?.isAcceptedInternational) &&
+                ", "}
+              {data?.isAcceptedEU_UK === true && "EU/Uk"}
+              {(data?.isAcceptedHome || data?.isAcceptedEU_UK) &&
+                data?.isAcceptedInternational &&
+                ", "}
+              {data?.isAcceptedInternational === true && "International"}
             </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>

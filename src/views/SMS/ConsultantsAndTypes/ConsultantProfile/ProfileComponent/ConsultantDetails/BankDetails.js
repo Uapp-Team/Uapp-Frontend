@@ -35,7 +35,14 @@ const BankDetails = ({ id }) => {
             <Card>
               <CardBody>
                 <div className="d-flex justify-content-between">
-                  <span className="card-heading">{details?.bankName}</span>
+                  <span>
+                    <span className="card-heading">{details?.bankName}</span>
+                    {details?.isDefault === true ? (
+                      <span className="ml-2 badge badge-secondary">
+                        Default
+                      </span>
+                    ) : null}
+                  </span>
                 </div>
                 <hr />
                 <Row className="text-gray">
