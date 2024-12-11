@@ -161,6 +161,7 @@ const UniversityList = (props) => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
   }, [setBranchLabel, setBranchValue]);
 
@@ -204,7 +205,7 @@ const UniversityList = (props) => {
   ]);
 
   useEffect(() => {
-    get(`ProviderDD/Index`).then((res) => {
+    get(`ProviderDD/Index/${branchValue}`).then((res) => {
       setProviderList(res);
     });
 
@@ -215,7 +216,7 @@ const UniversityList = (props) => {
     get(`UniversityTypeDD/Index`).then((res) => {
       setUniversityTypes(res);
     });
-  }, []);
+  }, [branchValue]);
 
   useEffect(() => {
     if (provideId) {
@@ -442,6 +443,8 @@ const UniversityList = (props) => {
 
   // on clear
   const handleClearSearch = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setUniStateLabel("State");
     setUniStateValue(0);
     setUniversityStates([]);
@@ -683,12 +686,25 @@ const UniversityList = (props) => {
               <Col lg="12" md="12" sm="12" xs="12">
                 <div style={{ display: "flex", justifyContent: "start" }}>
                   <div className="d-flex mt-1">
-                    {uniTypeValue !== 0 ||
+                    {(userType === userTypes?.SystemAdmin &&
+                      branchValue !== 0) ||
+                    uniTypeValue !== 0 ||
                     uniCountryValue !== 0 ||
                     unistateValue !== 0 ||
                     providerValue !== 0
                       ? ""
                       : ""}
+                    {userType === userTypes?.SystemAdmin &&
+                    branchValue !== 0 ? (
+                      <TagButton
+                        label={branchLabel}
+                        setValue={() => setBranchValue(0)}
+                        setLabel={() => setBranchLabel("Select Branch")}
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+
                     {uniTypeValue !== 0 ? (
                       <TagButton
                         label={uniTypeLabel}
@@ -736,7 +752,9 @@ const UniversityList = (props) => {
                     )}
                   </div>
                   <div className="mt-1 mx-1 d-flex btn-clear">
-                    {uniTypeValue !== 0 ||
+                    {(userType === userTypes?.SystemAdmin &&
+                      branchValue !== 0) ||
+                    uniTypeValue !== 0 ||
                     uniCountryValue !== 0 ||
                     unistateValue !== 0 ||
                     providerValue !== 0 ? (

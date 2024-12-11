@@ -108,16 +108,17 @@ const CompanionList = () => {
   useEffect(() => {
     get(`BranchDD/Index`).then((res) => {
       setBranch(res);
+      res?.length === 1 && setBranchValue(res[0].id);
     });
 
-    get("consultantdd/ActiveConsultant").then((res) => {
+    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
       setConsultant(res);
     });
 
     get("AccountStatusDD/index").then((res) => {
       setStatusType(res);
     });
-  }, []);
+  }, [branchValue]);
 
   useEffect(() => {
     if (!isTyping) {

@@ -44,6 +44,15 @@ const BranchList = () => {
   const [delData, setDelData] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  const userTypeId = localStorage.getItem("userType");
+  const [pass, setPass] = useState("");
+  const [cPass, setCPass] = useState("");
+  const [passData, setPassData] = useState({});
+  const [passModal, setPassModal] = useState(false);
+  const [passError, setPassError] = useState("");
+  const [error, setError] = useState("");
+  const [resetButtonStatus, setResetButtonStatus] = useState(false);
+
   // for hide/unhide table column
   const [tableData, setTableData] = useState([]);
   const [progress, setProgress] = useState(false);
@@ -117,15 +126,6 @@ const BranchList = () => {
     setTableData(values);
     localStorage.setItem("ColumnBranch", JSON.stringify(values));
   };
-
-  const userTypeId = localStorage.getItem("userType");
-  const [pass, setPass] = useState("");
-  const [cPass, setCPass] = useState("");
-  const [passData, setPassData] = useState({});
-  const [passModal, setPassModal] = useState(false);
-  const [passError, setPassError] = useState("");
-  const [error, setError] = useState("");
-  const [resetButtonStatus, setResetButtonStatus] = useState(false);
 
   const handlePass = (data) => {
     setPassData(data);
@@ -281,7 +281,7 @@ const BranchList = () => {
                       <DropdownMenu className="bg-dd-1">
                         {tableData?.map((table, i) => (
                           <div key={i}>
-                            {i === 2 ? (
+                            {i === 3 ? (
                               <>
                                 {permissions?.includes(
                                   permissionList?.Staff_Password_Change
@@ -363,7 +363,7 @@ const BranchList = () => {
                             {tableData[1]?.isActive ? (
                               <th>Branch Name</th>
                             ) : null}
-                            {tableData[1]?.isActive ? (
+                            {tableData[2]?.isActive ? (
                               <th>Admin Name</th>
                             ) : null}
                             {permissions?.includes(
@@ -373,28 +373,28 @@ const BranchList = () => {
                                 {userTypeId === userTypes?.SystemAdmin ||
                                 userTypeId === userTypes?.Admin ? (
                                   <>
-                                    {tableData[2]?.isActive ? (
+                                    {tableData[3]?.isActive ? (
                                       <th>Password</th>
                                     ) : null}
                                   </>
                                 ) : null}
                               </>
                             ) : null}
-                            {tableData[3]?.isActive ? <th>Email</th> : null}
-                            {tableData[4]?.isActive ? <th>Contact</th> : null}
-                            {tableData[5]?.isActive ? <th>Country</th> : null}
-                            {tableData[6]?.isActive ? (
+                            {tableData[4]?.isActive ? <th>Email</th> : null}
+                            {tableData[5]?.isActive ? <th>Contact</th> : null}
+                            {tableData[6]?.isActive ? <th>Country</th> : null}
+                            {tableData[7]?.isActive ? (
                               <th>Compliance Manager</th>
                             ) : null}
-                            {tableData[6]?.isActive ? (
+                            {tableData[8]?.isActive ? (
                               <th>Consultants</th>
                             ) : null}
-                            {tableData[7]?.isActive ? <th>Student</th> : null}
-                            {tableData[8]?.isActive ? (
+                            {tableData[9]?.isActive ? <th>Student</th> : null}
+                            {tableData[10]?.isActive ? (
                               <th>Applications</th>
                             ) : null}
 
-                            {tableData[9]?.isActive ? (
+                            {tableData[11]?.isActive ? (
                               <th
                                 style={{ width: "8%" }}
                                 className="text-center"
@@ -418,7 +418,7 @@ const BranchList = () => {
                                 <td>{singleBranch?.name}</td>
                               ) : null}
 
-                              {tableData[1]?.isActive ? (
+                              {tableData[2]?.isActive ? (
                                 <td>{singleBranch?.branchAdminName}</td>
                               ) : null}
 
@@ -429,7 +429,7 @@ const BranchList = () => {
                                   {userTypeId === userTypes?.SystemAdmin ||
                                   userTypeId === userTypes?.Admin ? (
                                     <>
-                                      {tableData[2]?.isActive ? (
+                                      {tableData[3]?.isActive ? (
                                         <td>
                                           <Link
                                             onClick={() =>
@@ -445,11 +445,11 @@ const BranchList = () => {
                                 </>
                               ) : null}
 
-                              {tableData[3]?.isActive ? (
+                              {tableData[4]?.isActive ? (
                                 <td>{singleBranch?.branchManagerEmail}</td>
                               ) : null}
 
-                              {tableData[4]?.isActive ? (
+                              {tableData[5]?.isActive ? (
                                 <td>
                                   <div className=" d-flex justify-content-center">
                                     <PopOverText
@@ -478,11 +478,11 @@ const BranchList = () => {
                                 </td>
                               ) : null}
 
-                              {tableData[5]?.isActive ? (
+                              {tableData[6]?.isActive ? (
                                 <td>{singleBranch?.country?.name}</td>
                               ) : null}
 
-                              {tableData[6]?.isActive ? (
+                              {tableData[7]?.isActive ? (
                                 <td>
                                   <div style={{ marginTop: "5px" }}>
                                     <span
@@ -499,7 +499,7 @@ const BranchList = () => {
                                 </td>
                               ) : null}
 
-                              {tableData[6]?.isActive ? (
+                              {tableData[8]?.isActive ? (
                                 <td>
                                   <div style={{ marginTop: "5px" }}>
                                     <span
@@ -516,7 +516,7 @@ const BranchList = () => {
                                 </td>
                               ) : null}
 
-                              {tableData[7]?.isActive ? (
+                              {tableData[9]?.isActive ? (
                                 <td>
                                   <div style={{ marginTop: "5px" }}>
                                     <span
@@ -532,7 +532,7 @@ const BranchList = () => {
                                   </div>
                                 </td>
                               ) : null}
-                              {tableData[8]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td>
                                   <div style={{ marginTop: "5px" }}>
                                     <span
@@ -549,7 +549,7 @@ const BranchList = () => {
                                 </td>
                               ) : null}
 
-                              {tableData[9]?.isActive ? (
+                              {tableData[11]?.isActive ? (
                                 <td
                                   style={{ width: "8%" }}
                                   className="text-center"
