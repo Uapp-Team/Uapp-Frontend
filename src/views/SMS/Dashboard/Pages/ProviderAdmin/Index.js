@@ -20,7 +20,7 @@ const ProviderAdmin = () => {
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [accountStatus, setAccountStatus] = useState(1);
+  const [accountStatus, setAccountStatus] = useState(0);
   const [providerId, setProviderId] = useState(0);
 
   useEffect(() => {
@@ -45,6 +45,8 @@ const ProviderAdmin = () => {
 
   useEffect(() => {
     get(`ProviderDashboard/Overview?rangeid=${intakeRngValue}`).then((res) => {
+      console.log(res, "account Status");
+
       setAccountStatus(res.accountStatusId);
       setProviderId(res.providerId);
     });
