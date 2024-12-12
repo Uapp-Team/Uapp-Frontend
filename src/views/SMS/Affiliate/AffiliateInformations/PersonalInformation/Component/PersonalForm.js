@@ -417,7 +417,9 @@ const PersonalForm = ({
           </Col>
         </FormGroup>
         <div>
-          <span>Digital Portfolio Information</span>
+          <span>
+            <span className="text-danger">*</span>Digital Portfolio Information
+          </span>
           <FormGroup row className="mt-3 mb-5">
             <Col lg="6">
               <Row
