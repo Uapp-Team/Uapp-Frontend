@@ -56,6 +56,7 @@ const EligibilityInformation = () => {
 
   const [visaType, setVisaType] = useState([]);
   const [visaTypeValue, setVisaTypeValue] = useState(0);
+  console.log(visaTypeValue, "visa");
   const [visaTypeLabel, setVisaTypeLabel] = useState("Select Visa Type");
 
   useEffect(() => {
@@ -107,7 +108,10 @@ const EligibilityInformation = () => {
           ? moment(new Date(res?.data?.expireDate)).format("YYYY-MM-DD")
           : null
       );
-      setVisa(res?.data?.visaType);
+      setVisaTypeLabel(
+        res?.data?.visaType ? res?.data?.visaType : "Select Visa Type"
+      );
+      setVisaTypeValue();
       // setDate(res?.expireDate);
     });
   }, [success, companionId]);
@@ -399,7 +403,7 @@ const EligibilityInformation = () => {
       isValid = false;
       setResidencyError("Residency status is required");
     }
-    if (residencyValue === 2 && visaTypeValue === 0) {
+    if (residencyValue === 2 && visaTypeLabel === "") {
       isValid = false;
       setVisaError("Visa Type is required");
     }
@@ -433,23 +437,23 @@ const EligibilityInformation = () => {
       "proofOfAddressFile",
       FileList4.length === 0 ? null : FileList4[0]?.originFileObj
     );
-    if (FileList4.length !== 0) {
-      subData.append("proofOfAddressId", eligibilityData?.proofOfAddressId);
-    }
+    // if (FileList4.length !== 0) {
+    //   subData.append("proofOfAddressId", eligibilityData?.proofOfAddressId);
+    // }
     subData.append(
       "BRPFile",
       FileList5.length === 0 ? null : FileList5[0]?.originFileObj
     );
-    if (FileList5.length !== 0) {
-      subData.append("brpId", eligibilityData?.brpId);
-    }
+    // if (FileList5.length !== 0) {
+    //   subData.append("brpId", eligibilityData?.brpId);
+    // }
     subData.append(
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
-    if (FileList6.length !== 0) {
-      subData.append("cvId", eligibilityData?.cvId);
-    }
+    // if (FileList6.length !== 0) {
+    //   subData.append("cvId", eligibilityData?.cvId);
+    // }
     if (exDate) {
       subData.append("expireDate", exDate);
     }
