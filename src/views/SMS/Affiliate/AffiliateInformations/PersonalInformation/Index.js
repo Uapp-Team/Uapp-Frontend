@@ -304,7 +304,9 @@ const PersonalInformation = () => {
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
     subdata.append("affiliateLinks", JSON.stringify(arrLink));
-
+    if (birthDate) {
+      subdata.append("dateOfBirth", birthDate);
+    }
     let CheckFileIsValid = () => {
       if (affiliatePersonalInfo?.data?.affiliateProfileImage === null) {
         if (FileList1.length < 1 && userId === affiliateId) {
