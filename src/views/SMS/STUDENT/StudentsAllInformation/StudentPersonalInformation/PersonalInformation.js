@@ -369,7 +369,6 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
-  const handleDelete = () => {};
 
   const countryResidenceName = countryResidence?.map((branchCountry) => ({
     label: branchCountry.name,
