@@ -8,6 +8,7 @@ const AllScoresCard = ({
   addNewScore,
   eltName,
   isQualification,
+  isQualificationAdd,
   ielts,
   handleEditDuolingo,
   handleEditFunctions,
@@ -644,7 +645,7 @@ const AllScoresCard = ({
         }}
       ></FormGroup>
 
-      {((ielts !== null ||
+      {(ielts !== null ||
         duolingo !== null ||
         toefl !== null ||
         functions !== null ||
@@ -652,8 +653,8 @@ const AllScoresCard = ({
         pearson !== null ||
         others !== null ||
         pte !== null) &&
-        isQualification === false) ||
-      isQualification === null ? (
+      isQualification === true &&
+      isQualificationAdd === false ? (
         <>
           {" "}
           {permissions?.includes(permissionList?.Edit_Student) ? (
