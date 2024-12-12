@@ -202,7 +202,7 @@ const StudentNavigation = ({ activetab, studentid, success, action }) => {
           onClick={() => navigateTo("12")}
           disabled={!activity?.declaration}
         >
-          Review and Apply
+          Review and Sign
         </NavLink>
       </NavItem>
     </Nav>
