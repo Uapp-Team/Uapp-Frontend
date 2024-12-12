@@ -6,6 +6,7 @@ import DownloadButton from "../../../../../../components/buttons/DownloadButton"
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 import Preview from "../../../../../../components/ui/Preview";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../../../constants/constants";
@@ -20,6 +21,7 @@ const EligibilityForm = ({
   errorc,
   selectUniCountry,
   countryDD2,
+  visaTypeDD,
   uniCountryLabel2,
   uniCountryValue2,
   selectUniCountry2,
@@ -69,8 +71,12 @@ const EligibilityForm = ({
   visaError,
   handlevisaType,
   dateError,
+  setDateError,
   handleDate,
   handlePrevious,
+  visaTypeLabel,
+  visaTypeValue,
+  selectVisaType,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -158,7 +164,7 @@ const EligibilityForm = ({
                   <span className="text-danger">*</span> Visa Type
                 </span>
 
-                <Input
+                {/* <Input
                   type="text"
                   name="VisaType"
                   id="VisaType"
@@ -168,17 +174,27 @@ const EligibilityForm = ({
                   placeholder="Enter Visa Status"
                   value={visa}
                   // defaultValue={eligibilityData?.visaType}
+                /> */}
+                <Select
+                  options={visaTypeDD}
+                  value={{
+                    label: visaTypeLabel,
+                    value: visaTypeValue,
+                  }}
+                  onChange={(opt) => selectVisaType(opt.label, opt.value)}
+                  name="visaTypeId"
+                  id="visaTypeId"
                 />
                 <span className="text-danger">{visaError}</span>
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                <span>
+                {/* <span>
                   <span className="text-danger">*</span> Expiry Date of Your
                   BRP/TRP or Visa{" "}
-                </span>
+                </span> */}
 
-                <Input
+                {/* <Input
                   type="date"
                   name="ExpireDate"
                   id="ExpireDate"
@@ -186,8 +202,16 @@ const EligibilityForm = ({
                     handleDate(e);
                   }}
                   defaultValue={exDate}
+                /> */}
+                <DMYPicker
+                  label="Expiry Date of Your
+                  BRP/TRP or Visa"
+                  value={exDate}
+                  setValue={handleDate}
+                  error={dateError}
+                  action={setDateError}
+                  required={true}
                 />
-                <span className="text-danger">{dateError}</span>
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
