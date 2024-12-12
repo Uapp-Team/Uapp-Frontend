@@ -1,17 +1,15 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
-import get from "../../../../../helpers/get";
-import Uget from "../../../../../helpers/Uget";
-import Navigation from "../NavigationAndRegistration/Navigation";
-import put from "../../../../../helpers/put";
-import moment from "moment";
-import PersonalForm from "./Component/PersonalForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
+import Uget from "../../../../../helpers/Uget";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import PersonalForm from "./Component/PersonalForm";
 
 const PersonalInformation = () => {
   // Profile Image States
@@ -143,10 +141,9 @@ const PersonalInformation = () => {
       setMaritalStatusValue(
         res?.data?.maritalStatusId !== null ? res?.data?.maritalStatusId : 0
       );
-      res?.data?.dateOfBirth &&
-        setBirthDate(
-          moment(new Date(res?.data?.dateOfBirth)).format("YYYY-MM-DD")
-        );
+      setBirthDate(
+        moment(new Date(res?.data?.dateOfBirth)).format("YYYY-MM-DD")
+      );
     });
   }, [success, affiliateId]);
 
@@ -293,11 +290,8 @@ const PersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    setBirthDate(e.target.value);
-    if (e.target.value === "") {
-      setDateError("Date of birth is required");
-    } else {
-      setDateError("");
+    if (e) {
+      setBirthDate(e);
     }
   };
 
@@ -477,6 +471,7 @@ const PersonalInformation = () => {
                 phoneNumber={phoneNumber}
                 dateError={dateError}
                 handleDate={handleDate}
+                setDateError={setDateError}
                 birthDate={birthDate}
                 minDate={minDate}
                 arrLink={arrLink}
