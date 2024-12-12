@@ -54,9 +54,17 @@ const EligibilityInformation = () => {
   const [previewTitle, setPreviewTitle] = useState("");
   const [previewFileType, setPreviewFileType] = useState("");
 
+  const [visaType, setVisaType] = useState([]);
+  const [visaTypeValue, setVisaTypeValue] = useState(0);
+  const [visaTypeLabel, setVisaTypeLabel] = useState("Select Visa Type");
+
   useEffect(() => {
     get("CountryDD/index").then((res) => {
       setCountryList(res);
+    });
+
+    get("visatypedd/get-all").then((res) => {
+      setVisaType(res);
     });
 
     get("ResidencyStatusDD/index").then((res) => {
@@ -113,6 +121,17 @@ const EligibilityInformation = () => {
     label: countryOptions?.name,
     value: countryOptions?.id,
   }));
+
+  const visaTypeDD = visaType.map((visaTypeOptions) => ({
+    label: visaTypeOptions?.name,
+    value: visaTypeOptions?.id,
+  }));
+
+  const selectVisaType = (label, value) => {
+    setVisaTypeLabel(label);
+    setVisaTypeValue(value);
+    setVisaError("");
+  };
 
   // select Country
   const selectUniCountry = (label, value) => {
@@ -380,7 +399,7 @@ const EligibilityInformation = () => {
       isValid = false;
       setResidencyError("Residency status is required");
     }
-    if (residencyValue === 2 && !visa) {
+    if (residencyValue === 2 && visaTypeValue === 0) {
       isValid = false;
       setVisaError("Visa Type is required");
     }
@@ -407,9 +426,9 @@ const EligibilityInformation = () => {
       "idOrPassportFile",
       FileList3.length === 0 ? null : FileList3[0]?.originFileObj
     );
-    if (FileList3.length !== 0) {
-      subData.append("idOrPassportId", eligibilityData?.idOrPassportId);
-    }
+    // if (FileList3.length !== 0) {
+    //   subData.append("idOrPassportId", eligibilityData?.idOrPassportId);
+    // }
     subData.append(
       "proofOfAddressFile",
       FileList4.length === 0 ? null : FileList4[0]?.originFileObj
@@ -434,7 +453,7 @@ const EligibilityInformation = () => {
     if (exDate) {
       subData.append("expireDate", exDate);
     }
-    console.log(subData);
+    subData.append("visaType", visaTypeLabel);
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
@@ -526,6 +545,11 @@ const EligibilityInformation = () => {
                 setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
+                visaType={visaType}
+                visaTypeValue={visaTypeValue}
+                visaTypeLabel={visaTypeLabel}
+                visaTypeDD={visaTypeDD}
+                selectVisaType={selectVisaType}
               ></EligibilityForm>
             </TabPane>
           </TabContent>
