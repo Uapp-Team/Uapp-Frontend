@@ -433,7 +433,7 @@ const UpdateProvider = () => {
               <Col lg="6" md="8">
                 <span>
                   <span className="text-danger">*</span>{" "}
-                  <span>Company or Institution name</span>
+                  <span>Company or Institution Name</span>
                 </span>
 
                 <Input
@@ -497,7 +497,7 @@ const UpdateProvider = () => {
             <FormGroup row>
               <Col lg="6" md="8">
                 <span>
-                  <span>Finance (Billing) Email</span>
+                  <span>Billing Email Address</span>
                 </span>
 
                 <Input
