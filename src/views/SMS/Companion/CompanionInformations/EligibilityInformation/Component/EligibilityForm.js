@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { FormGroup, Form, Col, Input, Label, Row } from "reactstrap";
-import Select from "react-select";
-import { Modal, Upload } from "antd";
-import { rootUrl } from "../../../../../../constants/constants";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import UploadButton from "../../../../../../components/buttons/UploadButton";
-import DownloadButton from "../../../../../../components/buttons/DownloadButton";
 import { EyeOutlined } from "@ant-design/icons";
+import { Modal, Upload } from "antd";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import DownloadButton from "../../../../../../components/buttons/DownloadButton";
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../constants/constants";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -30,6 +31,8 @@ const EligibilityForm = ({
   residencyError,
   residencyLabel,
   exDate,
+  exDateError,
+  setExDateError,
   onRadioValueChange,
   rightToWork,
   FileList3,
@@ -73,8 +76,14 @@ const EligibilityForm = ({
   visaError,
   handlevisaType,
   dateError,
+  setDateError,
   handleDate,
   handlePrevious,
+  visaType,
+  visaTypeDD,
+  visaTypeLabel,
+  visaTypeValue,
+  selectVisaType,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -471,7 +480,7 @@ const EligibilityForm = ({
                   <span className="text-danger">*</span> Visa Type
                 </span>
 
-                <Input
+                {/* <Input
                   type="text"
                   name="VisaType"
                   id="VisaType"
@@ -481,17 +490,27 @@ const EligibilityForm = ({
                   placeholder="Enter Visa Status"
                   value={visa}
                   // defaultValue={eligibilityData?.visaType}
+                /> */}
+                <Select
+                  options={visaTypeDD}
+                  value={{
+                    label: visaTypeLabel,
+                    value: visaTypeValue,
+                  }}
+                  onChange={(opt) => selectVisaType(opt.label, opt.value)}
+                  name="visaTypeId"
+                  id="visaTypeId"
                 />
                 <span className="text-danger">{visaError}</span>
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                <span>
+                {/* <span>
                   <span className="text-danger">*</span> Expiry Date of Your
                   BRP/TRP or Visa{" "}
                 </span>
 
-                <Input
+                 <Input
                   type="date"
                   name="ExpireDate"
                   id="ExpireDate"
@@ -499,6 +518,14 @@ const EligibilityForm = ({
                     handleDate(e);
                   }}
                   defaultValue={exDate}
+                /> */}
+                <DMYPicker
+                  label="Expiry Date of Your BRP/TRP or Visa"
+                  value={exDate}
+                  setValue={handleDate}
+                  error={exDateError}
+                  action={setExDateError}
+                  required={true}
                 />
                 <span className="text-danger">{dateError}</span>
               </FormGroup>

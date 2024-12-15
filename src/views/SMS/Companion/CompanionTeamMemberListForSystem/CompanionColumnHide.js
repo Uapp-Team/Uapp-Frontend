@@ -8,7 +8,7 @@ import {
   Input,
 } from "reactstrap";
 
-import ColumnAffiliate from "../../TableColumn/ColumnAffiliate";
+import ColumnCompanionTeam from "../../TableColumn/ColumnCompanionTeam";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const CompanionColumnHide = ({
@@ -21,13 +21,16 @@ const CompanionColumnHide = ({
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
-    const tableColumnConsultant = JSON.parse(
-      localStorage.getItem("ColumnConsultant")
+    const tableColumnComanionTeam = JSON.parse(
+      localStorage.getItem("ColumnCompanionTeam")
     );
-    tableColumnConsultant && setTableData(tableColumnConsultant);
-    !tableColumnConsultant &&
-      localStorage.setItem("ColumnConsultant", JSON.stringify(ColumnAffiliate));
-    !tableColumnConsultant && setTableData(ColumnAffiliate);
+    tableColumnComanionTeam && setTableData(tableColumnComanionTeam);
+    !tableColumnComanionTeam &&
+      localStorage.setItem(
+        "ColumnCompanionTeam",
+        JSON.stringify(ColumnCompanionTeam)
+      );
+    !tableColumnComanionTeam && setTableData(ColumnCompanionTeam);
   }, [setTableData]);
 
   return (
@@ -45,34 +48,7 @@ const CompanionColumnHide = ({
         <DropdownMenu className="bg-dd-1">
           {tableData.map((table, i) => (
             <div key={i}>
-              {i === 3 ? (
-                <>
-                  {permissions?.includes(
-                    permissionList.Consultant_Password_Change
-                  ) && (
-                    <div className="d-flex justify-content-between">
-                      <Col md="8" className="">
-                        <p className="">{table?.title}</p>
-                      </Col>
-
-                      <Col md="4" className="text-center">
-                        <FormGroup check inline>
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            id=""
-                            name="check"
-                            onChange={(e) => {
-                              handleChecked(e, i);
-                            }}
-                            defaultChecked={table?.isActive}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </div>
-                  )}
-                </>
-              ) : i === 12 ? (
+              {i === 5 ? (
                 <>
                   {permissions?.includes(
                     permissionList.Change_Consultant_AccountStatus

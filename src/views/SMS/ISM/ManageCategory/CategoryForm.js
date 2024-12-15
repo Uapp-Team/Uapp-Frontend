@@ -90,7 +90,11 @@ const CategoryForm = ({
                   placeholder={`Add ${categoryId > 0 ? "Sub " : ""}Category`}
                   register={register}
                   defaultValue={defaultData?.name}
-                  error={errors?.name?.message}
+                  error={
+                    categoryId > 0 && errors?.name?.message
+                      ? `Sub ${errors?.name?.message}`
+                      : errors?.name?.message
+                  }
                   className="faq-sub-category mb-0"
                 />
               </>

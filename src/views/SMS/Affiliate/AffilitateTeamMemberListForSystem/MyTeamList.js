@@ -128,7 +128,7 @@ const MyTeamList = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnConsultant", JSON.stringify(values));
+    localStorage.setItem("ColumnAffiliateTeam", JSON.stringify(values));
   };
 
   const handlePass = (data) => {

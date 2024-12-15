@@ -74,8 +74,6 @@ const Consultant = () => {
     });
   }, [referenceId]);
 
-  console.log(status);
-
   // const showDrawer = () => {
   //   setOpen(true);
   // };

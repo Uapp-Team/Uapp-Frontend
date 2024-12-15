@@ -292,7 +292,8 @@ const ContactFormComponent = ({
             <FormGroup>
               <span className="">
                 <span className="text-danger">*</span>
-                Is student's permanent address same as the mailing address?
+                Is the student's permanent address the same as their mailing
+                address?
               </span>
               <br />
 

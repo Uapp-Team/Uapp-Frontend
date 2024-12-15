@@ -193,13 +193,11 @@ export default function ApplicationList({
       )}
 
       <>
-        {" "}
         {applicationInfo.map((appinfo) => (
           <div>
             <Card>
               <CardBody>
                 <>
-                  {" "}
                   <div className="row" style={{ marginTop: "30px" }}>
                     <div className="col-md-2">
                       <span className="std-dashboard-style7">APP ID</span>{" "}
@@ -829,7 +827,7 @@ export default function ApplicationList({
                               />
                             </div>
                             <div className="mt-1 mx-1">
-                              <span>Review & Apply</span>
+                              <span>Review & Signed</span>
                             </div>
                           </div>
                         ) : (
@@ -838,7 +836,7 @@ export default function ApplicationList({
                               <img src={ashTick} className="img-fluid" alt="" />
                             </div>
                             <div className="mt-1 mx-1">
-                              <span>Review & Apply</span>
+                              <span>Review & Sign</span>
                             </div>
                           </div>
                         )}

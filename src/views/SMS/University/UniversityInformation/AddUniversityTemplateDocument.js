@@ -73,10 +73,40 @@ const AddUniversityTemplateDocument = () => {
   const [nameError, setNameError] = useState("");
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const [error, setError] = useState(false);
+
+  // const handleChange1 = ({ fileList }) => {
+  //   setUploadError(false);
+  //   setFileList1(fileList);
+  // };
+
+  useEffect(() => {
+    if (applicationObject?.templateFile?.fileUrl) {
+      setFileList1([
+        {
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
+          url: rootUrl + applicationObject.templateFile.fileUrl,
+        },
+      ]);
+    }
+  }, [applicationObject]);
 
   const handleChange1 = ({ fileList }) => {
-    setUploadError(false);
-    setFileList1(fileList);
+    if (
+      fileList.length > 0 &&
+      fileList[0]?.type !== "image/jpeg" &&
+      fileList[0]?.type !== "image/jpg" &&
+      fileList[0]?.type !== "image/png"
+    ) {
+      setFileList1([]);
+      setError("Only jpeg, jpg, png image is allowed");
+    } else {
+      setFileList1(fileList);
+      setError("");
+      setUploadError(false);
+    }
   };
 
   function getBase641(file) {
@@ -546,22 +576,7 @@ const AddUniversityTemplateDocument = () => {
                                   </Col>
                                   <Col md="5">
                                     <div className="row">
-                                      {applicationObject?.templateFile ? (
-                                        <div className="col-md-6">
-                                          <Image
-                                            width={104}
-                                            height={104}
-                                            src={
-                                              rootUrl +
-                                              applicationObject?.templateFile
-                                                ?.thumbnailUrl
-                                            }
-                                            className="pr-2"
-                                          />
-                                        </div>
-                                      ) : null}
-
-                                      <div className="col-md-6">
+                                      <div className="col-md-6 pb-2 pr-3">
                                         <Upload
                                           listType="picture-card"
                                           multiple={false}
@@ -578,14 +593,14 @@ const AddUniversityTemplateDocument = () => {
                                               style={{ marginTop: 8 }}
                                             >
                                               <Icon.Upload />
-                                              <br />
-                                              <span>Upload Here</span>
+                                              {/* <br />
+                                  <span>Upload Here</span> */}
                                             </div>
                                           ) : (
                                             ""
                                           )}
                                         </Upload>
-                                        <AntdModal
+                                        <Modal
                                           visible={previewVisible1}
                                           title={previewTitle1}
                                           footer={null}
@@ -596,7 +611,10 @@ const AddUniversityTemplateDocument = () => {
                                             style={{ width: "100%" }}
                                             src={previewImage1}
                                           />
-                                        </AntdModal>
+                                        </Modal>
+                                        <span className="text-danger d-block">
+                                          {uploadError}
+                                        </span>
                                       </div>
                                     </div>
 

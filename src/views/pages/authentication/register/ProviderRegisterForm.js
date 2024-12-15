@@ -261,7 +261,7 @@ const ProviderRegisterForm = () => {
               marginBottom: "-8px",
             }}
           >
-            Company or institution name
+            Company Or Institution Name
           </h1>
         </div>
 
@@ -319,7 +319,7 @@ const ProviderRegisterForm = () => {
               marginTop: "20px",
             }}
           >
-            Point of Contact
+            Designated Representative
           </h1>
         </div>
 

@@ -70,6 +70,20 @@ const CampusInformation = () => {
     });
   }, []);
   useEffect(() => {
+    get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
+      setUniversityStates(res);
+    });
+  }, [uniCountryValue])
+
+
+  useEffect(() => {
+    get(`UniversityCityDD/Index/${uniCountryValue}`).then((res) => {
+      setCity(res);
+    });
+  }, [uniCountryValue])
+
+
+  useEffect(() => {
     get(`UniversityCampus/Get/${campusId}`).then((res) => {
       setCampusName(res?.name);
       setAddressLine(res?.addressLine);
@@ -102,14 +116,10 @@ const CampusInformation = () => {
     setAvarageLivingCostCurrencyId(value);
     setAvarageTutionFeeCurrencyId(value);
     setEstimatedTotalCostCurrencyId(value);
-    get(`UniversityStateDD/Index/${value}`).then((res) => {
-      setUniversityStates(res);
-    });
+
     setUniStateLabel("Select Campus State");
     setUniStateValue(0);
-    get(`UniversityCityDD/Index/${value}`).then((res) => {
-      setCity(res);
-    });
+
     setCityLabel("Select Campus City");
     setCityValue(0);
   };

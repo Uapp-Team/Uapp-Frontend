@@ -262,6 +262,8 @@ const ProviderList = () => {
 
   // on clear
   const handleClearSearch = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setSearchStr("");
     setProviderLabel("Provider Type");
     setProviderValue(0);
@@ -527,7 +529,24 @@ const ProviderList = () => {
                   }}
                 >
                   <div className="d-flex mt-1">
-                    {providerValue !== 0 || uappIdValue !== 0 ? "" : ""}
+                    {(userType === userTypes?.SystemAdmin &&
+                      branchValue !== 0) ||
+                    providerValue !== 0 ||
+                    uappIdValue !== 0
+                      ? ""
+                      : ""}
+
+                    {userType === userTypes?.SystemAdmin &&
+                    branchValue !== 0 ? (
+                      <TagButton
+                        label={branchLabel}
+                        setValue={() => setBranchValue(0)}
+                        setLabel={() => setBranchLabel("Select Branch")}
+                      ></TagButton>
+                    ) : (
+                      ""
+                    )}
+
                     {providerValue !== 0 ? (
                       <TagButton
                         label={providerLabel}
@@ -549,7 +568,10 @@ const ProviderList = () => {
                     )}
                   </div>
                   <div className="mt-1 mx-1 d-flex btn-clear">
-                    {providerValue !== 0 || uappIdValue !== 0 ? (
+                    {(userType === userTypes?.SystemAdmin &&
+                      branchValue !== 0) ||
+                    providerValue !== 0 ||
+                    uappIdValue !== 0 ? (
                       <button className="tag-clear" onClick={handleClearSearch}>
                         Clear All
                       </button>

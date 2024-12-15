@@ -546,7 +546,7 @@ const ManageIntakes = () => {
                         <div className="date-input mt-3">
                           <span>
                             <span className="text-danger">*</span> Application
-                            Dateline
+                            Deadline
                           </span>
                           <Input
                             type="date"

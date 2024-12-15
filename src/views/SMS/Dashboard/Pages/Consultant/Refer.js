@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "reactstrap";
 import StudentRegRefer from "../../../../../components/Refer/StudentRegRefer";
+import get from "../../../../../helpers/get";
 
 const Refer = () => {
   const referenceId = localStorage.getItem("referenceId");
   const [modalShow, setModalShow] = useState(false);
+  const [status, setStatus] = useState(false);
+
+  useEffect(() => {
+    get(`Consultant/Status/${referenceId}`).then((res) => {
+      setStatus(res);
+    });
+  }, [referenceId]);
+
   return (
     <div>
       <div
         onClick={() => {
-          setModalShow(true);
+          status && setModalShow(true);
         }}
-        className="refer-button"
+        className={`refer-button ${!status && "bg-gray"}`}
       >
         <i class="fas fa-share-alt"></i>
       </div>

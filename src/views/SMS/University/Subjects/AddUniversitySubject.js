@@ -416,11 +416,11 @@ const AddUniversitySubject = () => {
             <NavItem>
               {submitData || subjId ? (
                 <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Elt Score
+                  ELT Score
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "3"}>
-                  Elt Score
+                  ELT Score
                 </NavLink>
               )}
             </NavItem>
@@ -475,11 +475,11 @@ const AddUniversitySubject = () => {
             <NavItem>
               {submitData || subjectId ? (
                 <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Elt Score
+                  ELT Score
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "3"}>
-                  Elt Score
+                  ELT Score
                 </NavLink>
               )}
             </NavItem>
