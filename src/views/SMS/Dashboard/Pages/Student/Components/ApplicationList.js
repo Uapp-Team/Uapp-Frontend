@@ -183,10 +183,11 @@ export default function ApplicationList({
         <Card style={{ marginTop: "24px" }}>
           <CardBody
             style={{
-              height: "200px",
+              height: "240px",
               borderRadius: "0.5rem",
               backgroundSize: "cover",
               backgroundImage: `url(${StdDashBoardUperCarousel1})`,
+              backgroundPosition: "bottom",
             }}
           ></CardBody>
         </Card>
