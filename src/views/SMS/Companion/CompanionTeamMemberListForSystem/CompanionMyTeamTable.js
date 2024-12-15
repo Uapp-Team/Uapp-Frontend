@@ -69,16 +69,16 @@ const CompanionMyTeamTable = ({
               <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
             ) : null} */}
 
-            {tableData[7]?.isActive ? <th>Started</th> : null}
-            {tableData[11]?.isActive ? <th>Status</th> : null}
+            {tableData[3]?.isActive ? <th>Started</th> : null}
+            {tableData[4]?.isActive ? <th>Status</th> : null}
 
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[12]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[5]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[13]?.isActive ? (
+            {tableData[6]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -155,17 +155,17 @@ const CompanionMyTeamTable = ({
                 </>
               ) : null} */}
 
-              {tableData[7]?.isActive ? (
+              {tableData[3]?.isActive ? (
                 <td>{dateFormate(companionTeam?.started)}</td>
               ) : null}
-              {tableData[11]?.isActive ? (
+              {tableData[4]?.isActive ? (
                 <td>{companionTeam?.accountStatus}</td>
               ) : null}
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[12]?.isActive ? (
+                  {tableData[5]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!companionTeam?.isActive}
@@ -176,7 +176,7 @@ const CompanionMyTeamTable = ({
                 </>
               ) : null}
 
-              {tableData[13]?.isActive ? (
+              {tableData[6]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Consultant) ? (

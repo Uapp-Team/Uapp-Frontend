@@ -76,6 +76,7 @@ const TestScore = () => {
   const [loading, setLoading] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [isQualification, setIsQualifiacation] = useState(null);
+  const [isQualificationAdd, setIsQualifiacationAdd] = useState(false);
   const [ieltsExamDate, setIeltsExamDate] = useState(null);
   const [ieltsExamDateError, setIeltsExamDateError] = useState(null);
   const [duolingoExamDate, setDuolingoExamDate] = useState(null);
@@ -668,10 +669,17 @@ const TestScore = () => {
           setOthersScoreOverall(res?.scoreOverall);
           setOthersEquivalentScore(res?.ieltsEquivalent);
         });
+
+        await get(`StudentTestScoreSummery/Get/${applicationStudentId}`).then(
+          (res) => {
+            setIsQualifiacation(res?.hasTestScore);
+          }
+        );
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
+        setIsQualifiacationAdd(false);
       }
     };
     fetchData();
@@ -857,14 +865,13 @@ const TestScore = () => {
   };
 
   const addNewScore = () => {
-    setIsQualifiacation(true);
+    setIsQualifiacationAdd(true);
     // setQualificationValue(1);
   };
 
   // on Close Modal
   const closeModal = () => {
     setModalOpen(false);
-    setSuccess(!success);
     setIsQualifiacation(false);
     setIeltsSpeaking(0);
     setIeltsSpeakingError(false);
@@ -1660,6 +1667,29 @@ const TestScore = () => {
   // };
 
   // Gre data update
+  console.log("isQualification", isQualification);
+  const handleNotest = () => {
+    post("StudentTestScoreSummery/Submit", {
+      studentId: applicationStudentId,
+      hasTestScore: false,
+    }).then((res) => {
+      setButtonStatus(false);
+      setProgress(false);
+
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+  };
 
   return (
     <div>
@@ -1699,42 +1729,39 @@ const TestScore = () => {
                     Do You Hold an English Language Qualification Such as GCSE
                     English Language, IELTS, Pearson etc ?
                   </span>
-                </div>
-              ) : null}
 
-              {!(
-                ielts !== null ||
-                duolingo !== null ||
-                toefl !== null ||
-                functions !== null ||
-                gcse !== null ||
-                pearson !== null ||
-                others !== null
-              ) ? (
-                <FormGroup>
-                  <div className="d-flex m-1 align-items-center">
-                    <input
-                      type="radio"
-                      value="Yes"
-                      onClick={() => setIsQualifiacation(true)}
-                      checked={isQualification === true}
-                    />
-                    <label className="mt-2 px-2">Yes</label>
-                    <input
-                      type="radio"
-                      value="No"
-                      onClick={() => setIsQualifiacation(false)}
-                      checked={isQualification === false}
-                    />
-                    <label className="mt-2 px-2">No</label>
-                  </div>
-                </FormGroup>
+                  <FormGroup>
+                    <div className="d-flex m-1 align-items-center">
+                      <input
+                        type="radio"
+                        value="Yes"
+                        onClick={() => {
+                          setIsQualifiacation(true);
+                          setIsQualifiacationAdd(true);
+                        }}
+                        checked={isQualification === true}
+                      />
+                      <label className="mt-2 px-2">Yes</label>
+                      <input
+                        type="radio"
+                        value="No"
+                        onClick={() => setIsQualifiacation(false)}
+                        checked={isQualification === false}
+                      />
+                      <label className="mt-2 px-2">No</label>
+                    </div>
+                    {isQualification === false && (
+                      <SaveButton action={() => handleNotest()} />
+                    )}
+                  </FormGroup>
+                </div>
               ) : null}
 
               <AllScoresCard
                 addNewScore={addNewScore}
                 eltName={eltName}
                 isQualification={isQualification}
+                isQualificationAdd={isQualificationAdd}
                 ielts={ielts}
                 handleEditDuolingo={handleEditDuolingo}
                 handleEditFunctions={handleEditFunctions}
@@ -1758,7 +1785,7 @@ const TestScore = () => {
                 others={others}
               ></AllScoresCard>
 
-              {isQualification === true ? (
+              {isQualification === true && isQualificationAdd === true ? (
                 <>
                   <FormGroup>
                     <Row>

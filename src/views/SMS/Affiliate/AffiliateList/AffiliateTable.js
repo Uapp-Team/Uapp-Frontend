@@ -59,6 +59,7 @@ const AffiliateTable = ({
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
     userType === userTypes?.Admin.toString();
+
   return (
     <div className="table-responsive fixedhead mb-2" ref={componentRef}>
       <Table id="table-to-xls" className="table-sm table-bordered">
@@ -75,27 +76,27 @@ const AffiliateTable = ({
             ) : null}
 
             {tableData[4]?.isActive ? <th>Parent</th> : null}
-            {adminPermission && tableData[4]?.isActive ? (
+            {adminPermission && tableData[5]?.isActive ? (
               <th>Consultant</th>
             ) : null}
-            {tableData[5]?.isActive ? <th>Started</th> : null}
-            {tableData[6]?.isActive ? <th>Pending Invitation</th> : null}
-            {tableData[6]?.isActive ? <th>Leads</th> : null}
-            {tableData[6]?.isActive ? <th>Students</th> : null}
-            {tableData[7]?.isActive ? <th>Team Member</th> : null}
-            {tableData[7]?.isActive ? <th>Application</th> : null}
-            {tableData[7]?.isActive ? <th>Registered</th> : null}
-            {tableData[8]?.isActive ? <th>Status</th> : null}
+            {tableData[6]?.isActive ? <th>Started</th> : null}
+            {tableData[7]?.isActive ? <th>Pending Invitation</th> : null}
+            {tableData[8]?.isActive ? <th>Leads</th> : null}
+            {tableData[9]?.isActive ? <th>Students</th> : null}
+            {tableData[10]?.isActive ? <th>Team Member</th> : null}
+            {tableData[11]?.isActive ? <th>Application</th> : null}
+            {tableData[12]?.isActive ? <th>Registered</th> : null}
+            {tableData[13]?.isActive ? <th>Status</th> : null}
 
-            {tableData[9]?.isActive ? <th>Branch</th> : null}
+            {tableData[14]?.isActive ? <th>Branch</th> : null}
 
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[10]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[15]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[11]?.isActive ? (
+            {tableData[16]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -174,15 +175,15 @@ const AffiliateTable = ({
               ) : null}
 
               {tableData[4]?.isActive ? <td>{affiliate?.parentName}</td> : null}
-              {adminPermission && tableData[4]?.isActive ? (
+              {adminPermission && tableData[5]?.isActive ? (
                 <td>{affiliate?.consultantName}</td>
               ) : null}
 
-              {tableData[5]?.isActive ? (
+              {tableData[6]?.isActive ? (
                 <td>{dateFormate(affiliate?.createdOn)}</td>
               ) : null}
 
-              {tableData[6]?.isActive ? (
+              {tableData[7]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -199,7 +200,7 @@ const AffiliateTable = ({
                 </td>
               ) : null}
 
-              {tableData[6]?.isActive ? (
+              {tableData[8]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -214,7 +215,7 @@ const AffiliateTable = ({
                 </td>
               ) : null}
 
-              {tableData[6]?.isActive ? (
+              {tableData[9]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -231,7 +232,7 @@ const AffiliateTable = ({
                 </td>
               ) : null}
 
-              {tableData[7]?.isActive ? (
+              {tableData[10]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -245,7 +246,7 @@ const AffiliateTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[7]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -261,7 +262,7 @@ const AffiliateTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[7]?.isActive ? (
+              {tableData[12]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -277,17 +278,19 @@ const AffiliateTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[8]?.isActive ? (
+              {tableData[13]?.isActive ? (
                 <td>{affiliate?.accountStatus}</td>
               ) : null}
 
-              {tableData[9]?.isActive ? <td>{affiliate?.branchName}</td> : null}
+              {tableData[14]?.isActive ? (
+                <td>{affiliate?.branchName}</td>
+              ) : null}
 
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[10]?.isActive ? (
+                  {tableData[15]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!affiliate?.isActive}
@@ -298,7 +301,7 @@ const AffiliateTable = ({
                 </>
               ) : null}
 
-              {tableData[11]?.isActive ? (
+              {tableData[16]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}

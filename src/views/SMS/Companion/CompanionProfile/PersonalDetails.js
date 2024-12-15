@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import get from "../../../../helpers/get";
-import { Table } from "reactstrap";
+import React from "react";
 import { Link } from "react-router-dom";
+import { Table } from "reactstrap";
 import { dateFormate } from "../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../constants/userTypeConstant";
 
@@ -41,7 +40,7 @@ const PersonalDetails = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Phone Number</td>
-            <td>{companionProfileData?.data?.phoneNumber}</td>
+            <td>+{companionProfileData?.data?.phoneNumber}</td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Gender</td>

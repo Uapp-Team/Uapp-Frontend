@@ -392,7 +392,6 @@
 
 .Download-app-section {
   margin-top: 60px;
-
 }
 
 .Download-app-section a {
@@ -485,7 +484,7 @@
 
 @media (min-width: 1400px) {
   .responsive-form {
-    width: 42%;
+    width: 60%;
   }
 
   .form-items {

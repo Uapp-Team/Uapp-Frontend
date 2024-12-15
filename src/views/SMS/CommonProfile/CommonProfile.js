@@ -3,7 +3,7 @@ import { userTypes } from "../../../constants/userTypeConstant";
 import BranchManagerNewProfile from "../Branches/BranchManager/BranchManagerNewProfile";
 import ComplianceOfficerNewProfile from "../Branches/ComplianceOfficer/ComplianceOfficerNewProfile";
 // import EmployeeNewProfile from "../Configuration/Employees/EmployeeNewProfile";
-import Index from "../ConsultantsAndTypes/ConsultantProfile/Index";
+import Consultant from "../ConsultantsAndTypes/ConsultantProfile/Index";
 import AdmissionManagerNewProfile from "../AllStaffs/AdmissionManager/AdmissionManagerProfile/Index";
 import AdmissionOfficerProfile from "../AllStaffs/AdmissionOfficer/AdmissionOfficerProfile/Component/AdmissionOfficerProfile";
 // import ProviderAdminOwnProfile from "../Provider/ProviderAdmin/ProviderAdminProfile/ProviderAdminOwnProfile";
@@ -54,7 +54,7 @@ const CommonProfile = () => {
       {currentUser === userTypes?.AdmissionOfficer.toString() && (
         <AdmissionOfficerProfile userId={userId} />
       )}
-      {currentUser === userTypes?.Consultant.toString() && <Index />}
+      {currentUser === userTypes?.Consultant.toString() && <Consultant />}
       {currentUser === userTypes?.ComplianceOfficer.toString() && (
         <ComplianceOfficerNewProfile />
       )}

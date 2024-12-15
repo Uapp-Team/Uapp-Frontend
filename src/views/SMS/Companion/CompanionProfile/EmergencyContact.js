@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import get from "../../../../helpers/get";
-import { Card, Table } from "reactstrap";
+import React from "react";
 import { Link } from "react-router-dom";
+import { Card, Table } from "reactstrap";
 import { userTypes } from "../../../../constants/userTypeConstant";
 
 const EmergencyContact = ({
@@ -82,7 +81,7 @@ const EmergencyContact = ({
                   </li>
                 </td>
                 <td className="border-0">
-                  {companionProfileData?.data?.contact?.phoneNumber}
+                  +{companionProfileData?.data?.contact?.phoneNumber}
                 </td>
                 <td className="border-0">
                   {companionProfileData?.data?.contact?.email}

@@ -110,7 +110,8 @@ const GovernmentFundingAssesment = ({ studentid, success, setSuccess }) => {
                   checked={check}
                 />{" "}
                 <span>
-                  I hereby affirm that all the information provided regarding my
+                  I confirm that all the information provided regarding my
+                  source of funds is true, complete and accurate.regarding my
                   source of funds is true, complete and accurate.
                 </span>
               </div>

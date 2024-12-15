@@ -20,6 +20,10 @@ const ColumnAffiliate = [
     isActive: true,
   },
   {
+    title: "Consultant",
+    isActive: true,
+  },
+  {
     title: "Started",
     isActive: true,
   },
@@ -28,7 +32,23 @@ const ColumnAffiliate = [
     isActive: true,
   },
   {
+    title: "Leads",
+    isActive: true,
+  },
+  {
+    title: "Students",
+    isActive: true,
+  },
+  {
     title: "Team Member",
+    isActive: true,
+  },
+  {
+    title: "Application",
+    isActive: true,
+  },
+  {
+    title: "Registered",
     isActive: true,
   },
   {
