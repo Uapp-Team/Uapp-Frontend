@@ -108,7 +108,9 @@ const EligibilityInformation = () => {
       );
       setVisa(res?.data?.visaType);
       // setDate(res?.expireDate);
-      setVisaTypeLabel(res?.data?.visaType);
+      setVisaTypeLabel(
+        res?.data?.visaType ? res?.data?.visaType : "Select Visa Type"
+      );
     });
   }, [success, affiliateId]);
 
@@ -330,7 +332,7 @@ const EligibilityInformation = () => {
       isValid = false;
       setResidencyError("Residency status is required");
     }
-    if (residencyValue === 2 && visaTypeValue === 0) {
+    if (residencyValue === 2 && visaTypeLabel === "") {
       isValid = false;
       setVisaError("Visa Type is required");
     }
