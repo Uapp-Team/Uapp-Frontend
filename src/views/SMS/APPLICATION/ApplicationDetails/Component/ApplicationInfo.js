@@ -1754,18 +1754,16 @@ const ApplicationInfo = ({
                       <td>{applicationProfileData?.loanYearsForEU}</td>
                     </tr>
                   )}
-                  {applicationProfileData?.isHavePre_Settlementstatus ===
-                    false && (
-                    <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-                      <td>Settled or Pre-settled status</td>
-                      <td>
-                        {applicationProfileData?.isHavePre_Settlementstatus ===
-                        false
-                          ? "No"
-                          : "Yes"}
-                      </td>
-                    </tr>
-                  )}
+
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>Settled or Pre-settled status</td>
+                    <td>
+                      {applicationProfileData?.isHavePre_Settlementstatus ===
+                      false
+                        ? "No"
+                        : "Yes"}
+                    </td>
+                  </tr>
 
                   {applicationProfileData?.isHavePre_Settlementstatus ===
                   false ? (
