@@ -362,29 +362,27 @@ const EligibilityInformation = () => {
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      post(`ConsultantEligibility/ConsultantEligibility`, subData).then(
-        (res) => {
-          setProgress(false);
-          setButtonStatus(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setSuccess(!success);
-            setFileList3([]);
-            setFileList4([]);
-            setFileList5([]);
-            setFileList6([]);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-          history.push(`/consultantBankInformation/${consultantRegisterId}`);
+      post(`ConsultantEligibility/submit`, subData).then((res) => {
+        setProgress(false);
+        setButtonStatus(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+          setFileList3([]);
+          setFileList4([]);
+          setFileList5([]);
+          setFileList6([]);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
         }
-      );
+        history.push(`/consultantBankInformation/${consultantRegisterId}`);
+      });
     }
   };
   const handlePrevious = () => {
