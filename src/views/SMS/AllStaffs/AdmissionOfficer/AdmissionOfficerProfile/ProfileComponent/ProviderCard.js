@@ -108,7 +108,13 @@ const ProviderCard = ({ officerId, userId }) => {
                       {providerData?.phoneNumber == null ? null : (
                         <li>
                           <i className="fas fa-phone pr-2"></i>{" "}
-                          {providerData?.phoneNumber}
+                          {providerData?.phoneNumber &&
+                          providerData?.phoneNumber.includes("+")
+                            ? providerData?.phoneNumber
+                            : providerData?.phoneNumber &&
+                              !providerData?.phoneNumber.includes("+")
+                            ? "+" + providerData?.phoneNumber
+                            : null}
                         </li>
                       )}
                     </>

@@ -183,10 +183,11 @@ export default function ApplicationList({
         <Card style={{ marginTop: "24px" }}>
           <CardBody
             style={{
-              height: "200px",
+              height: "240px",
               borderRadius: "0.5rem",
               backgroundSize: "cover",
               backgroundImage: `url(${StdDashBoardUperCarousel1})`,
+              backgroundPosition: "bottom",
             }}
           ></CardBody>
         </Card>
@@ -630,224 +631,248 @@ export default function ApplicationList({
       </>
 
       <>
-        <Card>
-          <CardBody>
-            <>
-              <div className="row" style={{ marginTop: "30px" }}>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={PersonalDetailsIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={personalDetails}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.personalDetails !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
+        {stdDashboard?.isProfileCompleted === false ? (
+          <Card>
+            <CardBody>
+              <>
+                <div className="row" style={{ marginTop: "30px" }}>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={PersonalDetailsIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={personalDetails}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.personalDetails !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Personal Details</span>
+                              </div>
                             </div>
-                            <div className="mt-1 mx-1">
-                              <span>Personal Details</span>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Personal Details</span>
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={applicationIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={applications}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.application !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Application</span>
+                              </div>
                             </div>
-                            <div className="mt-1 mx-1">
-                              <span>Personal Details</span>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Application</span>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </button>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={educationIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={educations}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.education !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Education</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Education</span>
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={experienceIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={experience}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.experience !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Experience</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Experience</span>
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={documentsIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={documents}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.documents !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Documents</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Documents</span>
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-2 text-center">
+                    <div>
+                      <img src={ReviewApplyIcon} alt="" />
+                      <div className="mt-2">
+                        <button
+                          onClick={review}
+                          className="py-1 px-2 std-btn-complete-profile"
+                        >
+                          {stdDashboard?.reviewAndApply !== false ? (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={greenTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Review & Signed</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="d-flex">
+                              <div>
+                                <img
+                                  src={ashTick}
+                                  className="img-fluid"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="mt-1 mx-1">
+                                <span>Review & Sign</span>
+                              </div>
+                            </div>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={applicationIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={applications}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.application !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Application</span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Application</span>
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={educationIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={educations}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.education !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Education</span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Education</span>
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={experienceIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={experience}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.experience !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Experience</span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Experience</span>
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={documentsIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={documents}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.documents !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Documents</span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Documents</span>
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-2 text-center">
-                  <div>
-                    <img src={ReviewApplyIcon} alt="" />
-                    <div className="mt-2">
-                      <button
-                        onClick={review}
-                        className="py-1 px-2 std-btn-complete-profile"
-                      >
-                        {stdDashboard?.reviewAndApply !== false ? (
-                          <div className="d-flex">
-                            <div>
-                              <img
-                                src={greenTick}
-                                className="img-fluid"
-                                alt=""
-                              />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Review & Signed</span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="d-flex">
-                            <div>
-                              <img src={ashTick} className="img-fluid" alt="" />
-                            </div>
-                            <div className="mt-1 mx-1">
-                              <span>Review & Sign</span>
-                            </div>
-                          </div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="mt-5">
-                {stdDashboard?.isProfileCompleted === false ? (
+                <div className="mt-5">
                   <>
                     <div className="std-dashboard-style1 mb-4">
                       Complete your profile information to get started
@@ -859,11 +884,11 @@ export default function ApplicationList({
                       name={"Complete Profile"}
                     ></ButtonForFunction>
                   </>
-                ) : null}
-              </div>
-            </>
-          </CardBody>
-        </Card>
+                </div>
+              </>
+            </CardBody>
+          </Card>
+        ) : null}
       </>
     </div>
   );

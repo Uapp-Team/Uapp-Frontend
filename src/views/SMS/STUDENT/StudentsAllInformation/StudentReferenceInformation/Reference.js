@@ -500,7 +500,7 @@ const Reference = () => {
                                   Edit
                                 </span>
                               </a>
-                            ) : null}
+                            ) : null}{" "}
                             |{" "}
                             {permissions?.includes(
                               permissionList?.Edit_Student

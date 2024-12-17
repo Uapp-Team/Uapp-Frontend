@@ -60,7 +60,15 @@ const PersonalForm = ({ personalInfo }) => {
           >
             <td width="40%">Phone Number</td>
 
-            <td width="60%">{personalInfo?.phoneNumber}</td>
+            <td width="60%">
+              {personalInfo?.phoneNumber &&
+              personalInfo?.phoneNumber.includes("+")
+                ? personalInfo?.phoneNumber
+                : personalInfo?.phoneNumber &&
+                  !personalInfo?.phoneNumber.includes("+")
+                ? "+" + personalInfo?.phoneNumber
+                : null}
+            </td>
           </tr>
         </tbody>
       </Table>

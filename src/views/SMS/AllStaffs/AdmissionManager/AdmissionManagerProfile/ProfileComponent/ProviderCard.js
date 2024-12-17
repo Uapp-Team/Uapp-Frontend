@@ -117,7 +117,13 @@ const ProviderCard = ({ admissionManagerId }) => {
                           <li>
                             {" "}
                             <i className="fas fa-phone pr-2"></i>{" "}
-                            {consultantData?.phoneNumber}{" "}
+                            {consultantData?.phoneNumber &&
+                            consultantData?.phoneNumber.includes("+")
+                              ? consultantData?.phoneNumber
+                              : consultantData?.phoneNumber &&
+                                !consultantData?.phoneNumber.includes("+")
+                              ? "+" + consultantData?.phoneNumber
+                              : null}
                           </li>
                         )}
                       </ul>
@@ -184,7 +190,13 @@ const ProviderCard = ({ admissionManagerId }) => {
                   <li>
                     {" "}
                     <i className="fas fa-phone pr-2"></i>{" "}
-                    {managerOfficers.phoneNumber}
+                    {managerOfficers.phoneNumber &&
+                    managerOfficers.phoneNumber.includes("+")
+                      ? managerOfficers.phoneNumber
+                      : managerOfficers.phoneNumber &&
+                        !managerOfficers.phoneNumber.includes("+")
+                      ? "+" + managerOfficers.phoneNumber
+                      : null}
                   </li>
                 </ul>
               </Col>
