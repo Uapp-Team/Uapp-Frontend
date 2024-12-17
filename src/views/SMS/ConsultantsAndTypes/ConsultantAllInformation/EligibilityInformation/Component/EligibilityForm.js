@@ -6,6 +6,7 @@ import DownloadButton from "../../../../../../components/buttons/DownloadButton"
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 import Preview from "../../../../../../components/ui/Preview";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
@@ -68,6 +69,7 @@ const EligibilityForm = ({
   visaError,
   handlevisaType,
   dateError,
+  setDateError,
   handleDate,
   handlePrevious,
 }) => {
@@ -173,12 +175,12 @@ const EligibilityForm = ({
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                <span>
+                {/* <span>
                   <span className="text-danger">*</span> Expiry Date of Your
                   BRP/TRP or Visa{" "}
-                </span>
+                </span> */}
 
-                <Input
+                {/* <Input
                   type="date"
                   name="expireDate"
                   id="expireDate"
@@ -186,6 +188,16 @@ const EligibilityForm = ({
                     handleDate(e);
                   }}
                   defaultValue={exDate}
+                /> */}
+
+                <DMYPicker
+                  label="Expiry Date of Your
+                  BRP/TRP or Visa"
+                  value={exDate}
+                  setValue={handleDate}
+                  error={dateError}
+                  action={setDateError}
+                  required={true}
                 />
                 <span className="text-danger">{dateError}</span>
               </FormGroup>

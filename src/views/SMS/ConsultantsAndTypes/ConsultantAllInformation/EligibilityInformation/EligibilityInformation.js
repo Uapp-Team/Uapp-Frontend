@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
@@ -23,7 +22,7 @@ const EligibilityInformation = () => {
   const [uniCountryLabel2, setUniCountryLabel2] = useState("Select Residence");
   const [uniCountryValue2, setUniCountryValue2] = useState(0);
   const [errorc2, setErrorC2] = useState("");
-  const [exDate, setExDate] = useState(currentDate);
+  const [exDate, setExDate] = useState(null);
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -92,7 +91,7 @@ const EligibilityInformation = () => {
       setExDate(
         res?.expireDate
           ? moment(new Date(res?.expireDate)).format("YYYY-MM-DD")
-          : currentDate
+          : null
       );
       setVisa(res?.visaType);
       // setDate(res?.expireDate);
@@ -286,11 +285,10 @@ const EligibilityInformation = () => {
     }
   };
   const handleDate = (e) => {
-    setExDate(e.target.value);
-    if (e.target.value === "") {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    if (e) {
+      setExDate(e);
     } else {
-      setDateError("");
+      setDateError("Expiry Date of Your BRP/TRP or Visa required");
     }
   };
 
@@ -357,6 +355,9 @@ const EligibilityInformation = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
+    if (exDate) {
+      subData.append("expireDate", exDate);
+    }
 
     if (ValidateForm()) {
       setButtonStatus(true);
@@ -450,6 +451,7 @@ const EligibilityInformation = () => {
                 visaError={visaError}
                 handlevisaType={handlevisaType}
                 dateError={dateError}
+                setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
               ></EligibilityForm>
