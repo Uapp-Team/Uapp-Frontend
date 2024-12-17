@@ -37,7 +37,9 @@ const ProviderAbout = ({ id }) => {
               </tr> */}
               <tr>
                 <td>Phone</td>
-                <td>{data?.officialPhone}</td>
+                <td>
+                  {data?.officialPhone ? <> +{data?.officialPhone}</> : null}
+                </td>
               </tr>
               <tr>
                 <td>Email </td>
