@@ -1,4 +1,10 @@
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { Modal, Upload } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Col,
   Form,
@@ -8,22 +14,11 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
-import {
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
-import { connect } from "react-redux";
-import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
-import { rootUrl } from "../../../../constants/constants";
-import { Link, useHistory, useParams } from "react-router-dom";
-import post from "../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
 import notify from "../../../../assets/img/notify.png";
-import axios from "axios";
-import { Upload } from "antd";
 import UploadButton from "../../../../components/buttons/UploadButton";
+import { rootUrl } from "../../../../constants/constants";
 import containsDigit from "../../../../helpers/nameContainDigit";
+import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 
 const ConsultantRegisterForm = () => {
   const [parameter, setParameter] = useState("");
@@ -54,6 +49,10 @@ const ConsultantRegisterForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewFileType, setPreviewFileType] = useState("");
 
   useEffect(() => {
     setParameter(invitationcode);
@@ -231,6 +230,70 @@ const ConsultantRegisterForm = () => {
     }
     return isFormValid;
   }
+
+  function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  const handlePreview = async (file) => {
+    // Infer file type if it's not provided
+    const inferFileType = (file) => {
+      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+      switch (extension) {
+        case "jpg":
+        case "jpeg":
+        case "png":
+        case "gif":
+          return "image/jpeg";
+        case "pdf":
+          return "application/pdf";
+        case "doc":
+          return "application/msword";
+        case "docx":
+          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        default:
+          return "unknown";
+      }
+    };
+
+    const fileType = file.type || inferFileType(file);
+    if (fileType.startsWith("image")) {
+      // If it's an image
+      file.preview = await getBase64(file.originFileObj || file.url);
+      setPreviewImage(file.preview || file.url);
+      setPreviewFileType(fileType);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+    } else if (fileType === "application/pdf") {
+      // If it's a PDF
+      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+      setPreviewImage(pdfPreview);
+      setPreviewVisible(true);
+      setPreviewFileType(fileType);
+      setPreviewTitle(file.name);
+    } else if (
+      fileType === "application/msword" ||
+      fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      // For DOC or DOCX files
+      const googleViewer = `https://docs.google.com/viewer?url=${
+        file.url || URL.createObjectURL(file.originFileObj)
+      }&embedded=true`;
+      setPreviewImage(googleViewer);
+      setPreviewVisible(true);
+      setPreviewTitle(file.name);
+      setPreviewFileType(fileType);
+    } else {
+      // Handle unsupported file types
+      alert("Preview not available for this file type");
+    }
+  };
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -550,15 +613,69 @@ const ConsultantRegisterForm = () => {
             </Col>
             <Col sm={8}>
               <Upload
+                onPreview={handlePreview}
                 multiple={false}
                 fileList={cvFile}
                 onChange={handleFile}
                 beforeUpload={(file) => {
                   return false;
                 }}
+                itemRender={(originNode, file) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        flex: 1,
+                      }}
+                    >
+                      {originNode}
+                    </div>
+                    <EyeOutlined
+                      style={{
+                        marginLeft: "4px",
+                        cursor: "pointer",
+                        flexShrink: 0,
+                      }}
+                      onClick={() => handlePreview(file)}
+                    />
+                  </div>
+                )}
               >
                 {cvFile.length < 1 ? <UploadButton /> : ""}
               </Upload>
+
+              {previewVisible && (
+                <Modal
+                  title={previewTitle}
+                  visible={previewVisible}
+                  footer={null}
+                  onCancel={() => setPreviewVisible(false)}
+                >
+                  {previewFileType === "application/pdf" ? (
+                    <iframe
+                      src={previewImage}
+                      style={{ width: "100%", height: "80vh" }}
+                      frameBorder="0"
+                    ></iframe>
+                  ) : (
+                    <img
+                      alt={previewTitle}
+                      src={previewImage}
+                      style={{ width: "100%" }}
+                    />
+                  )}
+                </Modal>
+              )}
             </Col>
           </div>
           <span className="text-danger">{cvError}</span>
