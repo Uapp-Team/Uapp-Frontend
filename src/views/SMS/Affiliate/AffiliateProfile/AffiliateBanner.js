@@ -123,7 +123,13 @@ const AffiliateBanner = ({
                 {/* {studentDetails?.phoneNumber === null ? null : ( */}
                 <p className="mb-2">
                   <i className="fas fa-phone pr-2"></i>
-                  {affiliateProfileData?.data?.phoneNumber}
+                  {affiliateProfileData?.data?.phoneNumber &&
+                  affiliateProfileData?.data?.phoneNumber.includes("+")
+                    ? affiliateProfileData?.data?.phoneNumber
+                    : affiliateProfileData?.data?.phoneNumber &&
+                      !affiliateProfileData?.data?.phoneNumber.includes("+")
+                    ? "+" + affiliateProfileData?.data?.phoneNumber
+                    : null}
                 </p>
                 {/* )} */}
 

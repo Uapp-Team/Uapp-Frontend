@@ -65,7 +65,15 @@ const EmergencyContactCard = ({
                     <p>
                       <span>Phone</span>
                       <br />
-                      <b> +{contact?.phoneNumber}</b>
+                      <b>
+                        {contact?.phoneNumber &&
+                        contact?.phoneNumber.includes("+")
+                          ? contact?.phoneNumber
+                          : contact?.phoneNumber &&
+                            !contact?.phoneNumber.includes("+")
+                          ? "+" + contact?.phoneNumber
+                          : null}
+                      </b>
                     </p>
                     <p>
                       <span>Email</span>

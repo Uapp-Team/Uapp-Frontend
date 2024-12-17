@@ -78,8 +78,11 @@ const ReferenceCard = ({ sId, referenceList, setReferenceList, activity }) => {
                       <td className="border-0">{ref?.referenceType.name}</td>
                       <td className="border-0">{ref?.institute_Company}</td>
                       <td className="border-0">
-                        {ref?.phoneNumber && "+"}
-                        {ref?.phoneNumber}
+                        {ref?.phoneNumber && ref?.phoneNumber.includes("+")
+                          ? ref?.phoneNumber
+                          : ref?.phoneNumber && !ref?.phoneNumber.includes("+")
+                          ? "+" + ref?.phoneNumber
+                          : null}
                       </td>
                       <td className="border-0">{ref?.emailAddress}</td>
                     </tr>

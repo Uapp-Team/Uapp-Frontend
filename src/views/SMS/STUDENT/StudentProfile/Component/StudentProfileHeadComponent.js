@@ -254,10 +254,11 @@ export default function StudentProfileHeadComponent({ studentid }) {
             <div
               className="bg-image-profile"
               style={{
-                backgroundImage: `url(${studentDetails?.coverImage
-                  ? rootUrl + studentDetails?.coverImage?.fileUrl
-                  : profileCover
-                  })`,
+                backgroundImage: `url(${
+                  studentDetails?.coverImage
+                    ? rootUrl + studentDetails?.coverImage?.fileUrl
+                    : profileCover
+                })`,
               }}
             >
               {/* <img
@@ -575,7 +576,13 @@ export default function StudentProfileHeadComponent({ studentid }) {
                         {studentDetails?.phoneNumber === null ? null : (
                           <p>
                             <i className="fas fa-phone pr-2"></i>
-                            {studentDetails?.phoneNumber}
+                            {studentDetails?.phoneNumber &&
+                            studentDetails?.phoneNumber.includes("+")
+                              ? studentDetails?.phoneNumber
+                              : studentDetails?.phoneNumber &&
+                                !studentDetails?.phoneNumber.includes("+")
+                              ? "+" + studentDetails?.phoneNumber
+                              : null}
                           </p>
                         )}
                       </div>
@@ -623,8 +630,8 @@ export default function StudentProfileHeadComponent({ studentid }) {
                               blackList === null
                                 ? false
                                 : blackList === false
-                                  ? false
-                                  : true
+                                ? false
+                                : true
                             }
                             onChange={(e) => {
                               handleBlacklist(e, studentDetails?.id);
