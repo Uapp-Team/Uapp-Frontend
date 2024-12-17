@@ -376,7 +376,13 @@ const EmployeeProfile = ({ userId }) => {
                                   {employeeDetails?.phone === null ? null : (
                                     <p>
                                       <i className="fas fa-phone pr-2"></i>
-                                      {employeeDetails?.phone}
+                                      {employeeDetails?.phone &&
+                                      employeeDetails?.phone.includes("+")
+                                        ? employeeDetails?.phone
+                                        : employeeDetails?.phone &&
+                                          !employeeDetails?.phone.includes("+")
+                                        ? "+" + employeeDetails?.phone
+                                        : null}
                                     </p>
                                   )}
                                 </div>

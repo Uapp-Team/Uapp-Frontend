@@ -1024,6 +1024,8 @@ const ProviderApplication = ({ currentUser }) => {
                   setdocumentStatusLabel={setdocumentStatusLabel}
                   documentStatusValue={documentStatusValue}
                   setdocumentStatusValue={setdocumentStatusValue}
+                  affiliateValue={0}
+                  companionValue={0}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||

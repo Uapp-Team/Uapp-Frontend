@@ -109,7 +109,7 @@ const AddUniversity = (props) => {
   const [locations, setLocations] = useState("");
   const [locationError, setLocationError] = useState("");
   const [OfficialWebsite, setOfficialWebsite] = useState("");
-  // const [OfficialWebsiteError, setOfficialWebsiteError] = useState("");
+  const [OfficialWebsiteError, setOfficialWebsiteError] = useState("");
   const [CollectionWebsite, setCollectionWebsite] = useState("");
   // const [CollectionWebsiteError, setCollectionWebsiteError] = useState("");
   const [branch, setBranch] = useState([]);
@@ -333,11 +333,11 @@ const AddUniversity = (props) => {
   const handleOfficialWebsite = (e) => {
     let data = e.target.value.trimStart();
     setOfficialWebsite(data);
-    // if (data === "") {
-    //   setOfficialWebsiteError("Official Website is required");
-    // } else {
-    //   setOfficialWebsiteError("");
-    // }
+    if (data === "") {
+      setOfficialWebsiteError("Official Website is required");
+    } else {
+      setOfficialWebsiteError("");
+    }
   };
   const handleCollectionWebsite = (e) => {
     let data = e.target.value.trimStart();
@@ -431,10 +431,10 @@ const AddUniversity = (props) => {
       isFormValid = false;
       setLocationError("Location is required");
     }
-    // if (!OfficialWebsite) {
-    //   isFormValid = false;
-    //   setOfficialWebsiteError("Official Website is required");
-    // }
+    if (!OfficialWebsite) {
+      isFormValid = false;
+      setOfficialWebsiteError("Official Website is required");
+    }
     // if (!CollectionWebsite) {
     //   isFormValid = false;
     //   setCollectionWebsiteError("Collection Website is required");
@@ -1108,7 +1108,7 @@ const AddUniversity = (props) => {
                     <Row>
                       <Col md="4">
                         <FormGroup>
-                          <span>Home/Eu Commission Currency </span>
+                          <span>Home/EU Commission Currency </span>
 
                           <Currency
                             currencyId={homeCurrencyId}
@@ -1170,7 +1170,7 @@ const AddUniversity = (props) => {
                       <Col md="4">
                         <FormGroup>
                           <span>
-                            {/* <span className="text-danger">*</span>  */}
+                            <span className="text-danger">*</span>
                             Official Website
                           </span>
 
@@ -1184,9 +1184,9 @@ const AddUniversity = (props) => {
                             }}
                             value={OfficialWebsite}
                           />
-                          {/* <span className="text-danger">
+                          <span className="text-danger">
                             {OfficialWebsiteError}
-                          </span> */}
+                          </span>
                         </FormGroup>
                       </Col>
                       <Col md="4">

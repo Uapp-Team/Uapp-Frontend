@@ -366,8 +366,8 @@ const CampusList = (props) => {
                           ) : null}
                           {tableData[2]?.isActive ? (
                             <td>
-                              Total Student - {campus?.totalStudent} {<br />}
-                              International Student -{" "}
+                              Total Students - {campus?.totalStudent} {<br />}
+                              International Students -{" "}
                               {campus?.internationalStudent}
                             </td>
                           ) : null}

@@ -40,7 +40,15 @@ const PersonalDetails = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Phone Number</td>
-            <td>+{companionProfileData?.data?.phoneNumber}</td>
+            <td>
+              {companionProfileData?.data?.phoneNumber &&
+              companionProfileData?.data?.phoneNumber.includes("+")
+                ? companionProfileData?.data?.phoneNumber
+                : companionProfileData?.data?.phoneNumber &&
+                  !companionProfileData?.data?.phoneNumber.includes("+")
+                ? "+" + companionProfileData?.data?.phoneNumber
+                : null}
+            </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Gender</td>

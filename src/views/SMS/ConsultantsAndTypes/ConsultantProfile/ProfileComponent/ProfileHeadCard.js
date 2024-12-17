@@ -483,8 +483,13 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             {headData?.phoneNumber === null ? null : (
                               <p>
                                 <i className="fas fa-phone pr-2"></i>
-                                {headData?.phoneNumber && "+"}
-                                {headData?.phoneNumber}
+                                {headData?.phoneNumber &&
+                                headData?.phoneNumber.includes("+")
+                                  ? headData?.phoneNumber
+                                  : headData?.phoneNumber &&
+                                    !headData?.phoneNumber.includes("+")
+                                  ? "+" + headData?.phoneNumber
+                                  : null}
                               </p>
                             )}
                             {headData?.linkTypeId === null ? null : (
