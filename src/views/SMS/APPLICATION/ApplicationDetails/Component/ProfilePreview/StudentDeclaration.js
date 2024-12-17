@@ -84,11 +84,11 @@ const StudentDeclaration = ({
       console.log(res, "concent");
     });
 
-    fetch(`http://ip.jsontest.com/`)
-      .then((res) => res?.json())
-      .then((data) => {
-        setAPiInfo(data?.ip);
-      });
+    // fetch(`http://ip.jsontest.com/`)
+    //   .then((res) => res?.json())
+    //   .then((data) => {
+    //     setAPiInfo(data?.ip);
+    //   });
   }, [success, sId]);
 
   const handleTerms = (event) => {
