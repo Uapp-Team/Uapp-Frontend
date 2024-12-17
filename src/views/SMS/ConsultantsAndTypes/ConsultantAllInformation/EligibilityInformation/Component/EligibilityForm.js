@@ -1,14 +1,13 @@
-import React from "react";
-import { FormGroup, Form, Col, Input, Label, Row } from "reactstrap";
-import Select from "react-select";
 import { Upload } from "antd";
-import { rootUrl } from "../../../../../../constants/constants";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import UploadButton from "../../../../../../components/buttons/UploadButton";
+import React from "react";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
 import Preview from "../../../../../../components/ui/Preview";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -239,7 +238,7 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
-              {residencyValue === 2 && <span className="text-danger">* </span>}
+              <span className="text-danger">* </span>
               <span>Id/Passport : </span>
             </Col>
 
@@ -258,7 +257,7 @@ const EligibilityForm = ({
                     {FileList3.length < 1 ? <UploadButton /> : ""}
                   </Upload>
                   {idPassportError && (
-                    <span className="text-danger">File is required </span>
+                    <span className="text-danger">File is required</span>
                   )}
                 </div>
                 {eligibilityData?.idOrPassport?.fileUrl && (
@@ -275,6 +274,7 @@ const EligibilityForm = ({
 
           <FormGroup row className="has-icon-left position-relative">
             <Col md="" className="text-md-right">
+              <span className="text-danger">*</span>
               <span>Proof of Address : </span>
             </Col>
 
@@ -341,6 +341,7 @@ const EligibilityForm = ({
           )}
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
+              <span className="text-danger">*</span>
               <span>CV File : </span>
             </Col>
 
@@ -358,7 +359,9 @@ const EligibilityForm = ({
                     {FileList6.length < 1 ? <UploadButton /> : ""}
                   </Upload>
 
-                  <span className="text-danger">{cvError}</span>
+                  {cvError && (
+                    <span className="text-danger">File is required </span>
+                  )}
                 </div>
                 {eligibilityData?.cv?.fileUrl && (
                   <Preview file={eligibilityData?.cv?.fileUrl} />

@@ -1,15 +1,15 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import moment from "moment";
-import EligibilityForm from "./Component/EligibilityForm";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import EligibilityForm from "./Component/EligibilityForm";
 
 const EligibilityInformation = () => {
   const activetab = "5";
@@ -39,7 +39,7 @@ const EligibilityInformation = () => {
   const [FileList5, setFileList5] = useState([]);
   const [proofOfRightError, setProofOfRightError] = useState("");
   const [FileList6, setFileList6] = useState([]);
-  const [cvError, setCvError] = useState("");
+  const [cvError, setCvError] = useState(false);
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
   const [navVisibility, setNavVisibility] = useState({});
@@ -317,12 +317,22 @@ const EligibilityInformation = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
     if (
-      residencyValue === 2 &&
       FileList3.length === 0 &&
       eligibilityData?.idOrPassport?.fileUrl == null
     ) {
       isValid = false;
       setIdPassportError(true);
+    }
+    if (
+      FileList4.length === 0 &&
+      eligibilityData?.proofOfAddress?.fileUrl == null
+    ) {
+      isValid = false;
+      setProofOfAddressError(true);
+    }
+    if (FileList6.length === 0 && eligibilityData?.cv?.fileUrl == null) {
+      isValid = false;
+      setCvError(true);
     }
     return isValid;
   };
