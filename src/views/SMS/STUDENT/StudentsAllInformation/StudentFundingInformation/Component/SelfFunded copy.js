@@ -13,9 +13,11 @@ import { rootUrl } from "../../../../../../constants/constants";
 import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
 import put from "../../../../../../helpers/put";
+import Preview from "../../../../../../components/ui/Preview";
+import UploadImage from "../../../../../../components/form/UploadImage";
 const SelfFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
-  const [FileList1, setFileList1] = useState([]);
+  const [FileList1, setFileList1] = useState({});
   const [selfError, setSelfError] = useState("");
   const [progress, setProgress] = useState(false);
   const { addToast } = useToasts();
@@ -33,6 +35,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
     get(`SelfFunded/GetByStudentId/${studentid}`).then((res) => {
       console.log(res);
       setSelfFunding(res);
+      // setFileList1(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -196,11 +199,11 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                 Business Certificate)
               </span>
             </FormGroup>
-            <FormGroup row className="has-icon-left position-relative">
-              <Col sm="4">
+            {/* <FormGroup row className="has-icon-left position-relative">
+              <Col md="3">
                 <span>Upload Document:</span>
               </Col>
-              <Col sm="4">
+              <Col md="4">
                 <Upload
                   onPreview={handlePreview1}
                   multiple={false}
@@ -246,14 +249,35 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
                 <div className="text-danger d-block">{selfError}</div>
               </Col>
 
-              <Col sm="4">
-                {FileList1.length > 0 && selfFunding?.attachement ? (
+              <Col md="1">
+                {FileList1?.length > 0 && (
+                  <EyeOutlined
+                    style={{ marginLeft: "8px", cursor: "pointer" }}
+                    onClick={() => handlePreview1(FileList1[0])}
+                  />
+                )}
+                {FileList1?.length > 0 && selfFunding?.attachement ? (
+                  <Preview file={selfFunding?.attachement} />
+                ) : null}
+              </Col>
+              <Col md="4">
+                {FileList1?.length > 0 && selfFunding?.attachement ? (
                   <a href={rootUrl + selfFunding?.attachement} target="blank">
                     <DownloadButton />
                   </a>
                 ) : null}
               </Col>
-            </FormGroup>
+            </FormGroup> */}
+
+            <UploadImage
+              label="Upload Document"
+              file64={FileList1}
+              id="avaterFile"
+              setFile={setFileList1}
+              defaultValue={selfFunding?.attachement}
+              error={selfError}
+              setrror={setSelfError}
+            />
           </Col>
         </Row>
 

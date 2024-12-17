@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
@@ -669,12 +670,13 @@ const EducationalInformation = () => {
                                     {permissions?.includes(
                                       permissionList?.Edit_Student
                                     ) ? (
-                                      <span
-                                        className="pointer text-body"
+                                      <a
+                                        href="#"
+                                        // className="pointer text-body"
                                         onClick={() => handleUpdate(edu.id)}
                                       >
                                         Edit
-                                      </span>
+                                      </a>
                                     ) : null}
                                     {" | "}
                                     {permissions?.includes(
