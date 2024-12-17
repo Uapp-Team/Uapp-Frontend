@@ -1,13 +1,14 @@
+import { Image, Modal, Upload } from "antd";
 import React, { useState } from "react";
-import { FormGroup, Form, Col, Input, Row } from "reactstrap";
-import { Upload, Modal, Image } from "antd";
-import { rootUrl } from "../../../../../../constants/constants";
 import * as Icon from "react-feather";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import Select from "react-select";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../constants/constants";
 
 const PersonalForm = ({
   arrLinkError,
@@ -32,6 +33,7 @@ const PersonalForm = ({
   titleValue,
   title,
   dateError,
+  setDateError,
   handleDate,
   handleSubmit,
   consultantRegisterId,
@@ -298,23 +300,14 @@ const PersonalForm = ({
         </FormGroup>
         <FormGroup row>
           <Col lg="6" md="8">
-            <span>
-              {" "}
-              <span className="text-danger">*</span>
-              Date Of Birth
-            </span>
-
-            <Input
-              type="date"
-              name="dateOfBirth"
-              id="dateOfBirth"
-              onChange={(e) => {
-                handleDate(e);
-              }}
+            <DMYPicker
+              label="Date Of Birth"
               value={birthDate}
-              min={minDate}
+              setValue={handleDate}
+              error={dateError}
+              action={setDateError}
+              required={true}
             />
-            <span className="text-danger">{dateError}</span>
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -424,7 +417,9 @@ const PersonalForm = ({
           </Col>
         </FormGroup>
         <div>
-          <span>Digital Portfolio Information</span>
+          <span>
+            <span className="text-danger">*</span>Digital Portfolio Information
+          </span>
           <FormGroup row className="mt-3 mb-5">
             <Col lg="6">
               <Row

@@ -325,17 +325,20 @@ const PersonalInformation = () => {
   };
 
   const handleIssueDate = (e) => {
-    if (e) {
-      setIssueDate(e);
-    } else {
-      setIssueDateError("Issue Date is required");
+    setIssueDate(e);
+    setIssueDateError("");
+    if (expireDate) {
+      const checkdate = new Date(e) > new Date(expireDate);
+      checkdate && setIssueDateError("Issue date need to be previous date");
     }
   };
+
   const handleExpireDate = (e) => {
-    if (e) {
-      setexpireDate(e);
-    } else {
-      setexpireDateError("Expire Date is required");
+    setexpireDate(e);
+    setexpireDateError("");
+    if (issueDate) {
+      const checkdate = new Date(e) > new Date(issueDate);
+      !checkdate && setexpireDateError("Expire date needs to be later date");
     }
   };
 
@@ -366,7 +369,6 @@ const PersonalInformation = () => {
       setImgError(false);
     }
   };
-  const handleDelete = () => {};
 
   const countryResidenceName = countryResidence?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -834,7 +836,7 @@ const PersonalInformation = () => {
                           label="Issue Date"
                           value={issueDate}
                           error={issueDateError}
-                          action={setIssueDateError}
+                          // action={setIssueDateError}
                           name="issueDate"
                           id="issueDate"
                           required={true}
@@ -847,7 +849,7 @@ const PersonalInformation = () => {
                           label="Expire Date"
                           setValue={handleExpireDate}
                           error={expireDateError}
-                          action={setexpireDateError}
+                          // action={setexpireDateError}
                           required={true}
                           value={expireDate}
                           name="expireDate"

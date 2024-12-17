@@ -26,6 +26,7 @@ import get from "../../../../helpers/get";
 import Loader from "../../Search/Loader/Loader";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import Uget from "../../../../helpers/Uget";
+import DMYPicker from "../../../../components/form/DMYPicker";
 
 const AffiliateInvitation = () => {
   const { addToast } = useToasts();
@@ -133,26 +134,14 @@ const AffiliateInvitation = () => {
         <CardBody>
           <div className="row">
             <div className="col-md-3 mb-2">
-              <span>From Date</span>
-
-              <Input
-                type="date"
-                onChange={(e) => {
-                  setfromDate(e.target.value);
-                }}
+              <DMYPicker
+                label="From Date"
                 value={fromDate}
+                setValue={setfromDate}
               />
             </div>
             <div className="col-md-3 mb-2">
-              <span>To Date</span>
-
-              <Input
-                type="date"
-                onChange={(e) => {
-                  settoDate(e.target.value);
-                }}
-                value={toDate}
-              />
+              <DMYPicker label="To Date" value={toDate} setValue={settoDate} />
             </div>
 
             <div className="col-md-3 mb-2">

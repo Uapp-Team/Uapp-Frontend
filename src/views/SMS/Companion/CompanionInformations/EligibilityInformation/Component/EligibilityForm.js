@@ -79,6 +79,11 @@ const EligibilityForm = ({
   setDateError,
   handleDate,
   handlePrevious,
+  visaType,
+  visaTypeDD,
+  visaTypeLabel,
+  visaTypeValue,
+  selectVisaType,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -475,7 +480,7 @@ const EligibilityForm = ({
                   <span className="text-danger">*</span> Visa Type
                 </span>
 
-                <Input
+                {/* <Input
                   type="text"
                   name="VisaType"
                   id="VisaType"
@@ -485,6 +490,16 @@ const EligibilityForm = ({
                   placeholder="Enter Visa Status"
                   value={visa}
                   // defaultValue={eligibilityData?.visaType}
+                /> */}
+                <Select
+                  options={visaTypeDD}
+                  value={{
+                    label: visaTypeLabel,
+                    value: visaTypeValue,
+                  }}
+                  onChange={(opt) => selectVisaType(opt.label, opt.value)}
+                  name="visaTypeId"
+                  id="visaTypeId"
                 />
                 <span className="text-danger">{visaError}</span>
               </FormGroup>

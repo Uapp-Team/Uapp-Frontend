@@ -30,8 +30,8 @@ const StudentAccountCreateSuccessfully = () => {
 
                 <p style={{ fontSize: "14px" }}>
                   A verification email has been sent to your email address.
-                  <br />
-                  Follow the instruction from the email to verify your account.
+                  Please follow the instructions within the email to verify your
+                  account.
                 </p>
                 <Link className="text-id hover" to="/">
                   Log In to your UAPP Account
