@@ -5,6 +5,7 @@ import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
+import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
@@ -53,6 +54,29 @@ const PersonalInformation = () => {
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
+    if (consPersonalInfo?.consultantProfileImage?.thumbnailUrl) {
+      setFileList1([
+        {
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
+          url: rootUrl + consPersonalInfo?.consultantProfileImage?.thumbnailUrl,
+        },
+      ]);
+    }
+    if (consPersonalInfo?.consultantCoverImage?.thumbnailUrl) {
+      setFileList2([
+        {
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
+          url: rootUrl + consPersonalInfo?.consultantCoverImage?.thumbnailUrl,
+        },
+      ]);
+    }
+  }, [consPersonalInfo]);
+
+  useEffect(() => {
     get("MaritalStatusDD/Index").then((res) => {
       setMaritalStatus(res);
     });
@@ -69,7 +93,6 @@ const PersonalInformation = () => {
 
     get(`Consultant/GetPersonalInformation/${consultantRegisterId}`).then(
       (res) => {
-        console.log("personalInfo", res);
         setConsPersonalInfo(res);
         setPassport(res?.passportId !== null ? res.passportId : "");
         setphoneNumber(res?.phoneNumber);

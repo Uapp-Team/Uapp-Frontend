@@ -1,4 +1,4 @@
-import { Image, Modal, Upload } from "antd";
+import { Modal, Upload } from "antd";
 import React from "react";
 import * as Icon from "react-feather";
 import PhoneInput from "react-phone-input-2";
@@ -8,7 +8,6 @@ import PreviousButton from "../../../../../../components/buttons/PreviousButton"
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import DMYPicker from "../../../../../../components/form/DMYPicker";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import { rootUrl } from "../../../../../../constants/constants";
 
 const PersonalForm = ({
   dateError,
@@ -211,7 +210,7 @@ const PersonalForm = ({
               </Col>
               <Col md="5">
                 <div className="row">
-                  {consPersonalInfo?.consultantProfileImage != null ? (
+                  {/* {consPersonalInfo?.consultantProfileImage != null ? (
                     <div className="col-md-6">
                       <Image
                         width={104}
@@ -222,7 +221,7 @@ const PersonalForm = ({
                         }
                       />
                     </div>
-                  ) : null}
+                  ) : null} */}
 
                   <div className="col-md-6">
                     <Upload
@@ -238,8 +237,8 @@ const PersonalForm = ({
                       {FileList1.length < 1 ? (
                         <div className="text-danger" style={{ marginTop: 8 }}>
                           <Icon.Upload />
-                          <br />
-                          <span>Upload Here</span>
+                          {/* <br />
+                          <span>Upload Here</span> */}
                         </div>
                       ) : (
                         ""
@@ -278,7 +277,7 @@ const PersonalForm = ({
               </Col>
               <Col md="5">
                 <div className="row">
-                  {consPersonalInfo?.consultantCoverImage != null ? (
+                  {/* {consPersonalInfo?.consultantCoverImage != null ? (
                     <div className="col-md-6">
                       <Image
                         width={104}
@@ -289,7 +288,7 @@ const PersonalForm = ({
                         }
                       />
                     </div>
-                  ) : null}
+                  ) : null} */}
 
                   <div className="col-md-6">
                     <Upload
@@ -305,8 +304,8 @@ const PersonalForm = ({
                       {FileList2.length < 1 ? (
                         <div className="text-danger" style={{ marginTop: 8 }}>
                           <Icon.Upload />
-                          <br />
-                          <span>Upload Here</span>
+                          {/* <br />
+                          <span>Upload Here</span> */}
                         </div>
                       ) : (
                         ""
