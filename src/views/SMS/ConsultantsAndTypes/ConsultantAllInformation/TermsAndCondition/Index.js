@@ -1,21 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import ReactToPrint from "react-to-print";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Button, Table } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import ButtonLoader from "../../../Components/ButtonLoader";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import put from "../../../../../helpers/put";
-import { userTypes } from "../../../../../constants/userTypeConstant";
+import { Button, Card, CardBody, Table } from "reactstrap";
 import icon_warning from "../../../../../assets/img/icons/icon_warning.png";
 import icon_success from "../../../../../assets/img/icons/icons_success.png";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import ReactToPrint from "react-to-print";
 import logoLg from "../../../../../assets/img/Logo.svg";
-import { Link } from "react-router-dom";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
-import DOMPurify from "dompurify";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import ButtonLoader from "../../../Components/ButtonLoader";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
 
 const ConsultantTermsInformation = () => {
   const activetab = "9";
@@ -99,7 +98,7 @@ const ConsultantTermsInformation = () => {
       setConscentData(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
 

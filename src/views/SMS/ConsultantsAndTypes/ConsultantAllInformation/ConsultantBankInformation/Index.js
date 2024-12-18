@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import put from "../../../../../helpers/put";
-import remove from "../../../../../helpers/remove";
-import BankInformationForm from "./Component/BankInformationForm";
-import BankDetailsCard from "./Component/BankDetailsCard";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import BankDetailsCard from "./Component/BankDetailsCard";
+import BankInformationForm from "./Component/BankInformationForm";
 
 const ConsultantBankDetails = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -48,8 +48,7 @@ const ConsultantBankDetails = () => {
       setBankDetailsData(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
-      console.log("consNav", res);
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
   }, [success, consultantRegisterId]);
@@ -232,7 +231,6 @@ const ConsultantBankDetails = () => {
       });
     }
   };
-  console.log(navVisibility);
   return (
     <div>
       <BreadCrumb
@@ -312,7 +310,9 @@ const ConsultantBankDetails = () => {
 
           <div className="d-flex justify-content-between mt-5">
             <PreviousButton action={goPrevious} />
-            <SaveButton text="Next" action={goForward} />
+            {navVisibility?.openTandC === true && (
+              <SaveButton text="Next" action={goForward} />
+            )}
           </div>
         </CardBody>
       </Card>

@@ -85,9 +85,8 @@ const PersonalInformation = () => {
       setGender(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       //
-      console.log("consNav", res);
       setNavVisibility(res);
     });
 

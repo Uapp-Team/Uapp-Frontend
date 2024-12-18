@@ -5,20 +5,20 @@ import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
-  TabContent,
-  TabPane,
+  Col,
   Form,
   FormGroup,
-  Col,
   Row,
+  TabContent,
+  TabPane,
 } from "reactstrap";
-import get from "../../../../../helpers/get";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import put from "../../../../../helpers/put";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
+import put from "../../../../../helpers/put";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
 
 const ConsultantRecruitment = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -59,9 +59,8 @@ const ConsultantRecruitment = () => {
       setForCountryList(res?.recruitmentForCountries);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       //
-      console.log("consNav", res);
       setNavVisibility(res);
     });
   }, [success, consultantRegisterId]);
@@ -129,9 +128,10 @@ const ConsultantRecruitment = () => {
           autoDismiss: true,
         });
         setButtonStatus(false);
-        history.push(
-          `/consultantCommissionInformation/${consultantRegisterId}`
-        );
+        res?.data?.isSuccess === true &&
+          history.push(
+            `/consultantCommissionInformation/${consultantRegisterId}`
+          );
       });
     }
   };

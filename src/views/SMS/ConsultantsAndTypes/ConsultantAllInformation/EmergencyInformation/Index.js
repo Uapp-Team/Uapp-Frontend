@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
@@ -14,15 +15,14 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import { useToasts } from "react-toast-notifications";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
 
 const ContactInformation = () => {
   const activetab = "4";
@@ -74,8 +74,7 @@ const ContactInformation = () => {
   }, [country, countryValue]);
 
   useEffect(() => {
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
-      console.log("consNav", res);
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
 

@@ -76,7 +76,7 @@ const GeneralInformation = () => {
   }, [branchValue]);
 
   useEffect(() => {
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
 
