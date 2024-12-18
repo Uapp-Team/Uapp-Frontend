@@ -12,7 +12,7 @@ import UploadImage from "../../../../../../components/form/UploadImage";
 const SelfFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState(null);
-  const [selfError, setSelfError] = useState("");
+  const [fileError, setFileError] = useState("");
   const [progress, setProgress] = useState(false);
   const { addToast } = useToasts();
   const [selfFunding, setSelfFunding] = useState({});
@@ -33,7 +33,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
-    subData.append("SelfFundedFile", FileList1 ? FileList1 : null);
+    subData.append("SelfFundedFile", FileList1);
 
     if (selfFunding?.id) {
       setProgress(true);
@@ -102,8 +102,8 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
               id="avaterFile"
               setFile={setFileList1}
               defaultValue={selfFunding?.attachement}
-              error={selfError}
-              setrror={setSelfError}
+              error={fileError}
+              setrror={setFileError}
             />
           </Col>
         </Row>
