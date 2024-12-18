@@ -24,10 +24,10 @@ const UploadImage = ({
     setFile(e.target.files[0]);
     setFileType(file?.type);
 
-    if (!file?.type.includes("image")) {
+    if (file?.type && !file?.type.includes("image")) {
       const url = URL.createObjectURL(file);
       setBash64(url);
-    } else if (file?.type.includes("image")) {
+    } else if (file?.type && file?.type.includes("image")) {
       const reader = new FileReader();
 
       reader.onload = function () {
@@ -44,9 +44,9 @@ const UploadImage = ({
     <>
       <Form.Group className="mb-3">
         <div className="d-flex align-items-center justify-content-between">
-          {label && <span className="mr-4">{label}</span>}
-          <div>
-            <label htmlFor={`inputImg${id}`} className="pointer">
+          <div className="d-flex justify-content-start align-items-center">
+            {label && <span className="mr-4">{label}</span>}
+            <label htmlFor={`inputImg${id}`} className="pointer mb-0">
               <span type="button" className="upload-button">
                 <i class="fas fa-plus mr-2"></i> Upload
               </span>
