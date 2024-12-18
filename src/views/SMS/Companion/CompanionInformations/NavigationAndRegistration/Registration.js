@@ -605,7 +605,7 @@ const Registration = () => {
 
       <ConfirmModal
         text="Companion added successfully"
-        text2="Companion account has been created and an email is sent to the companion email address with login credentials."
+        text2="A companion account has been successfully created, and an email containing the login credentials has been sent to the companion's registered email address."
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(!isModalOpen)}
         buttonStatus={buttonStatus}

@@ -4,6 +4,8 @@ import Year from "../date/Year";
 import { Col, Row } from "reactstrap";
 import get from "../../helpers/get";
 import Chart from "react-apexcharts";
+import moment from "moment";
+import { dateFormate, ymdateFormate } from "../date/calenderFormate";
 const DashboardProgressChart = () => {
   const [chartData, setChartData] = useState([]);
   const [intake, setIntake] = useState();
@@ -15,6 +17,7 @@ const DashboardProgressChart = () => {
   const [yearLable, setYearLable] = useState("Year");
   const [yearValue, setYearValue] = useState(0);
   const [date, setDate] = useState(null);
+  console.log(date, "data");
 
   useEffect(() => {
     get(`AccountIntakeDD/index`).then((res) => {
