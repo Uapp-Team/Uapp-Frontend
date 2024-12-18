@@ -1,14 +1,14 @@
+import { Image, Modal, Upload } from "antd";
 import React from "react";
-import { FormGroup, Form, Col, Input, Row } from "reactstrap";
-import { Upload, Modal, Image } from "antd";
-import { rootUrl } from "../../../../../../constants/constants";
 import * as Icon from "react-feather";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
 import DMYPicker from "../../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../constants/constants";
 
 const PersonalForm = ({
   dateError,
@@ -19,6 +19,8 @@ const PersonalForm = ({
   Dates,
   setPassport,
   passport,
+  passportError,
+  setPassportError,
   gender,
   setGenderValue,
   setGenderError,
@@ -81,6 +83,7 @@ const PersonalForm = ({
 
         <FormGroup row>
           <Col lg="6" md="8">
+            <span className="text-danger">*</span>
             <span>Passport/ID</span>
 
             <Input
@@ -88,9 +91,15 @@ const PersonalForm = ({
               name="passportId"
               id="passportId"
               placeholder="Enter Passport Number"
-              onChange={(e) => setPassport(e.target.value)}
+              onChange={(e) => {
+                setPassport(e.target.value);
+                setPassportError(false);
+              }}
               defaultValue={passport}
             />
+            {passportError && (
+              <span className="text-danger">{passportError}</span>
+            )}
           </Col>
         </FormGroup>
 
