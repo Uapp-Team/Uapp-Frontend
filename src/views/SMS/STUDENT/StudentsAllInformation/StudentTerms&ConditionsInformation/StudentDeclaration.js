@@ -65,11 +65,11 @@ const StudentDeclaration = () => {
       console.log(res, "declaration");
     });
 
-    fetch(`http://ip.jsontest.com/`)
-      .then((res) => res?.json())
-      .then((data) => {
-        setAPiInfo(data?.ip);
-      });
+    // fetch(`http://ip.jsontest.com/`)
+    //   .then((res) => res?.json())
+    //   .then((data) => {
+    //     setAPiInfo(data?.ip);
+    //   });
   }, [success, applicationStudentId]);
 
   const handleTerms = (event) => {
@@ -348,7 +348,7 @@ const StudentDeclaration = () => {
                       </div>
                       <Button
                         color="primary"
-                        onClick={handleTerms}
+                        onClick={() => handleTerms()}
                         disabled={!check}
                       >
                         {progress ? (

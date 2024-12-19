@@ -1,15 +1,14 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import moment from "moment";
 import EligibilityForm from "./Component/EligibilityForm";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../components/date/calenderFormate";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const EligibilityInformation = () => {
   const activetab = "5";
@@ -23,7 +22,7 @@ const EligibilityInformation = () => {
   const [uniCountryLabel2, setUniCountryLabel2] = useState("Select Residence");
   const [uniCountryValue2, setUniCountryValue2] = useState(0);
   const [errorc2, setErrorC2] = useState("");
-  const [exDate, setExDate] = useState(currentDate);
+  const [exDate, setExDate] = useState(null);
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -39,7 +38,7 @@ const EligibilityInformation = () => {
   const [FileList5, setFileList5] = useState([]);
   const [proofOfRightError, setProofOfRightError] = useState("");
   const [FileList6, setFileList6] = useState([]);
-  const [cvError, setCvError] = useState("");
+  const [cvError, setCvError] = useState(false);
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
   const [navVisibility, setNavVisibility] = useState({});
@@ -92,7 +91,7 @@ const EligibilityInformation = () => {
       setExDate(
         res?.expireDate
           ? moment(new Date(res?.expireDate)).format("YYYY-MM-DD")
-          : currentDate
+          : null
       );
       setVisa(res?.visaType);
       // setDate(res?.expireDate);
@@ -286,11 +285,10 @@ const EligibilityInformation = () => {
     }
   };
   const handleDate = (e) => {
-    setExDate(e.target.value);
-    if (e.target.value === "") {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    if (e) {
+      setExDate(e);
     } else {
-      setDateError("");
+      setDateError("Expiry Date of Your BRP/TRP or Visa required");
     }
   };
 
@@ -317,12 +315,22 @@ const EligibilityInformation = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
     if (
-      residencyValue === 2 &&
       FileList3.length === 0 &&
       eligibilityData?.idOrPassport?.fileUrl == null
     ) {
       isValid = false;
       setIdPassportError(true);
+    }
+    if (
+      FileList4.length === 0 &&
+      eligibilityData?.proofOfAddress?.fileUrl == null
+    ) {
+      isValid = false;
+      setProofOfAddressError(true);
+    }
+    if (FileList6.length === 0 && eligibilityData?.cv?.fileUrl == null) {
+      isValid = false;
+      setCvError(true);
     }
     return isValid;
   };
@@ -347,33 +355,34 @@ const EligibilityInformation = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
+    if (exDate) {
+      subData.append("expireDate", exDate);
+    }
 
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      post(`ConsultantEligibility/ConsultantEligibility`, subData).then(
-        (res) => {
-          setProgress(false);
-          setButtonStatus(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setSuccess(!success);
-            setFileList3([]);
-            setFileList4([]);
-            setFileList5([]);
-            setFileList6([]);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-          history.push(`/consultantBankInformation/${consultantRegisterId}`);
+      post(`ConsultantEligibility/submit`, subData).then((res) => {
+        setProgress(false);
+        setButtonStatus(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+          setFileList3([]);
+          setFileList4([]);
+          setFileList5([]);
+          setFileList6([]);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
         }
-      );
+        history.push(`/consultantBankInformation/${consultantRegisterId}`);
+      });
     }
   };
   const handlePrevious = () => {
@@ -440,6 +449,7 @@ const EligibilityInformation = () => {
                 visaError={visaError}
                 handlevisaType={handlevisaType}
                 dateError={dateError}
+                setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
               ></EligibilityForm>
