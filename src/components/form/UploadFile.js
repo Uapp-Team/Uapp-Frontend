@@ -6,7 +6,7 @@ import Preview from "../ui/Preview";
 import DownloadButton from "../buttons/DownloadButton";
 import { Modal } from "reactstrap";
 
-const UploadImage = ({
+const UploadFile = ({
   label,
   defaultValue,
   file,
@@ -104,4 +104,4 @@ const UploadImage = ({
   );
 };
 
-export default UploadImage;
+export default UploadFile;

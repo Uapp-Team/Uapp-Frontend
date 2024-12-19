@@ -13,7 +13,7 @@ import { rootUrl } from "../../../../../../constants/constants";
 import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
 import put from "../../../../../../helpers/put";
-import UploadImage from "../../../../../../components/form/UploadImage";
+import UploadFile from "../../../../../../components/form/UploadFile";
 
 const Scholarship = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -125,7 +125,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
                 will ask latter)
               </span>
             </FormGroup>
-            <UploadImage
+            <UploadFile
               label="Upload Document"
               file={FileList1}
               id="avaterFile"

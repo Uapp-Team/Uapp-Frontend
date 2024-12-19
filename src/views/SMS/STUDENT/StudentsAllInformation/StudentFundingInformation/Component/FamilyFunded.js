@@ -9,7 +9,7 @@ import { permissionList } from "../../../../../../constants/AuthorizationConstan
 import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
 import put from "../../../../../../helpers/put";
-import UploadImage from "../../../../../../components/form/UploadImage";
+import UploadFile from "../../../../../../components/form/UploadFile";
 
 const FamilyFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
@@ -101,7 +101,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
                 Attachment (Relationship with sponsor, attach prove of fund )
               </span>
             </FormGroup>
-            <UploadImage
+            <UploadFile
               label="Upload Document"
               file={FileList2}
               id="avaterFile"
