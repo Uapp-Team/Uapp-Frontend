@@ -12,6 +12,7 @@ import UploadFile from "../../../../../../components/form/UploadFile";
 const SelfFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const [fileError, setFileError] = useState("");
   const [progress, setProgress] = useState(false);
   const { addToast } = useToasts();
@@ -23,9 +24,8 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
 
   useEffect(() => {
     get(`SelfFunded/GetByStudentId/${studentid}`).then((res) => {
-      console.log(res);
       setSelfFunding(res);
-
+      setAttachment(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -34,6 +34,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("SelfFundedFile", FileList1);
+    subData.append("attachement", attachment);
 
     if (selfFunding?.id) {
       setProgress(true);
@@ -101,7 +102,8 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
               file={FileList1}
               id="avaterFile"
               setFile={setFileList1}
-              defaultValue={selfFunding?.attachement}
+              defaultValue={attachment}
+              setRemove={setAttachment}
               error={fileError}
               setrror={setFileError}
             />

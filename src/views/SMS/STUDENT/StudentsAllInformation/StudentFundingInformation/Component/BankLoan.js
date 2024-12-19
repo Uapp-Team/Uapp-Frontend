@@ -13,6 +13,7 @@ import UploadFile from "../../../../../../components/form/UploadFile";
 const BankLoan = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const { addToast } = useToasts();
   const [bankFunding, setBankFunding] = useState({});
   // const [buttonStatus, setButtonStatus] = useState(false);
@@ -27,6 +28,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
   useEffect(() => {
     get(`BankLoan/GetByStudentId/${studentid}`).then((res) => {
       setBankFunding(res);
+      setAttachment(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -35,6 +37,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("bankLoanFile", FileList1);
+    subData.append("attachement", attachment);
 
     if (bankFunding?.id) {
       setProgress(true);
@@ -103,7 +106,8 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
               file={FileList1}
               id="avaterFile"
               setFile={setFileList1}
-              defaultValue={bankFunding?.attachement}
+              defaultValue={attachment}
+              setRemove={setAttachment}
               error={selfError}
               setrror={setSelfError}
             />

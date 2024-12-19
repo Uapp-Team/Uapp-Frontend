@@ -18,6 +18,7 @@ import UploadFile from "../../../../../../components/form/UploadFile";
 const Scholarship = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList1, setFileList1] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const [fileError, setFileError] = useState("");
   const { addToast } = useToasts();
   const [scholarshipFunding, setScholarshipFunding] = useState({});
@@ -30,8 +31,8 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
 
   useEffect(() => {
     get(`Scholarship/GetByStudentId/${studentid}`).then((res) => {
-      console.log(res);
       setScholarshipFunding(res);
+      setAttachment(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -41,6 +42,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
     const subData = new FormData(event.target);
     // setButtonStatus(true);
     subData.append("scholarshipFile", FileList1);
+    subData.append("attachement", attachment);
 
     if (scholarshipFunding?.id) {
       setProgress(true);
@@ -130,7 +132,8 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
               file={FileList1}
               id="avaterFile"
               setFile={setFileList1}
-              defaultValue={scholarshipFunding?.attachement}
+              defaultValue={attachment}
+              setRemove={setAttachment}
               error={fileError}
               setrror={setFileError}
             />

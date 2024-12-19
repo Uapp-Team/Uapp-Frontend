@@ -5,13 +5,15 @@ import ErrorText from "./ErrorText";
 import Preview from "../ui/Preview";
 import DownloadButton from "../buttons/DownloadButton";
 import { Modal } from "reactstrap";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const UploadFile = ({
   label,
-  defaultValue,
   file,
   id,
   setFile,
+  defaultValue,
+  setRemove,
   error,
   setError,
 }) => {
@@ -21,7 +23,7 @@ const UploadFile = ({
 
   const handleFile = (e) => {
     const file = e.target.files[0];
-    setFile(e.target.files[0]);
+    setFile && setFile(e.target.files[0]);
     setFileType(file?.type);
 
     if (file?.type && !file?.type.includes("image")) {
@@ -72,11 +74,27 @@ const UploadFile = ({
                   <i class="fas fa-eye text-info fs-24px"></i>
                 </a>
               )}
+              {setFile && (
+                <div
+                  className="pointer text-gray"
+                  onClick={() => setFile(null)}
+                >
+                  <AiOutlineDelete size={20} />
+                </div>
+              )}
               <div></div>
             </>
           ) : defaultValue ? (
             <>
               <Preview file={defaultValue} />
+              {setRemove && (
+                <div
+                  className="pointer text-gray"
+                  onClick={() => setRemove("")}
+                >
+                  <AiOutlineDelete size={20} />
+                </div>
+              )}
               <DownloadButton file={defaultValue} />
             </>
           ) : null}

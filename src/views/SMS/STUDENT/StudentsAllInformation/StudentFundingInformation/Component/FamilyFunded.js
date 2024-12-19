@@ -14,6 +14,7 @@ import UploadFile from "../../../../../../components/form/UploadFile";
 const FamilyFunded = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const [FileList2, setFileList2] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const { addToast } = useToasts();
   const [familyFunding, setFamilyFunding] = useState({});
   // const [buttonStatus, setButtonStatus] = useState(false);
@@ -27,8 +28,8 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
 
   useEffect(() => {
     get(`FamilyFunded/GetByStudentId/${studentid}`).then((res) => {
-      console.log(res);
       setFamilyFunding(res);
+      setAttachment(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -39,6 +40,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("familyFundedFile", FileList2);
+    subData.append("attachement", attachment);
 
     // setButtonStatus(true);
     if (familyFunding?.id) {
@@ -106,7 +108,8 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
               file={FileList2}
               id="avaterFile"
               setFile={setFileList2}
-              defaultValue={familyFunding?.attachement}
+              defaultValue={attachment}
+              setRemove={setAttachment}
               error={fileError}
               setrror={setFileError}
             />

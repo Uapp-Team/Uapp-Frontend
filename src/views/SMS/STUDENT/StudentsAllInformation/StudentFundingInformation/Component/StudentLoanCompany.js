@@ -15,6 +15,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
   const history = useHistory();
   const { addToast } = useToasts();
   const [FileList1, setFileList1] = useState(null);
+  const [attachment, setAttachment] = useState(null);
   const [studentFunding, setStudentFunding] = useState({});
   // const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -27,8 +28,8 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
 
   useEffect(() => {
     get(`StudentLoanCompany/GetByStudentId/${studentid}`).then((res) => {
-      console.log(res);
       setStudentFunding(res);
+      setAttachment(res?.attachement);
       setCheck(res);
     });
   }, [success, studentid]);
@@ -39,6 +40,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
     const subData = new FormData(event.target);
 
     subData.append("studentLoanCompanyFile", FileList1);
+    subData.append("attachement", attachment);
 
     if (studentFunding?.id) {
       setProgress(true);
@@ -107,7 +109,8 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
               file={FileList1}
               id="avaterFile"
               setFile={setFileList1}
-              defaultValue={studentFunding?.attachement}
+              defaultValue={attachment}
+              setRemove={setAttachment}
               error={fileError}
               setrror={setFileError}
             />
