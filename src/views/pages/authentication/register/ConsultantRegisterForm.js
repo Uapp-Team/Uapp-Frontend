@@ -1,5 +1,9 @@
-import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -15,7 +19,7 @@ import {
   Label,
 } from "reactstrap";
 import notify from "../../../../assets/img/notify.png";
-import UploadButton from "../../../../components/buttons/UploadButton";
+import UploadFile from "../../../../components/form/UploadFile";
 import { rootUrl } from "../../../../constants/constants";
 import containsDigit from "../../../../helpers/nameContainDigit";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
@@ -43,17 +47,13 @@ const ConsultantRegisterForm = () => {
   const [linkedFacebook, setLinkedFacebook] = useState("");
   const [linkedFacebookError, setLinkedFacebookError] = useState("");
   const [checked, setChecked] = useState(null);
-  const [cvFile, setCvFile] = useState([]);
+  const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
   const [loansForEu, setLoansForEu] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [progress, setProgress] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [previewFileType, setPreviewFileType] = useState("");
-
   useEffect(() => {
     setParameter(invitationcode);
   }, [invitationcode]);
@@ -74,11 +74,6 @@ const ConsultantRegisterForm = () => {
       });
   }, []);
 
-  const handleFile = ({ fileList }) => {
-    setCvFile(fileList);
-    setCvError("");
-  };
-
   const SetNameTitleFromDD = (e) => {
     setTitle(e.target.value);
   };
@@ -92,6 +87,13 @@ const ConsultantRegisterForm = () => {
       setLastNameError("");
     }
   };
+
+  const antIcon = (
+    <LoadingOutlined
+      style={{ fontSize: 35, color: "white", fontWeight: "bold" }}
+      spin
+    />
+  );
   const handleLinkedFacebookChange = (e) => {
     setLinkedFacebook(e.target.value);
     if (e.target.value === "") {
@@ -224,78 +226,14 @@ const ConsultantRegisterForm = () => {
 
     // }
 
-    if (cvFile.length < 1) {
+    if (cvFile === null) {
       isFormValid = false;
       setCvError("CV file is required");
     }
     return isFormValid;
   }
 
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
-
-  const handlePreview = async (file) => {
-    // Infer file type if it's not provided
-    const inferFileType = (file) => {
-      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
-      switch (extension) {
-        case "jpg":
-        case "jpeg":
-        case "png":
-        case "gif":
-          return "image/jpeg";
-        case "pdf":
-          return "application/pdf";
-        case "doc":
-          return "application/msword";
-        case "docx":
-          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        default:
-          return "unknown";
-      }
-    };
-
-    const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith("image")) {
-      // If it's an image
-      file.preview = await getBase64(file.originFileObj || file.url);
-      setPreviewImage(file.preview || file.url);
-      setPreviewFileType(fileType);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-    } else if (fileType === "application/pdf") {
-      // If it's a PDF
-      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview);
-      setPreviewVisible(true);
-      setPreviewFileType(fileType);
-      setPreviewTitle(file.name);
-    } else if (
-      fileType === "application/msword" ||
-      fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${
-        file.url || URL.createObjectURL(file.originFileObj)
-      }&embedded=true`;
-      setPreviewImage(googleViewer);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-      setPreviewFileType(fileType);
-    } else {
-      // Handle unsupported file types
-      alert("Preview not available for this file type");
-    }
-  };
-
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
     subData.append("consultantTypeId", 2);
@@ -305,57 +243,42 @@ const ConsultantRegisterForm = () => {
     subData.append("email", email);
     subData.append("invitationCode", referCode);
     subData.append("linkedIn_Facebook", linkedFacebook);
-    subData.append(
-      "cvfile",
-      cvFile.length === 0 ? null : cvFile[0]?.originFileObj
-    );
+    subData.append("cvfile", cvFile);
     subData.append("password", password);
     subData.append("linkTypeId", loansForEu);
 
-    // const subData = {
-    //   ConsultantTypeId: 2,
-    //   NameTittleId: title,
-    //   FirstName: firstName,
-    //   LastName: lastName,
-    //   Email: email,
-    //   Password: password,
-    //   InvitationCode: referCode,
-    //   LinkedIn_Facebook: linkedFacebook,
-    // };
-    console.log("subdata", subData);
-
-    for (var x of subData.values()) {
-      console.log("subdata", x);
-    }
-
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
-      // clearAllErrors();
-
-      // fetch(`${rootUrl}ConsultantRegister/Register`, {
-      //   method: "POST",
-      //   headers: {
-      //     "content-type": "multipart/form-data",
-      //   },
-      //   body: subData,
-      // })
-      axios
-        .post(`${rootUrl}ConsultantRegister/Register`, subData)
-        .then((res) => {
-          if (res?.data?.isSuccess == true) {
-            console.log("data", res);
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            history.push("/consultantAccountCreated");
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
+      try {
+        setProgress(true);
+        await axios
+          .post(`${rootUrl}ConsultantRegister/Register`, subData)
+          .then((res) => {
+            if (res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+              history.push("/consultantAccountCreated");
+            } else {
+              addToast(res?.data?.message, {
+                appearance: "error",
+                autoDismiss: true,
+              });
+            }
+          });
+      } catch (error) {
+        addToast(
+          "An error occurred while registering. Please try again later.",
+          {
+            appearance: "error",
+            autoDismiss: true,
           }
-        });
+        );
+        return;
+      } finally {
+        setProgress(false);
+      }
     }
   };
 
@@ -605,80 +528,19 @@ const ConsultantRegisterForm = () => {
         </div>
 
         <FormGroup>
-          <div className="d-flex align-items-center">
-            <Col sm={4} style={{ paddingLeft: "1px" }}>
-              <span>
-                <span className="text-danger">*</span>CV File :
-              </span>
-            </Col>
-            <Col sm={8}>
-              <Upload
-                onPreview={handlePreview}
-                multiple={false}
-                fileList={cvFile}
-                onChange={handleFile}
-                beforeUpload={(file) => {
-                  return false;
-                }}
-                itemRender={(originNode, file) => (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        flex: 1,
-                      }}
-                    >
-                      {originNode}
-                    </div>
-                    <EyeOutlined
-                      style={{
-                        marginLeft: "4px",
-                        cursor: "pointer",
-                        flexShrink: 0,
-                      }}
-                      onClick={() => handlePreview(file)}
-                    />
-                  </div>
-                )}
-              >
-                {cvFile.length < 1 ? <UploadButton /> : ""}
-              </Upload>
-
-              {previewVisible && (
-                <Modal
-                  title={previewTitle}
-                  visible={previewVisible}
-                  footer={null}
-                  onCancel={() => setPreviewVisible(false)}
-                >
-                  {previewFileType === "application/pdf" ? (
-                    <iframe
-                      src={previewImage}
-                      style={{ width: "100%", height: "80vh" }}
-                      frameBorder="0"
-                    ></iframe>
-                  ) : (
-                    <img
-                      alt={previewTitle}
-                      src={previewImage}
-                      style={{ width: "100%" }}
-                    />
-                  )}
-                </Modal>
-              )}
+          <div className="d-flex pt-3">
+            <Col sm={12}>
+              <UploadFile
+                label="CV File :"
+                file={cvFile}
+                id="avaterFile"
+                setFile={setCvFile}
+                // defaultValue={}
+                error={cvError}
+                setError={setCvError}
+              />
             </Col>
           </div>
-          <span className="text-danger">{cvError}</span>
         </FormGroup>
 
         <div className="mb-3">
@@ -719,11 +581,9 @@ const ConsultantRegisterForm = () => {
         </div>
 
         <div className="mb-3">
-          <div>
-            <span className="text-danger">{error}</span>
-          </div>
+          <div></div>
           <button className="btn-register-lg" type="submit" disabled={!checked}>
-            Register Now
+            {progress ? <Spin indicator={antIcon} /> : "Register Now"}
           </button>
         </div>
         <Link to={"/"} className="already-registered mb-5">

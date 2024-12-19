@@ -60,9 +60,8 @@ const EligibilityInformation = () => {
       setResidency(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       //
-      console.log("consNav", res);
       setNavVisibility(res);
     });
 
@@ -305,6 +304,14 @@ const EligibilityInformation = () => {
     if (uniCountryValue !== uniCountryValue2 && residencyValue === 0) {
       isValid = false;
       setResidencyError("Residency status is required");
+    }
+    if (
+      uniCountryValue !== uniCountryValue2 &&
+      FileList5.length === 0 &&
+      eligibilityData?.brp?.fileUrl == null
+    ) {
+      isValid = false;
+      setProofOfRightError("File is required");
     }
     if (residencyValue === 2 && !visa) {
       isValid = false;
