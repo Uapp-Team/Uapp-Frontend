@@ -226,13 +226,13 @@ const ConsultantRegisterForm = () => {
 
     // }
 
-    if (cvFile === null) {
+    if (!cvFile) {
       isFormValid = false;
       setCvError("CV file is required");
     }
     return isFormValid;
   }
-
+  console.log(cvFile);
   const handleRegister = async (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
