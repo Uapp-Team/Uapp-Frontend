@@ -1835,6 +1835,19 @@ const Consent = ({
 
                     <Table style={{ marginBottom: "2 rem" }}>
                       <tbody>
+                              <tr style={{ border: "1px solid #dee2e6" }}>
+                                <td
+                                  style={{
+                                    borderRight: "1px solid #dee2e6",
+                                    paddingLeft: "8px",
+                                  }}
+                                >
+                                  Relation
+                                </td>
+                                <td style={{ paddingLeft: "8px" }}>
+                                  {ref?.referenceType.name}
+                                </td>
+                              </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>
                           <td
                             style={{
@@ -1847,19 +1860,6 @@ const Consent = ({
                           </td>
                           <td style={{ paddingLeft: "8px" }}>
                             {ref?.referenceName}
-                          </td>
-                        </tr>
-                        <tr style={{ border: "1px solid #dee2e6" }}>
-                          <td
-                            style={{
-                              borderRight: "1px solid #dee2e6",
-                              paddingLeft: "8px",
-                            }}
-                          >
-                            Relation
-                          </td>
-                          <td style={{ paddingLeft: "8px" }}>
-                            {ref?.referenceType.name}
                           </td>
                         </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>
