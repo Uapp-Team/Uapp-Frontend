@@ -72,6 +72,7 @@ const UploadFile = ({
                   <i class="fas fa-eye text-info fs-24px"></i>
                 </a>
               )}
+              <div></div>
             </>
           ) : defaultValue ? (
             <>
