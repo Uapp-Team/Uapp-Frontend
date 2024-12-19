@@ -2112,6 +2112,19 @@ const StudentDeclaration = () => {
                               style={{
                                 borderRight: "1px solid #dee2e6",
                                 paddingLeft: "8px",
+                              }}
+                            >
+                              Relation
+                            </td>
+                            <td style={{ paddingLeft: "8px" }}>
+                              {ref?.referenceType.name}
+                            </td>
+                          </tr>{" "}
+                          <tr style={{ border: "1px solid #dee2e6" }}>
+                            <td
+                              style={{
+                                borderRight: "1px solid #dee2e6",
+                                paddingLeft: "8px",
                                 width: "50%",
                               }}
                             >
@@ -2119,19 +2132,6 @@ const StudentDeclaration = () => {
                             </td>
                             <td style={{ paddingLeft: "8px" }}>
                               {ref?.referenceName}
-                            </td>
-                          </tr>
-                          <tr style={{ border: "1px solid #dee2e6" }}>
-                            <td
-                              style={{
-                                borderRight: "1px solid #dee2e6",
-                                paddingLeft: "8px",
-                              }}
-                            >
-                              Relation
-                            </td>
-                            <td style={{ paddingLeft: "8px" }}>
-                              {ref?.referenceType.name}
                             </td>
                           </tr>
                           <tr style={{ border: "1px solid #dee2e6" }}>
