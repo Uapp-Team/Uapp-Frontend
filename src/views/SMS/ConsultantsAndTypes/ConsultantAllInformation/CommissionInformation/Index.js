@@ -523,11 +523,13 @@ const ConsultantCommission = () => {
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />
-            <SaveButton
-              text="Next"
-              action={goForward}
-              buttonStatus={buttonStatus}
-            />
+            {navVisibility?.openTandC === true && (
+              <SaveButton
+                text="Next"
+                action={goForward}
+                buttonStatus={buttonStatus}
+              />
+            )}
           </FormGroup>
         </CardBody>
       </Card>

@@ -310,7 +310,7 @@ const ConsultantBankDetails = () => {
 
           <div className="d-flex justify-content-between mt-5">
             <PreviousButton action={goPrevious} />
-            {navVisibility?.openTandC === true && (
+            {bankDetailsData?.length > 0 && (
               <SaveButton text="Next" action={goForward} />
             )}
           </div>

@@ -324,6 +324,7 @@ const EligibilityForm = ({
           {uniCountryValue === uniCountryValue2 ? null : (
             <FormGroup row className="has-icon-left position-relative">
               <Col md="4" className="text-md-right">
+                <span className="text-danger">*</span>
                 <span>BRP / TRP / Settled / Pre-Settled / Share Code : </span>
               </Col>
 
@@ -340,7 +341,9 @@ const EligibilityForm = ({
                     >
                       {FileList5.length < 1 ? <UploadButton /> : ""}
                     </Upload>
-                    <span className="text-danger">{proofOfRightError}</span>
+                    {proofOfRightError && (
+                      <span className="text-danger">{proofOfRightError}</span>
+                    )}
                   </div>
                   {eligibilityData?.brp?.fileUrl && (
                     <Preview file={eligibilityData?.brp?.fileUrl} />

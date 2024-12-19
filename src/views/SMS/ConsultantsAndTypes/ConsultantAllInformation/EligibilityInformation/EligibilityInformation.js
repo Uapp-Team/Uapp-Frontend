@@ -305,6 +305,14 @@ const EligibilityInformation = () => {
       isValid = false;
       setResidencyError("Residency status is required");
     }
+    if (
+      uniCountryValue !== uniCountryValue2 &&
+      FileList5.length === 0 &&
+      eligibilityData?.brp?.fileUrl == null
+    ) {
+      isValid = false;
+      setProofOfRightError("File is required");
+    }
     if (residencyValue === 2 && !visa) {
       isValid = false;
       setVisaError("Visa Type is required");
