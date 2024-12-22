@@ -4,8 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 // import "react-pdf/dist/Page/AnnotationLayer.css";
 // import "react-pdf/dist/Page/TextLayer.css";
 
-import { EyeOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
+import { Modal } from "antd";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import {
@@ -25,7 +24,7 @@ import doc from "../../../../../assets/icon/doc.png";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import UploadButton from "../../../../../components/buttons/UploadButton";
+import UploadFile from "../../../../../components/form/UploadFile";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import Download from "../../../../../components/ui/Download";
 import Preview from "../../../../../components/ui/Preview";
@@ -50,8 +49,8 @@ const DocumentUpload = () => {
   const [docuTypeLabel, setDocuTypeLabel] = useState("Select Document");
   const [docuTypeValue, setDocuTypeValue] = useState(0);
   const [docutypeError, setDocuTypeError] = useState(false);
-  const [FileList1, setFileList1] = useState([]);
-  const [uploadError, setUploadError] = useState(false);
+  const [FileList1, setFileList1] = useState(null);
+  const [uploadError, setUploadError] = useState("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage1, setPreviewImage1] = useState("");
   const [previewTitle1, setPreviewTitle1] = useState("");
@@ -83,11 +82,7 @@ const DocumentUpload = () => {
   const [previewFileType, setPreviewFileType] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [nav, setNav] = useState({});
-
-  const handleChange1 = ({ fileList }) => {
-    setUploadError(false);
-    setFileList1(fileList);
-  };
+  const [attatchment, setAttachment] = useState(null);
 
   function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -223,9 +218,9 @@ const DocumentUpload = () => {
       isFormValid = false;
       setDocumentTitleError("Document title is required");
     }
-    if (FileList1.length === 0) {
+    if (addDoc && FileList1 === null) {
       isFormValid = false;
-      setUploadError(true);
+      setUploadError("Document is required");
     }
     if (addDoc === null) {
       isFormValid = false;
@@ -237,10 +232,7 @@ const DocumentUpload = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
-    subData.append(
-      "studentDocument",
-      FileList1.length === 0 ? null : FileList1[0]?.originFileObj
-    );
+    subData.append("studentDocument", FileList1);
 
     // for (var i of subData) {
     // }
@@ -794,7 +786,7 @@ const DocumentUpload = () => {
                   </FormGroup>
 
                   <FormGroup>
-                    <div className="row">
+                    {/* <div className="row">
                       <Col>
                         <span>
                           <span className="text-danger text-left">*</span>Upload
@@ -852,13 +844,19 @@ const DocumentUpload = () => {
 
                         <div className="text-danger d-block">{uploadError}</div>
                       </Col>
-                      <Col>
-                        {/* <span className="text-gray">
-                          Document size should be 2MB and file format .jpg or
-                          .png
-                        </span> */}
-                      </Col>
-                    </div>
+                    </div> */}
+
+                    <UploadFile
+                      label="Upload Document"
+                      file={FileList1}
+                      id="avaterFile"
+                      setFile={setFileList1}
+                      defaultValue={attatchment}
+                      setRemove={setAttachment}
+                      error={uploadError}
+                      setError={setUploadError}
+                      require={true}
+                    />
                   </FormGroup>
                   <FormGroup className="text-right">
                     {permissions?.includes(permissionList?.Edit_Student) ? (
