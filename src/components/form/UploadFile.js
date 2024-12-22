@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import ErrorText from "./ErrorText";
-import Preview from "../ui/Preview";
-import DownloadButton from "../buttons/DownloadButton";
-import { Modal } from "reactstrap";
 import { AiOutlineDelete } from "react-icons/ai";
+import { Modal } from "reactstrap";
+import DownloadButton from "../buttons/DownloadButton";
+import Preview from "../ui/Preview";
+import ErrorText from "./ErrorText";
 
 const UploadFile = ({
   label,
@@ -16,6 +16,7 @@ const UploadFile = ({
   setRemove,
   error,
   setError,
+  require = false,
 }) => {
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [fileType, setFileType] = useState(null);
@@ -47,6 +48,7 @@ const UploadFile = ({
       <Form.Group className="mb-3">
         <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex justify-content-start align-items-center">
+            {label && require && <span className="text-danger">*</span>}
             {label && <span className="mr-4">{label}</span>}
             <label htmlFor={`inputImg${id}`} className="pointer mb-0">
               <span type="button" className="upload-button">
