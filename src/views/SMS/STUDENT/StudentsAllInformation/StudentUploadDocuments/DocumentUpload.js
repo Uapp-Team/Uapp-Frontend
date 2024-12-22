@@ -786,66 +786,6 @@ const DocumentUpload = () => {
                   </FormGroup>
 
                   <FormGroup>
-                    {/* <div className="row">
-                      <Col>
-                        <span>
-                          <span className="text-danger text-left">*</span>Upload
-                          Document:{"  "}
-                        </span>
-                      </Col>
-
-                      <Col sm="4">
-                        <Upload
-                          onPreview={handlePreview1}
-                          multiple={false}
-                          fileList={FileList1}
-                          onChange={handleChange1}
-                          beforeUpload={(file) => false}
-                          itemRender={(originNode, file) => (
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "baseLine",
-                              }}
-                            >
-                              {originNode}
-                              <EyeOutlined
-                                style={{ marginLeft: "8px", cursor: "pointer" }}
-                                onClick={() => handlePreview1(file)}
-                              />
-                            </div>
-                          )}
-                        >
-                          {FileList1.length < 1 ? <UploadButton /> : ""}
-                        </Upload>
-
-                        {previewVisible && (
-                          <Modal
-                            title={previewTitle}
-                            visible={previewVisible}
-                            footer={null}
-                            onCancel={() => setPreviewVisible(false)}
-                          >
-                            {previewFileType === "application/pdf" ? (
-                              <iframe
-                                src={previewImage}
-                                style={{ width: "100%", height: "80vh" }}
-                                frameBorder="0"
-                              ></iframe>
-                            ) : (
-                              <img
-                                alt={previewTitle}
-                                src={previewImage}
-                                style={{ width: "100%" }}
-                              />
-                            )}
-                          </Modal>
-                        )}
-
-                        <div className="text-danger d-block">{uploadError}</div>
-                      </Col>
-                    </div> */}
-
                     <UploadFile
                       label="Upload Document"
                       file={FileList1}
