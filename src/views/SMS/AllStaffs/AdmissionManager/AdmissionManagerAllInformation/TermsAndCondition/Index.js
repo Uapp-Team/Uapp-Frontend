@@ -12,6 +12,7 @@ import icon_warning from "../../../../../../assets/img/icons/icon_warning.png";
 import icon_success from "../../../../../../assets/img/icons/icons_success.png";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
 
 const Index = () => {
   const userType = localStorage.getItem("userType");
@@ -92,6 +93,10 @@ const Index = () => {
 
   const goBackward = () => {
     history.push(`/admissionManagersOfficerInformation/${admissionManagerId}`);
+  };
+
+  const goToProfile = () => {
+    history.push(`/admissionManagerProfile/${admissionManagerId}`);
   };
 
   return (
@@ -254,6 +259,7 @@ const Index = () => {
           </div>
           <div className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />
+            <SaveButton text="Go to profile" action={goToProfile} />
           </div>
         </CardBody>
       </Card>

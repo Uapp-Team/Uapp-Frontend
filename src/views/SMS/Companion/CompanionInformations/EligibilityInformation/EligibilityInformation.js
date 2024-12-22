@@ -14,7 +14,7 @@ const EligibilityInformation = () => {
   const [success, setSuccess] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [uniCountryLabel, setUniCountryLabel] = useState(
-    "Select Country of Citizenship"
+    "Select Country of Nationality"
   );
   const [uniCountryValue, setUniCountryValue] = useState(0);
   const [errorc, setErrorC] = useState("");
@@ -87,7 +87,7 @@ const EligibilityInformation = () => {
       setUniCountryLabel(
         res?.data !== null
           ? res?.data?.citizenshipCountryName
-          : "Select Country of Citizenship"
+          : "Select Country of Nationality"
       );
       setUniCountryValue(
         res?.data !== null ? res?.data?.countryOfCitizenShipId : 0

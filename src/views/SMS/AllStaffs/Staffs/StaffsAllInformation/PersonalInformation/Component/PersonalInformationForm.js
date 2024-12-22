@@ -10,6 +10,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
 import moment from "moment";
+import DMYPicker from "../../../../../../../components/form/DMYPicker";
 
 const PersonalInformationForm = ({
   handleSubmit,
@@ -48,6 +49,7 @@ const PersonalInformationForm = ({
   progress,
   buttonStatus,
   DatesError,
+  setDateError,
   handleDate,
   phoneError,
   handlePhoneNumber,
@@ -63,23 +65,14 @@ const PersonalInformationForm = ({
 
       <FormGroup row>
         <Col lg="6" md="8">
-          <span>
-            <span className="text-danger">*</span> Date Of Birth
-          </span>
-
-          <Input
-            type="date"
-            name="dateOfBirth"
-            id="dateOfBirth"
-            onChange={(e) => {
-              handleDate(e);
-            }}
-            // value={moment(new Date(Dates)).format("DD-MM-YYYY")}
+          <DMYPicker
+            label="Date Of Birth"
             value={Dates}
+            setValue={handleDate}
+            error={DatesError}
+            action={setDateError}
+            required={true}
           />
-          {DatesError && (
-            <span className="text-danger">Birth date is required</span>
-          )}
         </Col>
       </FormGroup>
 

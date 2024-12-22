@@ -164,11 +164,10 @@ const StaffPersonalInformation = () => {
   };
 
   const handleDate = (e) => {
-    SetDate(e.target.value);
-    if (e.target.value === "") {
-      SetDateError(true);
+    if (e) {
+      SetDate(e);
     } else {
-      SetDateError(false);
+      SetDateError("Birth date is required");
     }
   };
 
@@ -196,6 +195,7 @@ const StaffPersonalInformation = () => {
     event.preventDefault();
     const subdata = new FormData(event.target);
 
+    subdata.append("dateOfBirth", Dates);
     subdata.append("EmployeeProfileFile", FileList1[0]?.originFileObj);
     subdata.append("EmployeeCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phone);
@@ -222,7 +222,7 @@ const StaffPersonalInformation = () => {
 
       if (!Dates) {
         isFormValid = false;
-        SetDateError("Date is required");
+        SetDateError("Birth date is required");
       }
 
       if (!phone) {
@@ -306,6 +306,8 @@ const StaffPersonalInformation = () => {
                 staffId={staffId}
                 Dates={Dates}
                 SetDate={SetDate}
+                DatesError={DatesError}
+                setDateError={SetDateError}
                 setPassport={setPassport}
                 passport={passport}
                 gender={gender}
@@ -339,7 +341,6 @@ const StaffPersonalInformation = () => {
                 progress={progress}
                 buttonStatus={buttonStatus}
                 handleDate={handleDate}
-                DatesError={DatesError}
                 phoneError={phoneError}
                 goPrevious={goPrevious}
                 phone={phone}
