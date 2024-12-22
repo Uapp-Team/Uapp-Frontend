@@ -26,7 +26,7 @@ const StaffEligibility = () => {
   const [uniCountryLabel2, setUniCountryLabel2] = useState("Select Residence");
   const [uniCountryValue2, setUniCountryValue2] = useState(0);
   const [errorc2, setErrorC2] = useState("");
-  const [exDate, setExDate] = useState(currentDate);
+  const [exDate, setExDate] = useState(null);
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -103,16 +103,10 @@ const StaffEligibility = () => {
         res?.haveRightToWork !== null ? `${res?.haveRightToWork}` : "false"
       );
 
-      // res?.expireDate !== "0001-01-01T00:00:00"
       res?.expireDate
         ? setExDate(moment(new Date(res?.expireDate)).format("YYYY-MM-DD"))
-        : setExDate(currentDate);
+        : setExDate(null);
 
-      // setExDate(
-      //   res?.expireDate !== null
-      //     ? moment(new Date(res?.expireDate)).format("YYYY-MM-DD")
-      //     : null
-      // );
       setVisa(res?.visaType);
     });
   }, [success, staffId]);
@@ -311,11 +305,10 @@ const StaffEligibility = () => {
   };
 
   const handleDate = (e) => {
-    setExDate(e.target.value);
-    if (e.target.value === "") {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    if (e) {
+      setExDate(e);
     } else {
-      setDateError("");
+      setDateError("Expiry Date of Your BRP/TRP or Visa required");
     }
   };
 
@@ -337,7 +330,7 @@ const StaffEligibility = () => {
       isFormValid = false;
       setVisaError("Visa Type is required");
     }
-    if (residencyValue === 2 && !new Date(exDate).getDate()) {
+    if (residencyValue === 2 && !exDate) {
       isFormValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
@@ -497,6 +490,7 @@ const StaffEligibility = () => {
                 visaError={visaError}
                 handleDate={handleDate}
                 dateError={dateError}
+                setDateError={setDateError}
               ></EligibilityForm>
               {/* Form End */}
             </TabPane>
