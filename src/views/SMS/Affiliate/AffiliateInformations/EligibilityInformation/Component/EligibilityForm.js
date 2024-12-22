@@ -189,20 +189,6 @@ const EligibilityForm = ({
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                {/* <span>
-                  <span className="text-danger">*</span> Expiry Date of Your
-                  BRP/TRP or Visa{" "}
-                </span> */}
-
-                {/* <Input
-                  type="date"
-                  name="ExpireDate"
-                  id="ExpireDate"
-                  onChange={(e) => {
-                    handleDate(e);
-                  }}
-                  defaultValue={exDate}
-                /> */}
                 <DMYPicker
                   label="Expiry Date of Your
                   BRP/TRP or Visa"
