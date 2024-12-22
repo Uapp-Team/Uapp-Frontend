@@ -488,7 +488,7 @@ const AddUniversityCampus = (props) => {
                                 {uniCampus?.avarageApplicationFee}
                               </p>
                               <p>
-                                Estimated TotalCost :{" "}
+                                Estimated Total Cost :{" "}
                                 <CurrencyValue
                                   currencyList={currencyDD}
                                   currencyId={

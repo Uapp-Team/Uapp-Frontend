@@ -19,11 +19,11 @@ const Preview = ({ file }) => {
 
   return (
     <div>
-      {file.split(".")[1] === "jpeg" ||
-      file.split(".")[1] === "jpg" ||
-      file.split(".")[1] === "png" ||
-      file.split(".")[1] === "webp" ||
-      file.split(".")[1] === "gif" ? (
+      {file?.split(".")[1] === "jpeg" ||
+      file?.split(".")[1] === "jpg" ||
+      file?.split(".")[1] === "png" ||
+      file?.split(".")[1] === "webp" ||
+      file?.split(".")[1] === "gif" ? (
         <>
           <i
             onClick={() => openPopover(rootUrl + file)}
@@ -42,7 +42,7 @@ const Preview = ({ file }) => {
             ></i>
           </Modal>
         </>
-      ) : file.split(".")[1] === "pdf" ? (
+      ) : file?.split(".")[1] === "pdf" ? (
         <>
           <i
             onClick={() => openPopover(rootUrl + file)}

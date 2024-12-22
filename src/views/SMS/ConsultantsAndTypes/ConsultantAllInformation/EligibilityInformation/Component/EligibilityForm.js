@@ -1,14 +1,14 @@
-import React from "react";
-import { FormGroup, Form, Col, Input, Label, Row } from "reactstrap";
-import Select from "react-select";
 import { Upload } from "antd";
-import { rootUrl } from "../../../../../../constants/constants";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../../components/buttons/PreviousButton";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
-import UploadButton from "../../../../../../components/buttons/UploadButton";
+import React from "react";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import DownloadButton from "../../../../../../components/buttons/DownloadButton";
+import PreviousButton from "../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
+import UploadButton from "../../../../../../components/buttons/UploadButton";
+import DMYPicker from "../../../../../../components/form/DMYPicker";
 import Preview from "../../../../../../components/ui/Preview";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -69,6 +69,7 @@ const EligibilityForm = ({
   visaError,
   handlevisaType,
   dateError,
+  setDateError,
   handleDate,
   handlePrevious,
 }) => {
@@ -94,7 +95,8 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup className="has-icon-left position-relative">
             <span>
-              Country of Nationality <span className="text-danger">*</span>{" "}
+              <span className="text-danger">*</span>
+              Country of Nationality
             </span>
 
             <Select
@@ -173,12 +175,12 @@ const EligibilityForm = ({
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                <span>
+                {/* <span>
                   <span className="text-danger">*</span> Expiry Date of Your
                   BRP/TRP or Visa{" "}
-                </span>
+                </span> */}
 
-                <Input
+                {/* <Input
                   type="date"
                   name="expireDate"
                   id="expireDate"
@@ -186,6 +188,16 @@ const EligibilityForm = ({
                     handleDate(e);
                   }}
                   defaultValue={exDate}
+                /> */}
+
+                <DMYPicker
+                  label="Expiry Date of Your
+                  BRP/TRP or Visa"
+                  value={exDate}
+                  setValue={handleDate}
+                  error={dateError}
+                  action={setDateError}
+                  required={true}
                 />
                 <span className="text-danger">{dateError}</span>
               </FormGroup>
@@ -239,7 +251,7 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
-              {residencyValue === 2 && <span className="text-danger">* </span>}
+              <span className="text-danger">* </span>
               <span>Id/Passport : </span>
             </Col>
 
@@ -258,7 +270,7 @@ const EligibilityForm = ({
                     {FileList3.length < 1 ? <UploadButton /> : ""}
                   </Upload>
                   {idPassportError && (
-                    <span className="text-danger">File is required </span>
+                    <span className="text-danger">File is required</span>
                   )}
                 </div>
                 {eligibilityData?.idOrPassport?.fileUrl && (
@@ -275,6 +287,7 @@ const EligibilityForm = ({
 
           <FormGroup row className="has-icon-left position-relative">
             <Col md="" className="text-md-right">
+              <span className="text-danger">*</span>
               <span>Proof of Address : </span>
             </Col>
 
@@ -311,6 +324,7 @@ const EligibilityForm = ({
           {uniCountryValue === uniCountryValue2 ? null : (
             <FormGroup row className="has-icon-left position-relative">
               <Col md="4" className="text-md-right">
+                <span className="text-danger">*</span>
                 <span>BRP / TRP / Settled / Pre-Settled / Share Code : </span>
               </Col>
 
@@ -327,7 +341,9 @@ const EligibilityForm = ({
                     >
                       {FileList5.length < 1 ? <UploadButton /> : ""}
                     </Upload>
-                    <span className="text-danger">{proofOfRightError}</span>
+                    {proofOfRightError && (
+                      <span className="text-danger">{proofOfRightError}</span>
+                    )}
                   </div>
                   {eligibilityData?.brp?.fileUrl && (
                     <Preview file={eligibilityData?.brp?.fileUrl} />
@@ -341,6 +357,7 @@ const EligibilityForm = ({
           )}
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
+              <span className="text-danger">*</span>
               <span>CV File : </span>
             </Col>
 
@@ -358,7 +375,9 @@ const EligibilityForm = ({
                     {FileList6.length < 1 ? <UploadButton /> : ""}
                   </Upload>
 
-                  <span className="text-danger">{cvError}</span>
+                  {cvError && (
+                    <span className="text-danger">File is required </span>
+                  )}
                 </div>
                 {eligibilityData?.cv?.fileUrl && (
                   <Preview file={eligibilityData?.cv?.fileUrl} />

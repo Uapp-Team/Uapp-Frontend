@@ -95,7 +95,13 @@ const ParentCompanion = ({ companionProfileData, companionId }) => {
                 {companionProfileData?.data?.parent?.phone === null ? null : (
                   <li>
                     <i className="fas fa-phone pr-2"></i>
-                    {companionProfileData?.data?.parent?.phone}
+                    {companionProfileData?.data?.parent?.phone &&
+                    companionProfileData?.data?.parent?.phone.includes("+")
+                      ? companionProfileData?.data?.parent?.phone
+                      : companionProfileData?.data?.parent?.phone &&
+                        !companionProfileData?.data?.parent?.phone.includes("+")
+                      ? "+" + companionProfileData?.data?.parent?.phone
+                      : null}
                   </li>
                 )}
               </ul>

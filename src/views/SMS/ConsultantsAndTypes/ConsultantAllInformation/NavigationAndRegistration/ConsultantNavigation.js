@@ -54,73 +54,109 @@ const ConsultantNavigation = ({
   };
   return (
     <Nav tabs>
-      {navVisibility?.general ? (
+      {navVisibility?.showGeneral ? (
         <NavItem>
-          <NavLink active={currentTab === "1"} onClick={() => navigateTo("1")}>
+          <NavLink
+            disabled={navVisibility?.openGeneral === false}
+            active={currentTab === "1"}
+            onClick={() => navigateTo("1")}
+          >
             Consultant Details
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.personal ? (
+      {navVisibility?.showPersonal ? (
         <NavItem>
-          <NavLink active={currentTab === "2"} onClick={() => navigateTo("2")}>
+          <NavLink
+            disabled={navVisibility?.openPersonal === false}
+            active={currentTab === "2"}
+            onClick={() => navigateTo("2")}
+          >
             Personal Details
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.contact ? (
+      {navVisibility?.showContact ? (
         <NavItem>
-          <NavLink active={currentTab === "3"} onClick={() => navigateTo("3")}>
+          <NavLink
+            disabled={navVisibility?.openContact === false}
+            active={currentTab === "3"}
+            onClick={() => navigateTo("3")}
+          >
             Address
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.emergency ? (
+      {navVisibility?.showemergency ? (
         <NavItem>
-          <NavLink active={currentTab === "4"} onClick={() => navigateTo("4")}>
+          <NavLink
+            disabled={navVisibility?.openemergency === false}
+            active={currentTab === "4"}
+            onClick={() => navigateTo("4")}
+          >
             Emergency Contact
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.eligibility ? (
+      {navVisibility?.showEligibility ? (
         <NavItem>
-          <NavLink active={currentTab === "5"} onClick={() => navigateTo("5")}>
+          <NavLink
+            disabled={navVisibility?.openEligibility === false}
+            active={currentTab === "5"}
+            onClick={() => navigateTo("5")}
+          >
             Right to work
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.bankDetails ? (
+      {navVisibility?.showBankDetails ? (
         <NavItem>
-          <NavLink active={currentTab === "6"} onClick={() => navigateTo("6")}>
+          <NavLink
+            disabled={navVisibility?.openBankDetails === false}
+            active={currentTab === "6"}
+            onClick={() => navigateTo("6")}
+          >
             Bank Details
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.recruitment ? (
+      {navVisibility?.showRecruitment ? (
         <NavItem>
-          <NavLink active={currentTab === "7"} onClick={() => navigateTo("7")}>
+          <NavLink
+            disabled={navVisibility?.openRecruitment === false}
+            active={currentTab === "7"}
+            onClick={() => navigateTo("7")}
+          >
             Recruitment
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.commission ? (
+      {navVisibility?.showcommission ? (
         <NavItem>
-          <NavLink active={currentTab === "8"} onClick={() => navigateTo("8")}>
+          <NavLink
+            disabled={navVisibility?.opencommission === false}
+            active={currentTab === "8"}
+            onClick={() => navigateTo("8")}
+          >
             Commission
           </NavLink>
         </NavItem>
       ) : null}
 
-      {navVisibility?.tandC ? (
+      {navVisibility?.showTandC ? (
         <NavItem>
-          <NavLink active={currentTab === "9"} onClick={() => navigateTo("9")}>
+          <NavLink
+            disabled={navVisibility?.openTandC === false}
+            active={currentTab === "9"}
+            onClick={() => navigateTo("9")}
+          >
             Terms & Conditions
           </NavLink>
         </NavItem>

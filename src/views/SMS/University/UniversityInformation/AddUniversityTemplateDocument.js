@@ -36,6 +36,9 @@ import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import CheckOne from "../../../../components/form/CheckOne";
+import UploadButton from "../../../../components/buttons/UploadButton";
+import DownloadButton from "../../../../components/buttons/DownloadButton";
+import Preview from "../../../../components/ui/Preview";
 
 const AddUniversityTemplateDocument = () => {
   const { addToast } = useToasts();
@@ -80,34 +83,39 @@ const AddUniversityTemplateDocument = () => {
   //   setFileList1(fileList);
   // };
 
-  useEffect(() => {
-    if (applicationObject?.templateFile?.fileUrl) {
-      setFileList1([
-        {
-          uid: "-1",
-          name: "Profile Image",
-          status: "done",
-          url: rootUrl + applicationObject.templateFile.fileUrl,
-        },
-      ]);
-    }
-  }, [applicationObject]);
+  // useEffect(() => {
+  //   if (applicationObject?.templateFile?.fileUrl) {
+  //     setFileList1([
+  //       {
+  //         uid: "-1",
+  //         name: "Profile Image",
+  //         status: "done",
+  //         url: rootUrl + applicationObject.templateFile.fileUrl,
+  //       },
+  //     ]);
+  //   }
+  // }, [applicationObject]);
 
   const handleChange1 = ({ fileList }) => {
-    if (
-      fileList.length > 0 &&
-      fileList[0]?.type !== "image/jpeg" &&
-      fileList[0]?.type !== "image/jpg" &&
-      fileList[0]?.type !== "image/png"
-    ) {
-      setFileList1([]);
-      setError("Only jpeg, jpg, png image is allowed");
-    } else {
-      setFileList1(fileList);
-      setError("");
-      setUploadError(false);
-    }
+    setFileList1(fileList);
+    setError("");
+    setUploadError(false);
   };
+  // const handleChange1 = ({ fileList }) => {
+  //   if (
+  //     fileList.length > 0 &&
+  //     fileList[0]?.type !== "image/jpeg" &&
+  //     fileList[0]?.type !== "image/jpg" &&
+  //     fileList[0]?.type !== "image/png"
+  //   ) {
+  //     setFileList1([]);
+  //     setError("Only jpeg, jpg, png image is allowed");
+  //   } else {
+  //     setFileList1(fileList);
+  //     setError("");
+  //     setUploadError(false);
+  //   }
+  // };
 
   function getBase641(file) {
     return new Promise((resolve, reject) => {
@@ -494,7 +502,7 @@ const AddUniversityTemplateDocument = () => {
                               row
                               className="has-icon-left position-relative"
                             >
-                              <Col md="6">
+                              <Col md="7">
                                 <span>
                                   <span className="text-danger">*</span>{" "}
                                   Application Type{" "}
@@ -524,7 +532,7 @@ const AddUniversityTemplateDocument = () => {
                               row
                               className="has-icon-left position-relative"
                             >
-                              <Col md="6">
+                              <Col md="7">
                                 <span>
                                   {" "}
                                   <span className="text-danger">
@@ -549,7 +557,7 @@ const AddUniversityTemplateDocument = () => {
                               row
                               className="has-icon-left position-relative"
                             >
-                              <Col md="6">
+                              <Col md="7">
                                 <span>Description </span>
                                 <Input
                                   type="textarea"
@@ -563,74 +571,61 @@ const AddUniversityTemplateDocument = () => {
                             </FormGroup>
 
                             <Row>
-                              <Col md="6">
+                              <Col md="7">
                                 <FormGroup
                                   row
                                   className="has-icon-left position-relative"
                                 >
-                                  <Col md="3">
+                                  <Col md="4">
                                     <span>
                                       <span className="text-danger">*</span>{" "}
                                       Upload Document:{" "}
                                     </span>
                                   </Col>
-                                  <Col md="5">
-                                    <div className="row">
-                                      <div className="col-md-6 pb-2 pr-3">
+
+                                  <Col md="8">
+                                    <div className="d-flex justify-content-between align-items-center">
+                                      <div>
                                         <Upload
-                                          listType="picture-card"
                                           multiple={false}
                                           fileList={FileList1}
-                                          onPreview={handlePreview1}
                                           onChange={handleChange1}
                                           beforeUpload={(file) => {
                                             return false;
                                           }}
+                                          style={{ height: "32px" }}
                                         >
                                           {FileList1.length < 1 ? (
-                                            <div
-                                              className="text-danger"
-                                              style={{ marginTop: 8 }}
-                                            >
-                                              <Icon.Upload />
-                                              {/* <br />
-                                  <span>Upload Here</span> */}
-                                            </div>
+                                            <UploadButton />
                                           ) : (
                                             ""
                                           )}
                                         </Upload>
-                                        <Modal
-                                          visible={previewVisible1}
-                                          title={previewTitle1}
-                                          footer={null}
-                                          onCancel={handleCancel1}
-                                        >
-                                          <img
-                                            alt="example"
-                                            style={{ width: "100%" }}
-                                            src={previewImage1}
-                                          />
-                                        </Modal>
-                                        <span className="text-danger d-block">
-                                          {uploadError}
-                                        </span>
+                                        {uploadError && (
+                                          <span className="text-danger">
+                                            Document is required
+                                          </span>
+                                        )}
                                       </div>
+                                      {applicationObject?.templateFile
+                                        ?.fileUrl && (
+                                        <Preview
+                                          file={
+                                            applicationObject?.templateFile
+                                              ?.fileUrl
+                                          }
+                                        />
+                                      )}
+                                      {applicationObject?.templateFile
+                                        ?.fileUrl != null && (
+                                        <DownloadButton
+                                          file={
+                                            applicationObject?.templateFile
+                                              ?.fileUrl
+                                          }
+                                        />
+                                      )}
                                     </div>
-
-                                    {uploadError && (
-                                      <span className="text-danger">
-                                        Document is required
-                                      </span>
-                                    )}
-                                  </Col>
-                                  <Col md="4" className="pt-4">
-                                    <span
-                                      style={{ color: "rgba(0, 0, 0, 0.45)" }}
-                                    >
-                                      File size less than 2MB, keep visual
-                                      elements centered
-                                    </span>
                                   </Col>
                                 </FormGroup>
 

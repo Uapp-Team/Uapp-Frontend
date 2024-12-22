@@ -1,4 +1,14 @@
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { Spin } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   Col,
   Form,
@@ -8,22 +18,11 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
-import {
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
-import { connect } from "react-redux";
-import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
-import { rootUrl } from "../../../../constants/constants";
-import { Link, useHistory, useParams } from "react-router-dom";
-import post from "../../../../helpers/post";
-import { useToasts } from "react-toast-notifications";
 import notify from "../../../../assets/img/notify.png";
-import axios from "axios";
-import { Upload } from "antd";
-import UploadButton from "../../../../components/buttons/UploadButton";
+import UploadFile from "../../../../components/form/UploadFile";
+import { rootUrl } from "../../../../constants/constants";
 import containsDigit from "../../../../helpers/nameContainDigit";
+import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 
 const ConsultantRegisterForm = () => {
   const [parameter, setParameter] = useState("");
@@ -48,13 +47,13 @@ const ConsultantRegisterForm = () => {
   const [linkedFacebook, setLinkedFacebook] = useState("");
   const [linkedFacebookError, setLinkedFacebookError] = useState("");
   const [checked, setChecked] = useState(null);
-  const [cvFile, setCvFile] = useState([]);
+  const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
   const [loansForEu, setLoansForEu] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [progress, setProgress] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-
   useEffect(() => {
     setParameter(invitationcode);
   }, [invitationcode]);
@@ -75,11 +74,6 @@ const ConsultantRegisterForm = () => {
       });
   }, []);
 
-  const handleFile = ({ fileList }) => {
-    setCvFile(fileList);
-    setCvError("");
-  };
-
   const SetNameTitleFromDD = (e) => {
     setTitle(e.target.value);
   };
@@ -93,6 +87,13 @@ const ConsultantRegisterForm = () => {
       setLastNameError("");
     }
   };
+
+  const antIcon = (
+    <LoadingOutlined
+      style={{ fontSize: 35, color: "white", fontWeight: "bold" }}
+      spin
+    />
+  );
   const handleLinkedFacebookChange = (e) => {
     setLinkedFacebook(e.target.value);
     if (e.target.value === "") {
@@ -225,14 +226,14 @@ const ConsultantRegisterForm = () => {
 
     // }
 
-    if (cvFile.length < 1) {
+    if (!cvFile) {
       isFormValid = false;
       setCvError("CV file is required");
     }
     return isFormValid;
   }
-
-  const handleRegister = (e) => {
+  console.log(cvFile);
+  const handleRegister = async (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
     subData.append("consultantTypeId", 2);
@@ -242,57 +243,42 @@ const ConsultantRegisterForm = () => {
     subData.append("email", email);
     subData.append("invitationCode", referCode);
     subData.append("linkedIn_Facebook", linkedFacebook);
-    subData.append(
-      "cvfile",
-      cvFile.length === 0 ? null : cvFile[0]?.originFileObj
-    );
+    subData.append("cvfile", cvFile);
     subData.append("password", password);
     subData.append("linkTypeId", loansForEu);
 
-    // const subData = {
-    //   ConsultantTypeId: 2,
-    //   NameTittleId: title,
-    //   FirstName: firstName,
-    //   LastName: lastName,
-    //   Email: email,
-    //   Password: password,
-    //   InvitationCode: referCode,
-    //   LinkedIn_Facebook: linkedFacebook,
-    // };
-    console.log("subdata", subData);
-
-    for (var x of subData.values()) {
-      console.log("subdata", x);
-    }
-
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
-      // clearAllErrors();
-
-      // fetch(`${rootUrl}ConsultantRegister/Register`, {
-      //   method: "POST",
-      //   headers: {
-      //     "content-type": "multipart/form-data",
-      //   },
-      //   body: subData,
-      // })
-      axios
-        .post(`${rootUrl}ConsultantRegister/Register`, subData)
-        .then((res) => {
-          if (res?.data?.isSuccess == true) {
-            console.log("data", res);
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            history.push("/consultantAccountCreated");
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
+      try {
+        setProgress(true);
+        await axios
+          .post(`${rootUrl}ConsultantRegister/Register`, subData)
+          .then((res) => {
+            if (res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+              history.push("/consultantAccountCreated");
+            } else {
+              addToast(res?.data?.message, {
+                appearance: "error",
+                autoDismiss: true,
+              });
+            }
+          });
+      } catch (error) {
+        addToast(
+          "An error occurred while registering. Please try again later.",
+          {
+            appearance: "error",
+            autoDismiss: true,
           }
-        });
+        );
+        return;
+      } finally {
+        setProgress(false);
+      }
     }
   };
 
@@ -542,26 +528,19 @@ const ConsultantRegisterForm = () => {
         </div>
 
         <FormGroup>
-          <div className="d-flex align-items-center">
-            <Col sm={4} style={{ paddingLeft: "1px" }}>
-              <span>
-                <span className="text-danger">*</span>CV File :
-              </span>
-            </Col>
-            <Col sm={8}>
-              <Upload
-                multiple={false}
-                fileList={cvFile}
-                onChange={handleFile}
-                beforeUpload={(file) => {
-                  return false;
-                }}
-              >
-                {cvFile.length < 1 ? <UploadButton /> : ""}
-              </Upload>
+          <div className="d-flex pt-3">
+            <Col sm={12}>
+              <UploadFile
+                label="CV File :"
+                file={cvFile}
+                id="avaterFile"
+                setFile={setCvFile}
+                // defaultValue={}
+                error={cvError}
+                setError={setCvError}
+              />
             </Col>
           </div>
-          <span className="text-danger">{cvError}</span>
         </FormGroup>
 
         <div className="mb-3">
@@ -602,11 +581,9 @@ const ConsultantRegisterForm = () => {
         </div>
 
         <div className="mb-3">
-          <div>
-            <span className="text-danger">{error}</span>
-          </div>
+          <div></div>
           <button className="btn-register-lg" type="submit" disabled={!checked}>
-            Register Now
+            {progress ? <Spin indicator={antIcon} /> : "Register Now"}
           </button>
         </div>
         <Link to={"/"} className="already-registered mb-5">

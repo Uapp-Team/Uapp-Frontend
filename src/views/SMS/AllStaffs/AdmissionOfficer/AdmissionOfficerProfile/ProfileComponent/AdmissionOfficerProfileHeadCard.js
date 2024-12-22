@@ -690,8 +690,11 @@ const AdmissionOfficerProfileHeadCard = ({
                             {head?.phone === null ? null : (
                               <p>
                                 <i className="fas fa-phone pr-2"></i>
-
-                                {head?.phone}
+                                {head?.phone && head?.phone.includes("+")
+                                  ? head?.phone
+                                  : head?.phone && !head?.phone.includes("+")
+                                  ? "+" + head?.phone
+                                  : null}
                               </p>
                             )}
                           </>

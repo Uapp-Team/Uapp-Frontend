@@ -1,11 +1,11 @@
 import React from "react";
 import {} from "reactstrap";
 // import StudentRegisterForm from "./StudentRegisterForm";
-import "../../../../assets/scss/pages/authentication.scss";
-import providerlogo from "../../../../assets/img/providerlogo.svg";
+import { Link } from "react-router-dom";
 import "../../../../assets/CoustomStyle/auth.css";
+import providerlogo from "../../../../assets/img/providerlogo.svg";
+import "../../../../assets/scss/pages/authentication.scss";
 import AuthFooter from "./components/AuthFooter";
-// import { Link } from "react-router-dom";
 const ConsultantAccountCreateSuccessfully = () => {
   return (
     <div className="auth-container">
@@ -33,6 +33,9 @@ const ConsultantAccountCreateSuccessfully = () => {
                   address. Kindly verify your email to proceed with the next
                   steps.
                 </p>
+                <Link className="text-id hover" to="/">
+                  Log In to your UAPP Account
+                </Link>
               </div>
 
               {/* <div className="mb-3 ">

@@ -41,8 +41,11 @@ const PersonalDetails = ({ id }) => {
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Phone Number</td>
             <td>
-              {data?.phoneNumber && "+"}
-              {data?.phoneNumber}
+              {data?.phoneNumber && data?.phoneNumber.includes("+")
+                ? data?.phoneNumber
+                : data?.phoneNumber && !data?.phoneNumber.includes("+")
+                ? "+" + data?.phoneNumber
+                : null}
             </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>

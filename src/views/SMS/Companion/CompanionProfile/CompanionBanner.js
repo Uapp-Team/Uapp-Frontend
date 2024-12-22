@@ -120,8 +120,14 @@ const CompanionBanner = ({
 
               {/* {studentDetails?.phoneNumber === null ? null : ( */}
               <p className="mb-2">
-                <i className="fas fa-phone pr-2"></i>+
-                {companionProfileData?.data?.phoneNumber}
+                <i className="fas fa-phone pr-2"></i>
+                {companionProfileData?.data?.phoneNumber &&
+                companionProfileData?.data?.phoneNumber.includes("+")
+                  ? companionProfileData?.data?.phoneNumber
+                  : companionProfileData?.data?.phoneNumber &&
+                    !companionProfileData?.data?.phoneNumber.includes("+")
+                  ? "+" + companionProfileData?.data?.phoneNumber
+                  : null}
               </p>
               {/* )} */}
 
