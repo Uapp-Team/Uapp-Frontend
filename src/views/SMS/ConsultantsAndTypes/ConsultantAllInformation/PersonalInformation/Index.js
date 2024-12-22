@@ -1,15 +1,16 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
-import get from "../../../../../helpers/get";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import put from "../../../../../helpers/put";
-import moment from "moment";
-import PersonalForm from "./Component/PersonalForm";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
+import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import put from "../../../../../helpers/put";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import PersonalForm from "./Component/PersonalForm";
 
 const PersonalInformation = () => {
   // Profile Image States
@@ -38,6 +39,7 @@ const PersonalInformation = () => {
   const [Dates, SetDate] = useState(currentDate);
   const [consPersonalInfo, setConsPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState("");
   const [navVisibility, setNavVisibility] = useState({});
   const { consultantRegisterId } = useParams();
   const { addToast } = useToasts();
@@ -52,6 +54,29 @@ const PersonalInformation = () => {
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
+    if (consPersonalInfo?.consultantProfileImage?.thumbnailUrl) {
+      setFileList1([
+        {
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
+          url: rootUrl + consPersonalInfo?.consultantProfileImage?.thumbnailUrl,
+        },
+      ]);
+    }
+    if (consPersonalInfo?.consultantCoverImage?.thumbnailUrl) {
+      setFileList2([
+        {
+          uid: "-1",
+          name: "Profile Image",
+          status: "done",
+          url: rootUrl + consPersonalInfo?.consultantCoverImage?.thumbnailUrl,
+        },
+      ]);
+    }
+  }, [consPersonalInfo]);
+
+  useEffect(() => {
     get("MaritalStatusDD/Index").then((res) => {
       setMaritalStatus(res);
     });
@@ -60,17 +85,15 @@ const PersonalInformation = () => {
       setGender(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       //
-      console.log("consNav", res);
       setNavVisibility(res);
     });
 
     get(`Consultant/GetPersonalInformation/${consultantRegisterId}`).then(
       (res) => {
-        console.log("personalInfo", res);
         setConsPersonalInfo(res);
-        setPassport(res?.passportId);
+        setPassport(res?.passportId !== null ? res.passportId : "");
         setphoneNumber(res?.phoneNumber);
         setGenderValue(res?.genderId !== null ? res?.genderId : 0);
         setMaritalStatusValue(
@@ -229,6 +252,10 @@ const PersonalInformation = () => {
         isValid = false;
         setDateError("Date of birth is required");
       }
+      if (passport === "") {
+        isValid = false;
+        setPassportError("Passport/ID is required");
+      }
       if (maritalStatusValue === 0) {
         isValid = false;
         setMaritalStatusError(true);
@@ -299,6 +326,8 @@ const PersonalInformation = () => {
                 Dates={Dates}
                 setPassport={setPassport}
                 passport={passport}
+                passportError={passportError}
+                setPassportError={setPassportError}
                 gender={gender}
                 setGenderValue={setGenderValue}
                 setGenderError={setGenderError}

@@ -41,13 +41,13 @@ const ReferenceCard = ({ sId, referenceList, setReferenceList, activity }) => {
                     className="border-0"
                     style={{ borderLeft: "1px solid #dee2e6" }}
                   >
-                    <b>Name</b>
+                    <b>Relation</b>
                   </td>
                   <td
                     className="border-0"
                     style={{ borderLeft: "1px solid #dee2e6" }}
                   >
-                    <b>Relation</b>
+                    <b>Name</b>
                   </td>
                   <td
                     className="border-0"
@@ -74,8 +74,8 @@ const ReferenceCard = ({ sId, referenceList, setReferenceList, activity }) => {
                       key={ref.id}
                       style={{ borderBottom: "1px solid #dee2e6" }}
                     >
-                      <td className="border-0">{ref?.referenceName}</td>
                       <td className="border-0">{ref?.referenceType.name}</td>
+                      <td className="border-0">{ref?.referenceName}</td>
                       <td className="border-0">{ref?.institute_Company}</td>
                       <td className="border-0">
                         {ref?.phoneNumber && ref?.phoneNumber.includes("+")

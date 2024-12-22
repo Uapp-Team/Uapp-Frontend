@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Card, CardBody, Form, TabContent, TabPane } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import ConsultantContactForm from "./Component/ConsultantContactForm";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
+import { Card, CardBody, Form, TabContent, TabPane } from "reactstrap";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import ConsultantContactForm from "./Component/ConsultantContactForm";
 
 const ContactInformation = () => {
   const activetab = "3";
@@ -40,7 +40,7 @@ const ContactInformation = () => {
       setCountry(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
 

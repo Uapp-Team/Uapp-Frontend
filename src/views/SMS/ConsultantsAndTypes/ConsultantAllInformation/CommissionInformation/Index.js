@@ -1,33 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  FormGroup,
-  Button,
-  Table,
-  Row,
-  Col,
-} from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import ButtonForFunction from "../../../Components/ButtonForFunction";
-import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
-import put from "../../../../../helpers/put";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import remove from "../../../../../helpers/remove";
-import PromotionalCommission from "../../../Consultant/PromotionalCommission";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import AssignCommissionForm from "./Component/AssignCommissionForm";
-import CurrentCommissionGroup from "./Component/CurrentCommissionGroup";
-import ConsultantCommissionGroupHistory from "./Component/ConsultantCommissionGroupHistory";
+import { Card, CardBody, Col, FormGroup, Row, Table } from "reactstrap";
+import icon_info from "../../../../../assets/img/icons/Frame.png";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import icon_info from "../../../../../assets/img/icons/Frame.png";
 import DefaultDropdown from "../../../../../components/Dropdown/DefaultDropdown";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
+import put from "../../../../../helpers/put";
+import remove from "../../../../../helpers/remove";
+import PromotionalCommission from "../../../Consultant/PromotionalCommission";
+import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import AssignCommissionForm from "./Component/AssignCommissionForm";
+import ConsultantCommissionGroupHistory from "./Component/ConsultantCommissionGroupHistory";
+import CurrentCommissionGroup from "./Component/CurrentCommissionGroup";
 
 const ConsultantCommission = () => {
   const history = useHistory();
@@ -85,8 +75,7 @@ const ConsultantCommission = () => {
       setLogList(res);
     });
 
-    get(`ConsultantNavBar/Get/${consultantRegisterId}`).then((res) => {
-      console.log("consNav", res);
+    get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
       setNavVisibility(res);
     });
 
@@ -534,11 +523,13 @@ const ConsultantCommission = () => {
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />
-            <SaveButton
-              text="Next"
-              action={goForward}
-              buttonStatus={buttonStatus}
-            />
+            {navVisibility?.openTandC === true && (
+              <SaveButton
+                text="Next"
+                action={goForward}
+                buttonStatus={buttonStatus}
+              />
+            )}
           </FormGroup>
         </CardBody>
       </Card>
