@@ -200,70 +200,66 @@ const EligibilityInformation = () => {
     setIdPassportError(false);
   };
 
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
+  // function getBase64(file) {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // }
 
   const handlePreview3 = async (file) => {
     console.log(file, "siam");
 
     // Infer file type if it's not provided
-    const inferFileType = (file) => {
-      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
-      switch (extension) {
-        case "jpg":
-        case "jpeg":
-        case "png":
-        case "gif":
-          return "image/jpeg";
-        case "pdf":
-          return "application/pdf";
-        case "doc":
-          return "application/msword";
-        case "docx":
-          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        default:
-          return "unknown";
-      }
-    };
+    // const inferFileType = (file) => {
+    //   const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
+    //   switch (extension) {
+    //     case "jpg":
+    //     case "jpeg":
+    //     case "png":
+    //     case "gif":
+    //       return "image/jpeg";
+    //     case "pdf":
+    //       return "application/pdf";
+    //     case "doc":
+    //       return "application/msword";
+    //     case "docx":
+    //       return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    //     default:
+    //       return "unknown";
+    //   }
+    // };
 
-    const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith("image")) {
-      // If it's an image
-      file.preview = await getBase64(file.originFileObj || file.url);
-      setPreviewImage(file.preview || file.url);
-      setPreviewFileType(fileType);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-    } else if (fileType === "application/pdf") {
-      // If it's a PDF
-      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview);
-      setPreviewVisible(true);
-      setPreviewFileType(fileType);
-      setPreviewTitle(file.name);
-    } else if (
-      fileType === "application/msword" ||
-      fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${
-        file.url || URL.createObjectURL(file.originFileObj)
-      }&embedded=true`;
-      setPreviewImage(googleViewer);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-      setPreviewFileType(fileType);
-    } else {
-      // Handle unsupported file types
-      alert("Preview not available for this file type");
-    }
+    // const fileType = file.type || inferFileType(file);
+    // if (fileType.startsWith("image")) {
+    //   file.preview = await getBase64(file.originFileObj || file.url);
+    //   setPreviewImage(file.preview || file.url);
+    //   setPreviewFileType(fileType);
+    //   setPreviewVisible(true);
+    //   setPreviewTitle(file.name);
+    // } else if (fileType === "application/pdf") {
+    //   const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
+    //   setPreviewImage(pdfPreview);
+    //   setPreviewVisible(true);
+    //   setPreviewFileType(fileType);
+    //   setPreviewTitle(file.name);
+    // } else if (
+    //   fileType === "application/msword" ||
+    //   fileType ===
+    //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    // ) {
+    //   const googleViewer = `https://docs.google.com/viewer?url=${
+    //     file.url || URL.createObjectURL(file.originFileObj)
+    //   }&embedded=true`;
+    //   setPreviewImage(googleViewer);
+    //   setPreviewVisible(true);
+    //   setPreviewTitle(file.name);
+    //   setPreviewFileType(fileType);
+    // } else {
+    //   alert("Preview not available for this file type");
+    // }
   };
 
   // Id or Passport Code End
@@ -382,10 +378,13 @@ const EligibilityInformation = () => {
   };
   const handleDate = (e) => {
     setExDate(e);
-    if (e === "") {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
-    } else {
-      setDateError("");
+    setDateError("");
+
+    const today = new Date();
+    const selectedDate = new Date(e);
+
+    if (selectedDate <= today) {
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
 
@@ -406,6 +405,10 @@ const EligibilityInformation = () => {
     if (residencyValue === 2 && visaTypeLabel === "") {
       isValid = false;
       setVisaError("Visa Type is required");
+    }
+    if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+      isValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
     if (residencyValue === 2 && !exDate) {
       isValid = false;

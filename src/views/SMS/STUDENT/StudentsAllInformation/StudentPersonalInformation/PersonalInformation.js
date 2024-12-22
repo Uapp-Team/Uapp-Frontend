@@ -315,6 +315,7 @@ const PersonalInformation = () => {
       setDateError("Date of birth is required");
     }
   };
+
   const handlePassport = (e) => {
     setPassport(e.target.value);
     if (e.target.value === "") {
