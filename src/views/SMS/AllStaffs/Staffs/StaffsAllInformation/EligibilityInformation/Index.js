@@ -352,6 +352,8 @@ const StaffEligibility = () => {
 
     const subData = new FormData(event.target);
 
+    subData.append("expireDate", exDate);
+
     subData.append(
       "idOrPassportFile",
       FileList3.length === 0 ? null : FileList3[0]?.originFileObj

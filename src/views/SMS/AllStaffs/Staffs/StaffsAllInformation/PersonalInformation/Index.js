@@ -195,6 +195,7 @@ const StaffPersonalInformation = () => {
     event.preventDefault();
     const subdata = new FormData(event.target);
 
+    subdata.append("dateOfBirth", Dates);
     subdata.append("EmployeeProfileFile", FileList1[0]?.originFileObj);
     subdata.append("EmployeeCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phone);
