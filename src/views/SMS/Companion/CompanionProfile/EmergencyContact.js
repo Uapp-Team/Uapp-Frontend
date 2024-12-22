@@ -81,7 +81,13 @@ const EmergencyContact = ({
                   </li>
                 </td>
                 <td className="border-0">
-                  +{companionProfileData?.data?.contact?.phoneNumber}
+                  {companionProfileData?.data?.phoneNumber &&
+                  companionProfileData?.data?.phoneNumber.includes("+")
+                    ? companionProfileData?.data?.phoneNumber
+                    : companionProfileData?.data?.phoneNumber &&
+                      !companionProfileData?.data?.phoneNumber.includes("+")
+                    ? "+" + companionProfileData?.data?.phoneNumber
+                    : null}
                 </td>
                 <td className="border-0">
                   {companionProfileData?.data?.contact?.email}

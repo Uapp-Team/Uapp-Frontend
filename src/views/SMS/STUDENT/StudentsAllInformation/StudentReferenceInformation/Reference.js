@@ -319,50 +319,54 @@ const Reference = () => {
       isFormValid = false;
       setReferenceError(true);
     }
-    if (!referenceName) {
-      isFormValid = false;
-      setReferenceNameError("Reference name is required");
-    }
-    if (!institute) {
-      isFormValid = false;
-      setInstituteError("Institute is required");
-    }
-    if (!phoneNumber) {
-      isFormValid = false;
-      setPhoneNumberError("Phone number is required");
+
+    if (referenceValue !== 3) {
+      if (!referenceName) {
+        isFormValid = false;
+        setReferenceNameError("Reference name is required");
+      }
+      if (!institute) {
+        isFormValid = false;
+        setInstituteError("Institute is required");
+      }
+      if (!phoneNumber) {
+        isFormValid = false;
+        setPhoneNumberError("Phone number is required");
+      }
+
+      if (phoneNumber?.length < 9) {
+        isFormValid = false;
+        setPhoneNumberError("Phone number required minimum 9 digit");
+      }
+
+      if (!email) {
+        setEmailError("Email is required");
+        isFormValid = false;
+      }
+
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        isFormValid = false;
+        setEmailError("Email is not Valid");
+      }
+
+      if (!addressLine) {
+        isFormValid = false;
+        setAddressLineError("Address line is required");
+      }
+      if (!city) {
+        isFormValid = false;
+        setCityError("City is required");
+      }
+      if (!state) {
+        isFormValid = false;
+        setStateError("State is required");
+      }
+      if (countryValue === 0) {
+        isFormValid = false;
+        setCountryError(true);
+      }
     }
 
-    if (phoneNumber?.length < 9) {
-      isFormValid = false;
-      setPhoneNumberError("Phone number required minimum 9 digit");
-    }
-
-    if (!email) {
-      setEmailError("Email is required");
-      isFormValid = false;
-    }
-
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-      isFormValid = false;
-      setEmailError("Email is not Valid");
-    }
-
-    if (!addressLine) {
-      isFormValid = false;
-      setAddressLineError("Address line is required");
-    }
-    if (!city) {
-      isFormValid = false;
-      setCityError("City is required");
-    }
-    if (!state) {
-      isFormValid = false;
-      setStateError("State is required");
-    }
-    if (countryValue === 0) {
-      isFormValid = false;
-      setCountryError(true);
-    }
     return isFormValid;
   };
 
@@ -469,8 +473,8 @@ const Reference = () => {
                   <Table responsive className="table-bordered">
                     <thead className="tablehead">
                       <tr>
-                        <th>Name</th>
                         <th>Relation</th>
+                        <th>Name</th>
                         <th>Institute/Company</th>
                         <th>Phone</th>
                         <th>Email</th>
@@ -480,8 +484,8 @@ const Reference = () => {
                     <tbody>
                       {refList?.map((ref, i) => (
                         <tr key={ref.id}>
-                          <td>{ref?.referenceName}</td>
                           <td>{ref?.referenceType.name}</td>
+                          <td>{ref?.referenceName}</td>
                           <td>{ref?.institute_Company}</td>
                           <td>
                             {ref?.phoneNumber && "+"}
@@ -500,7 +504,7 @@ const Reference = () => {
                                   Edit
                                 </span>
                               </a>
-                            ) : null}
+                            ) : null}{" "}
                             |{" "}
                             {permissions?.includes(
                               permissionList?.Edit_Student
@@ -595,7 +599,10 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8">
                         <span>
-                          <span className="text-danger">*</span> Reference Name
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}{" "}
+                          Reference Name
                         </span>
 
                         <Input
@@ -617,7 +624,9 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8">
                         <span>
-                          <span className="text-danger">*</span>
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}
                           <>
                             {referenceValue === 1
                               ? " Institute"
@@ -642,7 +651,9 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8" className="phone-input-group">
                         <span>
-                          <span className="text-danger">*</span>
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}
                           Phone Number
                         </span>
                         <PhoneInput
@@ -666,7 +677,9 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8">
                         <span>
-                          <span className="text-danger">*</span>
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}
                           Professional/Institutional Email
                         </span>
 
@@ -688,7 +701,10 @@ const Reference = () => {
                       <Col lg="6" md="8">
                         {" "}
                         <span>
-                          <span className="text-danger">*</span> Country
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}{" "}
+                          Country
                         </span>
                         <Select
                           options={countryName}
@@ -711,7 +727,10 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8">
                         <span>
-                          <span className="text-danger">*</span> Address Line
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}{" "}
+                          Address Line
                         </span>
 
                         <Input
@@ -731,7 +750,10 @@ const Reference = () => {
                     <FormGroup row>
                       <Col lg="6" md="8">
                         <span>
-                          <span className="text-danger">*</span> City
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}{" "}
+                          City
                         </span>
 
                         <Input
@@ -752,7 +774,10 @@ const Reference = () => {
                       <Col lg="6" md="8">
                         {" "}
                         <span>
-                          <span className="text-danger">*</span>State/County
+                          {referenceValue !== 3 && (
+                            <span className="text-danger">*</span>
+                          )}
+                          State/County
                         </span>
                         <Input
                           type="text"

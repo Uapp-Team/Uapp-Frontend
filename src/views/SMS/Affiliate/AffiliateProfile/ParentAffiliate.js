@@ -95,7 +95,13 @@ const ParentAffiliate = ({ affiliateProfileData, affiliateId }) => {
                 {affiliateProfileData?.data?.parent?.phone === null ? null : (
                   <li>
                     <i className="fas fa-phone pr-2"></i>
-                    {affiliateProfileData?.data?.parent?.phone}
+                    {affiliateProfileData?.data?.parent?.phone &&
+                    affiliateProfileData?.data?.parent?.phone.includes("+")
+                      ? affiliateProfileData?.data?.parent?.phone
+                      : affiliateProfileData?.data?.parent?.phone &&
+                        !affiliateProfileData?.data?.parent?.phone.includes("+")
+                      ? "+" + affiliateProfileData?.data?.parent?.phone
+                      : null}
                   </li>
                 )}
               </ul>

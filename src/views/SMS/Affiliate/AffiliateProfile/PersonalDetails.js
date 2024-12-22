@@ -41,7 +41,16 @@ const PersonalDetails = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Phone Number</td>
-            <td>{affiliateProfileData?.data?.phoneNumber}</td>
+            <td>
+              {" "}
+              {affiliateProfileData?.data?.phoneNumber &&
+              affiliateProfileData?.data?.phoneNumber.includes("+")
+                ? affiliateProfileData?.data?.phoneNumber
+                : affiliateProfileData?.data?.phoneNumber &&
+                  !affiliateProfileData?.data?.phoneNumber.includes("+")
+                ? "+" + affiliateProfileData?.data?.phoneNumber
+                : null}
+            </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Gender</td>

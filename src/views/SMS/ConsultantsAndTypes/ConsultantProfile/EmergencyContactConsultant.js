@@ -79,7 +79,15 @@ const EmergencyContactConsultant = ({ id }) => {
                     <span>{consultantEmergency?.state}</span>
                   </li>
                 </td>
-                <td className="border-0">{consultantEmergency?.phoneNumber}</td>
+                <td className="border-0">
+                  {consultantEmergency?.phoneNumberr &&
+                  consultantEmergency?.phoneNumber.includes("+")
+                    ? consultantEmergency?.phoneNumber
+                    : consultantEmergency?.phoneNumber &&
+                      !consultantEmergency?.phoneNumber.includes("+")
+                    ? "+" + consultantEmergency?.phoneNumber
+                    : null}
+                </td>
                 <td className="border-0">
                   {consultantEmergency?.emailAddress}
                 </td>

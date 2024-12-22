@@ -1040,6 +1040,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   setdocumentStatusValue={setdocumentStatusValue}
                   documentStatusLabel={documentStatusLabel}
                   setdocumentStatusLabel={setdocumentStatusLabel}
+                  affiliateValue={0}
+                  companionValue={0}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {managerUappIdValue !== 0 ||

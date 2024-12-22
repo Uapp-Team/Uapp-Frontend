@@ -5094,12 +5094,15 @@ tr .text-body:hover {
   color: #1890ff !important;
 }
 
+.std-btn-complete-profile img {
+  width: 25px;
+}
 .std-btn-complete-profile {
   background-color: #fff;
-  /* color: #495057; */
+  margin-top: 5px;
   color: #7d8282;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 12px;
   border-radius: 4px;
   border: 1px solid #c4cccc;
 }

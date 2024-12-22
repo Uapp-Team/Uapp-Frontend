@@ -478,7 +478,7 @@ const AddUniversityFinancial = (props) => {
                       <Col md="5">
                         <span>
                           <span className="text-danger">*</span>
-                          Post Graduate{" "}
+                          Postgraduate{" "}
                         </span>
 
                         <Input
