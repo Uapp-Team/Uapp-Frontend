@@ -31,13 +31,17 @@ const EligibilityInformation = () => {
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [FileList3, setFileList3] = useState([]);
-  const [idPassportError, setIdPassportError] = useState(false);
-  const [FileList4, setFileList4] = useState([]);
-  const [proofOfAddressError, setProofOfAddressError] = useState(false);
-  const [FileList5, setFileList5] = useState([]);
+  const [FileList3, setFileList3] = useState(null);
+  const [idPassportFile, setIdPassportFile] = useState("");
+  const [idPassportError, setIdPassportError] = useState("");
+  const [FileList4, setFileList4] = useState(null);
+  const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
+  const [proofOfAddressError, setProofOfAddressError] = useState("");
+  const [FileList5, setFileList5] = useState(null);
+  const [brpFile, setBrpFile] = useState(null);
   const [proofOfRightError, setProofOfRightError] = useState("");
-  const [FileList6, setFileList6] = useState([]);
+  const [FileList6, setFileList6] = useState(null);
+  const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
@@ -75,6 +79,11 @@ const EligibilityInformation = () => {
 
     Uget(`CompanionEligibility/get-by/${companionId}`).then((res) => {
       setEligibilityData(res?.data);
+      setIdPassportFile(res?.data?.idOrPassport?.fileUrl);
+      setProofOfAddressFile(res?.data?.proofOfAddress?.fileUrl);
+      setBrpFile(res?.data?.brp?.fileUrl);
+      setCvFile(res?.data?.cv?.fileUrl);
+
       setUniCountryLabel(
         res?.data !== null
           ? res?.data?.citizenshipCountryName
@@ -414,13 +423,9 @@ const EligibilityInformation = () => {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
-    if (
-      residencyValue === 2 &&
-      FileList3.length === 0 &&
-      eligibilityData?.idOrPassport?.fileUrl == null
-    ) {
+    if (residencyValue === 2 && FileList3 === null && idPassportFile === "") {
       isValid = false;
-      setIdPassportError(true);
+      setIdPassportError("File is required");
     }
     return isValid;
   };
@@ -429,34 +434,15 @@ const EligibilityInformation = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("visa", visa);
-    subData.append(
-      "idOrPassportFile",
-      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
-    );
-    // if (FileList3.length !== 0) {
-    //   subData.append("idOrPassportId", eligibilityData?.idOrPassportId);
-    // }
-    subData.append(
-      "proofOfAddressFile",
-      FileList4.length === 0 ? null : FileList4[0]?.originFileObj
-    );
-    // if (FileList4.length !== 0) {
-    //   subData.append("proofOfAddressId", eligibilityData?.proofOfAddressId);
-    // }
-    subData.append(
-      "BRPFile",
-      FileList5.length === 0 ? null : FileList5[0]?.originFileObj
-    );
-    // if (FileList5.length !== 0) {
-    //   subData.append("brpId", eligibilityData?.brpId);
-    // }
-    subData.append(
-      "CvFile",
-      FileList6.length === 0 ? null : FileList6[0]?.originFileObj
-    );
-    // if (FileList6.length !== 0) {
-    //   subData.append("cvId", eligibilityData?.cvId);
-    // }
+    subData.append("idOrPassportFile", FileList3);
+    subData.append("proofOfAddressFile", FileList4);
+    subData.append("BRPFile", FileList5);
+    subData.append("CvFile", FileList6);
+    subData.append("attachement", idPassportFile);
+    subData.append("attachement", proofOfAddressFile);
+    subData.append("attachement", brpFile);
+    subData.append("attachement", cvFile);
+
     if (exDate) {
       subData.append("expireDate", exDate);
     }
@@ -529,20 +515,32 @@ const EligibilityInformation = () => {
                 rightToWork={rightToWork}
                 FileList3={FileList3}
                 setFileList3={setFileList3}
+                idPassportFile={idPassportFile}
+                setIdPassportFile={setIdPassportFile}
                 handleChange3={handleChange3}
                 idPassportError={idPassportError}
+                setIdPassportError={setIdPassportError}
                 FileList4={FileList4}
                 setFileList4={setFileList4}
+                proofOfAddressFile={proofOfAddressFile}
+                setProofOfAddressFile={setProofOfAddressFile}
                 handleChange4={handleChange4}
                 proofOfAddressError={proofOfAddressError}
+                setProofOfAddressError={setProofOfAddressError}
                 FileList5={FileList5}
                 setFileList5={setFileList5}
+                brpFile={brpFile}
+                setBrpFile={setBrpFile}
                 handleChange5={handleChange5}
                 proofOfRightError={proofOfRightError}
+                setProofOfRightError={setProofOfRightError}
                 FileList6={FileList6}
                 setFileList6={setFileList6}
+                cvFile={cvFile}
+                setCvFile={setCvFile}
                 handleChange6={handleChange6}
                 cvError={cvError}
+                setCvError={setCvError}
                 progress={progress}
                 buttonStatus={buttonStatus}
                 visa={visa}
