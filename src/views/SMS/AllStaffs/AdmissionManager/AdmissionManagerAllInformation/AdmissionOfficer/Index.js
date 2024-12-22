@@ -54,7 +54,7 @@ const Index = () => {
     });
     if (navItem?.terms === true) {
       history.push(`/admissionManagerTermsInformation/${admissionManagerId}`);
-    }
+    } else history.push(`/admissionManagerProfile/${admissionManagerId}`);
   };
   const HandleAddOrRemove = (e, id) => {
     const values = [...assignedOfficers];
@@ -138,11 +138,11 @@ const Index = () => {
                           permissionList.Update_AdmissionManager
                         ) ? (
                           <SaveButton
-                            text={
-                              navItem?.terms === true ? "Save and Next" : "Save"
-                            }
+                            text="Save and Next"
                             action={handleSubmit}
-                            // text="Save and Next"
+                            // text={
+                            //   navItem?.terms === true ? "Save and Next" : "Save"
+                            // }
                             // progress={progress}
                             // buttonStatus={buttonStatus}
                           />
