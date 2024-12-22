@@ -207,8 +207,6 @@ const PersonalStatement = () => {
                         <div className="mt-3">
                           {fileName ? (
                             <p>{fileName}</p>
-                          ) : stateMentError ? (
-                            <div className="text-danger">{stateMentError}</div>
                           ) : (
                             <p>Only .txt file are allowed</p>
                           )}
