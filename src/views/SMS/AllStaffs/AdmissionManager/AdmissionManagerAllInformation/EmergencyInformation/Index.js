@@ -254,10 +254,11 @@ const Index = () => {
             `/admissionManagerEligibilityInformation/${admissionManagerId}`
           );
         } else {
-          userType !== userTypes?.AdmissionManager &&
-            history.push(
-              `/admissionManagersOfficerInformation/${admissionManagerId}`
-            );
+          userType !== userTypes?.AdmissionManager
+            ? history.push(
+                `/admissionManagersOfficerInformation/${admissionManagerId}`
+              )
+            : history.push(`/admissionManagerProfile/${admissionManagerId}`);
         }
       });
     }
@@ -547,12 +548,13 @@ const Index = () => {
                         permissionList?.Update_AdmissionManager
                       ) ? (
                         <SaveButton
-                          text={
-                            navItem?.eligibility === true ||
-                            userType !== userTypes?.AdmissionManager
-                              ? "Save and Next"
-                              : "Save"
-                          }
+                          // text={
+                          //   navItem?.eligibility === true ||
+                          //   userType !== userTypes?.AdmissionManager
+                          //     ? "Save and Next"
+                          //     : "Save"
+                          // }
+                          text="Save and Next"
                           progress={progress}
                           buttonStatus={buttonStatus}
                         />

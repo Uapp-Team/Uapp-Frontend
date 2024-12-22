@@ -28,6 +28,10 @@ const ColumnBranch = [
     isActive: true,
   },
   {
+    title: "Compliance",
+    isActive: true,
+  },
+  {
     title: "Consultants",
     isActive: true,
   },
