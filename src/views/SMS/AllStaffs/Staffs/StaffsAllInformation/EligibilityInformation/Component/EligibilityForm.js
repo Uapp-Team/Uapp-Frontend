@@ -108,7 +108,7 @@ const EligibilityForm = ({
 
           <FormGroup>
             <span>
-              <span className="text-danger">*</span> Residence
+              <span className="text-danger">*</span> Country of Residence
             </span>
 
             <Select

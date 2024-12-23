@@ -319,7 +319,7 @@ const StaffEligibility = () => {
     }
     if (uniCountryValue2 === 0) {
       isFormValid = false;
-      setErrorC2("Residence is required");
+      setErrorC2("Country of Residence is required");
     }
     if (uniCountryValue !== uniCountryValue2 && residencyValue === 0) {
       isFormValid = false;
