@@ -342,6 +342,22 @@ const StaffEligibility = () => {
       isFormValid = false;
       setIdPassportError(true);
     }
+    if (
+      FileList4.length === 0 &&
+      eligibilityData?.proofOfAddress?.fileUrl == null
+    ) {
+      isFormValid = false;
+      setProofOfAddressError(true);
+    }
+    if (FileList5.length === 0 && eligibilityData?.brp?.fileUrl == null) {
+      isFormValid = false;
+      setProofOfRightError(true);
+    }
+
+    if (FileList6.length === 0 && eligibilityData?.cv?.fileUrl == null) {
+      isFormValid = false;
+      setCvError(true);
+    }
 
     return isFormValid;
   };
