@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Col, FormGroup, Input, Row } from "reactstrap";
 import Select from "react-select";
+import { Col, FormGroup, Input, Row } from "reactstrap";
 import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
@@ -139,7 +139,7 @@ const ContactInformationForm = ({
           <Input
             type="text"
             id="address"
-            placeholder="Enter house no."
+            placeholder="Enter Address"
             onChange={(e) => {
               handleHouse(e);
             }}
