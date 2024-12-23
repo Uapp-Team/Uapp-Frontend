@@ -1,16 +1,15 @@
 import { Image, Modal, Upload } from "antd";
 import React from "react";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
-import { rootUrl } from "../../../../../../../constants/constants";
 import * as Icon from "react-feather";
-import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
-import SaveButton from "../../../../../../../components/buttons/SaveButton";
-import { userTypes } from "../../../../../../../constants/userTypeConstant";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
-import moment from "moment";
+import { Col, Form, FormGroup, Input, Row } from "reactstrap";
+import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
+import SaveButton from "../../../../../../../components/buttons/SaveButton";
 import DMYPicker from "../../../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../../constants/constants";
+import { userTypes } from "../../../../../../../constants/userTypeConstant";
 
 const PersonalInformationForm = ({
   handleSubmit,
@@ -78,7 +77,9 @@ const PersonalInformationForm = ({
 
       <FormGroup row className="has-icon-left position-relative">
         <Col lg="6" md="8">
-          <span>Passport/ID</span>
+          <span>
+            <span className="text-danger">*</span>Passport/ID
+          </span>
           <Input
             type="text"
             name="passportId"
