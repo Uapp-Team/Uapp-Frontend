@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardBody, Table } from "reactstrap";
+import { Card, Table } from "reactstrap";
 
 const ContactForm = ({ contactInfo }) => {
   return (
@@ -18,7 +18,7 @@ const ContactForm = ({ contactInfo }) => {
               borderBottom: "1px solid #2525251F",
             }}
           >
-            <td width="40%">House No</td>
+            <td width="40%">Address Line 1</td>
 
             <td width="60%">{contactInfo?.houseNo}</td>
           </tr>
@@ -28,7 +28,7 @@ const ContactForm = ({ contactInfo }) => {
               borderBottom: "1px solid #2525251F",
             }}
           >
-            <td width="40%">Address Line</td>
+            <td width="40%">Address Line 2</td>
 
             <td width="60%">{contactInfo?.addressLine}</td>
           </tr>
