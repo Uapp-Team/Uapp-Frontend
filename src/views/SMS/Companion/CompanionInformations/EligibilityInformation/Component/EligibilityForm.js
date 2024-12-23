@@ -166,17 +166,6 @@ const EligibilityForm = ({
                   <span className="text-danger">*</span> Visa Type
                 </span>
 
-                {/* <Input
-                  type="text"
-                  name="VisaType"
-                  id="VisaType"
-                  onChange={(e) => {
-                    handlevisaType(e);
-                  }}
-                  placeholder="Enter Visa Status"
-                  value={visa}
-                  // defaultValue={eligibilityData?.visaType}
-                /> */}
                 <Select
                   options={visaTypeDD}
                   value={{

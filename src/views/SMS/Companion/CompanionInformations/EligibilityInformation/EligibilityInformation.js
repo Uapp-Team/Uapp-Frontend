@@ -32,7 +32,7 @@ const EligibilityInformation = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const [FileList3, setFileList3] = useState(null);
-  const [idPassportFile, setIdPassportFile] = useState("");
+  const [idPassportFile, setIdPassportFile] = useState(null);
   const [idPassportError, setIdPassportError] = useState("");
   const [FileList4, setFileList4] = useState(null);
   const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
@@ -178,192 +178,21 @@ const EligibilityInformation = () => {
     setResidencyLabel(label);
     setResidencyValue(value);
   };
-  // Id or Passport Code Start
-
-  // function getBase643(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel3 = () => {
-  //   setPreviewVisible3(false);
-  // };
-
-  // const handlePreview3 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase643(file.originFileObj);
-  //   }
-  //   setPreviewImage3(file.url || file.preview);
-  //   setPreviewVisible3(true);
-  //   setPreviewTitle3(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
 
   const handleChange3 = ({ fileList }) => {
     setFileList3(fileList);
     setIdPassportError(false);
   };
 
-  // function getBase64(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  const handlePreview3 = async (file) => {
-    console.log(file, "siam");
-
-    // Infer file type if it's not provided
-    // const inferFileType = (file) => {
-    //   const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
-    //   switch (extension) {
-    //     case "jpg":
-    //     case "jpeg":
-    //     case "png":
-    //     case "gif":
-    //       return "image/jpeg";
-    //     case "pdf":
-    //       return "application/pdf";
-    //     case "doc":
-    //       return "application/msword";
-    //     case "docx":
-    //       return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    //     default:
-    //       return "unknown";
-    //   }
-    // };
-
-    // const fileType = file.type || inferFileType(file);
-    // if (fileType.startsWith("image")) {
-    //   file.preview = await getBase64(file.originFileObj || file.url);
-    //   setPreviewImage(file.preview || file.url);
-    //   setPreviewFileType(fileType);
-    //   setPreviewVisible(true);
-    //   setPreviewTitle(file.name);
-    // } else if (fileType === "application/pdf") {
-    //   const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-    //   setPreviewImage(pdfPreview);
-    //   setPreviewVisible(true);
-    //   setPreviewFileType(fileType);
-    //   setPreviewTitle(file.name);
-    // } else if (
-    //   fileType === "application/msword" ||
-    //   fileType ===
-    //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    // ) {
-    //   const googleViewer = `https://docs.google.com/viewer?url=${
-    //     file.url || URL.createObjectURL(file.originFileObj)
-    //   }&embedded=true`;
-    //   setPreviewImage(googleViewer);
-    //   setPreviewVisible(true);
-    //   setPreviewTitle(file.name);
-    //   setPreviewFileType(fileType);
-    // } else {
-    //   alert("Preview not available for this file type");
-    // }
-  };
-
-  // Id or Passport Code End
-
-  // Proof of Address Code Start
-
-  // function getBase644(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel4 = () => {
-  //   setPreviewVisible4(false);
-  // };
-
-  // const handlePreview4 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase644(file.originFileObj);
-  //   }
-  //   setPreviewImage4(file.url || file.preview);
-  //   setPreviewVisible4(true);
-  //   setPreviewTitle4(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
-
   const handleChange4 = ({ fileList }) => {
     setFileList4(fileList);
     setProofOfAddressError(false);
   };
-  // Proof of Address Code End
-
-  // Proof of Right to Work Code Start
-
-  // function getBase645(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel5 = () => {
-  //   setPreviewVisible5(false);
-  // };
-
-  // const handlePreview5 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase645(file.originFileObj);
-  //   }
-
-  //   setPreviewImage5(file.url || file.preview);
-  //   setPreviewVisible5(true);
-  //   setPreviewTitle5(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
 
   const handleChange5 = ({ fileList }) => {
     setFileList5(fileList);
     setProofOfRightError("");
   };
-  // Proof of Right to Work Code End
-
-  // CV Start
-
-  // function getBase646(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel6 = () => {
-  //   setPreviewVisible6(false);
-  // };
-
-  // const handlePreview6 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase646(file.originFileObj);
-  //   }
-
-  //   setPreviewImage6(file.url || file.preview);
-  //   setPreviewVisible6(true);
-  //   setPreviewTitle6(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
 
   const handleChange6 = ({ fileList }) => {
     setFileList6(fileList);
@@ -438,10 +267,15 @@ const EligibilityInformation = () => {
     subData.append("proofOfAddressFile", FileList4);
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
-    subData.append("attachement", idPassportFile);
-    subData.append("attachement", proofOfAddressFile);
+    subData.append("idOrPassportId", idPassportFile);
+    subData.append("proofOfAddressId", proofOfAddressFile);
     subData.append("attachement", brpFile);
     subData.append("attachement", cvFile);
+
+    // subData.append("idOrPassportId", idPassportFile || null);
+    // subData.append("proofOfAddressId", proofOfAddressFile || null);
+    // subData.append("attachement", brpFile || null);
+    // subData.append("attachement", cvFile || null);
 
     if (exDate) {
       subData.append("expireDate", exDate);
