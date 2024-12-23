@@ -8,10 +8,9 @@ import post from "../../../../../../helpers/post";
 import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
 
 import moment from "moment";
-import EligibilityForm from "./Component/EligibilityForm";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import EligibilityForm from "./Component/EligibilityForm";
 
 const StaffEligibility = () => {
   const activetab = "5";
@@ -352,7 +351,9 @@ const StaffEligibility = () => {
 
     const subData = new FormData(event.target);
 
-    subData.append("expireDate", exDate);
+    if (exDate) {
+      subData.append("expireDate", exDate);
+    }
 
     subData.append(
       "idOrPassportFile",
@@ -370,11 +371,6 @@ const StaffEligibility = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
-
-    for (var value of subData) {
-      console.log(value);
-    }
-
     var formIsValid = validateRegisterForm(subData);
 
     if (formIsValid) {
@@ -394,6 +390,7 @@ const StaffEligibility = () => {
           setFileList4([]);
           setFileList5([]);
           setFileList6([]);
+          history.push("/staffList");
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
