@@ -1,14 +1,14 @@
-import React from "react";
-import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import Select from "react-select";
 import { Upload } from "antd";
-import { rootUrl } from "../../../../../../../constants/constants";
+import React from "react";
+import Select from "react-select";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
 import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../../components/buttons/SaveButton";
-import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
 import UploadButton from "../../../../../../../components/buttons/UploadButton";
-import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
 import DMYPicker from "../../../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../../constants/constants";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -174,10 +174,8 @@ const EligibilityForm = ({
                 />
               </FormGroup>
 
-              <FormGroup>
-                <span>Do You Have Right to Work?</span>
-                <br />
-
+              <FormGroup className="d-flex">
+                <span className="pr-5">Do You Have Right to Work?</span>
                 <FormGroup check inline>
                   <Input
                     className="form-check-input"
