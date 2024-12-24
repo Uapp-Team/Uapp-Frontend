@@ -225,7 +225,7 @@ const StaffPersonalInformation = () => {
         SetDateError("Birth date is required");
       }
 
-      if (passport === null) {
+      if (passport === null || passport === "") {
         isFormValid = false;
         setPassportError(true);
       }
@@ -316,6 +316,7 @@ const StaffPersonalInformation = () => {
                 setPassport={setPassport}
                 passport={passport}
                 passportError={passportError}
+                setPassportError={setPassportError}
                 gender={gender}
                 setGenderValue={setGenderValue}
                 setGenderError={setGenderError}

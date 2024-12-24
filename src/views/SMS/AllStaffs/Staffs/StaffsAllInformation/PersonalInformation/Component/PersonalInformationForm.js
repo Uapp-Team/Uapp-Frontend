@@ -17,6 +17,8 @@ const PersonalInformationForm = ({
   Dates,
   setPassport,
   passport,
+  passportError,
+  setPassportError,
   gender,
   setGenderValue,
   setGenderError,
@@ -85,9 +87,17 @@ const PersonalInformationForm = ({
             name="passportId"
             id="passportId"
             placeholder="Enter Passport Number"
-            onChange={(e) => setPassport(e.target.value)}
+            onChange={(e) => {
+              setPassport(e.target.value);
+              if (passportError) {
+                setPassportError(false);
+              }
+            }}
             defaultValue={passport}
           />
+          {passportError && (
+            <span className="text-danger">Passport/ID is required</span>
+          )}
         </Col>
       </FormGroup>
 
