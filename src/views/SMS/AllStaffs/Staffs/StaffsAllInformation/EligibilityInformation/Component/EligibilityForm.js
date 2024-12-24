@@ -1,15 +1,11 @@
-import { Upload } from "antd";
 import React from "react";
 import Select from "react-select";
 import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
 import PreviousButton from "../../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../../components/buttons/SaveButton";
-import UploadButton from "../../../../../../../components/buttons/UploadButton";
 import DMYPicker from "../../../../../../../components/form/DMYPicker";
-import Preview from "../../../../../../../components/ui/Preview";
+import UploadFile from "../../../../../../../components/form/UploadFile";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
-import { rootUrl } from "../../../../../../../constants/constants";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -34,35 +30,23 @@ const EligibilityForm = ({
   onRadioValueChange,
   rightToWork,
   FileList3,
-  handlePreview3,
-  handleChange3,
-  previewVisible3,
-  previewTitle3,
-  handleCancel3,
-  previewImage3,
+  setFileList3,
   idPassportError,
+  setIdPassportError,
   FileList4,
+  setFileList4,
   handlePreview4,
   handleChange4,
-  previewVisible4,
-  previewTitle4,
-  handleCancel4,
-  previewImage4,
   proofOfAddressError,
+  setProofOfAddressError,
   FileList5,
+  setFileList5,
   handlePreview5,
   handleChange5,
-  previewVisible5,
-  previewTitle5,
-  handleCancel5,
-  previewImage5,
   proofOfRightError,
   FileList6,
   handlePreview6,
   handleChange6,
-  previewVisible6,
-  previewTitle6,
-  handleCancel6,
   cvError,
   progress,
   buttonStatus,
@@ -72,6 +56,14 @@ const EligibilityForm = ({
   handleDate,
   dateError,
   setDateError,
+  idPassportAttachment,
+  proofOfAddressAttachment,
+  setProofOfRightError,
+  brpAttachment,
+  setCvError,
+  setFileList6,
+  cvAttachment,
+  setIdPassportAttachment,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -228,35 +220,17 @@ const EligibilityForm = ({
               <span>Id/Passport</span>
             </Col>
             <Col md="8">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <Upload
-                    multiple={false}
-                    fileList={FileList3}
-                    onChange={handleChange3}
-                    beforeUpload={(file) => {
-                      return false;
-                    }}
-                    style={{ height: "32px" }}
-                  >
-                    {FileList3.length < 1 ? <UploadButton /> : ""}
-                  </Upload>
-
-                  {idPassportError && (
-                    <span className="text-danger">File is required </span>
-                  )}
-                </div>
-                {eligibilityData?.idOrPassport?.fileUrl && (
-                  <Preview file={eligibilityData?.idOrPassport?.fileUrl} />
-                )}
-                {eligibilityData?.idOrPassport?.fileUrl != null ? (
-                  <a
-                    href={rootUrl + eligibilityData?.idOrPassport?.thumbnailUrl}
-                  >
-                    <DownloadButton />
-                  </a>
-                ) : null}
-              </div>
+              <UploadFile
+                // label="Id/Passport"
+                file={FileList3}
+                id="Id/Passport"
+                setFile={setFileList3}
+                defaultValue={idPassportAttachment}
+                // setRemove={setIdPassportAttachment}
+                error={idPassportError}
+                setError={setIdPassportError}
+                require={true}
+              />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -265,37 +239,17 @@ const EligibilityForm = ({
               <span>Proof of Address</span>
             </Col>
             <Col md="8">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <Upload
-                    multiple={false}
-                    fileList={FileList4}
-                    onPreview={handlePreview4}
-                    onChange={handleChange4}
-                    beforeUpload={(file) => {
-                      return false;
-                    }}
-                  >
-                    {FileList4.length < 1 ? <UploadButton /> : ""}
-                  </Upload>
-
-                  {proofOfAddressError && (
-                    <span className="text-danger">File is required</span>
-                  )}
-                </div>
-                {eligibilityData?.proofOfAddress?.fileUrl && (
-                  <Preview file={eligibilityData?.proofOfAddress?.fileUrl} />
-                )}
-                {eligibilityData?.proofOfAddress?.fileUrl != null ? (
-                  <a
-                    href={
-                      rootUrl + eligibilityData?.proofOfAddress?.thumbnailUrl
-                    }
-                  >
-                    <DownloadButton />
-                  </a>
-                ) : null}
-              </div>
+              <UploadFile
+                // label="Proof of Address"
+                file={FileList4}
+                id="Proof of Address"
+                setFile={setFileList4}
+                defaultValue={proofOfAddressAttachment}
+                // setRemove={}
+                error={proofOfAddressError}
+                setError={setProofOfAddressError}
+                require={true}
+              />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -304,33 +258,16 @@ const EligibilityForm = ({
               <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
             </Col>
             <Col md="8">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <Upload
-                    multiple={false}
-                    fileList={FileList5}
-                    onPreview={handlePreview5}
-                    onChange={handleChange5}
-                    beforeUpload={(file) => {
-                      return false;
-                    }}
-                  >
-                    {FileList5.length < 1 ? <UploadButton /> : ""}
-                  </Upload>
-
-                  {proofOfRightError && (
-                    <span className="text-danger">File is Required</span>
-                  )}
-                </div>
-                {eligibilityData?.brp?.fileUrl && (
-                  <Preview file={eligibilityData?.brp?.fileUrl} />
-                )}
-                {eligibilityData?.brp?.fileUrl != null ? (
-                  <a href={rootUrl + eligibilityData?.brp?.thumbnailUrl}>
-                    <DownloadButton />
-                  </a>
-                ) : null}
-              </div>
+              <UploadFile
+                // label="BRP / TRP / Settled / Pre-Settled / Share Code"
+                file={FileList5}
+                id="BRP"
+                setFile={setFileList5}
+                defaultValue={brpAttachment}
+                // setRemove={setAttachment}
+                error={proofOfRightError}
+                setError={setProofOfRightError}
+              />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -339,33 +276,15 @@ const EligibilityForm = ({
               <span>CV File</span>
             </Col>
             <Col md="8">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <Upload
-                    multiple={false}
-                    fileList={FileList6}
-                    onPreview={handlePreview6}
-                    onChange={handleChange6}
-                    beforeUpload={(file) => {
-                      return false;
-                    }}
-                  >
-                    {FileList6.length < 1 ? <UploadButton /> : ""}
-                  </Upload>
-
-                  {cvError && (
-                    <span className="text-danger">File is required</span>
-                  )}
-                </div>
-                {eligibilityData?.cv?.fileUrl && (
-                  <Preview file={eligibilityData?.cv?.fileUrl} />
-                )}
-                {eligibilityData?.cv?.fileUrl != null ? (
-                  <a href={rootUrl + eligibilityData?.cv?.thumbnailUrl}>
-                    <DownloadButton />
-                  </a>
-                ) : null}
-              </div>
+              <UploadFile
+                file={FileList6}
+                id="CV"
+                setFile={setFileList6}
+                defaultValue={cvAttachment}
+                // setRemove={setCvAttachment}
+                error={cvError}
+                setError={setCvError}
+              />
             </Col>
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
