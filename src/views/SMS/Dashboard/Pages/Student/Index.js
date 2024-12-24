@@ -265,7 +265,7 @@ const Student = () => {
             </div>
           </div>
 
-          <Consent
+          {/* <Consent
             sId={referenceId}
             studentDetails={studentDetails}
             contactData={contactData}
@@ -290,7 +290,7 @@ const Student = () => {
             result={result}
             otherInformation={otherInformation}
             UploadData={UploadData}
-          />
+          /> */}
           <StudentJoinBanner className="my-4" />
           <div className="d-none">
             <ProfilePreview

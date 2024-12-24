@@ -1758,10 +1758,7 @@ const ApplicationInfo = ({
                   <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                     <td>Settled/Pre-settled status</td>
                     <td>
-                      {applicationProfileData?.isHavePre_Settlementstatus ===
-                      false
-                        ? "No"
-                        : "Yes"}
+                      {applicationProfileData?.currentResidencyStatusForEU}
                     </td>
                   </tr>
 
