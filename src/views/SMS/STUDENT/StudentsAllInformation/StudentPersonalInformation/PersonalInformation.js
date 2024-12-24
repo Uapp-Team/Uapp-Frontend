@@ -1066,7 +1066,7 @@ const PersonalInformation = () => {
 
                         {nationalityError && (
                           <span className="text-danger">
-                            Nationality is required
+                            Country Nationality is required
                           </span>
                         )}
                       </Col>

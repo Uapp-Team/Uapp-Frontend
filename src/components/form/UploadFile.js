@@ -90,7 +90,7 @@ const UploadFile = ({
               {setRemove && (
                 <div
                   className="pointer text-gray"
-                  onClick={() => setRemove("")}
+                  onClick={() => setRemove(null)}
                 >
                   <AiOutlineDelete size={20} />
                 </div>

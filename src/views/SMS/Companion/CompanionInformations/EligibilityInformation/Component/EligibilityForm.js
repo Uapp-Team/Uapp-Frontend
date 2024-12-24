@@ -254,7 +254,7 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
-              {residencyValue === 2 && <span className="text-danger">* </span>}
+              <span className="text-danger">* </span>
               <span>Id/Passport : </span>
             </Col>
             <Col md="8">
@@ -274,6 +274,7 @@ const EligibilityForm = ({
 
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
+              <span className="text-danger">* </span>
               <span>Proof of Address</span>
             </Col>
             <Col md="8">
@@ -294,6 +295,7 @@ const EligibilityForm = ({
           {uniCountryValue === uniCountryValue2 ? null : (
             <FormGroup row className="has-icon-left position-relative">
               <Col md="4" className="text-md-right">
+                <span className="text-danger">* </span>
                 <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
               </Col>
               <Col md="8">
@@ -313,6 +315,7 @@ const EligibilityForm = ({
           )}
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
+              <span className="text-danger">* </span>
               <span>CV File</span>
             </Col>
             <Col md="8">

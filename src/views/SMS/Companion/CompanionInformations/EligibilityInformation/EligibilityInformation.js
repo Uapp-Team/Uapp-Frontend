@@ -52,11 +52,7 @@ const EligibilityInformation = () => {
   const [visaError, setVisaError] = useState("");
   const [dateError, setDateError] = useState("");
   const history = useHistory();
-  const userType = localStorage.getItem("userType");
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [previewFileType, setPreviewFileType] = useState("");
+  console.log(idPassportFile, proofOfAddressFile, cvFile, brpFile);
 
   const [visaType, setVisaType] = useState([]);
   const [visaTypeValue, setVisaTypeValue] = useState(0);
@@ -79,10 +75,18 @@ const EligibilityInformation = () => {
 
     Uget(`CompanionEligibility/get-by/${companionId}`).then((res) => {
       setEligibilityData(res?.data);
-      setIdPassportFile(res?.data?.idOrPassport?.fileUrl);
-      setProofOfAddressFile(res?.data?.proofOfAddress?.fileUrl);
-      setBrpFile(res?.data?.brp?.fileUrl);
-      setCvFile(res?.data?.cv?.fileUrl);
+      setIdPassportFile(
+        res?.data?.idOrPassport?.fileUrl
+          ? res?.data?.idOrPassport?.fileUrl
+          : null
+      );
+      setProofOfAddressFile(
+        res?.data?.proofOfAddress?.fileUrl
+          ? res?.data?.proofOfAddress?.fileUrl
+          : null
+      );
+      setBrpFile(res?.data?.brp?.fileUrl ? res?.data?.brp?.fileUrl : null);
+      setCvFile(res?.data?.cv?.fileUrl ? res?.data?.cv?.fileUrl : null);
 
       setUniCountryLabel(
         res?.data !== null
@@ -179,21 +183,6 @@ const EligibilityInformation = () => {
     setResidencyValue(value);
   };
 
-  const handleChange3 = ({ fileList }) => {
-    setFileList3(fileList);
-    setIdPassportError(false);
-  };
-
-  const handleChange4 = ({ fileList }) => {
-    setFileList4(fileList);
-    setProofOfAddressError(false);
-  };
-
-  const handleChange5 = ({ fileList }) => {
-    setFileList5(fileList);
-    setProofOfRightError("");
-  };
-
   const handleChange6 = ({ fileList }) => {
     setFileList6(fileList);
     setCvError("");
@@ -252,10 +241,30 @@ const EligibilityInformation = () => {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
-    if (residencyValue === 2 && FileList3 === null && idPassportFile === "") {
+    if (FileList3 === null && idPassportFile === null) {
       isValid = false;
       setIdPassportError("File is required");
     }
+
+    if (FileList4 === null && proofOfAddressFile === null) {
+      isValid = false;
+      setProofOfAddressError("File is required");
+    }
+
+    if (
+      uniCountryValue !== uniCountryValue2 &&
+      FileList5 === null &&
+      brpFile === null
+    ) {
+      isValid = false;
+      setProofOfRightError("File is required");
+    }
+
+    if (FileList6 === null && cvFile === null) {
+      isValid = false;
+      setCvError("File is required");
+    }
+
     return isValid;
   };
 
@@ -267,15 +276,16 @@ const EligibilityInformation = () => {
     subData.append("proofOfAddressFile", FileList4);
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
-    subData.append("idOrPassportId", idPassportFile);
-    subData.append("proofOfAddressId", proofOfAddressFile);
-    subData.append("attachement", brpFile);
-    subData.append("attachement", cvFile);
-
-    // subData.append("idOrPassportId", idPassportFile || null);
-    // subData.append("proofOfAddressId", proofOfAddressFile || null);
-    // subData.append("attachement", brpFile || null);
-    // subData.append("attachement", cvFile || null);
+    subData.append(
+      "idOrPassportId",
+      idPassportFile ? eligibilityData?.idOrPassportId : 0
+    );
+    subData.append(
+      "proofOfAddressId",
+      proofOfAddressFile ? eligibilityData?.proofOfAddressId : 0
+    );
+    subData.append("brpId", brpFile ? eligibilityData?.brpId : 0);
+    subData.append("cvId", cvFile ? eligibilityData?.cvId : 0);
 
     if (exDate) {
       subData.append("expireDate", exDate);
@@ -293,10 +303,6 @@ const EligibilityInformation = () => {
             autoDismiss: true,
           });
           setSuccess(!success);
-          setFileList3([]);
-          setFileList4([]);
-          setFileList5([]);
-          setFileList6([]);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -351,21 +357,18 @@ const EligibilityInformation = () => {
                 setFileList3={setFileList3}
                 idPassportFile={idPassportFile}
                 setIdPassportFile={setIdPassportFile}
-                handleChange3={handleChange3}
                 idPassportError={idPassportError}
                 setIdPassportError={setIdPassportError}
                 FileList4={FileList4}
                 setFileList4={setFileList4}
                 proofOfAddressFile={proofOfAddressFile}
                 setProofOfAddressFile={setProofOfAddressFile}
-                handleChange4={handleChange4}
                 proofOfAddressError={proofOfAddressError}
                 setProofOfAddressError={setProofOfAddressError}
                 FileList5={FileList5}
                 setFileList5={setFileList5}
                 brpFile={brpFile}
                 setBrpFile={setBrpFile}
-                handleChange5={handleChange5}
                 proofOfRightError={proofOfRightError}
                 setProofOfRightError={setProofOfRightError}
                 FileList6={FileList6}

@@ -459,7 +459,7 @@ const PersonalForm = ({
                 </Col>
                 <Col md="5">
                   <FormGroup>
-                    <span>Url</span>
+                    <span>URL</span>
                     <Input
                       className="form-mt"
                       type="text"
