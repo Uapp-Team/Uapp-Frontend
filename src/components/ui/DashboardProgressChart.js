@@ -4,9 +4,8 @@ import Year from "../date/Year";
 import { Col, Row } from "reactstrap";
 import get from "../../helpers/get";
 import Chart from "react-apexcharts";
-import moment from "moment";
-import { dateFormate, ymdateFormate } from "../date/calenderFormate";
 import DMYPicker from "../form/DMYPicker";
+import { dateDMY } from "../date/DateFormate";
 const DashboardProgressChart = () => {
   const [chartData, setChartData] = useState([]);
   const [intake, setIntake] = useState();
@@ -29,7 +28,6 @@ const DashboardProgressChart = () => {
     });
 
     get("AccountIntake/GetCurrentAccountIntake").then((res) => {
-      console.log(res);
       setIntakeLabel(res?.intakeName);
       setIntakeValue(res?.id);
     });
@@ -39,7 +37,6 @@ const DashboardProgressChart = () => {
     get(
       `Report/ProgressReport/${intakeValue}/${date}/${monthValue}/${yearValue}`
     ).then((res) => {
-      console.log(res);
       const dataArray = [
         res?.totalApplication,
         res?.underAssesment,
@@ -81,7 +78,7 @@ const DashboardProgressChart = () => {
   };
 
   const dateHandle = (e) => {
-    setDate(e.target.value);
+    setDate(e);
     setIntakeLabel("Intake");
     setIntakeValue(0);
     setYearLable("Year");
@@ -138,16 +135,7 @@ const DashboardProgressChart = () => {
             required
           />
 
-          <input
-            style={{ border: "1px solid rgba(0,0,0,.1)", borderRadius: "4px" }}
-            type="date"
-            name="date"
-            id="date"
-            onChange={(e) => {
-              dateHandle(e);
-            }}
-            value={date}
-          />
+          <DMYPicker value={date} setValue={dateHandle} width="auto" />
         </div>
       </div>
       <hr />
@@ -156,7 +144,7 @@ const DashboardProgressChart = () => {
           {intakeLabel !== "Intake" && intakeLabel}
           {monthLabel !== "Month" && monthLabel}{" "}
           {yearLable !== "Year" && yearLable}
-          {date !== null && date}
+          {date !== null && dateDMY(date)}
         </p>
         <Row className="p-2">
           <Col>

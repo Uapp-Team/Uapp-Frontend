@@ -82,6 +82,12 @@ const LiveIntake = () => {
   }, [universityValue]);
 
   useEffect(() => {
+    get("DeliveryPatternDD/Index").then((res) => {
+      setDeliveryPatternDD(res);
+    });
+  }, []);
+
+  useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
       setIntakeRngDD(res);
     });

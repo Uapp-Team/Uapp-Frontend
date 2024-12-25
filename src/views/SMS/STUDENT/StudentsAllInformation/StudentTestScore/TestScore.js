@@ -872,7 +872,7 @@ const TestScore = () => {
   // on Close Modal
   const closeModal = () => {
     setModalOpen(false);
-    setIsQualifiacation(false);
+    setIsQualifiacationAdd(false);
     setIeltsSpeaking(0);
     setIeltsSpeakingError(false);
     setIeltsReading(0);

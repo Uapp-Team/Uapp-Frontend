@@ -299,7 +299,6 @@ const BranchConsultantRegistration = () => {
   return (
     <div>
       <BranchNavbar
-        title="Add Default Consultant"
         activeTab={activetab}
         branchId={branchId}
       />
