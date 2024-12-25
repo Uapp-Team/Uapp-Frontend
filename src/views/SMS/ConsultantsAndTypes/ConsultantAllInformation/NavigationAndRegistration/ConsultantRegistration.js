@@ -12,9 +12,9 @@ import {
 } from "../../../../../components/core/User";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -266,7 +266,7 @@ const ConsultantRegistration = () => {
               <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
               <div className="pl-3">
                 <span>
-                  Consultant Information Below To Create Consultant Account.
+                  Provide information below to create a consultant account
                 </span>
               </div>
             </div>
