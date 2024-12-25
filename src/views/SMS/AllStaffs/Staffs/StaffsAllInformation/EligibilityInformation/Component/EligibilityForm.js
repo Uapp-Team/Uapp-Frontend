@@ -8,6 +8,7 @@ import SaveButton from "../../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../../constants/AuthorizationConstant";
 import UploadButton from "../../../../../../../components/buttons/UploadButton";
 import DownloadButton from "../../../../../../../components/buttons/DownloadButton";
+import DMYPicker from "../../../../../../../components/form/DMYPicker";
 
 const EligibilityForm = ({
   handleSubmit,
@@ -69,6 +70,7 @@ const EligibilityForm = ({
   visaError,
   handleDate,
   dateError,
+  setDateError,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -161,22 +163,15 @@ const EligibilityForm = ({
               </FormGroup>
 
               <FormGroup>
-                <span>
-                  {" "}
-                  <span className="text-danger">*</span> Expiry Date of Your
-                  BRP/TRP or Visa
-                </span>
-
-                <Input
-                  type="date"
-                  name="expireDate"
-                  id="expireDate"
+                <DMYPicker
+                  label="Expiry Date of Your
+                  BRP/TRP or Visa"
                   value={exDate}
-                  onChange={(e) => {
-                    handleDate(e);
-                  }}
+                  setValue={handleDate}
+                  error={dateError}
+                  action={setDateError}
+                  required={true}
                 />
-                <span className="text-danger">{dateError}</span>
               </FormGroup>
 
               <FormGroup>

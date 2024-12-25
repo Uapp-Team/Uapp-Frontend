@@ -199,7 +199,6 @@ const EligibilityForm = ({
                   action={setDateError}
                   required={true}
                 />
-                <span className="text-danger">{dateError}</span>
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">

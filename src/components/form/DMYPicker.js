@@ -10,6 +10,7 @@ const DMYPicker = ({
   error,
   action,
   required = false,
+  width = "100%",
 }) => {
   const handleDate = (e) => {
     if (e) {
@@ -24,9 +25,8 @@ const DMYPicker = ({
 
   return (
     <>
-      <span>
-        {required && <span className="text-danger">*</span>} {label}
-      </span>
+      {label && required && <span className="text-danger">*</span>}
+      {label && <span>{label}</span>}
 
       <DatePicker
         onChange={(e) => {
@@ -34,7 +34,7 @@ const DMYPicker = ({
         }}
         value={value ? moment(value) : null}
         style={{
-          width: "100%",
+          width: width,
         }}
         format="DD/MM/YYYY"
         placeholder="dd/mm/yyyy"
