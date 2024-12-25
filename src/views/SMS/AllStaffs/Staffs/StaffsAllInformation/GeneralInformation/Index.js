@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 
-import { Card, CardBody, TabContent, TabPane, Button } from "reactstrap";
+import { Card, CardBody, TabContent, TabPane } from "reactstrap";
+import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
+import { userTypes } from "../../../../../../constants/userTypeConstant";
 import get from "../../../../../../helpers/get";
 import post from "../../../../../../helpers/post";
-import { userTypes } from "../../../../../../constants/userTypeConstant";
-import GeneralInformationForm from "./Component/GeneralInformationForm";
 import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
-import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
+import GeneralInformationForm from "./Component/GeneralInformationForm";
 
 const StaffGeneralInformation = () => {
+  const [action, setAction] = useState({});
   const [title, setTitle] = useState([]);
   const [consType, setConsType] = useState([]);
   const [nameLabel, setNameLabel] = useState("Select Title");
@@ -202,7 +203,12 @@ const StaffGeneralInformation = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation activetab={activetab} staffId={staffId} />
+      <StaffNavigation
+        activetab={activetab}
+        staffId={staffId}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <p className="section-title">General Information</p>
