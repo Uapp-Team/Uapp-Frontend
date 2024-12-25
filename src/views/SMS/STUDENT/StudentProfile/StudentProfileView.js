@@ -105,7 +105,7 @@ const StudentProfileView = ({ sId }) => {
 
             <Col md="4">
               <StudentParentConsultant id={sId} />
-              <Consent
+              {/* <Consent
                 sId={sId ? sId : referenceId}
                 studentDetails={studentDetails}
                 contactData={contactData}
@@ -130,7 +130,7 @@ const StudentProfileView = ({ sId }) => {
                 result={result}
                 otherInformation={otherInformation}
                 UploadData={UploadData}
-              />
+              /> */}
             </Col>
           </Row>
         </div>

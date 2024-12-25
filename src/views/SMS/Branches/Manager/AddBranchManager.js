@@ -301,7 +301,6 @@ const AddBranchManager = () => {
     <div>
       <div>
         <BranchNavbar
-          title="Add Branch Admin Information"
           activeTab={activetab}
           branchId={branchId}
         />

@@ -1761,7 +1761,7 @@ const ApplicationInfo = ({
                       {applicationProfileData?.isHavePre_Settlementstatus ===
                       false
                         ? "No"
-                        : "Yes"}
+                        : applicationProfileData?.currentResidencyStatusForEU}
                     </td>
                   </tr>
 
