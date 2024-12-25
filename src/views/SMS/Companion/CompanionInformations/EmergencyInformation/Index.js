@@ -329,6 +329,7 @@ const ContactInformation = () => {
         activetab="3"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>

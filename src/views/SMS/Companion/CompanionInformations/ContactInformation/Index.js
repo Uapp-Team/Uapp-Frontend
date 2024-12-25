@@ -180,6 +180,7 @@ const ContactInformation = () => {
         activetab="2"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>
