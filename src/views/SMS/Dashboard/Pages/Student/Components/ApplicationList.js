@@ -313,7 +313,7 @@ export default function ApplicationList({
                                   //   gotoApplicationDetails(appinfo?.applicationId)
                                   // }
                                 >
-                                  Check Details{" "}
+                                  Tracking{" "}
                                   <span className="ml-1">
                                     <i class="fas fa-arrow-right"></i>
                                   </span>
