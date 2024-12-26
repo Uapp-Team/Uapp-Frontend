@@ -79,9 +79,14 @@ const ConsultantBankDetails = () => {
       setAccountName(res?.accountName);
       setAccountNumber(res?.accountNumber);
       setBankName(res?.bankName);
-      setShortCode(res?.sortCode);
+      setShortCode(formatShortCode(res?.sortCode ? res?.sortCode : ""));
       setIsDefault(res?.isDefault);
     });
+  };
+
+  const formatShortCode = (sortCode) => {
+    const digitsOnly = sortCode.replace(/\D/g, "");
+    return digitsOnly.match(/.{1,2}/g)?.join("-") || "";
   };
 
   const goPrevious = () => {
@@ -167,10 +172,13 @@ const ConsultantBankDetails = () => {
     }
   };
   const handleShortCode = (e) => {
-    let data = e.target.value.trimStart();
-    setShortCode(data);
-    if (data.length > 6) {
-      setShortCodeError("Sort Code is not more than 6 digit");
+    let input = e.target.value.replace(/\D/g, "");
+    let formattedInput = input.match(/.{1,2}/g)?.join("-") || "";
+
+    setShortCode(formattedInput);
+
+    if (formattedInput.replace(/-/g, "").length > 8) {
+      setShortCodeError("Short Code cannot have more than 6 digits");
     } else {
       setShortCodeError("");
     }
@@ -196,7 +204,7 @@ const ConsultantBankDetails = () => {
     //   setShortCodeError("Sort Code is required");
     // }
 
-    if (shortCode?.length > 6) {
+    if (shortCode?.length > 8) {
       isValid = false;
       setShortCodeError("Sort Code is not more than 6 digit");
     }
