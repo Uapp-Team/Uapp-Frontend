@@ -40,7 +40,7 @@ const FamilyFunded = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("familyFundedFile", FileList2);
-    subData.append("attachement", attachment);
+    subData.append("attachement", attachment ? attachment : "");
 
     // setButtonStatus(true);
     if (familyFunding?.id) {

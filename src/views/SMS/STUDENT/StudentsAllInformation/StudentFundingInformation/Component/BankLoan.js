@@ -37,7 +37,7 @@ const BankLoan = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("bankLoanFile", FileList1);
-    subData.append("attachement", attachment);
+    subData.append("attachement", attachment ? attachment : "");
 
     if (bankFunding?.id) {
       setProgress(true);
