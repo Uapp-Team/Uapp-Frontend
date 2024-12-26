@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Form, FormGroup, Input, Row, Label } from "reactstrap";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
@@ -99,7 +99,7 @@ const BankInformationForm = ({
               <span>Sort Code</span>
 
               <Input
-                type="number"
+                type="text"
                 name="sortCode"
                 id="sortCode"
                 placeholder="Enter Sort Code"
