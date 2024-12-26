@@ -28,6 +28,7 @@ const BankInformationForm = ({
   setIsDefault,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  console.log(bankDetailsData.length, "length check");
 
   return (
     <div className="">

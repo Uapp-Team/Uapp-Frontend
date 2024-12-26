@@ -383,9 +383,9 @@ const Registration = () => {
                               name="consultantId"
                               value={userId}
                             />
-                            <p className="fw-600">
+                            {/* <p className="fw-600">
                               {current_user?.displayName}
-                            </p>
+                            </p> */}
                           </>
                         )}
                       </>

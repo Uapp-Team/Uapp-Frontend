@@ -70,6 +70,7 @@ const Commission = () => {
         activetab="6"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />{" "}
       <Card>
         <CardBody>

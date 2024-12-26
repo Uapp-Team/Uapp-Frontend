@@ -174,6 +174,7 @@ const ConsultantTermsInformation = () => {
         activetab="7"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
 
       <Card>

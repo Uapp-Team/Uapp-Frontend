@@ -34,7 +34,7 @@ const SelfFunded = ({ studentid, success, setSuccess }) => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("SelfFundedFile", FileList1);
-    subData.append("attachement", attachment);
+    subData.append("attachement", attachment ? attachment : "");
 
     if (selfFunding?.id) {
       setProgress(true);

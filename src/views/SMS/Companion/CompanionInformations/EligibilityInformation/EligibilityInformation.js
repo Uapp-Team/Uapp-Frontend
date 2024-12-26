@@ -324,6 +324,7 @@ const EligibilityInformation = () => {
         activetab="4"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>

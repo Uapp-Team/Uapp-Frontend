@@ -35,7 +35,7 @@ const AffiliateAddSuccess = () => {
       <Card>
         <div className="p-3">
           <h2>Success</h2>
-          <p>Please notify the new affiliate to complete his / her profile!</p>
+          <p>Kindly inform the new affiliate to complete their profile</p>
         </div>
       </Card>
     </div>

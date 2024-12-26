@@ -171,8 +171,6 @@ const ConsultantBankDetails = () => {
     setShortCode(data);
     if (data === "") {
       setShortCodeError("Short code is required");
-    } else if (data?.length !== 8) {
-      setShortCodeError("Short code required 6 digit");
     } else {
       setShortCodeError("");
     }
@@ -197,10 +195,10 @@ const ConsultantBankDetails = () => {
       isValid = false;
       setShortCodeError("Short code is required");
     }
-    if (shortCode?.length > 8) {
-      isValid = false;
-      setShortCodeError("Short code required maximum 6 digit");
-    }
+    // if (shortCode?.length > 8) {
+    //   isValid = false;
+    //   setShortCodeError("Short code required maximum 6 digit");
+    // }
     return isValid;
   };
 
@@ -239,6 +237,7 @@ const ConsultantBankDetails = () => {
         activetab="5"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>
