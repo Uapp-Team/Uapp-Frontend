@@ -73,6 +73,7 @@ const StaffEligibility = () => {
   const [visa, setVisa] = useState("");
   const [visaError, setVisaError] = useState("");
   const [dateError, setDateError] = useState("");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -430,7 +431,12 @@ const StaffEligibility = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation activetab={activetab} staffId={staffId} />
+      <StaffNavigation
+        activetab={activetab}
+        staffId={staffId}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>

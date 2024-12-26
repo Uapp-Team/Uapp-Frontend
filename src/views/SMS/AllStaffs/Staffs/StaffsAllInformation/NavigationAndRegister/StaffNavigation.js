@@ -14,7 +14,6 @@ const StaffNavigation = ({ activetab, staffId, success, action }) => {
 
   useEffect(() => {
     get(`EmployeeNavbar/GetNavbar/${staffId}`).then((res) => {
-      console.log(res, "res");
       setActivity(res);
     });
   }, [staffId, success]);
