@@ -372,10 +372,15 @@ const StaffEligibility = () => {
 
     const subData = new FormData(event.target);
 
-    if (exDate) {
-      subData.append("expireDate", exDate);
-    }
+    // if (exDate) {
+    //   subData.append("expireDate", exDate);
+    // }
 
+    subData.append(
+      "expireDate",
+      residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
+    );
+    // subData.append("expireDate", exDate);
     subData.append("idOrPassportFile", FileList3);
     subData.append("proofOfAddressFile", FileList4);
     subData.append("BRPFile", FileList5);
