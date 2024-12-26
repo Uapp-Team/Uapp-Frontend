@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import post from "../../../../../helpers/post";
-import BankInformationForm from "./Component/BankInformationForm";
-import BankDetailsCard from "./Component/BankDetailsCard";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import { Card, CardBody } from "reactstrap";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import Navigation from "../NavigationAndRegistration/Navigation";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import post from "../../../../../helpers/post";
 import Uget from "../../../../../helpers/Uget";
 import Uremove from "../../../../../helpers/Uremove";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import BankDetailsCard from "./Component/BankDetailsCard";
+import BankInformationForm from "./Component/BankInformationForm";
 
 const ConsultantBankDetails = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -36,8 +35,6 @@ const ConsultantBankDetails = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [accountNumberError, setAccountNumberError] = useState("");
   const [shortCode, setShortCode] = useState("");
-  console.log(shortCode);
-
   const [shortCodeError, setShortCodeError] = useState("");
   const history = useHistory();
   const userTypeId = localStorage.getItem("userType");
@@ -49,6 +46,11 @@ const ConsultantBankDetails = () => {
       setBankDetailsData(res?.data);
     });
   }, [success, companionId]);
+
+  const formatShortCode = (sortCode) => {
+    const digitsOnly = sortCode.replace(/\D/g, "");
+    return digitsOnly.match(/.{1,2}/g)?.join("-") || "";
+  };
 
   const toggleDanger = (p) => {
     setDeleteData(p);
@@ -75,7 +77,7 @@ const ConsultantBankDetails = () => {
     setAccountName(data?.accountName);
     setAccountNumber(data?.accountNumber);
     setBankName(data?.bankName);
-    setShortCode(data?.sortCode);
+    setShortCode(formatShortCode(data?.sortCode ? data?.sortCode : ""));
     setIsDefault(data?.isDefault);
   };
 
@@ -163,13 +165,11 @@ const ConsultantBankDetails = () => {
     }
   };
   const handleShortCode = (e) => {
-    let data = e.target.value.trimStart();
-    // const formattedValue = data
-    //   .replace(/(\d{2})(\d{2})(\d{0,2})/, "$1-$2-$3")
-    //   .replace(/-$/, "");
+    let input = e.target.value.replace(/\D/g, "");
+    let formattedInput = input.match(/.{1,2}/g)?.join("-") || "";
 
-    setShortCode(data);
-    if (data === "") {
+    setShortCode(formattedInput);
+    if (input === "") {
       setShortCodeError("Short code is required");
     } else {
       setShortCodeError("");
