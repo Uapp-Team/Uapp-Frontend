@@ -46,6 +46,7 @@ const StaffPersonalInformation = () => {
   const history = useHistory();
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("MaritalStatusDD/Index").then((res) => {
@@ -299,7 +300,12 @@ const StaffPersonalInformation = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation staffId={staffId} activetab={activetab} />
+      <StaffNavigation
+        staffId={staffId}
+        activetab={activetab}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>

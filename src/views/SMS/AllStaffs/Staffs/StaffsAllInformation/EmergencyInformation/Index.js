@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { useToasts } from "react-toast-notifications";
-import Select from "react-select";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
@@ -15,14 +15,14 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import get from "../../../../../../helpers/get";
-import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
-import post from "../../../../../../helpers/post";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
-import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
+import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import get from "../../../../../../helpers/get";
+import post from "../../../../../../helpers/post";
+import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
 
 const StaffContactInformation = () => {
   const { staffId } = useParams();
@@ -56,6 +56,7 @@ const StaffContactInformation = () => {
   const [street, setStreet] = useState("");
   const [route, setRoute] = useState("");
   const [state, setState] = useState("");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -327,7 +328,12 @@ const StaffContactInformation = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation activetab={activetab} staffId={staffId} />
+      <StaffNavigation
+        activetab={activetab}
+        staffId={staffId}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>
