@@ -247,7 +247,7 @@ const Affiliate = () => {
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
         {/* <ModalHeader></ModalHeader> */}
         <ModalBody>
-          <h4 className="mb-3">Send Invitation to email</h4>
+          <h4 className="mb-3">Send an invitation to email</h4>
           <Form onSubmit={handleSubmit}>
             <input
               type="hidden"

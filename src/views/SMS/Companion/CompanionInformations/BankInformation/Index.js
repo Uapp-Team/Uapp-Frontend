@@ -36,6 +36,8 @@ const ConsultantBankDetails = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [accountNumberError, setAccountNumberError] = useState("");
   const [shortCode, setShortCode] = useState("");
+  console.log(shortCode);
+
   const [shortCodeError, setShortCodeError] = useState("");
   const history = useHistory();
   const userTypeId = localStorage.getItem("userType");
@@ -143,6 +145,7 @@ const ConsultantBankDetails = () => {
   };
   const handleAccountName = (e) => {
     let data = e.target.value.trimStart();
+
     setAccountName(data);
     if (data === "") {
       setAccountNameError("Account Holder name is required");
@@ -161,6 +164,10 @@ const ConsultantBankDetails = () => {
   };
   const handleShortCode = (e) => {
     let data = e.target.value.trimStart();
+    // const formattedValue = data
+    //   .replace(/(\d{2})(\d{2})(\d{0,2})/, "$1-$2-$3")
+    //   .replace(/-$/, "");
+
     setShortCode(data);
     if (data === "") {
       setShortCodeError("Short code is required");
@@ -188,6 +195,10 @@ const ConsultantBankDetails = () => {
       isValid = false;
       setShortCodeError("Short code is required");
     }
+    // if (shortCode?.length > 8) {
+    //   isValid = false;
+    //   setShortCodeError("Short code required maximum 6 digit");
+    // }
     return isValid;
   };
 
@@ -226,6 +237,7 @@ const ConsultantBankDetails = () => {
         activetab="5"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>

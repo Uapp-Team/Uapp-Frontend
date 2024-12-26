@@ -31,7 +31,9 @@ const PersonalDetails = ({
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td cwidth="60%">Date Of Birth</td>
             <td width="40%">
-              {dateFormate(companionProfileData?.data?.dateOfBirth)}
+              {companionProfileData?.data?.dateOfBirth
+                ? dateFormate(companionProfileData?.data?.dateOfBirth)
+                : ""}
             </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>

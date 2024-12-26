@@ -14,7 +14,7 @@ const EligibilityInformation = () => {
   const [success, setSuccess] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [uniCountryLabel, setUniCountryLabel] = useState(
-    "Select Country of Citizenship"
+    "Select Country of Nationality"
   );
   const [uniCountryValue, setUniCountryValue] = useState(0);
   const [errorc, setErrorC] = useState("");
@@ -31,13 +31,17 @@ const EligibilityInformation = () => {
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [FileList3, setFileList3] = useState([]);
-  const [idPassportError, setIdPassportError] = useState(false);
-  const [FileList4, setFileList4] = useState([]);
-  const [proofOfAddressError, setProofOfAddressError] = useState(false);
-  const [FileList5, setFileList5] = useState([]);
+  const [FileList3, setFileList3] = useState(null);
+  const [idPassportFile, setIdPassportFile] = useState(null);
+  const [idPassportError, setIdPassportError] = useState("");
+  const [FileList4, setFileList4] = useState(null);
+  const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
+  const [proofOfAddressError, setProofOfAddressError] = useState("");
+  const [FileList5, setFileList5] = useState(null);
+  const [brpFile, setBrpFile] = useState(null);
   const [proofOfRightError, setProofOfRightError] = useState("");
-  const [FileList6, setFileList6] = useState([]);
+  const [FileList6, setFileList6] = useState(null);
+  const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
@@ -48,11 +52,7 @@ const EligibilityInformation = () => {
   const [visaError, setVisaError] = useState("");
   const [dateError, setDateError] = useState("");
   const history = useHistory();
-  const userType = localStorage.getItem("userType");
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [previewFileType, setPreviewFileType] = useState("");
+  console.log(idPassportFile, proofOfAddressFile, cvFile, brpFile);
 
   const [visaType, setVisaType] = useState([]);
   const [visaTypeValue, setVisaTypeValue] = useState(0);
@@ -75,10 +75,23 @@ const EligibilityInformation = () => {
 
     Uget(`CompanionEligibility/get-by/${companionId}`).then((res) => {
       setEligibilityData(res?.data);
+      setIdPassportFile(
+        res?.data?.idOrPassport?.fileUrl
+          ? res?.data?.idOrPassport?.fileUrl
+          : null
+      );
+      setProofOfAddressFile(
+        res?.data?.proofOfAddress?.fileUrl
+          ? res?.data?.proofOfAddress?.fileUrl
+          : null
+      );
+      setBrpFile(res?.data?.brp?.fileUrl ? res?.data?.brp?.fileUrl : null);
+      setCvFile(res?.data?.cv?.fileUrl ? res?.data?.cv?.fileUrl : null);
+
       setUniCountryLabel(
         res?.data !== null
           ? res?.data?.citizenshipCountryName
-          : "Select Country of Citizenship"
+          : "Select Country of Nationality"
       );
       setUniCountryValue(
         res?.data !== null ? res?.data?.countryOfCitizenShipId : 0
@@ -169,196 +182,6 @@ const EligibilityInformation = () => {
     setResidencyLabel(label);
     setResidencyValue(value);
   };
-  // Id or Passport Code Start
-
-  // function getBase643(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel3 = () => {
-  //   setPreviewVisible3(false);
-  // };
-
-  // const handlePreview3 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase643(file.originFileObj);
-  //   }
-  //   setPreviewImage3(file.url || file.preview);
-  //   setPreviewVisible3(true);
-  //   setPreviewTitle3(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
-
-  const handleChange3 = ({ fileList }) => {
-    setFileList3(fileList);
-    setIdPassportError(false);
-  };
-
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
-
-  const handlePreview3 = async (file) => {
-    console.log(file, "siam");
-
-    // Infer file type if it's not provided
-    const inferFileType = (file) => {
-      const extension = file.url ? file.url.split(".").pop().toLowerCase() : "";
-      switch (extension) {
-        case "jpg":
-        case "jpeg":
-        case "png":
-        case "gif":
-          return "image/jpeg";
-        case "pdf":
-          return "application/pdf";
-        case "doc":
-          return "application/msword";
-        case "docx":
-          return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        default:
-          return "unknown";
-      }
-    };
-
-    const fileType = file.type || inferFileType(file);
-    if (fileType.startsWith("image")) {
-      // If it's an image
-      file.preview = await getBase64(file.originFileObj || file.url);
-      setPreviewImage(file.preview || file.url);
-      setPreviewFileType(fileType);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-    } else if (fileType === "application/pdf") {
-      // If it's a PDF
-      const pdfPreview = file.url || URL.createObjectURL(file.originFileObj);
-      setPreviewImage(pdfPreview);
-      setPreviewVisible(true);
-      setPreviewFileType(fileType);
-      setPreviewTitle(file.name);
-    } else if (
-      fileType === "application/msword" ||
-      fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      // For DOC or DOCX files
-      const googleViewer = `https://docs.google.com/viewer?url=${
-        file.url || URL.createObjectURL(file.originFileObj)
-      }&embedded=true`;
-      setPreviewImage(googleViewer);
-      setPreviewVisible(true);
-      setPreviewTitle(file.name);
-      setPreviewFileType(fileType);
-    } else {
-      // Handle unsupported file types
-      alert("Preview not available for this file type");
-    }
-  };
-
-  // Id or Passport Code End
-
-  // Proof of Address Code Start
-
-  // function getBase644(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel4 = () => {
-  //   setPreviewVisible4(false);
-  // };
-
-  // const handlePreview4 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase644(file.originFileObj);
-  //   }
-  //   setPreviewImage4(file.url || file.preview);
-  //   setPreviewVisible4(true);
-  //   setPreviewTitle4(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
-
-  const handleChange4 = ({ fileList }) => {
-    setFileList4(fileList);
-    setProofOfAddressError(false);
-  };
-  // Proof of Address Code End
-
-  // Proof of Right to Work Code Start
-
-  // function getBase645(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel5 = () => {
-  //   setPreviewVisible5(false);
-  // };
-
-  // const handlePreview5 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase645(file.originFileObj);
-  //   }
-
-  //   setPreviewImage5(file.url || file.preview);
-  //   setPreviewVisible5(true);
-  //   setPreviewTitle5(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
-
-  const handleChange5 = ({ fileList }) => {
-    setFileList5(fileList);
-    setProofOfRightError("");
-  };
-  // Proof of Right to Work Code End
-
-  // CV Start
-
-  // function getBase646(file) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // }
-
-  // const handleCancel6 = () => {
-  //   setPreviewVisible6(false);
-  // };
-
-  // const handlePreview6 = async (file) => {
-  //   if (!file.url && !file.preview) {
-  //     file.preview = await getBase646(file.originFileObj);
-  //   }
-
-  //   setPreviewImage6(file.url || file.preview);
-  //   setPreviewVisible6(true);
-  //   setPreviewTitle6(
-  //     file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-  //   );
-  // };
 
   const handleChange6 = ({ fileList }) => {
     setFileList6(fileList);
@@ -382,10 +205,13 @@ const EligibilityInformation = () => {
   };
   const handleDate = (e) => {
     setExDate(e);
-    if (e === "") {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
-    } else {
-      setDateError("");
+    setDateError("");
+
+    const today = new Date();
+    const selectedDate = new Date(e);
+
+    if (selectedDate <= today) {
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
 
@@ -407,18 +233,38 @@ const EligibilityInformation = () => {
       isValid = false;
       setVisaError("Visa Type is required");
     }
+    if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+      isValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
+    }
     if (residencyValue === 2 && !exDate) {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
+    if (FileList3 === null && idPassportFile === null) {
+      isValid = false;
+      setIdPassportError("File is required");
+    }
+
+    if (FileList4 === null && proofOfAddressFile === null) {
+      isValid = false;
+      setProofOfAddressError("File is required");
+    }
+
     if (
-      residencyValue === 2 &&
-      FileList3.length === 0 &&
-      eligibilityData?.idOrPassport?.fileUrl == null
+      uniCountryValue !== uniCountryValue2 &&
+      FileList5 === null &&
+      brpFile === null
     ) {
       isValid = false;
-      setIdPassportError(true);
+      setProofOfRightError("File is required");
     }
+
+    if (FileList6 === null && cvFile === null) {
+      isValid = false;
+      setCvError("File is required");
+    }
+
     return isValid;
   };
 
@@ -426,34 +272,21 @@ const EligibilityInformation = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("visa", visa);
+    subData.append("idOrPassportFile", FileList3);
+    subData.append("proofOfAddressFile", FileList4);
+    subData.append("BRPFile", FileList5);
+    subData.append("CvFile", FileList6);
     subData.append(
-      "idOrPassportFile",
-      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
+      "idOrPassportId",
+      idPassportFile ? eligibilityData?.idOrPassportId : 0
     );
-    // if (FileList3.length !== 0) {
-    //   subData.append("idOrPassportId", eligibilityData?.idOrPassportId);
-    // }
     subData.append(
-      "proofOfAddressFile",
-      FileList4.length === 0 ? null : FileList4[0]?.originFileObj
+      "proofOfAddressId",
+      proofOfAddressFile ? eligibilityData?.proofOfAddressId : 0
     );
-    // if (FileList4.length !== 0) {
-    //   subData.append("proofOfAddressId", eligibilityData?.proofOfAddressId);
-    // }
-    subData.append(
-      "BRPFile",
-      FileList5.length === 0 ? null : FileList5[0]?.originFileObj
-    );
-    // if (FileList5.length !== 0) {
-    //   subData.append("brpId", eligibilityData?.brpId);
-    // }
-    subData.append(
-      "CvFile",
-      FileList6.length === 0 ? null : FileList6[0]?.originFileObj
-    );
-    // if (FileList6.length !== 0) {
-    //   subData.append("cvId", eligibilityData?.cvId);
-    // }
+    subData.append("brpId", brpFile ? eligibilityData?.brpId : 0);
+    subData.append("cvId", cvFile ? eligibilityData?.cvId : 0);
+
     if (exDate) {
       subData.append("expireDate", exDate);
     }
@@ -470,10 +303,6 @@ const EligibilityInformation = () => {
             autoDismiss: true,
           });
           setSuccess(!success);
-          setFileList3([]);
-          setFileList4([]);
-          setFileList5([]);
-          setFileList6([]);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -495,6 +324,7 @@ const EligibilityInformation = () => {
         activetab="4"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -526,20 +356,29 @@ const EligibilityInformation = () => {
                 rightToWork={rightToWork}
                 FileList3={FileList3}
                 setFileList3={setFileList3}
-                handleChange3={handleChange3}
+                idPassportFile={idPassportFile}
+                setIdPassportFile={setIdPassportFile}
                 idPassportError={idPassportError}
+                setIdPassportError={setIdPassportError}
                 FileList4={FileList4}
                 setFileList4={setFileList4}
-                handleChange4={handleChange4}
+                proofOfAddressFile={proofOfAddressFile}
+                setProofOfAddressFile={setProofOfAddressFile}
                 proofOfAddressError={proofOfAddressError}
+                setProofOfAddressError={setProofOfAddressError}
                 FileList5={FileList5}
                 setFileList5={setFileList5}
-                handleChange5={handleChange5}
+                brpFile={brpFile}
+                setBrpFile={setBrpFile}
                 proofOfRightError={proofOfRightError}
+                setProofOfRightError={setProofOfRightError}
                 FileList6={FileList6}
                 setFileList6={setFileList6}
+                cvFile={cvFile}
+                setCvFile={setCvFile}
                 handleChange6={handleChange6}
                 cvError={cvError}
+                setCvError={setCvError}
                 progress={progress}
                 buttonStatus={buttonStatus}
                 visa={visa}

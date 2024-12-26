@@ -13,6 +13,7 @@ import { rootUrl } from "../../../../constants/constants";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import put from "../../../../helpers/put";
 import Uget from "../../../../helpers/Uget";
+import { dateFormate } from "../../../../components/date/calenderFormate";
 
 const CompanionBanner = ({
   companionProfileData,
@@ -143,7 +144,8 @@ const CompanionBanner = ({
           <br />
           <span className="text-gray">
             {" "}
-            {companionProfileData?.data?.startedDate}
+            {dateFormate(companionProfileData?.data?.startedDate)}
+            {/* {companionProfileData?.data?.startedDate} */}
           </span>
           <br />
           {/* <span>{headData?.branchName}</span> */}

@@ -587,7 +587,7 @@ const MyTeamList = () => {
               toggle={closeModalAffiliate}
               className="uapp-modal2"
             >
-              <ModalHeader>Send Invitation to email</ModalHeader>
+              <ModalHeader>Send an invitation to email</ModalHeader>
               <ModalBody>
                 <Form onSubmit={handleAffiliateSubmit}>
                   <input

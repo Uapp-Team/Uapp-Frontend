@@ -40,7 +40,7 @@ const StudentLoanCompany = ({ studentid, success, setSuccess }) => {
     const subData = new FormData(event.target);
 
     subData.append("studentLoanCompanyFile", FileList1);
-    subData.append("attachement", attachment);
+    subData.append("attachement", attachment ? attachment : "");
 
     if (studentFunding?.id) {
       setProgress(true);

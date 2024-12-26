@@ -12,6 +12,7 @@ import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { currentDate } from "../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import post from "../../../../../helpers/post";
+import Loader from "../../../Search/Loader/Loader";
 
 const PersonalInformation = () => {
   // Profile Image States
@@ -79,6 +80,7 @@ const PersonalInformation = () => {
   const [branchLabel, setBranchLabel] = useState("Select Branch");
   const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const companionParentMenu = companionParent?.map(
     (companionParentOptions) => ({
@@ -188,6 +190,7 @@ const PersonalInformation = () => {
         setBirthDate(
           moment(new Date(res?.data?.dateOfBirth)).format("YYYY-MM-DD")
         );
+      setLoading(false);
     });
   }, [success, companionId]);
 
@@ -427,98 +430,106 @@ const PersonalInformation = () => {
 
   return (
     <div>
-      <Navigation
-        title="Personal Information"
-        activetab="1"
-        companionId={companionId}
-        success={success}
-      />
-      <Card>
-        <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="2">
-              <PersonalForm
-                handleSubmit={handleSubmit}
-                userTypeId={userTypeId}
-                userTypes={userTypes}
-                companionParentMenu={companionParentMenu}
-                companionParentLabel={companionParentLabel}
-                companionParentValue={companionParentValue}
-                parentError={parentError}
-                selectParentCompanion={selectParentCompanion}
-                titleError={titleError}
-                handleFirstNameChange={handleFirstNameChange}
-                handleLastNameChange={handleLastNameChange}
-                firstNameError={firstNameError}
-                lastNameError={lastNameError}
-                firstName={firstName}
-                lastName={lastName}
-                setTitleValue={setTitleValue}
-                setTitleError={setTitleError}
-                titleValue={titleValue}
-                title={title}
-                SetDate={SetDate}
-                Dates={Dates}
-                setPassport={setPassport}
-                passport={passport}
-                gender={gender}
-                setGenderValue={setGenderValue}
-                setGenderError={setGenderError}
-                genderValue={genderValue}
-                genderError={genderError}
-                maritalStatus={maritalStatus}
-                setMaritalStatusValue={setMaritalStatusValue}
-                setMaritalStatusError={setMaritalStatusError}
-                maritalStatusValue={maritalStatusValue}
-                maritalStatusError={maritalStatusError}
-                companionPersonalInfo={companionPersonalInfo}
-                FileList1={FileList1}
-                handlePreview1={handlePreview1}
-                handleChange1={handleChange1}
-                previewVisible1={previewVisible1}
-                previewTitle1={previewTitle1}
-                handleCancel1={handleCancel1}
-                previewImage1={previewImage1}
-                profilePicError={profilePicError}
-                error={error}
-                FileList2={FileList2}
-                handlePreview2={handlePreview2}
-                previewTitle2={previewTitle2}
-                previewVisible2={previewVisible2}
-                handleChange2={handleChange2}
-                handleCancel2={handleCancel2}
-                previewImage2={previewImage2}
-                error2={error2}
-                progress={progress}
-                buttonStatus={buttonStatus}
-                handlePhoneNumber={handlePhoneNumber}
-                phoneNUmberError={phoneNUmberError}
-                phoneNumber={phoneNumber}
-                dateError={dateError}
-                handleDate={handleDate}
-                setDateError={setDateError}
-                birthDate={birthDate}
-                minDate={minDate}
-                arrLink={arrLink}
-                setarrLink={setarrLink}
-                companionId={companionId}
-                setarrLinkError={setarrLinkError}
-                arrLinkError={arrLinkError}
-                consultantName={consultantName}
-                consultantLabel={consultantLabel}
-                consultantValue={consultantValue}
-                selectConsultant={selectConsultant}
-                consultantError={consultantError}
-                branchOptions={branchOptions}
-                branchValue={branchValue}
-                branchError={branchError}
-                branchLabel={branchLabel}
-                selectBranch={selectBranch}
-              ></PersonalForm>
-            </TabPane>
-          </TabContent>
-        </CardBody>
-      </Card>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {" "}
+          <Navigation
+            title="Personal Information"
+            activetab="1"
+            companionId={companionId}
+            success={success}
+            action={() => {}}
+          />
+          <Card>
+            <CardBody>
+              <TabContent activeTab={activetab}>
+                <TabPane tabId="2">
+                  <PersonalForm
+                    handleSubmit={handleSubmit}
+                    userTypeId={userTypeId}
+                    userTypes={userTypes}
+                    companionParentMenu={companionParentMenu}
+                    companionParentLabel={companionParentLabel}
+                    companionParentValue={companionParentValue}
+                    parentError={parentError}
+                    selectParentCompanion={selectParentCompanion}
+                    titleError={titleError}
+                    handleFirstNameChange={handleFirstNameChange}
+                    handleLastNameChange={handleLastNameChange}
+                    firstNameError={firstNameError}
+                    lastNameError={lastNameError}
+                    firstName={firstName}
+                    lastName={lastName}
+                    setTitleValue={setTitleValue}
+                    setTitleError={setTitleError}
+                    titleValue={titleValue}
+                    title={title}
+                    SetDate={SetDate}
+                    Dates={Dates}
+                    setPassport={setPassport}
+                    passport={passport}
+                    gender={gender}
+                    setGenderValue={setGenderValue}
+                    setGenderError={setGenderError}
+                    genderValue={genderValue}
+                    genderError={genderError}
+                    maritalStatus={maritalStatus}
+                    setMaritalStatusValue={setMaritalStatusValue}
+                    setMaritalStatusError={setMaritalStatusError}
+                    maritalStatusValue={maritalStatusValue}
+                    maritalStatusError={maritalStatusError}
+                    companionPersonalInfo={companionPersonalInfo}
+                    FileList1={FileList1}
+                    handlePreview1={handlePreview1}
+                    handleChange1={handleChange1}
+                    previewVisible1={previewVisible1}
+                    previewTitle1={previewTitle1}
+                    handleCancel1={handleCancel1}
+                    previewImage1={previewImage1}
+                    profilePicError={profilePicError}
+                    error={error}
+                    FileList2={FileList2}
+                    handlePreview2={handlePreview2}
+                    previewTitle2={previewTitle2}
+                    previewVisible2={previewVisible2}
+                    handleChange2={handleChange2}
+                    handleCancel2={handleCancel2}
+                    previewImage2={previewImage2}
+                    error2={error2}
+                    progress={progress}
+                    buttonStatus={buttonStatus}
+                    handlePhoneNumber={handlePhoneNumber}
+                    phoneNUmberError={phoneNUmberError}
+                    phoneNumber={phoneNumber}
+                    dateError={dateError}
+                    handleDate={handleDate}
+                    setDateError={setDateError}
+                    birthDate={birthDate}
+                    minDate={minDate}
+                    arrLink={arrLink}
+                    setarrLink={setarrLink}
+                    companionId={companionId}
+                    setarrLinkError={setarrLinkError}
+                    arrLinkError={arrLinkError}
+                    consultantName={consultantName}
+                    consultantLabel={consultantLabel}
+                    consultantValue={consultantValue}
+                    selectConsultant={selectConsultant}
+                    consultantError={consultantError}
+                    branchOptions={branchOptions}
+                    branchValue={branchValue}
+                    branchError={branchError}
+                    branchLabel={branchLabel}
+                    selectBranch={selectBranch}
+                  ></PersonalForm>
+                </TabPane>
+              </TabContent>
+            </CardBody>
+          </Card>
+        </>
+      )}
     </div>
   );
 };
