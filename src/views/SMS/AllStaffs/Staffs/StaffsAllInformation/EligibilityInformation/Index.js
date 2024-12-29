@@ -316,10 +316,14 @@ const StaffEligibility = () => {
   };
 
   const handleDate = (e) => {
-    if (e) {
-      setExDate(e);
-    } else {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    setExDate(e);
+    setDateError("");
+
+    const today = new Date();
+    const selectedDate = new Date(e);
+
+    if (selectedDate <= today) {
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
 
@@ -341,6 +345,12 @@ const StaffEligibility = () => {
       isFormValid = false;
       setVisaError("Visa Type is required");
     }
+
+    if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+      isFormValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
+    }
+
     if (residencyValue === 2 && !exDate) {
       isFormValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");

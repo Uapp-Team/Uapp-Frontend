@@ -162,9 +162,10 @@ const EligibilityForm = ({
                   value={exDate}
                   setValue={handleDate}
                   error={dateError}
-                  action={setDateError}
+                  // action={setDateError}
                   required={true}
                 />
+                {/* <span className="text-danger">{dateError}</span> */}
               </FormGroup>
 
               <FormGroup className="d-flex">
