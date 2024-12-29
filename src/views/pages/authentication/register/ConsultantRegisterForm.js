@@ -298,7 +298,7 @@ const ConsultantRegisterForm = () => {
               onChange={(e) => SetNameTitleFromDD(e)}
               style={{
                 height: "calc(1.5em + 1.3rem + 2px)",
-                width: "30%",
+                width: "20%",
                 borderRightStyle: "double",
                 borderTopRightRadius: "0px",
                 borderBottomRightRadius: "0px",
@@ -326,7 +326,7 @@ const ConsultantRegisterForm = () => {
               onChange={(e) => handleFirstNameChange(e)}
               style={{
                 height: "calc(1.5em + 1.3rem + 2px)",
-                width: "70%",
+                width: "80%",
                 borderLeftStyle: "none",
                 borderTopLeftRadius: "0px",
                 borderBottomLeftRadius: "0px",

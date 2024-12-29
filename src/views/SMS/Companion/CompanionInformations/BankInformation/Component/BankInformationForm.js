@@ -97,10 +97,7 @@ const BankInformationForm = ({
               <span className="text-danger">{accountNumberError}</span>
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
-              <span>
-                {" "}
-                <span className="text-danger">*</span> Sort Code
-              </span>
+              <span>Sort Code</span>
 
               <Input
                 type="text"
