@@ -127,7 +127,7 @@ const ContactInformation = () => {
     }
     if (!houseNo) {
       isValid = false;
-      setHouseNoError("Address line 1 is required");
+      setHouseNoError("Address line is required");
       // } else if (!addressLine) {
       //   setAddressLineError("Address line 2 is required");
     }
