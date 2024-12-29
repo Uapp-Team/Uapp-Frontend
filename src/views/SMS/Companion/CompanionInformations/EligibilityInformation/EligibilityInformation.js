@@ -233,10 +233,21 @@ const EligibilityInformation = () => {
       isValid = false;
       setVisaError("Visa Type is required");
     }
+
+    // if (!exDate) {
+    //   if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+    //     isValid = false;
+    //     setDateError(
+    //       "Expiry Date of Your BRP/TRP or Visa Should be future date"
+    //     );
+    //   }
+    // }
+
     if (residencyValue === 2 && new Date(exDate) <= new Date()) {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
+
     if (residencyValue === 2 && !exDate) {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
@@ -286,10 +297,14 @@ const EligibilityInformation = () => {
     );
     subData.append("brpId", brpFile ? eligibilityData?.brpId : 0);
     subData.append("cvId", cvFile ? eligibilityData?.cvId : 0);
+    subData.append(
+      "expireDate",
+      residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
+    );
 
-    if (exDate) {
-      subData.append("expireDate", exDate);
-    }
+    // if (exDate) {
+    //   subData.append("expireDate", exDate);
+    // }
     subData.append("visaType", visaTypeLabel);
     if (ValidateForm()) {
       setButtonStatus(true);

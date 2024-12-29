@@ -198,11 +198,11 @@ const EligibilityForm = ({
                   label="Expiry Date of Your BRP/TRP or Visa"
                   value={exDate}
                   setValue={handleDate}
-                  error={exDateError}
-                  action={setExDateError}
+                  error={dateError}
+                  // action={setExDateError}
                   required={true}
                 />
-                <span className="text-danger">{dateError}</span>
+                {/* <span className="text-danger">{dateError}</span> */}
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
