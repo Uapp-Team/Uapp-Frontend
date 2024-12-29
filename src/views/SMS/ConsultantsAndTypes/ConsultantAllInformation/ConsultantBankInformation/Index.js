@@ -204,7 +204,7 @@ const ConsultantBankDetails = () => {
     //   setShortCodeError("Sort Code is required");
     // }
 
-    if (shortCode?.length > 6) {
+    if (shortCode?.length > 8) {
       isValid = false;
       setShortCodeError("Sort Code is not more than 6 digit");
     }
