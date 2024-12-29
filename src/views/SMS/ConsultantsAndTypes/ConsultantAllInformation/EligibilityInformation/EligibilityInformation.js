@@ -308,7 +308,6 @@ const EligibilityInformation = () => {
 
   const ValidateForm = () => {
     var isValid = true;
-    console.log(uniCountryValue, uniCountryValue2, "value");
     if (uniCountryValue === 0) {
       isValid = false;
       setErrorC("Country of nationality  is required");
