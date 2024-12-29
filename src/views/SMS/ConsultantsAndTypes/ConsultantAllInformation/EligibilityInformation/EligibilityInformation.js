@@ -76,7 +76,9 @@ const EligibilityInformation = () => {
           : "Select Country of Citizenship"
       );
 
-      setUniCountryValue(res !== null ? res?.countryOfCitizenShip?.id : 0);
+      setUniCountryValue(
+        res?.countryOfCitizenShip?.id ? res?.countryOfCitizenShip?.id : 0
+      );
 
       setUniCountryLabel2(
         res?.countryOfResidence?.name
@@ -84,7 +86,9 @@ const EligibilityInformation = () => {
           : "Select Residence"
       );
 
-      setUniCountryValue2(res !== null ? res?.countryOfResidence?.id : 0);
+      setUniCountryValue2(
+        res?.countryOfResidence?.id ? res?.countryOfResidence?.id : 0
+      );
 
       setResidencyLabel(
         res !== null ? res?.residencyStatus?.name : "Select Residency Status"
@@ -304,6 +308,7 @@ const EligibilityInformation = () => {
 
   const ValidateForm = () => {
     var isValid = true;
+    console.log(uniCountryValue, uniCountryValue2, "value");
     if (uniCountryValue === 0) {
       isValid = false;
       setErrorC("Country of nationality  is required");
