@@ -177,8 +177,8 @@ const ConsultantBankDetails = () => {
 
     setShortCode(formattedInput);
 
-    if (formattedInput.replace(/-/g, "").length > 8) {
-      setShortCodeError("Short Code cannot have more than 6 digits");
+    if (formattedInput.replace(/-/g, "").length > 6) {
+      setShortCodeError("Sort Code cannot have more than 6 digits");
     } else {
       setShortCodeError("");
     }

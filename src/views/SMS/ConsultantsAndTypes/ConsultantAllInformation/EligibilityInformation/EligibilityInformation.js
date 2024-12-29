@@ -70,13 +70,15 @@ const EligibilityInformation = () => {
     ).then((res) => {
       setEligibilityData(res);
       setUniCountryLabel(
-        res !== null
+        res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
           : "Select Country of Citizenship"
       );
       setUniCountryValue(res !== null ? res?.countryOfCitizenShip?.id : 0);
       setUniCountryLabel2(
-        res !== null ? res?.countryOfResidence?.name : "Select Residence"
+        res?.countryOfResidence?.name
+          ? res?.countryOfResidence?.name
+          : "Select Residence"
       );
       setUniCountryValue2(res !== null ? res?.countryOfResidence?.id : 0);
       setResidencyLabel(

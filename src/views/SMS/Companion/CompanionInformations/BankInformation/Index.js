@@ -169,8 +169,8 @@ const ConsultantBankDetails = () => {
     let formattedInput = input.match(/.{1,2}/g)?.join("-") || "";
 
     setShortCode(formattedInput);
-    if (input === "") {
-      setShortCodeError("Short code is required");
+    if (formattedInput.replace(/-/g, "").length > 6) {
+      setShortCodeError("Sort Code cannot have more than 6 digits");
     } else {
       setShortCodeError("");
     }
@@ -191,9 +191,9 @@ const ConsultantBankDetails = () => {
       isValid = false;
       setAccountNumberError("Account number is required");
     }
-    if (!shortCode) {
+    if (shortCode.length > 8) {
       isValid = false;
-      setShortCodeError("Short code is required");
+      setShortCodeError("Sort Code is not more than 6 digit");
     }
     // if (shortCode?.length > 8) {
     //   isValid = false;
