@@ -90,6 +90,8 @@ const PersonalForm = ({
   branchLabel,
   selectBranch,
   setDateError,
+  passportError,
+  handlePassportChange,
 }) => {
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -320,16 +322,21 @@ const PersonalForm = ({
         </FormGroup>
         <FormGroup row>
           <Col lg="6" md="8">
-            <span>Passport/ID</span>
+            <span>
+              <span className="text-danger">*</span>Passport/ID
+            </span>
 
             <Input
               type="text"
               name="passportId"
               id="passportId"
               placeholder="Enter Passport Number"
-              onChange={(e) => setPassport(e.target.value)}
-              defaultValue={passport}
+              onChange={(e) => {
+                handlePassportChange(e);
+              }}
+              value={passport}
             />
+            <span className="text-danger">{passportError}</span>
           </Col>
         </FormGroup>
         <FormGroup row>
