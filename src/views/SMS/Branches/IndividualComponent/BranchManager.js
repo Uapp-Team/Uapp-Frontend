@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Modal, ModalBody, Row } from "reactstrap";
 import profileImage from "../../../../assets/img/profile/user-uploads/user-07.jpg";
-import get from "../../../../helpers/get";
-import { permissionList } from "../../../../constants/AuthorizationConstant";
-import AddButton from "../../../../components/buttons/AddButton";
-import { Link } from "react-router-dom/cjs/react-router-dom";
 import { rootUrl } from "../../../../constants/constants";
+import get from "../../../../helpers/get";
 import ChangeManager from "../ChangeManager/ChangeManager";
 
 const BranchManager = ({ id }) => {
@@ -70,7 +67,8 @@ const BranchManager = ({ id }) => {
                 </li>
                 {!branchManager?.phone ? null : (
                   <li>
-                    <i className="fas fa-phone pr-2"></i> {branchManager?.phone}
+                    <i className="fas fa-phone pr-2"></i> +
+                    {branchManager?.phone}
                   </li>
                 )}
               </ul>

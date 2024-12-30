@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 import { Col, Row } from "reactstrap";
 import profileImage from "../../../../assets/img/profile/user-uploads/user-07.jpg";
-import get from "../../../../helpers/get";
-import { permissionList } from "../../../../constants/AuthorizationConstant";
 import AddButton from "../../../../components/buttons/AddButton";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 import { rootUrl } from "../../../../constants/constants";
+import get from "../../../../helpers/get";
 
 const BranchAdmin = ({ id }) => {
   const [branchManager, setBranchManager] = useState({});
@@ -74,7 +74,7 @@ const BranchAdmin = ({ id }) => {
                 {branchManager?.consultant?.phoneNumber === null ? null : (
                   <li>
                     {" "}
-                    <i className="fas fa-phone pr-2"></i>{" "}
+                    <i className="fas fa-phone pr-2"></i> +
                     {branchManager?.phoneNumber}
                   </li>
                 )}

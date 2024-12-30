@@ -1,25 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router";
-import { useParams } from "react-router";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { useHistory, useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import get from "../../../../../helpers/get";
-import ReactToPrint from "react-to-print";
+import { Card, CardBody, Col, Row } from "reactstrap";
+import editbtn from "../../../../../assets/img/editbtn.png";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
 import Loader from "../../../Search/Loader/Loader";
-import GeneralForm from "./Component/GeneralForm";
 import ContactForm from "./Component/ContactForm";
-import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
-import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import PersonalForm from "./Component/PersonalForm";
 import EligibilityForm from "./Component/EligibilityForm";
-import { dateFormate } from "../../../../../components/date/calenderFormate";
 import EmergencyContactForm from "./Component/EmergencyContactForm";
-import { Link } from "react-router-dom";
-import editbtn from "../../../../../assets/img/editbtn.png";
+import GeneralForm from "./Component/GeneralForm";
+import PersonalForm from "./Component/PersonalForm";
+import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
+import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
 const EmployeeProfile = ({ userId }) => {
@@ -441,9 +438,7 @@ const EmployeeProfile = ({ userId }) => {
                                   color: "#d4d4d4",
                                 }}
                               >
-                                {dateFormate(
-                                  employeeDetails?.uappRegistrationDate
-                                )}
+                                {employeeDetails?.uappRegistrationDate}
                               </span>
                             </div>
                           </Col>

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import post from "../../../../../helpers/post";
-import BankInformationForm from "./Component/BankInformationForm";
-import BankDetailsCard from "./Component/BankDetailsCard";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import { Card, CardBody } from "reactstrap";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
-import Navigation from "../NavigationAndRegistration/Navigation";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import post from "../../../../../helpers/post";
 import Uget from "../../../../../helpers/Uget";
 import Uremove from "../../../../../helpers/Uremove";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import BankDetailsCard from "./Component/BankDetailsCard";
+import BankInformationForm from "./Component/BankInformationForm";
 
 const ConsultantBankDetails = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -48,6 +47,11 @@ const ConsultantBankDetails = () => {
     });
   }, [success, companionId]);
 
+  const formatShortCode = (sortCode) => {
+    const digitsOnly = sortCode.replace(/\D/g, "");
+    return digitsOnly.match(/.{1,2}/g)?.join("-") || "";
+  };
+
   const toggleDanger = (p) => {
     setDeleteData(p);
     setDeleteModal(true);
@@ -73,7 +77,7 @@ const ConsultantBankDetails = () => {
     setAccountName(data?.accountName);
     setAccountNumber(data?.accountNumber);
     setBankName(data?.bankName);
-    setShortCode(data?.sortCode);
+    setShortCode(formatShortCode(data?.sortCode ? data?.sortCode : ""));
     setIsDefault(data?.isDefault);
   };
 
@@ -143,6 +147,7 @@ const ConsultantBankDetails = () => {
   };
   const handleAccountName = (e) => {
     let data = e.target.value.trimStart();
+
     setAccountName(data);
     if (data === "") {
       setAccountNameError("Account Holder name is required");
@@ -160,10 +165,12 @@ const ConsultantBankDetails = () => {
     }
   };
   const handleShortCode = (e) => {
-    let data = e.target.value.trimStart();
-    setShortCode(data);
-    if (data === "") {
-      setShortCodeError("Short code is required");
+    let input = e.target.value.replace(/\D/g, "");
+    let formattedInput = input.match(/.{1,2}/g)?.join("-") || "";
+
+    setShortCode(formattedInput);
+    if (formattedInput.replace(/-/g, "").length > 6) {
+      setShortCodeError("Sort Code cannot have more than 6 digits");
     } else {
       setShortCodeError("");
     }
@@ -184,10 +191,14 @@ const ConsultantBankDetails = () => {
       isValid = false;
       setAccountNumberError("Account number is required");
     }
-    if (!shortCode) {
+    if (shortCode.length > 8) {
       isValid = false;
-      setShortCodeError("Short code is required");
+      setShortCodeError("Sort Code is not more than 6 digit");
     }
+    // if (shortCode?.length > 8) {
+    //   isValid = false;
+    //   setShortCodeError("Short code required maximum 6 digit");
+    // }
     return isValid;
   };
 
@@ -226,6 +237,7 @@ const ConsultantBankDetails = () => {
         activetab="5"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>

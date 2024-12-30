@@ -8,10 +8,9 @@ import post from "../../../../../../helpers/post";
 import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
 
 import moment from "moment";
-import EligibilityForm from "./Component/EligibilityForm";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
-import { currentDate } from "../../../../../../components/date/calenderFormate";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import EligibilityForm from "./Component/EligibilityForm";
 
 const StaffEligibility = () => {
   const activetab = "5";
@@ -40,26 +39,31 @@ const StaffEligibility = () => {
   const [previewVisible3, setPreviewVisible3] = useState(false);
   const [previewImage3, setPreviewImage3] = useState("");
   const [previewTitle3, setPreviewTitle3] = useState("");
-  const [FileList3, setFileList3] = useState([]);
-  const [idPassportError, setIdPassportError] = useState(false);
+  const [FileList3, setFileList3] = useState(null);
+  const [idPassportAttachment, setIdPassportAttachment] = useState(null);
+  const [idPassportError, setIdPassportError] = useState("");
 
   // Proof of Address States
   const [previewVisible4, setPreviewVisible4] = useState(false);
   const [previewImage4, setPreviewImage4] = useState("");
   const [previewTitle4, setPreviewTitle4] = useState("");
-  const [FileList4, setFileList4] = useState([]);
-  const [proofOfAddressError, setProofOfAddressError] = useState(false);
+  const [FileList4, setFileList4] = useState(null);
+  const [proofOfAddressAttachment, setProofOfAddressAttachment] =
+    useState(null);
+  const [cvAttachment, setCvAttachment] = useState(null);
+  const [proofOfAddressError, setProofOfAddressError] = useState("");
 
   // Proof of Right to Work States
   const [previewVisible5, setPreviewVisible5] = useState(false);
   const [previewImage5, setPreviewImage5] = useState("");
   const [previewTitle5, setPreviewTitle5] = useState("");
-  const [FileList5, setFileList5] = useState([]);
+  const [FileList5, setFileList5] = useState(null);
+  const [brpAttachment, setBrpAttachment] = useState(null);
   const [proofOfRightError, setProofOfRightError] = useState("");
   const [previewVisible6, setPreviewVisible6] = useState(false);
   const [previewImage6, setPreviewImage6] = useState("");
   const [previewTitle6, setPreviewTitle6] = useState("");
-  const [FileList6, setFileList6] = useState([]);
+  const [FileList6, setFileList6] = useState(null);
   const [cvError, setCvError] = useState("");
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
@@ -69,6 +73,7 @@ const StaffEligibility = () => {
   const [visa, setVisa] = useState("");
   const [visaError, setVisaError] = useState("");
   const [dateError, setDateError] = useState("");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -81,9 +86,15 @@ const StaffEligibility = () => {
     });
 
     get(`EmployeeEligibility/GetEmployeeEligibility/${staffId}`).then((res) => {
-      //
-      console.log("eligibilitydata", res);
       setEligibilityData(res);
+      setIdPassportAttachment(
+        res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
+      );
+      setProofOfAddressAttachment(
+        res?.proofOfAddress?.fileUrl ? res?.proofOfAddress?.fileUrl : null
+      );
+      setBrpAttachment(res?.brp?.fileUrl ? res?.brp?.fileUrl : null);
+      setCvAttachment(res?.cv?.fileUrl ? res?.cv?.fileUrl : null);
       setUniCountryLabel(
         res !== null
           ? res?.countryOfCitizenShip?.name
@@ -183,7 +194,7 @@ const StaffEligibility = () => {
 
   const handleChange3 = ({ fileList }) => {
     setFileList3(fileList);
-    setIdPassportError(false);
+    setIdPassportError("");
   };
 
   // Id or Passport Code End
@@ -217,7 +228,7 @@ const StaffEligibility = () => {
 
   const handleChange4 = ({ fileList }) => {
     setFileList4(fileList);
-    setProofOfAddressError(false);
+    setProofOfAddressError("");
   };
 
   // Proof of Address Code End
@@ -305,10 +316,14 @@ const StaffEligibility = () => {
   };
 
   const handleDate = (e) => {
-    if (e) {
-      setExDate(e);
-    } else {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    setExDate(e);
+    setDateError("");
+
+    const today = new Date();
+    const selectedDate = new Date(e);
+
+    if (selectedDate <= today) {
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
 
@@ -320,7 +335,7 @@ const StaffEligibility = () => {
     }
     if (uniCountryValue2 === 0) {
       isFormValid = false;
-      setErrorC2("Residence is required");
+      setErrorC2("Country of Residence is required");
     }
     if (uniCountryValue !== uniCountryValue2 && residencyValue === 0) {
       isFormValid = false;
@@ -330,18 +345,33 @@ const StaffEligibility = () => {
       isFormValid = false;
       setVisaError("Visa Type is required");
     }
+
+    if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+      isFormValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
+    }
+
     if (residencyValue === 2 && !exDate) {
       isFormValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
 
-    if (
-      residencyValue === 2 &&
-      FileList3.length === 0 &&
-      eligibilityData?.idOrPassport?.fileUrl == null
-    ) {
+    if (FileList3 === null && idPassportAttachment === null) {
       isFormValid = false;
-      setIdPassportError(true);
+      setIdPassportError("Id or Passport is required");
+    }
+    if (FileList4 === null && proofOfAddressAttachment === null) {
+      isFormValid = false;
+      setProofOfAddressError("Proof of Address file is required");
+    }
+    if (FileList5 === null && brpAttachment === null) {
+      isFormValid = false;
+      setProofOfRightError("File is required");
+    }
+
+    if (FileList6 === null && cvAttachment === null) {
+      isFormValid = false;
+      setCvError("CV is required");
     }
 
     return isFormValid;
@@ -352,29 +382,19 @@ const StaffEligibility = () => {
 
     const subData = new FormData(event.target);
 
-    subData.append("expireDate", exDate);
+    // if (exDate) {
+    //   subData.append("expireDate", exDate);
+    // }
 
     subData.append(
-      "idOrPassportFile",
-      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
+      "expireDate",
+      residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
     );
-    subData.append(
-      "proofOfAddressFile",
-      FileList4.length === 0 ? null : FileList4[0]?.originFileObj
-    );
-    subData.append(
-      "BRPFile",
-      FileList5.length === 0 ? null : FileList5[0]?.originFileObj
-    );
-    subData.append(
-      "CvFile",
-      FileList6.length === 0 ? null : FileList6[0]?.originFileObj
-    );
-
-    for (var value of subData) {
-      console.log(value);
-    }
-
+    // subData.append("expireDate", exDate);
+    subData.append("idOrPassportFile", FileList3);
+    subData.append("proofOfAddressFile", FileList4);
+    subData.append("BRPFile", FileList5);
+    subData.append("CvFile", FileList6);
     var formIsValid = validateRegisterForm(subData);
 
     if (formIsValid) {
@@ -390,10 +410,11 @@ const StaffEligibility = () => {
             autoDismiss: true,
           });
           setSuccess(!success);
-          setFileList3([]);
-          setFileList4([]);
-          setFileList5([]);
-          setFileList6([]);
+          setFileList3(null);
+          setFileList4(null);
+          setFileList5(null);
+          setFileList6(null);
+          history.push("/staffList");
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -425,7 +446,12 @@ const StaffEligibility = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation activetab={activetab} staffId={staffId} />
+      <StaffNavigation
+        activetab={activetab}
+        staffId={staffId}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>
@@ -455,6 +481,9 @@ const StaffEligibility = () => {
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
                 FileList3={FileList3}
+                setFileList3={setFileList3}
+                idPassportAttachment={idPassportAttachment}
+                setIdPassportAttachment={setIdPassportAttachment}
                 handlePreview3={handlePreview3}
                 handleChange3={handleChange3}
                 previewVisible3={previewVisible3}
@@ -462,7 +491,10 @@ const StaffEligibility = () => {
                 handleCancel3={handleCancel3}
                 previewImage3={previewImage3}
                 idPassportError={idPassportError}
+                setIdPassportError={setIdPassportError}
                 FileList4={FileList4}
+                setFileList4={setFileList4}
+                proofOfAddressAttachment={proofOfAddressAttachment}
                 handlePreview4={handlePreview4}
                 handleChange4={handleChange4}
                 previewVisible4={previewVisible4}
@@ -470,7 +502,10 @@ const StaffEligibility = () => {
                 handleCancel4={handleCancel4}
                 previewImage4={previewImage4}
                 proofOfAddressError={proofOfAddressError}
+                setProofOfAddressError={setProofOfAddressError}
                 FileList5={FileList5}
+                setFileList5={setFileList5}
+                brpAttachment={brpAttachment}
                 handlePreview5={handlePreview5}
                 handleChange5={handleChange5}
                 previewVisible5={previewVisible5}
@@ -478,13 +513,17 @@ const StaffEligibility = () => {
                 handleCancel5={handleCancel5}
                 previewImage5={previewImage5}
                 proofOfRightError={proofOfRightError}
+                setProofOfRightError={setProofOfRightError}
                 FileList6={FileList6}
+                setFileList6={setFileList6}
+                cvAttachment={cvAttachment}
                 handlePreview6={handlePreview6}
                 handleChange6={handleChange6}
                 previewVisible6={previewVisible6}
                 previewTitle6={previewTitle6}
                 handleCancel6={handleCancel6}
                 cvError={cvError}
+                setCvError={setCvError}
                 progress={progress}
                 buttonStatus={buttonStatus}
                 goBackward={goBackward}

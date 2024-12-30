@@ -116,15 +116,15 @@ const LiveIntakeDropdownAndSearch = ({
               />
             </Col>
             <Col lg="2" md="2" sm="2" xs="12" className="mb-2">
-              <DefaultDropdownU
+              {/* <DefaultDropdownU
                 label={deliveryPatternLabel}
                 setLabel={setDeliveryPatternLabel}
                 value={deliveryPatternValue}
                 setValue={setDeliveryPatternValue}
-                url={`DeliveryPatternDD/GetByUniversityId?universityId=${universityValue}`}
+                url="DeliveryPatternDD/Index"
                 className="mb-3"
-              />
-              {/* <Filter
+              /> */}
+              <Filter
                 data={deliveryPatternDD}
                 label={deliveryPatternLabel}
                 setLabel={setDeliveryPatternLabel}
@@ -132,7 +132,7 @@ const LiveIntakeDropdownAndSearch = ({
                 setValue={setDeliveryPatternValue}
                 action={() => {}}
                 isDisabled={false}
-              /> */}
+              />
             </Col>
           </Row>
           <Row className="">

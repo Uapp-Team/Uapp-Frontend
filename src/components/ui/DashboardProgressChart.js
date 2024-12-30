@@ -17,6 +17,7 @@ const DashboardProgressChart = () => {
   const [yearLable, setYearLable] = useState("Year");
   const [yearValue, setYearValue] = useState(0);
   const [date, setDate] = useState(null);
+  console.log(date, "data");
 
   useEffect(() => {
     get(`AccountIntakeDD/index`).then((res) => {

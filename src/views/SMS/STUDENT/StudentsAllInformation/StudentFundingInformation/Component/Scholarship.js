@@ -42,7 +42,7 @@ const Scholarship = ({ studentid, success, setSuccess }) => {
     const subData = new FormData(event.target);
     // setButtonStatus(true);
     subData.append("scholarshipFile", FileList1);
-    subData.append("attachement", attachment);
+    subData.append("attachement", attachment ? attachment : "");
 
     if (scholarshipFunding?.id) {
       setProgress(true);

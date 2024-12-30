@@ -329,6 +329,7 @@ const ContactInformation = () => {
         activetab="3"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>
@@ -349,14 +350,14 @@ const ContactInformation = () => {
                 <FormGroup row>
                   <Col lg="6" md="8">
                     <span>
-                      <span className="text-danger">*</span> Person Name
+                      <span className="text-danger">*</span> Full Name
                     </span>
 
                     <Input
                       type="text"
                       name="personName"
                       id="personName"
-                      placeholder="Enter Reference Name"
+                      placeholder="Enter Full Name"
                       onChange={(e) => {
                         handleReferenceName(e);
                       }}

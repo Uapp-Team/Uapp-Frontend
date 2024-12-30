@@ -196,7 +196,7 @@ const EligibilityForm = ({
                   value={exDate}
                   setValue={handleDate}
                   error={dateError}
-                  action={setDateError}
+                  // action={setDateError}
                   required={true}
                 />
               </FormGroup>

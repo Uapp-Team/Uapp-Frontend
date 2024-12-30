@@ -69,16 +69,27 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
+
       setUniCountryLabel(
-        res !== null
+        res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
           : "Select Country of Citizenship"
       );
-      setUniCountryValue(res !== null ? res?.countryOfCitizenShip?.id : 0);
-      setUniCountryLabel2(
-        res !== null ? res?.countryOfResidence?.name : "Select Residence"
+
+      setUniCountryValue(
+        res?.countryOfCitizenShip?.id ? res?.countryOfCitizenShip?.id : 0
       );
-      setUniCountryValue2(res !== null ? res?.countryOfResidence?.id : 0);
+
+      setUniCountryLabel2(
+        res?.countryOfResidence?.name
+          ? res?.countryOfResidence?.name
+          : "Select Residence"
+      );
+
+      setUniCountryValue2(
+        res?.countryOfResidence?.id ? res?.countryOfResidence?.id : 0
+      );
+
       setResidencyLabel(
         res !== null ? res?.residencyStatus?.name : "Select Residency Status"
       );
@@ -284,10 +295,14 @@ const EligibilityInformation = () => {
     }
   };
   const handleDate = (e) => {
-    if (e) {
-      setExDate(e);
-    } else {
-      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    setExDate(e);
+    setDateError("");
+
+    const today = new Date();
+    const selectedDate = new Date(e);
+
+    if (selectedDate <= today) {
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
 
@@ -317,6 +332,12 @@ const EligibilityInformation = () => {
       isValid = false;
       setVisaError("Visa Type is required");
     }
+
+    if (residencyValue === 2 && new Date(exDate) <= new Date()) {
+      isValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
+    }
+
     if (residencyValue === 2 && !exDate) {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
@@ -362,9 +383,14 @@ const EligibilityInformation = () => {
       "CvFile",
       FileList6.length === 0 ? null : FileList6[0]?.originFileObj
     );
-    if (exDate) {
-      subData.append("expireDate", exDate);
-    }
+
+    subData.append(
+      "expireDate",
+      residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
+    );
+    // if (exDate) {
+    //   subData.append("expireDate", exDate);
+    // }
 
     if (ValidateForm()) {
       setButtonStatus(true);

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Card, CardBody, Form, TabContent, TabPane } from "reactstrap";
 import { useToasts } from "react-toast-notifications";
-import Navigation from "../NavigationAndRegistration/Navigation";
-import ConsultantContactForm from "./Component/ConsultantContactForm";
+import { Card, CardBody, Form, TabContent, TabPane } from "reactstrap";
 import get from "../../../../../helpers/get";
 import post from "../../../../../helpers/post";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import Uget from "../../../../../helpers/Uget";
+import Navigation from "../NavigationAndRegistration/Navigation";
+import ConsultantContactForm from "./Component/ConsultantContactForm";
 
 const ContactInformation = () => {
   const activetab = "3";
@@ -21,7 +19,7 @@ const ContactInformation = () => {
   const [success, setSuccess] = useState(false);
   const [houseNo, setHouseNo] = useState("");
   const [houseNoError, setHouseNoError] = useState("");
-  const [addressLine, setAddressLine] = useState("");
+  const [addressLine, setAddressLine] = useState(null);
   // const [addressLineError, setAddressLineError] = useState("");
   const [cityN, setCityN] = useState("");
   const [cityError, setCityError] = useState("");
@@ -57,9 +55,7 @@ const ContactInformation = () => {
         // );
         setphoneNumber(res?.data?.cellPhoneNumber);
         setHouseNo(res?.data?.houseNo !== null ? res?.data?.houseNo : null);
-        setAddressLine(
-          res?.data?.addressLine !== null ? res?.data?.addressLine : ""
-        );
+        setAddressLine(res?.data?.addressLine ? res?.data?.addressLine : null);
         setCityN(res?.data?.city !== null ? res?.data?.city : null);
         setState(res?.data?.state !== null ? res?.data?.state : "");
         setZipCode(res?.data?.zipCode !== null ? res?.data?.zipCode : null);
@@ -145,7 +141,7 @@ const ContactInformation = () => {
     const subData = new FormData(event.target);
 
     subData.append("houseNo", houseNo);
-    subData.append("addressLine", addressLine);
+    subData.append("addressLine", addressLine === null ? "" : addressLine);
     subData.append("city", cityN);
     subData.append("state", state);
     subData.append("zipCode", zipCode);
@@ -180,6 +176,7 @@ const ContactInformation = () => {
         activetab="2"
         companionId={companionId}
         success={success}
+        action={() => {}}
       />
       <Card>
         <CardBody>
