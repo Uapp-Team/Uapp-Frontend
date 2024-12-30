@@ -481,7 +481,7 @@ const PersonalInformation = () => {
     if (expireDate === null) {
       isFormValid = false;
       setexpireDateError("Expiry Date is required ");
-      if (!firstErrorField) firstErrorField = "expireDate";
+      if (!firstErrorField) firstErrorField = "expiresDate";
     }
 
     if (genderValue === 0) {
@@ -876,8 +876,8 @@ const PersonalInformation = () => {
                           // action={setexpireDateError}
                           required={true}
                           value={expireDate}
-                          name="expireDate"
-                          id="expireDate"
+                          name="expiresDate"
+                          id="expiresDate"
                         />
                       </Col>
                     </FormGroup>
