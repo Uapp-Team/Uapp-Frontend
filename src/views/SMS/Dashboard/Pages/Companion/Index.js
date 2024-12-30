@@ -243,7 +243,7 @@ const Companion = () => {
                           Refer a student, Earn Unlimited
                         </h1>
                         <p className="fs-13px ">
-                          Refer a friend or family and receive up to £500!
+                          Refer a friend or family and receive up to £100!
                         </p>
                         <button
                           onClick={() => setModalOpen(true)}
@@ -265,7 +265,7 @@ const Companion = () => {
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
         {/* <ModalHeader></ModalHeader> */}
         <ModalBody>
-          <h4 className="mb-3">Send Invitation to email</h4>
+          <h4 className="mb-3">Send an invitation to email</h4>
           <Form onSubmit={handleSubmit}>
             <input
               type="hidden"

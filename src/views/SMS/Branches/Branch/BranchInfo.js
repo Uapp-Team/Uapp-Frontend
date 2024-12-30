@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "reactstrap";
+import branch from "../../../../assets/icon/branch.svg";
 import get from "../../../../helpers/get";
 import Loader from "../../Search/Loader/Loader";
-import branch from "../../../../assets/icon/branch.svg";
 
 const BranchInfo = ({ id }) => {
   const [branchInfo, setBranchInfo] = useState({});
@@ -52,7 +52,7 @@ const BranchInfo = ({ id }) => {
                   </li>
                   {branchInfo?.phoneNumber === null ? null : (
                     <li>
-                      <i className="fas fa-phone pr-2"></i>
+                      <i className="fas fa-phone pr-2"></i>+
                       {branchInfo?.phoneNumber}
                     </li>
                   )}

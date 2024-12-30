@@ -1,8 +1,6 @@
 import React from "react";
 import { Card, Table } from "reactstrap";
 
-import { Link } from "react-router-dom";
-
 const EmergencyContactForm = ({ emergencyInfo }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
@@ -72,7 +70,7 @@ const EmergencyContactForm = ({ emergencyInfo }) => {
                     <span>{emergencyInfo?.state}</span>
                   </li>
                 </td>
-                <td className="border-0">{emergencyInfo?.phoneNumber}</td>
+                <td className="border-0">+{emergencyInfo?.phoneNumber}</td>
                 <td className="border-0">{emergencyInfo?.emailAddress}</td>
               </tr>
             </tbody>

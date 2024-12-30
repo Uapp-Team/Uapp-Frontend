@@ -20,7 +20,7 @@ const ContactInformation = () => {
   const [success, setSuccess] = useState(false);
   const [houseNo, setHouseNo] = useState("");
   const [houseNoError, setHouseNoError] = useState("");
-  const [addressLine, setAddressLine] = useState("");
+  const [addressLine, setAddressLine] = useState(null);
   // const [addressLineError, setAddressLineError] = useState("");
   const [cityN, setCityN] = useState("");
   const [cityError, setCityError] = useState("");
@@ -56,7 +56,7 @@ const ContactInformation = () => {
         // );
         setphoneNumber(res?.cellPhoneNumber);
         setHouseNo(res?.houseNo !== null ? res?.houseNo : null);
-        setAddressLine(res?.addressLine !== null ? res?.addressLine : "");
+        setAddressLine(res?.addressLine ? res?.addressLine : null);
         setCityN(res?.city !== null ? res?.city : null);
         setState(res?.state !== null ? res?.state : "");
         setZipCode(res?.zipCode !== null ? res?.zipCode : null);
@@ -142,7 +142,7 @@ const ContactInformation = () => {
     const subData = new FormData(event.target);
     subData.append("cellPhoneNumber", phoneNumber);
     subData.append("houseNo", houseNo);
-    subData.append("addressLine", addressLine);
+    subData.append("addressLine", addressLine === null ? "" : addressLine);
     subData.append("city", cityN);
     subData.append("state", state);
     subData.append("zipCode", zipCode);

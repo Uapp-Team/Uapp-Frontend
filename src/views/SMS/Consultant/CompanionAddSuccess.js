@@ -35,7 +35,7 @@ const CompanionAddSuccess = () => {
       <Card>
         <div className="p-3">
           <h2>Success</h2>
-          <p>Please notify the new companion to complete his / her profile!</p>
+          <p>Kindly inform the new companion to complete their profile</p>
         </div>
       </Card>
     </div>

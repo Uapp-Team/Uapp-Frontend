@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Col, Form, FormGroup, Input, Row, Label } from "reactstrap";
+import React from "react";
+import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
@@ -96,10 +96,7 @@ const BankInformationForm = ({
               <span className="text-danger">{accountNumberError}</span>
             </FormGroup>
             <FormGroup className="has-icon-left position-relative">
-              <span>
-                {" "}
-                <span className="text-danger">*</span> Sort Code
-              </span>
+              <span> Sort Code</span>
 
               <Input
                 type="text"

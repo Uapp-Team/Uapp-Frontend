@@ -1,15 +1,14 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, TabContent, TabPane } from "reactstrap";
-import get from "../../../../../../helpers/get";
-import put from "../../../../../../helpers/put";
-import moment from "moment";
-import PersonalInformationForm from "./Component/PersonalInformationForm";
-import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
-import { currentDate } from "../../../../../../components/date/calenderFormate";
+import get from "../../../../../../helpers/get";
+import put from "../../../../../../helpers/put";
+import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
+import PersonalInformationForm from "./Component/PersonalInformationForm";
 
 const StaffPersonalInformation = () => {
   // Profile Image States
@@ -42,10 +41,12 @@ const StaffPersonalInformation = () => {
   const [valid, setValid] = useState(true);
   const [consPersonalInfo, setConsPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState(false);
   const { staffId } = useParams();
   const history = useHistory();
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("MaritalStatusDD/Index").then((res) => {
@@ -225,6 +226,11 @@ const StaffPersonalInformation = () => {
         SetDateError("Birth date is required");
       }
 
+      if (passport === null || passport === "") {
+        isFormValid = false;
+        setPassportError(true);
+      }
+
       if (!phone) {
         isFormValid = false;
         setPhoneError("Phone number is required");
@@ -294,7 +300,12 @@ const StaffPersonalInformation = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation staffId={staffId} activetab={activetab} />
+      <StaffNavigation
+        staffId={staffId}
+        activetab={activetab}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>
@@ -310,6 +321,8 @@ const StaffPersonalInformation = () => {
                 setDateError={SetDateError}
                 setPassport={setPassport}
                 passport={passport}
+                passportError={passportError}
+                setPassportError={setPassportError}
                 gender={gender}
                 setGenderValue={setGenderValue}
                 setGenderError={setGenderError}

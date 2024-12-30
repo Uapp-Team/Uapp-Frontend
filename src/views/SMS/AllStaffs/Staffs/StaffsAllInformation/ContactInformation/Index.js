@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Card, CardBody, Form, TabContent, TabPane } from "reactstrap";
-import get from "../../../../../../helpers/get";
-import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
-import post from "../../../../../../helpers/post";
-import ContactInformationForm from "./Component/ContactInformationForm";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import get from "../../../../../../helpers/get";
+import post from "../../../../../../helpers/post";
+import StaffNavigation from "../NavigationAndRegister/StaffNavigation";
+import ContactInformationForm from "./Component/ContactInformationForm";
 
 const StaffContactInformation = () => {
   const { staffId } = useParams();
@@ -32,6 +32,7 @@ const StaffContactInformation = () => {
   const [addressData, setAddressData] = useState({});
   const { addToast } = useToasts();
   const [phoneNumber, setphoneNumber] = useState("");
+  const [action, setAction] = useState({});
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -176,7 +177,12 @@ const StaffContactInformation = () => {
         path={`/staffList`}
       />
 
-      <StaffNavigation activetab={activetab} staffId={staffId} />
+      <StaffNavigation
+        activetab={activetab}
+        staffId={staffId}
+        success={success}
+        action={setAction}
+      />
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>

@@ -26,7 +26,7 @@ const CountingCards = ({ id, count, setCount }) => {
           </Col>
           <Col lg={4} sm={6} className="pb-4">
             <DashboardCount
-              title="Responsed"
+              title="Responded"
               value={count?.responsed}
               bgColor="#E8FAF5"
               borderColor="#5B9A8B"
@@ -35,7 +35,7 @@ const CountingCards = ({ id, count, setCount }) => {
           </Col>
           <Col lg={4} sm={6} className="pb-4">
             <DashboardCount
-              title="In Process"
+              title="Total Application"
               value={count?.inProgress}
               bgColor="#FBF5E8"
               borderColor="#FFBA08"
@@ -44,7 +44,7 @@ const CountingCards = ({ id, count, setCount }) => {
           </Col>
           <Col lg={4} sm={6} className="pb-4">
             <DashboardCount
-              title="Processed"
+              title="Registered"
               value={count?.processed}
               bgColor="#F0FFE0"
               borderColor="#70E000"

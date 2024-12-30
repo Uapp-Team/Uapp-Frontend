@@ -315,6 +315,7 @@ const PersonalInformation = () => {
       setDateError("Date of birth is required");
     }
   };
+
   const handlePassport = (e) => {
     setPassport(e.target.value);
     if (e.target.value === "") {
@@ -1065,7 +1066,7 @@ const PersonalInformation = () => {
 
                         {nationalityError && (
                           <span className="text-danger">
-                            Nationality is required
+                            Country Nationality is required
                           </span>
                         )}
                       </Col>
