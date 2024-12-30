@@ -38,8 +38,8 @@ const DMYPicker = ({
         }}
         format="DD/MM/YYYY"
         placeholder="dd/mm/yyyy"
-        // name={name}
-        // id={name}
+        name={name}
+        id={name}
       />
       <span className="text-danger">{error}</span>
     </>
