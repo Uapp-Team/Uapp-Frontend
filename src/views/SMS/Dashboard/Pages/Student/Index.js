@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import vector from "../../../../../assets/img/Vector.png";
-import banner from "../../../../../assets/img/banner.svg";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import { Link, useHistory } from "react-router-dom";
-import get from "../../../../../helpers/get";
-import axios from "axios";
-import { rootUrl } from "../../../../../constants/constants";
-import ApplicationList from "./Components/ApplicationList";
+import { useHistory } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 import profileImage from "../../../../../assets/img/profile/user-uploads/user-07.jpg";
-import UserNotices from "../../Component/UserNotices";
-import Consent from "../../../STUDENT/StudentProfile/Component/Consent";
-import ProfilePreview from "../../../STUDENT/StudentProfile/ProfilePreview";
+import { rootUrl } from "../../../../../constants/constants";
+import get from "../../../../../helpers/get";
 import StudentJoinBanner from "../../../Affiliate/AffiliateComponents/StudentJoinBanner";
+import ProfilePreview from "../../../STUDENT/StudentProfile/ProfilePreview";
+import UserNotices from "../../Component/UserNotices";
+import ApplicationList from "./Components/ApplicationList";
 import Department from "./Components/Department";
 
 const Student = () => {
@@ -254,7 +250,7 @@ const Student = () => {
                       </li>
                       {consultantData?.phoneNumber == null ? null : (
                         <li>
-                          <i className="fas fa-phone pr-2"></i>
+                          <i className="fas fa-phone pr-2"></i>+
                           {consultantData?.phoneNumber}
                         </li>
                       )}
