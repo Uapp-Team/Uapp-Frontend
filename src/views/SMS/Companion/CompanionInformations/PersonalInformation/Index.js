@@ -41,6 +41,7 @@ const PersonalInformation = () => {
   const [Dates, SetDate] = useState(currentDate);
   const [companionPersonalInfo, setCompanionPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState("");
   const [navVisibility, setNavVisibility] = useState({});
   const { companionId } = useParams();
   const { addToast } = useToasts();
@@ -363,6 +364,11 @@ const PersonalInformation = () => {
         setLastNameError("Number can not be allowed in the Last Name");
       }
 
+      if (!passport) {
+        isValid = false;
+        setPassportError("Passport is required");
+      }
+
       if (!phoneNumber) {
         isValid = false;
         setphoneNUmberError("Phone number is required");
@@ -404,6 +410,15 @@ const PersonalInformation = () => {
     }
   };
 
+  const handlePassportChange = (e) => {
+    let data = e.target.value.trimStart();
+    setPassport(data);
+    if (data === "") {
+      setPassportError("Passport is required");
+    } else {
+      setFirstNameError("");
+    }
+  };
   const handleFirstNameChange = (e) => {
     let data = e.target.value.trimStart();
     setFirstName(data);
@@ -470,6 +485,8 @@ const PersonalInformation = () => {
                     Dates={Dates}
                     setPassport={setPassport}
                     passport={passport}
+                    passportError={passportError}
+                    handlePassportChange={handlePassportChange}
                     gender={gender}
                     setGenderValue={setGenderValue}
                     setGenderError={setGenderError}
