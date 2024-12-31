@@ -29,6 +29,7 @@ const EligibilityForm = ({
   exDate,
   onRadioValueChange,
   rightToWork,
+  setRightToWork,
   FileList3,
   setFileList3,
   idPassportFile,
@@ -165,21 +166,6 @@ const EligibilityForm = ({
               </FormGroup>
 
               <FormGroup className="has-icon-left position-relative">
-                {/* <span>
-                  <span className="text-danger">*</span> Expiry Date of Your
-                  BRP/TRP or Visa{" "}
-                </span> */}
-
-                {/* <Input
-                  type="date"
-                  name="expireDate"
-                  id="expireDate"
-                  onChange={(e) => {
-                    handleDate(e);
-                  }}
-                  defaultValue={exDate}
-                /> */}
-
                 <DMYPicker
                   label="Expiry Date of Your
                   BRP/TRP or Visa"
@@ -191,8 +177,8 @@ const EligibilityForm = ({
                 />
               </FormGroup>
 
-              <FormGroup className="has-icon-left position-relative">
-                <span>Do You Have Right to Work? </span>
+              <FormGroup className="d-flex has-icon-left position-relative">
+                <span className="mr-5">Do You Have Right to Work? </span>
 
                 <FormGroup check inline>
                   <Input
@@ -200,9 +186,11 @@ const EligibilityForm = ({
                     type="radio"
                     id="haveRightToWork"
                     value="true"
-                    onChange={onRadioValueChange}
+                    onChange={() => {
+                      setRightToWork(true);
+                    }}
                     name="haveRightToWork"
-                    checked={rightToWork === "true"}
+                    checked={rightToWork === true}
                   />
                   <Label
                     className="form-check-label"
@@ -218,10 +206,12 @@ const EligibilityForm = ({
                     className="form-check-input"
                     type="radio"
                     id="haveRightToWork"
-                    onChange={onRadioValueChange}
+                    onChange={() => {
+                      setRightToWork(false);
+                    }}
                     name="haveRightToWork"
                     value="false"
-                    checked={rightToWork === "false"}
+                    checked={rightToWork === false}
                   />
                   <Label
                     className="form-check-label"

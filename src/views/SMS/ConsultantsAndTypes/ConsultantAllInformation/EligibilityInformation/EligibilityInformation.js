@@ -451,6 +451,7 @@ const EligibilityInformation = () => {
                 exDate={exDate}
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
+                setRightToWork={setRightToWork}
                 FileList3={FileList3}
                 setFileList3={setFileList3}
                 idPassportFile={idPassportFile}
