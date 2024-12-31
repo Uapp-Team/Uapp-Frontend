@@ -43,7 +43,7 @@ const EligibilityInformation = () => {
   const [FileList6, setFileList6] = useState(null);
   const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
-  const [rightToWork, setRightToWork] = useState("false");
+  const [rightToWork, setRightToWork] = useState(null);
   const [eligibilityData, setEligibilityData] = useState({});
   const [navVisibility, setNavVisibility] = useState({});
   const { consultantRegisterId } = useParams();
@@ -106,9 +106,7 @@ const EligibilityInformation = () => {
       );
       setResidencyValue(res !== null ? res?.residencyStatus?.id : "0");
       //   setRadioPracticalTraining();
-      setRightToWork(
-        res?.haveRightToWork !== null ? `${res?.haveRightToWork}` : "false"
-      );
+      setRightToWork(res?.haveRightToWork ? res?.haveRightToWork : null);
       setExDate(
         res?.expireDate
           ? moment(new Date(res?.expireDate)).format("YYYY-MM-DD")
