@@ -1,5 +1,3 @@
-import { DatePicker } from "antd";
-import moment from "moment";
 import React from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -7,8 +5,8 @@ import Select from "react-select";
 import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import DMYPicker from "../../../../../components/form/DMYPicker";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
 const EducationalForm = ({
   oneData,
@@ -241,7 +239,7 @@ const EducationalForm = ({
                   handleInstitutionLanguage(e);
                 }}
                 value={instituteLanguage}
-                placeholder="Enter Language Of Institution"
+                placeholder="Medium of Instruction"
               />
             </FormGroup>
             <FormGroup>
