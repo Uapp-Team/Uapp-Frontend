@@ -106,16 +106,21 @@ const EligibilityInformation = () => {
       );
       setResidencyValue(res !== null ? res?.residencyStatus?.id : "0");
       //   setRadioPracticalTraining();
-      setRightToWork(res?.haveRightToWork ? res?.haveRightToWork : null);
+      setRightToWork(
+        res != null && res?.haveRightToWork === true
+          ? true
+          : res != null && res?.haveRightToWork === false
+          ? false
+          : null
+      );
       setExDate(
         res?.expireDate
           ? moment(new Date(res?.expireDate)).format("YYYY-MM-DD")
           : null
       );
       setVisa(res?.visaType);
-      // setDate(res?.expireDate);
     });
-  }, [success, consultantRegisterId]);
+  }, [success, consultantRegisterId, setRightToWork]);
 
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
