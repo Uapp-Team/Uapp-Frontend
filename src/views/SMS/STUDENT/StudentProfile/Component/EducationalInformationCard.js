@@ -108,7 +108,7 @@ const EducationalInformationCard = ({
                       <b> {edu?.countryOfEducation?.name}</b>
                     </p>
                     <p>
-                      <span>Language of Institution</span>
+                      <span>Medium of Instruction (MOI)</span>
                       <br />
                       <b>{edu?.languageOfInstitution}</b>
                     </p>
