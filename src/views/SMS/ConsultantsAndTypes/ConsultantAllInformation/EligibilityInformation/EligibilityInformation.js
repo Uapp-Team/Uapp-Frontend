@@ -31,14 +31,18 @@ const EligibilityInformation = () => {
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [FileList3, setFileList3] = useState([]);
-  const [idPassportError, setIdPassportError] = useState(false);
-  const [FileList4, setFileList4] = useState([]);
-  const [proofOfAddressError, setProofOfAddressError] = useState(false);
-  const [FileList5, setFileList5] = useState([]);
+  const [FileList3, setFileList3] = useState(null);
+  const [idPassportFile, setIdPassportFile] = useState(null);
+  const [idPassportError, setIdPassportError] = useState("");
+  const [FileList4, setFileList4] = useState(null);
+  const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
+  const [proofOfAddressError, setProofOfAddressError] = useState("");
+  const [FileList5, setFileList5] = useState(null);
+  const [brpFile, setBrpFile] = useState(null);
   const [proofOfRightError, setProofOfRightError] = useState("");
-  const [FileList6, setFileList6] = useState([]);
-  const [cvError, setCvError] = useState(false);
+  const [FileList6, setFileList6] = useState(null);
+  const [cvFile, setCvFile] = useState(null);
+  const [cvError, setCvError] = useState("");
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
   const [navVisibility, setNavVisibility] = useState({});
@@ -69,7 +73,14 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
-
+      setIdPassportFile(
+        res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
+      );
+      setProofOfAddressFile(
+        res?.proofOfAddress?.fileUrl ? res?.proofOfAddress?.fileUrl : null
+      );
+      setBrpFile(res?.brp?.fileUrl ? res?.brp?.fileUrl : null);
+      setCvFile(res?.cv?.fileUrl ? res?.cv?.fileUrl : null);
       setUniCountryLabel(
         res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
@@ -178,7 +189,7 @@ const EligibilityInformation = () => {
 
   const handleChange3 = ({ fileList }) => {
     setFileList3(fileList);
-    setIdPassportError(false);
+    setIdPassportError("");
   };
   // Id or Passport Code End
 
@@ -210,7 +221,7 @@ const EligibilityInformation = () => {
 
   const handleChange4 = ({ fileList }) => {
     setFileList4(fileList);
-    setProofOfAddressError(false);
+    setProofOfAddressError("");
   };
   // Proof of Address Code End
 
@@ -322,8 +333,8 @@ const EligibilityInformation = () => {
     }
     if (
       uniCountryValue !== uniCountryValue2 &&
-      FileList5.length === 0 &&
-      eligibilityData?.brp?.fileUrl == null
+      FileList5 === null &&
+      brpFile == null
     ) {
       isValid = false;
       setProofOfRightError("File is required");
@@ -342,23 +353,17 @@ const EligibilityInformation = () => {
       isValid = false;
       setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
-    if (
-      FileList3.length === 0 &&
-      eligibilityData?.idOrPassport?.fileUrl == null
-    ) {
+    if (FileList3 === null && idPassportFile == null) {
       isValid = false;
-      setIdPassportError(true);
+      setIdPassportError("File is required");
     }
-    if (
-      FileList4.length === 0 &&
-      eligibilityData?.proofOfAddress?.fileUrl == null
-    ) {
+    if (FileList4 === null && proofOfAddressFile == null) {
       isValid = false;
-      setProofOfAddressError(true);
+      setProofOfAddressError("File is required");
     }
-    if (FileList6.length === 0 && eligibilityData?.cv?.fileUrl == null) {
+    if (FileList6 === null && cvFile == null) {
       isValid = false;
-      setCvError(true);
+      setCvError("File is required");
     }
     return isValid;
   };
@@ -367,22 +372,10 @@ const EligibilityInformation = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("visa", visa);
-    subData.append(
-      "idOrPassportFile",
-      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
-    );
-    subData.append(
-      "proofOfAddressFile",
-      FileList4.length === 0 ? null : FileList4[0]?.originFileObj
-    );
-    subData.append(
-      "BRPFile",
-      FileList5.length === 0 ? null : FileList5[0]?.originFileObj
-    );
-    subData.append(
-      "CvFile",
-      FileList6.length === 0 ? null : FileList6[0]?.originFileObj
-    );
+    subData.append("idOrPassportFile", FileList3);
+    subData.append("proofOfAddressFile", FileList4);
+    subData.append("BRPFile", FileList5);
+    subData.append("CvFile", FileList6);
 
     subData.append(
       "expireDate",
@@ -404,10 +397,6 @@ const EligibilityInformation = () => {
             autoDismiss: true,
           });
           setSuccess(!success);
-          setFileList3([]);
-          setFileList4([]);
-          setFileList5([]);
-          setFileList6([]);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -465,17 +454,33 @@ const EligibilityInformation = () => {
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
                 FileList3={FileList3}
+                setFileList3={setFileList3}
+                idPassportFile={idPassportFile}
+                setIdPassportFile={setIdPassportFile}
+                setIdPassportError={setIdPassportError}
                 handleChange3={handleChange3}
                 idPassportError={idPassportError}
                 FileList4={FileList4}
+                setFileList4={setFileList4}
+                proofOfAddressFile={proofOfAddressFile}
+                setProofOfAddressFile={setProofOfAddressFile}
                 handleChange4={handleChange4}
                 proofOfAddressError={proofOfAddressError}
+                setProofOfAddressError={setProofOfAddressError}
                 FileList5={FileList5}
+                setFileList5={setFileList5}
+                brpFile={brpFile}
+                setBrpFile={setBrpFile}
+                setProofOfRightError={setProofOfRightError}
                 handleChange5={handleChange5}
                 proofOfRightError={proofOfRightError}
                 FileList6={FileList6}
+                setFileList6={setFileList6}
+                cvFile={cvFile}
+                setCvFile={setCvFile}
                 handleChange6={handleChange6}
                 cvError={cvError}
+                setCvError={setCvError}
                 progress={progress}
                 buttonStatus={buttonStatus}
                 visa={visa}
