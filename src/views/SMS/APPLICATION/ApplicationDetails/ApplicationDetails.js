@@ -11,6 +11,7 @@ import ApplicationInfo from "./Component/ApplicationInfo";
 import Assessment from "./Component/Assessment";
 import InternalAssessment from "./Component/InternalAssessment";
 import ProfilePreview from "./Component/ProfilePreview";
+import AdmissionCompliance from "./Component/RightSide/AdmissionCompilance";
 import AdmissionConsultant from "./Component/RightSide/AdmissionConsultant";
 import AdmissionManager from "./Component/RightSide/AdmissionManager";
 import AdmissionOfficer from "./Component/RightSide/AdmissionOfficer";
@@ -323,6 +324,11 @@ const ApplicationDetails = () => {
                 id={"scrollDown"}
                 applicationTimeline={applicationTimeline}
               />
+
+              {userType !== userTypes?.AdmissionCompliance &&
+                applicationInfo?.admissionCompliance && (
+                  <AdmissionCompliance applicationInfo={applicationInfo} />
+                )}
 
               {userType === userTypes?.Student ? (
                 <>
