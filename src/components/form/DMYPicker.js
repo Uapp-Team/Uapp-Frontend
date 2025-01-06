@@ -4,6 +4,7 @@ import React from "react";
 
 const DMYPicker = ({
   label,
+  id,
   name,
   value,
   setValue,
@@ -39,7 +40,7 @@ const DMYPicker = ({
         format="DD/MM/YYYY"
         placeholder="dd/mm/yyyy"
         name={name}
-        id={name}
+        id={id}
       />
       <span className="text-danger">{error}</span>
     </>
