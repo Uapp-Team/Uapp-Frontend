@@ -830,7 +830,7 @@ const PersonalInformation = () => {
                           action={setDateError}
                           required={true}
                           id="dateOfBirth"
-                          name="dateOfBirth"
+                          // name="dateOfBirth"
                         />
                       </Col>
                       <Col lg="6" md="8"></Col>
@@ -861,7 +861,7 @@ const PersonalInformation = () => {
                           value={issueDate}
                           error={issueDateError}
                           // action={setIssueDateError}
-                          name="issueDate"
+                          // name="issueDate"
                           id="issueDate"
                           required={true}
                         />
@@ -876,7 +876,7 @@ const PersonalInformation = () => {
                           // action={setexpireDateError}
                           required={true}
                           value={expireDate}
-                          name="expiresDate"
+                          // name="expiresDate"
                           id="expiresDate"
                         />
                       </Col>
