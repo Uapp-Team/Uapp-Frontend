@@ -86,7 +86,7 @@ const BankDetailsCard = ({
               <b>{details?.bic}</b>
             </p>
             <p>
-              <span>Swift</span>
+              <span>SWIFT</span>
               <br />
               <b>{details?.swift}</b>
             </p>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import get from "../../../../helpers/get";
-import { dateFormate } from "../../../../components/date/calenderFormate";
 
 const ConsultantBankInformation = ({ id }) => {
   const [consultantBankInformation, setConsultantBankInformation] = useState(
@@ -73,7 +72,7 @@ const ConsultantBankInformation = ({ id }) => {
                       <b>{bankInfo?.bic}</b>
                     </p>
                     <p>
-                      <span>Swift</span>
+                      <span>SWIFT</span>
                       <br />
                       <b>{bankInfo?.swift}</b>
                     </p>
