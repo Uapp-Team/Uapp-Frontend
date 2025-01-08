@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Row, Table } from "reactstrap";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import get from "../../../../helpers/get";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { userTypes } from "../../../../constants/userTypeConstant";
 
 const BankDetails = ({ companionProfileData, companionId, referenceId }) => {
@@ -65,7 +64,7 @@ const BankDetails = ({ companionProfileData, companionId, referenceId }) => {
                     <b>{details?.bic}</b>
                   </p>
                   <p>
-                    <span>Swift</span>
+                    <span>SWIFT</span>
                     <br />
                     <b>{details?.swift}</b>
                   </p>
