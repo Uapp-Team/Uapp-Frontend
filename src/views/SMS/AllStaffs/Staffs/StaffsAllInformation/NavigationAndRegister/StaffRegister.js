@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Form, FormGroup, Col, Input, Row } from "reactstrap";
-import get from "../../../../../../helpers/get";
-import post from "../../../../../../helpers/post";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import BreadCrumb from "../../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../../components/modal/ConfirmModal";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../../constants/userTypeConstant";
+import get from "../../../../../../helpers/get";
+import containsDigit from "../../../../../../helpers/nameContainDigit";
+import post from "../../../../../../helpers/post";
 
 const StaffRegister = () => {
   const { addToast } = useToasts();
@@ -91,18 +92,25 @@ const StaffRegister = () => {
   // };
 
   const handleFirstName = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    const data = e.target.value;
+    setFirstName(data);
+
+    if (data === "") {
       setFirstNameError("First name is required");
+    } else if (containsDigit(data)) {
+      setFirstNameError("First name should not contain digits");
     } else {
       setFirstNameError("");
     }
   };
 
   const handleLastName = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    const data = e.target.value;
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last name is required");
+    } else if (containsDigit(data)) {
+      setLastNameError("Last name should not contain digits");
     } else {
       setLastNameError("");
     }
@@ -146,10 +154,16 @@ const StaffRegister = () => {
     if (!firstName) {
       isFormValid = false;
       setFirstNameError("First name is required");
+    } else if (containsDigit(firstName)) {
+      isFormValid = false;
+      setFirstNameError("First name should not contain digits");
     }
     if (!lastName) {
       isFormValid = false;
       setLastNameError("Last name is required");
+    } else if (containsDigit(lastName)) {
+      isFormValid = false;
+      setLastNameError("Last name should not contain digits");
     }
     if (!email) {
       isFormValid = false;
