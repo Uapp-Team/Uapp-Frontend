@@ -13,13 +13,11 @@ const DMYPicker = ({
   required = false,
   width = "100%",
 }) => {
-  const handleDate = (e) => {
-    if (e) {
-      const day = new Date(e._d).getDate();
-      const month = new Date(e._d).getMonth();
-      const year = new Date(e._d).getFullYear();
-      const convertedValue = `${year}-${month + 1}-${day}`;
-      setValue(convertedValue);
+  const handleDate = (date) => {
+    if (date) {
+      // Use Moment.js to format the date consistently
+      const formattedDate = date.format("YYYY-MM-DD");
+      setValue(formattedDate);
       action && action();
     }
   };
@@ -30,10 +28,8 @@ const DMYPicker = ({
       {label && <span>{label}</span>}
 
       <DatePicker
-        onChange={(e) => {
-          handleDate(e);
-        }}
-        value={value ? moment(value) : null}
+        onChange={handleDate}
+        value={value ? moment(value, "YYYY-MM-DD") : null}
         style={{
           width: width,
         }}
