@@ -107,9 +107,14 @@ const PersonalForm = ({
   };
 
   const addLink = (data) => {
+    const urlRegex =
+      /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(:\d+)?(\/[\w-]*)*\/?$/;
+
     if (data.title === "" || data.link === "") {
       data.title === "" && setlinkTitleError("Title Required");
       data.link === "" && setlinkUrlError("Url Required");
+    } else if (!urlRegex.test(data.link)) {
+      setlinkUrlError("Invalid URL format");
     } else {
       setlinkTitleError("");
       setlinkUrlError("");
@@ -451,8 +456,8 @@ const PersonalForm = ({
                     <Input
                       className="form-mt"
                       type="text"
-                      name="lastName"
-                      id="lastName"
+                      name="companionLinks"
+                      id="companionLinks"
                       onChange={(e) => {
                         setlinkTitle(e.target.value);
                       }}
@@ -469,9 +474,9 @@ const PersonalForm = ({
                     <span>URL</span>
                     <Input
                       className="form-mt"
-                      type="text"
-                      name="lastName"
-                      id="lastName"
+                      type="url"
+                      name="companionLinks"
+                      id="companionLinks"
                       onChange={(e) => {
                         setlinkUrl(e.target.value);
                       }}

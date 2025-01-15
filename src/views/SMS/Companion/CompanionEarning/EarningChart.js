@@ -43,10 +43,15 @@ const EarningChart = () => {
         opacity: 0.5,
       },
     },
+
     xaxis: {
       categories: data?.monthNames,
     },
   };
+
+  // categories: data?.monthNames,
+
+  console.log(data?.monthNames);
 
   return (
     <>
@@ -58,7 +63,12 @@ const EarningChart = () => {
             {data?.toDate}
           </p>
         </div>
-        <Chart options={options} series={series} type="line" height={350} />
+        {data?.monthNames?.length > 0 ? (
+          <Chart options={options} series={series} type="line" height={350} />
+        ) : (
+          <p>Loading chart...</p>
+        )}
+        {/* <Chart options={options} series={series} type="line" height={350} /> */}
       </div>
     </>
   );
