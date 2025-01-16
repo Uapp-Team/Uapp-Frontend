@@ -43,23 +43,34 @@ const EarningChart = () => {
         opacity: 0.5,
       },
     },
+
     xaxis: {
       categories: data?.monthNames,
     },
   };
 
+  // categories: data?.monthNames,
+
+  console.log(data?.monthNames);
+
   return (
     <>
-      <div className="custom-card-border p-3 pt-4">
-        <div className="d-flex justify-content-between">
-          <p className="aff-card-title px-3 mb-0">Earning</p>
-          <p className="aff-card-title px-3 mb-0">
-            {data?.fromDate} <span className="text-gray">to</span>{" "}
-            {data?.toDate}
-          </p>
+      {data?.monthNames?.length > 0 ? (
+        <div className="custom-card-border p-3 pt-4">
+          <div className="d-flex justify-content-between">
+            <p className="aff-card-title px-3 mb-0">Earning</p>
+            <p className="aff-card-title px-3 mb-0">
+              {data?.fromDate} <span className="text-gray">to</span>
+              {data?.toDate}
+            </p>
+          </div>
+          <Chart options={options} series={series} type="line" height={350} />
         </div>
-        <Chart options={options} series={series} type="line" height={350} />
-      </div>
+      ) : (
+        <div className="custom-card-border p-3 pt-4">
+          <h4> There is no data available for the chart...</h4>
+        </div>
+      )}
     </>
   );
 };

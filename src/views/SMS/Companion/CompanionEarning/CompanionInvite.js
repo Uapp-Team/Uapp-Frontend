@@ -75,7 +75,7 @@ const CompanionInvite = () => {
               Refer a student, Earn Unlimited
             </h1>
             <p className="fs-13px ">
-              Refer a friend or family and receive up to £500!
+              Refer a friend or family and receive up to £100!
             </p>
             <button
               onClick={() => setModalOpen(true)}
