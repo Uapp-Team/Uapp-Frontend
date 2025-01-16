@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { useToasts } from "react-toast-notifications";
 import { Col, Form, FormGroup, Input, Modal, ModalBody } from "reactstrap";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import { useToasts } from "react-toast-notifications";
 import post from "../../../../helpers/post";
 
 const CompanionInvite = () => {

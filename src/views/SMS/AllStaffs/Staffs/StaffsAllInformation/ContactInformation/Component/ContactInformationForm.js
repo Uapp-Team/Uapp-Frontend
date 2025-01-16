@@ -156,6 +156,8 @@ const ContactInformationForm = ({
 
           <Input
             type="text"
+            name="addressLine"
+            id="addressLine"
             onChange={(e) => {
               handleAddressLine(e);
             }}
@@ -186,6 +188,8 @@ const ContactInformationForm = ({
 
           <Input
             type="text"
+            name="state"
+            id="state"
             placeholder="Enter State/County"
             onChange={(e) => setState(e.target.value)}
             value={state}
