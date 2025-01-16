@@ -55,21 +55,22 @@ const EarningChart = () => {
 
   return (
     <>
-      <div className="custom-card-border p-3 pt-4">
-        <div className="d-flex justify-content-between">
-          <p className="aff-card-title px-3 mb-0">Earning</p>
-          <p className="aff-card-title px-3 mb-0">
-            {data?.fromDate} <span className="text-gray">to</span>{" "}
-            {data?.toDate}
-          </p>
-        </div>
-        {data?.monthNames?.length > 0 ? (
+      {data?.monthNames?.length > 0 ? (
+        <div className="custom-card-border p-3 pt-4">
+          <div className="d-flex justify-content-between">
+            <p className="aff-card-title px-3 mb-0">Earning</p>
+            <p className="aff-card-title px-3 mb-0">
+              {data?.fromDate} <span className="text-gray">to</span>
+              {data?.toDate}
+            </p>
+          </div>
           <Chart options={options} series={series} type="line" height={350} />
-        ) : (
-          <p>Loading chart...</p>
-        )}
-        {/* <Chart options={options} series={series} type="line" height={350} /> */}
-      </div>
+        </div>
+      ) : (
+        <div className="custom-card-border p-3 pt-4">
+          <h4> There is no data available for the chart...</h4>
+        </div>
+      )}
     </>
   );
 };
