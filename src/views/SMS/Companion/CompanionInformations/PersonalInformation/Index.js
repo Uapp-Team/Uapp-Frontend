@@ -318,7 +318,7 @@ const PersonalInformation = () => {
     subdata.append("ProfileImageFile", FileList1[0]?.originFileObj);
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
-    subdata.append("companionLinks", JSON.stringify(arrLink));
+    subdata.append("companionLinks", JSON.stringify(arrLink).toString());
 
     let CheckFileIsValid = () => {
       if (companionPersonalInfo?.data?.companionProfileImage === null) {
@@ -416,9 +416,10 @@ const PersonalInformation = () => {
     if (data === "") {
       setPassportError("Passport is required");
     } else {
-      setFirstNameError("");
+      setPassportError("");
     }
   };
+
   const handleFirstNameChange = (e) => {
     let data = e.target.value.trimStart();
     setFirstName(data);
