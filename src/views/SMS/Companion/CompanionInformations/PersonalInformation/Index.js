@@ -318,7 +318,6 @@ const PersonalInformation = () => {
     subdata.append("ProfileImageFile", FileList1[0]?.originFileObj);
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
-    // subdata.append("companionLinks", "hi");
     subdata.append("companionLinks", JSON.stringify(arrLink).toString());
 
     let CheckFileIsValid = () => {
