@@ -456,8 +456,6 @@ const PersonalForm = ({
                     <Input
                       className="form-mt"
                       type="text"
-                      name="companionLinks"
-                      id="companionLinks"
                       onChange={(e) => {
                         setlinkTitle(e.target.value);
                       }}
@@ -475,8 +473,6 @@ const PersonalForm = ({
                     <Input
                       className="form-mt"
                       type="url"
-                      name="companionLinks"
-                      id="companionLinks"
                       onChange={(e) => {
                         setlinkUrl(e.target.value);
                       }}

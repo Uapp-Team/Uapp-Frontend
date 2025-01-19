@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 import ColumnApplicationManager from "../../../TableColumn/ColumnApplicationManager.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
 import Download from "../../../../../components/buttons/Download.js";
+import Typing from "../../../../../components/form/Typing.js";
 
 const AdmissionManagerApplication = ({ currentUser }) => {
   const componentRef = useRef();
@@ -44,6 +45,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
   // Dropdown Filter states
   const [isHide, setIsHide] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [applicationId, setApplicationId] = useState(
+    AdmissionManagerApplicationPaging?.applicationId
+      ? AdmissionManagerApplicationPaging?.applicationId
+      : ""
+  );
 
   const [currentPage, setCurrentPage] = useState(
     AdmissionManagerApplicationPaging?.currentPage
@@ -306,6 +313,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           selector !== "1" && applicationValue && applicationValue,
         enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
         enrollValue: selector !== "3" && enrollValue && enrollValue,
+        applicationId: applicationId && applicationId,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -358,6 +366,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     orderValue,
     selector,
     intake,
+    applicationId,
     documentStatusLabel,
     documentStatusValue,
     percentageLabel,
@@ -618,37 +627,39 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   }, [consultantId, currentUser, intake, selector, status, universityId]);
 
   useEffect(() => {
-    if (currentUser !== undefined) {
-      if (universityId !== undefined) {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
+    if (!isTyping) {
+      if (currentUser !== undefined) {
+        if (universityId !== undefined) {
+          get(
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
+          ).then((res) => {
+            setLoading(false);
+            setApplicationList(res?.models);
 
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      } else if (consultantId !== undefined) {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
+            setEntity(res?.totalEntity);
+            // setSerialNumber(res?.firstSerialNumber);
+          });
+        } else if (consultantId !== undefined) {
+          get(
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
+          ).then((res) => {
+            setLoading(false);
+            setApplicationList(res?.models);
 
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      } else {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
+            setEntity(res?.totalEntity);
+            // setSerialNumber(res?.firstSerialNumber);
+          });
+        } else {
+          get(
+            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
+          ).then((res) => {
+            setLoading(false);
+            setApplicationList(res?.models);
 
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
+            setEntity(res?.totalEntity);
+            // setSerialNumber(res?.firstSerialNumber);
+          });
+        }
       }
     }
   }, [
@@ -677,6 +688,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     intakeRngValue,
     documentStatusValue,
     percentageValue,
+    applicationId,
+    isTyping,
   ]);
 
   // Function for open delete modal
@@ -778,6 +791,16 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 name="name"
                 id="id"
                 isDisabled={selector === "2" ? true : false}
+              />
+            </Col>
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Typing
+                // id="app"
+                name="search"
+                placeholder="Application Id"
+                value={applicationId}
+                setValue={setApplicationId}
+                setIsTyping={setIsTyping}
               />
             </Col>
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
