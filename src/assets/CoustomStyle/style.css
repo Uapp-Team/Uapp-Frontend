@@ -5717,3 +5717,91 @@ span.ant-upload-list-item-name {
 /* Application pipline M*/
 
 /* Application pipline S*/
+
+.funnel-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: auto;
+  perspective: 800px;
+  max-width: 1273px;
+}
+
+.funnel-card {
+  background-color: #ffffff;
+  color: #045d5e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 154px;
+  text-align: center;
+  padding: 20px 10px;
+  flex-shrink: 0;
+  position: relative;
+  transform-origin: right center;
+}
+
+.funnel-card.active {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.funnel-card .title {
+  font-size: 12px;
+  margin-bottom: 24px;
+}
+
+.circle {
+  width: 48px;
+  height: 48px;
+  background-color: #367d7e;
+  color: #fffdfa;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+}
+
+.circle-active {
+  background-color: white;
+  color: #0056b3;
+}
+
+.circle-count {
+  margin-top: 10px;
+}
+
+.label {
+  font-size: 10px;
+  color: #045d5e;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.label-active {
+  font-size: 10px;
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.students {
+  font-size: 12px;
+  color: #045d5e;
+  font-weight: 300;
+  margin: 5px 0 0;
+}
+
+.students-active {
+  font-size: 12px;
+  color: #fff;
+  font-weight: 300;
+  margin: 5px 0 0;
+}
