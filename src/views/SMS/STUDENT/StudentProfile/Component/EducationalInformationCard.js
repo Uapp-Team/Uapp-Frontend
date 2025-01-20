@@ -77,7 +77,7 @@ const EducationalInformationCard = ({
                   </Col>
                   <Col md="3">
                     <p>
-                      <span>Education Level</span>
+                      <span>Institution Name</span>
                       <br />
                       <b>{edu?.nameOfInstitution}</b>
                     </p>
@@ -108,7 +108,7 @@ const EducationalInformationCard = ({
                       <b> {edu?.countryOfEducation?.name}</b>
                     </p>
                     <p>
-                      <span>Language of Institution</span>
+                      <span>Medium of Instruction (MOI)</span>
                       <br />
                       <b>{edu?.languageOfInstitution}</b>
                     </p>

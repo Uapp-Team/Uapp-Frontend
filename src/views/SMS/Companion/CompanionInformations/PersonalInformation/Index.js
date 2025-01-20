@@ -41,6 +41,7 @@ const PersonalInformation = () => {
   const [Dates, SetDate] = useState(currentDate);
   const [companionPersonalInfo, setCompanionPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState("");
   const [navVisibility, setNavVisibility] = useState({});
   const { companionId } = useParams();
   const { addToast } = useToasts();
@@ -317,7 +318,7 @@ const PersonalInformation = () => {
     subdata.append("ProfileImageFile", FileList1[0]?.originFileObj);
     subdata.append("consultantCoverFile", FileList2[0]?.originFileObj);
     subdata.append("phoneNumber", phoneNumber);
-    subdata.append("companionLinks", JSON.stringify(arrLink));
+    subdata.append("companionLinks", JSON.stringify(arrLink).toString());
 
     let CheckFileIsValid = () => {
       if (companionPersonalInfo?.data?.companionProfileImage === null) {
@@ -363,6 +364,11 @@ const PersonalInformation = () => {
         setLastNameError("Number can not be allowed in the Last Name");
       }
 
+      if (!passport) {
+        isValid = false;
+        setPassportError("Passport is required");
+      }
+
       if (!phoneNumber) {
         isValid = false;
         setphoneNUmberError("Phone number is required");
@@ -401,6 +407,16 @@ const PersonalInformation = () => {
         setButtonStatus(false);
         history.push(`/companionContactInfo/${companionId}`);
       });
+    }
+  };
+
+  const handlePassportChange = (e) => {
+    let data = e.target.value.trimStart();
+    setPassport(data);
+    if (data === "") {
+      setPassportError("Passport is required");
+    } else {
+      setPassportError("");
     }
   };
 
@@ -470,6 +486,8 @@ const PersonalInformation = () => {
                     Dates={Dates}
                     setPassport={setPassport}
                     passport={passport}
+                    passportError={passportError}
+                    handlePassportChange={handlePassportChange}
                     gender={gender}
                     setGenderValue={setGenderValue}
                     setGenderError={setGenderError}

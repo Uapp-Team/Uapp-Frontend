@@ -50,11 +50,9 @@ const StaffContactInformation = () => {
         res?.cellPhoneNumber !== null ? res?.cellPhoneNumber : null
       );
       setHouseNo(res?.houseNo !== null ? res?.houseNo : null);
-      setAddressLine(
-        res?.addressLine !== "undefined" ? res?.addressLine : null
-      );
+      setAddressLine(res?.addressLine);
       setCityN(res?.city !== null ? res?.city : null);
-      setState(res?.state !== null ? res?.state : "");
+      setState(res?.state);
       setZipCode(res?.zipCode !== null ? res?.zipCode : null);
     });
   }, [success, staffId]);
@@ -88,7 +86,8 @@ const StaffContactInformation = () => {
     }
   };
   const handleAddressLine = (e) => {
-    setAddressLine(e.target.value);
+    const data = e.target.value.trimStart();
+    setAddressLine(data);
     // if (e.target.value === "") {
     //   setAddressLineError("Address line 2 is required");
     // } else {
@@ -132,9 +131,7 @@ const StaffContactInformation = () => {
 
     subData.append("cellPhoneNumber", phoneNumber);
     subData.append("houseNo", houseNo);
-    subData.append("addressLine", addressLine);
     subData.append("city", cityN);
-    subData.append("state", state);
     subData.append("zipCode", zipCode);
     subData.append("countryId", countryValue);
     subData.append("employeeId", staffId);
