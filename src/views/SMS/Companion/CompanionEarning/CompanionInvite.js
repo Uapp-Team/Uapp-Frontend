@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { useToasts } from "react-toast-notifications";
 import { Col, Form, FormGroup, Input, Modal, ModalBody } from "reactstrap";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import { useToasts } from "react-toast-notifications";
 import post from "../../../../helpers/post";
 
 const CompanionInvite = () => {
@@ -75,7 +75,7 @@ const CompanionInvite = () => {
               Refer a student, Earn Unlimited
             </h1>
             <p className="fs-13px ">
-              Refer a friend or family and receive up to £500!
+              Refer a friend or family and receive up to £100!
             </p>
             <button
               onClick={() => setModalOpen(true)}

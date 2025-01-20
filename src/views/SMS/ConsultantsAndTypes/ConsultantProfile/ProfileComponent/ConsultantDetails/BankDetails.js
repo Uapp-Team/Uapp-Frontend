@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import get from "../../../../../../helpers/get";
-import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Card, CardBody, Col, Row, Table } from "reactstrap";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import get from "../../../../../../helpers/get";
 
 const BankDetails = ({ id }) => {
   const [data, setData] = useState({});
@@ -77,7 +77,7 @@ const BankDetails = ({ id }) => {
                       <b>{details?.bic}</b>
                     </p>
                     <p>
-                      <span>Swift</span>
+                      <span>SWIFT</span>
                       <br />
                       <b>{details?.swift}</b>
                     </p>

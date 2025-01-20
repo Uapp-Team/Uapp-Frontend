@@ -181,6 +181,11 @@ const ContactInformation = () => {
     }
   };
 
+  const handleState = (e) => {
+    let data = e.target.value.trimStart();
+    setState(data);
+  };
+
   const ValidateForm = () => {
     var isFormValid = true;
 
@@ -507,6 +512,9 @@ const ContactInformation = () => {
                       name="state"
                       id="state"
                       placeholder="Enter State/County"
+                      onChange={(e) => {
+                        handleState(e);
+                      }}
                       value={state}
                     />
                   </Col>

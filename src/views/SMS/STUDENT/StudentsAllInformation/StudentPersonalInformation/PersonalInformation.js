@@ -27,6 +27,7 @@ import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import get from "../../../../../helpers/get";
 import put from "../../../../../helpers/put";
+import scrollIntoViewHelper from "../../../../../helpers/validations/scrollIntoViewHelper";
 import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
 
@@ -433,19 +434,7 @@ const PersonalInformation = () => {
 
   const validateRegisterForm = () => {
     var isFormValid = true;
-    if (titleValue === 0) {
-      isFormValid = false;
-      setTitleError(true);
-    }
-    if (countryResidenceValue === 0) {
-      isFormValid = false;
-      setCountryOfResidenceError(true);
-    }
-
-    if (countryBirthValue === 0) {
-      isFormValid = false;
-      setCountryOfBirthError(true);
-    }
+    let firstErrorField = null;
 
     if (
       userType !== userTypes?.Consultant &&
@@ -454,50 +443,77 @@ const PersonalInformation = () => {
       userType !== userTypes?.ProviderAdmin &&
       consultantValue === 0
     ) {
-      setConsultantError(true);
       isFormValid = false;
+      setConsultantError(true);
+      if (!firstErrorField) firstErrorField = "consultantId";
+    }
+    if (titleValue === 0) {
+      isFormValid = false;
+      setTitleError(true);
+      if (!firstErrorField) firstErrorField = "nameTittleId";
+    }
+    if (!firstName) {
+      isFormValid = false;
+      setFirstNameError("First Name is required");
+      if (!firstErrorField) firstErrorField = "firstName";
+    }
+    if (!lastName) {
+      isFormValid = false;
+      setLastNameError("Last Name is required");
+      if (!firstErrorField) firstErrorField = "lastName";
+    }
+
+    if (birthDate == null) {
+      isFormValid = false;
+      setDateError("Date of birth is required");
+      if (!firstErrorField) firstErrorField = "dateOfBirth";
+    }
+    if (!passport) {
+      isFormValid = false;
+      setPassportError("Passport Id is required");
+      if (!firstErrorField) firstErrorField = "passportNumber";
+    }
+    if (issueDate === null) {
+      isFormValid = false;
+      setIssueDateError("Issue Date is required");
+      if (!firstErrorField) firstErrorField = "issueDate";
+    }
+    if (expireDate === null) {
+      isFormValid = false;
+      setexpireDateError("Expiry Date is required ");
+      if (!firstErrorField) firstErrorField = "expiresDate";
     }
 
     if (genderValue === 0) {
       isFormValid = false;
       setGenderError(true);
-    }
-    if (!firstName) {
-      isFormValid = false;
-      setFirstNameError("First Name is required");
-    }
-    if (!lastName) {
-      isFormValid = false;
-      setLastNameError("Last Name is required");
-    }
-    if (birthDate == null) {
-      isFormValid = false;
-      setDateError("Date of birth is required");
-    }
-
-    if (!passport) {
-      isFormValid = false;
-      setPassportError("Passport Id is required");
-    }
-    if (issueDate === null) {
-      isFormValid = false;
-      setIssueDateError("Issue Date is required");
-    }
-    if (expireDate === null) {
-      isFormValid = false;
-      setexpireDateError("Expiry Date is required ");
+      if (!firstErrorField) firstErrorField = "genderId";
     }
     if (maritalStatusValue === 0) {
       isFormValid = false;
       setMaritalStatusError(true);
-    }
-    if (nationalityValue === 0) {
-      isFormValid = false;
-      setNationalityError(true);
+      if (!firstErrorField) firstErrorField = "maritalStatusId";
     }
     if (!phoneNumber) {
       isFormValid = false;
       setphoneNUmberError("Phone number is required");
+      if (!firstErrorField) firstErrorField = "phoneNumberId";
+    }
+
+    if (countryBirthValue === 0) {
+      isFormValid = false;
+      setCountryOfBirthError(true);
+      if (!firstErrorField) firstErrorField = "countryOfBirthId";
+    }
+    if (countryResidenceValue === 0) {
+      isFormValid = false;
+      setCountryOfResidenceError(true);
+      if (!firstErrorField) firstErrorField = "countryOfCitizenship";
+    }
+    if (nationalityValue === 0) {
+      isFormValid = false;
+      setNationalityError(true);
+      if (!firstErrorField) firstErrorField = "nationalityId";
     }
 
     if (phoneNumber?.length < 9) {
@@ -511,6 +527,9 @@ const PersonalInformation = () => {
     //     setImgError(true);
     //   }
     // }
+    if (!isFormValid && firstErrorField) {
+      scrollIntoViewHelper(firstErrorField);
+    }
     return isFormValid;
   };
 
@@ -558,6 +577,8 @@ const PersonalInformation = () => {
           });
         }
       });
+    } else {
+      console.log("Form contains errors");
     }
   };
 
@@ -808,6 +829,8 @@ const PersonalInformation = () => {
                           error={dateError}
                           action={setDateError}
                           required={true}
+                          id="dateOfBirth"
+                          // name="dateOfBirth"
                         />
                       </Col>
                       <Col lg="6" md="8"></Col>
@@ -838,7 +861,7 @@ const PersonalInformation = () => {
                           value={issueDate}
                           error={issueDateError}
                           // action={setIssueDateError}
-                          name="issueDate"
+                          // name="issueDate"
                           id="issueDate"
                           required={true}
                         />
@@ -853,8 +876,8 @@ const PersonalInformation = () => {
                           // action={setexpireDateError}
                           required={true}
                           value={expireDate}
-                          name="expireDate"
-                          id="expireDate"
+                          // name="expiresDate"
+                          id="expiresDate"
                         />
                       </Col>
                     </FormGroup>
@@ -954,10 +977,10 @@ const PersonalInformation = () => {
                           Phone Number
                         </span>
                         <PhoneInput
+                          name="phoneNumberId"
+                          id="phoneNumberId"
                           className="w-100"
                           type="string"
-                          name="phoneNumber"
-                          id="phoneNumber"
                           country={"gb"}
                           enableLongNumbers={true}
                           onChange={handlePhoneNumber}

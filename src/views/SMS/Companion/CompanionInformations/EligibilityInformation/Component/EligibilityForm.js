@@ -102,7 +102,7 @@ const EligibilityForm = ({
         <Col lg="6" md="8">
           <FormGroup className="has-icon-left position-relative">
             <span>
-              Country of Nationality <span className="text-danger">*</span>{" "}
+              <span className="text-danger">*</span>Country of Nationality{" "}
             </span>
 
             <Select

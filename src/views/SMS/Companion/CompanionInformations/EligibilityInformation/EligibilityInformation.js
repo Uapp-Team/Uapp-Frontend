@@ -52,8 +52,6 @@ const EligibilityInformation = () => {
   const [visaError, setVisaError] = useState("");
   const [dateError, setDateError] = useState("");
   const history = useHistory();
-  console.log(idPassportFile, proofOfAddressFile, cvFile, brpFile);
-
   const [visaType, setVisaType] = useState([]);
   const [visaTypeValue, setVisaTypeValue] = useState(0);
   console.log(visaTypeValue, "visa");

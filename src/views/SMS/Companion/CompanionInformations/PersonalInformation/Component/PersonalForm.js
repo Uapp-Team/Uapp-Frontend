@@ -90,6 +90,8 @@ const PersonalForm = ({
   branchLabel,
   selectBranch,
   setDateError,
+  passportError,
+  handlePassportChange,
 }) => {
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -105,9 +107,14 @@ const PersonalForm = ({
   };
 
   const addLink = (data) => {
+    const urlRegex =
+      /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(:\d+)?(\/[\w-]*)*\/?$/;
+
     if (data.title === "" || data.link === "") {
       data.title === "" && setlinkTitleError("Title Required");
       data.link === "" && setlinkUrlError("Url Required");
+    } else if (!urlRegex.test(data.link)) {
+      setlinkUrlError("Invalid URL format");
     } else {
       setlinkTitleError("");
       setlinkUrlError("");
@@ -320,16 +327,21 @@ const PersonalForm = ({
         </FormGroup>
         <FormGroup row>
           <Col lg="6" md="8">
-            <span>Passport/ID</span>
+            <span>
+              <span className="text-danger">*</span>Passport/ID
+            </span>
 
             <Input
               type="text"
               name="passportId"
               id="passportId"
               placeholder="Enter Passport Number"
-              onChange={(e) => setPassport(e.target.value)}
-              defaultValue={passport}
+              onChange={(e) => {
+                handlePassportChange(e);
+              }}
+              value={passport}
             />
+            <span className="text-danger">{passportError}</span>
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -444,8 +456,6 @@ const PersonalForm = ({
                     <Input
                       className="form-mt"
                       type="text"
-                      name="lastName"
-                      id="lastName"
                       onChange={(e) => {
                         setlinkTitle(e.target.value);
                       }}
@@ -462,9 +472,7 @@ const PersonalForm = ({
                     <span>URL</span>
                     <Input
                       className="form-mt"
-                      type="text"
-                      name="lastName"
-                      id="lastName"
+                      type="url"
                       onChange={(e) => {
                         setlinkUrl(e.target.value);
                       }}

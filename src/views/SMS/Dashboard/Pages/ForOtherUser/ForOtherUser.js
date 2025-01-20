@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import DashboardCount from "../../../../../components/ui/DashboardCount";
-import { Col, Row } from "reactstrap";
-import UserNotices from "../../Component/UserNotices";
-import Filter from "../../../../../components/Dropdown/Filter";
-import get from "../../../../../helpers/get";
 import { useHistory } from "react-router-dom";
+import { Col, Row } from "reactstrap";
 import plusicon from "../../../../../assets/img/plusicon.svg";
+import Filter from "../../../../../components/Dropdown/Filter";
 import DashboardApplication from "../../../../../components/ui/DashboardApplication";
+import DashboardCount from "../../../../../components/ui/DashboardCount";
+import DashboardProgressChart from "../../../../../components/ui/DashboardProgressChart";
 import DashboardReadyToApply from "../../../../../components/ui/DashboardReadyToApply";
+import get from "../../../../../helpers/get";
+import UserNotices from "../../Component/UserNotices";
 
 const ForOtherUser = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -195,6 +196,7 @@ const ForOtherUser = () => {
         <DashboardReadyToApply
           url={`AdminDashboard/ReadyToApplyApplications/${intakeRngValue}`}
         />
+        {currentUser?.userTypeId === 21 && <DashboardProgressChart />}
       </>
     </>
   );
