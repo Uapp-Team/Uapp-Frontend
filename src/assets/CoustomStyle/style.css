@@ -360,6 +360,10 @@ tbody tr:hover {
   font-size: 20px;
 }
 
+.fs-22px {
+  font-size: 22px;
+}
+
 .fs-24px {
   font-size: 24px;
 }
@@ -5715,5 +5719,18 @@ span.ant-upload-list-item-name {
 /* Application pipline */
 
 /* Application pipline M*/
+
+.custom-progress {
+  height: 10px;
+  border-radius: 10px;
+  background-color: #e9ecef; /* Bootstrap default light gray */
+  overflow: hidden; /* Ensure no child elements exceed borders */
+}
+
+.custom-progress-bar {
+  height: 100%;
+  background-color: green;
+  border-radius: 10px; /* Same as the container for a rounded look */
+}
 
 /* Application pipline S*/
