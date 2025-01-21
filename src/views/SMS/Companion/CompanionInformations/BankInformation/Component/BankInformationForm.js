@@ -28,7 +28,7 @@ const BankInformationForm = ({
   setIsDefault,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  console.log(bankDetailsData.length, "length check");
+  console.log(bankDetailsData, "length check");
 
   return (
     <div className="">
@@ -145,7 +145,7 @@ const BankInformationForm = ({
               />
             </FormGroup>
 
-            {bankDetailsData?.length < 1 ? null : (
+            {bankDetailsData?.length <= 1 ? null : (
               <>
                 <FormGroup className="has-icon-left position-relative">
                   <span>
