@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const PipelineCard = ({
   key,
@@ -20,8 +20,8 @@ const PipelineCard = ({
           isActive ? "text-white" : "theme-text-primary"
         }`}
         style={{
-          backgroundColor: isActive ? activeBgColor : bgColor,
-          width: width,
+          backgroundColor: `${isActive ? activeBgColor : bgColor}`,
+          width,
         }}
         onClick={onClick}
       >
