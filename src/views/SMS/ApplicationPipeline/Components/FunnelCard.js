@@ -9,27 +9,33 @@ const FunnelCard = ({
   backgroundColor,
   height,
   rotateY,
-  onClick, // Receive onClick prop
+  onClick,
 }) => {
   return (
-    <div
-      className={`funnel-card ${isActive ? "active" : ""}`}
-      style={{
-        backgroundColor,
-        height,
-        transform: `rotateY(${rotateY})`,
-      }}
-      onClick={onClick} // Trigger onClick when clicked
-    >
-      <p className="title">{title}</p>
-      <div className={`circle ${isActive ? "circle-active" : ""}`}>
-        <p className="circle-count">{count}</p>
+    <>
+      <div>
+        <div
+          className={`funnel-card ${isActive ? "active" : ""}`}
+          style={{
+            backgroundColor,
+            height,
+            transform: `rotateY(${rotateY})`,
+          }}
+          onClick={onClick}
+        >
+          <p className="title">{title}</p>
+          <div className={`circle ${isActive ? "circle-active" : ""}`}>
+            <p className="mt-3">{count}</p>
+          </div>
+          <p className={isActive ? "label-active" : "label"}>
+            {applicationsLabel}
+          </p>
+          <p className={isActive ? "students-active" : "students"}>
+            {studentsLabel}
+          </p>
+        </div>
       </div>
-      <p className={isActive ? "label-active" : "label"}>{applicationsLabel}</p>
-      <p className={isActive ? "students-active" : "students"}>
-        {studentsLabel}
-      </p>
-    </div>
+    </>
   );
 };
 
