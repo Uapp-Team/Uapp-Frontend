@@ -19,8 +19,8 @@ const PipelineCard = ({
           isActive ? "text-white" : "theme-text-primary"
         }`}
         style={{
-          backgroundColor: `${isActive ? activeBgColor : bgColor}`,
-          width,
+          backgroundColor: isActive ? activeBgColor : bgColor,
+          minWidth: width,
         }}
         onClick={onClick}
       >
