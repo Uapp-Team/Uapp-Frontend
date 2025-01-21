@@ -2,13 +2,12 @@ import React, { useState } from "react";
 
 const PipelineCard = ({
   key,
-  data,
   title,
-  applications = "5k",
-  students = "234",
-  width = "164px",
-  bgColor = "#EDF2F2",
-  activeBgColor = "#007acc",
+  applications,
+  students,
+  width,
+  bgColor,
+  activeBgColor,
   isActive,
   onClick,
 }) => {
