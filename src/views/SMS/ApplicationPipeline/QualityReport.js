@@ -15,8 +15,8 @@ const QualityReport = () => {
                 title="20% Assessment"
                 applications={50}
                 students={20}
-                confidence={1}
-                bgColor="#fff"
+                // confidence={1}
+                // bgColor="#fff"
               />
             </Col>
           </Row>
