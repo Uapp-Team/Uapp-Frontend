@@ -141,7 +141,7 @@ const SalesReport = () => {
                       title={card.title}
                       applications={card.applications}
                       students={card.students}
-                      width="254px"
+                      width="154px"
                       bgColor={piplineDesign[index].bgColor}
                       activeBgColor={piplineDesign[index].activeBgColor}
                       isActive={selectedCardIndex === index ? true : false}
