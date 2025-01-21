@@ -5719,18 +5719,20 @@ span.ant-upload-list-item-name {
 /* Application pipline */
 
 /* Application pipline M*/
-
-.custom-progress {
-  height: 10px;
-  border-radius: 10px;
-  background-color: #e9ecef; /* Bootstrap default light gray */
-  overflow: hidden; /* Ensure no child elements exceed borders */
+.btn-view-application {
+  color: #045d5e !important;
+  padding: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid transparent;
+  background-color: transparent;
 }
 
-.custom-progress-bar {
-  height: 100%;
-  background-color: green;
-  border-radius: 10px; /* Same as the container for a rounded look */
+.btn-view-application:hover {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: #fff;
 }
 
 /* Application pipline S*/

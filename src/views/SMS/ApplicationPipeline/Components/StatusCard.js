@@ -1,36 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
+import { Modal, ModalBody } from "reactstrap";
+import ApplicationList from "./ApplicationList";
 
-const StatusCard = () => {
+const StatusCard = ({
+  title,
+  applications,
+  students,
+  confidence = null,
+  bgColor = "#EDF2F2",
+}) => {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
-    <div className="custom-card-border p-16px">
-      <div className="d-flex justify-content-between">
-        <div className="">Status</div>
-        <div className="custom-progress">
-          <div
-            className="custom-progress-bar"
-            role="progressbar"
-            aria-valuenow="33"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            style={{ width: "33%" }}
-          ></div>
+    <>
+      <div
+        className="p-16px rounded"
+        style={{
+          backgroundColor: bgColor,
+          border: "1px solid #CDDFDF",
+        }}
+      >
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="">{title}</div>
+          {confidence !== null && (
+            <div className="w-25 d-flex justify-content-end">
+              <div
+                style={{
+                  backgroundColor: confidence >= 1 ? "#34C759" : "#ddd",
+                }}
+                className="w-25 h-8px rounded-left"
+              ></div>
+              <div
+                style={{
+                  backgroundColor: confidence >= 2 ? "#34C759" : "#ddd",
+                }}
+                className="w-25 mx-1 h-8px "
+              ></div>
+              <div
+                style={{
+                  backgroundColor: confidence >= 3 ? "#34C759" : "#ddd",
+                }}
+                className="w-25 h-8px rounded-right"
+              ></div>
+            </div>
+          )}
         </div>
-      </div>
-      <div className="row mb-24px mt-20px">
-        <div className="col">
-          <span className="fs-22px">5k</span>
-          <span className="fs-12px"> Applications</span>
+        <div className="row mb-24px mt-20px">
+          <div className="col">
+            <span className="fs-22px fw-600">{applications}</span>
+            <span className="fs-12px"> Applications</span>
+          </div>
+          <div className="col">
+            <span className="fs-22px fw-600">{students}</span>
+            <span className="fs-12px"> Student</span>
+          </div>
         </div>
-        <div className="col">
-          <span className="fs-22px">4.6k</span>
-          <span className="fs-12px"> Student</span>
-        </div>
+        <button
+          className="btn-view-application"
+          onClick={() => setModalOpen(true)}
+        >
+          View Application <AiOutlineRight />
+        </button>
       </div>
-      <div className="theme-text-primary pointer">
-        View Application <AiOutlineRight />
-      </div>
-    </div>
+
+      <Modal
+        isOpen={modalOpen}
+        toggle={() => setModalOpen(!modalOpen)}
+        className="modal-xl"
+      >
+        <ModalBody className="p-4">
+          <ApplicationList modalClose={() => setModalOpen(!modalOpen)} />
+        </ModalBody>
+      </Modal>
+    </>
   );
 };
 

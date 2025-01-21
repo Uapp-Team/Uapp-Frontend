@@ -11,7 +11,13 @@ const QualityReport = () => {
         <CardBody>
           <Row>
             <Col lg={4}>
-              <StatusCard />
+              <StatusCard
+                title="20% Assessment"
+                applications={50}
+                students={20}
+                confidence={1}
+                bgColor="#fff"
+              />
             </Col>
           </Row>
         </CardBody>
