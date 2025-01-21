@@ -9,6 +9,7 @@ const FunnelCard = ({
   backgroundColor,
   height,
   rotateY,
+  onClick, // Receive onClick prop
 }) => {
   return (
     <div
@@ -18,6 +19,7 @@ const FunnelCard = ({
         height,
         transform: `rotateY(${rotateY})`,
       }}
+      onClick={onClick} // Trigger onClick when clicked
     >
       <p className="title">{title}</p>
       <div className={`circle ${isActive ? "circle-active" : ""}`}>

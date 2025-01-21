@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import FunnelCard from "./Components/FunnelCard";
 
 const AdmissionsPipeline = () => {
-  const funnelData = [
+  const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
       count: "5k",
@@ -75,13 +75,24 @@ const AdmissionsPipeline = () => {
       height: "220px",
       rotateY: "4deg",
     },
-  ];
+  ]);
+
+  // Function to handle card click
+  const handleCardClick = (index) => {
+    setFunnelData((prevData) =>
+      prevData.map((card, i) => ({
+        ...card,
+        isActive: i === index, // Set the clicked card as active and others as inactive
+      }))
+    );
+  };
+
   return (
     <>
       <BreadCrumb title="Admissions Pipeline" />
       <div className="animated fadeIn">
         <Card className="p-3">
-          <h5>Addmission Application Pipeline</h5>
+          <h5>Admission Application Pipeline</h5>
           <div className="funnel-container">
             {funnelData.map((card, index) => (
               <FunnelCard
@@ -94,6 +105,7 @@ const AdmissionsPipeline = () => {
                 backgroundColor={card.backgroundColor}
                 height={card.height}
                 rotateY={card.rotateY}
+                onClick={() => handleCardClick(index)} // Pass the click handler
               />
             ))}
           </div>

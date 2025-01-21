@@ -5742,7 +5742,7 @@ span.ant-upload-list-item-name {
   padding: 20px 10px;
   flex-shrink: 0;
   position: relative;
-  transform-origin: right center;
+  cursor: pointer;
 }
 
 .funnel-card.active {
