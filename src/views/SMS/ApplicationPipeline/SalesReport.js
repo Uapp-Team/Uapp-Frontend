@@ -3,6 +3,7 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Card, CardBody } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
+import { AiFillCaretDown } from "react-icons/ai";
 
 const SalesReport = () => {
   const [stageArrow, setStageArrow] = useState(false);
@@ -132,15 +133,15 @@ const SalesReport = () => {
                 <div id="scroll-left" className="scroll-left">
                   <button class="scroll-button ms-2">&#10094;</button>
                 </div>
+
                 <div className="scroll-content carved-div ">
                   {funnelData.map((card, index) => (
                     <PipelineCard
                       key={index}
-                      data={card}
                       title={card.title}
                       applications={card.applications}
                       students={card.students}
-                      width="164px"
+                      width="254px"
                       bgColor={piplineDesign[index].bgColor}
                       activeBgColor={piplineDesign[index].activeBgColor}
                       isActive={selectedCardIndex === index ? true : false}
@@ -156,13 +157,16 @@ const SalesReport = () => {
             </div>
           </div>
 
-          <div>
-            {/* Display the arrow icon only for the active card */}
-            {selectedCardIndex !== null && selectedCardIndex !== undefined && (
-              <div className="p-5">
-                <CaretDownOutlined style={{ fontSize: "30px" }} />
+          <div className="d-flex">
+            {funnelData.map((card, index) => (
+              <div
+                key={index}
+                style={{ width: "170px" }}
+                className="text-center"
+              >
+                {selectedCardIndex === index && <AiFillCaretDown size={20} />}
               </div>
-            )}
+            ))}
           </div>
         </CardBody>
       </Card>
