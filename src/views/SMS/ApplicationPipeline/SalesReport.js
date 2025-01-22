@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
 import { Card, CardBody } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
 import { AiFillCaretDown } from "react-icons/ai";
 
 const SalesReport = () => {
-  const [stageArrow, setStageArrow] = useState(false);
   const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
@@ -80,15 +78,10 @@ const SalesReport = () => {
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
+    const scrollContainer2 = document.querySelector(".scroll-arrow");
     const scrollLeftButton = document.getElementById("scroll-left");
     const scrollRightButton = document.getElementById("scroll-right");
-    console.log("scrollContainer", scrollContainer.scrollLeft);
-    console.log(
-      "scrollRightButton",
-      scrollContainer.scrollLeft,
-      scrollContainer.clientWidth,
-      scrollContainer.scrollWidth
-    );
+
     function checkScrollButtons() {
       if (scrollContainer.scrollLeft === 0) {
         scrollLeftButton.classList.add("hidden");
@@ -107,11 +100,13 @@ const SalesReport = () => {
     }
     scrollLeftButton.addEventListener("click", () => {
       scrollContainer.scrollLeft -= 400; // Adjust the value as needed
+      scrollContainer2.scrollLeft -= 400; // Adjust the value as needed
       checkScrollButtons();
     });
 
     scrollRightButton.addEventListener("click", () => {
       scrollContainer.scrollLeft += 400; // Adjust the value as needed
+      scrollContainer2.scrollLeft += 400; // Adjust the value as needed
       checkScrollButtons();
     });
 
@@ -157,16 +152,22 @@ const SalesReport = () => {
             </div>
           </div>
 
-          <div className="d-flex">
-            {funnelData.map((card, index) => (
-              <div
-                key={index}
-                style={{ width: "170px" }}
-                className="text-center"
-              >
-                {selectedCardIndex === index && <AiFillCaretDown size={20} />}
+          <div className="row align-items-center">
+            <div className="col-12">
+              <div className="scroll-content scroll-arrow">
+                {funnelData.map((card, index) => (
+                  <div
+                    key={index}
+                    style={{ minWidth: "170px" }}
+                    className="text-center"
+                  >
+                    {selectedCardIndex === index && (
+                      <AiFillCaretDown size={22} color="#7C7C7C" />
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </CardBody>
       </Card>
