@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { Card } from "reactstrap";
+import { Card, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import Filter from "../../../components/Dropdown/Filter";
 import DateRange from "../../../components/form/DateRange";
 import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
 
 const AdmissionsPipeline = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
@@ -93,6 +94,34 @@ const AdmissionsPipeline = () => {
       activeBgColor: "#005A9C",
     },
   ];
+
+  const [statusCardData, setStatusCardData] = useState([
+    {
+      title: "20% Assessment",
+      applications: "5k",
+      students: "234",
+    },
+    {
+      title: "40% Assessment",
+      applications: "5k",
+      students: "234",
+    },
+    {
+      title: "60% Assessment",
+      applications: "5k",
+      students: "234",
+    },
+    {
+      title: "80% Assessment",
+      applications: "5k",
+      students: "234",
+    },
+    {
+      title: "100% Assessment",
+      applications: "5k",
+      students: "234",
+    },
+  ]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -230,8 +259,22 @@ const AdmissionsPipeline = () => {
                   Pre-application Stage
                 </p>
               </div>
-              <div className="border p-2 rounded h-34px bg-F2EFED">
+              <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
                 <h5 className="fs-12px fw-500">New Application</h5>
+              </div>
+              <div>
+                <Row>
+                  {statusCardData.map((card, index) => (
+                    <Col lg={4}>
+                      <StatusCard
+                        key={index}
+                        title={card.title}
+                        applications={card.applications}
+                        students={card.students}
+                      />
+                    </Col>
+                  ))}
+                </Row>
               </div>
             </>
           </div>
