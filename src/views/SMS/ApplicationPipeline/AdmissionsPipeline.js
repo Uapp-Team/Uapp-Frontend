@@ -8,6 +8,7 @@ import PipelineCard from "./Components/PipelineCard";
 
 const AdmissionsPipeline = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [showStages, setShowStages] = useState(false);
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
@@ -137,83 +138,102 @@ const AdmissionsPipeline = () => {
       <BreadCrumb title="Admissions Pipeline" />
       <Card>
         <div className="p-24px">
-          <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
-            <h5 className="fs-16px">Admission Application Pipeline</h5>
-            <div className="d-flex align-items-center justify-content-center gap-4px">
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                formattedDate={dateFormat}
-              />
-              <Filter
-                data={intakeRngDD}
-                label={intakeRngLabel}
-                setLabel={setIntakeRngLabel}
-                value={intakeRngValue}
-                setValue={setIntakeRngValue}
-                action={() => {}}
-                isDisabled={false}
-              />
-              <Filter
-                data={consultantDD}
-                label={consultantLabel}
-                setLabel={setConsultantLabel}
-                value={consultantValue}
-                setValue={setConsultantValue}
-                action={() => {}}
-                isDisabled={false}
-              />
+          <div>
+            <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
+              <h5 className="fs-16px">Admission Application Pipeline</h5>
+              <div className="d-flex align-items-center justify-content-center gap-4px">
+                <DateRange
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  formattedDate={dateFormat}
+                />
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  isDisabled={false}
+                />
+                <Filter
+                  data={consultantDD}
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
+                  isDisabled={false}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="row align-items-center">
-            <div className="col-12">
-              <div class="scroll-container">
-                <div id="scroll-left" className="scroll-left">
-                  <button class="scroll-button ms-2">&#10094;</button>
+            <div className="row align-items-center">
+              <div className="col-12">
+                <div class="scroll-container">
+                  <div id="scroll-left" className="scroll-left">
+                    <button class="scroll-button ms-2">&#10094;</button>
+                  </div>
+
+                  <div className="scroll-content carved-div ">
+                    {funnelData.map((card, index) => (
+                      <PipelineCard
+                        key={index}
+                        title={card.title}
+                        applications={card.applications}
+                        students={card.students}
+                        width="154px"
+                        bgColor={admissionPipelineDesign[index].bgColor}
+                        activeBgColor={
+                          admissionPipelineDesign[index].activeBgColor
+                        }
+                        isActive={selectedCardIndex === index ? true : false}
+                        onClick={() => {
+                          setShowStages(true);
+                          setSelectedCardIndex(index);
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  <div id="scroll-right" className="scroll-right">
+                    <button class="scroll-button me-2">&#10095;</button>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <div className="scroll-content carved-div ">
+            <div className="row align-items-center mb-16px mt-16px">
+              <div className="col-12">
+                <div className="scroll-content scroll-arrow">
                   {funnelData.map((card, index) => (
-                    <PipelineCard
+                    <div
                       key={index}
-                      title={card.title}
-                      applications={card.applications}
-                      students={card.students}
-                      width="154px"
-                      bgColor={admissionPipelineDesign[index].bgColor}
-                      activeBgColor={
-                        admissionPipelineDesign[index].activeBgColor
-                      }
-                      isActive={selectedCardIndex === index ? true : false}
-                      onClick={() => setSelectedCardIndex(index)}
-                    />
+                      style={{ minWidth: "170px" }}
+                      className="text-center"
+                    >
+                      {selectedCardIndex === index && (
+                        <AiFillCaretDown size={22} color="#7C7C7C" />
+                      )}
+                    </div>
                   ))}
                 </div>
-
-                <div id="scroll-right" className="scroll-right">
-                  <button class="scroll-button me-2">&#10095;</button>
-                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row align-items-center">
-            <div className="col-12">
-              <div className="scroll-content scroll-arrow">
-                {funnelData.map((card, index) => (
-                  <div
-                    key={index}
-                    style={{ minWidth: "170px" }}
-                    className="text-center"
-                  >
-                    {selectedCardIndex === index && (
-                      <AiFillCaretDown size={22} color="#7C7C7C" />
-                    )}
-                  </div>
-                ))}
+            {/* {showStages && (
+              
+            )} */}
+            <>
+              <div className="d-flex align-items-center h-48px ">
+                <p className="fs-16px fw-600 align-self-center">
+                  Pre-application Stage
+                </p>
               </div>
-            </div>
+              <div className="border p-2 rounded h-34px bg-F2EFED">
+                <h5 className="fs-12px fw-500">New Application</h5>
+              </div>
+            </>
           </div>
         </div>
       </Card>
