@@ -5761,6 +5761,11 @@ span.ant-upload-list-item-name {
 }
 
 /* Application pipline S*/
+/* ant date range */
+.ant-picker {
+  min-height: 38px;
+  max-width: 240px;
+}
 
 /* Container Styles */
 .funnel-container {

@@ -1,9 +1,10 @@
+import { DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import Filter from "../../../components/Dropdown/Filter";
-import DateRangePicker from "../../../components/form/DateRangePicker";
+import DateRange from "../../../components/form/DateRange";
 import PipelineCard from "./Components/PipelineCard";
 
 const AdmissionsPipeline = () => {
@@ -16,7 +17,9 @@ const AdmissionsPipeline = () => {
   const [consultantDD, setConsultantDD] = useState([]);
   const [consultantLabel, setConsultantLabel] = useState("Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
-
+  const { RangePicker } = DatePicker;
+  const dateFormat = "DD-MM-YYYY";
+  const [selectedDates, setSelectedDates] = useState([]);
   const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
@@ -59,7 +62,6 @@ const AdmissionsPipeline = () => {
       students: "234",
     },
   ]);
-
   const admissionPipelineDesign = [
     {
       bgColor: "#E6F3FA",
@@ -137,12 +139,10 @@ const AdmissionsPipeline = () => {
           <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
             <h5>Admission Application Pipeline</h5>
             <div className="d-flex align-items-center justify-content-center">
-              <DateRangePicker
-                formData={formDate}
-                setFormDate={setFormDate}
-                toDate={toDate}
-                setToDate={setToDate}
-                className=""
+              <DateRange
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                formattedDate={dateFormat}
               />
               <Filter
                 data={intakeRngDD}
