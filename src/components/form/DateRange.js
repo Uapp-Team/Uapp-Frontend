@@ -4,8 +4,12 @@ import React from "react";
 const DateRange = ({ selectedDates, setSelectedDates, formattedDate }) => {
   const { RangePicker } = DatePicker;
   const handleDateChange = (dates) => {
-    const formattedDates = dates.map((date) => date.format(formattedDate));
-    setSelectedDates(formattedDates);
+    if (dates) {
+      const formattedDates = dates.map((date) => date.format(formattedDate));
+      setSelectedDates(formattedDates);
+    } else {
+      setSelectedDates([]);
+    }
   };
 
   return (
