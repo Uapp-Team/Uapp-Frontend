@@ -93,8 +93,6 @@ const AdmissionsPipeline = () => {
     },
   ];
 
-  console.log(selectedDates[0], "selectedDates");
-
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
     const scrollContainer2 = document.querySelector(".scroll-arrow");
@@ -140,8 +138,8 @@ const AdmissionsPipeline = () => {
       <Card>
         <div className="p-24px">
           <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
-            <h5>Admission Application Pipeline</h5>
-            <div className="d-flex align-items-center justify-content-center">
+            <h5 className="fs-16px">Admission Application Pipeline</h5>
+            <div className="d-flex align-items-center justify-content-center gap-4px">
               <DateRange
                 selectedDates={selectedDates}
                 setSelectedDates={setSelectedDates}
