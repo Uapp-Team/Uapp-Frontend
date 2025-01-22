@@ -2,10 +2,20 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import Filter from "../../../components/Dropdown/Filter";
+import DateRangePicker from "../../../components/form/DateRangePicker";
 import PipelineCard from "./Components/PipelineCard";
 
 const AdmissionsPipeline = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
+  const [formDate, setFormDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [consultantDD, setConsultantDD] = useState([]);
+  const [consultantLabel, setConsultantLabel] = useState("Consultant");
+  const [consultantValue, setConsultantValue] = useState(0);
 
   const [funnelData, setFunnelData] = useState([
     {
@@ -126,7 +136,33 @@ const AdmissionsPipeline = () => {
         <div className="p-24px">
           <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
             <h5>Admission Application Pipeline</h5>
-            <p>Date</p>
+            <div className="d-flex align-items-center justify-content-center">
+              <DateRangePicker
+                formData={formDate}
+                setFormDate={setFormDate}
+                toDate={toDate}
+                setToDate={setToDate}
+                className=""
+              />
+              <Filter
+                data={intakeRngDD}
+                label={intakeRngLabel}
+                setLabel={setIntakeRngLabel}
+                value={intakeRngValue}
+                setValue={setIntakeRngValue}
+                action={() => {}}
+                isDisabled={false}
+              />
+              <Filter
+                data={consultantDD}
+                label={consultantLabel}
+                setLabel={setConsultantLabel}
+                value={consultantValue}
+                setValue={setConsultantValue}
+                action={() => {}}
+                isDisabled={false}
+              />
+            </div>
           </div>
 
           <div className="row align-items-center">
