@@ -1,131 +1,176 @@
-import { CaretDownOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
-import { Card } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { AiFillCaretDown } from "react-icons/ai";
+import { Card, CardBody } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import FunnelCard from "./Components/FunnelCard";
+import PipelineCard from "./Components/PipelineCard";
 
 const AdmissionsPipeline = () => {
-  const [stageArrow, setStageArrow] = useState(false);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+
   const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: true,
-      backgroundColor: "#E6F3FA",
-      height: "280px",
-      rotateY: "10deg",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "UAPP Compliance",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#FFF6CC",
-      height: "270px",
-      rotateY: "9deg",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "University processing",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#FFEBD6",
-      height: "260px",
-      rotateY: "8deg",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "Conditional Offer",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#EAF8EB",
-      height: "250px",
-      rotateY: "7deg",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "Pre-Offer Stage/Post",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#FCE5E6",
-      height: "240px",
-      rotateY: "6deg",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "Unconditional Offer",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#E3F6E3",
-      height: "230px",
-      rotateY: "5deg",
+      applications: "5k",
+      students: "234",
+    },
+    {
+      title: "Pre arrival Stage/Visa",
+      applications: "5k",
+      students: "234",
     },
     {
       title: "Registration",
-      count: "5k",
-      applicationsLabel: "Applications",
-      studentsLabel: "234 Student",
-      isActive: false,
-      backgroundColor: "#D6E9F5",
-      height: "220px",
-      rotateY: "4deg",
+      applications: "5k",
+      students: "234",
     },
   ]);
 
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null); // Track the clicked card index
+  const admissionPipelineDesign = [
+    {
+      bgColor: "#E6F3FA",
+      activeBgColor: "#007ACC",
+    },
+    {
+      bgColor: "#FFF6CC",
+      activeBgColor: "#E6C317",
+    },
+    {
+      bgColor: "#FFEBD6",
+      activeBgColor: "#FF7F11",
+    },
+    {
+      bgColor: "#EAF8EB",
+      activeBgColor: "#32A852",
+    },
+    {
+      bgColor: "#FCE5E6",
+      activeBgColor: "#E63946",
+    },
+    {
+      bgColor: "#E3F6E3",
+      activeBgColor: "#2CA02C",
+    },
+    {
+      bgColor: "#ECEBFF",
+      activeBgColor: "#6C63FF",
+    },
+    {
+      bgColor: "#D6E9F5",
+      activeBgColor: "#005A9C",
+    },
+  ];
 
-  // Function to handle card click
-  const handleCardClick = (index) => {
-    setSelectedCardIndex(index); // Set the clicked card index
-    setStageArrow(true);
-    setFunnelData((prevData) =>
-      prevData.map((card, i) => ({
-        ...card,
-        isActive: i === index, // Mark the clicked card as active
-      }))
-    );
-  };
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".scroll-content");
+    const scrollLeftButton = document.getElementById("scroll-left");
+    const scrollRightButton = document.getElementById("scroll-right");
+    function checkScrollButtons() {
+      if (scrollContainer.scrollLeft === 0) {
+        scrollLeftButton.classList.add("hidden");
+      } else {
+        scrollLeftButton.classList.remove("hidden");
+      }
+
+      if (
+        scrollContainer.scrollLeft + scrollContainer.clientWidth >=
+        scrollContainer.scrollWidth
+      ) {
+        scrollRightButton.classList.add("hidden");
+      } else {
+        scrollRightButton.classList.remove("hidden");
+      }
+    }
+    scrollLeftButton.addEventListener("click", () => {
+      scrollContainer.scrollLeft -= 400;
+      checkScrollButtons();
+    });
+
+    scrollRightButton.addEventListener("click", () => {
+      scrollContainer.scrollLeft += 400;
+      checkScrollButtons();
+    });
+
+    scrollContainer.addEventListener("scroll", checkScrollButtons);
+    checkScrollButtons();
+  }, [funnelData]);
 
   return (
     <>
-      <BreadCrumb title="Admissions Pipeline" />
-      <div className="animated fadeIn">
-        <Card className="p-3">
+      <BreadCrumb title="Sales Report" />
+      <Card>
+        <CardBody>
           <h5>Admission Application Pipeline</h5>
-          <div>
-            <div className="funnel-container">
-              {funnelData.map((card, index) => (
-                <FunnelCard
-                  key={index}
-                  title={card.title}
-                  count={card.count}
-                  applicationsLabel={card.applicationsLabel}
-                  studentsLabel={card.studentsLabel}
-                  isActive={card.isActive}
-                  backgroundColor={card.backgroundColor}
-                  height={card.height}
-                  rotateY={card.rotateY}
-                  onClick={() => handleCardClick(index)}
-                  stageArrow={stageArrow}
-                />
-              ))}
-            </div>
-            {/* Display the arrow icon only for the active card */}
-            {selectedCardIndex !== null && selectedCardIndex !== undefined && (
-              <div className="p-5">
-                <CaretDownOutlined style={{ fontSize: "30px" }} />
+
+          <div className="row align-items-center">
+            <div className="col-12">
+              <div class="scroll-container">
+                <div id="scroll-left" className="scroll-left">
+                  <button class="scroll-button ms-2">&#10094;</button>
+                </div>
+
+                <div className="scroll-content carved-div ">
+                  {funnelData.map((card, index) => (
+                    <PipelineCard
+                      key={index}
+                      title={card.title}
+                      applications={card.applications}
+                      students={card.students}
+                      width="154px"
+                      bgColor={admissionPipelineDesign[index].bgColor}
+                      activeBgColor={
+                        admissionPipelineDesign[index].activeBgColor
+                      }
+                      isActive={selectedCardIndex === index ? true : false}
+                      onClick={() => setSelectedCardIndex(index)}
+                    />
+                  ))}
+                </div>
+
+                <div id="scroll-right" className="scroll-right">
+                  <button class="scroll-button me-2">&#10095;</button>
+                </div>
               </div>
-            )}
+            </div>
           </div>
-        </Card>
-      </div>
+
+          <div className="d-flex">
+            {funnelData.map((card, index) => (
+              <div
+                key={index}
+                style={{ width: "170px" }}
+                className="text-center"
+              >
+                {selectedCardIndex === index && <AiFillCaretDown size={20} />}
+              </div>
+            ))}
+          </div>
+        </CardBody>
+      </Card>
     </>
   );
 };
