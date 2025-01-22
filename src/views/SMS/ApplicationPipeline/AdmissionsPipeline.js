@@ -1,4 +1,3 @@
-import { DatePicker } from "antd";
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card } from "reactstrap";
@@ -12,12 +11,9 @@ const AdmissionsPipeline = () => {
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [formDate, setFormDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
   const [consultantDD, setConsultantDD] = useState([]);
   const [consultantLabel, setConsultantLabel] = useState("Consultant");
   const [consultantValue, setConsultantValue] = useState(0);
-  const { RangePicker } = DatePicker;
   const dateFormat = "DD-MM-YYYY";
   const [selectedDates, setSelectedDates] = useState([]);
   const [funnelData, setFunnelData] = useState([
@@ -97,10 +93,14 @@ const AdmissionsPipeline = () => {
     },
   ];
 
+  console.log(selectedDates[0], "selectedDates");
+
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
+    const scrollContainer2 = document.querySelector(".scroll-arrow");
     const scrollLeftButton = document.getElementById("scroll-left");
     const scrollRightButton = document.getElementById("scroll-right");
+
     function checkScrollButtons() {
       if (scrollContainer.scrollLeft === 0) {
         scrollLeftButton.classList.add("hidden");
@@ -118,16 +118,19 @@ const AdmissionsPipeline = () => {
       }
     }
     scrollLeftButton.addEventListener("click", () => {
-      scrollContainer.scrollLeft -= 400;
+      scrollContainer.scrollLeft -= 400; // Adjust the value as needed
+      scrollContainer2.scrollLeft -= 400; // Adjust the value as needed
       checkScrollButtons();
     });
 
     scrollRightButton.addEventListener("click", () => {
-      scrollContainer.scrollLeft += 400;
+      scrollContainer.scrollLeft += 400; // Adjust the value as needed
+      scrollContainer2.scrollLeft += 400; // Adjust the value as needed
       checkScrollButtons();
     });
 
     scrollContainer.addEventListener("scroll", checkScrollButtons);
+    // Initial check
     checkScrollButtons();
   }, [funnelData]);
 
@@ -197,16 +200,22 @@ const AdmissionsPipeline = () => {
             </div>
           </div>
 
-          <div className="d-flex">
-            {funnelData.map((card, index) => (
-              <div
-                key={index}
-                style={{ width: "170px" }}
-                className="text-center"
-              >
-                {selectedCardIndex === index && <AiFillCaretDown size={20} />}
+          <div className="row align-items-center">
+            <div className="col-12">
+              <div className="scroll-content scroll-arrow">
+                {funnelData.map((card, index) => (
+                  <div
+                    key={index}
+                    style={{ minWidth: "170px" }}
+                    className="text-center"
+                  >
+                    {selectedCardIndex === index && (
+                      <AiFillCaretDown size={22} color="#7C7C7C" />
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </Card>
