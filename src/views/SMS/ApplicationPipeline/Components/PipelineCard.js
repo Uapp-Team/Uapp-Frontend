@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { AiFillCaretDown } from "react-icons/ai";
+import React from "react";
 
 const PipelineCard = ({
   key,
@@ -37,9 +36,6 @@ const PipelineCard = ({
         <p className="fs-12px">
           <span className="fw-500">{students} </span>Student
         </p>
-        {/* <div>
-          <AiFillCaretDown size={20} />
-        </div> */}
       </div>
     </>
   );
