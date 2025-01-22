@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { Card, CardBody } from "reactstrap";
+import { Card } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
 
@@ -121,10 +121,13 @@ const AdmissionsPipeline = () => {
 
   return (
     <>
-      <BreadCrumb title="Sales Report" />
+      <BreadCrumb title="Admissions Pipeline" />
       <Card>
-        <CardBody>
-          <h5>Admission Application Pipeline</h5>
+        <div className="p-24px">
+          <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
+            <h5>Admission Application Pipeline</h5>
+            <p>Date</p>
+          </div>
 
           <div className="row align-items-center">
             <div className="col-12">
@@ -169,7 +172,7 @@ const AdmissionsPipeline = () => {
               </div>
             ))}
           </div>
-        </CardBody>
+        </div>
       </Card>
     </>
   );
