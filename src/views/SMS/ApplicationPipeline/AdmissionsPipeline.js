@@ -27,13 +27,13 @@ const AdmissionsPipeline = () => {
       childs: [
         {
           title: "New Application",
-          applicationCount: 3,
-          studentCount: 3,
+          applicationCount: 15,
+          studentCount: 8,
           childs: [
             {
               title: "20% Assessment",
-              applicationCount: 3,
-              studentCount: 3,
+              applicationCount: 5,
+              studentCount: 7,
               childs: null,
             },
           ],
