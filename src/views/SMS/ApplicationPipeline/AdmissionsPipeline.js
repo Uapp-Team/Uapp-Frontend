@@ -265,7 +265,7 @@ const AdmissionsPipeline = () => {
               <div>
                 <Row>
                   {statusCardData.map((card, index) => (
-                    <Col lg={4}>
+                    <Col lg={4} md={6} sm={12} key={index}>
                       <StatusCard
                         key={index}
                         title={card.title}
