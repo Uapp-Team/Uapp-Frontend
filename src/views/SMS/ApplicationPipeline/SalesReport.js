@@ -5,11 +5,33 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
 import { pipelineDesign, applicationStatus } from "./DemoData";
 import StatusCard from "./Components/StatusCard";
+import DateRange from "../../../components/form/DateRange";
+import Filter from "../../../components/Dropdown/Filter";
+import get from "../../../helpers/get";
+import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 
 const SalesReport = () => {
   const [funnelData, setFunnelData] = useState(applicationStatus);
-
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
+  const [intake, setIntake] = useState(0);
+  const [consultantValue, setConsultantValue] = useState(0);
+  const [selectedDates, setSelectedDates] = useState([]);
+  const dateFormat = "DD-MM-YYYY";
+
+  useEffect(() => {
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
+    });
+
+    get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
+      setIntakeRngValue(res?.id);
+      setIntakeRngLabel(res?.intakeName);
+    });
+  }, []);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -55,7 +77,42 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          <p className="fs-16px fw-600 mb-3">Sales Report</p>
+          <div className="d-flex align-items-center justify-content-between mb-8px">
+            <p className="fs-16px fw-600">Sales Report</p>
+            <div className="d-flex align-items-center justify-content-center gap-4px">
+              <DateRange
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                formattedDate={dateFormat}
+              />
+              <Filter
+                data={intakeRngDD}
+                label={intakeRngLabel}
+                setLabel={setIntakeRngLabel}
+                value={intakeRngValue}
+                setValue={setIntakeRngValue}
+                action={() => {}}
+                className="ml-2"
+              />
+
+              <DDFilterByAppUrl
+                label=""
+                placeholder="Select Intake"
+                url="IntakeDD/Index"
+                defaultValue={intake}
+                action={setIntake}
+                className="ml-2"
+              />
+              <DDFilterByAppUrl
+                label=""
+                placeholder="Select Consultant type"
+                url="ConsultantTypeDD/Index"
+                defaultValue={consultantValue}
+                action={setConsultantValue}
+                className="ml-2"
+              />
+            </div>
+          </div>
 
           <div className="row align-items-center relative">
             <div className="col-12">

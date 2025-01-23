@@ -1,191 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { Card, Col, Row } from "reactstrap";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import Filter from "../../../components/Dropdown/Filter";
-import DateRange from "../../../components/form/DateRange";
 import PipelineCard from "./Components/PipelineCard";
+import { pipelineDesign, applicationStatus } from "./DemoData";
 import StatusCard from "./Components/StatusCard";
+import DateRange from "../../../components/form/DateRange";
+import Filter from "../../../components/Dropdown/Filter";
+import get from "../../../helpers/get";
+import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 
 const AdmissionsPipeline = () => {
+  const [funnelData, setFunnelData] = useState(applicationStatus);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
-  const [showStages, setShowStages] = useState(false);
+
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [consultantDD, setConsultantDD] = useState([]);
-  const [consultantLabel, setConsultantLabel] = useState("Consultant");
+  const [intake, setIntake] = useState(0);
   const [consultantValue, setConsultantValue] = useState(0);
-  const dateFormat = "DD-MM-YYYY";
   const [selectedDates, setSelectedDates] = useState([]);
+  const dateFormat = "DD-MM-YYYY";
 
-  const [funnelData, setFunnelData] = useState([
-    {
-      title: "Pre-application",
-      applicationCount: 3,
-      studentCount: 3,
-      childs: [
-        {
-          title: "New Application",
-          applicationCount: 15,
-          studentCount: 8,
-          childs: [
-            {
-              title: "20% Assessment",
-              applicationCount: 5,
-              studentCount: 7,
-              childs: null,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "UAPP Compilance",
-      applicationCount: 299,
-      studentCount: 237,
-      childs: [
-        {
-          title: "Application Cancelled",
-          applicationCount: 299,
-          studentCount: 237,
-          childs: [
-            {
-              title: "Ready to Apply",
-              applicationCount: 264,
-              studentCount: 209,
-              childs: null,
-            },
-            {
-              title: "New Application",
-              applicationCount: 35,
-              studentCount: 33,
-              childs: null,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "University Processing",
-      applicationCount: 141,
-      studentCount: 125,
-      childs: [
-        {
-          title: "Process",
-          applicationCount: 141,
-          studentCount: 125,
-          childs: null,
-        },
-      ],
-    },
-    {
-      title: "Conditional Offer",
-      applicationCount: 0,
-      studentCount: 0,
-      childs: [],
-    },
-    {
-      title: "Pre-Offer Stage/Post",
-      applicationCount: 0,
-      studentCount: 0,
-      childs: [],
-    },
-    {
-      title: "Unconditional Offer",
-      applicationCount: 272,
-      studentCount: 256,
-      childs: [
-        {
-          title: "Offer Issued",
-          applicationCount: 272,
-          studentCount: 256,
-          childs: [
-            {
-              title: "Unconditional Offer",
-              applicationCount: 272,
-              studentCount: 256,
-              childs: null,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Pre arrival Stage/Visa",
-      applicationCount: 6,
-      studentCount: 6,
-      childs: [
-        {
-          title: "CAS Processing",
-          applicationCount: 3,
-          studentCount: 3,
-          childs: [
-            {
-              title: "Application Cancelled",
-              applicationCount: 3,
-              studentCount: 3,
-              childs: null,
-            },
-          ],
-        },
-        {
-          title: "Visa Processing",
-          applicationCount: 3,
-          studentCount: 3,
-          childs: [
-            {
-              title: "Application Completed",
-              applicationCount: 3,
-              studentCount: 3,
-              childs: null,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Registration",
-      applicationCount: 0,
-      studentCount: 0,
-      childs: [],
-    },
-  ]);
+  useEffect(() => {
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
+    });
 
-  const admissionPipelineDesign = [
-    {
-      bgColor: "#E6F3FA",
-      activeBgColor: "#007ACC",
-    },
-    {
-      bgColor: "#FFF6CC",
-      activeBgColor: "#E6C317",
-    },
-    {
-      bgColor: "#FFEBD6",
-      activeBgColor: "#FF7F11",
-    },
-    {
-      bgColor: "#EAF8EB",
-      activeBgColor: "#32A852",
-    },
-    {
-      bgColor: "#FCE5E6",
-      activeBgColor: "#E63946",
-    },
-    {
-      bgColor: "#E3F6E3",
-      activeBgColor: "#2CA02C",
-    },
-    {
-      bgColor: "#ECEBFF",
-      activeBgColor: "#6C63FF",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#005A9C",
-    },
-  ];
+    get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
+      setIntakeRngValue(res?.id);
+      setIntakeRngLabel(res?.intakeName);
+    });
+  }, []);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -228,146 +74,167 @@ const AdmissionsPipeline = () => {
 
   return (
     <>
-      <BreadCrumb title="Admissions Pipeline" />
+      <BreadCrumb title="Sales Report" />
       <Card>
-        <div className="p-24px">
-          <div>
-            <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
-              <h5 className="fs-16px">Admission Application Pipeline</h5>
-              <div className="d-flex align-items-center justify-content-center gap-4px">
-                <DateRange
-                  selectedDates={selectedDates}
-                  setSelectedDates={setSelectedDates}
-                  formattedDate={dateFormat}
-                />
-                <Filter
-                  data={intakeRngDD}
-                  label={intakeRngLabel}
-                  setLabel={setIntakeRngLabel}
-                  value={intakeRngValue}
-                  setValue={setIntakeRngValue}
-                  action={() => {}}
-                  isDisabled={false}
-                />
-                <Filter
-                  data={consultantDD}
-                  label={consultantLabel}
-                  setLabel={setConsultantLabel}
-                  value={consultantValue}
-                  setValue={setConsultantValue}
-                  action={() => {}}
-                  isDisabled={false}
-                />
-              </div>
+        <CardBody>
+          <div className="d-flex align-items-center justify-content-between mb-8px">
+            <p className="fs-16px fw-600">Sales Report</p>
+            <div className="d-flex align-items-center justify-content-center gap-4px">
+              <DateRange
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                formattedDate={dateFormat}
+              />
+              <Filter
+                data={intakeRngDD}
+                label={intakeRngLabel}
+                setLabel={setIntakeRngLabel}
+                value={intakeRngValue}
+                setValue={setIntakeRngValue}
+                action={() => {}}
+                className="ml-2"
+              />
+
+              <DDFilterByAppUrl
+                label=""
+                placeholder="Select Intake"
+                url="IntakeDD/Index"
+                defaultValue={intake}
+                action={setIntake}
+                className="ml-2"
+              />
+              <DDFilterByAppUrl
+                label=""
+                placeholder="Select Consultant type"
+                url="ConsultantTypeDD/Index"
+                defaultValue={consultantValue}
+                action={setConsultantValue}
+                className="ml-2"
+              />
             </div>
+          </div>
 
-            <div className="row align-items-center">
-              <div className="col-12">
-                <div class="scroll-container">
-                  <div id="scroll-left" className="scroll-left">
-                    <button class="scroll-button ms-2">&#10094;</button>
-                  </div>
-
-                  <div className="scroll-content carved-div ">
-                    {funnelData.map((card, index) => (
-                      <PipelineCard
-                        key={index}
-                        title={card.title}
-                        applications={card.applicationCount}
-                        students={card.studentCount}
-                        width="154px"
-                        bgColor={admissionPipelineDesign[index].bgColor}
-                        activeBgColor={
-                          admissionPipelineDesign[index].activeBgColor
-                        }
-                        isActive={selectedCardIndex === index ? true : false}
-                        onClick={() => {
-                          setShowStages(true);
-                          setSelectedCardIndex(index);
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  <div id="scroll-right" className="scroll-right">
-                    <button class="scroll-button me-2">&#10095;</button>
-                  </div>
+          <div className="row align-items-center relative">
+            <div className="col-12">
+              <div class="scroll-container">
+                <div id="scroll-left" className="scroll-left">
+                  <button class="scroll-button ms-2">&#10094;</button>
                 </div>
-              </div>
-            </div>
 
-            <div className="row align-items-center mb-16px mt-16px">
-              <div className="col-12">
-                <div className="scroll-content scroll-arrow">
+                <div className="scroll-content carved-div ">
                   {funnelData.map((card, index) => (
-                    <div
+                    <PipelineCard
                       key={index}
-                      style={{ minWidth: "170px" }}
-                      className="text-center"
-                    >
-                      {selectedCardIndex === index && (
-                        <AiFillCaretDown size={22} color="#7C7C7C" />
-                      )}
-                    </div>
+                      title={card.title}
+                      applications={card.applicationCount}
+                      students={card.studentCount}
+                      width="154px"
+                      bgColor={pipelineDesign[index].bgColor}
+                      activeBgColor={pipelineDesign[index].activeBgColor}
+                      isActive={selectedCardIndex === index ? true : false}
+                      onClick={() => setSelectedCardIndex(index)}
+                    />
                   ))}
                 </div>
+                <div id="scroll-right" className="scroll-right">
+                  <button class="scroll-button me-2">&#10095;</button>
+                </div>
               </div>
             </div>
+          </div>
 
-            {showStages && selectedCardIndex !== null && (
-              <div>
-                <div className="d-flex align-items-center h-48px">
-                  <p className="fs-16px fw-600 align-self-center">
-                    {funnelData[selectedCardIndex].title}
-                  </p>
-                </div>
-                {funnelData[selectedCardIndex].childs.map((item, index) => (
+          <div className="row align-items-center">
+            <div className="col-12">
+              <div className="scroll-content scroll-arrow">
+                {funnelData.map((card, index) => (
+                  <div
+                    key={index}
+                    style={{ minWidth: "170px" }}
+                    className="text-center mb-4"
+                  >
+                    {selectedCardIndex === index && (
+                      <>
+                        <AiFillCaretDown size={22} color="#7C7C7C" />
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
+            funnelData?.map((card, index) => (
+              <div key={index} className="d-flex">
+                {selectedCardIndex === index ? (
+                  <div
+                    className="p-16px rounded"
+                    style={{
+                      backgroundColor: pipelineDesign[index].bgColor,
+                      border: `1px solid ${pipelineDesign[index].activeBgColor}`,
+                    }}
+                  >
+                    <p
+                      className="14px fw-500"
+                      style={{
+                        color: pipelineDesign[index].activeBgColor,
+                      }}
+                    >
+                      {card?.title}
+                    </p>
+                    <hr />
+                    <Row>
+                      {card?.childs.map((data, index) => (
+                        <Col key={index}>
+                          <div>
+                            <span className="fw-600 fs-16px">
+                              {data?.applicationCount}
+                            </span>
+                            <span className="fs-12px"> Application</span>
+                            <br />
+                            <span className="fw-600 fs-16px">
+                              {data?.studentCount}
+                            </span>
+                            <span className="fs-12px"> Student</span>
+                          </div>
+
+                          <p className="mb-0">{data?.title}</p>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+
+          {selectedCardIndex !== null && (
+            <div>
+              <p className="fs-16px fw-600 mt-5">
+                {funnelData[selectedCardIndex]?.title}
+              </p>
+              {funnelData[selectedCardIndex]?.childs.length > 0 &&
+                funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
-                    <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
-                      <h5 className="fs-12px fw-500">{item.title}</h5>
+                    <div className="p-2 rounded bg-F2EFED mb-3">
+                      <span className="fw-500">{item?.title}</span>
                     </div>
                     <Row>
-                      {item.childs &&
-                        item.childs.map((child, childIndex) => (
+                      {item?.childs?.length > 0 &&
+                        item?.childs.map((child, childIndex) => (
                           <Col lg={4} md={6} sm={12} key={childIndex}>
                             <StatusCard
-                              title={child.title}
-                              applications={child.applicationCount}
-                              students={child.studentCount}
+                              title={child?.title}
+                              applications={child?.applicationCount}
+                              students={child?.studentCount}
                             />
                           </Col>
                         ))}
                     </Row>
                   </div>
                 ))}
-              </div>
-            )}
-            {/* <>
-              <div className="d-flex align-items-center h-48px ">
-                <p className="fs-16px fw-600 align-self-center">
-                  Pre-application Stage
-                </p>
-              </div>
-              <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
-                <h5 className="fs-12px fw-500">New Application</h5>
-              </div>
-              <div>
-                <Row>
-                  {statusCardData.map((card, index) => (
-                    <Col lg={4} md={6} sm={12} key={index}>
-                      <StatusCard
-                        key={index}
-                        title={card.title}
-                        applications={card.applications}
-                        students={card.students}
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            </> */}
-          </div>
-        </div>
+            </div>
+          )}
+        </CardBody>
       </Card>
     </>
   );
