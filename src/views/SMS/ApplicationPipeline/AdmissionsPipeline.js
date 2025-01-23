@@ -74,11 +74,11 @@ const AdmissionsPipeline = () => {
 
   return (
     <>
-      <BreadCrumb title="Sales Report" />
+      <BreadCrumb title="Admissions Pipeline" />
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-8px">
-            <p className="fs-16px fw-600">Sales Report</p>
+            <p className="fs-16px fw-600">Admissions Application Pipeline</p>
             <div className="d-flex align-items-center justify-content-center gap-4px">
               <DateRange
                 selectedDates={selectedDates}
