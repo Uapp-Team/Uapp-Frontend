@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody } from "reactstrap";
+import { AiFillCaretDown } from "react-icons/ai";
+import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
-import { AiFillCaretDown } from "react-icons/ai";
 
 const SalesReport = () => {
   const [funnelData, setFunnelData] = useState([
@@ -131,7 +131,7 @@ const SalesReport = () => {
                 <div id="scroll-left" className="scroll-left">
                   <button class="scroll-button ms-2">&#10094;</button>
                 </div>
-
+                0{" "}
                 <div className="scroll-content carved-div ">
                   {funnelData.map((card, index) => (
                     <PipelineCard
@@ -149,7 +149,6 @@ const SalesReport = () => {
                     />
                   ))}
                 </div>
-
                 <div id="scroll-right" className="scroll-right">
                   <button class="scroll-button me-2">&#10095;</button>
                 </div>
@@ -178,10 +177,10 @@ const SalesReport = () => {
           </div>
 
           {funnelData.map((card, index) => (
-            <div key={index} className="text-center mx-auto w-25 mt-4">
+            <div key={index} className="mx-auto w-50 mt-4">
               {selectedCardIndex === index && (
                 <div
-                  className="p-16px rounded text-center text-white"
+                  className="p-16px rounded"
                   style={{
                     backgroundColor: admissionPipelineDesign[index].bgColor,
                     border: `1px solid ${admissionPipelineDesign[index].activeBgColor}`,
@@ -201,7 +200,12 @@ const SalesReport = () => {
                     {card.title}
                   </p>
                   <hr />
-                  <h5 className="text-16px fw-600">Hello</h5>
+                  <Row>
+                    <Col>
+                      <span className="fw-600 fs-16px">894</span>
+                      <p>Entry criterion not met</p>
+                    </Col>
+                  </Row>
                 </div>
               )}
             </div>
