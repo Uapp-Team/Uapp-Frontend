@@ -177,7 +177,7 @@ const SalesReport = () => {
           </div>
 
           {funnelData.map((card, index) => (
-            <div key={index} className="mx-auto w-50 mt-4">
+            <div key={index} className="mx-auto w-25 mt-4">
               {selectedCardIndex === index && (
                 <div
                   className="p-16px rounded"
@@ -201,6 +201,14 @@ const SalesReport = () => {
                   </p>
                   <hr />
                   <Row>
+                    <Col>
+                      <span className="fw-600 fs-16px">894</span>
+                      <p>Entry criterion not met</p>
+                    </Col>
+                    <Col>
+                      <span className="fw-600 fs-16px">894</span>
+                      <p>Entry criterion not met</p>
+                    </Col>
                     <Col>
                       <span className="fw-600 fs-16px">894</span>
                       <p>Entry criterion not met</p>
