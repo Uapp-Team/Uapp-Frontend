@@ -829,7 +829,7 @@ const AddUniversity = (props) => {
                             </span>
 
                             <Select
-                              // isDisabled
+                              isDisabled
                               value={{
                                 label: providerTypeLabel,
                                 value: providerTypeValue,
