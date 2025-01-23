@@ -155,25 +155,26 @@ const SalesReport = () => {
               <p className="fs-16px fw-600 mt-5">
                 {funnelData[selectedCardIndex]?.title}
               </p>
-              {funnelData[selectedCardIndex]?.childs?.map((item, index) => (
-                <div key={index}>
-                  <div className="p-2 rounded bg-F2EFED mb-3">
-                    <span className="fw-500">{item?.title}</span>
+              {funnelData[selectedCardIndex]?.childs.length > 0 &&
+                funnelData[selectedCardIndex]?.childs?.map((item, index) => (
+                  <div key={index}>
+                    <div className="p-2 rounded bg-F2EFED mb-3">
+                      <span className="fw-500">{item?.title}</span>
+                    </div>
+                    <Row>
+                      {item?.childs?.length > 0 &&
+                        item?.childs.map((child, childIndex) => (
+                          <Col lg={4} md={6} sm={12} key={childIndex}>
+                            <StatusCard
+                              title={child.title}
+                              applications={child.applicationCount}
+                              students={child.studentCount}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
                   </div>
-                  <Row>
-                    {item?.childs.length > 0 &&
-                      item.childs.map((child, childIndex) => (
-                        <Col lg={4} md={6} sm={12} key={childIndex}>
-                          <StatusCard
-                            title={child.title}
-                            applications={child.applicationCount}
-                            students={child.studentCount}
-                          />
-                        </Col>
-                      ))}
-                  </Row>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </CardBody>
