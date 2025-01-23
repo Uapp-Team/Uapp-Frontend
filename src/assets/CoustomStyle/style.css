@@ -5761,6 +5761,14 @@ span.ant-upload-list-item-name {
 }
 
 /* Application pipline S*/
+/* custom gap */
+.gap-4px {
+  gap: 4px;
+}
+
+.bg-F2EFED {
+  background-color: #f2efed;
+}
 /* ant date range */
 .ant-picker {
   min-height: 38px;

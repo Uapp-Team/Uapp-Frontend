@@ -14,7 +14,7 @@ const StatusCard = ({
   return (
     <>
       <div
-        className="p-16px rounded"
+        className="p-16px rounded mb-3"
         style={{
           backgroundColor: bgColor,
           border: "1px solid #CDDFDF",

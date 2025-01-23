@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { Card } from "reactstrap";
+import { Card, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import Filter from "../../../components/Dropdown/Filter";
 import DateRange from "../../../components/form/DateRange";
 import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
 
 const AdmissionsPipeline = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [showStages, setShowStages] = useState(false);
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
@@ -16,48 +18,140 @@ const AdmissionsPipeline = () => {
   const [consultantValue, setConsultantValue] = useState(0);
   const dateFormat = "DD-MM-YYYY";
   const [selectedDates, setSelectedDates] = useState([]);
+
   const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
-      applications: "5k",
-      students: "234",
+      applicationCount: 3,
+      studentCount: 3,
+      childs: [
+        {
+          title: "New Application",
+          applicationCount: 15,
+          studentCount: 8,
+          childs: [
+            {
+              title: "20% Assessment",
+              applicationCount: 5,
+              studentCount: 7,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
-      title: "UAPP Compliance",
-      applications: "5k",
-      students: "234",
+      title: "UAPP Compilance",
+      applicationCount: 299,
+      studentCount: 237,
+      childs: [
+        {
+          title: "Application Cancelled",
+          applicationCount: 299,
+          studentCount: 237,
+          childs: [
+            {
+              title: "Ready to Apply",
+              applicationCount: 264,
+              studentCount: 209,
+              childs: null,
+            },
+            {
+              title: "New Application",
+              applicationCount: 35,
+              studentCount: 33,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
-      title: "University processing",
-      applications: "5k",
-      students: "234",
+      title: "University Processing",
+      applicationCount: 141,
+      studentCount: 125,
+      childs: [
+        {
+          title: "Process",
+          applicationCount: 141,
+          studentCount: 125,
+          childs: null,
+        },
+      ],
     },
     {
       title: "Conditional Offer",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
     {
       title: "Pre-Offer Stage/Post",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
     {
       title: "Unconditional Offer",
-      applications: "5k",
-      students: "234",
+      applicationCount: 272,
+      studentCount: 256,
+      childs: [
+        {
+          title: "Offer Issued",
+          applicationCount: 272,
+          studentCount: 256,
+          childs: [
+            {
+              title: "Unconditional Offer",
+              applicationCount: 272,
+              studentCount: 256,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
       title: "Pre arrival Stage/Visa",
-      applications: "5k",
-      students: "234",
+      applicationCount: 6,
+      studentCount: 6,
+      childs: [
+        {
+          title: "CAS Processing",
+          applicationCount: 3,
+          studentCount: 3,
+          childs: [
+            {
+              title: "Application Cancelled",
+              applicationCount: 3,
+              studentCount: 3,
+              childs: null,
+            },
+          ],
+        },
+        {
+          title: "Visa Processing",
+          applicationCount: 3,
+          studentCount: 3,
+          childs: [
+            {
+              title: "Application Completed",
+              applicationCount: 3,
+              studentCount: 3,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
       title: "Registration",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
   ]);
+
   const admissionPipelineDesign = [
     {
       bgColor: "#E6F3FA",
@@ -92,8 +186,6 @@ const AdmissionsPipeline = () => {
       activeBgColor: "#005A9C",
     },
   ];
-
-  console.log(selectedDates[0], "selectedDates");
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -139,83 +231,141 @@ const AdmissionsPipeline = () => {
       <BreadCrumb title="Admissions Pipeline" />
       <Card>
         <div className="p-24px">
-          <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
-            <h5>Admission Application Pipeline</h5>
-            <div className="d-flex align-items-center justify-content-center">
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                formattedDate={dateFormat}
-              />
-              <Filter
-                data={intakeRngDD}
-                label={intakeRngLabel}
-                setLabel={setIntakeRngLabel}
-                value={intakeRngValue}
-                setValue={setIntakeRngValue}
-                action={() => {}}
-                isDisabled={false}
-              />
-              <Filter
-                data={consultantDD}
-                label={consultantLabel}
-                setLabel={setConsultantLabel}
-                value={consultantValue}
-                setValue={setConsultantValue}
-                action={() => {}}
-                isDisabled={false}
-              />
+          <div>
+            <div className="d-flex align-items-center justify-content-between mb-8px h-60px">
+              <h5 className="fs-16px">Admission Application Pipeline</h5>
+              <div className="d-flex align-items-center justify-content-center gap-4px">
+                <DateRange
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  formattedDate={dateFormat}
+                />
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  isDisabled={false}
+                />
+                <Filter
+                  data={consultantDD}
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
+                  isDisabled={false}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="row align-items-center">
-            <div className="col-12">
-              <div class="scroll-container">
-                <div id="scroll-left" className="scroll-left">
-                  <button class="scroll-button ms-2">&#10094;</button>
-                </div>
+            <div className="row align-items-center">
+              <div className="col-12">
+                <div class="scroll-container">
+                  <div id="scroll-left" className="scroll-left">
+                    <button class="scroll-button ms-2">&#10094;</button>
+                  </div>
 
-                <div className="scroll-content carved-div ">
-                  {funnelData.map((card, index) => (
-                    <PipelineCard
-                      key={index}
-                      title={card.title}
-                      applications={card.applications}
-                      students={card.students}
-                      width="154px"
-                      bgColor={admissionPipelineDesign[index].bgColor}
-                      activeBgColor={
-                        admissionPipelineDesign[index].activeBgColor
-                      }
-                      isActive={selectedCardIndex === index ? true : false}
-                      onClick={() => setSelectedCardIndex(index)}
-                    />
-                  ))}
-                </div>
+                  <div className="scroll-content carved-div ">
+                    {funnelData.map((card, index) => (
+                      <PipelineCard
+                        key={index}
+                        title={card.title}
+                        applications={card.applicationCount}
+                        students={card.studentCount}
+                        width="154px"
+                        bgColor={admissionPipelineDesign[index].bgColor}
+                        activeBgColor={
+                          admissionPipelineDesign[index].activeBgColor
+                        }
+                        isActive={selectedCardIndex === index ? true : false}
+                        onClick={() => {
+                          setShowStages(true);
+                          setSelectedCardIndex(index);
+                        }}
+                      />
+                    ))}
+                  </div>
 
-                <div id="scroll-right" className="scroll-right">
-                  <button class="scroll-button me-2">&#10095;</button>
+                  <div id="scroll-right" className="scroll-right">
+                    <button class="scroll-button me-2">&#10095;</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="row align-items-center">
-            <div className="col-12">
-              <div className="scroll-content scroll-arrow">
-                {funnelData.map((card, index) => (
-                  <div
-                    key={index}
-                    style={{ minWidth: "170px" }}
-                    className="text-center"
-                  >
-                    {selectedCardIndex === index && (
-                      <AiFillCaretDown size={22} color="#7C7C7C" />
-                    )}
+            <div className="row align-items-center mb-16px mt-16px">
+              <div className="col-12">
+                <div className="scroll-content scroll-arrow">
+                  {funnelData.map((card, index) => (
+                    <div
+                      key={index}
+                      style={{ minWidth: "170px" }}
+                      className="text-center"
+                    >
+                      {selectedCardIndex === index && (
+                        <AiFillCaretDown size={22} color="#7C7C7C" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {showStages && selectedCardIndex !== null && (
+              <div>
+                <div className="d-flex align-items-center h-48px">
+                  <p className="fs-16px fw-600 align-self-center">
+                    {funnelData[selectedCardIndex].title}
+                  </p>
+                </div>
+                {funnelData[selectedCardIndex].childs.map((item, index) => (
+                  <div key={index}>
+                    <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
+                      <h5 className="fs-12px fw-500">{item.title}</h5>
+                    </div>
+                    <Row>
+                      {item.childs &&
+                        item.childs.map((child, childIndex) => (
+                          <Col lg={4} md={6} sm={12} key={childIndex}>
+                            <StatusCard
+                              title={child.title}
+                              applications={child.applicationCount}
+                              students={child.studentCount}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
                   </div>
                 ))}
               </div>
-            </div>
+            )}
+            {/* <>
+              <div className="d-flex align-items-center h-48px ">
+                <p className="fs-16px fw-600 align-self-center">
+                  Pre-application Stage
+                </p>
+              </div>
+              <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
+                <h5 className="fs-12px fw-500">New Application</h5>
+              </div>
+              <div>
+                <Row>
+                  {statusCardData.map((card, index) => (
+                    <Col lg={4} md={6} sm={12} key={index}>
+                      <StatusCard
+                        key={index}
+                        title={card.title}
+                        applications={card.applications}
+                        students={card.students}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            </> */}
           </div>
         </div>
       </Card>
