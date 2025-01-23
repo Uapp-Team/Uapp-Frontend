@@ -55,7 +55,7 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          <p className="fs-16px fw-600 mb-3">Admissions Application Pipeline</p>
+          <p className="fs-16px fw-600 mb-3">Sales Report</p>
 
           <div className="row align-items-center relative">
             <div className="col-12">
