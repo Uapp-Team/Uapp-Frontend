@@ -123,7 +123,7 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          {/* <h5>Admission Application Pipeline</h5> */}
+          <p className="fs-16px fw-600 mb-3">Sales Report</p>
 
           <div className="row align-items-center relative">
             <div className="col-12">
