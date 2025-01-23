@@ -43,37 +43,40 @@ const SalesReport = () => {
     },
   ]);
 
-  const piplineDesign = [
+  const admissionPipelineDesign = [
     {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
+      bgColor: "#E6F3FA",
+      activeBgColor: "#007ACC",
+    },
+    {
+      bgColor: "#FFF6CC",
+      activeBgColor: "#E6C317",
+    },
+    {
+      bgColor: "#FFEBD6",
+      activeBgColor: "#FF7F11",
+    },
+    {
+      bgColor: "#EAF8EB",
+      activeBgColor: "#32A852",
+    },
+    {
+      bgColor: "#FCE5E6",
+      activeBgColor: "#E63946",
+    },
+    {
+      bgColor: "#E3F6E3",
+      activeBgColor: "#2CA02C",
+    },
+    {
+      bgColor: "#ECEBFF",
+      activeBgColor: "#6C63FF",
     },
     {
       bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#D6E9F5",
+      activeBgColor: "#005A9C",
     },
   ];
-
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   useEffect(() => {
@@ -120,9 +123,9 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          <h5>Admission Application Pipeline</h5>
+          {/* <h5>Admission Application Pipeline</h5> */}
 
-          <div className="row align-items-center">
+          <div className="row align-items-center relative">
             <div className="col-12">
               <div class="scroll-container">
                 <div id="scroll-left" className="scroll-left">
@@ -137,8 +140,10 @@ const SalesReport = () => {
                       applications={card.applications}
                       students={card.students}
                       width="154px"
-                      bgColor={piplineDesign[index].bgColor}
-                      activeBgColor={piplineDesign[index].activeBgColor}
+                      bgColor={admissionPipelineDesign[index].bgColor}
+                      activeBgColor={
+                        admissionPipelineDesign[index].activeBgColor
+                      }
                       isActive={selectedCardIndex === index ? true : false}
                       onClick={() => setSelectedCardIndex(index)}
                     />
@@ -159,16 +164,48 @@ const SalesReport = () => {
                   <div
                     key={index}
                     style={{ minWidth: "170px" }}
-                    className="text-center"
+                    className="text-center mt-4"
                   >
                     {selectedCardIndex === index && (
-                      <AiFillCaretDown size={22} color="#7C7C7C" />
+                      <>
+                        <AiFillCaretDown size={22} color="#7C7C7C" />
+                      </>
                     )}
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
+          {funnelData.map((card, index) => (
+            <div key={index} className="text-center mx-auto w-25 mt-4">
+              {selectedCardIndex === index && (
+                <div
+                  className="p-16px rounded text-center text-white"
+                  style={{
+                    backgroundColor: admissionPipelineDesign[index].bgColor,
+                    border: `1px solid ${admissionPipelineDesign[index].activeBgColor}`,
+                  }}
+                  // style={{
+                  //   backgroundColor: "#F9FAFA",
+                  //   border: "1px solid #367D7E",
+                  //   minWidth: "350px",
+                  // }}
+                >
+                  <p
+                    className="14px fw-500"
+                    style={{
+                      color: admissionPipelineDesign[index].activeBgColor,
+                    }}
+                  >
+                    {card.title}
+                  </p>
+                  <hr />
+                  <h5 className="text-16px fw-600">Hello</h5>
+                </div>
+              )}
+            </div>
+          ))}
         </CardBody>
       </Card>
     </>
