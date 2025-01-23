@@ -3,80 +3,12 @@ import { AiFillCaretDown } from "react-icons/ai";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
+import { applicationStatus, pipelineDesign } from "./DemoData";
 
 const SalesReport = () => {
-  const [funnelData, setFunnelData] = useState([
-    {
-      title: "Pre-application",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "UAPP Compliance",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "University processing",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "Conditional Offer",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "Pre-Offer Stage/Post",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "Unconditional Offer",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "Registration",
-      applications: "5k",
-      students: "234",
-    },
-  ]);
+  const [funnelData, setFunnelData] = useState(applicationStatus);
 
-  const admissionPipelineDesign = [
-    {
-      bgColor: "#E6F3FA",
-      activeBgColor: "#007ACC",
-    },
-    {
-      bgColor: "#FFF6CC",
-      activeBgColor: "#E6C317",
-    },
-    {
-      bgColor: "#FFEBD6",
-      activeBgColor: "#FF7F11",
-    },
-    {
-      bgColor: "#EAF8EB",
-      activeBgColor: "#32A852",
-    },
-    {
-      bgColor: "#FCE5E6",
-      activeBgColor: "#E63946",
-    },
-    {
-      bgColor: "#E3F6E3",
-      activeBgColor: "#2CA02C",
-    },
-    {
-      bgColor: "#ECEBFF",
-      activeBgColor: "#6C63FF",
-    },
-    {
-      bgColor: "#D6E9F5",
-      activeBgColor: "#005A9C",
-    },
-  ];
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   useEffect(() => {
@@ -131,19 +63,17 @@ const SalesReport = () => {
                 <div id="scroll-left" className="scroll-left">
                   <button class="scroll-button ms-2">&#10094;</button>
                 </div>
-                0{" "}
+
                 <div className="scroll-content carved-div ">
                   {funnelData.map((card, index) => (
                     <PipelineCard
                       key={index}
                       title={card.title}
-                      applications={card.applications}
-                      students={card.students}
+                      applications={card.applicationCount}
+                      students={card.studentCount}
                       width="154px"
-                      bgColor={admissionPipelineDesign[index].bgColor}
-                      activeBgColor={
-                        admissionPipelineDesign[index].activeBgColor
-                      }
+                      bgColor={pipelineDesign[index].bgColor}
+                      activeBgColor={pipelineDesign[index].activeBgColor}
                       isActive={selectedCardIndex === index ? true : false}
                       onClick={() => setSelectedCardIndex(index)}
                     />
@@ -163,7 +93,7 @@ const SalesReport = () => {
                   <div
                     key={index}
                     style={{ minWidth: "170px" }}
-                    className="text-center mt-4"
+                    className="text-center mb-4"
                   >
                     {selectedCardIndex === index && (
                       <>
@@ -176,48 +106,77 @@ const SalesReport = () => {
             </div>
           </div>
 
-          {funnelData.map((card, index) => (
-            <div key={index} className="mx-auto w-25 mt-4">
-              {selectedCardIndex === index && (
-                <div
-                  className="p-16px rounded"
-                  style={{
-                    backgroundColor: admissionPipelineDesign[index].bgColor,
-                    border: `1px solid ${admissionPipelineDesign[index].activeBgColor}`,
-                  }}
-                  // style={{
-                  //   backgroundColor: "#F9FAFA",
-                  //   border: "1px solid #367D7E",
-                  //   minWidth: "350px",
-                  // }}
-                >
-                  <p
-                    className="14px fw-500"
+          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
+            funnelData?.map((card, index) => (
+              <div key={index} className="d-flex">
+                {selectedCardIndex === index ? (
+                  <div
+                    className="p-16px rounded"
                     style={{
-                      color: admissionPipelineDesign[index].activeBgColor,
+                      backgroundColor: pipelineDesign[index].bgColor,
+                      border: `1px solid ${pipelineDesign[index].activeBgColor}`,
                     }}
                   >
-                    {card.title}
-                  </p>
-                  <hr />
-                  <Row>
-                    <Col>
-                      <span className="fw-600 fs-16px">894</span>
-                      <p>Entry criterion not met</p>
-                    </Col>
-                    <Col>
-                      <span className="fw-600 fs-16px">894</span>
-                      <p>Entry criterion not met</p>
-                    </Col>
-                    <Col>
-                      <span className="fw-600 fs-16px">894</span>
-                      <p>Entry criterion not met</p>
-                    </Col>
-                  </Row>
-                </div>
-              )}
+                    <p
+                      className="14px fw-500"
+                      style={{
+                        color: pipelineDesign[index].activeBgColor,
+                      }}
+                    >
+                      {card?.title}
+                    </p>
+                    <hr />
+                    <Row>
+                      {card?.childs.map((data, index) => (
+                        <Col key={index}>
+                          <div>
+                            <span className="fw-600 fs-16px">
+                              {data.applicationCount}
+                            </span>
+                            <span className="fs-12px"> Application</span>
+                            <br />
+                            <span className="fw-600 fs-16px">
+                              {data.studentCount}
+                            </span>
+                            <span className="fs-12px"> Student</span>
+                          </div>
+
+                          <p className="mb-0">{data.title}</p>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+
+          {selectedCardIndex !== null && (
+            <div>
+              <p className="fs-16px fw-600 mt-5">
+                {funnelData[selectedCardIndex]?.title}
+              </p>
+              {funnelData[selectedCardIndex]?.childs.length > 0 &&
+                funnelData[selectedCardIndex]?.childs?.map((item, index) => (
+                  <div key={index}>
+                    <div className="p-2 rounded bg-F2EFED mb-3">
+                      <span className="fw-500">{item?.title}</span>
+                    </div>
+                    <Row>
+                      {item?.childs?.length > 0 &&
+                        item?.childs.map((child, childIndex) => (
+                          <Col lg={4} md={6} sm={12} key={childIndex}>
+                            <StatusCard
+                              title={child.title}
+                              applications={child.applicationCount}
+                              students={child.studentCount}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </div>
+                ))}
             </div>
-          ))}
+          )}
         </CardBody>
       </Card>
     </>
