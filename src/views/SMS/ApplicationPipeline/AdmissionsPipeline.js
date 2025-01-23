@@ -18,48 +18,140 @@ const AdmissionsPipeline = () => {
   const [consultantValue, setConsultantValue] = useState(0);
   const dateFormat = "DD-MM-YYYY";
   const [selectedDates, setSelectedDates] = useState([]);
+
   const [funnelData, setFunnelData] = useState([
     {
       title: "Pre-application",
-      applications: "5k",
-      students: "234",
+      applicationCount: 3,
+      studentCount: 3,
+      childs: [
+        {
+          title: "New Application",
+          applicationCount: 3,
+          studentCount: 3,
+          childs: [
+            {
+              title: "20% Assessment",
+              applicationCount: 3,
+              studentCount: 3,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
-      title: "UAPP Compliance",
-      applications: "5k",
-      students: "234",
+      title: "UAPP Compilance",
+      applicationCount: 299,
+      studentCount: 237,
+      childs: [
+        {
+          title: "Application Cancelled",
+          applicationCount: 299,
+          studentCount: 237,
+          childs: [
+            {
+              title: "Ready to Apply",
+              applicationCount: 264,
+              studentCount: 209,
+              childs: null,
+            },
+            {
+              title: "New Application",
+              applicationCount: 35,
+              studentCount: 33,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
-      title: "University processing",
-      applications: "5k",
-      students: "234",
+      title: "University Processing",
+      applicationCount: 141,
+      studentCount: 125,
+      childs: [
+        {
+          title: "Process",
+          applicationCount: 141,
+          studentCount: 125,
+          childs: null,
+        },
+      ],
     },
     {
       title: "Conditional Offer",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
     {
       title: "Pre-Offer Stage/Post",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
     {
       title: "Unconditional Offer",
-      applications: "5k",
-      students: "234",
+      applicationCount: 272,
+      studentCount: 256,
+      childs: [
+        {
+          title: "Offer Issued",
+          applicationCount: 272,
+          studentCount: 256,
+          childs: [
+            {
+              title: "Unconditional Offer",
+              applicationCount: 272,
+              studentCount: 256,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
       title: "Pre arrival Stage/Visa",
-      applications: "5k",
-      students: "234",
+      applicationCount: 6,
+      studentCount: 6,
+      childs: [
+        {
+          title: "CAS Processing",
+          applicationCount: 3,
+          studentCount: 3,
+          childs: [
+            {
+              title: "Application Cancelled",
+              applicationCount: 3,
+              studentCount: 3,
+              childs: null,
+            },
+          ],
+        },
+        {
+          title: "Visa Processing",
+          applicationCount: 3,
+          studentCount: 3,
+          childs: [
+            {
+              title: "Application Completed",
+              applicationCount: 3,
+              studentCount: 3,
+              childs: null,
+            },
+          ],
+        },
+      ],
     },
     {
       title: "Registration",
-      applications: "5k",
-      students: "234",
+      applicationCount: 0,
+      studentCount: 0,
+      childs: [],
     },
   ]);
+
   const admissionPipelineDesign = [
     {
       bgColor: "#E6F3FA",
@@ -94,34 +186,6 @@ const AdmissionsPipeline = () => {
       activeBgColor: "#005A9C",
     },
   ];
-
-  const [statusCardData, setStatusCardData] = useState([
-    {
-      title: "20% Assessment",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "40% Assessment",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "60% Assessment",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "80% Assessment",
-      applications: "5k",
-      students: "234",
-    },
-    {
-      title: "100% Assessment",
-      applications: "5k",
-      students: "234",
-    },
-  ]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -209,8 +273,8 @@ const AdmissionsPipeline = () => {
                       <PipelineCard
                         key={index}
                         title={card.title}
-                        applications={card.applications}
-                        students={card.students}
+                        applications={card.applicationCount}
+                        students={card.studentCount}
                         width="154px"
                         bgColor={admissionPipelineDesign[index].bgColor}
                         activeBgColor={
@@ -250,10 +314,35 @@ const AdmissionsPipeline = () => {
               </div>
             </div>
 
-            {/* {showStages && (
-              
-            )} */}
-            <>
+            {showStages && selectedCardIndex !== null && (
+              <div>
+                <div className="d-flex align-items-center h-48px">
+                  <p className="fs-16px fw-600 align-self-center">
+                    {funnelData[selectedCardIndex].title}
+                  </p>
+                </div>
+                {funnelData[selectedCardIndex].childs.map((item, index) => (
+                  <div key={index}>
+                    <div className="border p-2 rounded h-34px bg-F2EFED mb-3">
+                      <h5 className="fs-12px fw-500">{item.title}</h5>
+                    </div>
+                    <Row>
+                      {item.childs &&
+                        item.childs.map((child, childIndex) => (
+                          <Col lg={4} md={6} sm={12} key={childIndex}>
+                            <StatusCard
+                              title={child.title}
+                              applications={child.applicationCount}
+                              students={child.studentCount}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* <>
               <div className="d-flex align-items-center h-48px ">
                 <p className="fs-16px fw-600 align-self-center">
                   Pre-application Stage
@@ -276,7 +365,7 @@ const AdmissionsPipeline = () => {
                   ))}
                 </Row>
               </div>
-            </>
+            </> */}
           </div>
         </div>
       </Card>
