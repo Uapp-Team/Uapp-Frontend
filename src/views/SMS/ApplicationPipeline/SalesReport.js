@@ -131,17 +131,17 @@ const SalesReport = () => {
                         <Col key={index}>
                           <div>
                             <span className="fw-600 fs-16px">
-                              {data.applicationCount}
+                              {data?.applicationCount}
                             </span>
                             <span className="fs-12px"> Application</span>
                             <br />
                             <span className="fw-600 fs-16px">
-                              {data.studentCount}
+                              {data?.studentCount}
                             </span>
                             <span className="fs-12px"> Student</span>
                           </div>
 
-                          <p className="mb-0">{data.title}</p>
+                          <p className="mb-0">{data?.title}</p>
                         </Col>
                       ))}
                     </Row>
@@ -166,9 +166,9 @@ const SalesReport = () => {
                         item?.childs.map((child, childIndex) => (
                           <Col lg={4} md={6} sm={12} key={childIndex}>
                             <StatusCard
-                              title={child.title}
-                              applications={child.applicationCount}
-                              students={child.studentCount}
+                              title={child?.title}
+                              applications={child?.applicationCount}
+                              students={child?.studentCount}
                             />
                           </Col>
                         ))}
