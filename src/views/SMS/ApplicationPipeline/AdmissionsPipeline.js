@@ -35,7 +35,6 @@ const AdmissionsPipeline = () => {
     });
   }, []);
 
-  console.log("selectedDates", selectedDates);
   useEffect(() => {
     if (intakeRngValue > 0) {
       Uget(
@@ -94,47 +93,52 @@ const AdmissionsPipeline = () => {
       <BreadCrumb title="Admissions Pipeline" />
       <Card>
         <CardBody>
-          <div className="d-flex align-items-center justify-content-between mb-8px">
-            <p className="fs-16px fw-600"> Pipeline</p>
-            <div className="d-flex align-items-center justify-content-center gap-4px">
-              <Filter
-                data={intakeRngDD}
-                label={intakeRngLabel}
-                setLabel={setIntakeRngLabel}
-                value={intakeRngValue}
-                setValue={setIntakeRngValue}
-                action={() => {}}
-                className="mr-2"
-              />
+          <Row className="mb-4">
+            <Col lg={4}>
+              <p className="fs-16px fw-600">Admissions Application Pipeline</p>
+            </Col>
+            <Col lg={8}>
+              <div className="d-flex align-items-center justify-content-end gap-4px ">
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  className="mr-2"
+                />
 
-              <DefaultDropdown
-                label={intakeLabel}
-                setLabel={setIntakeLabel}
-                value={intake}
-                setValue={setIntake}
-                url={`IntakeDD/get/${intakeRngValue}`}
-                name="intake"
-                action={(l, v) => setSelectedDates([])}
-              />
+                <DefaultDropdown
+                  label={intakeLabel}
+                  setLabel={setIntakeLabel}
+                  value={intake}
+                  setValue={setIntake}
+                  url={`IntakeDD/get/${intakeRngValue}`}
+                  name="intake"
+                  action={(l, v) => setSelectedDates([])}
+                />
 
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                action={() => {
-                  setIntake(0);
-                  setIntakeLabel("Select Intake");
-                }}
-              />
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Select Consultant type"
-                url="ConsultantTypeDD/Index"
-                defaultValue={consultantValue}
-                action={setConsultantValue}
-                className="ml-2"
-              />
-            </div>
-          </div>
+                <DateRange
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  action={() => {
+                    setIntake(0);
+                    setIntakeLabel("Select Intake");
+                  }}
+                />
+
+                <DDFilterByAppUrl
+                  label=""
+                  placeholder="Select Type"
+                  url="ConsultantTypeDD/Index"
+                  defaultValue={consultantValue}
+                  action={setConsultantValue}
+                  className="ml-2"
+                />
+              </div>
+            </Col>
+          </Row>
 
           <div className="row align-items-center relative">
             <div className="col-12">
@@ -186,50 +190,6 @@ const AdmissionsPipeline = () => {
               </div>
             </div>
           </div>
-
-          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
-            funnelData?.map((card, index) => (
-              <div key={index} className="d-flex">
-                {selectedCardIndex === index ? (
-                  <div
-                    className="p-16px rounded"
-                    style={{
-                      backgroundColor: pipelineDesign[index].bgColor,
-                      border: `1px solid ${pipelineDesign[index].activeBgColor}`,
-                    }}
-                  >
-                    <p
-                      className="14px fw-500"
-                      style={{
-                        color: pipelineDesign[index].activeBgColor,
-                      }}
-                    >
-                      {card?.title}
-                    </p>
-                    <hr />
-                    <Row>
-                      {card?.childs.map((data, index) => (
-                        <Col key={index}>
-                          <div>
-                            <span className="fw-600 fs-16px">
-                              {data?.applicationCount}
-                            </span>
-                            <span className="fs-12px"> Application</span>
-                            <br />
-                            <span className="fw-600 fs-16px">
-                              {data?.studentCount}
-                            </span>
-                            <span className="fs-12px"> Student</span>
-                          </div>
-
-                          <p className="mb-0">{data?.title}</p>
-                        </Col>
-                      ))}
-                    </Row>
-                  </div>
-                ) : null}
-              </div>
-            ))}
 
           {selectedCardIndex !== null && (
             <div>
