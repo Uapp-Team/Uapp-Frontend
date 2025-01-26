@@ -8,19 +8,21 @@ import StatusCard from "./Components/StatusCard";
 import DateRange from "../../../components/form/DateRange";
 import Filter from "../../../components/Dropdown/Filter";
 import get from "../../../helpers/get";
+import Uget from "../../../helpers/Uget";
 import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 
 const AdmissionsPipeline = () => {
-  const [funnelData, setFunnelData] = useState(applicationStatus);
+  const [funnelData, setFunnelData] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
   const [intake, setIntake] = useState(0);
+  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
   const [consultantValue, setConsultantValue] = useState(0);
   const [selectedDates, setSelectedDates] = useState([]);
-  const dateFormat = "DD-MM-YYYY";
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -32,6 +34,21 @@ const AdmissionsPipeline = () => {
       setIntakeRngLabel(res?.intakeName);
     });
   }, []);
+
+  console.log("selectedDates", selectedDates);
+  useEffect(() => {
+    if (intakeRngValue > 0) {
+      Uget(
+        `ApplicationPipeline/get?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&consultantTypeId=${consultantValue}`
+      ).then((res) => {
+        setFunnelData(res?.data);
+      });
+    }
+  }, [intakeRngValue, intake, selectedDates, consultantValue]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -78,13 +95,8 @@ const AdmissionsPipeline = () => {
       <Card>
         <CardBody>
           <div className="d-flex align-items-center justify-content-between mb-8px">
-            <p className="fs-16px fw-600">Admissions Application Pipeline</p>
+            <p className="fs-16px fw-600"> Pipeline</p>
             <div className="d-flex align-items-center justify-content-center gap-4px">
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                formattedDate={dateFormat}
-              />
               <Filter
                 data={intakeRngDD}
                 label={intakeRngLabel}
@@ -92,16 +104,26 @@ const AdmissionsPipeline = () => {
                 value={intakeRngValue}
                 setValue={setIntakeRngValue}
                 action={() => {}}
-                className="ml-2"
+                className="mr-2"
               />
 
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Select Intake"
-                url="IntakeDD/Index"
-                defaultValue={intake}
-                action={setIntake}
-                className="ml-2"
+              <DefaultDropdown
+                label={intakeLabel}
+                setLabel={setIntakeLabel}
+                value={intake}
+                setValue={setIntake}
+                url={`IntakeDD/get/${intakeRngValue}`}
+                name="intake"
+                action={(l, v) => setSelectedDates([])}
+              />
+
+              <DateRange
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                action={() => {
+                  setIntake(0);
+                  setIntakeLabel("Select Intake");
+                }}
               />
               <DDFilterByAppUrl
                 label=""
@@ -122,19 +144,20 @@ const AdmissionsPipeline = () => {
                 </div>
 
                 <div className="scroll-content carved-div ">
-                  {funnelData.map((card, index) => (
-                    <PipelineCard
-                      key={index}
-                      title={card.title}
-                      applications={card.applicationCount}
-                      students={card.studentCount}
-                      width="154px"
-                      bgColor={pipelineDesign[index].bgColor}
-                      activeBgColor={pipelineDesign[index].activeBgColor}
-                      isActive={selectedCardIndex === index ? true : false}
-                      onClick={() => setSelectedCardIndex(index)}
-                    />
-                  ))}
+                  {funnelData?.length > 0 &&
+                    funnelData?.map((card, index) => (
+                      <PipelineCard
+                        key={index}
+                        title={card?.title}
+                        applications={card?.applicationCount}
+                        students={card?.studentCount}
+                        width="154px"
+                        bgColor={pipelineDesign[index].bgColor}
+                        activeBgColor={pipelineDesign[index].activeBgColor}
+                        isActive={selectedCardIndex === index ? true : false}
+                        onClick={() => setSelectedCardIndex(index)}
+                      />
+                    ))}
                 </div>
                 <div id="scroll-right" className="scroll-right">
                   <button class="scroll-button me-2">&#10095;</button>
@@ -146,19 +169,20 @@ const AdmissionsPipeline = () => {
           <div className="row align-items-center">
             <div className="col-12">
               <div className="scroll-content scroll-arrow">
-                {funnelData.map((card, index) => (
-                  <div
-                    key={index}
-                    style={{ minWidth: "170px" }}
-                    className="text-center mb-4"
-                  >
-                    {selectedCardIndex === index && (
-                      <>
-                        <AiFillCaretDown size={22} color="#7C7C7C" />
-                      </>
-                    )}
-                  </div>
-                ))}
+                {funnelData?.length > 0 &&
+                  funnelData?.map((card, index) => (
+                    <div
+                      key={index}
+                      style={{ minWidth: "170px" }}
+                      className="text-center mb-4"
+                    >
+                      {selectedCardIndex === index ? (
+                        <>
+                          <AiFillCaretDown size={22} color="#7C7C7C" />
+                        </>
+                      ) : null}
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -212,7 +236,7 @@ const AdmissionsPipeline = () => {
               <p className="fs-16px fw-600 mt-5">
                 {funnelData[selectedCardIndex]?.title}
               </p>
-              {funnelData[selectedCardIndex]?.childs.length > 0 &&
+              {funnelData[selectedCardIndex]?.childs?.length > 0 &&
                 funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
                     <div className="p-2 rounded bg-F2EFED mb-3">
