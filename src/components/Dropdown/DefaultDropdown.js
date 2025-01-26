@@ -28,9 +28,9 @@ const DefaultDropdown = ({
   }));
 
   const select = (label, value) => {
-    setError(false);
     setLabel(label);
     setValue(value);
+    setError && setError(false);
     action && action(label, value);
   };
 
