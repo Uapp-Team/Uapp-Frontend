@@ -184,3 +184,119 @@ export const applicationStatus = [
     childs: [],
   },
 ];
+
+export const qualityReport = [
+  {
+    title: "Applicaton Confidence Report (ACR)",
+    applicationCount: 299,
+    studentCount: 237,
+    childs: [
+      {
+        title: "Pre-application Stage",
+        applicationCount: 299,
+        studentCount: 237,
+        childs: [
+          {
+            title: "Low Confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            confidence: 1,
+            childs: null,
+          },
+          {
+            title: "Medium Confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            confidence: 2,
+            childs: null,
+          },
+        ],
+      },
+      {
+        title: "Unconditional Offer Stage",
+        applicationCount: 299,
+        studentCount: 237,
+        childs: [
+          {
+            title: "Form low confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            childs: null,
+          },
+          {
+            title: "Form Medium confidence",
+            applicationCount: 35,
+            studentCount: 33,
+            childs: null,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Applicaton Confidence Report (ACR)",
+    applicationCount: 299,
+    studentCount: 237,
+    childs: [
+      {
+        title: "Pre-application Stage",
+        applicationCount: 299,
+        studentCount: 237,
+        childs: [
+          {
+            title: "Low Confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            confidence: 1,
+            childs: null,
+          },
+          {
+            title: "Medium Confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            confidence: 2,
+            childs: null,
+          },
+        ],
+      },
+      {
+        title: "Unconditional Offer Stage",
+        applicationCount: 299,
+        studentCount: 237,
+        childs: [
+          {
+            title: "Form low confidence",
+            applicationCount: 264,
+            studentCount: 209,
+            childs: null,
+          },
+          {
+            title: "Form Medium confidence",
+            applicationCount: 35,
+            studentCount: 33,
+            childs: null,
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const qualityDesign = [
+  {
+    bgColor: "#EDF2F2",
+    activeBgColor: "#367D7E",
+  },
+  {
+    bgColor: "#EDF2F2",
+    activeBgColor: "#367D7E",
+  },
+  {
+    bgColor: "#EDF2F2",
+    activeBgColor: "#367D7E",
+  },
+  {
+    bgColor: "#EDF2F2",
+    activeBgColor: "#367D7E",
+  },
+];
