@@ -160,50 +160,6 @@ const QualityReport = () => {
             </div>
           </div>
 
-          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
-            funnelData?.map((card, index) => (
-              <div key={index} className="d-flex">
-                {selectedCardIndex === index ? (
-                  <div
-                    className="p-16px rounded"
-                    style={{
-                      backgroundColor: qualityDesign[index].bgColor,
-                      border: `1px solid ${qualityDesign[index].activeBgColor}`,
-                    }}
-                  >
-                    <p
-                      className="14px fw-500"
-                      style={{
-                        color: qualityDesign[index].activeBgColor,
-                      }}
-                    >
-                      {card?.title}
-                    </p>
-                    <hr />
-                    <Row>
-                      {card?.childs.map((data, index) => (
-                        <Col key={index}>
-                          <div>
-                            <span className="fw-600 fs-16px">
-                              {data?.applicationCount}
-                            </span>
-                            <span className="fs-12px"> Application</span>
-                            <br />
-                            <span className="fw-600 fs-16px">
-                              {data?.studentCount}
-                            </span>
-                            <span className="fs-12px"> Student</span>
-                          </div>
-
-                          <p className="mb-0">{data?.title}</p>
-                        </Col>
-                      ))}
-                    </Row>
-                  </div>
-                ) : null}
-              </div>
-            ))}
-
           {selectedCardIndex !== null && (
             <div>
               <p className="fs-16px fw-600 mt-5">
@@ -212,23 +168,43 @@ const QualityReport = () => {
               {funnelData[selectedCardIndex]?.childs.length > 0 &&
                 funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
-                    <div className="p-2 rounded bg-F2EFED mb-3">
-                      <span className="fw-500">{item?.title}</span>
-                    </div>
-                    <Row>
-                      {item?.childs?.length > 0 &&
-                        item?.childs.map((child, childIndex) => (
-                          <Col lg={4} md={6} sm={12} key={childIndex}>
-                            <StatusCard
-                              title={child?.title}
-                              applications={child?.applicationCount}
-                              students={child?.studentCount}
-                              confidence={child?.confidence}
-                              bgColor="#fff"
-                            />
-                          </Col>
-                        ))}
-                    </Row>
+                    {item?.title === "" ? (
+                      <>
+                        <Row>
+                          {item?.childs?.length > 0 &&
+                            item?.childs.map((child, childIndex) => (
+                              <Col lg={4} md={6} sm={12} key={childIndex}>
+                                <StatusCard
+                                  title={child?.title}
+                                  applications={child?.applicationCount}
+                                  students={child?.studentCount}
+                                  confidence={child?.confidence}
+                                  bgColor="#fff"
+                                />
+                              </Col>
+                            ))}
+                        </Row>
+                      </>
+                    ) : (
+                      <>
+                        <div className="p-2 rounded bg-F2EFED mb-3">
+                          <span className="fw-500">{item?.title}</span>
+                        </div>
+                        <Row>
+                          {item?.childs?.length > 0 &&
+                            item?.childs.map((child, childIndex) => (
+                              <Col lg={4} md={6} sm={12} key={childIndex}>
+                                <StatusCard
+                                  title={child?.title}
+                                  applications={child?.applicationCount}
+                                  students={child?.studentCount}
+                                  confidence={child?.confidence}
+                                />
+                              </Col>
+                            ))}
+                        </Row>
+                      </>
+                    )}
                   </div>
                 ))}
             </div>

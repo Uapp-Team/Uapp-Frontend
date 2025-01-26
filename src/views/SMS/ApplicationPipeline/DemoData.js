@@ -239,7 +239,7 @@ export const qualityReport = [
     studentCount: 237,
     childs: [
       {
-        title: "Pre-application Stage",
+        title: "",
         applicationCount: 299,
         studentCount: 237,
         childs: [
