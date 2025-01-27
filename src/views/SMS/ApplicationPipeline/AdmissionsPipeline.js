@@ -98,7 +98,7 @@ const AdmissionsPipeline = () => {
               <p className="fs-16px fw-600">Admissions Application Pipeline</p>
             </Col>
             <Col lg={8}>
-              <div className="d-flex align-items-center justify-content-end gap-4px ">
+              <div className="d-flex align-items-center justify-content-end gap-4px">
                 <Filter
                   data={intakeRngDD}
                   label={intakeRngLabel}
@@ -191,6 +191,50 @@ const AdmissionsPipeline = () => {
             </div>
           </div>
 
+          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
+            funnelData?.map((card, index) => (
+              <div key={index} className="d-flex">
+                {selectedCardIndex === index ? (
+                  <div
+                    className="p-16px rounded"
+                    style={{
+                      backgroundColor: pipelineDesign[index].bgColor,
+                      border: `1px solid ${pipelineDesign[index].activeBgColor}`,
+                    }}
+                  >
+                    <p
+                      className="14px fw-500"
+                      style={{
+                        color: pipelineDesign[index].activeBgColor,
+                      }}
+                    >
+                      {card?.title}
+                    </p>
+                    <hr />
+                    <Row>
+                      {card?.childs.map((data, index) => (
+                        <Col key={index}>
+                          <div>
+                            <span className="fw-600 fs-16px">
+                              {data?.applicationCount}
+                            </span>
+                            <span className="fs-12px"> Application</span>
+                            <br />
+                            <span className="fw-600 fs-16px">
+                              {data?.studentCount}
+                            </span>
+                            <span className="fs-12px"> Student</span>
+                          </div>
+
+                          <p className="mb-0">{data?.title}</p>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : null}
+              </div>
+            ))}
+
           {selectedCardIndex !== null && (
             <div>
               <p className="fs-16px fw-600 mt-5">
@@ -210,6 +254,7 @@ const AdmissionsPipeline = () => {
                               title={child?.title}
                               applications={child?.applicationCount}
                               students={child?.studentCount}
+                              parameters={child?.parameters}
                             />
                           </Col>
                         ))}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import { AiOutlineRight } from "react-icons/ai";
 import { Modal, ModalBody } from "reactstrap";
 import ApplicationList from "./ApplicationList";
@@ -7,10 +8,19 @@ const StatusCard = ({
   title,
   applications,
   students,
+  parameters,
   confidence = null,
   bgColor = "#EDF2F2",
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const history = useHistory();
+  // const [modalOpen, setModalOpen] = useState(false);
+
+  const redirectRoute = (parameters) => {
+    history.push(`/applications`, {
+      state: parameters,
+    });
+  };
+  console.log(parameters);
   return (
     <>
       <div
@@ -55,15 +65,17 @@ const StatusCard = ({
             <span className="fs-12px"> Student</span>
           </div>
         </div>
-        <button
-          className="btn-view-application"
-          onClick={() => setModalOpen(true)}
-        >
-          View Application <AiOutlineRight />
-        </button>
+        {parameters && (
+          <button
+            className="btn-view-application"
+            onClick={() => redirectRoute(parameters)}
+          >
+            View Application <AiOutlineRight />
+          </button>
+        )}
       </div>
 
-      <Modal
+      {/* <Modal
         isOpen={modalOpen}
         toggle={() => setModalOpen(!modalOpen)}
         className="modal-xl"
@@ -71,7 +83,7 @@ const StatusCard = ({
         <ModalBody className="p-4">
           <ApplicationList modalClose={() => setModalOpen(!modalOpen)} />
         </ModalBody>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

@@ -14,7 +14,7 @@ import {
   Button,
 } from "reactstrap";
 import Select from "react-select";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useParams, useHistory } from "react-router";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
@@ -54,7 +54,10 @@ const ApplicationsCommon = () => {
     companionId,
     courseId,
   } = useParams();
+  const history = useHistory();
+  const parameters = history?.location?.state?.state;
 
+  console.log(parameters);
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
