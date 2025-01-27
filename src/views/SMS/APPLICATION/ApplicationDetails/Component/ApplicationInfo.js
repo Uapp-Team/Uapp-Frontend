@@ -1424,6 +1424,11 @@ const ApplicationInfo = ({
                     ) : null}
                   </div>
                 ) : null}
+                {applicationInfo?.statusChangeNote && (
+                  <span className="mt-1 fs-12px">
+                    Note : {applicationInfo?.statusChangeNote}
+                  </span>
+                )}
               </td>
             </tr>
 

@@ -698,14 +698,13 @@ const ApplicationsCommon = () => {
 
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
-
       if (selector === "1") {
         const result = res?.find((ans) => ans?.id.toString() === status);
 
         setApplicationLabel(result?.name);
       } else if (parameters?.applicationStatusId) {
         const result = res?.find(
-          (ans) => ans?.id.toString() === parameters?.applicationStatusId
+          (ans) => ans?.id === parameters?.applicationStatusId
         );
         setApplicationLabel(result?.name);
       }
@@ -831,13 +830,14 @@ const ApplicationsCommon = () => {
 
   useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      console.log(res);
       setApplicationSubDD(res);
       const result = res?.find(
         (ans) => ans?.id === parameters?.applicationSubStatusId
       );
-      setApplicationLabel(result?.name);
+      setApplicationSubLabel(result?.name);
     });
-  }, [applicationValue]);
+  }, [applicationValue, parameters]);
 
   useEffect(() => {
     get(`ConsultantTypeDD/Index`).then((res) => {
@@ -960,6 +960,9 @@ const ApplicationsCommon = () => {
     isTyping,
     percentageValue,
     courseId,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
   ]);
 
   // Delete Button Click Action

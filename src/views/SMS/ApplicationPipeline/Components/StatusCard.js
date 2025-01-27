@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { AiOutlineRight } from "react-icons/ai";
-import { Modal, ModalBody } from "reactstrap";
-import ApplicationList from "./ApplicationList";
 
 const StatusCard = ({
   title,
@@ -19,7 +17,7 @@ const StatusCard = ({
       state: parameters,
     });
   };
-  console.log(parameters);
+
   return (
     <>
       <div
