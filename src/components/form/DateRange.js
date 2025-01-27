@@ -1,4 +1,5 @@
 import { DatePicker } from "antd";
+import moment from "moment";
 import React from "react";
 
 const DateRange = ({
@@ -9,18 +10,19 @@ const DateRange = ({
 }) => {
   const { RangePicker } = DatePicker;
   const handleDateChange = (dates) => {
-    if (dates) {
-      const formattedDates = dates.map((date) => date.format(formattedDate));
-      setSelectedDates(formattedDates);
-      action && action();
-    } else {
-      setSelectedDates([]);
-    }
+    setSelectedDates(
+      dates ? dates.map((date) => date.format(formattedDate)) : []
+    );
+    if (action) action();
   };
 
   return (
     <RangePicker
-      defaultValue={selectedDates}
+      value={
+        selectedDates.length
+          ? selectedDates.map((date) => moment(date, formattedDate))
+          : []
+      }
       format={formattedDate}
       onChange={handleDateChange}
     />
