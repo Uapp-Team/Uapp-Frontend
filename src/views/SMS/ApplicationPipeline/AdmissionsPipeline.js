@@ -191,7 +191,7 @@ const AdmissionsPipeline = () => {
             </div>
           </div>
 
-          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
+          {/* {funnelData[selectedCardIndex]?.childs?.length > 1 &&
             funnelData?.map((card, index) => (
               <div key={index} className="d-flex">
                 {selectedCardIndex === index ? (
@@ -233,7 +233,7 @@ const AdmissionsPipeline = () => {
                   </div>
                 ) : null}
               </div>
-            ))}
+            ))} */}
 
           {selectedCardIndex !== null && (
             <div>
