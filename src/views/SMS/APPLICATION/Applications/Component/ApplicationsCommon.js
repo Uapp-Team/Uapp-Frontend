@@ -307,7 +307,9 @@ const ApplicationsCommon = () => {
   );
 
   const [percentageLabel, setPercentageLabel] = useState(
-    application?.percentageLabel
+    parameters?.percentage
+      ? `${parameters?.percentage}%`
+      : application?.percentageLabel
       ? application?.percentageLabel
       : "Assesment percentage"
   );
@@ -325,7 +327,7 @@ const ApplicationsCommon = () => {
       ? application?.selectedDates
       : []
   );
-
+  console.log("selectedDates: ", selectedDates);
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
 
@@ -703,7 +705,7 @@ const ApplicationsCommon = () => {
         setApplicationLabel(result?.name);
       } else if (parameters?.applicationStatusId) {
         const result = res?.find(
-          (ans) => ans?.id === parameters?.applicationStatusId
+          (ans) => ans?.id.toString() === parameters?.applicationStatusId
         );
         setApplicationLabel(result?.name);
       }

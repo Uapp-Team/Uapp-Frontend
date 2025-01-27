@@ -13,7 +13,6 @@ const StatusCard = ({
   bgColor = "#EDF2F2",
 }) => {
   const history = useHistory();
-  // const [modalOpen, setModalOpen] = useState(false);
 
   const redirectRoute = (parameters) => {
     history.push(`/applications`, {
@@ -74,16 +73,6 @@ const StatusCard = ({
           </button>
         )}
       </div>
-
-      {/* <Modal
-        isOpen={modalOpen}
-        toggle={() => setModalOpen(!modalOpen)}
-        className="modal-xl"
-      >
-        <ModalBody className="p-4">
-          <ApplicationList modalClose={() => setModalOpen(!modalOpen)} />
-        </ModalBody>
-      </Modal> */}
     </>
   );
 };
