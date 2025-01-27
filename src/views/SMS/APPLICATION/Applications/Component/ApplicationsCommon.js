@@ -325,7 +325,7 @@ const ApplicationsCommon = () => {
       ? application?.selectedDates
       : []
   );
-
+  console.log("selectedDates: ", selectedDates);
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
 
