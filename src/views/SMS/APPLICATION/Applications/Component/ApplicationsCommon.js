@@ -35,11 +35,14 @@ import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommo
 import Typing from "../../../../../components/form/Typing.js";
 import Loader from "../../../Search/Loader/Loader";
 import Download from "../../../../../components/buttons/Download.js";
+import DateRange from "../../../../../components/form/DateRange.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
   const componentRef = useRef();
   const location = useLocation();
+  const history = useHistory();
+  const parameters = history?.location?.state?.state;
   const {
     affiliateId,
     admId,
@@ -54,8 +57,6 @@ const ApplicationsCommon = () => {
     companionId,
     courseId,
   } = useParams();
-  const history = useHistory();
-  const parameters = history?.location?.state?.state;
 
   console.log(parameters);
   // Previous states get from session storage
@@ -82,6 +83,7 @@ const ApplicationsCommon = () => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
+  const [applicationSubDD, setApplicationSubDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -107,6 +109,7 @@ const ApplicationsCommon = () => {
   // state for common
   const [commonUappIdDD, setCommonUappIdDD] = useState([]);
   const [commonUniDD, setCommonUniDD] = useState([]);
+  const [consultantTypeDD, setConsultantTypeDD] = useState([]);
   const [commonConsultantDD, setCommonConsultantDD] = useState([]);
   const [commonStdDD, setCommonStdDD] = useState([]);
 
@@ -127,6 +130,18 @@ const ApplicationsCommon = () => {
   );
   const [commonUniValue, setCommonUniValue] = useState(
     application?.commonUniValue ? application?.commonUniValue : 0
+  );
+  const [consultantTypeLabel, setConsultantTypeLabel] = useState(
+    application?.consultantTypeLabel
+      ? application?.consultantTypeLabel
+      : "Consultant Type"
+  );
+  const [consultantTypeValue, setConsultantTypeValue] = useState(
+    parameters?.consultantTypeId
+      ? parameters?.consultantTypeId
+      : application?.consultantTypeValue
+      ? application?.consultantTypeValue
+      : 0
   );
   const [consultantLabel, setConsultantLabel] = useState(
     application?.consultantLabel ? application?.consultantLabel : "Consultant"
@@ -153,8 +168,22 @@ const ApplicationsCommon = () => {
   const [applicationValue, setApplicationValue] = useState(
     selector === "1"
       ? status
+      : parameters?.applicationStatusId
+      ? parameters?.applicationStatusId
       : application?.applicationValue
       ? application?.applicationValue
+      : 0
+  );
+  const [applicationSubLabel, setApplicationSubLabel] = useState(
+    application?.applicationSubLabel
+      ? application?.applicationSubLabel
+      : "Sub Status"
+  );
+  const [applicationSubValue, setApplicationSubValue] = useState(
+    parameters?.applicationSubStatusId
+      ? parameters?.applicationSubStatusId
+      : application?.applicationSubValue
+      ? application?.applicationSubValue
       : 0
   );
   const [offerLabel, setOfferLabel] = useState(
@@ -182,7 +211,11 @@ const ApplicationsCommon = () => {
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    application?.intakeValue ? application?.intakeValue : 0
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : application?.intakeValue
+      ? application?.intakeValue
+      : 0
   );
   const [intakeRngLabel, setIntakeRngLabel] = useState(
     application?.intakeRngLabel ? application?.intakeRngLabel : "Intake Range"
@@ -190,6 +223,8 @@ const ApplicationsCommon = () => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : application?.intakeRngValue
       ? application?.intakeRngValue
       : 0
@@ -277,7 +312,18 @@ const ApplicationsCommon = () => {
       : "Assesment percentage"
   );
   const [percentageValue, setPercentageValue] = useState(
-    application?.percentageValue ? application?.percentageValue : 0
+    parameters?.percentage
+      ? parameters?.percentage
+      : application?.percentageValue
+      ? application?.percentageValue
+      : 0
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    parameters?.fromApplicationDate && parameters?.toApplicationDate
+      ? [parameters?.fromApplicationDate, parameters?.toApplicationDate]
+      : application?.selectedDates
+      ? application?.selectedDates
+      : []
   );
 
   // state for  application list
@@ -321,12 +367,16 @@ const ApplicationsCommon = () => {
         offerLabel: selector !== "2" && offerLabel && offerLabel,
         offerValue: selector !== "2" && offerValue && offerValue,
         applicationId: applicationId && applicationId,
+        consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
+        consultantTypeValue: consultantTypeValue && consultantTypeValue,
         consultantLabel: consultantLabel && consultantLabel,
         consultantValue: consultantValue && consultantValue,
         applicationLabel:
           selector !== "1" && applicationLabel && applicationLabel,
         applicationValue:
           selector !== "1" && applicationValue && applicationValue,
+        applicationSubLabel: applicationSubLabel && applicationSubLabel,
+        applicationSubValue: applicationSubValue && applicationSubValue,
         enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
         enrollValue: selector !== "3" && enrollValue && enrollValue,
         intakeLabel: intakeLabel && intakeLabel,
@@ -364,6 +414,7 @@ const ApplicationsCommon = () => {
         documentStatusValue: documentStatusValue && documentStatusValue,
         percentageLabel: percentageLabel && percentageLabel,
         percentageValue: percentageValue && percentageValue,
+        selectedDates: selectedDates && selectedDates,
       })
     );
   }, [
@@ -375,10 +426,14 @@ const ApplicationsCommon = () => {
     offerLabel,
     offerValue,
     applicationId,
+    consultantTypeLabel,
+    consultantTypeValue,
     consultantLabel,
     consultantValue,
     applicationLabel,
     applicationValue,
+    applicationSubLabel,
+    applicationSubValue,
     enrollLabel,
     enrollValue,
     intakeLabel,
@@ -646,6 +701,11 @@ const ApplicationsCommon = () => {
         const result = res?.find((ans) => ans?.id.toString() === status);
 
         setApplicationLabel(result?.name);
+      } else if (parameters?.applicationStatusId) {
+        const result = res?.find(
+          (ans) => ans?.id === parameters?.applicationStatusId
+        );
+        setApplicationLabel(result?.name);
       }
     });
 
@@ -667,6 +727,12 @@ const ApplicationsCommon = () => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("AccountIntakeDD/index").then((res) => {
@@ -675,6 +741,11 @@ const ApplicationsCommon = () => {
       if (intake) {
         const filterData = res.filter((status) => {
           return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
         });
         setIntakeRngLabel(filterData[0]?.name);
       }
@@ -742,6 +813,7 @@ const ApplicationsCommon = () => {
     adoId,
     success,
     providerId,
+    parameters,
   ]);
 
   useEffect(() => {
@@ -755,6 +827,28 @@ const ApplicationsCommon = () => {
     });
   }, [proValue, admId, success]);
 
+  useEffect(() => {
+    get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      setApplicationSubDD(res);
+      const result = res?.find(
+        (ans) => ans?.id === parameters?.applicationSubStatusId
+      );
+      setApplicationLabel(result?.name);
+    });
+  }, [applicationValue]);
+
+  useEffect(() => {
+    get(`ConsultantTypeDD/Index`).then((res) => {
+      setConsultantTypeDD(res);
+      if (parameters?.consultantTypeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.consultantTypeId;
+        });
+        setConsultantTypeLabel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
   // Api calling for Application List
   useEffect(() => {
     if (!isTyping) {
@@ -763,7 +857,11 @@ const ApplicationsCommon = () => {
         ? get(
             `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
               percentageValue ? percentageValue : 0
-            }`
+            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+              selectedDates[0] ? selectedDates[0] : ""
+            }&toApplicationDate=${
+              selectedDates[1] ? selectedDates[1] : ""
+            }&applicationSubStatusId=${applicationSubValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -773,7 +871,11 @@ const ApplicationsCommon = () => {
         ? get(
             `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
               percentageValue ? percentageValue : 0
-            }`
+            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+              selectedDates[0] ? selectedDates[0] : ""
+            }&toApplicationDate=${
+              selectedDates[1] ? selectedDates[1] : ""
+            }&applicationSubStatusId=${applicationSubValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -783,7 +885,11 @@ const ApplicationsCommon = () => {
         ? get(
             `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
               percentageValue ? percentageValue : 0
-            }`
+            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+              selectedDates[0] ? selectedDates[0] : ""
+            }&toApplicationDate=${
+              selectedDates[1] ? selectedDates[1] : ""
+            }&applicationSubStatusId=${applicationSubValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -793,7 +899,11 @@ const ApplicationsCommon = () => {
         ? get(
             `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
               percentageValue ? percentageValue : 0
-            }`
+            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+              selectedDates[0] ? selectedDates[0] : ""
+            }&toApplicationDate=${
+              selectedDates[1] ? selectedDates[1] : ""
+            }&applicationSubStatusId=${applicationSubValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -804,7 +914,11 @@ const ApplicationsCommon = () => {
               percentageValue ? percentageValue : 0
             }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
               courseId ? courseId : 0
-            }`
+            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+              selectedDates[0] ? selectedDates[0] : ""
+            }&toApplicationDate=${
+              selectedDates[1] ? selectedDates[1] : ""
+            }&applicationSubStatusId=${applicationSubValue}`
           ).then((res) => {
             setLoading(false);
             setApplicationList(res?.models);
@@ -1050,21 +1164,28 @@ const ApplicationsCommon = () => {
           <Row className="gy-3">
             {isHide ? (
               <>
-                {userType === userTypes?.Student.toString() ? null : (
-                  <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                    <Select
-                      options={commonConsultantMenu}
-                      value={{ label: consultantLabel, value: consultantValue }}
-                      onChange={(opt) =>
-                        selectConsultantDD(opt.label, opt.value)
-                      }
-                      placeholder="Consultant"
-                      name="name"
-                      id="id"
-                      isDisabled={consultantId !== undefined ? true : false}
-                    />
-                  </Col>
-                )}
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={consultantTypeDD}
+                    label={consultantTypeLabel}
+                    setLabel={setConsultantTypeLabel}
+                    value={consultantTypeValue}
+                    setValue={setConsultantTypeValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={commonConsultantMenu}
+                    value={{ label: consultantLabel, value: consultantValue }}
+                    onChange={(opt) => selectConsultantDD(opt.label, opt.value)}
+                    placeholder="Consultant"
+                    name="name"
+                    id="id"
+                    isDisabled={consultantId !== undefined ? true : false}
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={applicationMenu}
@@ -1074,6 +1195,17 @@ const ApplicationsCommon = () => {
                     name="name"
                     id="id"
                     isDisabled={selector === "1" ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={applicationSubDD}
+                    label={applicationSubLabel}
+                    setLabel={setApplicationSubLabel}
+                    value={applicationSubValue}
+                    setValue={setApplicationSubValue}
+                    action={() => {}}
+                    className="mr-2"
                   />
                 </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
@@ -1311,6 +1443,12 @@ const ApplicationsCommon = () => {
                     name="name"
                     id="id"
                     isDisabled={companionId ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <DateRange
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
                   />
                 </Col>
               </>
