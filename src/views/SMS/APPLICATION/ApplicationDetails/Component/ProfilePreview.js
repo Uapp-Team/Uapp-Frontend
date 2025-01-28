@@ -195,7 +195,7 @@ const ProfilePreview = ({ sId, applicationInfo, success, setSuccess }) => {
       </div>
       {/* </div> */}
 
-      {applicationInfo.applicationStatusId !== 13 && (
+      {applicationInfo?.applicationSubStatusId !== 38 && (
         <>
           {permissions?.includes(
             permissionList.Update_Application_Assesment

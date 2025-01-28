@@ -144,7 +144,7 @@ const AdmissionManager = ({
                         permissionList.Change_Admission_Manger
                       ) ? (
                         <>
-                          {applicationInfo.applicationStatusId !== 13 &&
+                          {applicationInfo?.applicationSubStatusId !== 38 &&
                           (userType === userTypes?.SystemAdmin ||
                             userType === userTypes?.Admin ||
                             userType === userTypes?.ProviderAdmin) ? (
@@ -190,7 +190,7 @@ const AdmissionManager = ({
           {/* <div>
             {permissions?.includes(permissionList.Change_Admission_Manger) ? (
               <>
-                {applicationInfo.applicationStatusId !== 13 &&
+                {applicationInfo?.applicationSubStatusId !== 38 &&
                 (userType === userTypes?.SystemAdmin ||
                   userType === userTypes?.Admin ||
                   userType === userTypes?.ProviderAdmin) ? (

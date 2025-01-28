@@ -395,14 +395,13 @@ const ApplicationDetails = () => {
               {userType === userTypes?.Consultant ? null : (
                 <AdmissionConsultant applicationInfo={applicationInfo} />
               )}
-              {/* <div className="mb-3">
-                <MessageHistoryCardApplicationDetailsPage applicationId={id} />
-              </div> */}
 
               {permissions?.includes(permissionList?.View_ApplicationNote) ? (
                 <div id="notelist" className="mb-5">
                   <ApplicationNote
-                    applicationStatusId={applicationInfo.applicationStatusId}
+                    applicationSubStatusId={
+                      applicationInfo.applicationSubStatusId
+                    }
                     id={id}
                     notes={notes}
                     success={success}
@@ -415,7 +414,7 @@ const ApplicationDetails = () => {
           {chatOpen === true && (
             <div className="messanger">
               <MessageHistoryCardApplicationDetailsPage
-                applicationStatusId={applicationInfo.applicationStatusId}
+                applicationSubStatusId={applicationInfo.applicationSubStatusId}
                 applicationId={id}
                 chatOpen={chatOpen}
                 close={isChatOpen}
