@@ -38,7 +38,7 @@ const SalesReport = () => {
   useEffect(() => {
     if (intakeRngValue > 0) {
       Uget(
-        `ApplicationPipeline/AdmissionsPipeline?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
+        `ApplicationPipeline/SalesReport?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
           selectedDates[0] ? selectedDates[0] : ""
         }&toApplicationDate=${
           selectedDates[1] ? selectedDates[1] : ""
