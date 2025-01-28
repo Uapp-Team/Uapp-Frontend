@@ -62,10 +62,13 @@ const SelectAndClear = ({
                   onChange={(opt) => selectProviders(opt.label, opt.value)}
                   name="providerId"
                   id="providerId"
-                  isDisabled={providerId !== undefined ? true : false}
+                  isDisabled={
+                    providerId !== undefined || branchValue === 0 ? true : false
+                  }
                 />
               </Col>
             )}
+
             {userType === userTypes?.AdmissionManager ? null : (
               <Col lg="6" md="6" sm="12" xs="12">
                 <Select
@@ -74,7 +77,9 @@ const SelectAndClear = ({
                   onChange={(opt) => selectManager(opt.label, opt.value)}
                   name="admissionmanagerId"
                   id="admissionmanagerId"
-                  isDisabled={managerId !== undefined ? true : false}
+                  isDisabled={
+                    managerId !== undefined || proValue === 0 ? true : false
+                  }
                 />
               </Col>
             )}

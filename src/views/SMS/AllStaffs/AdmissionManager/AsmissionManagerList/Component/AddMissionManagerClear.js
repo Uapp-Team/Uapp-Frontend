@@ -31,6 +31,8 @@ const AddMissionManagerClear = ({
   branch,
   setBranch,
 }) => {
+  console.log(branchValue, "branchValue");
+
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
@@ -56,7 +58,7 @@ const AddMissionManagerClear = ({
                   onChange={(opt) => selectProvider(opt.label, opt.value)}
                   name="providerId"
                   id="providerId"
-                  isDisabled={providerId ? true : false}
+                  isDisabled={providerId || branchValue === 0 ? true : false}
                 />
               </Col>
             )}
