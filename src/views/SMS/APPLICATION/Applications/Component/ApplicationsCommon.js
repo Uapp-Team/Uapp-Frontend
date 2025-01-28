@@ -835,7 +835,7 @@ const ApplicationsCommon = () => {
       const result = res?.find(
         (ans) => ans?.id === parameters?.applicationSubStatusId
       );
-      setApplicationSubLabel(result?.name);
+      result?.length > 0 && setApplicationSubLabel(result?.name);
     });
   }, [applicationValue, parameters]);
 
