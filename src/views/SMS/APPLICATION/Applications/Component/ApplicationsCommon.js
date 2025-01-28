@@ -1553,6 +1553,8 @@ const ApplicationsCommon = () => {
                   setPercentageLabel={setPercentageLabel}
                   percentageValue={percentageValue}
                   setPercentageValue={setPercentageValue}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||

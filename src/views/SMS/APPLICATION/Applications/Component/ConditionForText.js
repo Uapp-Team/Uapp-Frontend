@@ -91,6 +91,8 @@ const ConditionForText = ({
   setPercentageLabel,
   percentageValue,
   setPercentageValue,
+  selectedDates,
+  setSelectedDates,
 }) => {
   return (
     <>
@@ -290,6 +292,13 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
+        )}
+        {selectedDates.length > 0 && (
+          <TagButton
+            label={selectedDates.join(" - ")}
+            setValue={() => setSelectedDates([])}
+            setLabel={() => {}}
+          />
         )}
         {/* 
         {commonUappIdValue !== 0 &&
