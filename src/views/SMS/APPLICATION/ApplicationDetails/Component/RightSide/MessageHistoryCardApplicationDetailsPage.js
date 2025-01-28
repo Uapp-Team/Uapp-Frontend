@@ -12,7 +12,7 @@ import { Upload } from "antd";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const MessageHistoryCardApplicationDetailsPage = ({
-  applicationStatusId,
+  applicationSubStatusId,
   applicationId,
   viewId,
   close,
@@ -312,7 +312,7 @@ const MessageHistoryCardApplicationDetailsPage = ({
                 </div>
               </>
             )}
-            {applicationStatusId !== 13 &&
+            {applicationSubStatusId !== 13 &&
             (userType === userTypes?.SystemAdmin ||
               userType === userTypes?.Admin ||
               userType === userTypes?.ProviderAdmin ||

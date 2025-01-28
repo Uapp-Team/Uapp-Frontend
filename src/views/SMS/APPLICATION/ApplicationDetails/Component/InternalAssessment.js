@@ -292,7 +292,7 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
         </div>
       )}
 
-      {applicationInfo.applicationStatusId !== 13 && (
+      {applicationInfo?.applicationSubStatusId !== 38 && (
         <>
           {permissions?.includes(
             permissionList.Update_Application_Assesment

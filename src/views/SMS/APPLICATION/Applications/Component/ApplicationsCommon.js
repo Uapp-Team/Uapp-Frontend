@@ -2103,7 +2103,7 @@ const ApplicationsCommon = () => {
       {chatOpen === true && (
         <div className="messanger">
           <MessageHistoryCardApplicationDetailsPage
-            applicationStatusId={chatapp.applicationStatusId}
+            applicationSubStatusId={chatapp.applicationSubStatusId}
             applicationId={`${chatapp.id}`}
             viewId={`${chatapp.applicationViewId}`}
             chatOpen={chatOpen}
