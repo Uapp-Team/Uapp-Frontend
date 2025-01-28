@@ -1423,7 +1423,7 @@ const ApplicationInfo = ({
                     ) : null}
                   </div>
                 ) : null}
-                {applicationInfo?.statusChangeNote && (
+                {applicationInfo?.applicationStatusId === 13 && (
                   <span className="mt-1 fs-12px">
                     Note : {applicationInfo?.statusChangeNote}
                   </span>
