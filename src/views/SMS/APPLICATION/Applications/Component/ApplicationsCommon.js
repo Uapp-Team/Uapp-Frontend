@@ -1,41 +1,41 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useHistory, useLocation, useParams } from "react-router";
+import { Link } from "react-router-dom";
+import Select from "react-select";
+import ReactToPrint from "react-to-print";
+import { useToasts } from "react-toast-notifications";
 import {
+  Button,
   Card,
   CardBody,
-  Input,
   Col,
-  Row,
-  Table,
   Dropdown,
-  FormGroup,
   DropdownMenu,
   DropdownToggle,
-  Button,
+  FormGroup,
+  Input,
+  Row,
+  Table,
 } from "reactstrap";
-import Select from "react-select";
-import { useLocation, useParams, useHistory } from "react-router";
-import { useToasts } from "react-toast-notifications";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
+import Download from "../../../../../components/buttons/Download.js";
+import Filter from "../../../../../components/Dropdown/Filter.js";
+import DateRange from "../../../../../components/form/DateRange.js";
+import Typing from "../../../../../components/form/Typing.js";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
+import { userTypes } from "../../../../../constants/userTypeConstant.js";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
 import ButtonForFunction from "../../../Components/ButtonForFunction";
 import LinkButton from "../../../Components/LinkButton.js";
-import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
-import ReactToPrint from "react-to-print";
-import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
-import ConditionForText from "./ConditionForText.js";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
-import { userTypes } from "../../../../../constants/userTypeConstant.js";
-import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
-import Filter from "../../../../../components/Dropdown/Filter.js";
 import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
-import { Link } from "react-router-dom";
-import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
-import Typing from "../../../../../components/form/Typing.js";
+import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
 import Loader from "../../../Search/Loader/Loader";
-import Download from "../../../../../components/buttons/Download.js";
-import DateRange from "../../../../../components/form/DateRange.js";
+import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
+import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
+import ConditionForText from "./ConditionForText.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
@@ -1549,6 +1549,10 @@ const ApplicationsCommon = () => {
                   setdocumentStatusLabel={setdocumentStatusLabel}
                   documentStatusValue={documentStatusValue}
                   setdocumentStatusValue={setdocumentStatusValue}
+                  percentageLabel={percentageLabel}
+                  setPercentageLabel={setPercentageLabel}
+                  percentageValue={percentageValue}
+                  setPercentageValue={setPercentageValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||

@@ -87,6 +87,10 @@ const ConditionForText = ({
   setdocumentStatusLabel,
   documentStatusValue,
   setdocumentStatusValue,
+  percentageLabel,
+  setPercentageLabel,
+  percentageValue,
+  setPercentageValue,
 }) => {
   return (
     <>
@@ -245,6 +249,16 @@ const ConditionForText = ({
             label={documentStatusLabel}
             setValue={() => setdocumentStatusValue(0)}
             setLabel={() => setdocumentStatusLabel("Select Document Status")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {percentageValue !== 0 ? (
+          <TagButton
+            label={percentageLabel}
+            setValue={() => setPercentageValue(0)}
+            setLabel={() => setPercentageLabel("Assesment percentage")}
           ></TagButton>
         ) : (
           ""
