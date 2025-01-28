@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import PipelineCard from "./Components/PipelineCard";
-import { pipelineDesign, applicationStatus } from "./DemoData";
-import StatusCard from "./Components/StatusCard";
-import DateRange from "../../../components/form/DateRange";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
+import DateRange from "../../../components/form/DateRange";
+import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
-import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
+import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
+import { pipelineDesign } from "./DemoData";
 
 const AdmissionsPipeline = () => {
   const [funnelData, setFunnelData] = useState([]);
@@ -98,7 +98,7 @@ const AdmissionsPipeline = () => {
               <p className="fs-16px fw-600">Admissions Application Pipeline</p>
             </Col>
             <Col lg={8}>
-              <div className="d-flex align-items-center justify-content-end gap-4px">
+              <div className="d-flex align-items-center justify-content-center gap-4px">
                 <Filter
                   data={intakeRngDD}
                   label={intakeRngLabel}
