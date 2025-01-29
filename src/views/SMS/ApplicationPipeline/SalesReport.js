@@ -2,25 +2,27 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import PipelineCard from "./Components/PipelineCard";
-import { pipelineDesign, applicationStatus } from "./DemoData";
-import StatusCard from "./Components/StatusCard";
-import DateRange from "../../../components/form/DateRange";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
-import get from "../../../helpers/get";
+import DateRange from "../../../components/form/DateRange";
 import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
+import get from "../../../helpers/get";
+import Uget from "../../../helpers/Uget";
+import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
+import { pipelineDesign } from "./DemoData";
 
 const SalesReport = () => {
-  const [funnelData, setFunnelData] = useState(applicationStatus);
+  const [funnelData, setFunnelData] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
   const [intake, setIntake] = useState(0);
+  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
   const [consultantValue, setConsultantValue] = useState(0);
   const [selectedDates, setSelectedDates] = useState([]);
-  const dateFormat = "DD-MM-YYYY";
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -32,6 +34,20 @@ const SalesReport = () => {
       setIntakeRngLabel(res?.intakeName);
     });
   }, []);
+
+  useEffect(() => {
+    if (intakeRngValue > 0) {
+      Uget(
+        `ApplicationPipeline/SalesReport?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&consultantTypeId=${consultantValue}`
+      ).then((res) => {
+        setFunnelData(res?.data);
+      });
+    }
+  }, [intakeRngValue, intake, selectedDates, consultantValue]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -77,42 +93,52 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          <div className="d-flex align-items-center justify-content-between mb-8px">
-            <p className="fs-16px fw-600">Sales Report</p>
-            <div className="d-flex align-items-center justify-content-center gap-4px">
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                formattedDate={dateFormat}
-              />
-              <Filter
-                data={intakeRngDD}
-                label={intakeRngLabel}
-                setLabel={setIntakeRngLabel}
-                value={intakeRngValue}
-                setValue={setIntakeRngValue}
-                action={() => {}}
-                className="ml-2"
-              />
+          <Row className="mb-4">
+            <Col lg={4}>
+              <p className="fs-16px fw-600">Sales Report</p>
+            </Col>
+            <Col>
+              <div className="d-flex align-items-center justify-content-center gap-4px">
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  className="ml-2"
+                />
 
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Select Intake"
-                url="IntakeDD/Index"
-                defaultValue={intake}
-                action={setIntake}
-                className="ml-2"
-              />
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Select Consultant type"
-                url="ConsultantTypeDD/Index"
-                defaultValue={consultantValue}
-                action={setConsultantValue}
-                className="ml-2"
-              />
-            </div>
-          </div>
+                <DefaultDropdown
+                  label={intakeLabel}
+                  setLabel={setIntakeLabel}
+                  value={intake}
+                  setValue={setIntake}
+                  url={`IntakeDD/get/${intakeRngValue}`}
+                  name="intake"
+                  action={(l, v) => setSelectedDates([])}
+                />
+
+                <DateRange
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  action={() => {
+                    setIntake(0);
+                    setIntakeLabel("Select Intake");
+                  }}
+                />
+
+                <DDFilterByAppUrl
+                  label=""
+                  placeholder="Select type"
+                  url="ConsultantTypeDD/Index"
+                  defaultValue={consultantValue}
+                  action={setConsultantValue}
+                  className="ml-2"
+                />
+              </div>
+            </Col>
+          </Row>
 
           <div className="row align-items-center relative">
             <div className="col-12">
@@ -146,24 +172,25 @@ const SalesReport = () => {
           <div className="row align-items-center">
             <div className="col-12">
               <div className="scroll-content scroll-arrow">
-                {funnelData.map((card, index) => (
-                  <div
-                    key={index}
-                    style={{ minWidth: "170px" }}
-                    className="text-center mb-4"
-                  >
-                    {selectedCardIndex === index && (
-                      <>
-                        <AiFillCaretDown size={22} color="#7C7C7C" />
-                      </>
-                    )}
-                  </div>
-                ))}
+                {funnelData?.length > 0 &&
+                  funnelData?.map((card, index) => (
+                    <div
+                      key={index}
+                      style={{ minWidth: "170px" }}
+                      className="text-center mb-4"
+                    >
+                      {selectedCardIndex === index ? (
+                        <>
+                          <AiFillCaretDown size={22} color="#7C7C7C" />
+                        </>
+                      ) : null}
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
 
-          {funnelData[selectedCardIndex]?.childs?.length > 1 &&
+          {/* {funnelData[selectedCardIndex]?.childs?.length > 1 &&
             funnelData?.map((card, index) => (
               <div key={index} className="d-flex">
                 {selectedCardIndex === index ? (
@@ -205,14 +232,14 @@ const SalesReport = () => {
                   </div>
                 ) : null}
               </div>
-            ))}
+            ))} */}
 
           {selectedCardIndex !== null && (
             <div>
               <p className="fs-16px fw-600 mt-5">
                 {funnelData[selectedCardIndex]?.title}
               </p>
-              {funnelData[selectedCardIndex]?.childs.length > 0 &&
+              {funnelData[selectedCardIndex]?.childs?.length > 0 &&
                 funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
                     <div className="p-2 rounded bg-F2EFED mb-3">
@@ -226,6 +253,7 @@ const SalesReport = () => {
                               title={child?.title}
                               applications={child?.applicationCount}
                               students={child?.studentCount}
+                              parameters={child?.parameters}
                             />
                           </Col>
                         ))}

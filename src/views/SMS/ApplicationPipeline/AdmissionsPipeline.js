@@ -2,27 +2,71 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
-import PipelineCard from "./Components/PipelineCard";
-import { pipelineDesign, applicationStatus } from "./DemoData";
-import StatusCard from "./Components/StatusCard";
-import DateRange from "../../../components/form/DateRange";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
+import DateRange from "../../../components/form/DateRange";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
-import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
+import PipelineCard from "./Components/PipelineCard";
+import StatusCard from "./Components/StatusCard";
+import { pipelineDesign } from "./DemoData";
 
 const AdmissionsPipeline = () => {
+  const applicationPipeline = JSON.parse(
+    sessionStorage.getItem("applicationPipeline")
+  );
   const [funnelData, setFunnelData] = useState([]);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(
+    applicationPipeline?.selectedCardIndex !== null
+      ? applicationPipeline?.selectedCardIndex
+      : null
+  );
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
-  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
-  const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [intake, setIntake] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState(
+    applicationPipeline?.intakeRngLabel || "Select Intake"
+  );
+  const [intakeRngValue, setIntakeRngValue] = useState(
+    applicationPipeline?.intakeRngValue || 0
+  );
+  const [intake, setIntake] = useState(applicationPipeline?.intake || 0);
+  const [intakeLabel, setIntakeLabel] = useState(
+    applicationPipeline?.intakeLabel || "Select Intake"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    applicationPipeline?.consultantValue || 0
+  );
+  const [consultantLabel, setConsultantLabel] = useState(
+    applicationPipeline?.consultantLabel || "Select Consultant"
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    applicationPipeline?.selectedDates || []
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "applicationPipeline",
+      JSON.stringify({
+        selectedCardIndex,
+        intakeRngLabel,
+        intakeRngValue,
+        intake,
+        intakeLabel,
+        consultantValue,
+        consultantLabel,
+        selectedDates,
+      })
+    );
+  }, [
+    selectedCardIndex,
+    intakeRngLabel,
+    intakeRngValue,
+    intake,
+    intakeLabel,
+    consultantValue,
+    consultantLabel,
+    selectedDates,
+  ]);
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -98,7 +142,7 @@ const AdmissionsPipeline = () => {
               <p className="fs-16px fw-600">Admissions Application Pipeline</p>
             </Col>
             <Col lg={8}>
-              <div className="d-flex align-items-center justify-content-end gap-4px">
+              <div className="d-flex align-items-center justify-content-center gap-4px">
                 <Filter
                   data={intakeRngDD}
                   label={intakeRngLabel}
@@ -128,12 +172,14 @@ const AdmissionsPipeline = () => {
                   }}
                 />
 
-                <DDFilterByAppUrl
-                  label=""
+                <DefaultDropdown
                   placeholder="Select Type"
                   url="ConsultantTypeDD/Index"
-                  defaultValue={consultantValue}
-                  action={setConsultantValue}
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
                   className="ml-2"
                 />
               </div>

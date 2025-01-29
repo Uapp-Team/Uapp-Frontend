@@ -87,6 +87,12 @@ const ConditionForText = ({
   setdocumentStatusLabel,
   documentStatusValue,
   setdocumentStatusValue,
+  percentageLabel,
+  setPercentageLabel,
+  percentageValue,
+  setPercentageValue,
+  selectedDates,
+  setSelectedDates,
 }) => {
   return (
     <>
@@ -250,6 +256,16 @@ const ConditionForText = ({
           ""
         )}
 
+        {percentageValue !== 0 ? (
+          <TagButton
+            label={percentageLabel}
+            setValue={() => setPercentageValue(0)}
+            setLabel={() => setPercentageLabel("Assesment percentage")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
         {!admId && admissionManagerValue !== 0 ? (
           <TagButton
             label={admissionManagerLabel}
@@ -276,6 +292,13 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
+        )}
+        {selectedDates.length > 0 && (
+          <TagButton
+            label={selectedDates.join(" - ")}
+            setValue={() => setSelectedDates([])}
+            setLabel={() => {}}
+          />
         )}
         {/* 
         {commonUappIdValue !== 0 &&
