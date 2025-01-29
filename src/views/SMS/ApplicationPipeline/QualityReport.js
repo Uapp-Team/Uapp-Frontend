@@ -2,25 +2,69 @@ import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
 import DateRange from "../../../components/form/DateRange";
-import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 import get from "../../../helpers/get";
+import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
 import StatusCard from "./Components/StatusCard";
-import { qualityDesign, qualityReport } from "./DemoData";
+import { qualityDesign } from "./DemoData";
 
 const QualityReport = () => {
-  const [funnelData, setFunnelData] = useState(qualityReport);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const qualityPipeline = sessionStorage.getItem("qualityPipeline");
+  const [funnelData, setFunnelData] = useState([]);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(
+    qualityPipeline?.selectedCardIndex !== null
+      ? qualityPipeline?.selectedCardIndex
+      : null
+  );
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
-  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
-  const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [intake, setIntake] = useState(0);
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const dateFormat = "DD-MM-YYYY";
+  const [intakeRngLabel, setIntakeRngLabel] = useState(
+    qualityPipeline?.intakeRngLabel || "Select Intake"
+  );
+  const [intakeRngValue, setIntakeRngValue] = useState(
+    qualityPipeline?.intakeRngValue || 0
+  );
+  const [intake, setIntake] = useState(qualityPipeline?.intake || 0);
+  const [intakeLabel, setIntakeLabel] = useState(
+    qualityPipeline?.intakeLabel || "Select Intake"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    qualityPipeline?.consultantValue || 0
+  );
+  const [consultantLabel, setConsultantLabel] = useState(
+    qualityPipeline?.consultantLabel || "Select Consultant"
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    qualityPipeline?.selectedDates || []
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "qualityPipeline",
+      JSON.stringify({
+        selectedCardIndex,
+        intakeRngLabel,
+        intakeRngValue,
+        intake,
+        intakeLabel,
+        consultantValue,
+        consultantLabel,
+        selectedDates,
+      })
+    );
+  }, [
+    selectedCardIndex,
+    intakeRngLabel,
+    intakeRngValue,
+    intake,
+    intakeLabel,
+    consultantValue,
+    consultantLabel,
+    selectedDates,
+  ]);
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -32,6 +76,20 @@ const QualityReport = () => {
       setIntakeRngLabel(res?.intakeName);
     });
   }, []);
+
+  useEffect(() => {
+    if (intakeRngValue > 0) {
+      Uget(
+        `ApplicationPipeline/QualityReport?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&consultantTypeId=${consultantValue}`
+      ).then((res) => {
+        setFunnelData(res?.data);
+      });
+    }
+  }, [intakeRngValue, intake, selectedDates, consultantValue]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(".scroll-content");
@@ -76,41 +134,54 @@ const QualityReport = () => {
       <BreadCrumb title="Application Quality Report" />
       <Card>
         <CardBody>
-          <div className="d-flex align-items-center justify-content-between mb-8px">
-            <p className="fs-16px fw-600">Application Quality Report</p>
-            <div className="d-flex align-items-center justify-content-center gap-4px">
-              <DateRange
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                formattedDate={dateFormat}
-              />
-              <Filter
-                data={intakeRngDD}
-                label={intakeRngLabel}
-                setLabel={setIntakeRngLabel}
-                value={intakeRngValue}
-                setValue={setIntakeRngValue}
-                action={() => {}}
-                className="ml-2"
-              />
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Intake"
-                url="IntakeDD/Index"
-                defaultValue={intake}
-                action={setIntake}
-                className="ml-2"
-              />
-              <DDFilterByAppUrl
-                label=""
-                placeholder="Consultant type"
-                url="ConsultantTypeDD/Index"
-                defaultValue={consultantValue}
-                action={setConsultantValue}
-                className="ml-2"
-              />
-            </div>
-          </div>
+          <Row>
+            <Col lg={4}>
+              <p className="fs-16px fw-600">Application Quality Report</p>
+            </Col>
+            <Col lg={8}>
+              <div className="d-flex align-items-center justify-content-center gap-4px">
+                <Filter
+                  data={intakeRngDD}
+                  label={intakeRngLabel}
+                  setLabel={setIntakeRngLabel}
+                  value={intakeRngValue}
+                  setValue={setIntakeRngValue}
+                  action={() => {}}
+                  className="mr-2"
+                />
+
+                <DefaultDropdown
+                  label={intakeLabel}
+                  setLabel={setIntakeLabel}
+                  value={intake}
+                  setValue={setIntake}
+                  url={`IntakeDD/get/${intakeRngValue}`}
+                  name="intake"
+                  action={(l, v) => setSelectedDates([])}
+                />
+
+                <DateRange
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  action={() => {
+                    setIntake(0);
+                    setIntakeLabel("Select Intake");
+                  }}
+                />
+
+                <DefaultDropdown
+                  placeholder="Select Type"
+                  url="ConsultantTypeDD/Index"
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
+                  className="ml-2"
+                />
+              </div>
+            </Col>
+          </Row>
           <div className="row align-items-center relative">
             <div className="col-12">
               <div class="scroll-container">
