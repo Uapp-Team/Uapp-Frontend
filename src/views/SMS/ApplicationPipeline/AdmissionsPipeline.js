@@ -74,8 +74,10 @@ const AdmissionsPipeline = () => {
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
-      setIntakeRngValue(res?.id);
-      setIntakeRngLabel(res?.intakeName);
+      if (!applicationPipeline?.intakeRngLabel) {
+        setIntakeRngValue(res?.id);
+        setIntakeRngLabel(res?.intakeName);
+      }
     });
   }, []);
 
