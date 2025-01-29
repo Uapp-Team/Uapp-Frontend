@@ -5,7 +5,6 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
 import DateRange from "../../../components/form/DateRange";
-import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
@@ -13,16 +12,65 @@ import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
 
 const SalesReport = () => {
+  const salesPipeline = JSON.parse(sessionStorage.getItem("salesPipeline"));
   const [funnelData, setFunnelData] = useState([]);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(
+    salesPipeline?.selectedCardIndex !== null
+      ? salesPipeline?.selectedCardIndex
+      : null
+  );
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
-  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
-  const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [intake, setIntake] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState(
+    salesPipeline?.intakeRngLabel
+      ? salesPipeline?.intakeRngLabel
+      : "Select Intake Range"
+  );
+  const [intakeRngValue, setIntakeRngValue] = useState(
+    salesPipeline?.intakeRngValue ? salesPipeline?.intakeRngValue : 0
+  );
+  const [intake, setIntake] = useState(
+    salesPipeline?.intake ? salesPipeline?.intake : 0
+  );
+  const [intakeLabel, setIntakeLabel] = useState(
+    salesPipeline?.intakeLabel ? salesPipeline?.intakeLabel : "Select Intake"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    salesPipeline?.consultantValue ? salesPipeline?.consultantValue : 0
+  );
+  const [consultantLabel, setConsultantLabel] = useState(
+    salesPipeline?.consultantLabel
+      ? salesPipeline?.consultantLabel
+      : "Select Consultant"
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    salesPipeline?.selectedDates ? salesPipeline?.selectedDates : []
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "salesPipeline",
+      JSON.stringify({
+        selectedCardIndex,
+        intakeRngLabel,
+        intakeRngValue,
+        intake,
+        intakeLabel,
+        consultantValue,
+        consultantLabel,
+        selectedDates,
+      })
+    );
+  }, [
+    selectedCardIndex,
+    intakeRngLabel,
+    intakeRngValue,
+    intake,
+    intakeLabel,
+    consultantValue,
+    consultantLabel,
+    selectedDates,
+  ]);
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
@@ -30,8 +78,10 @@ const SalesReport = () => {
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
-      setIntakeRngValue(res?.id);
-      setIntakeRngLabel(res?.intakeName);
+      if (!salesPipeline?.intakeRngLabel) {
+        setIntakeRngValue(res?.id);
+        setIntakeRngLabel(res?.intakeName);
+      }
     });
   }, []);
 
@@ -105,7 +155,10 @@ const SalesReport = () => {
                   setLabel={setIntakeRngLabel}
                   value={intakeRngValue}
                   setValue={setIntakeRngValue}
-                  action={() => {}}
+                  action={() => {
+                    setIntake(0);
+                    setIntakeLabel("Select Intake");
+                  }}
                   className="ml-2"
                 />
 
@@ -128,12 +181,14 @@ const SalesReport = () => {
                   }}
                 />
 
-                <DDFilterByAppUrl
-                  label=""
-                  placeholder="Select type"
+                <DefaultDropdown
+                  placeholder="Select Type"
                   url="ConsultantTypeDD/Index"
-                  defaultValue={consultantValue}
-                  action={setConsultantValue}
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
                   className="ml-2"
                 />
               </div>
