@@ -27,6 +27,9 @@ const InternalStatus = ({ id, success, setSuccess }) => {
     if (id) {
       get(`ApplicationInternalAssesmentRequirement/Get/${id}`).then((res) => {
         setStatus(res);
+        setStatement(res?.note);
+        const count = countWords(res?.note);
+        setStringData(count);
       });
     }
   }, [id, success]);
@@ -71,21 +74,22 @@ const InternalStatus = ({ id, success, setSuccess }) => {
     e.preventDefault();
     if (statusValue === 2 && statement === "") {
       setStateMentError("Statement is required");
-    }
-    if (statusValue === 2 && stringData < 20) {
+    } else if (statusValue === 2 && stringData < 20) {
       setStateMentError("Statement minimum 20 words");
-    }
-    setProgress(true);
-    put(
-      `ApplicationInternalAssesmentRequirement/Update/${id}/${statusValue}`
-    ).then((action) => {
-      setProgress(false);
-      addToast(action?.data?.message, {
-        appearance: "success",
-        autoDismiss: true,
+    } else {
+      setProgress(true);
+      put(
+        `ApplicationInternalAssesmentRequirement/Update?id=${id}&statusid=${statusValue}&note=${statement}`
+      ).then((action) => {
+        console.log(action);
+        setProgress(false);
+        addToast(action?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
       });
-      setSuccess(!success);
-    });
+    }
   };
 
   return (
@@ -122,6 +126,7 @@ const InternalStatus = ({ id, success, setSuccess }) => {
                   type="textarea"
                   name="statement"
                   id="statement"
+                  row={6}
                   value={statement}
                   onChange={(e) => handleStringData(e)}
                 />
