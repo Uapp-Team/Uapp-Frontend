@@ -17,7 +17,9 @@ const AdmissionsPipeline = () => {
   );
   const [funnelData, setFunnelData] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(
-    applicationPipeline?.selectedCardIndex || null
+    applicationPipeline?.selectedCardIndex !== null
+      ? applicationPipeline?.selectedCardIndex
+      : null
   );
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
