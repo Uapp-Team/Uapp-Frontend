@@ -5,7 +5,6 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import Filter from "../../../components/Dropdown/Filter";
 import DateRange from "../../../components/form/DateRange";
-import DDFilterByAppUrl from "../../../components/form/DDFilterByAppUrl";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
@@ -35,6 +34,9 @@ const AdmissionsPipeline = () => {
   const [consultantValue, setConsultantValue] = useState(
     applicationPipeline?.consultantValue || 0
   );
+  const [consultantLabel, setConsultantLabel] = useState(
+    applicationPipeline?.consultantLabel || "Select Consultant"
+  );
   const [selectedDates, setSelectedDates] = useState(
     applicationPipeline?.selectedDates || []
   );
@@ -49,6 +51,7 @@ const AdmissionsPipeline = () => {
         intake,
         intakeLabel,
         consultantValue,
+        consultantLabel,
         selectedDates,
       })
     );
@@ -59,6 +62,7 @@ const AdmissionsPipeline = () => {
     intake,
     intakeLabel,
     consultantValue,
+    consultantLabel,
     selectedDates,
   ]);
 
@@ -166,12 +170,14 @@ const AdmissionsPipeline = () => {
                   }}
                 />
 
-                <DDFilterByAppUrl
-                  label=""
+                <DefaultDropdown
                   placeholder="Select Type"
                   url="ConsultantTypeDD/Index"
-                  defaultValue={consultantValue}
-                  action={setConsultantValue}
+                  label={consultantLabel}
+                  setLabel={setConsultantLabel}
+                  value={consultantValue}
+                  setValue={setConsultantValue}
+                  action={() => {}}
                   className="ml-2"
                 />
               </div>
