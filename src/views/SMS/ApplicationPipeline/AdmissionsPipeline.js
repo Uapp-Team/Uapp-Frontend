@@ -13,16 +13,54 @@ import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
 
 const AdmissionsPipeline = () => {
+  const applicationPipeline = JSON.parse(
+    sessionStorage.getItem("applicationPipeline")
+  );
   const [funnelData, setFunnelData] = useState([]);
-  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(
+    applicationPipeline?.selectedCardIndex || null
+  );
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
-  const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
-  const [intakeRngValue, setIntakeRngValue] = useState(0);
-  const [intake, setIntake] = useState(0);
-  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
-  const [consultantValue, setConsultantValue] = useState(0);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState(
+    applicationPipeline?.intakeRngLabel || "Select Intake"
+  );
+  const [intakeRngValue, setIntakeRngValue] = useState(
+    applicationPipeline?.intakeRngValue || 0
+  );
+  const [intake, setIntake] = useState(applicationPipeline?.intake || 0);
+  const [intakeLabel, setIntakeLabel] = useState(
+    applicationPipeline?.intakeLabel || "Select Intake"
+  );
+  const [consultantValue, setConsultantValue] = useState(
+    applicationPipeline?.consultantValue || 0
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    applicationPipeline?.selectedDates || []
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      "applicationPipeline",
+      JSON.stringify({
+        selectedCardIndex,
+        intakeRngLabel,
+        intakeRngValue,
+        intake,
+        intakeLabel,
+        consultantValue,
+        selectedDates,
+      })
+    );
+  }, [
+    selectedCardIndex,
+    intakeRngLabel,
+    intakeRngValue,
+    intake,
+    intakeLabel,
+    consultantValue,
+    selectedDates,
+  ]);
 
   useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
