@@ -34,6 +34,7 @@ const ConditionForText = ({
   setAdmissionManagerValue,
   commonUappIdValue,
   commonStdValue,
+  consultantTypeValue,
   consultantValue,
   applicationValue,
   offerValue,
@@ -46,6 +47,7 @@ const ConditionForText = ({
   commonUniValue,
   commonUappIdLabel,
   commonStdLabel,
+  consultantTypeLabel,
   consultantLabel,
   applicationLabel,
   offerLabel,
@@ -77,7 +79,9 @@ const ConditionForText = ({
   setCommonUappIdValue,
   setCommonUniLabel,
   setCommonUniValue,
+  setConsultantTypeLabel,
   setConsultantLabel,
+  setConsultantTypeValue,
   setConsultantValue,
   setCommonStdLabel,
   setCommonStdValue,
@@ -117,6 +121,15 @@ const ConditionForText = ({
           ""
         )}
 
+        {consultantTypeValue !== 0 ? (
+          <TagButton
+            label={consultantTypeLabel}
+            setValue={() => setConsultantTypeValue(0)}
+            setLabel={() => setConsultantTypeLabel("Consultant Type")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
         {!consultantId && consultantValue !== 0 ? (
           <TagButton
             label={consultantLabel}

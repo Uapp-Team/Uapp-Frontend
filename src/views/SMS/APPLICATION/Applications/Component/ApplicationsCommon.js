@@ -1023,6 +1023,8 @@ const ApplicationsCommon = () => {
     setCommonUappIdValue(0);
     setCommonUniLabel("University Name");
     setCommonUniValue(0);
+    setConsultantTypeLabel("Consultant Type");
+    setConsultantTypeValue(0);
     !consultantId && setConsultantLabel("Consultant");
     !consultantId && setConsultantValue(0);
     setCommonStdLabel("Name");
@@ -1496,6 +1498,7 @@ const ApplicationsCommon = () => {
                   companionId={companionId}
                   commonUappIdValue={commonUappIdValue}
                   commonStdValue={commonStdValue}
+                  consultantTypeValue={consultantTypeValue}
                   consultantValue={consultantValue}
                   applicationValue={applicationValue}
                   offerValue={offerValue}
@@ -1509,6 +1512,7 @@ const ApplicationsCommon = () => {
                   commonUniValue={commonUniValue}
                   commonUappIdLabel={commonUappIdLabel}
                   commonStdLabel={commonStdLabel}
+                  consultantTypeLabel={consultantTypeLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
                   offerLabel={offerLabel}
@@ -1539,7 +1543,9 @@ const ApplicationsCommon = () => {
                   setCommonUappIdValue={setCommonUappIdValue}
                   setCommonUniLabel={setCommonUniLabel}
                   setCommonUniValue={setCommonUniValue}
+                  setConsultantTypeLabel={setConsultantTypeLabel}
                   setConsultantLabel={setConsultantLabel}
+                  setConsultantTypeValue={setConsultantTypeValue}
                   setConsultantValue={setConsultantValue}
                   consultantId={consultantId}
                   setCommonStdLabel={setCommonStdLabel}
