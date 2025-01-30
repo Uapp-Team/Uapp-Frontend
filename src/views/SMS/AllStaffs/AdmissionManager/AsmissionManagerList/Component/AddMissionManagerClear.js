@@ -46,6 +46,10 @@ const AddMissionManagerClear = ({
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setProviderValue(0);
+                    setProviderLabel("Select Provider");
+                  }}
                 />
               </Col>
             )}
@@ -58,7 +62,7 @@ const AddMissionManagerClear = ({
                   onChange={(opt) => selectProvider(opt.label, opt.value)}
                   name="providerId"
                   id="providerId"
-                  isDisabled={providerId || branchValue === 0 ? true : false}
+                  isDisabled={providerId ? true : false}
                 />
               </Col>
             )}

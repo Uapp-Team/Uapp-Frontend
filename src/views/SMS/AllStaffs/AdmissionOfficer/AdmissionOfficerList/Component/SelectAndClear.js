@@ -49,6 +49,12 @@ const SelectAndClear = ({
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setProValue(0);
+                    setProLabel("Select Provider");
+                    setManagerLabel("Select Admission Manager");
+                    setManagerValue(0);
+                  }}
                 />
               </Col>
             )}
@@ -62,9 +68,7 @@ const SelectAndClear = ({
                   onChange={(opt) => selectProviders(opt.label, opt.value)}
                   name="providerId"
                   id="providerId"
-                  isDisabled={
-                    providerId !== undefined || branchValue === 0 ? true : false
-                  }
+                  isDisabled={providerId !== undefined ? true : false}
                 />
               </Col>
             )}
@@ -77,9 +81,7 @@ const SelectAndClear = ({
                   onChange={(opt) => selectManager(opt.label, opt.value)}
                   name="admissionmanagerId"
                   id="admissionmanagerId"
-                  isDisabled={
-                    managerId !== undefined || proValue === 0 ? true : false
-                  }
+                  isDisabled={managerId !== undefined ? true : false}
                 />
               </Col>
             )}
