@@ -129,7 +129,11 @@ const ApplicationsCommon = () => {
       : "University Name"
   );
   const [commonUniValue, setCommonUniValue] = useState(
-    application?.commonUniValue ? application?.commonUniValue : 0
+    universityId
+      ? universityId
+      : application?.commonUniValue
+      ? application?.commonUniValue
+      : 0
   );
   const [consultantTypeLabel, setConsultantTypeLabel] = useState(
     application?.consultantTypeLabel
@@ -147,7 +151,7 @@ const ApplicationsCommon = () => {
     application?.consultantLabel ? application?.consultantLabel : "Consultant"
   );
   const [consultantValue, setConsultantValue] = useState(
-    consultantId
+    consultantId > 0
       ? consultantId
       : application?.consultantValue
       ? application?.consultantValue
@@ -166,7 +170,7 @@ const ApplicationsCommon = () => {
     application?.applicationLabel ? application?.applicationLabel : "Status"
   );
   const [applicationValue, setApplicationValue] = useState(
-    selector === "1"
+    status > 0
       ? status
       : parameters?.applicationStatusId
       ? parameters?.applicationStatusId
@@ -180,7 +184,9 @@ const ApplicationsCommon = () => {
       : "Sub Status"
   );
   const [applicationSubValue, setApplicationSubValue] = useState(
-    parameters?.applicationSubStatusId
+    selector > 0
+      ? selector
+      : parameters?.applicationSubStatusId
       ? parameters?.applicationSubStatusId
       : application?.applicationSubValue
       ? application?.applicationSubValue
@@ -190,21 +196,13 @@ const ApplicationsCommon = () => {
     application?.offerLabel ? application?.offerLabel : "Offer"
   );
   const [offerValue, setOfferValue] = useState(
-    selector === "2"
-      ? status
-      : application?.offerValue
-      ? application?.offerValue
-      : 0
+    application?.offerValue ? application?.offerValue : 0
   );
   const [enrollLabel, setEnrollLabel] = useState(
     application?.enrollLabel ? application?.enrollLabel : "Enrolment Status"
   );
   const [enrollValue, setEnrollValue] = useState(
-    selector === "3"
-      ? status
-      : application?.enrollValue
-      ? application?.enrollValue
-      : 0
+    application?.enrollValue ? application?.enrollValue : 0
   );
 
   const [intakeLabel, setIntakeLabel] = useState(
@@ -698,13 +696,12 @@ const ApplicationsCommon = () => {
 
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
-      if (selector === "1") {
+      if (status) {
         const result = res?.find((ans) => ans?.id.toString() === status);
-
         setApplicationLabel(result?.name);
       } else if (parameters?.applicationStatusId) {
         const result = res?.find(
-          (ans) => ans?.id === parameters?.applicationStatusId
+          (ans) => ans?.id.toString() === parameters?.applicationStatusId
         );
         setApplicationLabel(result?.name);
       }
@@ -712,18 +709,10 @@ const ApplicationsCommon = () => {
 
     get("OfferStatusDD/Index").then((res) => {
       setOfferDD(res);
-      if (selector === "2") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setOfferLabel(result?.name);
-      }
     });
 
     get("EnrollmentStatusDD/Index").then((res) => {
       setEnrollDD(res);
-      if (selector === "3") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setEnrollLabel(result?.name);
-      }
     });
 
     get("IntakeDD/Index").then((res) => {
@@ -830,12 +819,16 @@ const ApplicationsCommon = () => {
 
   useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
-      console.log(res);
       setApplicationSubDD(res);
-      const result = res?.find(
-        (ans) => ans?.id === parameters?.applicationSubStatusId
-      );
-      result?.length > 0 && setApplicationSubLabel(result?.name);
+      if (selector) {
+        const result = res?.find((ans) => ans?.id.toString() === selector);
+        result?.length > 0 && setApplicationSubLabel(result[0]?.name);
+      } else if (parameters?.applicationSubStatusId) {
+        const result = res?.find(
+          (ans) => ans?.id.toString() === parameters?.applicationSubStatusId
+        );
+        result?.length > 0 && setApplicationSubLabel(result[0]?.name);
+      }
     });
   }, [applicationValue, parameters]);
 
@@ -855,77 +848,21 @@ const ApplicationsCommon = () => {
   useEffect(() => {
     if (!isTyping) {
       setLoading(true);
-      consultantId !== undefined
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-              selectedDates[0] ? selectedDates[0] : ""
-            }&toApplicationDate=${
-              selectedDates[1] ? selectedDates[1] : ""
-            }&applicationSubStatusId=${applicationSubValue}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : universityId !== undefined
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-              selectedDates[0] ? selectedDates[0] : ""
-            }&toApplicationDate=${
-              selectedDates[1] ? selectedDates[1] : ""
-            }&applicationSubStatusId=${applicationSubValue}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : selector === "1"
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-              selectedDates[0] ? selectedDates[0] : ""
-            }&toApplicationDate=${
-              selectedDates[1] ? selectedDates[1] : ""
-            }&applicationSubStatusId=${applicationSubValue}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : selector === "2"
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-              selectedDates[0] ? selectedDates[0] : ""
-            }&toApplicationDate=${
-              selectedDates[1] ? selectedDates[1] : ""
-            }&applicationSubStatusId=${applicationSubValue}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
-              courseId ? courseId : 0
-            }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-              selectedDates[0] ? selectedDates[0] : ""
-            }&toApplicationDate=${
-              selectedDates[1] ? selectedDates[1] : ""
-            }&applicationSubStatusId=${applicationSubValue}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          });
+      get(
+        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
+          percentageValue ? percentageValue : 0
+        }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
+          courseId ? courseId : 0
+        }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&applicationSubStatusId=${applicationSubValue}`
+      ).then((res) => {
+        setLoading(false);
+        setApplicationList(res?.models);
+        setEntity(res?.totalEntity);
+      });
     }
   }, [
     currentPage,
@@ -1090,33 +1027,53 @@ const ApplicationsCommon = () => {
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row className="gy-3">
-            {userType === userTypes?.Student.toString() ? null : (
-              <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                <Select
-                  options={commonUappIdMenu}
-                  value={{ label: commonUappIdLabel, value: commonUappIdValue }}
-                  onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
-                  placeholder="UAPP ID"
-                  name="name"
-                  id="id"
-                />
-              </Col>
-            )}
-
-            {userType === userTypes?.Student.toString() ? null : (
-              <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                <Select
-                  options={commonStdMenu}
-                  value={{ label: commonStdLabel, value: commonStdValue }}
-                  onChange={(opt) => selectStudentDD(opt.label, opt.value)}
-                  placeholder="Name"
-                  name="name"
-                  id="id"
-                />
-              </Col>
-            )}
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={commonUappIdMenu}
+                value={{ label: commonUappIdLabel, value: commonUappIdValue }}
+                onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
+                placeholder="UAPP ID"
+                name="name"
+                id="id"
+              />
+            </Col>
 
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={commonStdMenu}
+                value={{ label: commonStdLabel, value: commonStdValue }}
+                onChange={(opt) => selectStudentDD(opt.label, opt.value)}
+                placeholder="Name"
+                name="name"
+                id="id"
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={applicationMenu}
+                value={{ label: applicationLabel, value: applicationValue }}
+                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                placeholder="Status"
+                name="name"
+                id="id"
+                isDisabled={status > 0 ? true : false}
+              />
+            </Col>
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={applicationSubDD}
+                label={applicationSubLabel}
+                setLabel={setApplicationSubLabel}
+                value={applicationSubValue}
+                setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
                 options={offerMenu}
                 value={{ label: offerLabel, value: offerValue }}
@@ -1124,9 +1081,8 @@ const ApplicationsCommon = () => {
                 placeholder="Offer"
                 name="name"
                 id="id"
-                isDisabled={selector === "2" ? true : false}
               />
-            </Col>
+            </Col> */}
 
             {/* 
             {userType === userTypes?.SystemAdmin ||
@@ -1193,29 +1149,8 @@ const ApplicationsCommon = () => {
                     isDisabled={consultantId !== undefined ? true : false}
                   />
                 </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                  <Select
-                    options={applicationMenu}
-                    value={{ label: applicationLabel, value: applicationValue }}
-                    onChange={(opt) => selectAppliDD(opt.label, opt.value)}
-                    placeholder="Status"
-                    name="name"
-                    id="id"
-                    isDisabled={selector === "1" ? true : false}
-                  />
-                </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                  <Filter
-                    data={applicationSubDD}
-                    label={applicationSubLabel}
-                    setLabel={setApplicationSubLabel}
-                    value={applicationSubValue}
-                    setValue={setApplicationSubValue}
-                    action={() => {}}
-                    className="mr-2"
-                  />
-                </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+
+                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={enrollMenu}
                     value={{ label: enrollLabel, value: enrollValue }}
@@ -1223,9 +1158,8 @@ const ApplicationsCommon = () => {
                     placeholder="Enrolment st..."
                     name="name"
                     id="id"
-                    isDisabled={selector === "3" ? true : false}
                   />
-                </Col>
+                </Col> */}
 
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select

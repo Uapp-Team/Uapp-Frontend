@@ -3842,17 +3842,6 @@ class AppRouter extends React.Component {
                     }
                   />
 
-                  {/* <AppRoute
-                    path="/applicationsByStatus/:status/:selector"
-                    component={
-                      permissions?.includes(
-                        permissionList?.View_Application_List
-                      )
-                        ? Applications
-                        : NotAuthorized
-                    }
-                  /> */}
-
                   <AppRoute
                     path="/applicationsFromConsultant/:consultantId/:intake?"
                     component={
