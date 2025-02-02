@@ -52,11 +52,8 @@ const AffiliateList = () => {
   const [branch, setBranch] = useState([]);
   const [branchValue, setBranchValue] = useState(0);
   const [branchLabel, setBranchLabel] = useState("Select branch");
-
   const [entity, setEntity] = useState(0);
-
   const [serialNum, setSerialNum] = useState(0);
-
   const [deleteModal, setDeleteModal] = useState(false);
   const { addToast } = useToasts();
   const [passModal, setPassModal] = useState(false);
@@ -64,11 +61,9 @@ const AffiliateList = () => {
   const [passError, setPassError] = useState("");
   const [delData, setDelData] = useState({});
   const history = useHistory();
-
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
     userType === userTypes?.Admin.toString();
-
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
     value: statusTypeOptions?.id,
