@@ -136,7 +136,7 @@ const QualityReport = () => {
       <BreadCrumb title="Application Quality Report" />
       <Card>
         <CardBody>
-          <Row>
+          <Row className="mb-4">
             <Col lg={4}>
               <p className="fs-16px fw-600">Application Quality Report</p>
             </Col>
