@@ -12,7 +12,7 @@ import StatusCard from "./Components/StatusCard";
 import { qualityDesign } from "./DemoData";
 
 const QualityReport = () => {
-  const qualityPipeline = sessionStorage.getItem("qualityPipeline");
+  const qualityPipeline = JSON.parse(sessionStorage.getItem("qualityPipeline"));
   const [funnelData, setFunnelData] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(
     qualityPipeline?.selectedCardIndex !== null
@@ -72,8 +72,10 @@ const QualityReport = () => {
     });
 
     get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
-      setIntakeRngValue(res?.id);
-      setIntakeRngLabel(res?.intakeName);
+      if (!qualityPipeline?.intakeRngLabel) {
+        setIntakeRngValue(res?.id);
+        setIntakeRngLabel(res?.intakeName);
+      }
     });
   }, []);
 
