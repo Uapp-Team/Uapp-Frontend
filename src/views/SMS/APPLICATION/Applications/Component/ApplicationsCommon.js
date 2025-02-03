@@ -269,25 +269,29 @@ const ApplicationsCommon = () => {
       ? application?.admissionManagerLabel
       : "Admission Manager"
   );
-  // const [admissionManagerValue, setAdmissionManagerValue] = useState(
-  //   admId
-  //     ? admId
-  //     : application?.admissionManagerValue
-  //     ? application?.admissionManagerValue
-  //     : 0
-  // );
   const [admissionManagerValue, setAdmissionManagerValue] = useState(
-    admId ? admId : 0
+    admId
+      ? admId
+      : application?.admissionManagerValue
+      ? application?.admissionManagerValue
+      : 0
   );
+  // const [admissionManagerValue, setAdmissionManagerValue] = useState(
+  //   admId ? admId : 0
+  // );
   const [admissionOfficerDD, setAdmissionOfficerDD] = useState([]);
   const [admissionOfficerLabel, setAdmissionOfficerLabel] = useState(
-    application?.admissionManagerLabel
-      ? application?.admissionManagerLabel
+    application?.admissionOfficerLabel
+      ? application?.admissionOfficerLabel
       : "Admission Officer"
   );
 
   const [admissionOfficerValue, setAdmissionOfficerValue] = useState(
-    adoId ? adoId : 0
+    adoId
+      ? adoId
+      : application?.admissionOfficerValue
+      ? application?.admissionOfficerValue
+      : 0
   );
   const [proLabel, setProLabel] = useState(
     application?.proLabel ? application?.proLabel : "Select Provider"
@@ -822,13 +826,14 @@ const ApplicationsCommon = () => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
       setApplicationSubDD(res);
       if (selector) {
-        const result = res?.find((ans) => ans?.id.toString() === selector);
-        result?.length > 0 && setApplicationSubLabel(result[0]?.name);
+        const result = res?.filter((ans) => ans?.id.toString() === selector);
+        console.log("result", result);
+        setApplicationSubLabel(result[0]?.name);
       } else if (parameters?.applicationSubStatusId) {
-        const result = res?.find(
+        const result = res?.filter(
           (ans) => ans?.id.toString() === parameters?.applicationSubStatusId
         );
-        result?.length > 0 && setApplicationSubLabel(result[0]?.name);
+        setApplicationSubLabel(result[0]?.name);
       }
     });
   }, [applicationValue, parameters]);
@@ -941,12 +946,12 @@ const ApplicationsCommon = () => {
 
   // handle clear all search function
   const handleClearSearch = () => {
-    selector !== "1" && setApplicationLabel("Status");
-    selector !== "1" && setApplicationValue(0);
-    selector !== "2" && setOfferLabel("Offer");
-    selector !== "2" && setOfferValue(0);
-    selector !== "3" && setEnrollLabel("Enrolment Status");
-    selector !== "3" && setEnrollValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    !selector && setApplicationSubLabel("Sub Status");
+    !selector && setApplicationSubValue(0);
+    // selector !== "3" && setEnrollLabel("Enrolment Status");
+    // selector !== "3" && setEnrollValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -984,6 +989,9 @@ const ApplicationsCommon = () => {
     !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
+    setPercentageLabel("All");
+    setPercentageValue(0);
+    setSelectedDates([]);
     setCurrentPage(1);
     // document.getElementById("app").placeholder = "Application Id";
     // document.getElementById("app").value = null;
@@ -1401,7 +1409,10 @@ const ApplicationsCommon = () => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <ConditionForText
+                  status={status}
                   selector={selector}
+                  admId={admId}
+                  adoId={adoId}
                   branchId={branchId}
                   branchLabel={branchLabel}
                   setBranchLabel={setBranchLabel}
@@ -1420,7 +1431,10 @@ const ApplicationsCommon = () => {
                   setAdmissionManagerLabel={setAdmissionManagerLabel}
                   admissionManagerValue={admissionManagerValue}
                   setAdmissionManagerValue={setAdmissionManagerValue}
-                  admId={admId}
+                  admissionOfficerLabel={admissionOfficerLabel}
+                  setAdmissionOfficerLabel={setAdmissionOfficerLabel}
+                  admissionOfficerValue={admissionOfficerValue}
+                  setAdmissionOfficerValue={setAdmissionOfficerValue}
                   affiliateLabel={affiliateLabel}
                   setAffiliateLabel={setAffiliateLabel}
                   affiliateValue={affiliateValue}
@@ -1436,6 +1450,7 @@ const ApplicationsCommon = () => {
                   consultantTypeValue={consultantTypeValue}
                   consultantValue={consultantValue}
                   applicationValue={applicationValue}
+                  applicationSubValue={applicationSubValue}
                   offerValue={offerValue}
                   enrollValue={enrollValue}
                   intakeValue={intakeValue}
@@ -1450,6 +1465,7 @@ const ApplicationsCommon = () => {
                   consultantTypeLabel={consultantTypeLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
+                  applicationSubLabel={applicationSubLabel}
                   offerLabel={offerLabel}
                   enrollLabel={enrollLabel}
                   intakeLabel={intakeLabel}
@@ -1459,7 +1475,9 @@ const ApplicationsCommon = () => {
                   financeLabel={financeLabel}
                   commonUniLabel={commonUniLabel}
                   setApplicationLabel={setApplicationLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationValue={setApplicationValue}
+                  setApplicationSubValue={setApplicationSubValue}
                   setOfferLabel={setOfferLabel}
                   setOfferValue={setOfferValue}
                   setEnrollLabel={setEnrollLabel}
@@ -1500,10 +1518,12 @@ const ApplicationsCommon = () => {
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
                   commonStdValue !== 0 ||
-                  (selector !== "1" && applicationValue !== 0) ||
+                  (!status && applicationValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) ||
                   (selector !== "2" && offerValue !== 0) ||
                   (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
+                  consultantTypeValue !== 0 ||
                   (!consultantId && consultantValue !== 0) ||
                   (!intake && intakeRngValue !== 0) ||
                   interviewValue !== 0 ||
@@ -1517,7 +1537,9 @@ const ApplicationsCommon = () => {
                   (!admId && admissionManagerValue !== 0) ||
                   (!affiliateId && affiliateValue !== 0) ||
                   (!adoId && admissionOfficerValue !== 0) ||
-                  (!companionId && companionValue !== 0) ? (
+                  (!companionId && companionValue !== 0) ||
+                  percentageValue !== 0 ||
+                  selectedDates.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>

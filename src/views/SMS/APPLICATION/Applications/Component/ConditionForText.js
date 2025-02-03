@@ -2,7 +2,10 @@ import React from "react";
 import TagButton from "../../../../../components/buttons/TagButton";
 
 const ConditionForText = ({
+  status,
   selector,
+  admId,
+  adoId,
   branchId,
   branchLabel,
   setBranchLabel,
@@ -22,7 +25,6 @@ const ConditionForText = ({
   affiliateValue,
   setAffiliateValue,
   affiliateId,
-  admId,
   companionLabel,
   setCompanionLabel,
   companionValue,
@@ -32,11 +34,16 @@ const ConditionForText = ({
   setAdmissionManagerLabel,
   admissionManagerValue,
   setAdmissionManagerValue,
+  admissionOfficerLabel,
+  setAdmissionOfficerLabel,
+  admissionOfficerValue,
+  setAdmissionOfficerValue,
   commonUappIdValue,
   commonStdValue,
   consultantTypeValue,
   consultantValue,
   applicationValue,
+  applicationSubValue,
   offerValue,
   enrollValue,
   intakeValue,
@@ -50,6 +57,7 @@ const ConditionForText = ({
   consultantTypeLabel,
   consultantLabel,
   applicationLabel,
+  applicationSubLabel,
   offerLabel,
   enrollLabel,
   intakeLabel,
@@ -61,6 +69,8 @@ const ConditionForText = ({
   commonUniLabel,
   setApplicationLabel,
   setApplicationValue,
+  setApplicationSubLabel,
+  setApplicationSubValue,
   setOfferLabel,
   setOfferValue,
   setEnrollLabel,
@@ -140,7 +150,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {selector !== "1" && applicationValue !== 0 ? (
+        {!status && applicationValue !== 0 ? (
           <TagButton
             label={applicationLabel}
             setValue={() => setApplicationValue(0)}
@@ -150,7 +160,17 @@ const ConditionForText = ({
           ""
         )}
 
-        {selector !== "2" && offerValue !== 0 ? (
+        {!selector && applicationSubValue !== 0 ? (
+          <TagButton
+            label={applicationSubLabel}
+            setValue={() => setApplicationSubValue(0)}
+            setLabel={() => setApplicationSubLabel("Sub Status")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {/* {selector !== "2" && offerValue !== 0 ? (
           <TagButton
             label={offerLabel}
             setValue={() => setOfferValue(0)}
@@ -158,9 +178,9 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
-        )}
+        )} */}
 
-        {selector !== "3" && enrollValue !== 0 ? (
+        {/* {selector !== "3" && enrollValue !== 0 ? (
           <TagButton
             label={enrollLabel}
             setValue={() => setEnrollValue(0)}
@@ -168,7 +188,7 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
-        )}
+        )} */}
 
         {intakeValue !== 0 ? (
           <TagButton
@@ -288,6 +308,17 @@ const ConditionForText = ({
         ) : (
           ""
         )}
+
+        {!adoId && admissionOfficerValue !== 0 ? (
+          <TagButton
+            label={admissionOfficerLabel}
+            setValue={() => setAdmissionOfficerValue(0)}
+            setLabel={() => setAdmissionOfficerLabel("Admission Officer")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
         {!affiliateId && affiliateValue !== 0 ? (
           <TagButton
             label={affiliateLabel}
