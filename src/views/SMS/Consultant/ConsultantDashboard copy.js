@@ -395,7 +395,7 @@ const ConsultantDashboard = () => {
                     <span
                       className="application-count-style2"
                       onClick={() => {
-                        history.push(`/applicationsByStatus/${2}/${2}`);
+                        history.push(`/applicationsByStatus/${9}/${0}`);
                       }}
                       style={{ color: "#AE75F8", cursor: "pointer" }}
                     >
@@ -416,7 +416,7 @@ const ConsultantDashboard = () => {
                     <span
                       className="application-count-style2"
                       onClick={() => {
-                        history.push(`/applicationsByStatus/${2}/${3}`);
+                        history.push(`/applicationsByStatus/${12}/${38}`);
                       }}
                       style={{ color: "#F7BD12", cursor: "pointer" }}
                     >
@@ -457,7 +457,7 @@ const ConsultantDashboard = () => {
 
                     <span
                       onClick={() => {
-                        history.push(`/applicationsByStatus/${4}/${3}`);
+                        history.push(`/applicationsByStatus/${12}/${41}`);
                       }}
                       className="application-count-style2"
                       style={{ color: "#707070", cursor: "pointer" }}

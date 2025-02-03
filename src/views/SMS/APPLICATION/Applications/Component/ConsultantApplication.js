@@ -613,12 +613,10 @@ const ConsultantApplication = ({ currentUser }) => {
 
   // handle clear all search function
   const handleClearSearch = () => {
-    selector !== "1" && setApplicationLabel("Status");
-    selector !== "1" && setApplicationValue(0);
-    selector !== "2" && setOfferLabel("Offer");
-    selector !== "2" && setOfferValue(0);
-    selector !== "3" && setEnrollLabel("Enrolment Status");
-    selector !== "3" && setEnrollValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    // !selector && setApplicationSubLabel("Sub Status");
+    // !selector && setApplicationSubValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");

@@ -132,7 +132,7 @@ const AdmissionManager = () => {
             <DashboardCount
               title="Total Registered"
               value={count?.totalRegistered}
-              link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
+              link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
               bgColor="#F0FFE0"
               borderColor="#70E000"
             />
@@ -150,7 +150,7 @@ const AdmissionManager = () => {
             <DashboardCount
               title="Withdrawn Application"
               value={count?.totalWithdrawn}
-              link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
+              link={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}
               bgColor="#EDF1F5"
               borderColor="#34495E"
             />
@@ -160,7 +160,7 @@ const AdmissionManager = () => {
             <DashboardCount
               title="Total Unconditional Offer"
               value={`${count?.totalUnconditional}`}
-              link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
+              link={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}
               bgColor="#FDF5E7"
               borderColor="#9E6F21"
               secondValue={count?.totalUnconditionalStudent}
@@ -172,7 +172,7 @@ const AdmissionManager = () => {
             <DashboardCount
               title="Total Submitted "
               value={`${count?.totalSubmitted}`}
-              link={`/applicationsByStatus/${4}/${1}/${intakeRngValue}`}
+              link={`/applicationsByStatus/${4}/${0}/${intakeRngValue}`}
               bgColor="#FDF5E7"
               borderColor="#9E6F21"
             />
@@ -186,61 +186,6 @@ const AdmissionManager = () => {
             />
           </Col>
         </Row>
-        {/* <Row>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Total Application"
-              value={count?.totalApplication}
-              link={`/applicationsbyintake/${intakeRngValue}`}
-              bgColor="#E1F5FC"
-              borderColor="#24A1CD"
-            />
-          </Col>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Applications in Process"
-              value={count?.totalApplicationInProgress}
-              link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
-              bgColor="#FBF5E8"
-              borderColor="#FFBA08"
-            />
-          </Col>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Total Registered"
-              value={count?.totalRegistered}
-              link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
-              bgColor="#F0FFE0"
-              borderColor="#70E000"
-            />
-          </Col>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Total Rejected"
-              value={count?.totalRejected}
-              link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
-              bgColor="#FEF6F5"
-              borderColor="#F87675"
-            />
-          </Col>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Withdrawn Application"
-              value={count?.totalWithdrawn}
-              link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
-              bgColor="#EDF1F5"
-              borderColor="#34495E"
-            />
-          </Col>
-          <Col lg={2} md={4} xs={6} className="mb-30px">
-            <DashboardCount
-              title="Conversion Rate"
-              value={`${count?.coversionRate}%`}
-              bgColor="#FDF5E7"
-              borderColor="#9E6F21"
-            />
-          </Col>
-        </Row> */}
       </>
 
       <>

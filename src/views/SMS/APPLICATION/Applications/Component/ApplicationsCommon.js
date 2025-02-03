@@ -369,21 +369,21 @@ const ApplicationsCommon = () => {
         commonUappIdValue: commonUappIdValue && commonUappIdValue,
         commonStdLabel: commonStdLabel && commonStdLabel,
         commonStdValue: commonStdValue && commonStdValue,
-        offerLabel: selector !== "2" && offerLabel && offerLabel,
-        offerValue: selector !== "2" && offerValue && offerValue,
+        // offerLabel: selector !== "2" && offerLabel && offerLabel,
+        // offerValue: selector !== "2" && offerValue && offerValue,
         applicationId: applicationId && applicationId,
         consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
         consultantTypeValue: consultantTypeValue && consultantTypeValue,
         consultantLabel: consultantLabel && consultantLabel,
         consultantValue: consultantValue && consultantValue,
-        applicationLabel:
-          selector !== "1" && applicationLabel && applicationLabel,
-        applicationValue:
-          selector !== "1" && applicationValue && applicationValue,
-        applicationSubLabel: applicationSubLabel && applicationSubLabel,
-        applicationSubValue: applicationSubValue && applicationSubValue,
-        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        applicationLabel: status > 0 && applicationLabel && applicationLabel,
+        applicationValue: status > 0 && applicationValue && applicationValue,
+        applicationSubLabel:
+          selector > 0 && applicationSubLabel && applicationSubLabel,
+        applicationSubValue:
+          selector > 0 && applicationSubValue && applicationSubValue,
+        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        // enrollValue: selector !== "3" && enrollValue && enrollValue,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -827,7 +827,6 @@ const ApplicationsCommon = () => {
       setApplicationSubDD(res);
       if (selector) {
         const result = res?.filter((ans) => ans?.id.toString() === selector);
-        console.log("result", result);
         setApplicationSubLabel(result[0]?.name);
       } else if (parameters?.applicationSubStatusId) {
         const result = res?.filter(
@@ -950,8 +949,6 @@ const ApplicationsCommon = () => {
     !status && setApplicationValue(0);
     !selector && setApplicationSubLabel("Sub Status");
     !selector && setApplicationSubValue(0);
-    // selector !== "3" && setEnrollLabel("Enrolment Status");
-    // selector !== "3" && setEnrollValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -1450,7 +1447,6 @@ const ApplicationsCommon = () => {
                   consultantTypeValue={consultantTypeValue}
                   consultantValue={consultantValue}
                   applicationValue={applicationValue}
-                  applicationSubValue={applicationSubValue}
                   offerValue={offerValue}
                   enrollValue={enrollValue}
                   intakeValue={intakeValue}
@@ -1465,7 +1461,6 @@ const ApplicationsCommon = () => {
                   consultantTypeLabel={consultantTypeLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
-                  applicationSubLabel={applicationSubLabel}
                   offerLabel={offerLabel}
                   enrollLabel={enrollLabel}
                   intakeLabel={intakeLabel}
@@ -1475,8 +1470,10 @@ const ApplicationsCommon = () => {
                   financeLabel={financeLabel}
                   commonUniLabel={commonUniLabel}
                   setApplicationLabel={setApplicationLabel}
-                  setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationValue={setApplicationValue}
+                  applicationSubValue={applicationSubValue}
+                  applicationSubLabel={applicationSubLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationSubValue={setApplicationSubValue}
                   setOfferLabel={setOfferLabel}
                   setOfferValue={setOfferValue}
@@ -1520,8 +1517,8 @@ const ApplicationsCommon = () => {
                   commonStdValue !== 0 ||
                   (!status && applicationValue !== 0) ||
                   (!selector && applicationSubValue !== 0) ||
-                  (selector !== "2" && offerValue !== 0) ||
-                  (selector !== "3" && enrollValue !== 0) ||
+                  // (selector !== "2" && offerValue !== 0) ||
+                  // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
                   consultantTypeValue !== 0 ||
                   (!consultantId && consultantValue !== 0) ||
@@ -1539,7 +1536,7 @@ const ApplicationsCommon = () => {
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
                   percentageValue !== 0 ||
-                  selectedDates.length > 0 ? (
+                  selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>
