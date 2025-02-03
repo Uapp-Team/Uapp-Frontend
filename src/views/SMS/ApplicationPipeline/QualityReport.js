@@ -239,43 +239,26 @@ const QualityReport = () => {
               {funnelData[selectedCardIndex]?.childs.length > 0 &&
                 funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
-                    {item?.title === "" ? (
-                      <>
-                        <Row>
-                          {item?.childs?.length > 0 &&
-                            item?.childs.map((child, childIndex) => (
-                              <Col lg={4} md={6} sm={12} key={childIndex}>
-                                <StatusCard
-                                  title={child?.title}
-                                  applications={child?.applicationCount}
-                                  students={child?.studentCount}
-                                  confidence={child?.confidence}
-                                  bgColor="#fff"
-                                />
-                              </Col>
-                            ))}
-                        </Row>
-                      </>
-                    ) : (
-                      <>
-                        <div className="p-2 rounded bg-F2EFED mb-3">
-                          <span className="fw-500">{item?.title}</span>
-                        </div>
-                        <Row>
-                          {item?.childs?.length > 0 &&
-                            item?.childs.map((child, childIndex) => (
-                              <Col lg={4} md={6} sm={12} key={childIndex}>
-                                <StatusCard
-                                  title={child?.title}
-                                  applications={child?.applicationCount}
-                                  students={child?.studentCount}
-                                  confidence={child?.confidence}
-                                />
-                              </Col>
-                            ))}
-                        </Row>
-                      </>
-                    )}
+                    <div className="p-2 rounded bg-F2EFED mb-3">
+                      <span className="fw-500">{item?.title}</span>
+                    </div>
+                    <Row>
+                      {item?.childs?.length > 0 &&
+                        item?.childs.map((child, childIndex) => (
+                          <Col lg={4} md={6} sm={12} key={childIndex}>
+                            <StatusCard
+                              title={child?.title}
+                              applications={child?.applicationCount}
+                              students={child?.studentCount}
+                              confidence={
+                                index === 0 ? child?.confidenceLevel : null
+                              }
+                              parameters={child?.parameters}
+                              bgColor={index === 0 ? "#ffff" : "#EDF2F2"}
+                            />
+                          </Col>
+                        ))}
+                    </Row>
                   </div>
                 ))}
             </div>
