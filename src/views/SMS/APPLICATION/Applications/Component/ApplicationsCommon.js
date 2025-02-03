@@ -24,6 +24,7 @@ import Filter from "../../../../../components/Dropdown/Filter.js";
 import DateRange from "../../../../../components/form/DateRange.js";
 import Typing from "../../../../../components/form/Typing.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import ContactNumber from "../../../../../components/ui/ContactNumber.js";
 import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
 import { userTypes } from "../../../../../constants/userTypeConstant.js";
 import get from "../../../../../helpers/get";
@@ -36,7 +37,6 @@ import Loader from "../../../Search/Loader/Loader";
 import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
 import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
 import ConditionForText from "./ConditionForText.js";
-import ContactNumber from "../../../../../components/ui/ContactNumber.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
@@ -191,6 +191,14 @@ const ApplicationsCommon = () => {
       ? parameters?.applicationSubStatusId
       : application?.applicationSubValue
       ? application?.applicationSubValue
+      : 0
+  );
+
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters.confidenceValue
+      ? parameters.confidenceValue
+      : application.confidenceValue
+      ? application.confidenceValue
       : 0
   );
   const [offerLabel, setOfferLabel] = useState(
