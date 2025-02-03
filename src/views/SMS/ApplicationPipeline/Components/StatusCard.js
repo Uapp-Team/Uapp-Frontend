@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import React from "react";
 import { AiOutlineRight } from "react-icons/ai";
+import { useHistory } from "react-router";
 
 const StatusCard = ({
   title,
@@ -25,6 +25,7 @@ const StatusCard = ({
         style={{
           backgroundColor: bgColor,
           border: "1px solid #CDDFDF",
+          minHeight: "169px",
         }}
       >
         <div className="d-flex justify-content-between align-items-center">
