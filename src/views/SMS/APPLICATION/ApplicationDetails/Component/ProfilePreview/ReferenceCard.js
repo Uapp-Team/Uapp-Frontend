@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Table } from "reactstrap";
 import get from "../../../../../../helpers/get";
+import ContactNumber from "../../../../../../components/ui/ContactNumber";
 
 const ReferenceCard = ({ sId, refList, setRefList }) => {
   useEffect(() => {
@@ -69,8 +70,7 @@ const ReferenceCard = ({ sId, refList, setRefList }) => {
                       <td className="border-0">{ref?.referenceName}</td>
                       <td className="border-0">{ref?.institute_Company}</td>
                       <td className="border-0">
-                        {ref?.phoneNumber && "+"}
-                        {ref?.phoneNumber}
+                        <ContactNumber data={ref?.phoneNumber} />
                       </td>
                       <td className="border-0">{ref?.emailAddress}</td>
                     </tr>

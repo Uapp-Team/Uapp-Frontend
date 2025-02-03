@@ -29,6 +29,7 @@ import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/C
 import { Link } from "react-router-dom";
 import ColumnApplicationConsultant from "../../../TableColumn/ColumnApplicationConsultant.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import ContactNumber from "../../../../../components/ui/ContactNumber.js";
 
 const ConsultantApplication = ({ currentUser }) => {
   const history = useHistory();
@@ -83,7 +84,6 @@ const ConsultantApplication = ({ currentUser }) => {
       ? applicationConsultant?.consUappIdValue
       : 0
   );
-
   const [consultantStdDD, setConsultantStdDD] = useState([]);
   const [consStdLabel, setConsStdLabel] = useState(
     applicationConsultant?.consStdLabel
@@ -1221,8 +1221,8 @@ const ConsultantApplication = ({ currentUser }) => {
 
                               {tableData[3]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentPhone && "+"}
-                                  {app?.studentPhone} <br />
+                                  <ContactNumber data={app?.studentPhone} />
+                                  <br />
                                   {app?.studentEmail}
                                 </td>
                               ) : null}

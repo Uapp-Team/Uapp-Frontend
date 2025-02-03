@@ -36,6 +36,7 @@ import Loader from "../../../Search/Loader/Loader";
 import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
 import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
 import ConditionForText from "./ConditionForText.js";
+import ContactNumber from "../../../../../components/ui/ContactNumber.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
@@ -1838,8 +1839,8 @@ const ApplicationsCommon = () => {
 
                                   {tableData[3]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
-                                      {app?.studentPhone && "+"}
-                                      {app?.studentPhone} <br />
+                                      <ContactNumber data={app?.studentPhone} />
+                                      <br />
                                       {app?.studentEmail}
                                     </td>
                                   ) : null}

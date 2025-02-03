@@ -9,6 +9,7 @@ import { rootUrl } from "../../../../../constants/constants";
 import logoLg from "../../../../../assets/img/Logo.svg";
 import ReactToPrint from "react-to-print";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import ContactNumber from "../../../../../components/ui/ContactNumber";
 
 const Consent = ({
   sId,
@@ -1835,19 +1836,19 @@ const Consent = ({
 
                     <Table style={{ marginBottom: "2 rem" }}>
                       <tbody>
-                              <tr style={{ border: "1px solid #dee2e6" }}>
-                                <td
-                                  style={{
-                                    borderRight: "1px solid #dee2e6",
-                                    paddingLeft: "8px",
-                                  }}
-                                >
-                                  Relation
-                                </td>
-                                <td style={{ paddingLeft: "8px" }}>
-                                  {ref?.referenceType.name}
-                                </td>
-                              </tr>
+                        <tr style={{ border: "1px solid #dee2e6" }}>
+                          <td
+                            style={{
+                              borderRight: "1px solid #dee2e6",
+                              paddingLeft: "8px",
+                            }}
+                          >
+                            Relation
+                          </td>
+                          <td style={{ paddingLeft: "8px" }}>
+                            {ref?.referenceType.name}
+                          </td>
+                        </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>
                           <td
                             style={{
@@ -1886,8 +1887,7 @@ const Consent = ({
                           </td>
 
                           <td style={{ paddingLeft: "8px" }}>
-                            {ref?.phoneNumber && "+"}
-                            {ref?.phoneNumber}
+                            <ContactNumber data={ref?.phoneNumber} />
                           </td>
                         </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>

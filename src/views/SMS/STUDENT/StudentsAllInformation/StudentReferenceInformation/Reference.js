@@ -28,6 +28,7 @@ import put from "../../../../../helpers/put";
 import remove from "../../../../../helpers/remove";
 import Loader from "../../../Search/Loader/Loader";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import ContactNumber from "../../../../../components/ui/ContactNumber";
 
 const Reference = () => {
   const history = useHistory();
@@ -488,8 +489,7 @@ const Reference = () => {
                           <td>{ref?.referenceName}</td>
                           <td>{ref?.institute_Company}</td>
                           <td>
-                            {ref?.phoneNumber && "+"}
-                            {ref?.phoneNumber}
+                            <ContactNumber data={ref?.phoneNumber} />
                           </td>
                           <td>{ref?.emailAddress}</td>
                           <td>
