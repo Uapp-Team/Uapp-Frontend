@@ -16,6 +16,7 @@ import put from "../../../../../helpers/put";
 import ButtonLoader from "../../../Components/ButtonLoader";
 import ProfilePreview from "../../StudentProfile/ProfilePreview";
 import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation";
+import ContactNumber from "../../../../../components/ui/ContactNumber";
 
 const StudentDeclaration = () => {
   const location = useLocation();
@@ -2158,8 +2159,7 @@ const StudentDeclaration = () => {
                             </td>
 
                             <td style={{ paddingLeft: "8px" }}>
-                              {ref?.phoneNumber && "+"}
-                              {ref?.phoneNumber}
+                              <ContactNumber data={ref?.phoneNumber} />
                             </td>
                           </tr>
                           <tr style={{ border: "1px solid #dee2e6" }}>

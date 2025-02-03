@@ -1,8 +1,12 @@
 import React from "react";
 import TagButton from "../../../../../components/buttons/TagButton";
+import { AdminUsers } from "../../../../../components/core/User";
 
 const ConditionForText = ({
+  status,
   selector,
+  admId,
+  adoId,
   branchId,
   branchLabel,
   setBranchLabel,
@@ -22,7 +26,6 @@ const ConditionForText = ({
   affiliateValue,
   setAffiliateValue,
   affiliateId,
-  admId,
   companionLabel,
   setCompanionLabel,
   companionValue,
@@ -32,11 +35,16 @@ const ConditionForText = ({
   setAdmissionManagerLabel,
   admissionManagerValue,
   setAdmissionManagerValue,
+  admissionOfficerLabel,
+  setAdmissionOfficerLabel,
+  admissionOfficerValue,
+  setAdmissionOfficerValue,
   commonUappIdValue,
   commonStdValue,
   consultantTypeValue,
   consultantValue,
   applicationValue,
+  applicationSubValue,
   offerValue,
   enrollValue,
   intakeValue,
@@ -50,6 +58,7 @@ const ConditionForText = ({
   consultantTypeLabel,
   consultantLabel,
   applicationLabel,
+  applicationSubLabel,
   offerLabel,
   enrollLabel,
   intakeLabel,
@@ -61,6 +70,8 @@ const ConditionForText = ({
   commonUniLabel,
   setApplicationLabel,
   setApplicationValue,
+  setApplicationSubLabel,
+  setApplicationSubValue,
   setOfferLabel,
   setOfferValue,
   setEnrollLabel,
@@ -101,7 +112,7 @@ const ConditionForText = ({
   return (
     <>
       <div className="d-flex mt-1">
-        {commonUappIdValue !== 0 ? (
+        {commonUappIdValue && commonUappIdValue !== 0 ? (
           <TagButton
             label={commonUappIdLabel}
             setValue={() => setCommonUappIdValue(0)}
@@ -111,7 +122,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {commonStdValue !== 0 ? (
+        {commonStdValue && commonStdValue !== 0 ? (
           <TagButton
             label={commonStdLabel}
             setValue={() => setCommonStdValue(0)}
@@ -121,7 +132,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {consultantTypeValue !== 0 ? (
+        {consultantTypeValue && consultantTypeValue !== 0 ? (
           <TagButton
             label={consultantTypeLabel}
             setValue={() => setConsultantTypeValue(0)}
@@ -130,7 +141,7 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {!consultantId && consultantValue !== 0 ? (
+        {!consultantId && consultantValue && consultantValue !== 0 ? (
           <TagButton
             label={consultantLabel}
             setValue={() => setConsultantValue(0)}
@@ -140,7 +151,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {selector !== "1" && applicationValue !== 0 ? (
+        {!status && applicationValue && applicationValue !== 0 ? (
           <TagButton
             label={applicationLabel}
             setValue={() => setApplicationValue(0)}
@@ -150,7 +161,17 @@ const ConditionForText = ({
           ""
         )}
 
-        {selector !== "2" && offerValue !== 0 ? (
+        {!selector && applicationSubValue && applicationSubValue !== 0 ? (
+          <TagButton
+            label={applicationSubLabel}
+            setValue={() => setApplicationSubValue(0)}
+            setLabel={() => setApplicationSubLabel("Sub Status")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {/* {selector !== "2" && offerValue !== 0 ? (
           <TagButton
             label={offerLabel}
             setValue={() => setOfferValue(0)}
@@ -158,9 +179,9 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
-        )}
+        )} */}
 
-        {selector !== "3" && enrollValue !== 0 ? (
+        {/* {selector !== "3" && enrollValue !== 0 ? (
           <TagButton
             label={enrollLabel}
             setValue={() => setEnrollValue(0)}
@@ -168,9 +189,9 @@ const ConditionForText = ({
           ></TagButton>
         ) : (
           ""
-        )}
+        )} */}
 
-        {intakeValue !== 0 ? (
+        {intakeValue && intakeValue !== 0 ? (
           <TagButton
             label={intakeLabel}
             setValue={() => setIntakeValue(0)}
@@ -180,7 +201,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {!intake && intakeRngValue !== 0 ? (
+        {!intake && intakeRngValue && intakeRngValue !== 0 ? (
           <TagButton
             label={intakeRngLabel}
             setValue={() => setIntakeRngValue(0)}
@@ -190,7 +211,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {interviewValue !== 0 ? (
+        {interviewValue && interviewValue !== 0 ? (
           <TagButton
             label={interviewLabel}
             setValue={() => setInterviewValue(0)}
@@ -199,7 +220,7 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {elptValue !== 0 ? (
+        {elptValue && elptValue !== 0 ? (
           <TagButton
             label={elptLabel}
             setValue={() => setElptValue(0)}
@@ -209,7 +230,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {financeValue !== 0 ? (
+        {financeValue && financeValue !== 0 ? (
           <TagButton
             label={financeLabel}
             setValue={() => setFinanceValue(0)}
@@ -219,7 +240,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {commonUniValue !== 0 ? (
+        {commonUniValue && commonUniValue !== 0 ? (
           <TagButton
             label={commonUniLabel}
             setValue={() => setCommonUniValue(0)}
@@ -229,7 +250,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {!branchId && branchValue !== 0 ? (
+        {!branchId && branchValue && branchValue !== 0 ? (
           <TagButton
             label={branchLabel}
             setValue={() => setBranchValue(0)}
@@ -239,7 +260,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {branchManagerValue !== 0 ? (
+        {branchManagerValue && branchManagerValue !== 0 ? (
           <TagButton
             label={branchManagerLabel}
             setValue={() => setBranchManagerValue(0)}
@@ -249,7 +270,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {!providerId && proValue !== 0 ? (
+        {!providerId && proValue && proValue !== 0 ? (
           <TagButton
             label={proLabel}
             setValue={() => setProValue(0)}
@@ -259,7 +280,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {documentStatusValue !== 0 ? (
+        {documentStatusValue && documentStatusValue !== 0 ? (
           <TagButton
             label={documentStatusLabel}
             setValue={() => setdocumentStatusValue(0)}
@@ -269,7 +290,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {percentageValue !== 0 ? (
+        {percentageValue && percentageValue !== 0 ? (
           <TagButton
             label={percentageLabel}
             setValue={() => setPercentageValue(0)}
@@ -279,7 +300,7 @@ const ConditionForText = ({
           ""
         )}
 
-        {!admId && admissionManagerValue !== 0 ? (
+        {!admId && admissionManagerValue && admissionManagerValue !== 0 ? (
           <TagButton
             label={admissionManagerLabel}
             setValue={() => setAdmissionManagerValue(0)}
@@ -288,7 +309,18 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {!affiliateId && affiliateValue !== 0 ? (
+
+        {!adoId && admissionOfficerValue && admissionOfficerValue !== 0 ? (
+          <TagButton
+            label={admissionOfficerLabel}
+            setValue={() => setAdmissionOfficerValue(0)}
+            setLabel={() => setAdmissionOfficerLabel("Admission Officer")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+
+        {!affiliateId && affiliateValue && affiliateValue !== 0 ? (
           <TagButton
             label={affiliateLabel}
             setValue={() => setAffiliateValue(0)}
@@ -297,7 +329,8 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {!companionId && companionValue !== 0 ? (
+
+        {!companionId && companionValue && companionValue !== 0 ? (
           <TagButton
             label={companionLabel}
             setValue={() => setCompanionValue(0)}
@@ -306,7 +339,8 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {selectedDates.length > 0 && (
+
+        {selectedDates && selectedDates?.length > 0 && (
           <TagButton
             label={selectedDates.join(" - ")}
             setValue={() => setSelectedDates([])}

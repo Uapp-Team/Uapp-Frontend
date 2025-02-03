@@ -28,6 +28,7 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import Loader from "../../../Search/Loader/Loader";
 import EducationalForm from "./EducationalForm";
+import ContactNumber from "../../../../../components/ui/ContactNumber";
 
 const EducationalInformation = () => {
   const { applicationStudentId } = useParams();
@@ -764,8 +765,9 @@ const EducationalInformation = () => {
                                       <span>Institution Contact Number</span>
                                       <br />
                                       <b>
-                                        {edu?.instituteContactNumber && "+"}
-                                        {edu?.instituteContactNumber}
+                                        <ContactNumber
+                                          data={edu?.instituteContactNumber}
+                                        />
                                       </b>
                                     </p>
 

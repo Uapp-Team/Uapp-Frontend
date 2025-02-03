@@ -127,7 +127,7 @@ const AdmissionOfficer = () => {
             <DashboardCount
               title="Total Registered"
               value={count?.totalRegistered}
-              link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
+              link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
               bgColor="#F0FFE0"
               borderColor="#70E000"
             />

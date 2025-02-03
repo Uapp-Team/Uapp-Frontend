@@ -29,6 +29,7 @@ import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/C
 import { Link } from "react-router-dom";
 import ColumnApplicationConsultant from "../../../TableColumn/ColumnApplicationConsultant.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import ContactNumber from "../../../../../components/ui/ContactNumber.js";
 
 const ConsultantApplication = ({ currentUser }) => {
   const history = useHistory();
@@ -83,7 +84,6 @@ const ConsultantApplication = ({ currentUser }) => {
       ? applicationConsultant?.consUappIdValue
       : 0
   );
-
   const [consultantStdDD, setConsultantStdDD] = useState([]);
   const [consStdLabel, setConsStdLabel] = useState(
     applicationConsultant?.consStdLabel
@@ -613,12 +613,10 @@ const ConsultantApplication = ({ currentUser }) => {
 
   // handle clear all search function
   const handleClearSearch = () => {
-    selector !== "1" && setApplicationLabel("Status");
-    selector !== "1" && setApplicationValue(0);
-    selector !== "2" && setOfferLabel("Offer");
-    selector !== "2" && setOfferValue(0);
-    selector !== "3" && setEnrollLabel("Enrolment Status");
-    selector !== "3" && setEnrollValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    // !selector && setApplicationSubLabel("Sub Status");
+    // !selector && setApplicationSubValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -1221,8 +1219,8 @@ const ConsultantApplication = ({ currentUser }) => {
 
                               {tableData[3]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentPhone && "+"}
-                                  {app?.studentPhone} <br />
+                                  <ContactNumber data={app?.studentPhone} />
+                                  <br />
                                   {app?.studentEmail}
                                 </td>
                               ) : null}

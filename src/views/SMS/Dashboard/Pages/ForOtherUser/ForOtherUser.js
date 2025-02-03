@@ -132,7 +132,7 @@ const ForOtherUser = () => {
             <DashboardCount
               title="Unconditional Offer"
               value={`${count?.totalUnconditionalOffer}`}
-              //   link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
+              //   link={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}
               bgColor="#FDF5E7"
               borderColor="#9E6F21"
               secondValue={count?.totalUnconditionalStudent}
@@ -145,7 +145,7 @@ const ForOtherUser = () => {
             <DashboardCount
               title="Total Registered"
               value={count?.totalRegister}
-              //   link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
+              //   link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
               bgColor="#F0FFE0"
               borderColor="#70E000"
             />
@@ -164,7 +164,7 @@ const ForOtherUser = () => {
             <DashboardCount
               title="Withdrawn Application"
               value={count?.withdrawnApplication}
-              //   link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
+              //   link={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}
               bgColor="#EDF1F5"
               borderColor="#34495E"
             />

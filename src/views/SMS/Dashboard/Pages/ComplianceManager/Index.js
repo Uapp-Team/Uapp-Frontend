@@ -122,18 +122,18 @@ const ComplianceManager = () => {
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Unconditional">
-          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}>
             <h2>{count?.totalUnconditionalOffer}</h2>
           </Link>
-          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}>
             <p className="text-gray-70">Unconditional Offer</p>
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Registered">
-          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}>
             <h2> {count?.totalRegistered}</h2>
           </Link>
-          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}>
             <p className="text-gray-70">Total Registered</p>
           </Link>
         </Col>
@@ -146,10 +146,10 @@ const ComplianceManager = () => {
           </Link>
         </Col>
         <Col className="m-2 p-3 AdmissionManager-card-Withdrawn">
-          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}>
             <h2> {count?.totalWithdrawn}</h2>
           </Link>
-          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
+          <Link to={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}>
             <p className="text-gray-70">Withdrawn Application</p>
           </Link>
         </Col>
