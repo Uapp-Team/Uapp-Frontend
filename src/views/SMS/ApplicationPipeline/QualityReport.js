@@ -253,10 +253,16 @@ const QualityReport = () => {
                               applications={child?.applicationCount}
                               students={child?.studentCount}
                               confidence={
-                                index === 0 ? child?.confidenceLevel : null
+                                selectedCardIndex === 0 && index === 0
+                                  ? child?.confidenceLevel
+                                  : null
                               }
                               parameters={child?.parameters}
-                              bgColor={index === 0 ? "#ffff" : "#EDF2F2"}
+                              bgColor={
+                                selectedCardIndex === 0 && index === 0
+                                  ? "#ffff"
+                                  : "#EDF2F2"
+                              }
                             />
                           </Col>
                         ))}
