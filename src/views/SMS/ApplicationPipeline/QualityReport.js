@@ -241,9 +241,11 @@ const QualityReport = () => {
               {funnelData[selectedCardIndex]?.childs.length > 0 &&
                 funnelData[selectedCardIndex]?.childs?.map((item, index) => (
                   <div key={index}>
-                    <div className="p-2 rounded bg-F2EFED mb-3">
-                      <span className="fw-500">{item?.title}</span>
-                    </div>
+                    {item?.title !== "" && (
+                      <div className="p-2 rounded bg-F2EFED mb-3">
+                        <span className="fw-500">{item?.title}</span>
+                      </div>
+                    )}
                     <Row>
                       {item?.childs?.length > 0 &&
                         item?.childs.map((child, childIndex) => (
