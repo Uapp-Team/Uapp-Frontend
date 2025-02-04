@@ -175,7 +175,7 @@ const StudentList = () => {
       });
     }
 
-    get("ConsultantDD/ByUser").then((res) => {
+    get(`ConsultantDD/ByUserNew/${branchValue}`).then((res) => {
       setConsultant(res);
       if (cId) {
         const result = res.filter((r) => {
@@ -184,7 +184,7 @@ const StudentList = () => {
         setConsultantLabel(result[0]?.name);
       }
     });
-  }, [studentTypeValue, cId, consultantValue, type, id]);
+  }, [studentTypeValue, cId, consultantValue, type, id, branchValue]);
 
   useEffect(() => {
     if (!isTyping) {

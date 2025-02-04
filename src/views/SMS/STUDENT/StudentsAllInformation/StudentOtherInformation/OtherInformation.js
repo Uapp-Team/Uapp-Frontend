@@ -17,8 +17,12 @@ const OtherInformation = () => {
   const [progress, setProgress] = useState(false);
   const history = useHistory();
   const [disability, setDisability] = useState(null);
+  console.log(disability);
+
   const [disabilityError, setDisabilityError] = useState("");
   const [crime, setCrime] = useState(null);
+  console.log(crime);
+
   const [crimeError, setCrimeError] = useState("");
   const [id, setId] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -114,6 +118,8 @@ const OtherInformation = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
+    subData.append("isHaveDisability", disability);
+    subData.append("isHaveCriminalConvictions", crime);
     if (validateRegisterForm()) {
       if (update) {
         setButtonStatus(true);
@@ -207,20 +213,19 @@ const OtherInformation = () => {
                   disabilities?
                 </span>
                 <div>
-                  <FormGroup check inline>
+                  <FormGroup check inline className="form-mt">
                     <input
                       className="form-check-input"
                       type="radio"
-                      id="isHaveDisability"
-                      onChange={() => setDisability(true)}
-                      name="isHaveDisability"
+                      id="isHaveDisabilityYes"
                       value={true}
                       checked={disability === true}
+                      onChange={() => setDisability(true)}
                     />
                     <Label
                       className="form-check-label"
                       check
-                      htmlFor="isHaveDisability"
+                      htmlFor="isHaveDisabilityYes"
                     >
                       Yes
                     </Label>
@@ -230,16 +235,15 @@ const OtherInformation = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      id="isHaveDisability"
-                      onChange={() => setDisability(false)}
-                      name="isHaveDisability"
+                      id="isHaveDisabilityNO"
                       value={false}
                       checked={disability === false}
+                      onChange={() => setDisability(false)}
                     />
                     <Label
                       className="form-check-label"
                       check
-                      htmlFor="isHaveDisability"
+                      htmlFor="isHaveDisabilityNO"
                     >
                       No
                     </Label>
@@ -281,20 +285,19 @@ const OtherInformation = () => {
                 </span>
 
                 <div>
-                  <FormGroup check inline>
+                  <FormGroup check inline className="form-mt">
                     <input
                       className="form-check-input"
                       type="radio"
-                      id="isHaveCriminalConvictions"
-                      onChange={() => setCrime(true)}
-                      name="isHaveCriminalConvictions"
+                      id="isHaveCriminalConvictionsYes"
                       value={true}
                       checked={crime === true}
+                      onChange={() => setCrime(true)}
                     />
                     <Label
                       className="form-check-label"
                       check
-                      htmlFor="isHaveCriminalConvictions"
+                      htmlFor="isHaveCriminalConvictionsYes"
                     >
                       Yes
                     </Label>
@@ -304,16 +307,15 @@ const OtherInformation = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      id="isHaveCriminalConvictions"
-                      onChange={() => setCrime(false)}
-                      name="isHaveCriminalConvictions"
+                      id="isHaveCriminalConvictionsNo"
                       value={false}
                       checked={crime === false}
+                      onChange={() => setCrime(false)}
                     />
                     <Label
                       className="form-check-label"
                       check
-                      htmlFor="isHaveCriminalConvictions"
+                      htmlFor="isHaveCriminalConvictionsNo"
                     >
                       No
                     </Label>

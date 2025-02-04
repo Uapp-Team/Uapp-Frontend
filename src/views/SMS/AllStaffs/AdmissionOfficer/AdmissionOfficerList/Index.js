@@ -270,7 +270,10 @@ const Index = () => {
         setManagerDDForm(res);
       });
     }
-  }, []);
+    get(`AdmissionManagerDD/Index/${proValue}`).then((res) => {
+      setManagerDD(res);
+    });
+  }, [proValue]);
 
   console.log(managerDD);
 
@@ -290,13 +293,13 @@ const Index = () => {
   }));
 
   const selectProviders = (label, value) => {
-    setManagerLabel("Select Admission Manager");
-    setManagerValue(0);
     setProLabel(label);
     setProValue(value);
-    get(`AdmissionManagerDD/Index/${value}`).then((res) => {
-      setManagerDD(res);
-    });
+    // get(`AdmissionManagerDD/Index/${value}`).then((res) => {
+    //   setManagerDD(res);
+    // });
+    setManagerLabel("Select Admission Manager");
+    setManagerValue(0);
   };
 
   // user select data per page

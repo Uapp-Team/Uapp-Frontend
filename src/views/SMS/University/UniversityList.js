@@ -615,6 +615,10 @@ const UniversityList = (props) => {
                     setLabel={setBranchLabel}
                     value={branchValue}
                     setValue={setBranchValue}
+                    action={() => {
+                      setProviderValue(0);
+                      setProviderLabel("Provider");
+                    }}
                   />
                 </Col>
               )}
