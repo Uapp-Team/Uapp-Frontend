@@ -56,7 +56,7 @@ const CountingCards = ({ id }) => {
             <DashboardCount
               title="Unconditional Offer"
               value={count?.totalUnconditionalOffer}
-              link={`/applicationsFromConsultantProfile/${id}/${2}/${2}/${
+              link={`/applicationsFromConsultantProfile/${id}/${9}/${0}/${
                 intake?.id
               }`}
               bgColor="#F8F3FF"
@@ -70,7 +70,7 @@ const CountingCards = ({ id }) => {
             <DashboardCount
               title="Total Registered"
               value={count?.totalRegistered}
-              link={`/applicationsFromConsultantProfile/${id}/${2}/${3}/${
+              link={`/applicationsFromConsultantProfile/${id}/${12}/${38}/${
                 intake?.id
               }`}
               bgColor="#F0FFE0"
@@ -100,7 +100,7 @@ const CountingCards = ({ id }) => {
             <DashboardCount
               title="Withdrawn Applications"
               value={`${count?.withdrawApplications}`}
-              link={`/applicationsFromConsultantProfile/${id}/${4}/${3}/${
+              link={`/applicationsFromConsultantProfile/${id}/${12}/${41}/${
                 intake?.id
               }`}
               bgColor="#FDF5E7"
