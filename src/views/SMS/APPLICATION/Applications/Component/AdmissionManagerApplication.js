@@ -1106,7 +1106,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   managerStdValue !== 0 ||
                   managerConsValue !== 0 ||
                   (!status && applicationValue !== 0) ||
-                  (!selector && applicationSubValue !== 0) || // (selector !== "2" && offerValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) ||
+                  // (selector !== "2" && offerValue !== 0) ||
                   // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
                   intakeRngValue !== 0 ||

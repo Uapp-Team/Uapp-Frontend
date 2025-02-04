@@ -64,6 +64,7 @@ const ConsultantApplication = ({ currentUser }) => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
+  const [applicationSubDD, setApplicationSubDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -103,7 +104,9 @@ const ConsultantApplication = ({ currentUser }) => {
       : "University Name"
   );
   const [consUniValue, setConsUniValue] = useState(
-    applicationConsultant?.consUniValue
+    universityId
+      ? universityId
+      : applicationConsultant?.consUniValue
       ? applicationConsultant?.consUniValue
       : 0
   );
@@ -126,24 +129,34 @@ const ConsultantApplication = ({ currentUser }) => {
       ? applicationConsultant?.applicationLabel
       : "Status"
   );
+
   const [applicationValue, setApplicationValue] = useState(
-    selector === "1"
+    status > 0
       ? status
       : applicationConsultant?.applicationValue
       ? applicationConsultant?.applicationValue
       : 0
   );
+  const [applicationSubLabel, setApplicationSubLabel] = useState(
+    applicationConsultant?.applicationSubLabel
+      ? applicationConsultant?.applicationSubLabel
+      : "Sub Status"
+  );
+  const [applicationSubValue, setApplicationSubValue] = useState(
+    selector > 0
+      ? selector
+      : applicationConsultant?.applicationSubValue
+      ? applicationConsultant?.applicationSubValue
+      : 0
+  );
+
   const [offerLabel, setOfferLabel] = useState(
     applicationConsultant?.offerLabel
       ? applicationConsultant?.offerLabel
       : "Offer"
   );
   const [offerValue, setOfferValue] = useState(
-    selector === "2"
-      ? status
-      : applicationConsultant?.offerValue
-      ? applicationConsultant?.offerValue
-      : 0
+    applicationConsultant?.offerValue ? applicationConsultant?.offerValue : 0
   );
   const [enrollLabel, setEnrollLabel] = useState(
     applicationConsultant?.enrollLabel
@@ -151,11 +164,7 @@ const ConsultantApplication = ({ currentUser }) => {
       : "Enrolment Status"
   );
   const [enrollValue, setEnrollValue] = useState(
-    selector === "3"
-      ? status
-      : applicationConsultant?.enrollValue
-      ? applicationConsultant?.enrollValue
-      : 0
+    applicationConsultant?.enrollValue ? applicationConsultant?.enrollValue : 0
   );
   const [intakeLabel, setIntakeLabel] = useState(
     applicationConsultant?.intakeLabel
@@ -261,14 +270,18 @@ const ConsultantApplication = ({ currentUser }) => {
         consUappIdValue: consUappIdValue && consUappIdValue,
         consStdLabel: consStdLabel && consStdLabel,
         consStdValue: consStdValue && consStdValue,
-        offerLabel: selector !== "2" && offerLabel && offerLabel,
-        offerValue: selector !== "2" && offerValue && offerValue,
-        applicationLabel:
-          selector !== "1" && applicationLabel && applicationLabel,
-        applicationValue:
-          selector !== "1" && applicationValue && applicationValue,
-        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        // offerLabel: selector !== "2" && offerLabel && offerLabel,
+        // offerValue: selector !== "2" && offerValue && offerValue,
+        applicationLabel: status > 0 && applicationLabel && applicationLabel,
+        applicationValue: status > 0 && applicationValue && applicationValue,
+        applicationSubLabel:
+          selector > 0 && applicationSubLabel && applicationSubLabel,
+        applicationSubValue:
+          selector > 0 && applicationSubValue && applicationSubValue,
+        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        // enrollValue: selector !== "3" && enrollValue && enrollValue,
+        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        // enrollValue: selector !== "3" && enrollValue && enrollValue,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -407,31 +420,31 @@ const ConsultantApplication = ({ currentUser }) => {
   useEffect(() => {
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
-      if (selector === "1") {
+      if (status > 0) {
         const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
         setApplicationValue(res?.id);
       }
     });
 
-    get("OfferStatusDD/Index").then((res) => {
-      setOfferDD(res);
-      if (selector === "2") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setOfferLabel(result?.name);
-        setOfferValue(res?.id);
-      }
-    });
+    // get("OfferStatusDD/Index").then((res) => {
+    //   setOfferDD(res);
+    //   if (selector === "2") {
+    //     const result = res?.find((ans) => ans?.id.toString() === status);
+    //     setOfferLabel(result?.name);
+    //     setOfferValue(res?.id);
+    //   }
+    // });
 
-    get("EnrollmentStatusDD/Index").then((res) => {
-      setEnrollDD(res);
-      console.log(res, "hahaha");
-      if (selector === "3") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setEnrollLabel(result?.name);
-        setEnrollValue(res?.id);
-      }
-    });
+    // get("EnrollmentStatusDD/Index").then((res) => {
+    //   setEnrollDD(res);
+    //   console.log(res, "hahaha");
+    //   if (selector === "3") {
+    //     const result = res?.find((ans) => ans?.id.toString() === status);
+    //     setEnrollLabel(result?.name);
+    //     setEnrollValue(res?.id);
+    //   }
+    // });
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
@@ -483,28 +496,27 @@ const ConsultantApplication = ({ currentUser }) => {
     }
   }, [currentUser, intake, selector, status, universityId]);
 
+  useEffect(() => {
+    get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      setApplicationSubDD(res);
+      if (selector > 0) {
+        const result = res?.filter((ans) => ans?.id.toString() === selector);
+        setApplicationSubLabel(result[0]?.name);
+      }
+    });
+  }, [applicationValue]);
+
   // Api calling for Application List
   useEffect(() => {
     if (currentUser !== undefined) {
-      if (universityId) {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${consUappIdValue}&studentId=${consStdValue}&universityId=${universityId}&uappPhoneId=${consPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      } else {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${consUappIdValue}&studentId=${consStdValue}&universityId=${consUniValue}&uappPhoneId=${consPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      }
+      get(
+        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${consUappIdValue}&studentId=${consStdValue}&universityId=${consUniValue}&uappPhoneId=${consPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
+      ).then((res) => {
+        setLoading(false);
+        setApplicationList(res?.models);
+        setEntity(res?.totalEntity);
+        // setSerialNumber(res?.firstSerialNumber);
+      });
     }
   }, [
     applicationValue,
@@ -615,8 +627,8 @@ const ConsultantApplication = ({ currentUser }) => {
   const handleClearSearch = () => {
     !status && setApplicationLabel("Status");
     !status && setApplicationValue(0);
-    // !selector && setApplicationSubLabel("Sub Status");
-    // !selector && setApplicationSubValue(0);
+    !selector && setApplicationSubLabel("Sub Status");
+    !selector && setApplicationSubValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -678,7 +690,33 @@ const ConsultantApplication = ({ currentUser }) => {
                 id="id"
               />
             </Col>
+
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={applicationMenu}
+                value={{ label: applicationLabel, value: applicationValue }}
+                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                placeholder="Status"
+                name="name"
+                id="id"
+                isDisabled={status > 0 ? true : false}
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={applicationSubDD}
+                label={applicationSubLabel}
+                setLabel={setApplicationSubLabel}
+                value={applicationSubValue}
+                setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
                 options={offerMenu}
                 value={{ label: offerLabel, value: offerValue }}
@@ -687,8 +725,9 @@ const ConsultantApplication = ({ currentUser }) => {
                 name="name"
                 id="id"
                 isDisabled={selector === "2" ? true : false}
-              />
-            </Col>
+              /> 
+            </Col>*/}
+
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <div className="mt-2">
                 <span
@@ -703,7 +742,7 @@ const ConsultantApplication = ({ currentUser }) => {
           <Row className="gy-3">
             {isHide ? (
               <>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={applicationMenu}
                     value={{ label: applicationLabel, value: applicationValue }}
@@ -713,8 +752,8 @@ const ConsultantApplication = ({ currentUser }) => {
                     id="id"
                     isDisabled={selector === "1" ? true : false}
                   />
-                </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                </Col> */}
+                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={enrollMenu}
                     value={{ label: enrollLabel, value: enrollValue }}
@@ -724,7 +763,7 @@ const ConsultantApplication = ({ currentUser }) => {
                     id="id"
                     isDisabled={selector === "3" ? true : false}
                   />
-                </Col>
+                </Col> */}
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={intakeMenu}
@@ -756,13 +795,7 @@ const ConsultantApplication = ({ currentUser }) => {
                     id="id"
                   />
                 </Col>
-              </>
-            ) : null}
-          </Row>
-          <Row className="gy-3">
-            {isHide ? (
-              <>
-                {" "}
+
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={elptMenu}
@@ -838,6 +871,7 @@ const ConsultantApplication = ({ currentUser }) => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <ConditionForText
+                  status={status}
                   selector={selector}
                   // branchLabel={branchLabel}
                   // setBranchLabel={setBranchLabel}
@@ -899,13 +933,18 @@ const ConsultantApplication = ({ currentUser }) => {
                   setdocumentStatusLabel={setdocumentStatusLabel}
                   documentStatusValue={documentStatusValue}
                   setdocumentStatusValue={setdocumentStatusValue}
+                  applicationSubValue={applicationSubValue}
+                  applicationSubLabel={applicationSubLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
+                  setApplicationSubValue={setApplicationSubValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {consUappIdValue !== 0 ||
                   consStdValue !== 0 ||
-                  (selector !== "1" && applicationValue !== 0) ||
-                  (selector !== "2" && offerValue !== 0) ||
-                  (selector !== "3" && enrollValue !== 0) ||
+                  (!status && applicationValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) ||
+                  // (selector !== "2" && offerValue !== 0) ||
+                  // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
                   (!intake && intakeRngValue !== 0) ||
                   interviewValue !== 0 ||
