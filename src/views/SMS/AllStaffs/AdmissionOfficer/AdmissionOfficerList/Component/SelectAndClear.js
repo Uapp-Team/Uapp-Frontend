@@ -49,6 +49,12 @@ const SelectAndClear = ({
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setProValue(0);
+                    setProLabel("Select Provider");
+                    setManagerLabel("Select Admission Manager");
+                    setManagerValue(0);
+                  }}
                 />
               </Col>
             )}
@@ -66,6 +72,7 @@ const SelectAndClear = ({
                 />
               </Col>
             )}
+
             {userType === userTypes?.AdmissionManager ? null : (
               <Col lg="6" md="6" sm="12" xs="12">
                 <Select

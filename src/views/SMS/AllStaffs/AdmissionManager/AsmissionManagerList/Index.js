@@ -21,7 +21,6 @@ const Index = () => {
     sessionStorage.getItem("admissionManager")
   );
   const { branchId, providerId } = useParams();
-  console.log(branchId, providerId);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);

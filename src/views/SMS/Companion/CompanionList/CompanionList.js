@@ -265,6 +265,8 @@ const CompanionList = () => {
   };
 
   const handleReset = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
     setStatusLabel("Status");
     setStatusValue(0);
     setconsultantLabel("Select Consultant");
@@ -333,6 +335,10 @@ const CompanionList = () => {
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setConsultantValue(0);
+                    setconsultantLabel("Select Consultant");
+                  }}
                 />
               </Col>
             )}
@@ -387,6 +393,15 @@ const CompanionList = () => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div className="d-flex justify-between-start">
                 <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                  {userType === userTypes?.SystemAdmin && branchValue !== 0 ? (
+                    <TagButton
+                      label={branchLabel}
+                      setValue={() => setBranchValue(0)}
+                      setLabel={() => setBranchLabel("Select branch")}
+                    />
+                  ) : (
+                    ""
+                  )}
                   {adminPermission && consultantValue !== 0 ? (
                     <TagButton
                       label={consultantLabel}
@@ -409,7 +424,8 @@ const CompanionList = () => {
                 </div>
 
                 <div className="mt-1 mx-0 d-flex btn-clear mb-2">
-                  {(adminPermission && consultantValue !== 0) ||
+                  {(userType === userTypes?.SystemAdmin && branchValue !== 0) ||
+                  (adminPermission && consultantValue !== 0) ||
                   statusValue !== 0 ? (
                     <button className="tag-clear" onClick={handleReset}>
                       Clear All
