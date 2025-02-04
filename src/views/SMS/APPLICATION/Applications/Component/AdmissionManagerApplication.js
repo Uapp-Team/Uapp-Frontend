@@ -76,6 +76,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
+  const [applicationSubDD, setApplicationSubDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -125,7 +126,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Consultant"
   );
   const [managerConsValue, setManagerConsValue] = useState(
-    AdmissionManagerApplicationPaging?.managerConsValue
+    consultantId
+      ? consultantId
+      : AdmissionManagerApplicationPaging?.managerConsValue
       ? AdmissionManagerApplicationPaging?.managerConsValue
       : 0
   );
@@ -137,7 +140,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "University Name"
   );
   const [managerUniValue, setManagerUniValue] = useState(
-    AdmissionManagerApplicationPaging?.managerUniValue
+    universityId
+      ? universityId
+      : AdmissionManagerApplicationPaging?.managerUniValue
       ? AdmissionManagerApplicationPaging?.managerUniValue
       : 0
   );
@@ -172,10 +177,22 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Status"
   );
   const [applicationValue, setApplicationValue] = useState(
-    selector === "1"
+    status > 0
       ? status
       : AdmissionManagerApplicationPaging?.applicationValue
       ? AdmissionManagerApplicationPaging?.applicationValue
+      : 0
+  );
+  const [applicationSubLabel, setApplicationSubLabel] = useState(
+    AdmissionManagerApplicationPaging?.applicationSubLabel
+      ? AdmissionManagerApplicationPaging?.applicationSubLabel
+      : "Sub Status"
+  );
+  const [applicationSubValue, setApplicationSubValue] = useState(
+    selector > 0
+      ? selector
+      : AdmissionManagerApplicationPaging?.applicationSubValue
+      ? AdmissionManagerApplicationPaging?.applicationSubValue
       : 0
   );
   const [offerLabel, setOfferLabel] = useState(
@@ -184,9 +201,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Offer"
   );
   const [offerValue, setOfferValue] = useState(
-    selector === "2"
-      ? status
-      : AdmissionManagerApplicationPaging?.offerValue
+    AdmissionManagerApplicationPaging?.offerValue
       ? AdmissionManagerApplicationPaging?.offerValue
       : 0
   );
@@ -196,9 +211,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Enrolment Status"
   );
   const [enrollValue, setEnrollValue] = useState(
-    selector === "3"
-      ? status
-      : AdmissionManagerApplicationPaging?.enrollValue
+    AdmissionManagerApplicationPaging?.enrollValue
       ? AdmissionManagerApplicationPaging?.enrollValue
       : 0
   );
@@ -303,16 +316,18 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         managerUappIdValue: managerUappIdValue && managerUappIdValue,
         managerStdLabel: managerStdLabel && managerStdLabel,
         managerStdValue: managerStdValue && managerStdValue,
-        offerLabel: selector !== "2" && offerLabel && offerLabel,
-        offerValue: selector !== "2" && offerValue && offerValue,
+        // offerLabel: selector !== "2" && offerLabel && offerLabel,
+        // offerValue: selector !== "2" && offerValue && offerValue,
         managerConsLabel: managerConsLabel && managerConsLabel,
         managerConsValue: managerConsValue && managerConsValue,
-        applicationLabel:
-          selector !== "1" && applicationLabel && applicationLabel,
-        applicationValue:
-          selector !== "1" && applicationValue && applicationValue,
-        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        applicationLabel: status > 0 && applicationLabel && applicationLabel,
+        applicationValue: status > 0 && applicationValue && applicationValue,
+        applicationSubLabel:
+          selector > 0 && applicationSubLabel && applicationSubLabel,
+        applicationSubValue:
+          selector > 0 && applicationSubValue && applicationSubValue,
+        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        // enrollValue: selector !== "3" && enrollValue && enrollValue,
         applicationId: applicationId && applicationId,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
@@ -477,8 +492,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   // handle clear all search function
   const handleClearSearch = () => {
     setCurrentPage(1);
-    setApplicationLabel("Status");
-    setApplicationValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    !selector && setApplicationSubLabel("Sub Status");
+    !selector && setApplicationSubValue(0);
     setOfferLabel("Offer");
     setOfferValue(0);
     setEnrollLabel("Enrolment Status");
@@ -552,30 +569,30 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
-      if (selector === "1") {
+      if (status > 0) {
         const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
         setApplicationValue(res?.id);
       }
     });
 
-    get("OfferStatusDD/Index").then((res) => {
-      setOfferDD(res);
-      if (selector === "2") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setOfferLabel(result?.name);
-        setOfferValue(res?.id);
-      }
-    });
+    // get("OfferStatusDD/Index").then((res) => {
+    //   setOfferDD(res);
+    //   if (selector === "2") {
+    //     const result = res?.find((ans) => ans?.id.toString() === status);
+    //     setOfferLabel(result?.name);
+    //     setOfferValue(res?.id);
+    //   }
+    // });
 
-    get("EnrollmentStatusDD/Index").then((res) => {
-      setEnrollDD(res);
-      if (selector === "3") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setEnrollLabel(result?.name);
-        setEnrollValue(res?.id);
-      }
-    });
+    // get("EnrollmentStatusDD/Index").then((res) => {
+    //   setEnrollDD(res);
+    //   if (selector === "3") {
+    //     const result = res?.find((ans) => ans?.id.toString() === status);
+    //     setEnrollLabel(result?.name);
+    //     setEnrollValue(res?.id);
+    //   }
+    // });
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
@@ -627,39 +644,26 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   }, [consultantId, currentUser, intake, selector, status, universityId]);
 
   useEffect(() => {
+    get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      setApplicationSubDD(res);
+      if (selector > 0) {
+        const result = res?.filter((ans) => ans?.id.toString() === selector);
+        setApplicationSubLabel(result[0]?.name);
+      }
+    });
+  }, [applicationValue]);
+
+  useEffect(() => {
     if (!isTyping) {
       if (currentUser !== undefined) {
-        if (universityId !== undefined) {
-          get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${universityId}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-
-            setEntity(res?.totalEntity);
-            // setSerialNumber(res?.firstSerialNumber);
-          });
-        } else if (consultantId !== undefined) {
-          get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${consultantId}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-
-            setEntity(res?.totalEntity);
-            // setSerialNumber(res?.firstSerialNumber);
-          });
-        } else {
-          get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-
-            setEntity(res?.totalEntity);
-            // setSerialNumber(res?.firstSerialNumber);
-          });
-        }
+        get(
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}&applicationSubStatusId=${applicationSubValue}`
+        ).then((res) => {
+          setLoading(false);
+          setApplicationList(res?.models);
+          setEntity(res?.totalEntity);
+          // setSerialNumber(res?.firstSerialNumber);
+        });
       }
     }
   }, [
@@ -782,7 +786,33 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 id="id"
               />
             </Col>
+
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={applicationMenu}
+                value={{ label: applicationLabel, value: applicationValue }}
+                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                placeholder="Status"
+                name="name"
+                id="id"
+                isDisabled={status > 0 ? true : false}
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={applicationSubDD}
+                label={applicationSubLabel}
+                setLabel={setApplicationSubLabel}
+                value={applicationSubValue}
+                setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
                 options={offerMenu}
                 value={{ label: offerLabel, value: offerValue }}
@@ -792,7 +822,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 id="id"
                 isDisabled={selector === "2" ? true : false}
               />
-            </Col>
+            </Col> */}
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Typing
                 // id="app"
@@ -828,7 +858,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     isDisabled={consultantId !== undefined ? true : false}
                   />
                 </Col>
-
+                {/* 
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={applicationMenu}
@@ -837,7 +867,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     placeholder="Status"
                     name="name"
                     id="id"
-                    isDisabled={selector === "1" ? true : false}
+                    isDisabled={status > 0 ? true : false}
                   />
                 </Col>
 
@@ -849,9 +879,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     placeholder="Enrolment st..."
                     name="name"
                     id="id"
-                    isDisabled={selector === "3" ? true : false}
+                    isDisabled={selector > 0 ? true : false}
                   />
-                </Col>
+                </Col> */}
 
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
@@ -1001,6 +1031,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <ConditionForText
+                  status={status}
                   selector={selector}
                   // branchId={branchId}
                   // branchLabel={branchLabel}
@@ -1063,6 +1094,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   setdocumentStatusValue={setdocumentStatusValue}
                   documentStatusLabel={documentStatusLabel}
                   setdocumentStatusLabel={setdocumentStatusLabel}
+                  applicationSubValue={applicationSubValue}
+                  applicationSubLabel={applicationSubLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
+                  setApplicationSubValue={setApplicationSubValue}
                   affiliateValue={0}
                   companionValue={0}
                 ></ConditionForText>
@@ -1070,9 +1105,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   {managerUappIdValue !== 0 ||
                   managerStdValue !== 0 ||
                   managerConsValue !== 0 ||
-                  (selector !== "1" && applicationValue !== 0) ||
-                  (selector !== "2" && offerValue !== 0) ||
-                  (selector !== "3" && enrollValue !== 0) ||
+                  (!status && applicationValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) || // (selector !== "2" && offerValue !== 0) ||
+                  // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
                   intakeRngValue !== 0 ||
                   interviewValue !== 0 ||
@@ -1564,7 +1599,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       {chatOpen === true && (
         <div className="messanger">
           <MessageHistoryCardApplicationDetailsPage
-            applicationStatusId={chatapp.applicationStatusId}
+            applicationSubStatusId={chatapp.applicationSubStatusId}
             applicationId={`${chatapp.id}`}
             viewId={`${chatapp.applicationViewId}`}
             chatOpen={chatOpen}

@@ -28,6 +28,7 @@ import ButtonLoader from "../../../Components/ButtonLoader";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import ContactNumber from "../../../../../components/ui/ContactNumber";
 
 const AssociateProfileHead = ({ id }) => {
   const [headData, setHeadData] = useState({});
@@ -354,8 +355,7 @@ const AssociateProfileHead = ({ id }) => {
                   {headData?.phoneNumber === null ? null : (
                     <p>
                       <i className="fas fa-phone pr-2"></i>
-                      {headData?.phoneNumber && "+"}
-                      {headData?.phoneNumber}
+                      <ContactNumber data={headData?.phoneNumber} />
                     </p>
                   )}
                 </div>

@@ -159,7 +159,7 @@ const AdmissionOfficer = ({
                             permissionList.Change_Admission_Officer
                           ) ? (
                             <>
-                              {applicationInfo.applicationStatusId !== 13 &&
+                              {applicationInfo?.applicationSubStatusId !== 38 &&
                               (userType === userTypes?.SystemAdmin ||
                                 userType === userTypes?.Admin ||
                                 userType === userTypes?.ProviderAdmin) ? (
@@ -210,7 +210,7 @@ const AdmissionOfficer = ({
                   permissionList.Change_Admission_Officer
                 ) ? (
                   <>
-                    {applicationInfo.applicationStatusId !== 13 &&
+                    {applicationInfo?.applicationSubStatusId !== 38 &&
                     (userType === userTypes?.SystemAdmin ||
                       userType === userTypes?.Admin ||
                       userType === userTypes?.ProviderAdmin) ? (

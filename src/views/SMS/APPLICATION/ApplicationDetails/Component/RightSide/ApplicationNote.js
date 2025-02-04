@@ -8,7 +8,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const ApplicationNote = ({
-  applicationStatusId,
+  applicationSubStatusId,
   id,
   notes,
   success,
@@ -89,7 +89,7 @@ const ApplicationNote = ({
 
         {permissions?.includes(permissionList.Add_ApplicationNote) ? (
           <div>
-            {applicationStatusId !== 13 && (
+            {applicationSubStatusId !== 13 && (
               <Form onSubmit={submitNotes}>
                 <Input
                   type="hidden"
