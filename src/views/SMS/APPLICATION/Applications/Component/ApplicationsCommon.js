@@ -58,9 +58,6 @@ const ApplicationsCommon = () => {
     companionId,
     courseId,
   } = useParams();
-
-  console.log(parameters);
-
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -841,7 +838,6 @@ const ApplicationsCommon = () => {
         const result = res?.find(
           (ans) => ans?.id === parameters?.applicationStatusId
         );
-        console.log(result, "status");
         setApplicationLabel(result?.name);
       }
     });
