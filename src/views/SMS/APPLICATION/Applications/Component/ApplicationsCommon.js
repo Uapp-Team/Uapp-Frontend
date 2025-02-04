@@ -59,6 +59,8 @@ const ApplicationsCommon = () => {
     courseId,
   } = useParams();
 
+  console.log(parameters);
+
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -719,19 +721,6 @@ const ApplicationsCommon = () => {
       }
     });
 
-    get("ApplicationStatusDD/Index").then((res) => {
-      setApplicationDD(res);
-      if (status) {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setApplicationLabel(result?.name);
-      } else if (parameters?.applicationStatusId) {
-        const result = res?.find(
-          (ans) => ans?.id.toString() === parameters?.applicationStatusId
-        );
-        setApplicationLabel(result?.name);
-      }
-    });
-
     get("OfferStatusDD/Index").then((res) => {
       setOfferDD(res);
     });
@@ -843,15 +832,32 @@ const ApplicationsCommon = () => {
   }, [proValue, admId, success]);
 
   useEffect(() => {
+    get("ApplicationStatusDD/Index").then((res) => {
+      setApplicationDD(res);
+      if (status > 0) {
+        const result = res?.find((ans) => ans?.id.toString() === status);
+        setApplicationLabel(result?.name);
+      } else if (parameters?.applicationStatusId) {
+        const result = res?.find(
+          (ans) => ans?.id === parameters?.applicationStatusId
+        );
+        console.log(result, "status");
+        setApplicationLabel(result?.name);
+      }
+    });
+  }, [status, parameters]);
+
+  useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
       setApplicationSubDD(res);
-      if (selector) {
+      if (selector > 0) {
         const result = res?.filter((ans) => ans?.id.toString() === selector);
         setApplicationSubLabel(result[0]?.name);
       } else if (parameters?.applicationSubStatusId) {
         const result = res?.filter(
-          (ans) => ans?.id.toString() === parameters?.applicationSubStatusId
+          (ans) => ans?.id === parameters?.applicationSubStatusId
         );
+        console.log(result, "sub status");
         setApplicationSubLabel(result[0]?.name);
       }
     });
@@ -1112,19 +1118,6 @@ const ApplicationsCommon = () => {
                 setLabel={setApplicationSubLabel}
                 value={applicationSubValue}
                 setValue={setApplicationSubValue}
-                action={() => {}}
-                className="mr-2"
-                isDisabled={selector > 0 ? true : false}
-              />
-            </Col>
-
-            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-              <Filter
-                data={confidenceLevelDD}
-                label={confidenceLevel}
-                setLabel={setConfidenceLevel}
-                value={confidenceValue}
-                setValue={setConfidenceValue}
                 action={() => {}}
                 className="mr-2"
                 isDisabled={selector > 0 ? true : false}
@@ -1442,6 +1435,18 @@ const ApplicationsCommon = () => {
                     name="name"
                     id="id"
                     isDisabled={companionId ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={confidenceLevelDD}
+                    label={confidenceLevel}
+                    setLabel={setConfidenceLevel}
+                    value={confidenceValue}
+                    setValue={setConfidenceValue}
+                    action={() => {}}
+                    className="mr-2"
+                    isDisabled={selector > 0 ? true : false}
                   />
                 </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
