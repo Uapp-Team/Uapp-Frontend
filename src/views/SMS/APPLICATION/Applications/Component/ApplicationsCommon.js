@@ -194,11 +194,11 @@ const ApplicationsCommon = () => {
       : 0
   );
 
-  const [confidenceValue, setConfidenceValue] = useState(
-    parameters.confidenceValue
-      ? parameters.confidenceValue
-      : application.confidenceValue
-      ? application.confidenceValue
+  const [confidenceLabel, setConfidenceLabel] = useState(
+    parameters?.confidenceLevel
+      ? parameters?.confidenceLevel
+      : application?.confidenceLevel
+      ? application?.confidenceLevel
       : 0
   );
   const [offerLabel, setOfferLabel] = useState(
