@@ -1698,7 +1698,7 @@ const ApplicationInfo = ({
             {usersType !== userTypes?.Student &&
               usersType !== userTypes?.Consultant &&
               usersType !== userTypes?.Affiliate &&
-              usersType !== userTypes?.Consultant && (
+              usersType !== userTypes?.Companion && (
                 <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                   <td td className="w-50">
                     Confidence Level
