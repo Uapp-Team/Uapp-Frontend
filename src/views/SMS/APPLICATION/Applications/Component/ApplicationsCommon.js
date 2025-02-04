@@ -993,7 +993,8 @@ const ApplicationsCommon = () => {
     !status && setApplicationValue(0);
     !selector && setApplicationSubLabel("Sub Status");
     !selector && setApplicationSubValue(0);
-    setConfidenceValue("Confidence Level");
+    setConfidenceLevel("Confidence Level");
+    setConfidenceValue("");
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -1578,7 +1579,7 @@ const ApplicationsCommon = () => {
                   commonStdValue !== 0 ||
                   (!status && applicationValue !== 0) ||
                   (!selector && applicationSubValue !== 0) ||
-                  confidenceValue !== 0 ||
+                  confidenceValue !== "" ||
                   // (selector !== "2" && offerValue !== 0) ||
                   // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
