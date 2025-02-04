@@ -58,9 +58,6 @@ const ApplicationsCommon = () => {
     companionId,
     courseId,
   } = useParams();
-
-  console.log(parameters);
-
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
