@@ -207,6 +207,9 @@ const ApplicationsCommon = () => {
       ? application?.confidenceValue
       : ""
   );
+  // useEffect(() => {
+  //   confidenceValue.toString() === "0" && setConfidenceValue("0");
+  // }, [confidenceValue]);
   const [offerLabel, setOfferLabel] = useState(
     application?.offerLabel ? application?.offerLabel : "Offer"
   );
@@ -395,7 +398,9 @@ const ApplicationsCommon = () => {
           selector > 0 && applicationSubLabel && applicationSubLabel,
         applicationSubValue:
           selector > 0 && applicationSubValue && applicationSubValue,
-        confidenceValue: confidenceValue && confidenceValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
         confidenceLevel: confidenceLevel && confidenceLevel,
         // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
         // enrollValue: selector !== "3" && enrollValue && enrollValue,
@@ -859,7 +864,10 @@ const ApplicationsCommon = () => {
   useEffect(() => {
     get(`ApplicationConfidence/SelectList`).then((res) => {
       setConfidenceLevelDD(res);
-      if (parameters?.confidenceLevel) {
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
         const filterData = res.filter((status) => {
           return status.id === parameters?.confidenceLevel;
         });
@@ -1523,8 +1531,6 @@ const ApplicationsCommon = () => {
                   applicationSubLabel={applicationSubLabel}
                   setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationSubValue={setApplicationSubValue}
-                  confidenceValue={confidenceValue}
-                  setConfidenceValue={setConfidenceValue}
                   setOfferLabel={setOfferLabel}
                   setOfferValue={setOfferValue}
                   setEnrollLabel={setEnrollLabel}
@@ -1561,6 +1567,10 @@ const ApplicationsCommon = () => {
                   setPercentageValue={setPercentageValue}
                   selectedDates={selectedDates}
                   setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
