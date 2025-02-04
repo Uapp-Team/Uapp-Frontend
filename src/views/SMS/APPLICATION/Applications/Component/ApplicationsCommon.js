@@ -59,7 +59,6 @@ const ApplicationsCommon = () => {
     courseId,
   } = useParams();
 
-  console.log(parameters);
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -85,6 +84,7 @@ const ApplicationsCommon = () => {
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
   const [applicationSubDD, setApplicationSubDD] = useState([]);
+  const [confidenceLevelDD, setConfidenceLevelDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -194,12 +194,17 @@ const ApplicationsCommon = () => {
       : 0
   );
 
-  const [confidenceLabel, setConfidenceLabel] = useState(
-    parameters?.confidenceLevel
-      ? parameters?.confidenceLevel
-      : application?.confidenceLevel
+  const [confidenceLevel, setConfidenceLevel] = useState(
+    application?.confidenceLevel
       ? application?.confidenceLevel
-      : 0
+      : "Confidence Level"
+  );
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters?.confidenceLevel?.toString()
+      ? parameters?.confidenceLevel?.toString()
+      : application?.confidenceValue
+      ? application?.confidenceValue
+      : ""
   );
   const [offerLabel, setOfferLabel] = useState(
     application?.offerLabel ? application?.offerLabel : "Offer"
@@ -338,7 +343,6 @@ const ApplicationsCommon = () => {
       ? application?.selectedDates
       : []
   );
-  console.log("selectedDates: ", selectedDates);
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
 
@@ -390,6 +394,10 @@ const ApplicationsCommon = () => {
           selector > 0 && applicationSubLabel && applicationSubLabel,
         applicationSubValue:
           selector > 0 && applicationSubValue && applicationSubValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
+        confidenceLevel: confidenceLevel && confidenceLevel,
         // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
         // enrollValue: selector !== "3" && enrollValue && enrollValue,
         intakeLabel: intakeLabel && intakeLabel,
@@ -447,6 +455,8 @@ const ApplicationsCommon = () => {
     applicationValue,
     applicationSubLabel,
     applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
     enrollLabel,
     enrollValue,
     intakeLabel,
@@ -488,6 +498,8 @@ const ApplicationsCommon = () => {
     documentStatusValue,
     percentageLabel,
     percentageValue,
+    status,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -846,6 +858,21 @@ const ApplicationsCommon = () => {
   }, [applicationValue, parameters]);
 
   useEffect(() => {
+    get(`ApplicationConfidence/SelectList`).then((res) => {
+      setConfidenceLevelDD(res);
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.confidenceLevel;
+        });
+        setConfidenceLevel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
     get(`ConsultantTypeDD/Index`).then((res) => {
       setConsultantTypeDD(res);
       if (parameters?.consultantTypeId) {
@@ -870,7 +897,9 @@ const ApplicationsCommon = () => {
           selectedDates[0] ? selectedDates[0] : ""
         }&toApplicationDate=${
           selectedDates[1] ? selectedDates[1] : ""
-        }&applicationSubStatusId=${applicationSubValue}`
+        }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+          confidenceValue ? confidenceValue : ""
+        }`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -913,6 +942,7 @@ const ApplicationsCommon = () => {
     consultantTypeValue,
     selectedDates,
     applicationSubValue,
+    confidenceValue,
   ]);
 
   // Delete Button Click Action
@@ -957,6 +987,7 @@ const ApplicationsCommon = () => {
     !status && setApplicationValue(0);
     !selector && setApplicationSubLabel("Sub Status");
     !selector && setApplicationSubValue(0);
+    !selector && setConfidenceValue("Confidence Level");
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -1081,6 +1112,19 @@ const ApplicationsCommon = () => {
                 setLabel={setApplicationSubLabel}
                 value={applicationSubValue}
                 setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={confidenceLevelDD}
+                label={confidenceLevel}
+                setLabel={setConfidenceLevel}
+                value={confidenceValue}
+                setValue={setConfidenceValue}
                 action={() => {}}
                 className="mr-2"
                 isDisabled={selector > 0 ? true : false}
@@ -1519,12 +1563,17 @@ const ApplicationsCommon = () => {
                   setPercentageValue={setPercentageValue}
                   selectedDates={selectedDates}
                   setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
                   commonStdValue !== 0 ||
                   (!status && applicationValue !== 0) ||
                   (!selector && applicationSubValue !== 0) ||
+                  (!selector && confidenceValue !== 0) ||
                   // (selector !== "2" && offerValue !== 0) ||
                   // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||

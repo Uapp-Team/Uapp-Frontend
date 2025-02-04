@@ -1,6 +1,5 @@
 import React from "react";
 import TagButton from "../../../../../components/buttons/TagButton";
-import { AdminUsers } from "../../../../../components/core/User";
 
 const ConditionForText = ({
   status,
@@ -108,6 +107,10 @@ const ConditionForText = ({
   setPercentageValue,
   selectedDates,
   setSelectedDates,
+  confidenceLevel,
+  setConfidenceLevel,
+  confidenceValue,
+  setConfidenceValue,
 }) => {
   return (
     <>
@@ -339,7 +342,15 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-
+        {confidenceValue?.toString() === "0" || confidenceValue > 0 ? (
+          <TagButton
+            label={confidenceLevel}
+            setValue={() => setConfidenceValue("")}
+            setLabel={() => setConfidenceLevel("Confidence Level")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
         {selectedDates && selectedDates?.length > 0 && (
           <TagButton
             label={selectedDates.join(" - ")}
@@ -347,6 +358,7 @@ const ConditionForText = ({
             setLabel={() => {}}
           />
         )}
+
         {/* 
         {commonUappIdValue !== 0 &&
         (commonStdValue !== 0 ||
