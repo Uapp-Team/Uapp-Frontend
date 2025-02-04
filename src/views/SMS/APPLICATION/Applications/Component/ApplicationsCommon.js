@@ -199,7 +199,6 @@ const ApplicationsCommon = () => {
       ? application?.confidenceLevel
       : "Confidence Level"
   );
-  console.log("object", parameters);
   const [confidenceValue, setConfidenceValue] = useState(
     parameters?.confidenceLevel?.toString()
       ? parameters?.confidenceLevel?.toString()
@@ -207,9 +206,6 @@ const ApplicationsCommon = () => {
       ? application?.confidenceValue
       : ""
   );
-  // useEffect(() => {
-  //   confidenceValue.toString() === "0" && setConfidenceValue("0");
-  // }, [confidenceValue]);
   const [offerLabel, setOfferLabel] = useState(
     application?.offerLabel ? application?.offerLabel : "Offer"
   );
