@@ -88,6 +88,7 @@ const StudentDeclaration = () => {
         });
         setSuccess(!success);
         localStorage.setItem("IsLead", false);
+        window.location.reload();
       } else {
         addToast(res?.data?.message, {
           appearance: "error",
