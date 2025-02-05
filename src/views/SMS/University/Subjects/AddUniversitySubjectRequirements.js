@@ -1,35 +1,29 @@
+import Axios from "axios";
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 import { useHistory, useParams } from "react-router-dom";
+import Select from "react-select";
 import {
   Card,
   CardBody,
+  Col,
   Form,
   FormGroup,
   Input,
-  Col,
-  TabContent,
-  TabPane,
   Row,
-  Button,
-  ModalFooter,
-  ModalBody,
-  Modal,
+  TabContent,
   Table,
+  TabPane,
 } from "reactstrap";
-import Axios from "axios";
 import { rootUrl } from "../../../../constants/constants";
 
 import { useToasts } from "react-toast-notifications";
-import get from "../../../../helpers/get";
-import ButtonLoader from "../../Components/ButtonLoader";
-import SubjectNavbar from "./Components/SubjectNavbar";
-import remove from "../../../../helpers/remove";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
-import ConfirmModal from "../../../../components/modal/ConfirmModal";
+import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
+import remove from "../../../../helpers/remove";
+import SubjectNavbar from "./Components/SubjectNavbar";
 
 const AddUniversitySubjectRequirements = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -562,7 +556,7 @@ const AddUniversitySubjectRequirements = () => {
                                         : false
                                     }
                                   />
-                                  <span className="mr-2">EU/UK </span>
+                                  <span className="mr-2">EU/EEA </span>
                                 </FormGroup>
                               </div>
                             ) : (
@@ -584,7 +578,7 @@ const AddUniversitySubjectRequirements = () => {
                                       document?.isForEu === true ? true : false
                                     }
                                   />
-                                  <span className="mr-2">EU/UK </span>
+                                  <span className="mr-2">EU/EEA </span>
                                 </FormGroup>
                               </Col>
                             )}
