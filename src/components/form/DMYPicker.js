@@ -26,12 +26,12 @@ const DMYPicker = ({
     <>
       {label && required && <span className="text-danger">*</span>}
       {label && <span>{label}</span>}
-
+      <br />
       <DatePicker
         onChange={handleDate}
         value={value ? moment(value, "YYYY-MM-DD") : null}
         style={{
-          width: width,
+          minWidth: width,
         }}
         format="DD/MM/YYYY"
         placeholder="dd/mm/yyyy"
