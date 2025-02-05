@@ -373,6 +373,8 @@ const ConsultantApplication = ({ currentUser }) => {
   const selectAppliDD = (label, value) => {
     setApplicationLabel(label);
     setApplicationValue(value);
+    setApplicationSubLabel("Sub Status");
+    setApplicationSubValue(0);
   };
   const selectOfferDD = (label, value) => {
     setOfferLabel(label);

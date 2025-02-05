@@ -185,6 +185,16 @@ input.form-control {
   cursor: pointer;
 }
 
+.help-data {
+  position: absolute;
+  top: 63px;
+  right: 0px;
+  background: white;
+  z-index: 99;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
 /* popover */
 
 body {
