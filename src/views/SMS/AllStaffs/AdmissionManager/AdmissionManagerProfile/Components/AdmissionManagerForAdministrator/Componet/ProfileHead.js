@@ -1,32 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Upload } from "antd";
+import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
-import uapploader from "../../../../../../../../assets/img/profile-img.png";
+import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-import editbtn from "../../../../../../../../assets/img/editbtn.png";
 import {
+  Button,
   Card,
   CardBody,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  FormGroup,
   Col,
+  FormGroup,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Row,
 } from "reactstrap";
-import get from "../../../../../../../../helpers/get";
-import { rootUrl } from "../../../../../../../../constants/constants";
-import put from "../../../../../../../../helpers/put";
-import { userTypes } from "../../../../../../../../constants/userTypeConstant";
-import { permissionList } from "../../../../../../../../constants/AuthorizationConstant";
-import ButtonLoader from "../../../../../../Components/ButtonLoader";
+import editbtn from "../../../../../../../../assets/img/editbtn.png";
+import uapploader from "../../../../../../../../assets/img/profile-img.png";
 import roundimg from "../../../../../../../../assets/img/roundimg.svg";
+import { permissionList } from "../../../../../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../../../../../constants/constants";
+import { userTypes } from "../../../../../../../../constants/userTypeConstant";
+import get from "../../../../../../../../helpers/get";
+import put from "../../../../../../../../helpers/put";
+import ButtonLoader from "../../../../../../Components/ButtonLoader";
 // import profileCover from "../../../../../assets/img/profile-cover.png";
 import profileCover from "../../../../../../../../assets/img/profile-cover.png";
-import { dateFormate } from "../../../../../../../../components/date/calenderFormate";
 import ImageUploadCrop from "../../../../../../../../components/ImageUpload/ImageUploadCrop";
 
 const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
@@ -62,7 +61,6 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
   useEffect(() => {
     if (admissionManagerId !== undefined) {
       get(`AddmissionManagerProfile/Head/${admissionManagerId}`).then((res) => {
-        console.log(res);
         setHeadData(res);
         setStatusLabel(res?.accountStatus?.statusName);
       });
@@ -73,7 +71,6 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
       });
     } else {
       get(`AddmissionManagerProfile/Head/${userId}`).then((res) => {
-        console.log(res);
         setHeadData(res);
         setStatusLabel(res?.accountStatus?.statusName);
       });
@@ -98,7 +95,6 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
       ManagerId: parseInt(admissionManagerId),
       StatusId: value,
     };
-    console.log(accountStatusData);
     put("AdmissionManager/UpdateAccountStatusChange", accountStatusData).then(
       (res) => {
         addToast(res?.data?.message, {
@@ -713,7 +709,7 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
                     color: "#d4d4d4",
                   }}
                 >
-                  {dateFormate(headData?.createdOn)}
+                  {headData?.createdOn}
                 </span>
               </div>
               <ul className="uapp-ul text-right">
