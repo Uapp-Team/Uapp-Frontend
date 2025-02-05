@@ -3,6 +3,7 @@ import { Card, CardBody, Col, Input, Row } from "reactstrap";
 import Select from "react-select";
 import Filter from "../../../../components/Dropdown/Filter";
 import icon_info from "../../../../assets/img/icons/icon_info.png";
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 
 const SearchAndClear = ({
   branchId,
@@ -38,6 +39,10 @@ const SearchAndClear = ({
   setConsultantLabel,
   check,
   setCheck,
+  setCompanionLabel,
+  companionLabel,
+  companionValue,
+  setCompanionValue,
 }) => {
   const userType = localStorage.getItem("userType");
 
@@ -70,6 +75,21 @@ const SearchAndClear = ({
                 />
               </Col>
             ) : null}
+
+            <Col lg="4" md="3" sm="12" className="mb-2 ">
+              <DefaultDropdown
+                label={companionLabel}
+                setLabel={setCompanionLabel}
+                value={companionValue}
+                setValue={setCompanionValue}
+                url="CompanionDD"
+                name="status"
+                error={() => {}}
+                setError={() => {}}
+                action={() => {}}
+              />
+            </Col>
+
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Input
                 style={{ height: "2.7rem" }}
