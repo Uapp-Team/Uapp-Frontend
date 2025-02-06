@@ -151,13 +151,15 @@ const AdminInformation = () => {
           appearance: "success",
           autoDismiss: true,
         });
-        // history.push("/providerList");
+        history.push("/providerList");
       });
     }
   };
+
   const handlePrevious = () => {
     history.push(`/providerAddress/${id}`);
   };
+
   return (
     <div>
       <BreadCrumb
