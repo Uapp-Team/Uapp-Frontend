@@ -242,7 +242,7 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
                 <h5>Student has not completed internal assessment</h5>
                 {again && <p>Already sent email</p>}
                 <SaveButton
-                  text={`Send Invitation Email ${again ? `again` : ""}`}
+                  text={`Sent Invitation Email ${again ? `again` : ""}`}
                   buttonStatus={buttonStatus}
                   progress={progress}
                   action={checkPlagiarism}

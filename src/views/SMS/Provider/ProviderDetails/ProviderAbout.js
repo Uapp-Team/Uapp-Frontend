@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import get from "../../../../helpers/get";
 import { Table } from "reactstrap";
-import Loader from "../../Search/Loader/Loader";
 import { rootUrl } from "../../../../constants/constants";
+import get from "../../../../helpers/get";
+import Loader from "../../Search/Loader/Loader";
 
 const ProviderAbout = ({ id }) => {
   const [data, setData] = useState([]);
@@ -56,9 +56,11 @@ const ProviderAbout = ({ id }) => {
               <tr>
                 <td>Company License File</td>
                 <td>
-                  <a href={rootUrl + data?.lisenceFileUrl} target="blank">
-                    attachment
-                  </a>
+                  {data?.lisenceFileUrl !== null && (
+                    <a href={rootUrl + data?.lisenceFileUrl} target="blank">
+                      attachment
+                    </a>
+                  )}
                 </td>
               </tr>
               <tr>

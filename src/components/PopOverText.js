@@ -35,7 +35,7 @@ const PopOverText = ({ value, i, btn, popoverOpen, setPopoverOpen }) => {
         positions={[]}
         content={value === popoverOpen ? value : null}
       >
-        <button className="btn-no-style" onClick={handlePopover}>
+        <button type="button" className="btn-no-style" onClick={handlePopover}>
           {value ? (
             <span className={isPopoverOpen && `text-primary`}>{btn}</span>
           ) : null}
