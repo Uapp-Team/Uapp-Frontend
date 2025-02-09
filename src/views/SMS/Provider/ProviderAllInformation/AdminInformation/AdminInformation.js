@@ -151,7 +151,12 @@ const AdminInformation = () => {
           appearance: "success",
           autoDismiss: true,
         });
-        history.push("/providerList");
+
+        (userType === userTypes?.SystemAdmin ||
+          userType === userTypes?.Admin) &&
+          history.push("/providerList");
+
+        userType === userTypes?.ProviderAdmin && history.push("/");
       });
     }
   };

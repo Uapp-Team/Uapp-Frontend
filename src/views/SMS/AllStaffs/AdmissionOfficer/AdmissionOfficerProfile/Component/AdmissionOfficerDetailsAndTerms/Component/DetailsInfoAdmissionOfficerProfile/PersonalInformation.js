@@ -31,7 +31,13 @@ const PersonalInformation = ({ data }) => {
         </tr>
         <tr style={{ borderBottom: "1px solid #dee2e6" }}>
           <td width="40%">Phone Number</td>
-          <td width="60%">{data?.phoneNumber}</td>
+          <td width="60%">
+            {data?.phoneNumber && data?.phoneNumber.includes("+")
+              ? data?.phoneNumber
+              : data?.phoneNumber && !data?.phoneNumber.includes("+")
+              ? "+" + data?.phoneNumber
+              : null}
+          </td>
         </tr>
       </tbody>
     </Table>
