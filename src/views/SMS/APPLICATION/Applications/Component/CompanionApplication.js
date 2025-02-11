@@ -251,11 +251,11 @@ const CompanionApplication = ({ currentUser }) => {
                               </th>
                             ) : null}
 
-                            {tableData[10]?.isActive ? (
+                            {/* {tableData[10]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
-                            ) : null}
+                            ) : null} */}
                           </tr>
                         </thead>
                         <tbody>
@@ -299,15 +299,16 @@ const CompanionApplication = ({ currentUser }) => {
 
                               {tableData[6]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
+                                  {app?.applicationStatusName} <br />
+                                  {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[10]?.isActive ? (
+                              {/* {tableData[10]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.enrollmentStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
                             </tr>
                           ))}
                         </tbody>

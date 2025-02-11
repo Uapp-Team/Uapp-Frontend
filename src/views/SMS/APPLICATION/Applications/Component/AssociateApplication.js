@@ -1093,9 +1093,9 @@ const AssociateApplication = ({ currentUser }) => {
                                 Status
                               </th>
                             ) : null}
-                            {tableData[10]?.isActive ? (
+                            {/* {tableData[10]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[11]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
@@ -1104,11 +1104,11 @@ const AssociateApplication = ({ currentUser }) => {
                             {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {tableData[13]?.isActive ? (
+                            {/* {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
@@ -1224,15 +1224,16 @@ const AssociateApplication = ({ currentUser }) => {
 
                               {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
+                                  {app?.applicationStatusName} <br />
+                                  {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[10]?.isActive ? (
+                              {/* {tableData[10]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.offerStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[11]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
@@ -1246,11 +1247,11 @@ const AssociateApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[13]?.isActive ? (
+                              {/* {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.enrollmentStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[14]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>

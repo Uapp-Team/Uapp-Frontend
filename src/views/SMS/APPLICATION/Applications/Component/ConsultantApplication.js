@@ -1177,9 +1177,9 @@ const ConsultantApplication = ({ currentUser }) => {
                               </th>
                             ) : null}
 
-                            {tableData[12]?.isActive ? (
+                            {/* {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
@@ -1188,11 +1188,11 @@ const ConsultantApplication = ({ currentUser }) => {
                             {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {tableData[15]?.isActive ? (
+                            {/* {tableData[15]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[16]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
@@ -1309,7 +1309,8 @@ const ConsultantApplication = ({ currentUser }) => {
 
                               {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
+                                  {app?.applicationStatusName} <br />
+                                  {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
@@ -1325,11 +1326,11 @@ const ConsultantApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[12]?.isActive ? (
+                              {/* {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.offerStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
@@ -1343,11 +1344,11 @@ const ConsultantApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[15]?.isActive ? (
+                              {/* {tableData[15]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.enrollmentStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[16]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
