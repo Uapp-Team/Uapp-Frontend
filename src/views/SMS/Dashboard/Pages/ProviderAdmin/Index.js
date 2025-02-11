@@ -117,11 +117,7 @@ const ProviderAdmin = () => {
               </div>
             </>
           ) : (
-            <>
-              <div className="mt-2 mr-4">
-                <span style={{ fontWeight: "500" }}>Appliction Processing</span>
-              </div>
-            </>
+            ""
           )}
 
           <UserNotices />
