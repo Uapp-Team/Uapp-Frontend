@@ -1238,7 +1238,8 @@ const ApplicationInfo = ({
                   {applicationInfo?.applicationStatus?.name}
 
                   {applicationInfo?.applicationStatusId !== 1 &&
-                    applicationInfo?.confidenceLevel > 0 && (
+                    applicationInfo?.confidenceLevel > 0 &&
+                    applicationInfo?.applicationSubStatusId !== 38 && (
                       <>
                         {permissions?.includes(
                           permissionList.Update_Application_Status
@@ -1361,7 +1362,7 @@ const ApplicationInfo = ({
                                 </Upload>
                               </FormGroup>
                             ) : null}
-                            {statusValue === 12 ? (
+                            {/* {statusValue === 12 ? (
                               <FormGroup>
                                 <span>Rejection Document</span>
                                 <br />
@@ -1381,7 +1382,7 @@ const ApplicationInfo = ({
                                   )}
                                 </Upload>
                               </FormGroup>
-                            ) : null}
+                            ) : null} */}
                             {statusValue === 4 ? (
                               <FormGroup>
                                 <span>University Application Date </span>
