@@ -1316,9 +1316,7 @@ const ApplicationInfo = ({
                             ) : (
                               <FormGroup>
                                 <span>
-                                  {statusValue === 6
-                                    ? " Offered Status"
-                                    : " Additional Status"}
+                                  Additional Status
                                   <span className="text-danger">*</span>
                                 </span>
 
@@ -1383,7 +1381,7 @@ const ApplicationInfo = ({
                                 </Upload>
                               </FormGroup>
                             ) : null} */}
-                            {statusValue === 4 ? (
+                            {statusValue === 4 && subStatusValue === 6 ? (
                               <FormGroup>
                                 <span>University Application Date </span>
                                 <span className="text-danger">*</span>

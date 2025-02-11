@@ -1997,17 +1997,17 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {/* {tableData[15]?.isActive ? (
+                                  {tableData[15]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.managerName}
                                     </td>
-                                  ) : null} */}
+                                  ) : null}
 
-                                  {tableData[16]?.isActive ? (
+                                  {/* {tableData[16]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.enrollmentStatusName}
                                     </td>
-                                  ) : null}
+                                  ) : null} */}
 
                                   {tableData[17]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
