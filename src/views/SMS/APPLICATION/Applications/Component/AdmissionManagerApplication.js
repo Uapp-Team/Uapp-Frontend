@@ -239,7 +239,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    AdmissionManagerApplicationPaging?.intakeValue
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : AdmissionManagerApplicationPaging?.intakeValue
       ? AdmissionManagerApplicationPaging?.intakeValue
       : 0
   );
@@ -251,6 +253,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : AdmissionManagerApplicationPaging?.intakeRngValue
       ? AdmissionManagerApplicationPaging?.intakeRngValue
       : 0
@@ -641,6 +645,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           return status.id.toString() === intake;
         });
         setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
       }
     });
 
@@ -673,6 +682,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("InterviewStatusDD/Index").then((res) => {

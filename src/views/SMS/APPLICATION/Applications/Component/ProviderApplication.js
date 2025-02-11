@@ -181,7 +181,11 @@ const ProviderApplication = ({ currentUser }) => {
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    application?.intakeValue ? application?.intakeValue : 0
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : application?.intakeValue
+      ? application?.intakeValue
+      : 0
   );
   const [intakeRngLabel, setIntakeRngLabel] = useState(
     application?.intakeRngLabel ? application?.intakeRngLabel : "Intake Range"
@@ -189,6 +193,8 @@ const ProviderApplication = ({ currentUser }) => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : application?.intakeRngValue
       ? application?.intakeRngValue
       : 0
@@ -645,6 +651,12 @@ const ProviderApplication = ({ currentUser }) => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("InterviewStatusDD/Index").then((res) => {
@@ -691,6 +703,11 @@ const ProviderApplication = ({ currentUser }) => {
       if (intake) {
         const filterData = res.filter((status) => {
           return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
         });
         setIntakeRngLabel(filterData[0]?.name);
       }
