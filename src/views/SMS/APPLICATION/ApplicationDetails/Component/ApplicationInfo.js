@@ -1237,30 +1237,31 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
-                  {applicationInfo?.applicationStatusId !== 1 && (
-                    <>
-                      {permissions?.includes(
-                        permissionList.Update_Application_Status
-                      ) ? (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{ color: "#619bff", cursor: "pointer" }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleApplicationEdit(
-                              applicationInfo?.applicationStatus?.name,
-                              applicationInfo?.applicationStatus?.id,
-                              applicationInfo?.applicationSubStatus
-                            )
-                          }
-                          permission={6}
-                        />
-                      ) : null}
-                    </>
-                  )}
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo?.confidenceLevel > 0 && (
+                      <>
+                        {permissions?.includes(
+                          permissionList.Update_Application_Status
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleApplicationEdit(
+                                applicationInfo?.applicationStatus?.name,
+                                applicationInfo?.applicationStatus?.id,
+                                applicationInfo?.applicationSubStatus
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
 
                   <Modal
                     isOpen={statusModalOpen}
@@ -1707,8 +1708,7 @@ const ApplicationInfo = ({
                   <td td className="w-50">
                     <div className="d-flex justify-content-between">
                       {applicationInfo?.confidenceLevelName}
-
-                      <>
+                      {applicationInfo?.confidenceLevel === 0 && (
                         <SpanButton
                           icon={
                             <i
@@ -1724,30 +1724,7 @@ const ApplicationInfo = ({
                           }
                           permission={6}
                         />
-                      </>
-                      {/* {usersType !== userTypes?.Student &&
-                            usersType !== userTypes?.Consultant &&
-                            usersType !== userTypes?.Affiliate &&
-                            usersType !== userTypes?.Consultant && (
-                              <>
-                                Companion
-                                <SpanButton
-                                  icon={
-                                    <i
-                                      class="far fa-edit"
-                                      style={{ color: "#619bff", cursor: "pointer" }}
-                                    ></i>
-                                  }
-                                  func={() =>
-                                    handleEditFinance(
-                                      applicationInfo?.studentFinanceStatus?.name,
-                                      applicationInfo?.studentFinanceStatus?.id
-                                    )
-                                  }
-                                  permission={6}
-                                />
-                              </>
-                            )} */}
+                      )}
 
                       <Modal
                         isOpen={confidenceModalOpen}
