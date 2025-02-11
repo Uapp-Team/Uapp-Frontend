@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import put from "../../../../../../helpers/put";
+import post from "../../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
-import ReactQuill from "react-quill";
 import RichTextArea from "../../../../../../components/form/RichTextArea";
 import { AdminUsers } from "../../../../../../components/core/User";
 
@@ -75,23 +74,30 @@ const InternalStatus = ({ id, success, setSuccess }) => {
 
   const handleApplicationUpdateSubmit = (e) => {
     e.preventDefault();
+
+    const data = {
+      id: id,
+      statusid: statusValue,
+      note: statement,
+    };
+
     if (statusValue === 2 && statement === "") {
       setStateMentError("Statement is required");
     } else if (statusValue === 2 && stringData < 20) {
       setStateMentError("Statement minimum 20 words");
     } else {
       setProgress(true);
-      put(
-        `ApplicationInternalAssesmentRequirement/Update?id=${id}&statusid=${statusValue}&note=${statement}`
-      ).then((action) => {
-        console.log(action);
-        setProgress(false);
-        addToast(action?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
-        setSuccess(!success);
-      });
+      post(`ApplicationInternalAssesmentRequirement/Update`, data).then(
+        (action) => {
+          console.log(action);
+          setProgress(false);
+          addToast(action?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+        }
+      );
     }
   };
 
