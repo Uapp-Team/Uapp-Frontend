@@ -857,7 +857,7 @@ const ApplicationsCommon = () => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue, parameters]);
+  }, [applicationValue, parameters, selector]);
 
   useEffect(() => {
     get(`ApplicationConfidence/SelectList`).then((res) => {
