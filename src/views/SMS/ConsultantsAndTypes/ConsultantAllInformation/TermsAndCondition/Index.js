@@ -237,6 +237,8 @@ const ConsultantTermsInformation = () => {
                 {userTypeId === userTypes?.SystemAdmin.toString() ||
                 userTypeId === userTypes?.Admin.toString() ||
                 userTypeId === userTypes?.BranchAdmin.toString() ||
+                userTypeId === userTypes?.BranchManager.toString() ||
+                userTypeId === userTypes?.ConsultantCompliance.toString() ||
                 userTypeId === userTypes?.ComplianceManager.toString() ? (
                   <>
                     {conscentData === null ||
