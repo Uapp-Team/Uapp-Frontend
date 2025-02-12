@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Col, Form, FormGroup, Input, Row } from "reactstrap";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
-import put from "../../../../../../helpers/put";
+import post from "../../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
+import RichTextArea from "../../../../../../components/form/RichTextArea";
+import { AdminUsers } from "../../../../../../components/core/User";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const InternalStatus = ({ id, success, setSuccess }) => {
   const { addToast } = useToasts();
@@ -58,10 +61,10 @@ const InternalStatus = ({ id, success, setSuccess }) => {
   }
 
   const handleStringData = (e) => {
-    const count = countWords(e.target.value);
+    setStatement(e);
+    const count = countWords(e);
     setStringData(count);
-    setStatement(e.target.value);
-    if (e.target.value === "") {
+    if (e === "") {
       setStateMentError("Statement is required");
     } else if (count < 20) {
       setStateMentError("Statement minimum 20 words");
@@ -72,23 +75,30 @@ const InternalStatus = ({ id, success, setSuccess }) => {
 
   const handleApplicationUpdateSubmit = (e) => {
     e.preventDefault();
+
+    const data = {
+      id: id,
+      statusid: statusValue,
+      note: statement,
+    };
+
     if (statusValue === 2 && statement === "") {
       setStateMentError("Statement is required");
     } else if (statusValue === 2 && stringData < 20) {
       setStateMentError("Statement minimum 20 words");
     } else {
       setProgress(true);
-      put(
-        `ApplicationInternalAssesmentRequirement/Update?id=${id}&statusid=${statusValue}&note=${statement}`
-      ).then((action) => {
-        console.log(action);
-        setProgress(false);
-        addToast(action?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
-        setSuccess(!success);
-      });
+      post(`ApplicationInternalAssesmentRequirement/Update`, data).then(
+        (action) => {
+          console.log(action);
+          setProgress(false);
+          addToast(action?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setSuccess(!success);
+        }
+      );
     }
   };
 
@@ -112,35 +122,59 @@ const InternalStatus = ({ id, success, setSuccess }) => {
                   value: statusValue,
                 }}
                 onChange={(opt) => selectStatus(opt.label, opt.value)}
+                isDisabled={
+                  !AdminUsers() && status?.internalAssesmentStatusId === 2
+                    ? true
+                    : false
+                }
                 name="statusId"
                 id="statusId"
               />
             </FormGroup>
+
             {statusValue === 2 && (
+              <>
+                {!AdminUsers() && status?.note ? (
+                  <>
+                    <div className="d-flex justify-content-between">
+                      <b>Note</b>
+                      <span>{dateFormate(status?.updatedOn)}</span>
+                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: status?.note,
+                      }}
+                    />
+                  </>
+                ) : (
+                  <FormGroup>
+                    <div className="d-flex justify-content-between">
+                      <span>
+                        Write a note <span className="text-danger">*</span>
+                      </span>
+                      <span>{dateFormate(status?.updatedOn)}</span>
+                    </div>
+
+                    <RichTextArea
+                      defaultValue={statement}
+                      onChange={handleStringData}
+                    />
+
+                    <div className="d-flex justify-content-between mt-4">
+                      <div className="text-danger">{stateMentError}</div>
+                      <div className="text-right">
+                        {stringData ? stringData : "0"} / min word-20
+                      </div>
+                    </div>
+                  </FormGroup>
+                )}
+              </>
+            )}
+            {!AdminUsers() && status?.note ? null : (
               <FormGroup>
-                <span>
-                  Write a note <span className="text-danger">*</span>
-                </span>
-
-                <Input
-                  type="textarea"
-                  name="statement"
-                  id="statement"
-                  row={6}
-                  value={statement}
-                  onChange={(e) => handleStringData(e)}
-                />
-
-                <div className="d-flex justify-content-between">
-                  <div className="text-danger">{stateMentError}</div>
-                  <div className="text-right">{stringData} / min word-20</div>
-                </div>
+                <SaveButton text="Save" progress={progress} />
               </FormGroup>
             )}
-
-            <FormGroup>
-              <SaveButton text="Save" progress={progress} />
-            </FormGroup>
           </Col>
         </Row>
       </Form>

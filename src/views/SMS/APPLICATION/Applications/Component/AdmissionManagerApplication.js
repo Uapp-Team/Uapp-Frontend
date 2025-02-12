@@ -12,7 +12,7 @@ import {
   DropdownToggle,
 } from "reactstrap";
 import Select from "react-select";
-import { useLocation, useParams } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
@@ -31,11 +31,14 @@ import ColumnApplicationManager from "../../../TableColumn/ColumnApplicationMana
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
 import Download from "../../../../../components/buttons/Download.js";
 import Typing from "../../../../../components/form/Typing.js";
+import DateRange from "../../../../../components/form/DateRange.js";
 
 const AdmissionManagerApplication = ({ currentUser }) => {
   const componentRef = useRef();
   const { addToast } = useToasts();
   const location = useLocation();
+  const history = useHistory();
+  const parameters = history?.location?.state?.state;
   const { status, selector, universityId, consultantId, intake } = useParams();
 
   // Previous states get from session storage
@@ -72,6 +75,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       ? AdmissionManagerApplicationPaging?.orderValue
       : 0
   );
+  const [consultantTypeDD, setConsultantTypeDD] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
@@ -84,6 +88,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [interviewDD, setInterviewDD] = useState([]);
   const [elptDD, setElptDD] = useState([]);
   const [financeDD, setFinanceDD] = useState([]);
+  const [confidenceLevelDD, setConfidenceLevelDD] = useState([]);
+
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   const [chatOpen, setChatOpen] = useState(false);
@@ -124,6 +130,18 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     AdmissionManagerApplicationPaging?.managerConsLabel
       ? AdmissionManagerApplicationPaging?.managerConsLabel
       : "Consultant"
+  );
+  const [consultantTypeLabel, setConsultantTypeLabel] = useState(
+    AdmissionManagerApplicationPaging?.consultantTypeLabel
+      ? AdmissionManagerApplicationPaging?.consultantTypeLabel
+      : "Consultant Type"
+  );
+  const [consultantTypeValue, setConsultantTypeValue] = useState(
+    parameters?.consultantTypeId
+      ? parameters?.consultantTypeId
+      : AdmissionManagerApplicationPaging?.consultantTypeValue
+      ? AdmissionManagerApplicationPaging?.consultantTypeValue
+      : 0
   );
   const [managerConsValue, setManagerConsValue] = useState(
     consultantId
@@ -221,7 +239,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    AdmissionManagerApplicationPaging?.intakeValue
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : AdmissionManagerApplicationPaging?.intakeValue
       ? AdmissionManagerApplicationPaging?.intakeValue
       : 0
   );
@@ -233,6 +253,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : AdmissionManagerApplicationPaging?.intakeRngValue
       ? AdmissionManagerApplicationPaging?.intakeRngValue
       : 0
@@ -280,6 +302,27 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       : 0
   );
 
+  const [confidenceLevel, setConfidenceLevel] = useState(
+    AdmissionManagerApplicationPaging?.confidenceLevel
+      ? AdmissionManagerApplicationPaging?.confidenceLevel
+      : "Confidence Level"
+  );
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters?.confidenceLevel?.toString()
+      ? parameters?.confidenceLevel?.toString()
+      : AdmissionManagerApplicationPaging?.confidenceValue
+      ? AdmissionManagerApplicationPaging?.confidenceValue
+      : ""
+  );
+
+  const [selectedDates, setSelectedDates] = useState(
+    parameters?.fromApplicationDate && parameters?.toApplicationDate
+      ? [parameters?.fromApplicationDate, parameters?.toApplicationDate]
+      : AdmissionManagerApplicationPaging?.selectedDates
+      ? AdmissionManagerApplicationPaging?.selectedDates
+      : []
+  );
+
   // application list
   const [applicationList, setApplicationList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -309,15 +352,15 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   // set page states at sessionStorage for next time use
   useEffect(() => {
     sessionStorage.setItem(
-      "admissionManagerApplication",
+      "",
       JSON.stringify({
         currentPage: currentPage && currentPage,
         managerUappIdLabel: managerUappIdLabel && managerUappIdLabel,
         managerUappIdValue: managerUappIdValue && managerUappIdValue,
         managerStdLabel: managerStdLabel && managerStdLabel,
         managerStdValue: managerStdValue && managerStdValue,
-        // offerLabel: selector !== "2" && offerLabel && offerLabel,
-        // offerValue: selector !== "2" && offerValue && offerValue,
+        consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
+        consultantTypeValue: consultantTypeValue && consultantTypeValue,
         managerConsLabel: managerConsLabel && managerConsLabel,
         managerConsValue: managerConsValue && managerConsValue,
         applicationLabel: status > 0 && applicationLabel && applicationLabel,
@@ -326,8 +369,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           selector > 0 && applicationSubLabel && applicationSubLabel,
         applicationSubValue:
           selector > 0 && applicationSubValue && applicationSubValue,
-        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        // enrollValue: selector !== "3" && enrollValue && enrollValue,
+
         applicationId: applicationId && applicationId,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
@@ -348,6 +390,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         documentStatusValue: documentStatusValue && documentStatusValue,
         percentageLabel: percentageLabel && percentageLabel,
         percentageValue: percentageValue && percentageValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
+        confidenceLevel: confidenceLevel && confidenceLevel,
+        selectedDates: selectedDates && selectedDates,
       })
     );
   }, [
@@ -386,12 +433,20 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     documentStatusValue,
     percentageLabel,
     percentageValue,
+    consultantTypeLabel,
+    consultantTypeValue,
+    status,
+    applicationSubLabel,
+    applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
+    selectedDates,
   ]);
 
   // for all dropdown
-  const applicationMenu = applicationDD.map((application) => ({
-    label: application?.name,
-    value: application?.id,
+  const applicationMenu = applicationDD.map((item) => ({
+    label: item?.name,
+    value: item?.id,
   }));
   const offerMenu = offerDD.map((offer) => ({
     label: offer?.name,
@@ -515,6 +570,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setmanagerUappIdLabel("UAPP ID");
     setmanagerUappIdValue(0);
     setManagerStdLabel("Name");
+    setConsultantTypeLabel("Consultant Type");
+    setConsultantTypeValue(0);
     setManagerStdValue(0);
     setManagerConsLabel("Consultant");
     setManagerConsValue(0);
@@ -524,6 +581,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setManagerPhnValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
+    setConfidenceLevel("Confidence Level");
+    setConfidenceValue("");
+    setSelectedDates([]);
   };
 
   // user select order
@@ -558,12 +618,44 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   };
 
   useEffect(() => {
+    get(`ConsultantTypeDD/Index`).then((res) => {
+      setConsultantTypeDD(res);
+      if (parameters?.consultantTypeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.consultantTypeId;
+        });
+        setConsultantTypeLabel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
+    get(`ApplicationConfidence/SelectList`).then((res) => {
+      setConfidenceLevelDD(res);
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.confidenceLevel;
+        });
+        setConfidenceLevel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
     get("AccountIntakeDD/index").then((res) => {
       setIntakeRngDD(res);
 
       if (intake) {
         const filterData = res.filter((status) => {
           return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
         });
         setIntakeRngLabel(filterData[0]?.name);
       }
@@ -598,6 +690,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("InterviewStatusDD/Index").then((res) => {
@@ -643,7 +741,16 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         setManagerPhoneDD(res);
       });
     }
-  }, [consultantId, currentUser, intake, selector, status, universityId]);
+  }, [
+    consultantId,
+    currentUser,
+    intake,
+    parameters.intakeId,
+    parameters.intakeRangeId,
+    selector,
+    status,
+    universityId,
+  ]);
 
   useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
@@ -653,13 +760,19 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue]);
+  }, [applicationValue, selector]);
 
   useEffect(() => {
     if (!isTyping) {
       if (currentUser !== undefined) {
         get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}&applicationSubStatusId=${applicationSubValue}`
+          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+            selectedDates[0] ? selectedDates[0] : ""
+          }&toApplicationDate=${
+            selectedDates[1] ? selectedDates[1] : ""
+          }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+            confidenceValue ? confidenceValue : ""
+          }`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -696,6 +809,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     percentageValue,
     applicationId,
     isTyping,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
+    confidenceValue,
   ]);
 
   // Function for open delete modal
@@ -849,6 +966,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           <Row className="gy-3">
             {isHide ? (
               <>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={consultantTypeDD}
+                    label={consultantTypeLabel}
+                    setLabel={setConsultantTypeLabel}
+                    value={consultantTypeValue}
+                    setValue={setConsultantTypeValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={managerConsMenu}
@@ -1025,6 +1153,24 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                     action={() => {}}
                   />
                 </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={confidenceLevelDD}
+                    label={confidenceLevel}
+                    setLabel={setConfidenceLevel}
+                    value={confidenceValue}
+                    setValue={setConfidenceValue}
+                    action={() => {}}
+                    className="mr-2"
+                    isDisabled={selector > 0 ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <DateRange
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -1100,12 +1246,23 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   applicationSubLabel={applicationSubLabel}
                   setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationSubValue={setApplicationSubValue}
+                  consultantTypeLabel={consultantTypeLabel}
+                  consultantTypeValue={consultantTypeValue}
+                  setConsultantTypeLabel={setConsultantTypeLabel}
+                  setConsultantTypeValue={setConsultantTypeValue}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                   affiliateValue={0}
                   companionValue={0}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {managerUappIdValue !== 0 ||
                   managerStdValue !== 0 ||
+                  consultantTypeValue !== 0 ||
                   managerConsValue !== 0 ||
                   (!status && applicationValue !== 0) ||
                   (!selector && applicationSubValue !== 0) ||
@@ -1117,7 +1274,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   elptValue !== 0 ||
                   financeValue !== 0 ||
                   documentStatusValue !== 0 ||
-                  managerUniValue !== 0 ? (
+                  managerUniValue !== 0 ||
+                  confidenceValue !== "" ||
+                  selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>
@@ -1340,9 +1499,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                               </th>
                             ) : null}
 
-                            {tableData[12]?.isActive ? (
+                            {/* {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
@@ -1351,11 +1510,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                             {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {tableData[15]?.isActive ? (
+                            {/* {tableData[15]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[16]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
@@ -1454,7 +1613,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
                               {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
+                                  {app?.applicationStatusName} <br />
+                                  {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
                               {tableData[10]?.isActive ? (
@@ -1468,11 +1628,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[12]?.isActive ? (
+                              {/* {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.offerStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
@@ -1486,11 +1646,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[15]?.isActive ? (
+                              {/* {tableData[15]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.enrollmentStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[16]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
