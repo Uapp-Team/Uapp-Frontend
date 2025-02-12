@@ -1476,7 +1476,7 @@ const ApplicationInfo = ({
               </td>
             </tr>
 
-            <tr>
+            {/* <tr>
               <td td className="w-50">
                 Enrolment Status
               </td>
@@ -1610,7 +1610,7 @@ const ApplicationInfo = ({
                   </Modal>
                 </div>
               </td>
-            </tr>
+            </tr> */}
 
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
               <td td className="w-50">
