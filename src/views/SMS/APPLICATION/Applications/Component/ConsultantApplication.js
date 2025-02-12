@@ -387,6 +387,14 @@ const ConsultantApplication = ({ currentUser }) => {
     intake,
     documentStatusLabel,
     documentStatusValue,
+    status,
+    applicationSubLabel,
+    applicationSubValue,
+    percentageLabel,
+    percentageValue,
+    confidenceValue,
+    confidenceLevel,
+    selectedDates,
   ]);
 
   // user select order
@@ -595,7 +603,7 @@ const ConsultantApplication = ({ currentUser }) => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue]);
+  }, [applicationValue, parameters.applicationSubStatusId, selector]);
 
   // Api calling for Application List
   useEffect(() => {
@@ -638,6 +646,8 @@ const ConsultantApplication = ({ currentUser }) => {
     documentStatusValue,
     confidenceValue,
     selectedDates,
+    percentageValue,
+    applicationSubValue,
   ]);
 
   // for all dropdown

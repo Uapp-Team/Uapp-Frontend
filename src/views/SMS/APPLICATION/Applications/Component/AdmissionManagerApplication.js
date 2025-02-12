@@ -433,6 +433,14 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     documentStatusValue,
     percentageLabel,
     percentageValue,
+    consultantTypeLabel,
+    consultantTypeValue,
+    status,
+    applicationSubLabel,
+    applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -733,7 +741,16 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         setManagerPhoneDD(res);
       });
     }
-  }, [consultantId, currentUser, intake, selector, status, universityId]);
+  }, [
+    consultantId,
+    currentUser,
+    intake,
+    parameters.intakeId,
+    parameters.intakeRangeId,
+    selector,
+    status,
+    universityId,
+  ]);
 
   useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
@@ -743,7 +760,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue]);
+  }, [applicationValue, selector]);
 
   useEffect(() => {
     if (!isTyping) {
@@ -792,6 +809,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     percentageValue,
     applicationId,
     isTyping,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
+    confidenceValue,
   ]);
 
   // Function for open delete modal

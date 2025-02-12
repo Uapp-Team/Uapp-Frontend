@@ -379,6 +379,14 @@ const ProviderApplication = ({ currentUser }) => {
     admId,
     documentStatusLabel,
     documentStatusValue,
+    consultantTypeLabel,
+    consultantTypeValue,
+    status,
+    applicationSubLabel,
+    applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -607,7 +615,7 @@ const ProviderApplication = ({ currentUser }) => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue]);
+  }, [applicationValue, selector]);
 
   useEffect(() => {
     get("ApplicationStatusDD/Index").then((res) => {
@@ -712,7 +720,17 @@ const ProviderApplication = ({ currentUser }) => {
         setIntakeRngLabel(filterData[0]?.name);
       }
     });
-  }, [admId, consultantId, intake, selector, status, universityId, userId]);
+  }, [
+    admId,
+    consultantId,
+    intake,
+    parameters.intakeId,
+    parameters.intakeRangeId,
+    selector,
+    status,
+    universityId,
+    userId,
+  ]);
 
   // Api calling for Application List
   useEffect(() => {
@@ -754,6 +772,10 @@ const ProviderApplication = ({ currentUser }) => {
     providerPhoneValue,
     universityId,
     documentStatusValue,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
+    confidenceValue,
   ]);
 
   // Delete Button Click Action
