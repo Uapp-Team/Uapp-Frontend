@@ -10,6 +10,7 @@ import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
 import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
+import { Consultant } from "../../../components/core/User";
 
 const AdmissionsPipeline = () => {
   const applicationPipeline = JSON.parse(
@@ -37,7 +38,7 @@ const AdmissionsPipeline = () => {
     applicationPipeline?.consultantValue || 0
   );
   const [consultantLabel, setConsultantLabel] = useState(
-    applicationPipeline?.consultantLabel || "Select Consultant"
+    applicationPipeline?.consultantLabel || "Consultant Type"
   );
   const [selectedDates, setSelectedDates] = useState(
     applicationPipeline?.selectedDates || []
@@ -174,16 +175,18 @@ const AdmissionsPipeline = () => {
                   }}
                 />
 
-                <DefaultDropdown
-                  placeholder="Select Type"
-                  url="ConsultantTypeDD/Index"
-                  label={consultantLabel}
-                  setLabel={setConsultantLabel}
-                  value={consultantValue}
-                  setValue={setConsultantValue}
-                  action={() => {}}
-                  className="ml-2"
-                />
+                {!Consultant() && (
+                  <DefaultDropdown
+                    placeholder="Select Type"
+                    url="ConsultantTypeDD/Index"
+                    label={consultantLabel}
+                    setLabel={setConsultantLabel}
+                    value={consultantValue}
+                    setValue={setConsultantValue}
+                    action={() => {}}
+                    className="ml-2"
+                  />
+                )}
               </div>
             </Col>
           </Row>

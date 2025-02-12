@@ -10,6 +10,7 @@ import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
 import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
+import { Consultant } from "../../../components/core/User";
 
 const SalesReport = () => {
   const salesPipeline = JSON.parse(sessionStorage.getItem("salesPipeline"));
@@ -41,7 +42,7 @@ const SalesReport = () => {
   const [consultantLabel, setConsultantLabel] = useState(
     salesPipeline?.consultantLabel
       ? salesPipeline?.consultantLabel
-      : "Select Consultant"
+      : "Consultant Type"
   );
   const [selectedDates, setSelectedDates] = useState(
     salesPipeline?.selectedDates ? salesPipeline?.selectedDates : []
@@ -181,16 +182,18 @@ const SalesReport = () => {
                   }}
                 />
 
-                <DefaultDropdown
-                  placeholder="Select Type"
-                  url="ConsultantTypeDD/Index"
-                  label={consultantLabel}
-                  setLabel={setConsultantLabel}
-                  value={consultantValue}
-                  setValue={setConsultantValue}
-                  action={() => {}}
-                  className="ml-2"
-                />
+                {!Consultant() && (
+                  <DefaultDropdown
+                    placeholder="Select Type"
+                    url="ConsultantTypeDD/Index"
+                    label={consultantLabel}
+                    setLabel={setConsultantLabel}
+                    value={consultantValue}
+                    setValue={setConsultantValue}
+                    action={() => {}}
+                    className="ml-2"
+                  />
+                )}
               </div>
             </Col>
           </Row>
