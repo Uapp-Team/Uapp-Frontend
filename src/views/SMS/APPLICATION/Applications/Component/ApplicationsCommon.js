@@ -380,8 +380,7 @@ const ApplicationsCommon = () => {
         commonUappIdValue: commonUappIdValue && commonUappIdValue,
         commonStdLabel: commonStdLabel && commonStdLabel,
         commonStdValue: commonStdValue && commonStdValue,
-        // offerLabel: selector !== "2" && offerLabel && offerLabel,
-        // offerValue: selector !== "2" && offerValue && offerValue,
+
         applicationId: applicationId && applicationId,
         consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
         consultantTypeValue: consultantTypeValue && consultantTypeValue,
@@ -397,8 +396,7 @@ const ApplicationsCommon = () => {
           (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
           confidenceValue.toString(),
         confidenceLevel: confidenceLevel && confidenceLevel,
-        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        // enrollValue: selector !== "3" && enrollValue && enrollValue,
+
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -1831,11 +1829,11 @@ const ApplicationsCommon = () => {
                                     Assessment
                                   </th>
                                 ) : null}
-                                {tableData[13]?.isActive ? (
+                                {/* {tableData[13]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Offer
                                   </th>
-                                ) : null}
+                                ) : null} */}
                                 {tableData[14]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Interview
@@ -1846,11 +1844,11 @@ const ApplicationsCommon = () => {
                                     Manager
                                   </th>
                                 ) : null}
-                                {tableData[16]?.isActive ? (
+                                {/* {tableData[16]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Enrolment Status
                                   </th>
-                                ) : null}
+                                ) : null} */}
                                 {tableData[17]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     SLCs
@@ -1970,7 +1968,8 @@ const ApplicationsCommon = () => {
 
                                   {tableData[10]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
-                                      {app?.applicationStatusName}
+                                      {app?.applicationStatusName} <br />
+                                      {app?.ApplicationSubStatusName}
                                     </td>
                                   ) : null}
 
@@ -1986,11 +1985,11 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {tableData[13]?.isActive ? (
+                                  {/* {tableData[13]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.offerStatusName}
                                     </td>
-                                  ) : null}
+                                  ) : null} */}
 
                                   {tableData[14]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
@@ -2004,11 +2003,11 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {tableData[16]?.isActive ? (
+                                  {/* {tableData[16]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.enrollmentStatusName}
                                     </td>
-                                  ) : null}
+                                  ) : null} */}
 
                                   {tableData[17]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
