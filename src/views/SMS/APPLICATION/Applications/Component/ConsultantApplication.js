@@ -30,11 +30,13 @@ import { Link } from "react-router-dom";
 import ColumnApplicationConsultant from "../../../TableColumn/ColumnApplicationConsultant.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
 import ContactNumber from "../../../../../components/ui/ContactNumber.js";
+import DateRange from "../../../../../components/form/DateRange.js";
 
 const ConsultantApplication = ({ currentUser }) => {
-  const history = useHistory();
   const { addToast } = useToasts();
   const componentRef = useRef();
+  const history = useHistory();
+  const parameters = history?.location?.state?.state;
   const { status, selector, universityId, intake } = useParams();
 
   // Previous states get from session storage
@@ -68,6 +70,7 @@ const ConsultantApplication = ({ currentUser }) => {
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
+  const [confidenceLevelDD, setConfidenceLevelDD] = useState([]);
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [interviewDD, setInterviewDD] = useState([]);
   const [elptDD, setElptDD] = useState([]);
@@ -172,7 +175,11 @@ const ConsultantApplication = ({ currentUser }) => {
       : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    applicationConsultant?.intakeValue ? applicationConsultant?.intakeValue : 0
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : applicationConsultant?.intakeValue
+      ? applicationConsultant?.intakeValue
+      : 0
   );
   const [intakeRngLabel, setIntakeRngLabel] = useState(
     applicationConsultant?.intakeRngLabel
@@ -182,6 +189,8 @@ const ConsultantApplication = ({ currentUser }) => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : applicationConsultant?.intakeRngValue
       ? applicationConsultant?.intakeRngValue
       : 0
@@ -222,6 +231,41 @@ const ConsultantApplication = ({ currentUser }) => {
     applicationConsultant?.documentStatusValue
       ? applicationConsultant?.documentStatusValue
       : 0
+  );
+
+  const [confidenceLevel, setConfidenceLevel] = useState(
+    applicationConsultant?.confidenceLevel
+      ? applicationConsultant?.confidenceLevel
+      : "Confidence Level"
+  );
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters?.confidenceLevel?.toString()
+      ? parameters?.confidenceLevel?.toString()
+      : applicationConsultant?.confidenceValue
+      ? applicationConsultant?.confidenceValue
+      : ""
+  );
+
+  const [percentageLabel, setPercentageLabel] = useState(
+    parameters?.percentage
+      ? `${parameters?.percentage}%`
+      : applicationConsultant?.percentageLabel
+      ? applicationConsultant?.percentageLabel
+      : "Assesment percentage"
+  );
+  const [percentageValue, setPercentageValue] = useState(
+    parameters?.percentage
+      ? parameters?.percentage
+      : applicationConsultant?.percentageValue
+      ? applicationConsultant?.percentageValue
+      : 0
+  );
+  const [selectedDates, setSelectedDates] = useState(
+    parameters?.fromApplicationDate && parameters?.toApplicationDate
+      ? [parameters?.fromApplicationDate, parameters?.toApplicationDate]
+      : applicationConsultant?.selectedDates
+      ? applicationConsultant?.selectedDates
+      : []
   );
 
   const [chatOpen, setChatOpen] = useState(false);
@@ -301,6 +345,13 @@ const ConsultantApplication = ({ currentUser }) => {
         orderValue: orderValue && orderValue,
         documentStatusLabel: documentStatusLabel && documentStatusLabel,
         documentStatusValue: documentStatusValue && documentStatusValue,
+        percentageLabel: percentageLabel && percentageLabel,
+        percentageValue: percentageValue && percentageValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
+        confidenceLevel: confidenceLevel && confidenceLevel,
+        selectedDates: selectedDates && selectedDates,
       })
     );
   }, [
@@ -419,6 +470,22 @@ const ConsultantApplication = ({ currentUser }) => {
   // Filter Dropdown data setState action function end here
 
   // Filter Dropdown data API calling
+
+  useEffect(() => {
+    get(`ApplicationConfidence/SelectList`).then((res) => {
+      setConfidenceLevelDD(res);
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.confidenceLevel;
+        });
+        setConfidenceLevel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
   useEffect(() => {
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
@@ -426,6 +493,11 @@ const ConsultantApplication = ({ currentUser }) => {
         const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
         setApplicationValue(res?.id);
+      } else if (parameters?.applicationStatusId) {
+        const result = res?.find(
+          (ans) => ans?.id === parameters?.applicationStatusId
+        );
+        setApplicationLabel(result?.name);
       }
     });
 
@@ -450,6 +522,12 @@ const ConsultantApplication = ({ currentUser }) => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("InterviewStatusDD/Index").then((res) => {
@@ -469,6 +547,11 @@ const ConsultantApplication = ({ currentUser }) => {
       if (intake) {
         const filterData = res.filter((status) => {
           return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
         });
         setIntakeRngLabel(filterData[0]?.name);
       }
@@ -496,13 +579,19 @@ const ConsultantApplication = ({ currentUser }) => {
         setConsultantPhnDD(res);
       });
     }
-  }, [currentUser, intake, selector, status, universityId]);
+  }, [currentUser, intake, selector, status, parameters, universityId]);
 
   useEffect(() => {
     get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
       setApplicationSubDD(res);
       if (selector > 0) {
         const result = res?.filter((ans) => ans?.id.toString() === selector);
+        setApplicationSubLabel(result[0]?.name);
+      } else if (parameters?.applicationSubStatusId) {
+        const result = res?.filter(
+          (ans) => ans?.id === parameters?.applicationSubStatusId
+        );
+        console.log(result, "sub status");
         setApplicationSubLabel(result[0]?.name);
       }
     });
@@ -512,7 +601,15 @@ const ConsultantApplication = ({ currentUser }) => {
   useEffect(() => {
     if (currentUser !== undefined) {
       get(
-        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${consUappIdValue}&studentId=${consStdValue}&universityId=${consUniValue}&uappPhoneId=${consPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
+        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${consUappIdValue}&studentId=${consStdValue}&universityId=${consUniValue}&uappPhoneId=${consPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
+          percentageValue ? percentageValue : 0
+        }&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+          confidenceValue ? confidenceValue : ""
+        }`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -539,6 +636,8 @@ const ConsultantApplication = ({ currentUser }) => {
     orderValue,
     universityId,
     documentStatusValue,
+    confidenceValue,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -633,6 +732,8 @@ const ConsultantApplication = ({ currentUser }) => {
     !selector && setApplicationSubValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
+    setConfidenceLevel("Confidence Level");
+    setConfidenceValue("");
     setIntakeLabel("Intake");
     setIntakeValue(0);
     setInterviewLabel("Interview");
@@ -651,6 +752,9 @@ const ConsultantApplication = ({ currentUser }) => {
     setConsPhnValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
+    setPercentageLabel("All");
+    setPercentageValue(0);
+    setSelectedDates([]);
     setCurrentPage(1);
   };
 
@@ -865,6 +969,59 @@ const ConsultantApplication = ({ currentUser }) => {
                     action={() => {}}
                   />
                 </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={[
+                      {
+                        id: 0,
+                        name: "All",
+                      },
+                      {
+                        id: 20,
+                        name: "20%",
+                      },
+                      {
+                        id: 40,
+                        name: "40%",
+                      },
+                      {
+                        id: 60,
+                        name: "60%",
+                      },
+                      {
+                        id: 80,
+                        name: "80%",
+                      },
+                      {
+                        id: 100,
+                        name: "100%",
+                      },
+                    ]}
+                    label={percentageLabel}
+                    setLabel={setPercentageLabel}
+                    value={percentageValue}
+                    setValue={setPercentageValue}
+                    action={() => {}}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={confidenceLevelDD}
+                    label={confidenceLevel}
+                    setLabel={setConfidenceLevel}
+                    value={confidenceValue}
+                    setValue={setConfidenceValue}
+                    action={() => {}}
+                    className="mr-2"
+                    isDisabled={selector > 0 ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <DateRange
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -939,6 +1096,16 @@ const ConsultantApplication = ({ currentUser }) => {
                   applicationSubLabel={applicationSubLabel}
                   setApplicationSubLabel={setApplicationSubLabel}
                   setApplicationSubValue={setApplicationSubValue}
+                  percentageLabel={percentageLabel}
+                  setPercentageLabel={setPercentageLabel}
+                  percentageValue={percentageValue}
+                  setPercentageValue={setPercentageValue}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {consUappIdValue !== 0 ||
@@ -953,7 +1120,10 @@ const ConsultantApplication = ({ currentUser }) => {
                   elptValue !== 0 ||
                   financeValue !== 0 ||
                   documentStatusValue !== 0 ||
-                  consUniValue !== 0 ? (
+                  consUniValue !== 0 ||
+                  confidenceValue !== "" ||
+                  percentageValue !== 0 ||
+                  selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>

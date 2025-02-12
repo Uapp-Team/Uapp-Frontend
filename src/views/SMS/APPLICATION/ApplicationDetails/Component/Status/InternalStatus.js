@@ -7,6 +7,7 @@ import { useToasts } from "react-toast-notifications";
 import get from "../../../../../../helpers/get";
 import RichTextArea from "../../../../../../components/form/RichTextArea";
 import { AdminUsers } from "../../../../../../components/core/User";
+import { dateFormate } from "../../../../../../components/date/calenderFormate";
 
 const InternalStatus = ({ id, success, setSuccess }) => {
   const { addToast } = useToasts();
@@ -135,7 +136,10 @@ const InternalStatus = ({ id, success, setSuccess }) => {
               <>
                 {!AdminUsers() && status?.note ? (
                   <>
-                    <b>Note</b>
+                    <div className="d-flex justify-content-between">
+                      <b>Note</b>
+                      <span>{dateFormate(status?.updatedOn)}</span>
+                    </div>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: status?.note,
@@ -144,16 +148,19 @@ const InternalStatus = ({ id, success, setSuccess }) => {
                   </>
                 ) : (
                   <FormGroup>
-                    <span>
-                      Write a note <span className="text-danger">*</span>
-                    </span>
+                    <div className="d-flex justify-content-between">
+                      <span>
+                        Write a note <span className="text-danger">*</span>
+                      </span>
+                      <span>{dateFormate(status?.updatedOn)}</span>
+                    </div>
 
                     <RichTextArea
                       defaultValue={statement}
                       onChange={handleStringData}
                     />
 
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mt-4">
                       <div className="text-danger">{stateMentError}</div>
                       <div className="text-right">
                         {stringData ? stringData : "0"} / min word-20
