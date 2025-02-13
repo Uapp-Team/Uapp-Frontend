@@ -421,6 +421,7 @@ const AddMissionManagerAdd = ({
                         ) ? (
                           <>
                             {userTypeId === userTypes?.SystemAdmin ||
+                            userTypeId === userTypes?.ProviderAdmin ||
                             userTypeId === userTypes?.Admin ? (
                               <>
                                 {tableData[2]?.isActive ? (
@@ -527,6 +528,7 @@ const AddMissionManagerAdd = ({
                           ) ? (
                             <>
                               {userTypeId === userTypes?.SystemAdmin ||
+                              userTypeId === userTypes?.ProviderAdmin ||
                               userTypeId === userTypes?.Admin ? (
                                 <>
                                   {tableData[2]?.isActive ? (

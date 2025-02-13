@@ -178,7 +178,7 @@ const AdmissionManagerDetails = () => {
                   borderBottom: "1px solid #2525251F",
                 }}
               >
-                <td width="40%">House No</td>
+                <td width="40%">Address Line 1</td>
 
                 <td width="60%">{data?.admissionManagerAddress?.houseNo}</td>
               </tr>
@@ -188,7 +188,7 @@ const AdmissionManagerDetails = () => {
                   borderBottom: "1px solid #2525251F",
                 }}
               >
-                <td width="40%">Address Line</td>
+                <td width="40%">Address Line 2</td>
 
                 <td width="60%">
                   {data?.admissionManagerAddress?.addressLine}

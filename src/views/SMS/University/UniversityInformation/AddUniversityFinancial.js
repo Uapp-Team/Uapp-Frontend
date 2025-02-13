@@ -374,7 +374,7 @@ const AddUniversityFinancial = (props) => {
                           name="AvarageTutionFee"
                           id="AvarageTutionFee"
                           value={tuitionFee}
-                          placeholder="Avarage Tution Fee"
+                          placeholder="Average Tution Fee"
                           onChange={(e) => {
                             handleTuitionFee(e);
                           }}
@@ -396,7 +396,7 @@ const AddUniversityFinancial = (props) => {
                           name="AvarageLivingCost"
                           id="AvarageLivingCost"
                           value={livingCost}
-                          placeholder="Avarage Living Cost"
+                          placeholder="Average Living Cost"
                           onChange={(e) => {
                             handleLivingCost(e);
                           }}

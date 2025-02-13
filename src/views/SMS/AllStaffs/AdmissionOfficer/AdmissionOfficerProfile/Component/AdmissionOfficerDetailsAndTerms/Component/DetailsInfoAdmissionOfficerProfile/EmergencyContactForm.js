@@ -74,7 +74,15 @@ const EmergencyContactForm = ({ emergencyInfo }) => {
                     <span>{emergencyInfo?.state}</span>
                   </li>
                 </td>
-                <td className="border-0">{emergencyInfo?.phoneNumber}</td>
+                <td className="border-0">
+                  {emergencyInfo?.phoneNumber &&
+                  emergencyInfo?.phoneNumber.includes("+")
+                    ? emergencyInfo?.phoneNumber
+                    : emergencyInfo?.phoneNumber &&
+                      !emergencyInfo?.phoneNumber.includes("+")
+                    ? "+" + emergencyInfo?.phoneNumber
+                    : null}
+                </td>
                 <td className="border-0">{emergencyInfo?.emailAddress}</td>
               </tr>
             </tbody>

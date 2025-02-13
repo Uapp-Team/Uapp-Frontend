@@ -151,13 +151,20 @@ const AdminInformation = () => {
           appearance: "success",
           autoDismiss: true,
         });
-        // history.push("/providerList");
+
+        (userType === userTypes?.SystemAdmin ||
+          userType === userTypes?.Admin) &&
+          history.push("/providerList");
+
+        userType === userTypes?.ProviderAdmin && history.push("/");
       });
     }
   };
+
   const handlePrevious = () => {
     history.push(`/providerAddress/${id}`);
   };
+
   return (
     <div>
       <BreadCrumb
