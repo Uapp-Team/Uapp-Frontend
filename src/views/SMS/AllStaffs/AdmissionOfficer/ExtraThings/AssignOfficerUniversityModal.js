@@ -24,8 +24,11 @@ const AssignOfficerUniversityModal = ({
   const [managerLabel, setManagerLabel] = useState("Select Admission Manager");
   const [managerValue, setManagerValue] = useState(0);
   const [assign, setAssign] = useState({});
+  console.log(assign, "assign");
+
   const [searchStr, setSearchStr] = useState("");
   const [showUniversity, setShowUniversity] = useState({});
+  console.log(showUniversity, "showUniversity");
   const [currentPage, setCurrentPage] = useState(1);
   const [callApi, setCallApi] = useState(false);
 

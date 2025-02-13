@@ -31,6 +31,8 @@ const AddMissionManagerClear = ({
   branch,
   setBranch,
 }) => {
+  console.log(branchValue, "branchValue");
+
   return (
     <div>
       <Card className="uapp-employee-search zindex-100">
@@ -44,6 +46,10 @@ const AddMissionManagerClear = ({
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setProviderValue(0);
+                    setProviderLabel("Select Provider");
+                  }}
                 />
               </Col>
             )}

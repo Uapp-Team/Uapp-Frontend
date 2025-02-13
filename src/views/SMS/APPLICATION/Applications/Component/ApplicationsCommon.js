@@ -1,45 +1,49 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useHistory, useLocation, useParams } from "react-router";
+import { Link } from "react-router-dom";
+import Select from "react-select";
+import ReactToPrint from "react-to-print";
+import { useToasts } from "react-toast-notifications";
 import {
+  Button,
   Card,
   CardBody,
-  Input,
   Col,
-  Row,
-  Table,
   Dropdown,
-  FormGroup,
   DropdownMenu,
   DropdownToggle,
-  Button,
+  FormGroup,
+  Input,
+  Row,
+  Table,
 } from "reactstrap";
-import Select from "react-select";
-import { useLocation, useParams } from "react-router";
-import { useToasts } from "react-toast-notifications";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
+import Download from "../../../../../components/buttons/Download.js";
+import Filter from "../../../../../components/Dropdown/Filter.js";
+import DateRange from "../../../../../components/form/DateRange.js";
+import Typing from "../../../../../components/form/Typing.js";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import ContactNumber from "../../../../../components/ui/ContactNumber.js";
+import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
+import { userTypes } from "../../../../../constants/userTypeConstant.js";
 import get from "../../../../../helpers/get";
 import remove from "../../../../../helpers/remove.js";
 import ButtonForFunction from "../../../Components/ButtonForFunction";
 import LinkButton from "../../../Components/LinkButton.js";
-import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
-import ReactToPrint from "react-to-print";
-import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
-import ConditionForText from "./ConditionForText.js";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
-import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
-import { userTypes } from "../../../../../constants/userTypeConstant.js";
-import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
-import Filter from "../../../../../components/Dropdown/Filter.js";
 import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
-import { Link } from "react-router-dom";
-import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
-import Typing from "../../../../../components/form/Typing.js";
+import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
 import Loader from "../../../Search/Loader/Loader";
-import Download from "../../../../../components/buttons/Download.js";
+import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
+import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
+import ConditionForText from "./ConditionForText.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
   const componentRef = useRef();
   const location = useLocation();
+  const history = useHistory();
+  const parameters = history?.location?.state?.state;
   const {
     affiliateId,
     admId,
@@ -54,7 +58,6 @@ const ApplicationsCommon = () => {
     companionId,
     courseId,
   } = useParams();
-
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -79,6 +82,8 @@ const ApplicationsCommon = () => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
+  const [applicationSubDD, setApplicationSubDD] = useState([]);
+  const [confidenceLevelDD, setConfidenceLevelDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -104,6 +109,7 @@ const ApplicationsCommon = () => {
   // state for common
   const [commonUappIdDD, setCommonUappIdDD] = useState([]);
   const [commonUniDD, setCommonUniDD] = useState([]);
+  const [consultantTypeDD, setConsultantTypeDD] = useState([]);
   const [commonConsultantDD, setCommonConsultantDD] = useState([]);
   const [commonStdDD, setCommonStdDD] = useState([]);
 
@@ -123,13 +129,29 @@ const ApplicationsCommon = () => {
       : "University Name"
   );
   const [commonUniValue, setCommonUniValue] = useState(
-    application?.commonUniValue ? application?.commonUniValue : 0
+    universityId
+      ? universityId
+      : application?.commonUniValue
+      ? application?.commonUniValue
+      : 0
+  );
+  const [consultantTypeLabel, setConsultantTypeLabel] = useState(
+    application?.consultantTypeLabel
+      ? application?.consultantTypeLabel
+      : "Consultant Type"
+  );
+  const [consultantTypeValue, setConsultantTypeValue] = useState(
+    parameters?.consultantTypeId
+      ? parameters?.consultantTypeId
+      : application?.consultantTypeValue
+      ? application?.consultantTypeValue
+      : 0
   );
   const [consultantLabel, setConsultantLabel] = useState(
     application?.consultantLabel ? application?.consultantLabel : "Consultant"
   );
   const [consultantValue, setConsultantValue] = useState(
-    consultantId
+    consultantId > 0
       ? consultantId
       : application?.consultantValue
       ? application?.consultantValue
@@ -148,38 +170,63 @@ const ApplicationsCommon = () => {
     application?.applicationLabel ? application?.applicationLabel : "Status"
   );
   const [applicationValue, setApplicationValue] = useState(
-    selector === "1"
+    status > 0
       ? status
+      : parameters?.applicationStatusId
+      ? parameters?.applicationStatusId
       : application?.applicationValue
       ? application?.applicationValue
       : 0
+  );
+  const [applicationSubLabel, setApplicationSubLabel] = useState(
+    application?.applicationSubLabel
+      ? application?.applicationSubLabel
+      : "Sub Status"
+  );
+  const [applicationSubValue, setApplicationSubValue] = useState(
+    selector > 0
+      ? selector
+      : parameters?.applicationSubStatusId
+      ? parameters?.applicationSubStatusId
+      : application?.applicationSubValue
+      ? application?.applicationSubValue
+      : 0
+  );
+
+  const [confidenceLevel, setConfidenceLevel] = useState(
+    application?.confidenceLevel
+      ? application?.confidenceLevel
+      : "Confidence Level"
+  );
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters?.confidenceLevel?.toString()
+      ? parameters?.confidenceLevel?.toString()
+      : application?.confidenceValue
+      ? application?.confidenceValue
+      : ""
   );
   const [offerLabel, setOfferLabel] = useState(
     application?.offerLabel ? application?.offerLabel : "Offer"
   );
   const [offerValue, setOfferValue] = useState(
-    selector === "2"
-      ? status
-      : application?.offerValue
-      ? application?.offerValue
-      : 0
+    application?.offerValue ? application?.offerValue : 0
   );
   const [enrollLabel, setEnrollLabel] = useState(
     application?.enrollLabel ? application?.enrollLabel : "Enrolment Status"
   );
   const [enrollValue, setEnrollValue] = useState(
-    selector === "3"
-      ? status
-      : application?.enrollValue
-      ? application?.enrollValue
-      : 0
+    application?.enrollValue ? application?.enrollValue : 0
   );
 
   const [intakeLabel, setIntakeLabel] = useState(
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    application?.intakeValue ? application?.intakeValue : 0
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : application?.intakeValue
+      ? application?.intakeValue
+      : 0
   );
   const [intakeRngLabel, setIntakeRngLabel] = useState(
     application?.intakeRngLabel ? application?.intakeRngLabel : "Intake Range"
@@ -187,6 +234,8 @@ const ApplicationsCommon = () => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : application?.intakeRngValue
       ? application?.intakeRngValue
       : 0
@@ -232,25 +281,29 @@ const ApplicationsCommon = () => {
       ? application?.admissionManagerLabel
       : "Admission Manager"
   );
-  // const [admissionManagerValue, setAdmissionManagerValue] = useState(
-  //   admId
-  //     ? admId
-  //     : application?.admissionManagerValue
-  //     ? application?.admissionManagerValue
-  //     : 0
-  // );
   const [admissionManagerValue, setAdmissionManagerValue] = useState(
-    admId ? admId : 0
+    admId
+      ? admId
+      : application?.admissionManagerValue
+      ? application?.admissionManagerValue
+      : 0
   );
+  // const [admissionManagerValue, setAdmissionManagerValue] = useState(
+  //   admId ? admId : 0
+  // );
   const [admissionOfficerDD, setAdmissionOfficerDD] = useState([]);
   const [admissionOfficerLabel, setAdmissionOfficerLabel] = useState(
-    application?.admissionManagerLabel
-      ? application?.admissionManagerLabel
+    application?.admissionOfficerLabel
+      ? application?.admissionOfficerLabel
       : "Admission Officer"
   );
 
   const [admissionOfficerValue, setAdmissionOfficerValue] = useState(
-    adoId ? adoId : 0
+    adoId
+      ? adoId
+      : application?.admissionOfficerValue
+      ? application?.admissionOfficerValue
+      : 0
   );
   const [proLabel, setProLabel] = useState(
     application?.proLabel ? application?.proLabel : "Select Provider"
@@ -269,14 +322,26 @@ const ApplicationsCommon = () => {
   );
 
   const [percentageLabel, setPercentageLabel] = useState(
-    application?.percentageLabel
+    parameters?.percentage
+      ? `${parameters?.percentage}%`
+      : application?.percentageLabel
       ? application?.percentageLabel
       : "Assesment percentage"
   );
   const [percentageValue, setPercentageValue] = useState(
-    application?.percentageValue ? application?.percentageValue : 0
+    parameters?.percentage
+      ? parameters?.percentage
+      : application?.percentageValue
+      ? application?.percentageValue
+      : 0
   );
-
+  const [selectedDates, setSelectedDates] = useState(
+    parameters?.fromApplicationDate && parameters?.toApplicationDate
+      ? [parameters?.fromApplicationDate, parameters?.toApplicationDate]
+      : application?.selectedDates
+      ? application?.selectedDates
+      : []
+  );
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
 
@@ -315,17 +380,23 @@ const ApplicationsCommon = () => {
         commonUappIdValue: commonUappIdValue && commonUappIdValue,
         commonStdLabel: commonStdLabel && commonStdLabel,
         commonStdValue: commonStdValue && commonStdValue,
-        offerLabel: selector !== "2" && offerLabel && offerLabel,
-        offerValue: selector !== "2" && offerValue && offerValue,
+
         applicationId: applicationId && applicationId,
+        consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
+        consultantTypeValue: consultantTypeValue && consultantTypeValue,
         consultantLabel: consultantLabel && consultantLabel,
         consultantValue: consultantValue && consultantValue,
-        applicationLabel:
-          selector !== "1" && applicationLabel && applicationLabel,
-        applicationValue:
-          selector !== "1" && applicationValue && applicationValue,
-        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        applicationLabel: status > 0 && applicationLabel && applicationLabel,
+        applicationValue: status > 0 && applicationValue && applicationValue,
+        applicationSubLabel:
+          selector > 0 && applicationSubLabel && applicationSubLabel,
+        applicationSubValue:
+          selector > 0 && applicationSubValue && applicationSubValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
+        confidenceLevel: confidenceLevel && confidenceLevel,
+
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -361,6 +432,7 @@ const ApplicationsCommon = () => {
         documentStatusValue: documentStatusValue && documentStatusValue,
         percentageLabel: percentageLabel && percentageLabel,
         percentageValue: percentageValue && percentageValue,
+        selectedDates: selectedDates && selectedDates,
       })
     );
   }, [
@@ -372,10 +444,16 @@ const ApplicationsCommon = () => {
     offerLabel,
     offerValue,
     applicationId,
+    consultantTypeLabel,
+    consultantTypeValue,
     consultantLabel,
     consultantValue,
     applicationLabel,
     applicationValue,
+    applicationSubLabel,
+    applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
     enrollLabel,
     enrollValue,
     intakeLabel,
@@ -417,6 +495,8 @@ const ApplicationsCommon = () => {
     documentStatusValue,
     percentageLabel,
     percentageValue,
+    status,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -529,6 +609,8 @@ const ApplicationsCommon = () => {
   const selectAppliDD = (label, value) => {
     setApplicationLabel(label);
     setApplicationValue(value);
+    setApplicationSubLabel("Sub Status");
+    setApplicationSubValue(0);
   };
   const selectOfferDD = (label, value) => {
     setOfferLabel(label);
@@ -636,34 +718,22 @@ const ApplicationsCommon = () => {
       }
     });
 
-    get("ApplicationStatusDD/Index").then((res) => {
-      setApplicationDD(res);
-
-      if (selector === "1") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-
-        setApplicationLabel(result?.name);
-      }
-    });
-
     get("OfferStatusDD/Index").then((res) => {
       setOfferDD(res);
-      if (selector === "2") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setOfferLabel(result?.name);
-      }
     });
 
     get("EnrollmentStatusDD/Index").then((res) => {
       setEnrollDD(res);
-      if (selector === "3") {
-        const result = res?.find((ans) => ans?.id.toString() === status);
-        setEnrollLabel(result?.name);
-      }
     });
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("AccountIntakeDD/index").then((res) => {
@@ -672,6 +742,11 @@ const ApplicationsCommon = () => {
       if (intake) {
         const filterData = res.filter((status) => {
           return status.id.toString() === intake;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
         });
         setIntakeRngLabel(filterData[0]?.name);
       }
@@ -739,6 +814,7 @@ const ApplicationsCommon = () => {
     adoId,
     success,
     providerId,
+    parameters,
   ]);
 
   useEffect(() => {
@@ -752,61 +828,85 @@ const ApplicationsCommon = () => {
     });
   }, [proValue, admId, success]);
 
+  useEffect(() => {
+    get("ApplicationStatusDD/Index").then((res) => {
+      setApplicationDD(res);
+      if (status > 0) {
+        const result = res?.find((ans) => ans?.id.toString() === status);
+        setApplicationLabel(result?.name);
+      } else if (parameters?.applicationStatusId) {
+        const result = res?.find(
+          (ans) => ans?.id === parameters?.applicationStatusId
+        );
+        setApplicationLabel(result?.name);
+      }
+    });
+  }, [status, parameters]);
+
+  useEffect(() => {
+    get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      setApplicationSubDD(res);
+      if (selector > 0) {
+        const result = res?.filter((ans) => ans?.id.toString() === selector);
+        setApplicationSubLabel(result[0]?.name);
+      } else if (parameters?.applicationSubStatusId) {
+        const result = res?.filter(
+          (ans) => ans?.id === parameters?.applicationSubStatusId
+        );
+        console.log(result, "sub status");
+        setApplicationSubLabel(result[0]?.name);
+      }
+    });
+  }, [applicationValue, parameters, selector]);
+
+  useEffect(() => {
+    get(`ApplicationConfidence/SelectList`).then((res) => {
+      setConfidenceLevelDD(res);
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.confidenceLevel;
+        });
+        setConfidenceLevel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
+    get(`ConsultantTypeDD/Index`).then((res) => {
+      setConsultantTypeDD(res);
+      if (parameters?.consultantTypeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.consultantTypeId;
+        });
+        setConsultantTypeLabel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
   // Api calling for Application List
   useEffect(() => {
     if (!isTyping) {
       setLoading(true);
-      consultantId !== undefined
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : universityId !== undefined
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : selector === "1"
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${status}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : selector === "2"
-        ? get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${status}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          })
-        : get(
-            `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
-              percentageValue ? percentageValue : 0
-            }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
-              courseId ? courseId : 0
-            }`
-          ).then((res) => {
-            setLoading(false);
-            setApplicationList(res?.models);
-            setEntity(res?.totalEntity);
-          });
+      get(
+        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
+          percentageValue ? percentageValue : 0
+        }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
+          courseId ? courseId : 0
+        }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+          confidenceValue ? confidenceValue : ""
+        }`
+      ).then((res) => {
+        setLoading(false);
+        setApplicationList(res?.models);
+        setEntity(res?.totalEntity);
+      });
     }
   }, [
     currentPage,
@@ -841,6 +941,10 @@ const ApplicationsCommon = () => {
     isTyping,
     percentageValue,
     courseId,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
+    confidenceValue,
   ]);
 
   // Delete Button Click Action
@@ -881,12 +985,12 @@ const ApplicationsCommon = () => {
 
   // handle clear all search function
   const handleClearSearch = () => {
-    selector !== "1" && setApplicationLabel("Status");
-    selector !== "1" && setApplicationValue(0);
-    selector !== "2" && setOfferLabel("Offer");
-    selector !== "2" && setOfferValue(0);
-    selector !== "3" && setEnrollLabel("Enrolment Status");
-    selector !== "3" && setEnrollValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    !selector && setApplicationSubLabel("Sub Status");
+    !selector && setApplicationSubValue(0);
+    setConfidenceLevel("Confidence Level");
+    setConfidenceValue("");
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -901,6 +1005,8 @@ const ApplicationsCommon = () => {
     setCommonUappIdValue(0);
     setCommonUniLabel("University Name");
     setCommonUniValue(0);
+    setConsultantTypeLabel("Consultant Type");
+    setConsultantTypeValue(0);
     !consultantId && setConsultantLabel("Consultant");
     !consultantId && setConsultantValue(0);
     setCommonStdLabel("Name");
@@ -922,6 +1028,9 @@ const ApplicationsCommon = () => {
     !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
+    setPercentageLabel("All");
+    setPercentageValue(0);
+    setSelectedDates([]);
     setCurrentPage(1);
     // document.getElementById("app").placeholder = "Application Id";
     // document.getElementById("app").value = null;
@@ -966,33 +1075,53 @@ const ApplicationsCommon = () => {
       <Card className="uapp-employee-search zindex-100">
         <CardBody className="search-card-body">
           <Row className="gy-3">
-            {userType === userTypes?.Student.toString() ? null : (
-              <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                <Select
-                  options={commonUappIdMenu}
-                  value={{ label: commonUappIdLabel, value: commonUappIdValue }}
-                  onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
-                  placeholder="UAPP ID"
-                  name="name"
-                  id="id"
-                />
-              </Col>
-            )}
-
-            {userType === userTypes?.Student.toString() ? null : (
-              <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                <Select
-                  options={commonStdMenu}
-                  value={{ label: commonStdLabel, value: commonStdValue }}
-                  onChange={(opt) => selectStudentDD(opt.label, opt.value)}
-                  placeholder="Name"
-                  name="name"
-                  id="id"
-                />
-              </Col>
-            )}
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={commonUappIdMenu}
+                value={{ label: commonUappIdLabel, value: commonUappIdValue }}
+                onChange={(opt) => selectUappIdDD(opt.label, opt.value)}
+                placeholder="UAPP ID"
+                name="name"
+                id="id"
+              />
+            </Col>
 
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={commonStdMenu}
+                value={{ label: commonStdLabel, value: commonStdValue }}
+                onChange={(opt) => selectStudentDD(opt.label, opt.value)}
+                placeholder="Name"
+                name="name"
+                id="id"
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
+                options={applicationMenu}
+                value={{ label: applicationLabel, value: applicationValue }}
+                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                placeholder="Status"
+                name="name"
+                id="id"
+                isDisabled={status > 0 ? true : false}
+              />
+            </Col>
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={applicationSubDD}
+                label={applicationSubLabel}
+                setLabel={setApplicationSubLabel}
+                value={applicationSubValue}
+                setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
                 options={offerMenu}
                 value={{ label: offerLabel, value: offerValue }}
@@ -1000,9 +1129,8 @@ const ApplicationsCommon = () => {
                 placeholder="Offer"
                 name="name"
                 id="id"
-                isDisabled={selector === "2" ? true : false}
               />
-            </Col>
+            </Col> */}
 
             {/* 
             {userType === userTypes?.SystemAdmin ||
@@ -1047,33 +1175,30 @@ const ApplicationsCommon = () => {
           <Row className="gy-3">
             {isHide ? (
               <>
-                {userType === userTypes?.Student.toString() ? null : (
-                  <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                    <Select
-                      options={commonConsultantMenu}
-                      value={{ label: consultantLabel, value: consultantValue }}
-                      onChange={(opt) =>
-                        selectConsultantDD(opt.label, opt.value)
-                      }
-                      placeholder="Consultant"
-                      name="name"
-                      id="id"
-                      isDisabled={consultantId !== undefined ? true : false}
-                    />
-                  </Col>
-                )}
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                  <Select
-                    options={applicationMenu}
-                    value={{ label: applicationLabel, value: applicationValue }}
-                    onChange={(opt) => selectAppliDD(opt.label, opt.value)}
-                    placeholder="Status"
-                    name="name"
-                    id="id"
-                    isDisabled={selector === "1" ? true : false}
+                  <Filter
+                    data={consultantTypeDD}
+                    label={consultantTypeLabel}
+                    setLabel={setConsultantTypeLabel}
+                    value={consultantTypeValue}
+                    setValue={setConsultantTypeValue}
+                    action={() => {}}
+                    className="mr-2"
                   />
                 </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Select
+                    options={commonConsultantMenu}
+                    value={{ label: consultantLabel, value: consultantValue }}
+                    onChange={(opt) => selectConsultantDD(opt.label, opt.value)}
+                    placeholder="Consultant"
+                    name="name"
+                    id="id"
+                    isDisabled={consultantId !== undefined ? true : false}
+                  />
+                </Col>
+
+                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={enrollMenu}
                     value={{ label: enrollLabel, value: enrollValue }}
@@ -1081,9 +1206,8 @@ const ApplicationsCommon = () => {
                     placeholder="Enrolment st..."
                     name="name"
                     id="id"
-                    isDisabled={selector === "3" ? true : false}
                   />
-                </Col>
+                </Col> */}
 
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
@@ -1310,6 +1434,24 @@ const ApplicationsCommon = () => {
                     isDisabled={companionId ? true : false}
                   />
                 </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={confidenceLevelDD}
+                    label={confidenceLevel}
+                    setLabel={setConfidenceLevel}
+                    value={confidenceValue}
+                    setValue={setConfidenceValue}
+                    action={() => {}}
+                    className="mr-2"
+                    isDisabled={selector > 0 ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <DateRange
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -1318,7 +1460,10 @@ const ApplicationsCommon = () => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <ConditionForText
+                  status={status}
                   selector={selector}
+                  admId={admId}
+                  adoId={adoId}
                   branchId={branchId}
                   branchLabel={branchLabel}
                   setBranchLabel={setBranchLabel}
@@ -1337,7 +1482,10 @@ const ApplicationsCommon = () => {
                   setAdmissionManagerLabel={setAdmissionManagerLabel}
                   admissionManagerValue={admissionManagerValue}
                   setAdmissionManagerValue={setAdmissionManagerValue}
-                  admId={admId}
+                  admissionOfficerLabel={admissionOfficerLabel}
+                  setAdmissionOfficerLabel={setAdmissionOfficerLabel}
+                  admissionOfficerValue={admissionOfficerValue}
+                  setAdmissionOfficerValue={setAdmissionOfficerValue}
                   affiliateLabel={affiliateLabel}
                   setAffiliateLabel={setAffiliateLabel}
                   affiliateValue={affiliateValue}
@@ -1350,6 +1498,7 @@ const ApplicationsCommon = () => {
                   companionId={companionId}
                   commonUappIdValue={commonUappIdValue}
                   commonStdValue={commonStdValue}
+                  consultantTypeValue={consultantTypeValue}
                   consultantValue={consultantValue}
                   applicationValue={applicationValue}
                   offerValue={offerValue}
@@ -1363,6 +1512,7 @@ const ApplicationsCommon = () => {
                   commonUniValue={commonUniValue}
                   commonUappIdLabel={commonUappIdLabel}
                   commonStdLabel={commonStdLabel}
+                  consultantTypeLabel={consultantTypeLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
                   offerLabel={offerLabel}
@@ -1375,6 +1525,10 @@ const ApplicationsCommon = () => {
                   commonUniLabel={commonUniLabel}
                   setApplicationLabel={setApplicationLabel}
                   setApplicationValue={setApplicationValue}
+                  applicationSubValue={applicationSubValue}
+                  applicationSubLabel={applicationSubLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
+                  setApplicationSubValue={setApplicationSubValue}
                   setOfferLabel={setOfferLabel}
                   setOfferValue={setOfferValue}
                   setEnrollLabel={setEnrollLabel}
@@ -1393,7 +1547,9 @@ const ApplicationsCommon = () => {
                   setCommonUappIdValue={setCommonUappIdValue}
                   setCommonUniLabel={setCommonUniLabel}
                   setCommonUniValue={setCommonUniValue}
+                  setConsultantTypeLabel={setConsultantTypeLabel}
                   setConsultantLabel={setConsultantLabel}
+                  setConsultantTypeValue={setConsultantTypeValue}
                   setConsultantValue={setConsultantValue}
                   consultantId={consultantId}
                   setCommonStdLabel={setCommonStdLabel}
@@ -1403,14 +1559,27 @@ const ApplicationsCommon = () => {
                   setdocumentStatusLabel={setdocumentStatusLabel}
                   documentStatusValue={documentStatusValue}
                   setdocumentStatusValue={setdocumentStatusValue}
+                  percentageLabel={percentageLabel}
+                  setPercentageLabel={setPercentageLabel}
+                  percentageValue={percentageValue}
+                  setPercentageValue={setPercentageValue}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
                   commonStdValue !== 0 ||
-                  (selector !== "1" && applicationValue !== 0) ||
-                  (selector !== "2" && offerValue !== 0) ||
-                  (selector !== "3" && enrollValue !== 0) ||
+                  (!status && applicationValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) ||
+                  confidenceValue !== "" ||
+                  // (selector !== "2" && offerValue !== 0) ||
+                  // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
+                  consultantTypeValue !== 0 ||
                   (!consultantId && consultantValue !== 0) ||
                   (!intake && intakeRngValue !== 0) ||
                   interviewValue !== 0 ||
@@ -1424,7 +1593,9 @@ const ApplicationsCommon = () => {
                   (!admId && admissionManagerValue !== 0) ||
                   (!affiliateId && affiliateValue !== 0) ||
                   (!adoId && admissionOfficerValue !== 0) ||
-                  (!companionId && companionValue !== 0) ? (
+                  (!companionId && companionValue !== 0) ||
+                  percentageValue !== 0 ||
+                  selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>
@@ -1658,11 +1829,11 @@ const ApplicationsCommon = () => {
                                     Assessment
                                   </th>
                                 ) : null}
-                                {tableData[13]?.isActive ? (
+                                {/* {tableData[13]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Offer
                                   </th>
-                                ) : null}
+                                ) : null} */}
                                 {tableData[14]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Interview
@@ -1673,11 +1844,11 @@ const ApplicationsCommon = () => {
                                     Manager
                                   </th>
                                 ) : null}
-                                {tableData[16]?.isActive ? (
+                                {/* {tableData[16]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Enrolment Status
                                   </th>
-                                ) : null}
+                                ) : null} */}
                                 {tableData[17]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     SLCs
@@ -1746,8 +1917,8 @@ const ApplicationsCommon = () => {
 
                                   {tableData[3]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
-                                      {app?.studentPhone && "+"}
-                                      {app?.studentPhone} <br />
+                                      <ContactNumber data={app?.studentPhone} />
+                                      <br />
                                       {app?.studentEmail}
                                     </td>
                                   ) : null}
@@ -1797,7 +1968,8 @@ const ApplicationsCommon = () => {
 
                                   {tableData[10]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
-                                      {app?.applicationStatusName}
+                                      {app?.applicationStatusName} <br />
+                                      {app?.ApplicationSubStatusName}
                                     </td>
                                   ) : null}
 
@@ -1813,11 +1985,11 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {tableData[13]?.isActive ? (
+                                  {/* {tableData[13]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.offerStatusName}
                                     </td>
-                                  ) : null}
+                                  ) : null} */}
 
                                   {tableData[14]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
@@ -1831,11 +2003,11 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {tableData[16]?.isActive ? (
+                                  {/* {tableData[16]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.enrollmentStatusName}
                                     </td>
-                                  ) : null}
+                                  ) : null} */}
 
                                   {tableData[17]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
@@ -1957,7 +2129,7 @@ const ApplicationsCommon = () => {
       {chatOpen === true && (
         <div className="messanger">
           <MessageHistoryCardApplicationDetailsPage
-            applicationStatusId={chatapp.applicationStatusId}
+            applicationSubStatusId={chatapp.applicationSubStatusId}
             applicationId={`${chatapp.id}`}
             viewId={`${chatapp.applicationViewId}`}
             chatOpen={chatOpen}

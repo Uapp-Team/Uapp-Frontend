@@ -41,6 +41,17 @@ const EmployeeType = lazy(() =>
   import("./views/SMS/AllStaffs/StaffsType/Index.js")
 );
 
+// Application Pipeline
+const AdmissionsPipeline = lazy(() =>
+  import("./views/SMS/ApplicationPipeline/AdmissionsPipeline.js")
+);
+const QualityReport = lazy(() =>
+  import("./views/SMS/ApplicationPipeline/QualityReport.js")
+);
+const SalesReport = lazy(() =>
+  import("./views/SMS/ApplicationPipeline/SalesReport.js")
+);
+
 // Role Categories
 const RoleItems = lazy(() => import("./views/SMS/RoleCategories/RoleItems"));
 const AddRole = lazy(() => import("./views/SMS/RoleCategories/AddRole"));
@@ -1784,6 +1795,14 @@ class AppRouter extends React.Component {
                   <AppRoute path="/content" component={UserContent} />
                   <AppRoute path="/contentHub" component={UserContentHub} />
                   <AppRoute path="/live-intake" component={LiveIntake} />
+
+                  {/* Application Pipeline */}
+                  <AppRoute
+                    path="/AdmissionsPipeline"
+                    component={AdmissionsPipeline}
+                  />
+                  <AppRoute path="/QualityReport" component={QualityReport} />
+                  <AppRoute path="/SalesReport" component={SalesReport} />
 
                   {/* Affiliate paths */}
                   <AppRoute
@@ -3822,17 +3841,6 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
-
-                  {/* <AppRoute
-                    path="/applicationsByStatus/:status/:selector"
-                    component={
-                      permissions?.includes(
-                        permissionList?.View_Application_List
-                      )
-                        ? Applications
-                        : NotAuthorized
-                    }
-                  /> */}
 
                   <AppRoute
                     path="/applicationsFromConsultant/:consultantId/:intake?"

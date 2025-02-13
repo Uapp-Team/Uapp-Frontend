@@ -776,7 +776,7 @@ const AddUniversity = (props) => {
                               }
                               // name="BranchId"
                               // id="BranchId"
-                              // isDisabled={branchId ? true : false}
+                              isDisabled={univerId ? true : false}
                             />
 
                             {branchError && (
@@ -829,7 +829,7 @@ const AddUniversity = (props) => {
                             </span>
 
                             <Select
-                              // isDisabled
+                              isDisabled
                               value={{
                                 label: providerTypeLabel,
                                 value: providerTypeValue,

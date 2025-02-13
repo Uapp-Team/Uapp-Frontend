@@ -11,10 +11,8 @@ import AffiliateTable from "./AffiliateTable";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import { useHistory } from "react-router";
 import { useToasts } from "react-toast-notifications";
-import { useParams } from "react-router";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import put from "../../../../helpers/put";
-import remove from "../../../../helpers/remove";
 import get from "../../../../helpers/get";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
@@ -47,7 +45,6 @@ const AffiliateList = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const [affiliateList, setAffiliateList] = useState({});
-  console.log(affiliateList, "affiliatelist");
   const [pass, setPass] = useState("");
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
@@ -55,11 +52,8 @@ const AffiliateList = () => {
   const [branch, setBranch] = useState([]);
   const [branchValue, setBranchValue] = useState(0);
   const [branchLabel, setBranchLabel] = useState("Select branch");
-
   const [entity, setEntity] = useState(0);
-
   const [serialNum, setSerialNum] = useState(0);
-
   const [deleteModal, setDeleteModal] = useState(false);
   const { addToast } = useToasts();
   const [passModal, setPassModal] = useState(false);
@@ -67,12 +61,9 @@ const AffiliateList = () => {
   const [passError, setPassError] = useState("");
   const [delData, setDelData] = useState({});
   const history = useHistory();
-  const [check, setCheck] = useState(false);
-
   const adminPermission =
     userType === userTypes?.SystemAdmin.toString() ||
     userType === userTypes?.Admin.toString();
-
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
     value: statusTypeOptions?.id,
@@ -314,8 +305,7 @@ const AffiliateList = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  console.log("dataPerPage", dataPerPage);
-  console.log("entity", entity);
+
   return (
     <div>
       <BreadCrumb title="Affiliate List" backTo="" path="/" />
@@ -330,6 +320,10 @@ const AffiliateList = () => {
                   setLabel={setBranchLabel}
                   value={branchValue}
                   setValue={setBranchValue}
+                  action={() => {
+                    setConsultantValue(0);
+                    setconsultantLabel("Select Consultant");
+                  }}
                 />
               </Col>
             )}

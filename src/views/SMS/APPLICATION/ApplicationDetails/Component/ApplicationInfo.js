@@ -30,6 +30,7 @@ import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import SpanButton from "../../../Components/SpanButton";
 import ApplicationStatus from "./Status/ApplicationStatus";
+import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const ApplicationInfo = ({
   handleScroll,
@@ -108,6 +109,10 @@ const ApplicationInfo = ({
   const [financeModalOpen, setFinanceModalOpen] = useState(false);
   const [financeLabel, setFinanceLabel] = useState("");
   const [financeValue, setFinanceValue] = useState(0);
+  const [confidenceDD, setConfidenceDD] = useState([]);
+  const [confidenceModalOpen, setConfidenceModalOpen] = useState(false);
+  const [confidenceLabel, setConfidenceLabel] = useState("");
+  const [confidenceValue, setConfidenceValue] = useState(0);
 
   // const [assesmentDD, setAssesmentDD] = useState([]);
   // const [assessmentModalOpen, setAssesmentModalOpen] = useState(false);
@@ -163,6 +168,7 @@ const ApplicationInfo = ({
   const [progress9, setProgress9] = useState(false);
   const [progress10, setProgress10] = useState(false);
   // const [progress11, setProgress11] = useState(false);
+  const [progress12, setProgress12] = useState(false);
 
   const [minuteError, setMinuteError] = useState("");
   const [timeError, setTimeError] = useState("");
@@ -184,6 +190,7 @@ const ApplicationInfo = ({
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   //   const [success, setSuccess] = useState(false);
+  const usersType = localStorage.getItem("userType");
 
   useEffect(() => {
     get(`ApplicationInfo/Overview/${sId}`).then((res) => {
@@ -223,6 +230,9 @@ const ApplicationInfo = ({
     // }
     get("StudentFinanceStatusDD/Index").then((res) => {
       setFinanceDD(res);
+    });
+    get("ApplicationConfidence/SelectList").then((res) => {
+      setConfidenceDD(res);
     });
     // get("ApplicationAssesmentStatusDD/Index").then((res) => {
     //   setAssesmentDD(res);
@@ -474,6 +484,15 @@ const ApplicationInfo = ({
     setFinanceValue(value);
   };
 
+  const confidenceMenu = confidenceDD.map((confidence) => ({
+    label: confidence?.name,
+    value: confidence?.id,
+  }));
+  const selectConfidence = (label, value) => {
+    setConfidenceLabel(label);
+    setConfidenceValue(value);
+  };
+
   // const selectAssesment = (label, value) => {
   //   setAssesmentLabel(label);
   //   setAssesmentValue(value);
@@ -526,6 +545,11 @@ const ApplicationInfo = ({
     setFinanceValue(id);
     setFinanceModalOpen(true);
   };
+  const handleEditConfidence = (name, id) => {
+    setConfidenceLabel(name);
+    setConfidenceValue(id);
+    setConfidenceModalOpen(true);
+  };
 
   const handleEditDeliveryPattern = (name, id) => {
     setDeliveryLabel(name);
@@ -555,7 +579,11 @@ const ApplicationInfo = ({
     setFinanceValue(0);
     // setAssesmentValue(0);
     setFinanceModalOpen(false);
-    // setAssesmentModalOpen(false);
+    setConfidenceLabel("");
+
+    setConfidenceValue(0);
+
+    setConfidenceModalOpen(false);
     setStatusLabel("");
     setStatusvalue(0);
     setStatusModalOpen(false);
@@ -678,6 +706,23 @@ const ApplicationInfo = ({
       });
       setFinanceLabel("");
       setFinanceValue(0);
+    });
+  };
+
+  const handleConfidenceUpdateSubmit = (e) => {
+    e.preventDefault();
+    const subData = new FormData(e.target);
+    setProgress12(true);
+    post(`ApplicationConfidence`, subData).then((action) => {
+      setProgress12(false);
+      setSuccess(!success);
+      setConfidenceModalOpen(false);
+      addToast(action?.data?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
+      setConfidenceLabel("");
+      setConfidenceValue(0);
     });
   };
 
@@ -1192,31 +1237,32 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
-                  {applicationInfo?.applicationStatusId > 2 && (
-                    // applicationInfo?.applicationStatusId < 13 &&
-                    <>
-                      {permissions?.includes(
-                        permissionList.Update_Application_Status
-                      ) ? (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{ color: "#619bff", cursor: "pointer" }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleApplicationEdit(
-                              applicationInfo?.applicationStatus?.name,
-                              applicationInfo?.applicationStatus?.id,
-                              applicationInfo?.applicationSubStatus
-                            )
-                          }
-                          permission={6}
-                        />
-                      ) : null}
-                    </>
-                  )}
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo?.confidenceLevel > 0 &&
+                    applicationInfo?.applicationSubStatusId !== 38 && (
+                      <>
+                        {permissions?.includes(
+                          permissionList.Update_Application_Status
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleApplicationEdit(
+                                applicationInfo?.applicationStatus?.name,
+                                applicationInfo?.applicationStatus?.id,
+                                applicationInfo?.applicationSubStatus
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
 
                   <Modal
                     isOpen={statusModalOpen}
@@ -1270,9 +1316,7 @@ const ApplicationInfo = ({
                             ) : (
                               <FormGroup>
                                 <span>
-                                  {statusValue === 6
-                                    ? " Offered Status"
-                                    : " Additional Status"}
+                                  Additional Status
                                   <span className="text-danger">*</span>
                                 </span>
 
@@ -1316,7 +1360,7 @@ const ApplicationInfo = ({
                                 </Upload>
                               </FormGroup>
                             ) : null}
-                            {statusValue === 12 ? (
+                            {/* {statusValue === 12 ? (
                               <FormGroup>
                                 <span>Rejection Document</span>
                                 <br />
@@ -1336,8 +1380,8 @@ const ApplicationInfo = ({
                                   )}
                                 </Upload>
                               </FormGroup>
-                            ) : null}
-                            {statusValue === 4 ? (
+                            ) : null} */}
+                            {statusValue === 4 && subStatusValue === 6 ? (
                               <FormGroup>
                                 <span>University Application Date </span>
                                 <span className="text-danger">*</span>
@@ -1424,10 +1468,15 @@ const ApplicationInfo = ({
                     ) : null}
                   </div>
                 ) : null}
+                {applicationInfo?.applicationStatusId === 13 && (
+                  <span className="mt-1 fs-12px">
+                    Note : {applicationInfo?.statusChangeNote}
+                  </span>
+                )}
               </td>
             </tr>
 
-            <tr>
+            {/* <tr>
               <td td className="w-50">
                 Enrolment Status
               </td>
@@ -1447,9 +1496,7 @@ const ApplicationInfo = ({
                     <>{applicationInfo?.enrollmentStatus?.name}</>
                   )}
 
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                  applicationInfo.applicationStatusId === 6 &&
-                  applicationInfo.applicationStatusId !== 13 ? (
+                  {applicationInfo.applicationStatusId === 9 ? (
                     <>
                       {permissions?.includes(
                         permissionList.Update_Application_Status
@@ -1563,7 +1610,7 @@ const ApplicationInfo = ({
                   </Modal>
                 </div>
               </td>
-            </tr>
+            </tr> */}
 
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
               <td td className="w-50">
@@ -1573,14 +1620,9 @@ const ApplicationInfo = ({
               <td td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.studentFinanceStatus?.name}
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo.applicationStatusId !== 13 &&
+                  {applicationInfo?.applicationStatusId === 9 &&
                     applicationInfo?.student?.studentType?.name !==
-                      "International" &&
-                    applicationInfo?.applicationStatus?.name ===
-                      "Offer Issued" &&
-                    applicationInfo?.applicationSubStatus?.name ===
-                      "Unconditional Offer" && (
+                      "International" && (
                       <>
                         {permissions?.includes(
                           permissionList.Update_Application_Status
@@ -1653,6 +1695,93 @@ const ApplicationInfo = ({
                 </div>
               </td>
             </tr>
+            {usersType !== userTypes?.Student &&
+              usersType !== userTypes?.Consultant &&
+              usersType !== userTypes?.Affiliate &&
+              usersType !== userTypes?.Companion && (
+                <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                  <td td className="w-50">
+                    Confidence Level
+                  </td>
+
+                  <td td className="w-50">
+                    <div className="d-flex justify-content-between">
+                      {applicationInfo?.confidenceLevelName}
+                      {applicationInfo?.confidenceLevel === 0 && (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{ color: "#619bff", cursor: "pointer" }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleEditConfidence(
+                              applicationInfo?.confidenceLevelName,
+                              applicationInfo?.confidenceLevel
+                            )
+                          }
+                          permission={6}
+                        />
+                      )}
+
+                      <Modal
+                        isOpen={confidenceModalOpen}
+                        toggle={closeModal}
+                        className="uapp-modal"
+                      >
+                        <ModalBody className="p-5">
+                          <h4>Update Confidence Level</h4>
+                          <Form onSubmit={handleConfidenceUpdateSubmit}>
+                            <FormGroup row>
+                              <input
+                                type="hidden"
+                                name="applicationId"
+                                id="applicationId"
+                                value={applicationInfo?.id}
+                              />
+                            </FormGroup>
+                            <Row>
+                              <Col md={7}>
+                                <FormGroup>
+                                  <span>
+                                    Confidence Status{" "}
+                                    <span className="text-danger">*</span>{" "}
+                                  </span>
+
+                                  <Select
+                                    options={confidenceMenu}
+                                    value={{
+                                      label: confidenceLabel,
+                                      value: confidenceValue,
+                                    }}
+                                    onChange={(opt) =>
+                                      selectConfidence(opt.label, opt.value)
+                                    }
+                                    name="confidenceLevel"
+                                    id="ConfidenceLevel "
+                                  />
+                                </FormGroup>
+
+                                <FormGroup>
+                                  <CancelButton
+                                    text="Close"
+                                    cancel={closeModal}
+                                  />
+                                  <SaveButton
+                                    text="Submit"
+                                    progress={progress3}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </Form>
+                        </ModalBody>
+                      </Modal>
+                    </div>
+                  </td>
+                </tr>
+              )}
           </tbody>
         </Table>
       </div>
@@ -1933,8 +2062,9 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.deliveryPattern?.name}
 
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo.applicationStatusId !== 13 && (
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo.applicationStatusId !== 12 &&
+                    applicationInfo?.applicationSubStatusId !== 38 && (
                       <>
                         {permissions?.includes(
                           permissionList.Update_Application_Info
@@ -2019,36 +2149,31 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.universityStudentId}</div>
 
-                  {applicationInfo?.applicationStatusId !== 1 &&
-                    applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo?.applicationStatusId !== 3 &&
-                    applicationInfo.applicationStatusId !== 11 &&
-                    applicationInfo.applicationStatusId !== 12 &&
-                    applicationInfo.applicationStatusId !== 13 && (
-                      <>
-                        {permissions?.includes(
-                          permissionList.Update_Application_Info
-                        ) ? (
-                          <SpanButton
-                            icon={
-                              <i
-                                class="far fa-edit"
-                                style={{
-                                  color: "#619bff",
-                                  cursor: "pointer",
-                                }}
-                              ></i>
-                            }
-                            func={() =>
-                              handleEditUniStdId(
-                                applicationInfo?.universityStudentId
-                              )
-                            }
-                            permission={6}
-                          />
-                        ) : null}
-                      </>
-                    )}
+                  {applicationInfo?.applicationStatusId === 4 && (
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Application_Info
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{
+                                color: "#619bff",
+                                cursor: "pointer",
+                              }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleEditUniStdId(
+                              applicationInfo?.universityStudentId
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
                   <Modal
                     isOpen={uniStdIdModalOpen}
@@ -2113,34 +2238,29 @@ const ApplicationInfo = ({
                     ) : null}
                   </div>
 
-                  {applicationInfo?.applicationStatusId !== 1 &&
-                    applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo?.applicationStatusId !== 3 &&
-                    applicationInfo.applicationStatusId !== 11 &&
-                    applicationInfo.applicationStatusId !== 12 &&
-                    applicationInfo.applicationStatusId !== 13 && (
-                      <>
-                        {" "}
-                        {permissions?.includes(
-                          permissionList.Update_Application_Info
-                        ) ? (
-                          <SpanButton
-                            icon={
-                              <i
-                                class="far fa-edit"
-                                style={{ color: "#619bff", cursor: "pointer" }}
-                              ></i>
-                            }
-                            func={() =>
-                              handleEditUniAppDate(
-                                applicationInfo?.universityApplicationDate
-                              )
-                            }
-                            permission={6}
-                          />
-                        ) : null}
-                      </>
-                    )}
+                  {applicationInfo?.applicationStatusId === 4 && (
+                    <>
+                      {" "}
+                      {permissions?.includes(
+                        permissionList.Update_Application_Info
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{ color: "#619bff", cursor: "pointer" }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleEditUniAppDate(
+                              applicationInfo?.universityApplicationDate
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
                   <Modal
                     isOpen={uniAppDateModalOpen}
@@ -2206,36 +2326,35 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div> {applicationInfo?.campus?.name}</div>
 
-                  {(applicationInfo?.applicationStatusId === 1 ||
-                    applicationInfo?.applicationStatusId === 2 ||
-                    applicationInfo?.applicationStatusId === 3 ||
-                    applicationInfo.applicationStatusId === 11 ||
-                    applicationInfo.applicationStatusId === 12 ||
-                    applicationInfo.applicationStatusId === 13) && (
-                    <>
-                      {permissions?.includes(
-                        permissionList.Update_Application_Info
-                      ) ? (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{
-                                color: "#619bff",
-                                cursor: "pointer",
-                              }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleEditCampusUpDate(
-                              applicationInfo?.campus?.name
-                            )
-                          }
-                          permission={6}
-                        />
-                      ) : null}
-                    </>
-                  )}
+                  {applicationInfo?.applicationStatusId !== 1 &&
+                    applicationInfo?.applicationStatusId !== 9 &&
+                    applicationInfo?.applicationStatusId !== 10 &&
+                    applicationInfo.applicationStatusId !== 11 &&
+                    applicationInfo.applicationStatusId !== 12 && (
+                      <>
+                        {permissions?.includes(
+                          permissionList.Update_Application_Info
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{
+                                  color: "#619bff",
+                                  cursor: "pointer",
+                                }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleEditCampusUpDate(
+                                applicationInfo?.campus?.name
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
 
                   <Modal
                     isOpen={CampusModalOpen}
@@ -2323,31 +2442,39 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.intake?.name}</div>
 
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo?.applicationStatusId === 7 &&
-                    applicationInfo.applicationStatusId !== 13 && (
-                      <>
-                        {permissions?.includes(
-                          permissionList.Update_Application_Info
-                        ) ? (
-                          <SpanButton
-                            icon={
-                              <i
-                                class="far fa-edit"
-                                style={{ color: "#619bff", cursor: "pointer" }}
-                              ></i>
-                            }
-                            func={() =>
-                              handleUpdateIntake(
-                                applicationInfo?.intake?.id,
-                                applicationInfo?.intake?.name
-                              )
-                            }
-                            permission={6}
-                          />
-                        ) : null}
-                      </>
-                    )}
+                  {((applicationInfo?.applicationStatusId === 3 &&
+                    applicationInfo?.applicationSubStatusId === 1) ||
+                    (applicationInfo?.applicationStatusId === 6 &&
+                      applicationInfo?.applicationSubStatusId === 20) ||
+                    (applicationInfo?.applicationStatusId === 7 &&
+                      applicationInfo?.applicationSubStatusId === 23) ||
+                    (applicationInfo?.applicationStatusId === 8 &&
+                      applicationInfo?.applicationSubStatusId === 26)) && (
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Application_Info
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{
+                                color: "#619bff",
+                                cursor: "pointer",
+                              }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleUpdateIntake(
+                              applicationInfo?.intake?.id,
+                              applicationInfo?.intake?.name
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
                   <Modal
                     isOpen={intakeModal}
@@ -2415,8 +2542,8 @@ const ApplicationInfo = ({
               <b>Interview</b>{" "}
             </td>
             <td className="border-0 text-right">
-              {applicationInfo?.applicationStatusId !== 2 &&
-                applicationInfo.applicationStatusId !== 13 && (
+              {applicationInfo?.applicationStatusId === 4 &&
+                applicationInfo?.applicationSubStatusId === 7 && (
                   <>
                     {permissions?.includes(
                       permissionList.Add_ApplicationInterview
@@ -2566,8 +2693,8 @@ const ApplicationInfo = ({
                       </span>
                     </td>
                     <td className="border-0 text-right">
-                      {applicationInfo?.applicationStatusId !== 2 &&
-                        applicationInfo.applicationStatusId !== 13 && (
+                      {applicationInfo?.applicationStatusId === 4 &&
+                        applicationInfo?.applicationSubStatusId === 7 && (
                           <>
                             {permissions?.includes(
                               permissionList.Add_ApplicationInterview
@@ -2633,8 +2760,8 @@ const ApplicationInfo = ({
                   <b>ELPT</b>{" "}
                 </td>
                 <td className="border-0 text-right">
-                  {applicationInfo?.applicationStatusId !== 2 &&
-                    applicationInfo.applicationStatusId !== 13 && (
+                  {applicationInfo?.applicationStatusId === 4 &&
+                    applicationInfo?.applicationSubStatusId === 8 && (
                       <>
                         {permissions?.includes(
                           permissionList.Add_ApplicationELPT
@@ -2918,8 +3045,8 @@ const ApplicationInfo = ({
                 <b>ELPT</b>{" "}
               </td>
               <td className="border-0 text-right">
-                {applicationInfo?.applicationStatusId !== 2 &&
-                  applicationInfo.applicationStatusId !== 13 && (
+                {applicationInfo?.applicationStatusId === 4 &&
+                  applicationInfo?.applicationSubStatusId === 8 && (
                     <>
                       {permissions?.includes(
                         permissionList.Add_ApplicationELPT
@@ -3327,7 +3454,7 @@ const ApplicationInfo = ({
         )}
       </div>
 
-      {applicationInfo.applicationStatusId !== 13 && (
+      {applicationInfo?.applicationSubStatusId !== 38 && (
         <>
           {permissions?.includes(
             permissionList.Update_Application_Assesment

@@ -8,6 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import "../../../../../assets/CoustomStyle/dashboard.css";
 import Filter from "../../../../../components/Dropdown/Filter";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
+import DashboardCount from "../../../../../components/ui/DashboardCount";
 
 const ComplianceManager = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -104,54 +105,66 @@ const ComplianceManager = () => {
       </div>
 
       {/* Status reports start */}
-      <Row className="p-2">
-        <Col className="m-2 p-3 AdmissionManager-card-application">
-          <Link to={`/applicationsbyintake/${intakeRngValue}`}>
-            <h2> {count?.totalApplication}</h2>
-          </Link>
-          <Link to={`/applicationsbyintake/${intakeRngValue}`}>
-            <p className="text-gray-70">Total Application</p>
-          </Link>
+      <Row>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Total Application"
+            value={count?.totalApplication}
+            link={`/applicationsbyintake/${intakeRngValue}`}
+            bgColor="#E1F5FC"
+            borderColor="#24A1CD"
+            secondValue={count?.totalApplicant}
+            secondColor="#176682"
+            secondBgColor="#BAE7F7"
+          />
         </Col>
-        <Col className="m-2 p-3 AdmissionManager-card-Process">
-          <Link to={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}>
-            <h2>{count?.totalApplicationInProgress}</h2>
-          </Link>
-          <Link to={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}>
-            <p className="text-gray-70">Applications in Process</p>
-          </Link>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Applications in Process"
+            value={count?.totalApplicationInProgress}
+            // link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
+            bgColor="#FBF5E8"
+            borderColor="#FFBA08"
+          />
         </Col>
-        <Col className="m-2 p-3 AdmissionManager-card-Unconditional">
-          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
-            <h2>{count?.totalUnconditionalOffer}</h2>
-          </Link>
-          <Link to={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}>
-            <p className="text-gray-70">Unconditional Offer</p>
-          </Link>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Unconditional Offer"
+            value={count?.totalUnconditionalOffer}
+            link={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}
+            bgColor="#F8F3FF"
+            borderColor="#AE75F8"
+            secondValue={count?.totalUnconditionalStudent}
+            secondColor="#451782"
+            secondBgColor="#E3D1FA"
+          />
         </Col>
-        <Col className="m-2 p-3 AdmissionManager-card-Registered">
-          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
-            <h2> {count?.totalRegistered}</h2>
-          </Link>
-          <Link to={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}>
-            <p className="text-gray-70">Total Registered</p>
-          </Link>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Total Registered"
+            value={count?.totalRegistered}
+            link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
+            bgColor="#F0FFE0"
+            borderColor="#70E000"
+          />
         </Col>
-        <Col className="m-2 p-3 AdmissionManager-card-Rejected">
-          <Link to={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}>
-            <h2> {count?.totalRejected}</h2>
-          </Link>
-          <Link to={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}>
-            <p className="text-gray-70">Rejected / Cancelled</p>
-          </Link>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Total Rejected / cancelled"
+            value={count?.totalRejected}
+            // link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
+            bgColor="#FEF6F5"
+            borderColor="#F87675"
+          />
         </Col>
-        <Col className="m-2 p-3 AdmissionManager-card-Withdrawn">
-          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
-            <h2> {count?.totalWithdrawn}</h2>
-          </Link>
-          <Link to={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}>
-            <p className="text-gray-70">Withdrawn Application</p>
-          </Link>
+        <Col lg={2} md={4} className="mb-30px">
+          <DashboardCount
+            title="Withdrawn Application"
+            value={count?.totalWithdrawn}
+            link={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}
+            bgColor="#EDF1F5"
+            borderColor="#34495E"
+          />
         </Col>
       </Row>
 

@@ -100,7 +100,7 @@ const AccountManager = () => {
           <DashboardCount
             title="Applications in Process"
             value={count?.totalApplicationInProgress}
-            link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
+            // link={`/applicationsByStatus/${5}/${1}/${intakeRngValue}`}
             bgColor="#FBF5E8"
             borderColor="#FFBA08"
           />
@@ -109,7 +109,7 @@ const AccountManager = () => {
           <DashboardCount
             title="Unconditional Offer"
             value={count?.totalUnconditionalOffer}
-            link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}
             bgColor="#F8F3FF"
             borderColor="#AE75F8"
             secondValue={count?.totalUnconditionalStudent}
@@ -121,7 +121,7 @@ const AccountManager = () => {
           <DashboardCount
             title="Total Registered"
             value={count?.totalRegistered}
-            link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
             bgColor="#F0FFE0"
             borderColor="#70E000"
           />
@@ -130,7 +130,7 @@ const AccountManager = () => {
           <DashboardCount
             title="Total Rejected/cancelled"
             value={count?.totalRejected}
-            link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
+            // link={`/applicationsByStatus/${12}/${1}/${intakeRngValue}`}
             bgColor="#FEF6F5"
             borderColor="#F87675"
           />
@@ -139,7 +139,7 @@ const AccountManager = () => {
           <DashboardCount
             title="Withdrawn Application"
             value={count?.totalWithdrawn}
-            link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}
             bgColor="#EDF1F5"
             borderColor="#34495E"
           />

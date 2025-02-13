@@ -355,8 +355,8 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                                         ? "Accepted"
                                         : "Rejected"}{" "}
                                     </span>
-                                    {applicationInfo.applicationStatusId !==
-                                      13 && (
+                                    {applicationInfo?.applicationSubStatusId !==
+                                      38 && (
                                       <i
                                         onClick={() => statusModal1(docu)}
                                         className={
@@ -407,8 +407,8 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                                 {userType === userTypes?.Student ||
                                 userType === userTypes?.Consultant ? (
                                   <>
-                                    {applicationInfo.applicationStatusId !==
-                                      13 &&
+                                    {applicationInfo?.applicationSubStatusId !==
+                                      38 &&
                                     docu?.applicationDocumentStatusId !== 2 ? (
                                       <>
                                         {permissions?.includes(
@@ -443,8 +443,8 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                                     permissionList.Delete_Application_Document
                                   ) ? (
                                     <>
-                                      {applicationInfo.applicationStatusId !==
-                                        13 && (
+                                      {applicationInfo?.applicationSubStatusId !==
+                                        38 && (
                                         <i
                                           class="fas fa-trash pointer text-danger "
                                           onClick={() => toggleDanger(docu)}
@@ -471,7 +471,7 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
                             {docu?.uploadedFile?.uploadedBy} at{" "}
                             {docu?.uploadedFile?.uploadedOn} {}
                           </span>
-                          {applicationInfo.applicationStatusId !== 13 &&
+                          {applicationInfo?.applicationSubStatusId !== 38 &&
                           docu?.uploadedFile?.canDelete ? (
                             <>
                               {permissions?.includes(
@@ -516,7 +516,7 @@ const StudentDocument = ({ stdId, applicationInfo, success, setSuccess }) => {
         userType === userTypes?.ProviderAdmin ||
         userType === userTypes?.AdmissionManager) && (
         <>
-          {applicationInfo.applicationStatusId !== 13 && (
+          {applicationInfo?.applicationSubStatusId !== 38 && (
             <div className="custom-card-border p-4 mb-3 ">
               <div className="mt-1 mb-4 d-flex justify-between">
                 <img src={icon_info} alt="" />

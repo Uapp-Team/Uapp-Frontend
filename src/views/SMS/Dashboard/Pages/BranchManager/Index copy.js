@@ -332,7 +332,7 @@ const BranchManager = () => {
               <DashboardCount
                 title="Unconditional Offer"
                 value={count?.totalUnconditionalOffer}
-                link={`/applicationsByStatus/${2}/${2}`}
+                link={`/applicationsByStatus/${9}/${0}`}
                 bgColor="#F8F3FF"
                 borderColor="#AE75F8"
               />
@@ -341,7 +341,7 @@ const BranchManager = () => {
               <DashboardCount
                 title="Total Registered"
                 value={count?.totalRegistered}
-                link={`/applicationsByStatus/${2}/${3}`}
+                link={`/applicationsByStatus/${12}/${38}`}
                 bgColor="#F0FFE0"
                 borderColor="#70E000"
               />
@@ -359,7 +359,7 @@ const BranchManager = () => {
               <DashboardCount
                 title="Withdrawn Application"
                 value={count?.totalWithdrawn}
-                link={`/applicationsByStatus/${4}/${3}`}
+                link={`/applicationsByStatus/${12}/${41}`}
                 bgColor="#EDF1F5"
                 borderColor="#34495E"
               />
@@ -435,7 +435,7 @@ const BranchManager = () => {
                 <span
                   className="pvdadmin-span-style2"
                   onClick={() => {
-                    history.push(`applicationsByStatus/${2}/${2}`);
+                    history.push(`applicationsByStatus/${9}/${0}`);
                   }}
                   style={{ color: "#AE75F8", cursor: "pointer" }}
                 >
@@ -454,7 +454,7 @@ const BranchManager = () => {
                 <span
                   className="pvdadmin-span-style2"
                   onClick={() => {
-                    history.push(`applicationsByStatus/${2}/${3}`);
+                    history.push(`applicationsByStatus/${12}/${38}`);
                   }}
                   style={{ color: "#F7BD12", cursor: "pointer" }}
                 >
@@ -495,7 +495,7 @@ const BranchManager = () => {
 
                 <span
                   onClick={() => {
-                    history.push(`/applicationsByStatus/${4}/${3}`);
+                    history.push(`/applicationsByStatus/${12}/${41}`);
                   }}
                   className="pvdadmin-span-style2"
                   style={{ color: "#707070", cursor: "pointer" }}

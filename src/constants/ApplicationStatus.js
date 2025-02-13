@@ -1,0 +1,17 @@
+export const ApplicationStatus = {
+  New_Application: 1,
+  Ready_To_Apply: 2,
+  Applications_Cancelled: 3,
+  University_Processing: 4,
+  Conditional_Offer: 5,
+  Entry_Criterion_Not_Met: 6,
+  Interview_Failed: 7,
+  ELT_Failed: 8,
+  Unconditional_Offer_Issued: 9,
+  CAS_Processing: 10,
+  VISA_Processing: 11,
+  Enrolment: 12,
+  N_A: 13,
+  Transfer_Application: 14,
+  Documents_Requested_by_University: 15,
+};

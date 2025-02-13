@@ -146,7 +146,7 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Unconditional Offer"
             value={count?.totalUnconditionalOffer}
-            link={`/applicationsByStatus/${2}/${2}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${9}/${0}/${intakeRngValue}`}
             bgColor="#F8F3FF"
             borderColor="#AE75F8"
             secondValue={count?.totalUnconditionalStudent}
@@ -158,7 +158,7 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Total Registered"
             value={count?.totalRegistered}
-            link={`/applicationsByStatus/${2}/${3}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${12}/${38}/${intakeRngValue}`}
             bgColor="#F0FFE0"
             borderColor="#70E000"
           />
@@ -176,7 +176,7 @@ const SuperAdmin = () => {
           <DashboardCount
             title="Withdrawn Application"
             value={count?.totalWithdrawn}
-            link={`/applicationsByStatus/${4}/${3}/${intakeRngValue}`}
+            link={`/applicationsByStatus/${12}/${41}/${intakeRngValue}`}
             bgColor="#EDF1F5"
             borderColor="#34495E"
           />

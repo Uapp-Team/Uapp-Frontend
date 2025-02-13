@@ -21,6 +21,7 @@ import ReactToPrint from "react-to-print";
 import logoLg from "../../../../../../assets/img/Logo.svg";
 import { rootUrl } from "../../../../../../constants/constants";
 import { dateFormate } from "../../../../../../components/date/calenderFormate";
+import ContactNumber from "../../../../../../components/ui/ContactNumber";
 
 const StudentDeclaration = ({
   sId,
@@ -2084,8 +2085,7 @@ const StudentDeclaration = ({
                         </td>
 
                         <td style={{ paddingLeft: "8px" }}>
-                          {ref?.phoneNumber && "+"}
-                          {ref?.phoneNumber}
+                          <ContactNumber data={ref?.phoneNumber} />
                         </td>
                       </tr>
                       <tr style={{ border: "1px solid #dee2e6" }}>

@@ -7,9 +7,10 @@ import StudentRegRefer from "../../../../../components/Refer/StudentRegRefer";
 import StudentJoinBanner from "../../../../../views/SMS/Affiliate/AffiliateComponents/StudentJoinBanner";
 
 const SideMenuStudent = () => {
-  const [canConsultant, setCanConsultant] = useState(false);
-  const referenceId = localStorage.getItem("referenceId");
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
+  const referenceId = localStorage.getItem("referenceId");
+  const [canConsultant, setCanConsultant] = useState(false);
+  const [conscentData, setConscentData] = useState({});
   const isLead = JSON?.parse(localStorage.getItem("IsLead"));
   const [modalShow, setModalShow] = useState(false);
 
@@ -21,21 +22,31 @@ const SideMenuStudent = () => {
     );
   }, [currentUser]);
 
+  useEffect(() => {
+    get(`StudentConsent/Get/${referenceId}`).then((res) => {
+      setConscentData(res);
+    });
+  }, [referenceId]);
+
   return (
     <>
       <SideMenuItem title="Overview" icon="fas fa-tachometer-alt" path="/" />
       <SideMenuItem title="Profile" icon="far fa-user" path="/profile" />
-      <SideMenuItem
-        title="Search and Apply"
-        icon="fas fa-magnifying-glass"
-        path="/search"
-      />
-      {!isLead && (
-        <SideMenuItem
-          title="My Applications"
-          icon="far fa-file"
-          path="/applications"
-        />
+      {conscentData?.isDeclared === true && (
+        <>
+          <SideMenuItem
+            title="Search and Apply"
+            icon="fas fa-magnifying-glass"
+            path="/search"
+          />
+          {!isLead && (
+            <SideMenuItem
+              title="My Applications"
+              icon="far fa-file"
+              path="/applications"
+            />
+          )}
+        </>
       )}
 
       {canConsultant && (

@@ -140,7 +140,7 @@ const Index = () => {
 
     subData.append("cellPhoneNumber", phoneNumber);
     subData.append("houseNo", houseNo);
-    subData.append("addressLine", addressLine);
+    subData.append("addressLine", addressLine === null ? "" : addressLine);
     subData.append("city", cityN);
     subData.append("state", state);
     subData.append("zipCode", zipCode);
