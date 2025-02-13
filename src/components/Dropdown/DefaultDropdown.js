@@ -19,7 +19,7 @@ const DefaultDropdown = ({
   useEffect(() => {
     get(url).then((res) => {
       setData(res);
-      // setData([{ id: 0, name: "All" }, ...res]);
+      setData([{ id: 0, name: "All" }, ...res]);
     });
   }, [url]);
 

@@ -136,12 +136,14 @@ const QualityReport = () => {
       <BreadCrumb title="Application Quality Report" />
       <Card>
         <CardBody>
-          <Row className="mb-4">
+          <Row>
             <Col lg={4}>
               <p className="fs-16px fw-600">Application Quality Report</p>
             </Col>
-            <Col lg={8}>
-              <div className="d-flex align-items-center justify-content-center gap-4px">
+          </Row>
+          <Row className="mb-4">
+            <Col lg={12}>
+              <div className="d-flex align-items-center justify-content-end gap-4px">
                 <Filter
                   data={intakeRngDD}
                   label={intakeRngLabel}
