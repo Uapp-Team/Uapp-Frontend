@@ -776,7 +776,7 @@ const AddUniversity = (props) => {
                               }
                               // name="BranchId"
                               // id="BranchId"
-                              // isDisabled={branchId ? true : false}
+                              isDisabled={univerId ? true : false}
                             />
 
                             {branchError && (

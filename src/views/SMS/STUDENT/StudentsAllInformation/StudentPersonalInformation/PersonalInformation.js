@@ -33,6 +33,8 @@ import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
+  console.log(applicationStudentId, "sakib");
+
   const userId = localStorage.getItem("referenceId");
   const history = useHistory();
   const { addToast } = useToasts();
@@ -650,7 +652,7 @@ const PersonalInformation = () => {
                               }
                               // name="BranchId"
                               // id="BranchId"
-                              // isDisabled={branchId ? true : false}
+                              isDisabled={applicationStudentId ? true : false}
                             />
                             {branchError && (
                               <span className="text-danger">
