@@ -29,6 +29,7 @@ const InternalStatus = ({ id, success, setSuccess }) => {
   useEffect(() => {
     if (id) {
       get(`ApplicationInternalAssesmentRequirement/Get/${id}`).then((res) => {
+        console.log(res);
         setStatus(res);
         setStatement(res?.note);
         const count = countWords(res?.note);
