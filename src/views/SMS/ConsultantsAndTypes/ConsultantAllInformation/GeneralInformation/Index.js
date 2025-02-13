@@ -42,6 +42,7 @@ const GeneralInformation = () => {
   const [navVisibility, setNavVisibility] = useState({});
   const activetab = "1";
   const { consultantRegisterId } = useParams();
+
   const userTypeId = localStorage.getItem("userType");
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");

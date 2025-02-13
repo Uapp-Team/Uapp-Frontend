@@ -98,6 +98,7 @@ const GeneralInformationForm = ({
                   onChange={(opt) => selectBranch(opt.label, opt.value)}
                   name="BranchId"
                   id="BranchId"
+                  isDisabled={consultantRegisterId ? true : false}
                 />
 
                 {branchError && (

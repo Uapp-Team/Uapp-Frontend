@@ -138,7 +138,7 @@ const PersonalForm = ({
                 onChange={(opt) => selectBranch(opt.label, opt.value)}
                 // name="BranchId"
                 // id="BranchId"
-                // isDisabled={branchId ? true : false}
+                isDisabled={affiliateId ? true : false}
               />
               {branchError && (
                 <span className="text-danger">Branch is required</span>

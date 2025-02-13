@@ -283,7 +283,7 @@ const Index = () => {
                       onChange={(opt) => selectBranch(opt.label, opt.value)}
                       // name="BranchId"
                       // id="BranchId"
-                      // isDisabled={branchId ? true : false}
+                      isDisabled={admissionOfficerId ? true : false}
                     />
 
                     {branchError && (
