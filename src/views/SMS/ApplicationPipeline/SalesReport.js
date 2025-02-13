@@ -144,12 +144,14 @@ const SalesReport = () => {
       <BreadCrumb title="Sales Report" />
       <Card>
         <CardBody>
-          <Row className="mb-4">
+          <Row>
             <Col lg={4}>
               <p className="fs-16px fw-600">Sales Report</p>
             </Col>
-            <Col>
-              <div className="d-flex align-items-center justify-content-center gap-4px">
+          </Row>
+          <Row className="mb-4">
+            <Col lg={12}>
+              <div className="d-flex align-items-center justify-content-end gap-4px">
                 <Filter
                   data={intakeRngDD}
                   label={intakeRngLabel}
@@ -197,7 +199,6 @@ const SalesReport = () => {
               </div>
             </Col>
           </Row>
-
           <div className="row align-items-center relative">
             <div className="col-12">
               <div class="scroll-container">

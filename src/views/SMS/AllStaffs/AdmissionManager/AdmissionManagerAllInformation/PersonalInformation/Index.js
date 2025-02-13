@@ -70,6 +70,7 @@ const Index = () => {
 
   const [consPersonalInfo, setConsPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
+  const [passportError, setPassportError] = useState("");
 
   const { admissionManagerId } = useParams();
   const history = useHistory();
@@ -225,6 +226,16 @@ const Index = () => {
     setValid(validatePhoneNumber(value));
   };
 
+  const handlePassport = (e) => {
+    let data = e.target.value.trimStart();
+    setPassport(data);
+    if (data === "") {
+      setPassportError("Passport is required");
+    } else {
+      setPassportError("");
+    }
+  };
+
   // on submit form
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -272,6 +283,11 @@ const Index = () => {
       if (!phoneNumber) {
         isFormValid = false;
         setphoneNUmberError("Phone number is required");
+      }
+
+      if (!passport) {
+        isFormValid = false;
+        setPassportError("Passport is required");
       }
 
       if (phoneNumber?.length < 9) {
@@ -372,9 +388,10 @@ const Index = () => {
                         name="passportId"
                         id="passportId"
                         placeholder="Enter Passport Number"
-                        onChange={(e) => setPassport(e.target.value)}
-                        defaultValue={passport}
+                        value={passport}
+                        onChange={(e) => handlePassport(e)}
                       />
+                      <span className="text-danger">{passportError}</span>
                     </Col>
                   </FormGroup>
 

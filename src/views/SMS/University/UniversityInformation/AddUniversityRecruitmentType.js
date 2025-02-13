@@ -117,9 +117,8 @@ const AddUniversityRecruitmentType = () => {
             appearance: "success",
             autoDismiss: true,
           });
-          // (userType === userTypes?.SystemAdmin ||
-          //   userType === userTypes?.Admin) &&
-          //   history.push(`/addUniversityCommission/${univerId}`);
+
+          history.push(`/universityList`);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -157,7 +156,7 @@ const AddUniversityRecruitmentType = () => {
                     />
                     <FormGroup row className="has-icon-left position-relative">
                       <Col md="2">
-                        <span>Home </span>
+                        <span>Home/UK </span>
                       </Col>
                       <Col md="6">
                         <FormGroup check inline>
@@ -204,7 +203,7 @@ const AddUniversityRecruitmentType = () => {
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col md="2">
-                        <span>EU/UK </span>
+                        <span>EU/EEU </span>
                       </Col>
                       <Col md="6">
                         <FormGroup check inline>

@@ -161,7 +161,7 @@ const AssignUniversity = () => {
         <CardBody>
           <div className="d-flex justify-content-end mb-3">
             <span style={{ fontWeight: "bold" }}>
-              Admission Manager: {data?.nameTittle?.name} {data?.firstName}{" "}
+              Admission Manager : {data?.nameTittle?.name} {data?.firstName}{" "}
               {data?.lastName}
             </span>
           </div>
@@ -460,16 +460,15 @@ const AssignUniversity = () => {
                     ) : null}
                     {checkType ? (
                       <td>
-                        {uni?.isAcceptHome === true ? `Home,` : null}{" "}
-                        {uni?.isAcceptEU_UK === true ? `EU/UK,` : null}{" "}
-                        {uni?.isAcceptInternational === true
-                          ? "International"
-                          : null}
-                        {uni?.isAcceptHome === false &&
-                        uni?.isAcceptEU_UK === false &&
-                        uni?.isAcceptInternational === false
-                          ? "Not available"
-                          : null}
+                        {[
+                          uni?.isAcceptHome === true ? "Home" : null,
+                          uni?.isAcceptEU_UK === true ? "EU/UK" : null,
+                          uni?.isAcceptInternational === true
+                            ? "International"
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(", ") || "Not available"}
                       </td>
                     ) : null}
 

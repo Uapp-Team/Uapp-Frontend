@@ -308,7 +308,7 @@ const AddProviderUniversityFinancial = (props) => {
                       name="AvarageTutionFee"
                       id="AvarageTutionFee"
                       defaultValue={financialData?.avarageTutionFee}
-                      placeholder="Avarage Tution Fee"
+                      placeholder="Average Tution Fee"
                       required
                     />
                     {/* <div className="form-control-position">
@@ -330,7 +330,7 @@ const AddProviderUniversityFinancial = (props) => {
                       name="AvarageLivingCost"
                       id="AvarageLivingCost"
                       defaultValue={financialData?.avarageLivingCost}
-                      placeholder="Avarage Living Cost"
+                      placeholder="Average Living Cost"
                       required
                     />
                     {/* <div className="form-control-position">

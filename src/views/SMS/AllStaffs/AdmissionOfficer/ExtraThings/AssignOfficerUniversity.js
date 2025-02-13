@@ -381,16 +381,15 @@ const AssignOfficerUniversity = () => {
                       {checkName ? <td>{uni?.university?.name}</td> : null}
                       {checkType ? (
                         <td>
-                          {uni?.isAcceptHome === true ? `Home,` : null}{" "}
-                          {uni?.isAcceptEU_UK === true ? `EU/UK,` : null}{" "}
-                          {uni?.isAcceptInternational === true
-                            ? "International"
-                            : null}
-                          {uni?.isAcceptHome === false &&
-                          uni?.isAcceptEU_UK === false &&
-                          uni?.isAcceptInternational === false
-                            ? "Not available"
-                            : null}
+                          {[
+                            uni?.isAcceptHome === true ? "Home" : null,
+                            uni?.isAcceptEU_UK === true ? "EU/UK" : null,
+                            uni?.isAcceptInternational === true
+                              ? "International"
+                              : null,
+                          ]
+                            .filter(Boolean)
+                            .join(", ") || "Not available"}
                         </td>
                       ) : null}
 
