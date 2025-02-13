@@ -62,7 +62,10 @@ const SearchAndClear = ({
                   name=""
                   error={() => {}}
                   setError={() => {}}
-                  action={() => {}}
+                  action={() => {
+                    setConsultantValue(0);
+                    setConsultantLabel("Select Consultant");
+                  }}
                   isDisabled={branchId ? true : false}
                 />
               </Col>

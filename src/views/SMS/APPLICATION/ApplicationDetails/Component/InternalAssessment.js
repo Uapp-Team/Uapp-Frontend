@@ -44,8 +44,8 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
       `ApplicationAssesment/UpdateInternalAssesmentStatus?id=${id}&statusid=${value}`
     ).then((res) => {
       setRelog(res);
+      setSuccess(!success);
     });
-    setSuccess(!success);
   };
   useEffect(() => {
     axios.get(`${etest}api/InterviewStatus`).then((res) => {
@@ -69,20 +69,20 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
       setViewId(res);
     });
   }, [applicationInfo]);
-  console.log(assessment);
-  console.log(viewId);
-  useEffect(() => {
-    axios
-      .get(`${etest}api/InterviweApi/Status/${applicationInfo.studentId}`)
-      .then((res) => {
-        const filterData = statusType.filter((status) => {
-          return status.id === res.data;
-        });
 
-        setStatusValue(filterData[0]?.id);
-        setStatusLabel(filterData[0]?.name);
+  useEffect(() => {
+    get(
+      `ApplicationInternalAssesmentRequirement/Get/${applicationInfo.id}`
+    ).then((res) => {
+      console.log(res);
+      const filterData = statusType.filter((status) => {
+        return status.id === res.interviewStatusId;
       });
-  }, [applicationInfo, statusType]);
+
+      setStatusValue(filterData[0]?.id);
+      setStatusLabel(filterData[0]?.name);
+    });
+  }, [applicationInfo, statusType, success]);
 
   useEffect(() => {
     get(`EtestPrepare/UserId`).then((res) => {
@@ -242,7 +242,11 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
                 <h5>Student has not completed internal assessment</h5>
                 {again && <p>Already sent email</p>}
                 <SaveButton
-                  text={`Send Invitation Email ${again ? `again` : ""}`}
+                  text={`${
+                    again
+                      ? `Send Invitation Email again`
+                      : "Sent Invitation Email "
+                  }`}
                   buttonStatus={buttonStatus}
                   progress={progress}
                   action={checkPlagiarism}
@@ -292,7 +296,7 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
         </div>
       )}
 
-      {applicationInfo.applicationStatusId !== 13 && (
+      {applicationInfo?.applicationSubStatusId !== 38 && (
         <>
           {permissions?.includes(
             permissionList.Update_Application_Assesment

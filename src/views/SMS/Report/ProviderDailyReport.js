@@ -231,7 +231,7 @@ const ProviderDailyReport = () => {
                       className="pvdadmin-span-style2"
                       style={{ color: "#AE75F8", cursor: "pointer" }}
                       // onClick={() => {
-                      //   history.push(`/applicationsByStatus/${2}/${2}`);
+                      //   history.push(`/applicationsByStatus/${9}/${0}`);
                       // }}
                     >
                       {count?.submittedToUniversity}
@@ -252,7 +252,7 @@ const ProviderDailyReport = () => {
                       className="pvdadmin-span-style2"
                       style={{ color: "#F7BD12", cursor: "pointer" }}
                       // onClick={() => {
-                      //   history.push(`/applicationsByStatus/${2}/${3}`);
+                      //   history.push(`/applicationsByStatus/${12}/${38}`);
                       // }}
                     >
                       {count?.totalRegistered}
@@ -290,7 +290,7 @@ const ProviderDailyReport = () => {
 
                     <span
                       // onClick={() => {
-                      //   history.push(`/applicationsByStatus/${4}/${3}`);
+                      //   history.push(`/applicationsByStatus/${12}/${41}`);
                       // }}
                       className="pvdadmin-span-style2"
                       style={{ color: "#707070", cursor: "pointer" }}

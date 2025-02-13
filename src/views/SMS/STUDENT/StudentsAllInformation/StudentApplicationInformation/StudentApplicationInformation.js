@@ -24,6 +24,7 @@ import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation
 import EuUkApplicationInformation from "./EuUkApplicationInformation";
 import HomeApplicationInformation from "./HomeApplicationInformation";
 import InternationalApplicationInformation from "./InternationalApplicationInformation";
+import PopOverText from "../../../../../components/PopOverText";
 
 const StudentApplicationInformation = () => {
   const history = useHistory();
@@ -593,7 +594,7 @@ const StudentApplicationInformation = () => {
     }
   };
 
-  console.log(FileList, "fileList");
+  const [popoverOpen, setPopoverOpen] = useState("");
   const selectCountry = (label, value) => {
     setCountryLabel(label);
     setCountryValue(value);
@@ -686,18 +687,81 @@ const StudentApplicationInformation = () => {
                             Type
                           </span>
 
-                          <Select
-                            options={studentTypeName}
-                            value={{
-                              label: studentTypeLabel,
-                              value: studentTypeValue,
-                            }}
-                            onChange={(opt) =>
-                              selectStudentType(opt.label, opt.value)
-                            }
-                            name="studentTypeId"
-                            id="studentTypeId"
-                          />
+                          <div className="d-flex">
+                            <div className="w-100">
+                              <Select
+                                options={studentTypeName}
+                                value={{
+                                  label: studentTypeLabel,
+                                  value: studentTypeValue,
+                                }}
+                                onChange={(opt) =>
+                                  selectStudentType(opt.label, opt.value)
+                                }
+                                name="studentTypeId"
+                                id="studentTypeId"
+                              />
+                            </div>
+                            {/* <PopOverText
+                              value={`<div>Home student is someone eligible for lower
+                              tuition fees based on residency and immigration
+                              status. To qualify, an individual must typically
+                              have lived in the UK for at least three years
+                              before the course start date and hold a relevant
+                              immigration status, such as British citizenship
+                              or settled status.
+                              <br />
+                              EU/EEA students in the UK may pay the same
+                              tuition fees as home students if they have
+                              pre-settled or settled status under the EU
+                              Settlement Scheme. Without this status, they are
+                              usually classified as international students.
+                              <br />
+                              International students in the UK are those who
+                              apply from outside from UK or inside from UK
+                              based on immigration status. They usually pay
+                              higher tuition fees and cannot get government
+                              student loans. To study in the UK, they also
+                              need a student visa.</div>`}
+                              btn={<i className="far fa-envelope"></i>}
+                              popoverOpen={popoverOpen}
+                              setPopoverOpen={setPopoverOpen}
+                            /> */}
+
+                            <b
+                              className="p-2 border rounded ml-2 pointer relative"
+                              title={`Home student is someone eligible for lower tuition fees based on residency and immigration status. To qualify, an individual must typically have lived in the UK for at least three years before the course start date and hold a relevant immigration status, such as British citizenship or settled status.
+                         
+EU/EEA students in the UK may pay the same tuition fees as home students if they have pre-settled or settled status under the EU Settlement Scheme. Without this status, they are usually classified as international students.
+                          
+International students in the UK are those who apply from outside from UK or inside from UK based on immigration status. They usually pay higher tuition fees and cannot get government student loans. To study in the UK, they also need a student visa.`}
+                            >
+                              ?
+                            </b>
+                            {/* <div className="help-data p-3 border rounded ml-2">
+                                Home student is someone eligible for lower
+                                tuition fees based on residency and immigration
+                                status. To qualify, an individual must typically
+                                have lived in the UK for at least three years
+                                before the course start date and hold a relevant
+                                immigration status, such as British citizenship
+                                or settled status.
+                                <br />
+                                EU/EEA students in the UK may pay the same
+                                tuition fees as home students if they have
+                                pre-settled or settled status under the EU
+                                Settlement Scheme. Without this status, they are
+                                usually classified as international students.
+                                <br />
+                                International students in the UK are those who
+                                apply from outside from UK or inside from UK
+                                based on immigration status. They usually pay
+                                higher tuition fees and cannot get government
+                                student loans. To study in the UK, they also
+                                need a student visa.
+                              </div> */}
+                          </div>
+
                           {studentTypeError && (
                             <span className="text-danger">
                               Application Type is Required

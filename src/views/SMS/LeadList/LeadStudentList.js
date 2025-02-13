@@ -38,6 +38,8 @@ const LeadStudentList = () => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [studentTypeList, setStudentTypeList] = useState([]);
   const [studentData, setStudentData] = useState([]);
+  const [companionLabel, setCompanionLabel] = useState("Select Companion");
+  const [companionValue, setCompanionValue] = useState(0);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState(
     student?.branchLabel ? student?.branchLabel : "Select Branch"
@@ -208,7 +210,7 @@ const LeadStudentList = () => {
       : get(
           `Student/GetLeadPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
             userTypeId === userTypes?.Consultant ? referenceId : consultantValue
-          }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+          }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&companionId=${companionValue}`
         ).then((res) => {
           setStudentData(res?.models);
           setEntity(res?.totalEntity);
@@ -236,6 +238,7 @@ const LeadStudentList = () => {
     orderValue,
     branchValue,
     check,
+    companionValue,
   ]);
 
   // api ends here
@@ -598,6 +601,10 @@ const LeadStudentList = () => {
             setStatusLabel={setStatusLabel}
             setConsultantValue={setConsultantValue}
             setConsultantLabel={setConsultantLabel}
+            setCompanionValue={setCompanionValue}
+            companionValue={companionValue}
+            setCompanionLabel={setCompanionLabel}
+            companionLabel={companionLabel}
           />
 
           {/*SearchAndClear ends here */}

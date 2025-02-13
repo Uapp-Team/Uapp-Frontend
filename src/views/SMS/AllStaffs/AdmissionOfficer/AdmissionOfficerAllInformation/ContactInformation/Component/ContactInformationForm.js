@@ -139,7 +139,7 @@ const ContactInformationForm = ({
           <Input
             type="text"
             id="address"
-            placeholder="Enter house no."
+            placeholder="Enter Address"
             onChange={(e) => {
               handleHouse(e);
             }}

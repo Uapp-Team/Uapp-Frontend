@@ -28,12 +28,14 @@ import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
 import { Link } from "react-router-dom";
 import ColumnApplicationProvider from "../../../TableColumn/ColumnApplicationProvider.js";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal.js";
+import DateRange from "../../../../../components/form/DateRange.js";
 
 const ProviderApplication = ({ currentUser }) => {
   const history = useHistory();
   const { addToast } = useToasts();
   const location = useLocation();
   const componentRef = useRef();
+  const parameters = history?.location?.state?.state;
   const { admId, consultantId, universityId, status, selector, intake } =
     useParams();
 
@@ -56,10 +58,13 @@ const ProviderApplication = ({ currentUser }) => {
   const [orderValue, setOrderValue] = useState(
     application?.orderValue ? application?.orderValue : 0
   );
+  const [consultantTypeDD, setConsultantTypeDD] = useState([]);
+  const [confidenceLevelDD, setConfidenceLevelDD] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
   const [applicationDD, setApplicationDD] = useState([]);
+  const [applicationSubDD, setApplicationSubDD] = useState([]);
   const [offerDD, setOfferDD] = useState([]);
   const [enrollDD, setEnrollDD] = useState([]);
   const [intakeDD, setIntakeDD] = useState([]);
@@ -90,7 +95,7 @@ const ProviderApplication = ({ currentUser }) => {
     application?.consultantLabel ? application?.consultantLabel : "Consultant"
   );
   const [consultantValue, setConsultantValue] = useState(
-    consultantId
+    consultantId > 0
       ? consultantId
       : application?.consultantValue
       ? application?.consultantValue
@@ -104,7 +109,11 @@ const ProviderApplication = ({ currentUser }) => {
       : "University Name"
   );
   const [commonUniValue, setCommonUniValue] = useState(
-    application?.commonUniValue ? application?.commonUniValue : 0
+    universityId
+      ? universityId
+      : application?.commonUniValue
+      ? application?.commonUniValue
+      : 0
   );
 
   const [providerPhoneDD, setProviderPhoneDD] = useState([]);
@@ -116,12 +125,38 @@ const ProviderApplication = ({ currentUser }) => {
     application?.applicationLabel ? application?.applicationLabel : "Status"
   );
   const [applicationValue, setApplicationValue] = useState(
-    selector === "1"
+    status > 0
       ? status
       : application?.applicationValue
       ? application?.applicationValue
       : 0
   );
+  const [applicationSubLabel, setApplicationSubLabel] = useState(
+    application?.applicationSubLabel
+      ? application?.applicationSubLabel
+      : "Sub Status"
+  );
+  const [applicationSubValue, setApplicationSubValue] = useState(
+    selector > 0
+      ? selector
+      : application?.applicationSubValue
+      ? application?.applicationSubValue
+      : 0
+  );
+
+  const [consultantTypeLabel, setConsultantTypeLabel] = useState(
+    application?.consultantTypeLabel
+      ? application?.consultantTypeLabel
+      : "Consultant Type"
+  );
+  const [consultantTypeValue, setConsultantTypeValue] = useState(
+    parameters?.consultantTypeId
+      ? parameters?.consultantTypeId
+      : application?.consultantTypeValue
+      ? application?.consultantTypeValue
+      : 0
+  );
+
   const [offerLabel, setOfferLabel] = useState(
     application?.offerLabel ? application?.offerLabel : "Offer"
   );
@@ -146,7 +181,11 @@ const ProviderApplication = ({ currentUser }) => {
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
   const [intakeValue, setIntakeValue] = useState(
-    application?.intakeValue ? application?.intakeValue : 0
+    parameters?.intakeId
+      ? parameters?.intakeId
+      : application?.intakeValue
+      ? application?.intakeValue
+      : 0
   );
   const [intakeRngLabel, setIntakeRngLabel] = useState(
     application?.intakeRngLabel ? application?.intakeRngLabel : "Intake Range"
@@ -154,6 +193,8 @@ const ProviderApplication = ({ currentUser }) => {
   const [intakeRngValue, setIntakeRngValue] = useState(
     intake
       ? intake
+      : parameters?.intakeRangeId
+      ? parameters?.intakeRangeId
       : application?.intakeRngValue
       ? application?.intakeRngValue
       : 0
@@ -200,6 +241,27 @@ const ProviderApplication = ({ currentUser }) => {
       : 0
   );
 
+  const [confidenceLevel, setConfidenceLevel] = useState(
+    application?.confidenceLevel
+      ? application?.confidenceLevel
+      : "Confidence Level"
+  );
+  const [confidenceValue, setConfidenceValue] = useState(
+    parameters?.confidenceLevel?.toString()
+      ? parameters?.confidenceLevel?.toString()
+      : application?.confidenceValue
+      ? application?.confidenceValue
+      : ""
+  );
+
+  const [selectedDates, setSelectedDates] = useState(
+    parameters?.fromApplicationDate && parameters?.toApplicationDate
+      ? [parameters?.fromApplicationDate, parameters?.toApplicationDate]
+      : application?.selectedDates
+      ? application?.selectedDates
+      : []
+  );
+
   // state for  application list
   const [applicationList, setApplicationList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -237,17 +299,18 @@ const ProviderApplication = ({ currentUser }) => {
         commonUappIdValue: commonUappIdValue && commonUappIdValue,
         commonStdLabel: commonStdLabel && commonStdLabel,
         commonStdValue: commonStdValue && commonStdValue,
-        offerLabel: selector !== "2" && offerLabel && offerLabel,
-        offerValue: selector !== "2" && offerValue && offerValue,
-        // applicationId: applicationId && applicationId,
+        consultantTypeLabel: consultantTypeLabel && consultantTypeLabel,
+        consultantTypeValue: consultantTypeValue && consultantTypeValue,
         consultantLabel: consultantLabel && consultantLabel,
         consultantValue: consultantValue && consultantValue,
-        applicationLabel:
-          selector !== "1" && applicationLabel && applicationLabel,
-        applicationValue:
-          selector !== "1" && applicationValue && applicationValue,
-        enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
-        enrollValue: selector !== "3" && enrollValue && enrollValue,
+        applicationLabel: status > 0 && applicationLabel && applicationLabel,
+        applicationValue: status > 0 && applicationValue && applicationValue,
+        applicationSubLabel:
+          selector > 0 && applicationSubLabel && applicationSubLabel,
+        applicationSubValue:
+          selector > 0 && applicationSubValue && applicationSubValue,
+        // enrollLabel: selector !== "3" && enrollLabel && enrollLabel,
+        // enrollValue: selector !== "3" && enrollValue && enrollValue,
         intakeLabel: intakeLabel && intakeLabel,
         intakeValue: intakeValue && intakeValue,
         intakeRngLabel: !intake && intakeRngLabel && intakeRngLabel,
@@ -273,6 +336,11 @@ const ProviderApplication = ({ currentUser }) => {
         orderValue: orderValue && orderValue,
         documentStatusLabel: documentStatusLabel && documentStatusLabel,
         documentStatusValue: documentStatusValue && documentStatusValue,
+        confidenceValue:
+          (confidenceValue?.toString() === "0" || confidenceValue > 0) &&
+          confidenceValue.toString(),
+        confidenceLevel: confidenceLevel && confidenceLevel,
+        selectedDates: selectedDates && selectedDates,
       })
     );
   }, [
@@ -311,6 +379,14 @@ const ProviderApplication = ({ currentUser }) => {
     admId,
     documentStatusLabel,
     documentStatusValue,
+    consultantTypeLabel,
+    consultantTypeValue,
+    status,
+    applicationSubLabel,
+    applicationSubValue,
+    confidenceValue,
+    confidenceLevel,
+    selectedDates,
   ]);
 
   // for all dropdown
@@ -374,6 +450,8 @@ const ProviderApplication = ({ currentUser }) => {
   const selectAppliDD = (label, value) => {
     setApplicationLabel(label);
     setApplicationValue(value);
+    setApplicationSubLabel("Sub Status");
+    setApplicationSubValue(0);
   };
   const selectOfferDD = (label, value) => {
     setOfferLabel(label);
@@ -433,12 +511,10 @@ const ProviderApplication = ({ currentUser }) => {
 
   // handle clear all search function
   const handleClearSearch = () => {
-    selector !== "1" && setApplicationLabel("Status");
-    selector !== "1" && setApplicationValue(0);
-    selector !== "2" && setOfferLabel("Offer");
-    selector !== "2" && setOfferValue(0);
-    selector !== "3" && setEnrollLabel("Enrolment Status");
-    selector !== "3" && setEnrollValue(0);
+    !status && setApplicationLabel("Status");
+    !status && setApplicationValue(0);
+    !selector && setApplicationSubLabel("Sub Status");
+    !selector && setApplicationSubValue(0);
     !intake && setIntakeRngLabel("Intake Range");
     !intake && setIntakeRngValue(0);
     setIntakeLabel("Intake");
@@ -453,6 +529,8 @@ const ProviderApplication = ({ currentUser }) => {
     setCommonUappIdValue(0);
     setCommonStdLabel("Name");
     setCommonStdValue(0);
+    setConsultantTypeLabel("Consultant Type");
+    setConsultantTypeValue(0);
     setConsultantLabel("Consultant");
     setConsultantValue(0);
     setCommonUniLabel("University Name");
@@ -464,6 +542,9 @@ const ProviderApplication = ({ currentUser }) => {
     !admId && setAdmissionManagerValue(0);
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
+    setConfidenceLevel("Confidence Level");
+    setConfidenceValue("");
+    setSelectedDates([]);
   };
 
   // user select order
@@ -498,6 +579,44 @@ const ProviderApplication = ({ currentUser }) => {
   };
 
   // Filter Dropdown data API calling
+
+  useEffect(() => {
+    get(`ConsultantTypeDD/Index`).then((res) => {
+      setConsultantTypeDD(res);
+      if (parameters?.consultantTypeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.consultantTypeId;
+        });
+        setConsultantTypeLabel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
+    get(`ApplicationConfidence/SelectList`).then((res) => {
+      setConfidenceLevelDD(res);
+      if (
+        parameters?.confidenceLevel?.toString() === "0" ||
+        parameters?.confidenceLevel > 0
+      ) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.confidenceLevel;
+        });
+        setConfidenceLevel(filterData[0]?.name);
+      }
+    });
+  }, [parameters]);
+
+  useEffect(() => {
+    get(`ApplicationSubStatus/GetAll/${applicationValue}`).then((res) => {
+      setApplicationSubDD(res);
+      if (selector) {
+        const result = res?.filter((ans) => ans?.id.toString() === selector);
+        setApplicationSubLabel(result[0]?.name);
+      }
+    });
+  }, [applicationValue, selector]);
+
   useEffect(() => {
     get("ApplicationStatusDD/Index").then((res) => {
       setApplicationDD(res);
@@ -540,6 +659,12 @@ const ProviderApplication = ({ currentUser }) => {
 
     get("IntakeDD/Index").then((res) => {
       setIntakeDD(res);
+      if (parameters?.intakeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeId;
+        });
+        setIntakeLabel(filterData[0]?.name);
+      }
     });
 
     get("InterviewStatusDD/Index").then((res) => {
@@ -588,48 +713,42 @@ const ProviderApplication = ({ currentUser }) => {
           return status.id.toString() === intake;
         });
         setIntakeRngLabel(filterData[0]?.name);
+      } else if (parameters?.intakeRangeId) {
+        const filterData = res.filter((status) => {
+          return status.id === parameters?.intakeRangeId;
+        });
+        setIntakeRngLabel(filterData[0]?.name);
       }
     });
-  }, [admId, consultantId, intake, selector, status, universityId, userId]);
+  }, [
+    admId,
+    consultantId,
+    intake,
+    parameters,
+    selector,
+    status,
+    universityId,
+    userId,
+  ]);
 
   // Api calling for Application List
   useEffect(() => {
     if (currentUser !== undefined) {
-      if (consultantId !== undefined) {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantId}universityId=${commonUniValue}&uappPhoneId=${providerPhoneValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
-          setCurrentPage(1);
-          setConsultantLabel(res.models[0]?.consultantName);
-          setConsultantValue(consultantId);
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      } else if (universityId !== undefined) {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${universityId}&uappPhoneId=${providerPhoneValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
-          setCurrentPage(1);
-          setCommonUniLabel(res.models[0]?.universityName);
-          setCommonUniValue(universityId);
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-        });
-      } else {
-        get(
-          `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&uappPhoneId=${providerPhoneValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`
-        ).then((res) => {
-          setLoading(false);
-          setApplicationList(res?.models);
-          setEntity(res?.totalEntity);
-          // setSerialNumber(res?.firstSerialNumber);
-          setCurrentPage(1);
-        });
-      }
+      get(
+        `Application/GetPaginated?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&uappPhoneId=${providerPhoneValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+          selectedDates[0] ? selectedDates[0] : ""
+        }&toApplicationDate=${
+          selectedDates[1] ? selectedDates[1] : ""
+        }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+          confidenceValue ? confidenceValue : ""
+        }`
+      ).then((res) => {
+        setLoading(false);
+        setApplicationList(res?.models);
+        setEntity(res?.totalEntity);
+        // setSerialNumber(res?.firstSerialNumber);
+        setCurrentPage(1);
+      });
     }
   }, [
     applicationValue,
@@ -652,6 +771,10 @@ const ProviderApplication = ({ currentUser }) => {
     providerPhoneValue,
     universityId,
     documentStatusValue,
+    consultantTypeValue,
+    selectedDates,
+    applicationSubValue,
+    confidenceValue,
   ]);
 
   // Delete Button Click Action
@@ -750,6 +873,31 @@ const ProviderApplication = ({ currentUser }) => {
 
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <Select
+                options={applicationMenu}
+                value={{ label: applicationLabel, value: applicationValue }}
+                onChange={(opt) => selectAppliDD(opt.label, opt.value)}
+                placeholder="Status"
+                name="name"
+                id="id"
+                isDisabled={status > 0 ? true : false}
+              />
+            </Col>
+
+            <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Filter
+                data={applicationSubDD}
+                label={applicationSubLabel}
+                setLabel={setApplicationSubLabel}
+                value={applicationSubValue}
+                setValue={setApplicationSubValue}
+                action={() => {}}
+                className="mr-2"
+                isDisabled={selector > 0 ? true : false}
+              />
+            </Col>
+
+            {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+              <Select
                 options={offerMenu}
                 value={{ label: offerLabel, value: offerValue }}
                 onChange={(opt) => selectOfferDD(opt.label, opt.value)}
@@ -758,7 +906,7 @@ const ProviderApplication = ({ currentUser }) => {
                 id="id"
                 isDisabled={selector === "2" ? true : false}
               />
-            </Col>
+            </Col> */}
 
             <Col lg="2" md="3" sm="6" xs="6" className="p-2">
               <div className="mt-2">
@@ -775,7 +923,17 @@ const ProviderApplication = ({ currentUser }) => {
           <Row className="gy-3">
             {isHide ? (
               <>
-                {" "}
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={consultantTypeDD}
+                    label={consultantTypeLabel}
+                    setLabel={setConsultantTypeLabel}
+                    value={consultantTypeValue}
+                    setValue={setConsultantTypeValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={providerConsMenu}
@@ -793,18 +951,7 @@ const ProviderApplication = ({ currentUser }) => {
                     isDisabled={consultantId !== undefined ? true : false}
                   />
                 </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
-                  <Select
-                    options={applicationMenu}
-                    value={{ label: applicationLabel, value: applicationValue }}
-                    onChange={(opt) => selectAppliDD(opt.label, opt.value)}
-                    placeholder="Status"
-                    name="name"
-                    id="id"
-                    isDisabled={selector === "1" ? true : false}
-                  />
-                </Col>
-                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                {/* <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={enrollMenu}
                     value={{ label: enrollLabel, value: enrollValue }}
@@ -814,7 +961,7 @@ const ProviderApplication = ({ currentUser }) => {
                     id="id"
                     isDisabled={selector === "3" ? true : false}
                   />
-                </Col>
+                </Col> */}
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Select
                     options={intakeMenu}
@@ -935,6 +1082,24 @@ const ProviderApplication = ({ currentUser }) => {
                     action={() => {}}
                   />
                 </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={confidenceLevelDD}
+                    label={confidenceLevel}
+                    setLabel={setConfidenceLevel}
+                    value={confidenceValue}
+                    setValue={setConfidenceValue}
+                    action={() => {}}
+                    className="mr-2"
+                    isDisabled={selector > 0 ? true : false}
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <DateRange
+                    selectedDates={selectedDates}
+                    setSelectedDates={setSelectedDates}
+                  />
+                </Col>
               </>
             ) : null}
           </Row>
@@ -959,6 +1124,7 @@ const ProviderApplication = ({ currentUser }) => {
             <Col lg="12" md="12" sm="12" xs="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <ConditionForText
+                  status={status}
                   selector={selector}
                   proValue={0}
                   // branchLabel={branchLabel}
@@ -1024,16 +1190,32 @@ const ProviderApplication = ({ currentUser }) => {
                   setdocumentStatusLabel={setdocumentStatusLabel}
                   documentStatusValue={documentStatusValue}
                   setdocumentStatusValue={setdocumentStatusValue}
+                  applicationSubValue={applicationSubValue}
+                  applicationSubLabel={applicationSubLabel}
+                  setApplicationSubLabel={setApplicationSubLabel}
+                  setApplicationSubValue={setApplicationSubValue}
+                  consultantTypeLabel={consultantTypeLabel}
+                  consultantTypeValue={consultantTypeValue}
+                  setConsultantTypeLabel={setConsultantTypeLabel}
+                  setConsultantTypeValue={setConsultantTypeValue}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  confidenceLevel={confidenceLevel}
+                  setConfidenceLevel={setConfidenceLevel}
+                  confidenceValue={confidenceValue}
+                  setConfidenceValue={setConfidenceValue}
                   affiliateValue={0}
                   companionValue={0}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
                   commonStdValue !== 0 ||
+                  consultantTypeValue !== 0 ||
                   consultantValue !== 0 ||
-                  applicationValue !== 0 ||
+                  (!status && applicationValue !== 0) ||
+                  (!selector && applicationSubValue !== 0) ||
                   offerValue !== 0 ||
-                  (selector !== "3" && enrollValue !== 0) ||
+                  // (selector !== "3" && enrollValue !== 0) ||
                   intakeValue !== 0 ||
                   (!intake && intakeRngValue !== 0) ||
                   interviewValue !== 0 ||
@@ -1041,7 +1223,9 @@ const ProviderApplication = ({ currentUser }) => {
                   financeValue !== 0 ||
                   commonUniValue !== 0 ||
                   documentStatusValue !== 0 ||
-                  (!admId && admissionManagerValue !== 0) ? (
+                  (!admId && admissionManagerValue !== 0) ||
+                  confidenceValue !== "" ||
+                  selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
                     </button>
@@ -1259,9 +1443,9 @@ const ProviderApplication = ({ currentUser }) => {
                                 Assessment
                               </th>
                             ) : null}
-                            {tableData[12]?.isActive ? (
+                            {/* {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
@@ -1270,11 +1454,11 @@ const ProviderApplication = ({ currentUser }) => {
                             {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {tableData[15]?.isActive ? (
+                            {/* {tableData[15]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Enrolment Status
                               </th>
-                            ) : null}
+                            ) : null} */}
                             {tableData[16]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
@@ -1394,7 +1578,8 @@ const ProviderApplication = ({ currentUser }) => {
 
                               {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationStatusName}
+                                  {app?.applicationStatusName} <br />
+                                  {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
@@ -1410,11 +1595,11 @@ const ProviderApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[12]?.isActive ? (
+                              {/* {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.offerStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
@@ -1428,11 +1613,11 @@ const ProviderApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {tableData[15]?.isActive ? (
+                              {/* {tableData[15]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.enrollmentStatusName}
                                 </td>
-                              ) : null}
+                              ) : null} */}
 
                               {tableData[16]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>

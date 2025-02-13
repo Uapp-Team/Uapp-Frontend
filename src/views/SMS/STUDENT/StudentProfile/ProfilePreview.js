@@ -20,6 +20,7 @@ import get from "../../../../helpers/get";
 import { Link } from "react-router-dom";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import { dateFormate } from "../../../../components/date/calenderFormate";
+import ContactNumber from "../../../../components/ui/ContactNumber";
 
 const ProfilePreview = ({
   sId,
@@ -1956,7 +1957,9 @@ const ProfilePreview = ({
                     </span>
 
                     <Table style={{ marginBottom: "2 rem" }}>
-                      <tbody>  <tr style={{ border: "1px solid #dee2e6" }}>
+                      <tbody>
+                        {" "}
+                        <tr style={{ border: "1px solid #dee2e6" }}>
                           <td
                             style={{
                               borderRight: "1px solid #dee2e6",
@@ -1983,7 +1986,6 @@ const ProfilePreview = ({
                             {ref?.referenceName}
                           </td>
                         </tr>
-
                         <tr style={{ border: "1px solid #dee2e6" }}>
                           <td
                             style={{
@@ -2008,8 +2010,7 @@ const ProfilePreview = ({
                           </td>
 
                           <td style={{ paddingLeft: "8px" }}>
-                            {ref?.phoneNumber && "+"}
-                            {ref?.phoneNumber}
+                            <ContactNumber data={ref?.phoneNumber} />
                           </td>
                         </tr>
                         <tr style={{ border: "1px solid #dee2e6" }}>

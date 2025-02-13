@@ -20,6 +20,8 @@ const ConsultantBankDetails = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const { companionId } = useParams();
   const [bankDetailsData, setBankDetailsData] = useState([]);
+  console.log(bankDetailsData);
+
   const [fetchedData, setFetchedData] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -96,6 +98,10 @@ const ConsultantBankDetails = () => {
   const handleSubmitUpdate = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
+
+    const isDefaultValue =
+      bankDetailsData?.length <= 1 ? isDefault === true : isDefault;
+    subData.append("isDefault", isDefaultValue);
 
     if (ValidateForm()) {
       setButtonStatus(true);
@@ -206,6 +212,9 @@ const ConsultantBankDetails = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
+    const isDefaultValue =
+      bankDetailsData?.length <= 1 ? isDefault === true : isDefault;
+    subData.append("isDefault", isDefaultValue);
 
     if (ValidateForm()) {
       setButtonStatus(true);

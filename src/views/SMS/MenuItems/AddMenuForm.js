@@ -284,7 +284,7 @@ const AddMenuForm = () => {
                   )}
                 </FormGroup>
 
-                {typeValue === "collapse" ? (
+                {typeValue === "item" ? (
                   <FormGroup>
                     <span>Parent Name</span>
 

@@ -1,25 +1,25 @@
 /* eslint-disable array-callback-return */
+import moment from "moment";
 import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
   Col,
-  Input,
-  Row,
   Form,
   FormGroup,
+  Input,
+  Row,
   Table,
 } from "reactstrap";
-import Select from "react-select";
-import { useToasts } from "react-toast-notifications";
-import moment from "moment";
-import get from "../../../../helpers/get";
-import post from "../../../../helpers/post";
+import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import { permissionList } from "../../../../constants/AuthorizationConstant";
-import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
+import get from "../../../../helpers/get";
+import post from "../../../../helpers/post";
 
 const ManageIntakes = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -48,10 +48,15 @@ const ManageIntakes = () => {
   const [dateError, setDateError] = useState(false);
   const [subjectIds, setSubjectIds] = useState([]);
   const [expandIds, setExpandIds] = useState([]);
+  const [agree, setAgree] = useState(false);
 
   const handleCollapsId = (i) => {
     const res = expandIds.filter((c) => c !== i);
     setExpandIds(res);
+  };
+
+  const handleAgree = (e) => {
+    setAgree(e.target.checked);
   };
 
   useEffect(() => {
@@ -570,17 +575,52 @@ const ManageIntakes = () => {
                         </div>
                       )}
 
+                      {checkSubIds.length > 0 && (
+                        <>
+                          <div className="text-danger my-2 ">
+                            <p style={{ fontSize: "12px" }}>
+                              Note: Assigning any intake to subjects will
+                              directly affect on the search and apply dataset.
+                              Make sure you have selected all the fields
+                              properly before proceeding to apply changes
+                            </p>
+                          </div>
+
+                          <div
+                            className="form-label-group position-relative has-icon-left"
+                            style={{
+                              paddingLeft: "20px",
+                              fontSize: "12px",
+                              fontWeight: 400,
+                            }}
+                          >
+                            <Input
+                              type="checkbox"
+                              name=""
+                              className="color"
+                              onChange={handleAgree}
+                            />
+                            <p style={{ color: " #7D8287" }}>
+                              I have checked all the parameters and accepting
+                              that the changes are liable by me.
+                            </p>
+                          </div>
+                        </>
+                      )}
+
                       <div className="d-flex justify-content-between mt-3">
                         <CancelButton text="Clear" cancel={handleClearSearch} />
                         {permissions?.includes(
                           permissionList.Edit_University
-                        ) && (
-                          <SaveButton
-                            text="Apply"
-                            progress={progress5}
-                            buttonStatus={buttonStatus}
-                          />
-                        )}
+                        ) &&
+                          checkSubIds.length > 0 &&
+                          agree && (
+                            <SaveButton
+                              text="Apply"
+                              progress={progress5}
+                              buttonStatus={buttonStatus}
+                            />
+                          )}
                       </div>
                     </FormGroup>
                   </Col>
