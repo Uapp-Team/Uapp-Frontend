@@ -44,8 +44,8 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
       `ApplicationAssesment/UpdateInternalAssesmentStatus?id=${id}&statusid=${value}`
     ).then((res) => {
       setRelog(res);
+      setSuccess(!success);
     });
-    setSuccess(!success);
   };
   useEffect(() => {
     axios.get(`${etest}api/InterviewStatus`).then((res) => {
@@ -69,20 +69,20 @@ const InternalAssessment = ({ applicationInfo, success, setSuccess }) => {
       setViewId(res);
     });
   }, [applicationInfo]);
-  console.log(assessment);
-  console.log(viewId);
-  useEffect(() => {
-    axios
-      .get(`${etest}api/InterviweApi/Status/${applicationInfo.studentId}`)
-      .then((res) => {
-        const filterData = statusType.filter((status) => {
-          return status.id === res.data;
-        });
 
-        setStatusValue(filterData[0]?.id);
-        setStatusLabel(filterData[0]?.name);
+  useEffect(() => {
+    get(
+      `ApplicationInternalAssesmentRequirement/Get/${applicationInfo.id}`
+    ).then((res) => {
+      console.log(res);
+      const filterData = statusType.filter((status) => {
+        return status.id === res.interviewStatusId;
       });
-  }, [applicationInfo, statusType]);
+
+      setStatusValue(filterData[0]?.id);
+      setStatusLabel(filterData[0]?.name);
+    });
+  }, [applicationInfo, statusType, success]);
 
   useEffect(() => {
     get(`EtestPrepare/UserId`).then((res) => {

@@ -10,6 +10,7 @@ import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
 import StatusCard from "./Components/StatusCard";
 import { qualityDesign } from "./DemoData";
+import { Consultant } from "../../../components/core/User";
 
 const QualityReport = () => {
   const qualityPipeline = JSON.parse(sessionStorage.getItem("qualityPipeline"));
@@ -35,7 +36,7 @@ const QualityReport = () => {
     qualityPipeline?.consultantValue || 0
   );
   const [consultantLabel, setConsultantLabel] = useState(
-    qualityPipeline?.consultantLabel || "Select Consultant"
+    qualityPipeline?.consultantLabel || "Consultant Type"
   );
   const [selectedDates, setSelectedDates] = useState(
     qualityPipeline?.selectedDates || []
@@ -173,16 +174,18 @@ const QualityReport = () => {
                   }}
                 />
 
-                <DefaultDropdown
-                  placeholder="Select Type"
-                  url="ConsultantTypeDD/Index"
-                  label={consultantLabel}
-                  setLabel={setConsultantLabel}
-                  value={consultantValue}
-                  setValue={setConsultantValue}
-                  action={() => {}}
-                  className="ml-2"
-                />
+                {!Consultant() && (
+                  <DefaultDropdown
+                    placeholder="Select Type"
+                    url="ConsultantTypeDD/Index"
+                    label={consultantLabel}
+                    setLabel={setConsultantLabel}
+                    value={consultantValue}
+                    setValue={setConsultantValue}
+                    action={() => {}}
+                    className="ml-2"
+                  />
+                )}
               </div>
             </Col>
           </Row>

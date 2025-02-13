@@ -603,7 +603,7 @@ const ConsultantApplication = ({ currentUser }) => {
         setApplicationSubLabel(result[0]?.name);
       }
     });
-  }, [applicationValue, parameters.applicationSubStatusId, selector]);
+  }, [applicationValue, parameters, selector]);
 
   // Api calling for Application List
   useEffect(() => {
