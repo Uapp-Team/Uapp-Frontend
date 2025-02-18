@@ -253,6 +253,8 @@ const Index = () => {
           history.push(
             `/admissionOfficerEligibilityInfo/${admissionOfficerId}`
           );
+        } else {
+          history.push(`/admissionOfficerList`);
         }
       });
     }
