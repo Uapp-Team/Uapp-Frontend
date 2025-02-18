@@ -2798,7 +2798,8 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/addUniversity/:univerId?"
                     component={
-                      permissions?.includes(permissionList?.Add_University)
+                      permissions?.includes(permissionList?.Add_University) ||
+                      permissions?.includes(permissionList.Edit_University)
                         ? AddUniversity
                         : NotAuthorized
                     }
@@ -2840,10 +2841,8 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/addUniversityTemplateDocument/:univerId"
                     component={
-                      permissions?.includes(
-                        permissionList?.Add_University ||
-                          permissionList?.Edit_University
-                      )
+                      permissions?.includes(permissionList?.Add_University) ||
+                      permissions?.includes(permissionList.Edit_University)
                         ? AddUniversityTemplateDocument
                         : NotAuthorized
                     }
