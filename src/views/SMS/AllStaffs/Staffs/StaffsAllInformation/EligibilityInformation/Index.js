@@ -364,7 +364,11 @@ const StaffEligibility = () => {
       isFormValid = false;
       setProofOfAddressError("Proof of Address file is required");
     }
-    if (FileList5 === null && brpAttachment === null) {
+    if (
+      uniCountryValue !== uniCountryValue2 &&
+      FileList5 === null &&
+      brpAttachment === null
+    ) {
       isFormValid = false;
       setProofOfRightError("File is required");
     }
