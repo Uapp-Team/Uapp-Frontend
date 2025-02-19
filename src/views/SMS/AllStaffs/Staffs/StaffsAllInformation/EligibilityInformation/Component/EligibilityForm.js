@@ -218,7 +218,7 @@ const EligibilityForm = ({
           <FormGroup row>
             <Col md="4">
               <span className="text-danger">* </span>
-              <span>Id/Passport</span>
+              <span>ID/Passport</span>
             </Col>
             <Col md="8">
               <UploadFile
