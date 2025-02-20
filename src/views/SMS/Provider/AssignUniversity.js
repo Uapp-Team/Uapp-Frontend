@@ -168,28 +168,43 @@ const AssignUniversity = () => {
 
           <Row className="mb-3">
             <Col lg="6" md="6" sm="12" xs="12">
-              {permissions?.includes(
-                permissionList.AdmissionManager_Assign_University
-              ) ? (
-                <div className="d-sm-flex">
-                  <ButtonForFunction
-                    func={() => setModalOpen(true)}
-                    className={"btn btn-uapp-add mr-2 "}
-                    icon={<i className="fas fa-plus"></i>}
-                    name={" Assign University"}
-                    permission={6}
-                  />
-                  {providerId === "1" && (
-                    <ButtonForFunction
-                      func={() => setProviderModalOpen(true)}
-                      className={"btn btn-uapp-add "}
-                      icon={<i className="fas fa-plus"></i>}
-                      name={" Assign Provider University"}
-                      permission={6}
-                    />
-                  )}
-                </div>
-              ) : null}
+              {data?.accountStatusId !== 1 && data?.accountStatusId !== 4 ? (
+                <>
+                  {" "}
+                  {permissions?.includes(
+                    permissionList.AdmissionManager_Assign_University
+                  ) ? (
+                    <div className="d-sm-flex">
+                      <ButtonForFunction
+                        func={() => setModalOpen(true)}
+                        className={"btn btn-uapp-add mr-2 "}
+                        icon={<i className="fas fa-plus"></i>}
+                        name={" Assign University"}
+                        permission={6}
+                      />
+                      {providerId === "1" && (
+                        <ButtonForFunction
+                          func={() => setProviderModalOpen(true)}
+                          className={"btn btn-uapp-add "}
+                          icon={<i className="fas fa-plus"></i>}
+                          name={" Assign Provider University"}
+                          permission={6}
+                        />
+                      )}
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <p className="section-title">
+                    Account Status : {data?.accountStatus}
+                  </p>
+                  <p style={{ color: "#fc7300", fontWeight: 500 }}>
+                    You need to activate your account before university assign
+                  </p>
+                </>
+              )}
             </Col>
 
             <Col lg="6" md="6" sm="12" xs="12">
