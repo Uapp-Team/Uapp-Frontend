@@ -1386,10 +1386,12 @@ const AddUniversity = (props) => {
                       <Col md="8">
                         <FormGroup className="text-right">
                           <CancelButton cancel={handleCancelAdd} />
-                          {permissions?.includes(
-                            permissionList.Add_University ||
+                          {(permissions?.includes(
+                            permissionList?.Add_University
+                          ) ||
+                            permissions?.includes(
                               permissionList.Edit_University
-                          ) && (
+                            )) && (
                             <SaveButton
                               text="Save and Next"
                               progress={progress}

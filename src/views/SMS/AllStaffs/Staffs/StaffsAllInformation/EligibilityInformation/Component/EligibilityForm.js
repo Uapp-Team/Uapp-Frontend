@@ -218,7 +218,7 @@ const EligibilityForm = ({
           <FormGroup row>
             <Col md="4">
               <span className="text-danger">* </span>
-              <span>Id/Passport</span>
+              <span>ID/Passport</span>
             </Col>
             <Col md="8">
               <UploadFile
@@ -253,24 +253,26 @@ const EligibilityForm = ({
               />
             </Col>
           </FormGroup>
-          <FormGroup row>
-            <Col md="4">
-              <span className="text-danger">* </span>
-              <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
-            </Col>
-            <Col md="8">
-              <UploadFile
-                // label="BRP / TRP / Settled / Pre-Settled / Share Code"
-                file={FileList5}
-                id="BRP"
-                setFile={setFileList5}
-                defaultValue={brpAttachment}
-                // setRemove={setAttachment}
-                error={proofOfRightError}
-                setError={setProofOfRightError}
-              />
-            </Col>
-          </FormGroup>
+          {uniCountryValue !== uniCountryValue2 && (
+            <FormGroup row>
+              <Col md="4">
+                <span className="text-danger">* </span>
+                <span>BRP / TRP / Settled / Pre-Settled / Share Code</span>
+              </Col>
+              <Col md="8">
+                <UploadFile
+                  // label="BRP / TRP / Settled / Pre-Settled / Share Code"
+                  file={FileList5}
+                  id="BRP"
+                  setFile={setFileList5}
+                  defaultValue={brpAttachment}
+                  // setRemove={setAttachment}
+                  error={proofOfRightError}
+                  setError={setProofOfRightError}
+                />
+              </Col>
+            </FormGroup>
+          )}
           <FormGroup row>
             <Col md="4">
               <span className="text-danger">* </span>
