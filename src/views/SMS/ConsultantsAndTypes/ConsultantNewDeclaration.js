@@ -74,9 +74,7 @@ const ConsultantNewDeclaration = () => {
               </CardBody>
             </Card>
           ) : (
-            <h1 className="text-center">
-              work in progress. <br /> Coming Soon...
-            </h1>
+            <h2 className="text-center">Consultant declaration is not found</h2>
           )}
         </>
       )}
