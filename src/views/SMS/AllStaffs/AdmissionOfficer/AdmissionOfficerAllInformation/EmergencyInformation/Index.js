@@ -254,7 +254,9 @@ const Index = () => {
             `/admissionOfficerEligibilityInfo/${admissionOfficerId}`
           );
         } else {
-          history.push(`/admissionOfficerList`);
+          userType === userTypes?.AdmissionOfficer
+            ? history.push(`/profile`)
+            : history.push(`/admissionOfficerList`);
         }
       });
     }
