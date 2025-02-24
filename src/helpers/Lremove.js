@@ -2,13 +2,12 @@ import Axios from "axios";
 import { leadApi } from "../constants/constants";
 import { expireDateHandler } from "./checkExpireDate";
 import history from "./history";
-const AuthStr = localStorage.getItem("token");
 async function Lremove(url, body = {}, authToken = "") {
   try {
-    expireDateHandler();
+    const token = await expireDateHandler();
     const res = await Axios.delete(`${leadApi}${url}`, body, {
       headers: {
-        authorization: AuthStr,
+        authorization: token,
       },
     });
     return await res;
