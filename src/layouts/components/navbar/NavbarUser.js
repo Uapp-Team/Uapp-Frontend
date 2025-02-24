@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import {
-  UncontrolledDropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  Badge,
-} from "reactstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
-import { history } from "../../../history";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { Link } from "react-router-dom";
+import {
+  Badge,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from "reactstrap";
+import user from "../../../assets/img/Uapp_fav.png";
+import { BranchManager, Consultant } from "../../../components/core/User";
 import { rootUrl } from "../../../constants/constants";
 import { userTypes } from "../../../constants/userTypeConstant";
-import { HubConnectionBuilder } from "@microsoft/signalr";
-import { Link } from "react-router-dom";
 import get from "../../../helpers/get";
-import user from "../../../assets/img/Uapp_fav.png";
 import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
-import { BranchManager, Consultant } from "../../../components/core/User";
+import { history } from "../../../history";
 
 const NavbarUser = () => {
   // const [navbarSearch, setnavbarSearch] = useState(false);
@@ -39,7 +39,6 @@ const NavbarUser = () => {
   useEffect(() => {
     (Consultant() || BranchManager()) &&
       get(`consultant/is-switchable/${userInfo?.referenceId}`).then((res) => {
-        console.log(res);
         setData(res);
       });
   }, [userInfo]);
@@ -264,7 +263,6 @@ const NavbarUser = () => {
 
   const redirect = (data) => {
     notificationByIdFunction(data?.id);
-    console.log(data?.targetUrl);
     history.push(`${data?.targetUrl}`);
 
     let value = data?.id;
@@ -278,64 +276,32 @@ const NavbarUser = () => {
 
   useEffect(() => {
     if (userInfo?.userTypeId === userTypes?.Student) {
-      axios
-        .get(
-          `${rootUrl}Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`,
-          {
-            headers: {
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
+      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
+        (res) => {
           setcanSwitch(res?.data?.result);
-        });
+        }
+      );
     }
 
     if (userInfo?.userTypeId?.toString() === userTypes?.Consultant) {
-      axios
-        .get(
-          `${rootUrl}Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`,
-          {
-            headers: {
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
-          setcanSwitch(res?.data?.result);
-        });
+      get(
+        `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
+      ).then((res) => {
+        setcanSwitch(res?.data?.result);
+      });
     }
 
-    axios
-      .get(`${rootUrl}Notification/UserNotificationCount`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationCount(res?.data);
-      });
+    get(`Notification/UserNotificationCount`).then((res) => {
+      setnotificationCount(res?.data);
+    });
 
-    axios
-      .get(`${rootUrl}MessageNotification/Count`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setmessageCount(res?.data?.result);
-      });
+    get(`MessageNotification/Count`).then((res) => {
+      setmessageCount(res?.data?.result);
+    });
 
-    axios
-      .get(`${rootUrl}Notification/GetInitial`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationData(res?.data?.result);
-      });
+    get(`Notification/GetInitial`).then((res) => {
+      setnotificationData(res?.data?.result);
+    });
 
     if (
       userInfo?.userTypeId.toString() === userTypes?.Consultant ||
