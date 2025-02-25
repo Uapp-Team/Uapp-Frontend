@@ -22,11 +22,6 @@ let refreshCallbacks = [];
 // Store the promise for current refresh operation
 let refreshTokenPromise = null;
 
-// Function to add callbacks to the queue
-const addCallbackToQueue = (callback) => {
-  refreshCallbacks.push(callback);
-};
-
 // Function to process the callback queue with the new token
 const processCallbackQueue = (newToken) => {
   refreshCallbacks.forEach((callback) => callback(newToken));
