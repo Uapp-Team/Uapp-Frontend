@@ -58,47 +58,39 @@ const NavbarUser = () => {
     logoutStorageHandler();
   };
 
-  const convertAccount = (e, url) => {
-    axios
-      .get(`${rootUrl + url}`, {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      })
+  const convertAccount = async (e, url) => {
+    get(`${url}`)
       .then((response) => {
-        if (response?.status === 200) {
-          if (response?.data?.isSuccess === true) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("permissions");
+        if (response?.isSuccess === true) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("permissions");
 
-            localStorage.setItem("token", "Bearer " + response?.data?.message);
-            localStorage.setItem(
-              "permissions",
-              JSON.stringify(response?.data?.permissions)
-            );
-            const AuthStr = "Bearer " + response?.data?.message;
-            axios
-              .get(`${rootUrl}Account/GetCurrentUser`, {
-                headers: {
-                  authorization: AuthStr,
-                },
-              })
-              .then((res) => {
-                if (res?.status === 200) {
-                  if (res?.data?.isActive === true) {
-                    localStorage.setItem(
-                      "current_user",
-                      JSON.stringify(res?.data)
-                    );
-                    localStorage.setItem("userType", res?.data?.userTypeId);
-                    localStorage.setItem("referenceId", res?.data?.referenceId);
-                    window.location.reload();
-                  }
+          localStorage.setItem("token", "Bearer " + response?.authToken);
+          localStorage.setItem(
+            "permissions",
+            JSON.stringify(response?.permissions)
+          );
+          const AuthStr = "Bearer " + response?.authToken;
+          axios
+            .get(`${rootUrl}Account/GetCurrentUser`, {
+              headers: {
+                authorization: AuthStr,
+              },
+            })
+            .then((res) => {
+              if (res?.status === 200) {
+                if (res?.data?.isActive === true) {
+                  localStorage.setItem(
+                    "current_user",
+                    JSON.stringify(res?.data)
+                  );
+                  localStorage.setItem("userType", res?.data?.userTypeId);
+                  localStorage.setItem("referenceId", res?.data?.referenceId);
+                  window.location.reload();
                 }
-              });
-
-            history.push("/");
-          }
+              }
+            });
+          history.push("/");
         }
       })
       .catch();
