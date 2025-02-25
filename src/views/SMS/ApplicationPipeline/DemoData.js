@@ -31,6 +31,10 @@ export const pipelineDesign = [
     bgColor: "#D6E9F5",
     activeBgColor: "#005A9C",
   },
+  {
+    bgColor: "#f2efed",
+    activeBgColor: "#afafaf",
+  },
 ];
 
 export const applicationStatus = [

@@ -209,8 +209,8 @@ const AdmissionsPipeline = () => {
                         applications={card?.applicationCount}
                         students={card?.studentCount}
                         width="154px"
-                        bgColor={pipelineDesign[index].bgColor}
-                        activeBgColor={pipelineDesign[index].activeBgColor}
+                        bgColor={pipelineDesign[index]?.bgColor}
+                        activeBgColor={pipelineDesign[index]?.activeBgColor}
                         isActive={selectedCardIndex === index ? true : false}
                         onClick={() => setSelectedCardIndex(index)}
                       />
