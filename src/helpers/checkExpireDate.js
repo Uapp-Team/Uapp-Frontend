@@ -35,7 +35,7 @@ export const expireDateHandler = async () => {
   // If no tokens exist, redirect to login
   if (!authToken || !refreshToken) {
     logoutStorageHandler();
-    window.location.href = "/sessionTimeOut";
+    window.location.href = "/";
     return false;
   }
 
