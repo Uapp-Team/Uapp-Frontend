@@ -11,12 +11,19 @@ import PipelineCard from "./Components/PipelineCard";
 import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
 import { Consultant } from "../../../components/core/User";
+import { useLocation } from "react-router-dom";
 
 const AdmissionsPipeline = () => {
+  const location = useLocation();
+  const selectedCategory = location.state?.selectedCategory || null;
+  console.log(selectedCategory, "selected category");
+
   const applicationPipeline = JSON.parse(
     sessionStorage.getItem("applicationPipeline")
   );
   const [funnelData, setFunnelData] = useState([]);
+  console.log(funnelData, "funnel data");
+
   const [selectedCardIndex, setSelectedCardIndex] = useState(
     applicationPipeline?.selectedCardIndex !== null
       ? applicationPipeline?.selectedCardIndex
@@ -43,6 +50,17 @@ const AdmissionsPipeline = () => {
   const [selectedDates, setSelectedDates] = useState(
     applicationPipeline?.selectedDates || []
   );
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const index = funnelData.findIndex(
+        (card) => card.title === selectedCategory
+      );
+      if (index !== -1) {
+        setSelectedCardIndex(index);
+      }
+    }
+  }, [selectedCategory, funnelData]);
 
   useEffect(() => {
     sessionStorage.setItem(

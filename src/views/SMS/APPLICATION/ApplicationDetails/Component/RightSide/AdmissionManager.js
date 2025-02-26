@@ -27,6 +27,7 @@ const AdmissionManager = ({
   setSuccess,
   success,
 }) => {
+  console.log(managerId, "managerId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");

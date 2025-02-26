@@ -33,7 +33,6 @@ import StudentNavigation from "../StudentNavigationAndRegister/StudentNavigation
 
 const PersonalInformation = () => {
   const { applicationStudentId } = useParams();
-  console.log(applicationStudentId, "sakib");
 
   const userId = localStorage.getItem("referenceId");
   const history = useHistory();

@@ -10,12 +10,13 @@ import Uget from "../../helpers/Uget";
 import Filter from "../Dropdown/Filter";
 import DefaultDropdown from "../Dropdown/DefaultDropdown";
 import DateRange from "../form/DateRange";
+import { useHistory } from "react-router-dom";
+
 const DashboardProgressChart = () => {
+  const history = useHistory();
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Select Intake");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
-  console.log(intakeRngValue);
-
   const [intake, setIntake] = useState(0);
   const [intakeLabel, setIntakeLabel] = useState("Select Intake");
   const [selectedDates, setSelectedDates] = useState([]);
@@ -45,21 +46,31 @@ const DashboardProgressChart = () => {
       }&toApplicationDate=${selectedDates[1] ? selectedDates[1] : ""}`
     ).then((res) => {
       const dataArray = [
-        res?.data?.totalApplication,
         res?.data?.preApplicationStage,
         res?.data?.uappCompilanceStage,
         res?.data?.universityProcessingStage,
         res?.data?.conditionalOfferStage,
         res?.data?.preOfferStageOrPost,
-        res?.data?.notSetYetStage,
-
+        res?.data?.uncoditionalOfferStage,
         res?.data?.preArrivalStageOrVisa,
-
         res?.data?.registrationStage,
+        res?.data?.notSetYetStage,
+        res?.data?.totalApplication,
       ];
       setChartData(dataArray);
     });
   }, [intakeRngValue, intake, selectedDates]);
+
+  const handleBarClick = (event, chartContext, config) => {
+    const clickedCategory =
+      config.w.config.xaxis.categories[config.dataPointIndex];
+    history.push({
+      pathname: `/AdmissionsPipeline/${clickedCategory
+        .replace(/\s+/g, "-")
+        .toLowerCase()}`,
+      state: { selectedCategory: clickedCategory },
+    });
+  };
 
   return (
     <div className="custom-card-border py-4 mb-30px">
@@ -116,6 +127,11 @@ const DashboardProgressChart = () => {
                 },
               ]}
               options={{
+                chart: {
+                  events: {
+                    dataPointSelection: handleBarClick,
+                  },
+                },
                 dataLabels: {
                   enabled: true,
                 },
@@ -128,16 +144,16 @@ const DashboardProgressChart = () => {
                 },
                 xaxis: {
                   categories: [
-                    "Total Application",
-                    "Pre-Application",
+                    "Pre-application",
                     "UAPP Compliance",
                     "University Processing",
                     "Conditional Offer",
-                    "Pre-Offer Stage ",
-                    "UnConditional Offer",
-                    "Pre-Arrival Stage",
+                    "Pre-Offer Stage/Post",
+                    "Unconditional Offer",
+                    "Pre arrival Stage/Visa",
                     "Registration",
                     "N/A",
+                    "Total Application",
                   ],
                 },
                 grid: {
@@ -154,7 +170,6 @@ const DashboardProgressChart = () => {
                   },
                 },
                 colors: [
-                  "#24A1CD",
                   "#E6C317",
                   "#FF7F11",
                   "#32A852",
@@ -164,6 +179,7 @@ const DashboardProgressChart = () => {
                   "#6C63FF",
                   "#005A9C",
                   "#A52A2A",
+                  "#24A1CD",
                 ],
               }}
             ></Chart>

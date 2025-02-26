@@ -18,6 +18,7 @@ import put from "../../../../../../helpers/put";
 import CancelButton from "../../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import Uget from "../../../../../../helpers/Uget";
 
 const AdmissionOfficer = ({
   applicationInfo,
@@ -26,7 +27,10 @@ const AdmissionOfficer = ({
   officerId,
   setSuccess,
   success,
+  managerId,
 }) => {
+  console.log(managerId, "managerId");
+
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");
@@ -39,8 +43,10 @@ const AdmissionOfficer = ({
 
   const handleChange1 = (uId) => {
     setModalOpen1(true);
-    get(`AdmissionOfficerDD/University/${uId}`).then((res) => {
-      setOfficerDD(res);
+    Uget(
+      `AdmissionOfficerDD/GetOfficers?universityId=${uId}&managerId=${managerId}`
+    ).then((res) => {
+      setOfficerDD(res?.data);
     });
   };
 
