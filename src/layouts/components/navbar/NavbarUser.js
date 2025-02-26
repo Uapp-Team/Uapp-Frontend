@@ -15,6 +15,7 @@ import user from "../../../assets/img/Uapp_fav.png";
 import { BranchManager, Consultant } from "../../../components/core/User";
 import { rootUrl } from "../../../constants/constants";
 import { userTypes } from "../../../constants/userTypeConstant";
+import { expireDateHandler } from "../../../helpers/checkExpireDate";
 import get from "../../../helpers/get";
 import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
 import { history } from "../../../history";
@@ -211,28 +212,16 @@ const NavbarUser = () => {
   };
 
   const countNotification = () => {
-    axios
-      .get(`${rootUrl}Notification/UserNotificationCount`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationCount(res?.data);
-        // setState({ notificationCount: res?.data });
-      });
+    get(`Notification/UserNotificationCount`).then((res) => {
+      setnotificationCount(res);
+      // setState({ notificationCount: res?.data });
+    });
   };
 
   const messageFunction = () => {};
 
   const countMessage = () => {
-    axios
-      .get(`${rootUrl}MessageNotification/Count`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {});
+    get(`MessageNotification/Count`).then((res) => {});
   };
 
   const allNotifications = () => {
@@ -270,7 +259,7 @@ const NavbarUser = () => {
     if (userInfo?.userTypeId === userTypes?.Student) {
       get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
         (res) => {
-          setcanSwitch(res?.data?.result);
+          setcanSwitch(res);
         }
       );
     }
@@ -279,20 +268,20 @@ const NavbarUser = () => {
       get(
         `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
       ).then((res) => {
-        setcanSwitch(res?.data?.result);
+        setcanSwitch(res);
       });
     }
 
     get(`Notification/UserNotificationCount`).then((res) => {
-      setnotificationCount(res?.data);
+      setnotificationCount(res);
     });
 
     get(`MessageNotification/Count`).then((res) => {
-      setmessageCount(res?.data?.result);
+      setmessageCount(res);
     });
 
     get(`Notification/GetInitial`).then((res) => {
-      setnotificationData(res?.data?.result);
+      setnotificationData(res);
     });
 
     if (
@@ -319,7 +308,12 @@ const NavbarUser = () => {
       userInfo?.userTypeId.toString() === userTypes?.Student
     ) {
       const messageConnection = new HubConnectionBuilder()
-        .withUrl(`${rootUrl}messageNotificationHub`)
+        .withUrl(`${rootUrl}messageNotificationHub`, {
+          accessTokenFactory: async () => {
+            const token = await expireDateHandler();
+            return token.slice(6);
+          },
+        })
         .withAutomaticReconnect()
         .build();
       if (messageConnection) {
@@ -342,7 +336,10 @@ const NavbarUser = () => {
 
     const newConnection = new HubConnectionBuilder()
       .withUrl(`${rootUrl}notification-hub`, {
-        accessTokenFactory: () => newToken,
+        accessTokenFactory: async () => {
+          const token = await expireDateHandler();
+          return token.slice(6);
+        },
       })
       // .withUrl(`${rootUrl}notification-hub`)
       .withAutomaticReconnect()
