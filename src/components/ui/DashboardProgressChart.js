@@ -170,15 +170,15 @@ const DashboardProgressChart = () => {
                   },
                 },
                 colors: [
+                  "#007ACC",
                   "#E6C317",
                   "#FF7F11",
                   "#32A852",
                   "#E63946",
-                  "#F87675",
-                  "#34495E",
+                  "#2CA02C",
                   "#6C63FF",
                   "#005A9C",
-                  "#A52A2A",
+                  "#afafaf",
                   "#24A1CD",
                 ],
               }}
