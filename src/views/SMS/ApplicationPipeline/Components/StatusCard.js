@@ -11,6 +11,7 @@ const StatusCard = ({
   bgColor = "#EDF2F2",
 }) => {
   const history = useHistory();
+  console.log(parameters, "parameters");
 
   const redirectRoute = (parameters) => {
     history.push(`/applications`, {

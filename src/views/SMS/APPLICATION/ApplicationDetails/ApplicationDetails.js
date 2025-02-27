@@ -131,6 +131,7 @@ const ApplicationDetails = () => {
   const isChatOpen = () => {
     setChatOpen(!chatOpen);
   };
+  console.log(managerId, "managerId");
 
   return (
     <>
@@ -337,6 +338,7 @@ const ApplicationDetails = () => {
                       applicationInfo={applicationInfo}
                       uniId={uniId}
                       id={id}
+                      managerId={managerId}
                       officerId={officerId}
                       setSuccess={setSuccess}
                       success={success}
@@ -358,6 +360,7 @@ const ApplicationDetails = () => {
                   uniId={uniId}
                   id={id}
                   officerId={officerId}
+                  managerId={managerId}
                   setSuccess={setSuccess}
                   success={success}
                 />
@@ -386,6 +389,7 @@ const ApplicationDetails = () => {
                     uniId={uniId}
                     id={id}
                     officerId={officerId}
+                    managerId={managerId}
                     setSuccess={setSuccess}
                     success={success}
                   />
