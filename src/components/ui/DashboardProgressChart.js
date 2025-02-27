@@ -17,7 +17,11 @@ const DashboardProgressChart = () => {
   const [intakeRngDD, setIntakeRngDD] = useState([]);
   const [intakeRngLabel, setIntakeRngLabel] = useState("Select Intake");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
+  console.log(intakeRngValue);
+
   const [intake, setIntake] = useState(0);
+  console.log(intake);
+
   const [intakeLabel, setIntakeLabel] = useState("Select Intake");
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -62,16 +66,29 @@ const DashboardProgressChart = () => {
   }, [intakeRngValue, intake, selectedDates]);
 
   const handleBarClick = (event, chartContext, config) => {
+    var value = getIntakeData();
+    console.log(value, "my value");
     const clickedCategory =
       config.w.config.xaxis.categories[config.dataPointIndex];
     history.push({
       pathname: `/AdmissionsPipeline/${clickedCategory
         .replace(/\s+/g, "-")
         .toLowerCase()}`,
-      state: { selectedCategory: clickedCategory },
+      state: {
+        selectedCategory: clickedCategory,
+        intakeRngValue,
+        intake,
+        selectedDates,
+        chartData,
+      },
     });
   };
 
+  function getIntakeData() {
+    console.log(intakeRngValue);
+
+    return intakeRngValue;
+  }
   return (
     <div className="custom-card-border py-4 mb-30px">
       <div className="d-flex flex-wrap justify-content-between px-4">

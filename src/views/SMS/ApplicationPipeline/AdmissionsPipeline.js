@@ -15,8 +15,19 @@ import { useLocation } from "react-router-dom";
 
 const AdmissionsPipeline = () => {
   const location = useLocation();
+  console.log(location);
+
   const selectedCategory = location.state?.selectedCategory || null;
-  console.log(selectedCategory, "selected category");
+  const intakeRangValue = location.state?.intakeRngValue || 0;
+  const intakeSingle = location.state?.intake || 0;
+  const selectedDatesReport = location.state?.selectedDates || [];
+  console.log(
+    selectedCategory,
+    intakeRangValue,
+    intakeSingle,
+    selectedDatesReport,
+    "selected category"
+  );
 
   const applicationPipeline = JSON.parse(
     sessionStorage.getItem("applicationPipeline")
