@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Card, CardHeader, CardBody } from "reactstrap";
-import get from "../../../helpers/get";
-import Select from "react-select";
 import Chart from "react-apexcharts";
-import camera444 from "../../../assets/img/camera444.svg";
+import { useHistory } from "react-router-dom";
+import Select from "react-select";
+import { Card, CardBody } from "reactstrap";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import TagButton from "../../../components/buttons/TagButton";
+import get from "../../../helpers/get";
 import Consultant from "./Consultant";
 
 const IntakeRangeReportForAdministrator = () => {
@@ -483,8 +482,6 @@ const IntakeRangeReportForAdministrator = () => {
     }
   }, [consultantValue, universityValue, accountIntakeValue, offerValue]);
 
-  console.log(estOption);
-
   const consultantOptions = consultant?.map((con) => ({
     label: con?.name,
     value: con?.id,
@@ -526,8 +523,6 @@ const IntakeRangeReportForAdministrator = () => {
     setOfferValue(value);
   };
 
-  console.log("options2", options2);
-  console.log("series2", series2);
   return (
     <div>
       <BreadCrumb title="Intake Range Report" backTo="" path="/" />

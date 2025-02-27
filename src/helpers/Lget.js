@@ -2,15 +2,13 @@ import Axios from "axios";
 import { leadApi } from "../constants/constants";
 import { expireDateHandler } from "./checkExpireDate";
 
-const AuthStr = localStorage.getItem("token");
-
 async function Lget(url) {
   try {
-    expireDateHandler();
+    const token = await expireDateHandler();
     const route = url.includes("http") ? url : `${leadApi}${url}`;
     const res = await Axios.get(route, {
       headers: {
-        authorization: AuthStr,
+        authorization: token,
       },
     });
     return await res?.data;
