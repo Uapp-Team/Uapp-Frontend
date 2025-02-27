@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { FormGroup, Form, Input, Button, Label } from "reactstrap";
-import { history } from "../../../history";
-import "../../../assets/scss/pages/authentication.scss";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useToasts } from "react-toast-notifications";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import "../../../assets/CoustomStyle/auth.css";
 import providerlogo from "../../../assets/img/providerlogo.svg";
-import AuthFooter from "./register/components/AuthFooter";
-import { useToasts } from "react-toast-notifications";
-import axios from "axios";
+import "../../../assets/scss/pages/authentication.scss";
 import { rootUrl } from "../../../constants/constants";
+import { history } from "../../../history";
+import AuthFooter from "./register/components/AuthFooter";
 
 const ForgotPassword = () => {
   const { addToast } = useToasts();
@@ -15,6 +15,14 @@ const ForgotPassword = () => {
   const [emailerror, setEmailError] = useState("");
   const [send, setSend] = useState(false);
   const [reSend, setReSend] = useState(false);
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    if (time > 0) {
+      const timer = setTimeout(() => setTime(time - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [time]);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -28,6 +36,19 @@ const ForgotPassword = () => {
     } else {
       setEmailError("");
     }
+  };
+
+  const handleSend = () => {
+    setSend(true);
+    setTime(30); // Start countdown
+    setReSend(false);
+    // Call your send email API here
+  };
+
+  const handleReSend = () => {
+    setReSend(true);
+    setTime(30); // Restart countdown
+    // Call your resend email API here
   };
 
   const handleReset = () => {
@@ -124,8 +145,10 @@ const ForgotPassword = () => {
                           color="primary"
                           type="submit"
                           className="px-75 btn-block"
+                          onClick={handleReSend}
+                          disabled={time > 0}
                         >
-                          Resend Email
+                          {time > 0 ? `Wait ${time} Sec` : "Resend Email"}
                         </Button>
                       ) : (
                         <>
@@ -134,11 +157,14 @@ const ForgotPassword = () => {
                               color="primary"
                               type="submit"
                               className="px-75 btn-block"
+                              onClick={handleSend}
                             >
                               Send Email
                             </Button>
                           ) : (
-                            <span>Wait 30 Sec</span>
+                            <span>
+                              {time > 0 ? `Wait ${time} Sec` : "Time's up!"}
+                            </span>
                           )}
                         </>
                       )}

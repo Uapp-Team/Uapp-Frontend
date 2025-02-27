@@ -1,18 +1,14 @@
 import React, { Suspense, lazy } from "react";
-import { Router, Switch, Route } from "react-router-dom";
-import { history } from "./history";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Spinner from "./components/core/spinner/Loading-spinner";
-import { ContextLayout } from "./utility/context/Layout";
+import { Redirect, Route, Router, Switch } from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
-import "./assets/CoustomStyle/style.css";
 import "./assets/CoustomStyle/pageView.css";
-import AdmissionGetData from "./views/Test/AdmissionGetData";
+import "./assets/CoustomStyle/style.css";
+import Spinner from "./components/core/spinner/Loading-spinner";
 import { permissionList } from "./constants/AuthorizationConstant";
-import { userTypes } from "./constants/userTypeConstant";
+import { history } from "./history";
+import { ContextLayout } from "./utility/context/Layout";
 import AssociateApplication from "./views/SMS/APPLICATION/Applications/Component/AssociateApplication.js";
-import Navigation from "./views/SMS/Affiliate/AffiliateInformations/NavigationAndRegistration/Navigation.js";
 // import CommissionSetting from "./views/SMS/Comission/CommisionSetting/CommissionSetting";
 
 // Authentication Checking
@@ -5297,7 +5293,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/pages/reset-password/:email"
+                    path="/pages/reset-password/:email/:token"
                     component={resetPassword}
                     fullLayout
                   />
@@ -5387,7 +5383,7 @@ class AppRouter extends React.Component {
                     fullLayout
                   />
                   <AppRoute
-                    path="/pages/reset-password/:email"
+                    path="/pages/reset-password/:email/:token"
                     component={resetPassword}
                     fullLayout
                   />
