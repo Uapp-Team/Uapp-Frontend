@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { FormGroup, Form, Input, Button } from "reactstrap";
-import { history } from "../../../history";
-import "../../../assets/scss/pages/authentication.scss";
-import "../../../assets/CoustomStyle/auth.css";
-import providerlogo from "../../../assets/img/providerlogo.svg";
-import AuthFooter from "./register/components/AuthFooter";
-import axios from "axios";
-import { rootUrl } from "../../../constants/constants";
 import { useToasts } from "react-toast-notifications";
+import { Button, Form, FormGroup, Input } from "reactstrap";
+import "../../../assets/CoustomStyle/auth.css";
 import logoLg from "../../../assets/img/Logo.svg";
+import providerlogo from "../../../assets/img/providerlogo.svg";
+import "../../../assets/scss/pages/authentication.scss";
+import { rootUrl } from "../../../constants/constants";
 import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
+import { history } from "../../../history";
+import AuthFooter from "./register/components/AuthFooter";
 
 const ResetPassword = () => {
-  const { email } = useParams();
+  const { email, token } = useParams();
   const { addToast } = useToasts();
   const current_user = JSON.parse(localStorage.getItem("current_user"));
 
-  const [token, setToken] = useState(false);
+  // const [token, setToken] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  useEffect(() => {
-    axios.get(`${rootUrl}Account/GetResetToken?email=${email}`).then((res) => {
-      setToken(res?.data?.result);
-      console.log(res?.data?.result);
-    });
-  }, [email]);
+  // useEffect(() => {
+  //   axios.get(`${rootUrl}Account/GetResetToken?email=${email}`).then((res) => {
+  //     setToken(res?.data?.result);
+  //     console.log(res?.data?.result);
+  //   });
+  // }, [email]);
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
@@ -91,7 +90,6 @@ const ResetPassword = () => {
       email: email,
       password: password,
     };
-    console.log("object", subData);
     const formIsValid = validateRegisterForm();
     if (formIsValid) {
       fetch(`${rootUrl}Account/ResetPassword`, {
@@ -103,7 +101,6 @@ const ResetPassword = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
           if (data?.result === true) {
             addToast(data?.message, {
               appearance: "success",
@@ -172,7 +169,12 @@ const ResetPassword = () => {
                 <img src={providerlogo} className="w-50" alt="" />
               </div>
               <div className="d-flex justify-content-center">
-                <div className="responsive-form my-5">
+                <div
+                  className="responsive-form my-5"
+                  style={{
+                    width: "380px",
+                  }}
+                >
                   <div className="register-header mb-5">
                     <h1> Reset Password </h1>
                     <p>

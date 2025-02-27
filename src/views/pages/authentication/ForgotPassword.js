@@ -18,11 +18,15 @@ const ForgotPassword = () => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
-    if (time > 0) {
-      const timer = setTimeout(() => setTime(time - 1), 1000);
-      return () => clearTimeout(timer);
+    let timer;
+    if (send && time > 0) {
+      timer = setTimeout(() => setTime((prev) => prev - 1), 1000);
+    } else if (time === 0 && send) {
+      setSend(false);
+      setReSend(true); // After 30 sec, show Resend button
     }
-  }, [time]);
+    return () => clearTimeout(timer);
+  }, [time, send]);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -32,40 +36,20 @@ const ForgotPassword = () => {
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
     ) {
-      setEmailError(" Email is not validate");
+      setEmailError("Email is not valid");
     } else {
       setEmailError("");
     }
   };
 
-  const handleSend = () => {
-    setSend(true);
-    setTime(30); // Start countdown
-    setReSend(false);
-    // Call your send email API here
-  };
-
-  const handleReSend = () => {
-    setReSend(true);
-    setTime(30); // Restart countdown
-    // Call your resend email API here
-  };
-
-  const handleReset = () => {
-    setTimeout(() => {
-      setReSend(true);
-    }, 30000);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (email === "") {
       setEmailError("Email is required");
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-      setEmailError("Email is not validate");
+      setEmailError("Email is not valid");
     } else {
-      if (send === false) {
+      if (!send) {
         axios
           .put(`${rootUrl}Account/ForgotPassword?email=${email}`)
           .then((res) => {
@@ -73,10 +57,13 @@ const ForgotPassword = () => {
               appearance: "success",
               autoDismiss: true,
             });
+            setSend(true);
+            setTime(30); // Start countdown from 30 sec
+          })
+          .catch((error) => {
+            console.error(error);
           });
-        setSend(true);
       } else {
-        setReSend(false);
         axios
           .put(`${rootUrl}Account/ResendForgotEmail?email=${email}`)
           .then((res) => {
@@ -84,17 +71,20 @@ const ForgotPassword = () => {
               appearance: "success",
               autoDismiss: true,
             });
+            setSend(true);
+            setTime(30); // Restart countdown from 30 sec
+          })
+          .catch((error) => {
+            console.error(error);
           });
       }
-
-      handleReset();
     }
   };
 
   return (
     <>
       <div className="auth-container">
-        <div className="left-illustration d-md-block d-lg-block d-none  ">
+        <div className="left-illustration d-md-block d-lg-block d-none">
           <div className="forgot-container">
             <img src={providerlogo} className="auth-logo-fixed" alt="uapp" />
           </div>
@@ -140,33 +130,24 @@ const ForgotPassword = () => {
                       </Button>
                     </div>
                     <div className="float-md-right d-block mb-1">
-                      {reSend === true ? (
+                      {reSend && time === 0 ? (
                         <Button
                           color="primary"
                           type="submit"
                           className="px-75 btn-block"
-                          onClick={handleReSend}
-                          disabled={time > 0}
                         >
-                          {time > 0 ? `Wait ${time} Sec` : "Resend Email"}
+                          Resend Email
                         </Button>
+                      ) : send && time > 0 ? (
+                        <span>Wait {time} sec</span>
                       ) : (
-                        <>
-                          {!send ? (
-                            <Button
-                              color="primary"
-                              type="submit"
-                              className="px-75 btn-block"
-                              onClick={handleSend}
-                            >
-                              Send Email
-                            </Button>
-                          ) : (
-                            <span>
-                              {time > 0 ? `Wait ${time} Sec` : "Time's up!"}
-                            </span>
-                          )}
-                        </>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          className="px-75 btn-block"
+                        >
+                          Send Email
+                        </Button>
                       )}
                     </div>
                   </Form>
