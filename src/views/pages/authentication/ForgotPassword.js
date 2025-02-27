@@ -36,20 +36,27 @@ const ForgotPassword = () => {
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
     ) {
-      setEmailError("Email is not valid");
+      setEmailError(" Email is not validate");
     } else {
       setEmailError("");
     }
   };
 
+  const handleReset = () => {
+    setTimeout(() => {
+      setReSend(true);
+    }, 30000);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (email === "") {
       setEmailError("Email is required");
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-      setEmailError("Email is not valid");
+      setEmailError("Email is not validate");
     } else {
-      if (!send) {
+      if (send === false) {
         axios
           .put(`${rootUrl}Account/ForgotPassword?email=${email}`)
           .then((res) => {
@@ -57,12 +64,9 @@ const ForgotPassword = () => {
               appearance: "success",
               autoDismiss: true,
             });
-            setSend(true);
-            setTime(30); // Start countdown from 30 sec
-          })
-          .catch((error) => {
-            console.error(error);
           });
+        setSend(true);
+        setTime(30);
       } else {
         axios
           .put(`${rootUrl}Account/ResendForgotEmail?email=${email}`)
@@ -72,19 +76,18 @@ const ForgotPassword = () => {
               autoDismiss: true,
             });
             setSend(true);
-            setTime(30); // Restart countdown from 30 sec
-          })
-          .catch((error) => {
-            console.error(error);
+            setTime(30);
           });
       }
+
+      handleReset();
     }
   };
 
   return (
     <>
       <div className="auth-container">
-        <div className="left-illustration d-md-block d-lg-block d-none">
+        <div className="left-illustration d-md-block d-lg-block d-none  ">
           <div className="forgot-container">
             <img src={providerlogo} className="auth-logo-fixed" alt="uapp" />
           </div>
@@ -130,7 +133,7 @@ const ForgotPassword = () => {
                       </Button>
                     </div>
                     <div className="float-md-right d-block mb-1">
-                      {reSend && time === 0 ? (
+                      {reSend ? (
                         <Button
                           color="primary"
                           type="submit"
@@ -138,7 +141,7 @@ const ForgotPassword = () => {
                         >
                           Resend Email
                         </Button>
-                      ) : send && time > 0 ? (
+                      ) : send ? (
                         <span>Wait {time} sec</span>
                       ) : (
                         <Button
