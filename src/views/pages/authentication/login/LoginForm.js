@@ -153,7 +153,7 @@ const LoginForm = () => {
                               localStorage.setItem("IsLead", res?.data?.result);
                               window.location.reload();
                             } else {
-                              seterror(res?.data?.message);
+                              seterror(res?.data?.authToken);
                             }
                           });
                       } else {
@@ -168,7 +168,7 @@ const LoginForm = () => {
 
               // history.push("/");
             } else {
-              seterror(response?.data?.message);
+              seterror(response?.data?.authToken);
             }
           }
         })
