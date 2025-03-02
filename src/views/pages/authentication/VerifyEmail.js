@@ -8,6 +8,7 @@ import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
 
 const VerifyEmail = () => {
   const { email } = useParams();
+  const { code } = useParams();
   const history = useHistory();
   const [verify, setVerify] = useState(false);
   const [loading, setLoading] = useState(true); // Add loading state for the timeout
@@ -17,7 +18,7 @@ const VerifyEmail = () => {
     if (!current_user) {
       // Simulate loading with setTimeout for 2 seconds
       setTimeout(() => {
-        Axios.put(`${rootUrl}Account/verify-email?email=${email}`)
+        Axios.put(`${rootUrl}Account/verify-email?email=${email}&code=${code}`)
           .then((res) => {
             setVerify(res);
           })
