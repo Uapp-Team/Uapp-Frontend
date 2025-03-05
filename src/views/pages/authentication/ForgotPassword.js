@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { FormGroup, Form, Input, Button, Label } from "reactstrap";
-import { history } from "../../../history";
-import "../../../assets/scss/pages/authentication.scss";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useToasts } from "react-toast-notifications";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import "../../../assets/CoustomStyle/auth.css";
 import providerlogo from "../../../assets/img/providerlogo.svg";
-import AuthFooter from "./register/components/AuthFooter";
-import { useToasts } from "react-toast-notifications";
-import axios from "axios";
+import "../../../assets/scss/pages/authentication.scss";
 import { rootUrl } from "../../../constants/constants";
+import { history } from "../../../history";
+import AuthFooter from "./register/components/AuthFooter";
 
 const ForgotPassword = () => {
   const { addToast } = useToasts();
@@ -15,6 +15,18 @@ const ForgotPassword = () => {
   const [emailerror, setEmailError] = useState("");
   const [send, setSend] = useState(false);
   const [reSend, setReSend] = useState(false);
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (send && time > 0) {
+      timer = setTimeout(() => setTime((prev) => prev - 1), 1000);
+    } else if (time === 0 && send) {
+      setSend(false);
+      setReSend(true); // After 30 sec, show Resend button
+    }
+    return () => clearTimeout(timer);
+  }, [time, send]);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -54,8 +66,8 @@ const ForgotPassword = () => {
             });
           });
         setSend(true);
+        setTime(30);
       } else {
-        setReSend(false);
         axios
           .put(`${rootUrl}Account/ResendForgotEmail?email=${email}`)
           .then((res) => {
@@ -63,6 +75,8 @@ const ForgotPassword = () => {
               appearance: "success",
               autoDismiss: true,
             });
+            setSend(true);
+            setTime(30);
           });
       }
 
@@ -119,7 +133,7 @@ const ForgotPassword = () => {
                       </Button>
                     </div>
                     <div className="float-md-right d-block mb-1">
-                      {reSend === true ? (
+                      {reSend ? (
                         <Button
                           color="primary"
                           type="submit"
@@ -127,20 +141,16 @@ const ForgotPassword = () => {
                         >
                           Resend Email
                         </Button>
+                      ) : send ? (
+                        <span>Wait {time} sec</span>
                       ) : (
-                        <>
-                          {!send ? (
-                            <Button
-                              color="primary"
-                              type="submit"
-                              className="px-75 btn-block"
-                            >
-                              Send Email
-                            </Button>
-                          ) : (
-                            <span>Wait 30 Sec</span>
-                          )}
-                        </>
+                        <Button
+                          color="primary"
+                          type="submit"
+                          className="px-75 btn-block"
+                        >
+                          Send Email
+                        </Button>
                       )}
                     </div>
                   </Form>

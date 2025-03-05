@@ -43,7 +43,7 @@ const DetailsInfoAdmissionOfficerProfile = ({ userId }) => {
       <Card>
         <CardBody>
           <p style={{ fontWeight: "600", fontSize: "16px" }}>
-            Admission Manager Details
+            Admission Officer Details
           </p>
 
           <GeneralInformation data={generalInfo} />

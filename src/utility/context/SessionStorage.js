@@ -27,6 +27,9 @@ const SessionStorage = () => {
   );
 
   const application = JSON.parse(sessionStorage.getItem("application"));
+  const AdmissionsPipeline = JSON.parse(
+    sessionStorage.getItem("applicationPipeline")
+  );
   const AdmissionManagerApplicationPaging = JSON.parse(
     sessionStorage.getItem("admissionManagerApplication")
   );
@@ -226,6 +229,11 @@ const SessionStorage = () => {
         !path.includes(`applications`)
       ) {
         sessionStorage.removeItem("application");
+      }
+    }
+    if (AdmissionsPipeline) {
+      if (!path.includes(`applications`)) {
+        sessionStorage.removeItem("applicationPipeline");
       }
     }
 

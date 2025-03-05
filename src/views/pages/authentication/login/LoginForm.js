@@ -1,16 +1,16 @@
+import {
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import { Spin } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FormGroup, Form, Input, InputGroup, InputGroupText } from "reactstrap";
-import { history } from "../../../../history";
-import axios from "axios";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Form, FormGroup, Input, InputGroup, InputGroupText } from "reactstrap";
+import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import { androidAppUrl, rootUrl } from "../../../../constants/constants";
 import SetStorage from "../../../SMS/TableColumn/SetStorage";
-import get from "../../../../helpers/get";
-import { userTypes } from "../../../../constants/userTypeConstant";
-import ConfirmModal from "../../../../components/modal/ConfirmModal";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -107,14 +107,18 @@ const LoginForm = () => {
               localStorage.removeItem("date");
               localStorage.setItem(
                 "token",
-                "Bearer " + response?.data?.message
+                "Bearer " + response?.data?.authToken
               );
               localStorage.setItem("date", response?.data?.expireDate);
+              localStorage.setItem(
+                "refreshToken",
+                response?.data?.refreshToken
+              );
               localStorage.setItem(
                 "permissions",
                 JSON.stringify(response?.data?.permissions)
               );
-              const AuthStr = "Bearer " + response?.data?.message;
+              const AuthStr = "Bearer " + response?.data?.authToken;
               axios
                 .get(`${rootUrl}Account/GetCurrentUser`, {
                   headers: {
@@ -149,7 +153,7 @@ const LoginForm = () => {
                               localStorage.setItem("IsLead", res?.data?.result);
                               window.location.reload();
                             } else {
-                              seterror(res?.data?.message);
+                              seterror(res?.data?.authToken);
                             }
                           });
                       } else {
@@ -164,7 +168,7 @@ const LoginForm = () => {
 
               // history.push("/");
             } else {
-              seterror(response?.data?.message);
+              seterror(response?.data?.authToken);
             }
           }
         })

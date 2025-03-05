@@ -1,17 +1,15 @@
 import axios from "axios";
 
-import history from "./history";
 import { leadApi } from "../constants/constants";
 import { expireDateHandler } from "./checkExpireDate";
-
-const AuthStr = localStorage.getItem("token");
+import history from "./history";
 
 async function Lpost(url, body = {}, authToken = "") {
   try {
-    expireDateHandler();
+    const token = await expireDateHandler();
     const res = await axios.post(`${leadApi}${url}`, body, {
       headers: {
-        authorization: AuthStr,
+        authorization: token,
       },
     });
     return await res;

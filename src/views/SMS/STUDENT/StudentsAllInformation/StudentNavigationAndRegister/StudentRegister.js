@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import post from "../../../../../helpers/post";
+import { useHistory, useParams } from "react-router-dom";
 import Select from "react-select";
-import get from "../../../../../helpers/get";
-import { userTypes } from "../../../../../constants/userTypeConstant";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
+import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import icon_info from "../../../../../assets/img/icons/icon_info.png";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
-import { useParams } from "react-router-dom";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import get from "../../../../../helpers/get";
+import post from "../../../../../helpers/post";
 
 const StudentRegister = () => {
   const history = useHistory();
@@ -375,8 +374,8 @@ const StudentRegister = () => {
 
                 <FormGroup>
                   <span>
-                    <span className="text-danger">*</span> Student Preferred
-                    Country{" "}
+                    <span className="text-danger">*</span> Preferred country of
+                    study{" "}
                   </span>
 
                   <Select

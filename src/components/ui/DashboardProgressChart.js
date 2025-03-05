@@ -6,145 +6,129 @@ import get from "../../helpers/get";
 import Chart from "react-apexcharts";
 import DMYPicker from "../form/DMYPicker";
 import { dateDMY } from "../date/DateFormate";
+import Uget from "../../helpers/Uget";
+import Filter from "../Dropdown/Filter";
+import DefaultDropdown from "../Dropdown/DefaultDropdown";
+import DateRange from "../form/DateRange";
+import { useHistory } from "react-router-dom";
+
 const DashboardProgressChart = () => {
+  const history = useHistory();
+  const [intakeRngDD, setIntakeRngDD] = useState([]);
+  const [intakeRngLabel, setIntakeRngLabel] = useState("Select Intake");
+  const [intakeRngValue, setIntakeRngValue] = useState(0);
+  console.log(intakeRngValue);
+
+  const [intake, setIntake] = useState(0);
+  console.log(intake);
+
+  const [intakeLabel, setIntakeLabel] = useState("Select Intake");
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  //////////////////////////////
   const [chartData, setChartData] = useState([]);
-  const [intake, setIntake] = useState();
-  const [intakeLabel, setIntakeLabel] = useState("Intake");
-  const [intakeValue, setIntakeValue] = useState(0);
-  const [month, setMonth] = useState();
-  const [monthLabel, setMonthLabel] = useState("Month");
-  const [monthValue, setMonthValue] = useState(0);
-  const [yearLable, setYearLable] = useState("Year");
-  const [yearValue, setYearValue] = useState(0);
-  const [date, setDate] = useState(null);
-  console.log(date, "data");
 
   useEffect(() => {
-    get(`AccountIntakeDD/index`).then((res) => {
-      setIntake(res);
-    });
-    get(`Month/Getall`).then((res) => {
-      setMonth(res);
+    get("AccountIntakeDD/index").then((res) => {
+      setIntakeRngDD(res);
     });
 
-    get("AccountIntake/GetCurrentAccountIntake").then((res) => {
-      setIntakeLabel(res?.intakeName);
-      setIntakeValue(res?.id);
+    get(`AccountIntake/GetCurrentAccountIntake`).then((res) => {
+      // if (!intakeRngLabel) {
+      //   setIntakeRngValue(res?.id);
+      //   setIntakeRngLabel(res?.intakeName);
+      // }
+      setIntakeRngValue(res?.id);
+      setIntakeRngLabel(res?.intakeName);
     });
   }, []);
 
   useEffect(() => {
-    get(
-      `Report/ProgressReport/${intakeValue}/${date}/${monthValue}/${yearValue}`
+    Uget(
+      `ApplicationPipeline/AdmissionsPipelineProgressReport?accountIntakeId=${intakeRngValue}&intakeId=${intake}&fromApplicationDate=${
+        selectedDates[0] ? selectedDates[0] : ""
+      }&toApplicationDate=${selectedDates[1] ? selectedDates[1] : ""}`
     ).then((res) => {
       const dataArray = [
-        res?.totalApplication,
-        res?.underAssesment,
-        res?.submittedToUniversity,
-        res?.unconditionalOffer,
-        res?.totalRegistered,
-        res?.totalRejected,
-        res?.totalWithdrawn,
+        res?.data?.preApplicationStage,
+        res?.data?.uappCompilanceStage,
+        res?.data?.universityProcessingStage,
+        res?.data?.conditionalOfferStage,
+        res?.data?.preOfferStageOrPost,
+        res?.data?.uncoditionalOfferStage,
+        res?.data?.preArrivalStageOrVisa,
+        res?.data?.registrationStage,
+        res?.data?.notSetYetStage,
+        res?.data?.totalApplication,
       ];
       setChartData(dataArray);
     });
-  }, [intakeValue, date, monthValue, yearValue]);
+  }, [intakeRngValue, intake, selectedDates]);
 
-  const intakeList = intake?.map((key) => ({
-    label: key.name,
-    value: key.id,
-  }));
-
-  const selectIntake = (label, value) => {
-    setIntakeLabel(label);
-    setIntakeValue(value);
-    setYearLable("Year");
-    setYearValue(0);
-    setMonthLabel("Month");
-    setMonthValue(0);
-    setDate(null);
-  };
-  const monthList = month?.map((key) => ({
-    label: key.name,
-    value: key.id,
-  }));
-
-  const selectMonth = (label, value) => {
-    setMonthLabel(label);
-    setMonthValue(value);
-    setIntakeLabel("Intake");
-    setIntakeValue(0);
-    setDate(null);
+  const handleBarClick = (event, chartContext, config) => {
+    var value = getIntakeData();
+    console.log(value, "my value");
+    const clickedCategory =
+      config.w.config.xaxis.categories[config.dataPointIndex];
+    history.push({
+      pathname: `/AdmissionsPipeline/${clickedCategory
+        .replace(/\s+/g, "-")
+        .toLowerCase()}`,
+      state: {
+        selectedCategory: clickedCategory,
+        intakeRngValue,
+        intake,
+        selectedDates,
+        chartData,
+      },
+    });
   };
 
-  const dateHandle = (e) => {
-    setDate(e);
-    setIntakeLabel("Intake");
-    setIntakeValue(0);
-    setYearLable("Year");
-    setYearValue(0);
-    setMonthLabel("Month");
-    setMonthValue(0);
-  };
+  function getIntakeData() {
+    console.log(intakeRngValue);
 
+    return intakeRngValue;
+  }
   return (
     <div className="custom-card-border py-4 mb-30px">
       <div className="d-flex flex-wrap justify-content-between px-4">
         <h5 className="mb-0">Progress Report</h5>
-        <div className="d-flex flex-wrap justify-content-between">
-          <Select
-            styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
-                border: "1px solid rgba(0,0,0,.1)",
-              }),
-            }}
-            options={intakeList}
-            value={{ label: intakeLabel, value: intakeValue }}
-            onChange={(opt) => selectIntake(opt.label, opt.value)}
-            name="intake"
-            id="intake"
-            required
-          />
-          <Year
-            lable={yearLable}
-            setLable={setYearLable}
-            yearValue={yearValue}
-            setYearValue={setYearValue}
-            action={() => {
-              setIntakeLabel("Intake");
-              setIntakeValue(0);
-              setMonthLabel("Month");
-              setMonthValue(0);
-              setDate(null);
-            }}
-          />
-          <Select
-            styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
-                border: "1px solid rgba(0,0,0,.1)",
-                marginRight: "8px",
-              }),
-            }}
-            options={monthList}
-            value={{ label: monthLabel, value: monthValue }}
-            onChange={(opt) => selectMonth(opt.label, opt.value)}
-            name="month"
-            id="month"
-            required
+        <div className="d-flex align-items-center justify-content-end gap-4px">
+          <Filter
+            data={intakeRngDD}
+            label={intakeRngLabel}
+            setLabel={setIntakeRngLabel}
+            value={intakeRngValue}
+            setValue={setIntakeRngValue}
+            action={() => {}}
+            className=""
           />
 
-          <DMYPicker value={date} setValue={dateHandle} width="auto" />
+          <DefaultDropdown
+            label={intakeLabel}
+            setLabel={setIntakeLabel}
+            value={intake}
+            setValue={setIntake}
+            url={`IntakeDD/get/${intakeRngValue}`}
+            name="intake"
+            action={(l, v) => setSelectedDates([])}
+          />
+
+          <DateRange
+            selectedDates={selectedDates}
+            setSelectedDates={setSelectedDates}
+            action={() => {
+              setIntake(0);
+              setIntakeLabel("Select Intake");
+            }}
+          />
         </div>
       </div>
       <hr />
       <div className="px-4">
         <p className="text-gray fw-500" style={{ fontWeight: "500" }}>
-          {intakeLabel !== "Intake" && intakeLabel}
-          {monthLabel !== "Month" && monthLabel}{" "}
-          {yearLable !== "Year" && yearLable}
-          {date !== null && dateDMY(date)}
+          {intakeRngLabel !== "Intake Range" && intakeRngLabel}
+          {/* {intakeLabel !== "Intake" && intakeLabel}{" "} */}
         </p>
         <Row className="p-2">
           <Col>
@@ -160,6 +144,11 @@ const DashboardProgressChart = () => {
                 },
               ]}
               options={{
+                chart: {
+                  events: {
+                    dataPointSelection: handleBarClick,
+                  },
+                },
                 dataLabels: {
                   enabled: true,
                 },
@@ -172,13 +161,16 @@ const DashboardProgressChart = () => {
                 },
                 xaxis: {
                   categories: [
-                    "Total Application",
-                    "Under Assessment",
-                    "Submitted to University",
+                    "Pre-application",
+                    "UAPP Compliance",
+                    "University Processing",
+                    "Conditional Offer",
+                    "Pre-Offer Stage/Post",
                     "Unconditional Offer",
-                    "Total Registered",
-                    "Rejections",
-                    "Total Withdrawn",
+                    "Pre arrival Stage/Visa",
+                    "Registration",
+                    "N/A",
+                    "Total Application",
                   ],
                 },
                 grid: {
@@ -195,13 +187,16 @@ const DashboardProgressChart = () => {
                   },
                 },
                 colors: [
+                  "#007ACC",
+                  "#E6C317",
+                  "#FF7F11",
+                  "#32A852",
+                  "#E63946",
+                  "#2CA02C",
+                  "#6C63FF",
+                  "#005A9C",
+                  "#afafaf",
                   "#24A1CD",
-                  "#5B9A8B",
-                  "#23CCB5",
-                  "#AE75F8",
-                  "#70E000",
-                  "#F87675",
-                  "#34495E",
                 ],
               }}
             ></Chart>
