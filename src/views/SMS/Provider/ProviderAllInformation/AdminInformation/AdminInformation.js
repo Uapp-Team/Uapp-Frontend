@@ -153,6 +153,7 @@ const AdminInformation = () => {
         });
 
         (userType === userTypes?.SystemAdmin ||
+          userType === userTypes?.BranchAdmin ||
           userType === userTypes?.Admin) &&
           history.push("/providerList");
 

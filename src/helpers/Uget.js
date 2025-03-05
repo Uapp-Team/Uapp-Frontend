@@ -2,14 +2,12 @@ import Axios from "axios";
 import { rootUrl } from "../constants/constants";
 import { expireDateHandler } from "./checkExpireDate";
 
-const AuthStr = localStorage.getItem("token");
-
 async function Uget(url) {
   try {
-    expireDateHandler();
+    const token = await expireDateHandler();
     const res = await Axios.get(`${rootUrl}${url}`, {
       headers: {
-        authorization: AuthStr,
+        authorization: token,
       },
     });
     return await res?.data;

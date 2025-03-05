@@ -25,6 +25,8 @@ const ProviderForm = (props) => {
   const [titleError, setTitleError] = useState(false);
   const [firstNameError, setFirstNameError] = useState("");
   const [firstName, setFirstName] = useState("");
+  console.log(firstName);
+
   const [lastName, setLastName] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,8 +75,9 @@ const ProviderForm = (props) => {
   };
 
   const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setFirstName(data);
+    if (data === "") {
       setFirstNameError("First Name is required");
     } else {
       setFirstNameError("");
@@ -82,8 +85,9 @@ const ProviderForm = (props) => {
   };
 
   const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-    if (e.target.value === "") {
+    let data = e.target.value.trimStart();
+    setLastName(data);
+    if (data === "") {
       setLastNameError("Last Name is required");
     } else {
       setLastNameError("");
@@ -124,11 +128,11 @@ const ProviderForm = (props) => {
     }
     if (!firstName) {
       setFirstNameError("First Name is required");
-      isFormValid = true;
+      isFormValid = false;
     }
     if (!lastName) {
       setLastNameError("Last Name is required");
-      isFormValid = true;
+      isFormValid = false;
     }
     if (titleValue === 0) {
       setTitleError(true);
@@ -163,7 +167,7 @@ const ProviderForm = (props) => {
     formData.append("AdminLastName", lastName);
     var formIsValid = validateRegisterForm(formData);
 
-    if (formIsValid) {
+    if (formIsValid === true) {
       setButtonStatus(true);
       setProgress(true);
       post("ProviderRegistration/Create", formData).then((action) => {
@@ -315,13 +319,13 @@ const ProviderForm = (props) => {
 
                   <Input
                     className="form-mt"
+                    type="text"
+                    name="adminFirstName"
+                    id="adminFirstName"
+                    value={firstName}
                     onChange={(e) => {
                       handleFirstNameChange(e);
                     }}
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    value={firstName}
                     placeholder="Enter First Name"
                   />
                   <span className="text-danger">{firstNameError}</span>
@@ -338,8 +342,8 @@ const ProviderForm = (props) => {
                       handleLastNameChange(e);
                     }}
                     type="text"
-                    name="lastName"
-                    id="lastName"
+                    name="adminLastName"
+                    id="adminLastName"
                     value={lastName}
                     placeholder="Enter Last Name"
                   />

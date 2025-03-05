@@ -1,22 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import ReactToPrint from "react-to-print";
 import { useToasts } from "react-toast-notifications";
-import { Card, CardBody, Button, Table } from "reactstrap";
-import get from "../../../../../helpers/get";
-import post from "../../../../../helpers/post";
-import ButtonLoader from "../../../Components/ButtonLoader";
-import Navigation from "../NavigationAndRegistration/Navigation";
-import put from "../../../../../helpers/put";
-import { userTypes } from "../../../../../constants/userTypeConstant";
+import { Button, Card, CardBody, Table } from "reactstrap";
 import icon_warning from "../../../../../assets/img/icons/icon_warning.png";
 import icon_success from "../../../../../assets/img/icons/icons_success.png";
-import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import ReactToPrint from "react-to-print";
 import logoLg from "../../../../../assets/img/Logo.svg";
-import { Link } from "react-router-dom";
 import { dateFormate } from "../../../../../components/date/calenderFormate";
-import DOMPurify from "dompurify";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import post from "../../../../../helpers/post";
 import Uget from "../../../../../helpers/Uget";
+import ButtonLoader from "../../../Components/ButtonLoader";
+import Navigation from "../NavigationAndRegistration/Navigation";
 
 const ConsultantTermsInformation = () => {
   const activetab = "7";
@@ -821,7 +817,7 @@ const ConsultantTermsInformation = () => {
 
                         <div
                           dangerouslySetInnerHTML={createMarkup(
-                            currentUserDetails?.data?.termsAndConditions
+                            conscentSummary?.data?.termsAndConditions
                           )}
                         ></div>
                         <div className="mt-4">
@@ -841,7 +837,9 @@ const ConsultantTermsInformation = () => {
                           <h5>
                             Date:{" "}
                             <span style={{ fontSize: "14px" }}>
-                              {companionProfileData?.data?.startedDate}
+                              {formatDate(
+                                companionProfileData?.data?.startedDate
+                              )}
                             </span>
                           </h5>
                         </div>

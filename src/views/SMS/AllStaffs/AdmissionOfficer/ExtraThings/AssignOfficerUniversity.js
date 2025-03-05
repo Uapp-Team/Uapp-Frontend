@@ -165,17 +165,33 @@ const AssignOfficerUniversity = () => {
 
           <Row className="mb-3">
             <Col lg="6" md="6" sm="12" xs="12">
-              {permissions?.includes(
-                permissionList.AdmissionOfficer_Assign_University
-              ) ? (
-                <ButtonForFunction
-                  func={() => setModalOpen(true)}
-                  className={"btn btn-uapp-add "}
-                  icon={<i className="fas fa-plus"></i>}
-                  name={" Assign University"}
-                  permission={6}
-                />
-              ) : null}
+              {officerData?.accountStatusId !== 1 &&
+              officerData?.accountStatusId !== 4 ? (
+                <>
+                  {" "}
+                  {permissions?.includes(
+                    permissionList.AdmissionOfficer_Assign_University
+                  ) ? (
+                    <ButtonForFunction
+                      func={() => setModalOpen(true)}
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      name={" Assign University"}
+                      permission={6}
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <p className="section-title">
+                    Account Status : {officerData?.accountStatus}
+                  </p>
+                  <p style={{ color: "#fc7300", fontWeight: 500 }}>
+                    You need to activate your account before university assign
+                  </p>
+                </>
+              )}
             </Col>
 
             <Col lg="6" md="6" sm="12" xs="12">

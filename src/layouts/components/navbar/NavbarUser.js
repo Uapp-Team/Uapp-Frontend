@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
-import {
-  UncontrolledDropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  Badge,
-} from "reactstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import { HubConnectionBuilder } from "@microsoft/signalr";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import * as Icon from "react-feather";
-import { history } from "../../../history";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { Link } from "react-router-dom";
+import {
+  Badge,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from "reactstrap";
+import user from "../../../assets/img/Uapp_fav.png";
+import { BranchManager, Consultant } from "../../../components/core/User";
 import { rootUrl } from "../../../constants/constants";
 import { userTypes } from "../../../constants/userTypeConstant";
-import { HubConnectionBuilder } from "@microsoft/signalr";
-import { Link } from "react-router-dom";
+import { expireDateHandler } from "../../../helpers/checkExpireDate";
 import get from "../../../helpers/get";
-import user from "../../../assets/img/Uapp_fav.png";
 import { logoutStorageHandler } from "../../../helpers/logoutStorageHandler";
-import { BranchManager, Consultant } from "../../../components/core/User";
+import { history } from "../../../history";
 
 const NavbarUser = () => {
   // const [navbarSearch, setnavbarSearch] = useState(false);
@@ -39,7 +40,6 @@ const NavbarUser = () => {
   useEffect(() => {
     (Consultant() || BranchManager()) &&
       get(`consultant/is-switchable/${userInfo?.referenceId}`).then((res) => {
-        console.log(res);
         setData(res);
       });
   }, [userInfo]);
@@ -59,47 +59,39 @@ const NavbarUser = () => {
     logoutStorageHandler();
   };
 
-  const convertAccount = (e, url) => {
-    axios
-      .get(`${rootUrl + url}`, {
-        headers: {
-          authorization: localStorage.getItem("token"),
-        },
-      })
+  const convertAccount = async (e, url) => {
+    get(`${url}`)
       .then((response) => {
-        if (response?.status === 200) {
-          if (response?.data?.isSuccess === true) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("permissions");
+        if (response?.isSuccess === true) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("permissions");
 
-            localStorage.setItem("token", "Bearer " + response?.data?.message);
-            localStorage.setItem(
-              "permissions",
-              JSON.stringify(response?.data?.permissions)
-            );
-            const AuthStr = "Bearer " + response?.data?.message;
-            axios
-              .get(`${rootUrl}Account/GetCurrentUser`, {
-                headers: {
-                  authorization: AuthStr,
-                },
-              })
-              .then((res) => {
-                if (res?.status === 200) {
-                  if (res?.data?.isActive === true) {
-                    localStorage.setItem(
-                      "current_user",
-                      JSON.stringify(res?.data)
-                    );
-                    localStorage.setItem("userType", res?.data?.userTypeId);
-                    localStorage.setItem("referenceId", res?.data?.referenceId);
-                    window.location.reload();
-                  }
+          localStorage.setItem("token", "Bearer " + response?.authToken);
+          localStorage.setItem(
+            "permissions",
+            JSON.stringify(response?.permissions)
+          );
+          const AuthStr = "Bearer " + response?.authToken;
+          axios
+            .get(`${rootUrl}Account/GetCurrentUser`, {
+              headers: {
+                authorization: AuthStr,
+              },
+            })
+            .then((res) => {
+              if (res?.status === 200) {
+                if (res?.data?.isActive === true) {
+                  localStorage.setItem(
+                    "current_user",
+                    JSON.stringify(res?.data)
+                  );
+                  localStorage.setItem("userType", res?.data?.userTypeId);
+                  localStorage.setItem("referenceId", res?.data?.referenceId);
+                  window.location.reload();
                 }
-              });
-
-            history.push("/");
-          }
+              }
+            });
+          history.push("/");
         }
       })
       .catch();
@@ -220,28 +212,16 @@ const NavbarUser = () => {
   };
 
   const countNotification = () => {
-    axios
-      .get(`${rootUrl}Notification/UserNotificationCount`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationCount(res?.data);
-        // setState({ notificationCount: res?.data });
-      });
+    get(`Notification/UserNotificationCount`).then((res) => {
+      setnotificationCount(res);
+      // setState({ notificationCount: res?.data });
+    });
   };
 
   const messageFunction = () => {};
 
   const countMessage = () => {
-    axios
-      .get(`${rootUrl}MessageNotification/Count`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {});
+    get(`MessageNotification/Count`).then((res) => {});
   };
 
   const allNotifications = () => {
@@ -264,7 +244,6 @@ const NavbarUser = () => {
 
   const redirect = (data) => {
     notificationByIdFunction(data?.id);
-    console.log(data?.targetUrl);
     history.push(`${data?.targetUrl}`);
 
     let value = data?.id;
@@ -278,64 +257,32 @@ const NavbarUser = () => {
 
   useEffect(() => {
     if (userInfo?.userTypeId === userTypes?.Student) {
-      axios
-        .get(
-          `${rootUrl}Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`,
-          {
-            headers: {
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
-          setcanSwitch(res?.data?.result);
-        });
+      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
+        (res) => {
+          setcanSwitch(res);
+        }
+      );
     }
 
     if (userInfo?.userTypeId?.toString() === userTypes?.Consultant) {
-      axios
-        .get(
-          `${rootUrl}Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`,
-          {
-            headers: {
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
-          setcanSwitch(res?.data?.result);
-        });
+      get(
+        `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
+      ).then((res) => {
+        setcanSwitch(res);
+      });
     }
 
-    axios
-      .get(`${rootUrl}Notification/UserNotificationCount`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationCount(res?.data);
-      });
+    get(`Notification/UserNotificationCount`).then((res) => {
+      setnotificationCount(res);
+    });
 
-    axios
-      .get(`${rootUrl}MessageNotification/Count`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setmessageCount(res?.data?.result);
-      });
+    get(`MessageNotification/Count`).then((res) => {
+      setmessageCount(res);
+    });
 
-    axios
-      .get(`${rootUrl}Notification/GetInitial`, {
-        headers: {
-          authorization: AuthStr,
-        },
-      })
-      .then((res) => {
-        setnotificationData(res?.data?.result);
-      });
+    get(`Notification/GetInitial`).then((res) => {
+      setnotificationData(res);
+    });
 
     if (
       userInfo?.userTypeId.toString() === userTypes?.Consultant ||
@@ -361,7 +308,12 @@ const NavbarUser = () => {
       userInfo?.userTypeId.toString() === userTypes?.Student
     ) {
       const messageConnection = new HubConnectionBuilder()
-        .withUrl(`${rootUrl}messageNotificationHub`)
+        .withUrl(`${rootUrl}messageNotificationHub`, {
+          accessTokenFactory: async () => {
+            const token = await expireDateHandler();
+            return token.slice(6);
+          },
+        })
         .withAutomaticReconnect()
         .build();
       if (messageConnection) {
@@ -384,7 +336,10 @@ const NavbarUser = () => {
 
     const newConnection = new HubConnectionBuilder()
       .withUrl(`${rootUrl}notification-hub`, {
-        accessTokenFactory: () => newToken,
+        accessTokenFactory: async () => {
+          const token = await expireDateHandler();
+          return token.slice(6);
+        },
       })
       // .withUrl(`${rootUrl}notification-hub`)
       .withAutomaticReconnect()

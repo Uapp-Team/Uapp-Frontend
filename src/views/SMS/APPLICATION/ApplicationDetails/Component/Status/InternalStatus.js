@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { Col, Form, FormGroup, Input, Row } from "reactstrap";
-import SaveButton from "../../../../../../components/buttons/SaveButton";
-import post from "../../../../../../helpers/post";
 import { useToasts } from "react-toast-notifications";
-import get from "../../../../../../helpers/get";
-import RichTextArea from "../../../../../../components/form/RichTextArea";
+import { Col, Form, FormGroup, Row } from "reactstrap";
+import SaveButton from "../../../../../../components/buttons/SaveButton";
 import { AdminUsers } from "../../../../../../components/core/User";
 import { dateFormate } from "../../../../../../components/date/calenderFormate";
+import RichTextArea from "../../../../../../components/form/RichTextArea";
+import get from "../../../../../../helpers/get";
+import post from "../../../../../../helpers/post";
 
 const InternalStatus = ({ id, success, setSuccess }) => {
   const { addToast } = useToasts();
@@ -153,7 +153,9 @@ const InternalStatus = ({ id, success, setSuccess }) => {
                       <span>
                         Write a note <span className="text-danger">*</span>
                       </span>
-                      <span>{dateFormate(status?.updatedOn)}</span>
+                      {status?.updatedOn !== null && (
+                        <span>{dateFormate(status?.updatedOn)}</span>
+                      )}
                     </div>
 
                     <RichTextArea
