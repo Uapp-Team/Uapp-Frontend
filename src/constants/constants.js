@@ -1,5 +1,5 @@
- export const rootUrl = `https://api.uapp.uk/`;
-//export const rootUrl = `https://localtest.uapp.uk/`;
+//  export const rootUrl = `https://api.uapp.uk/`;
+export const rootUrl = `https://localtest.uapp.uk/`;
 // export const rootUrl = `https://lostaquaapple55.conveyor.cloud/`;
 // export const rootUrl = `https://localhost:44357/`;
 // export const rootUrl = `http://192.168.0.116:45455/`;
