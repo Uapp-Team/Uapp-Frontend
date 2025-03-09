@@ -8,9 +8,9 @@ import DateRange from "../../../components/form/DateRange";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
-import StatusCard from "./Components/StatusCard";
 import { pipelineDesign } from "./DemoData";
 import { Consultant } from "../../../components/core/User";
+import StatusCardModal from "./Components/StatusCardModal";
 
 const SalesReport = () => {
   const salesPipeline = JSON.parse(sessionStorage.getItem("salesPipeline"));
@@ -166,6 +166,7 @@ const SalesReport = () => {
                 />
 
                 <DefaultDropdown
+                  selectAll={true}
                   label={intakeLabel}
                   setLabel={setIntakeLabel}
                   value={intake}
@@ -186,7 +187,7 @@ const SalesReport = () => {
 
                 {!Consultant() && (
                   <DefaultDropdown
-                    placeholder="Select Type"
+                    selectAll={true}
                     url="ConsultantTypeDD/Index"
                     label={consultantLabel}
                     setLabel={setConsultantLabel}
@@ -308,11 +309,11 @@ const SalesReport = () => {
                       {item?.childs?.length > 0 &&
                         item?.childs.map((child, childIndex) => (
                           <Col lg={4} md={6} sm={12} key={childIndex}>
-                            <StatusCard
+                            <StatusCardModal
                               title={child?.title}
                               applications={child?.applicationCount}
                               students={child?.studentCount}
-                              parameters={child?.parameters}
+                              applicationList={child?.applicationPipelineDtos}
                             />
                           </Col>
                         ))}

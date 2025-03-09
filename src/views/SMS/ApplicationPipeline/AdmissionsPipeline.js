@@ -15,7 +15,6 @@ import { useLocation } from "react-router-dom";
 
 const AdmissionsPipeline = () => {
   const location = useLocation();
-  console.log(location);
 
   const selectedCategory = location.state?.selectedCategory || null;
   const intakeRangValue = location.state?.intakeRngValue || 0;
@@ -188,6 +187,7 @@ const AdmissionsPipeline = () => {
                 />
 
                 <DefaultDropdown
+                  selectAll={true}
                   label={intakeLabel}
                   setLabel={setIntakeLabel}
                   value={intake}
@@ -208,6 +208,7 @@ const AdmissionsPipeline = () => {
 
                 {!Consultant() && (
                   <DefaultDropdown
+                    selectAll={true}
                     placeholder="Select Type"
                     url="ConsultantTypeDD/Index"
                     label={consultantLabel}
