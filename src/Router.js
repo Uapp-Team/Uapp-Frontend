@@ -1175,6 +1175,9 @@ const InFlowUpdate = lazy(() => import("./views/SMS/InFlow/Update"));
 const AccountTransactionList = lazy(() =>
   import("./views/SMS/ACCOUNTS/AccountsTransaction/Index")
 );
+const SakibAsifList = lazy(() =>
+  import("./views/SMS/ACCOUNTS/AccountsTransaction/SakibAsif.js")
+);
 
 const CreateWithdrawRequest = lazy(() =>
   import("./views/SMS/ACCOUNTS/WithdrawRequest/Create")
@@ -4869,6 +4872,16 @@ class AppRouter extends React.Component {
                         permissionList.View_Account_Transactions
                       )
                         ? AccountTransactionList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/sakibasif"
+                    component={
+                      permissions?.includes(
+                        permissionList.View_Account_Transactions
+                      )
+                        ? SakibAsifList
                         : NotAuthorized
                     }
                   />
