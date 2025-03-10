@@ -83,7 +83,7 @@ const InternalStatus = ({ id, success, setSuccess }) => {
       note: statement,
     };
 
-    if (statusValue === 2 && statement === "") {
+    if (statusValue === 2 && (statement === "" || statement === null)) {
       setStateMentError("Statement is required");
     } else if (statusValue === 2 && stringData < 20) {
       setStateMentError("Statement minimum 20 words");

@@ -68,7 +68,14 @@ const GeneralInformationForm = ({
                 id="BranchId"
                 isDisabled={staffId ? true : false}
               />
-
+              {staffId && (
+                <input
+                  type="hidden"
+                  value={branchValue}
+                  name="BranchId"
+                  id="BranchId"
+                />
+              )}
               {branchError && (
                 <span className="text-danger">Branch is required</span>
               )}
