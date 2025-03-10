@@ -8,7 +8,10 @@ const ApplicationList = ({ applicationList, modalClose }) => {
   return (
     <>
       <div className="d-flex justify-content-between mb-3">
-        <h3>Applications</h3>
+        <div className="d-flex align-items-center">
+          <h3 className="mb-0">Applications</h3>{" "}
+          <span className="count-summery">{applicationList?.length}</span>
+        </div>
         <CloseBtn action={modalClose} />
       </div>
       <div className="table-responsive fixedhead">
@@ -42,14 +45,7 @@ const ApplicationList = ({ applicationList, modalClose }) => {
                     {item?.studentViewId}
                   </Link>
                 </td>
-                <td>
-                  <Link
-                    className="text-id hover"
-                    to={`/studentProfile/${item?.studentId}`}
-                  >
-                    {item?.studentName}
-                  </Link>
-                </td>
+                <td>{item?.studentName}</td>
 
                 <td>
                   <Link
