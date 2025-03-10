@@ -60,7 +60,7 @@ const StatusCardModal = ({
           </div>
         </div>
 
-        {applicationList.length > 0 && (
+        {applicationList?.length > 0 && (
           <button
             className="btn-view-application"
             onClick={() => setModalOpen(true)}
