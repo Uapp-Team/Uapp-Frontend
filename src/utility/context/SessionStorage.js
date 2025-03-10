@@ -30,6 +30,8 @@ const SessionStorage = () => {
   const AdmissionsPipeline = JSON.parse(
     sessionStorage.getItem("applicationPipeline")
   );
+  const qualityPipeline = JSON.parse(sessionStorage.getItem("qualityPipeline"));
+  const salesPipeline = JSON.parse(sessionStorage.getItem("salesPipeline"));
   const AdmissionManagerApplicationPaging = JSON.parse(
     sessionStorage.getItem("admissionManagerApplication")
   );
@@ -231,9 +233,20 @@ const SessionStorage = () => {
         sessionStorage.removeItem("application");
       }
     }
+
     if (AdmissionsPipeline) {
       if (!path.includes(`applications`)) {
         sessionStorage.removeItem("applicationPipeline");
+      }
+    }
+    if (qualityPipeline) {
+      if (!path.includes(`applications`)) {
+        sessionStorage.removeItem("qualityPipeline");
+      }
+    }
+    if (salesPipeline) {
+      if (!path.includes(`applications`)) {
+        sessionStorage.removeItem("salesPipeline");
       }
     }
 
