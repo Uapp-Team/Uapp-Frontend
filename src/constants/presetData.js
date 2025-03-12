@@ -1,14 +1,18 @@
 export const consultantTier = [
   {
+    id: 0,
+    name: "Bronze",
+  },
+  {
     id: 1,
-    name: "Tier-1",
+    name: "Platinum",
   },
   {
     id: 2,
-    name: "Tier-2",
+    name: "Gold",
   },
   {
     id: 3,
-    name: "Tier-3",
+    name: "Silver",
   },
 ];

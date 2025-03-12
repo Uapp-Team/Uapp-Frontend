@@ -8,9 +8,9 @@ import DateRange from "../../../components/form/DateRange";
 import get from "../../../helpers/get";
 import Uget from "../../../helpers/Uget";
 import PipelineCard from "./Components/PipelineCard";
-import StatusCard from "./Components/StatusCard";
 import { qualityDesign } from "./DemoData";
 import { Consultant } from "../../../components/core/User";
+import StatusCardModal from "./Components/StatusCardModal";
 
 const QualityReport = () => {
   const qualityPipeline = JSON.parse(sessionStorage.getItem("qualityPipeline"));
@@ -156,6 +156,7 @@ const QualityReport = () => {
                 />
 
                 <DefaultDropdown
+                  selectAll={true}
                   label={intakeLabel}
                   setLabel={setIntakeLabel}
                   value={intake}
@@ -176,6 +177,7 @@ const QualityReport = () => {
 
                 {!Consultant() && (
                   <DefaultDropdown
+                    selectAll={true}
                     placeholder="Select Type"
                     url="ConsultantTypeDD/Index"
                     label={consultantLabel}
@@ -255,7 +257,7 @@ const QualityReport = () => {
                       {item?.childs?.length > 0 &&
                         item?.childs.map((child, childIndex) => (
                           <Col lg={4} md={6} sm={12} key={childIndex}>
-                            <StatusCard
+                            <StatusCardModal
                               title={child?.title}
                               applications={child?.applicationCount}
                               students={child?.studentCount}
@@ -264,7 +266,7 @@ const QualityReport = () => {
                                   ? child?.confidenceLevel
                                   : null
                               }
-                              parameters={child?.parameters}
+                              applicationList={child?.applicationPipelineDtos}
                               bgColor={
                                 selectedCardIndex === 0 && index === 0
                                   ? "#ffff"

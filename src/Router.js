@@ -5300,7 +5300,7 @@ class AppRouter extends React.Component {
                   <AppRoute path="/400" component={BadRequest} fullLayout />
 
                   <AppRoute
-                    path="/verifyEmail/:email"
+                    path="/verifyEmail/:email/:code"
                     component={VerifyEmail}
                     fullLayout
                   />
@@ -5385,7 +5385,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/verifyEmail/:email"
+                    path="/verifyEmail/:email/:code"
                     component={VerifyEmail}
                     fullLayout
                   />
