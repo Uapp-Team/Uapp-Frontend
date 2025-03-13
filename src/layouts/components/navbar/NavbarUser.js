@@ -110,15 +110,15 @@ const NavbarUser = () => {
   };
 
   const UserDropdown = (props) => {
-    useEffect(() => {}, [props]);
+    useEffect(() => { }, [props]);
     return (
       <DropdownMenu right>
         {userInfo?.userTypeId === userTypes?.SystemAdmin ? null : (
           <Link style={{ textDecoration: "none" }} to="/profile">
             <DropdownItem
               tag="a"
-              // href="#"
-              // onClick={redirectToProfile}
+            // href="#"
+            // onClick={redirectToProfile}
             >
               <Icon.User size={14} className="mr-1 align-middle" />
               <span className="align-middle">Profile</span>
@@ -128,11 +128,11 @@ const NavbarUser = () => {
 
         {(userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
           userInfo?.userTypeId.toString() === userTypes?.Admin) && (
-          <DropdownItem tag="a" onClick={goToBin}>
-            <i className="fas fa-recycle mr-1 align-middle"></i>
-            <span className="align-middle">Recycle Bin</span>
-          </DropdownItem>
-        )}
+            <DropdownItem tag="a" onClick={goToBin}>
+              <i className="fas fa-recycle mr-1 align-middle"></i>
+              <span className="align-middle">Recycle Bin</span>
+            </DropdownItem>
+          )}
 
         <DropdownItem tag="a" onClick={goToSettings}>
           <Icon.Settings size={14} className="mr-1 align-middle" />
@@ -218,10 +218,10 @@ const NavbarUser = () => {
     });
   };
 
-  const messageFunction = () => {};
+  const messageFunction = () => { };
 
   const countMessage = () => {
-    get(`MessageNotification/Count`).then((res) => {});
+    get(`MessageNotification/Count`).then((res) => { });
   };
 
   const allNotifications = () => {
@@ -239,7 +239,7 @@ const NavbarUser = () => {
           authorization: AuthStr,
         },
       })
-      .then((res) => {});
+      .then((res) => { });
   };
 
   const redirect = (data) => {
@@ -256,9 +256,10 @@ const NavbarUser = () => {
   };
 
   useEffect(() => {
-    if (userInfo?.userTypeId === userTypes?.Student) {
+    if (userInfo?.userTypeId.toString() === userTypes?.Student) {
       get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
         (res) => {
+          console.log("Can swith to consuiltant", res);
           setcanSwitch(res);
         }
       );
@@ -326,7 +327,7 @@ const NavbarUser = () => {
               }
             });
           });
-        } catch (error) {}
+        } catch (error) { }
       }
     }
 
@@ -364,11 +365,11 @@ const NavbarUser = () => {
           {/* Message Dropdown */}
 
           {userInfo?.userTypeId.toString() === userTypes?.Consultant ||
-          userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
-          userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
-          userInfo?.userTypeId.toString() === userTypes?.Admin ||
-          userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
-          userInfo?.userTypeId.toString() === userTypes?.Student ? (
+            userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
+            userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+            userInfo?.userTypeId.toString() === userTypes?.Admin ||
+            userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+            userInfo?.userTypeId.toString() === userTypes?.Student ? (
             <UncontrolledDropdown
               tag="li"
               className="dropdown-notification nav-item"
