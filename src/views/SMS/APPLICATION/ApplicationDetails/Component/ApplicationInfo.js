@@ -58,7 +58,7 @@ const ApplicationInfo = ({
   elptOverall,
   setElptOverall,
 }) => {
-  console.log(applicationInfo, "applicationInfo");
+  const currentUser = localStorage.getItem("userType");
   const handleDate = (e) => {
     var datee = e;
     var utcDate = new Date(datee);
@@ -1237,7 +1237,8 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
-                  {applicationInfo?.applicationStatusId !== 1 &&
+                  {currentUser !== userTypes?.AdmissionCompliance.toString() &&
+                    applicationInfo?.applicationStatusId !== 1 &&
                     applicationInfo?.confidenceLevel > 0 &&
                     applicationInfo?.applicationSubStatusId !== 38 && (
                       <>
