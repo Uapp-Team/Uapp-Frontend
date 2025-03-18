@@ -33,17 +33,17 @@ const Consent = ({ id }) => {
   useEffect(() => {
     userType === userTypes?.SystemAdmin
       ? get(`UserTermsAndConditions/Get/${userTypes?.Consultant}/${id}`).then(
-          (res) => {
-            setLoading(false);
-            setCurrentUserDetails(res);
-            console.log(res, "sakib");
-          }
-        )
-      : get(`UserTermsAndConditions/GetByCurrentUser`).then((res) => {
+        (res) => {
           setLoading(false);
           setCurrentUserDetails(res);
-          console.log(res, "sakib 1");
-        });
+          console.log(res, "sakib");
+        }
+      )
+      : get(`UserTermsAndConditions/GetByCurrentUser`).then((res) => {
+        setLoading(false);
+        setCurrentUserDetails(res);
+        console.log(res, "sakib 1");
+      });
   }, [id, userType]);
 
   useEffect(() => {
@@ -219,30 +219,30 @@ const Consent = ({ id }) => {
                       </td>
                       <td style={{ paddingLeft: "8px" }}>
                         {consultantData?.isAcceptedHome == true &&
-                        consultantData?.isAcceptedEU_UK == true &&
-                        consultantData?.isAcceptedInternational == true
+                          consultantData?.isAcceptedEU_UK == true &&
+                          consultantData?.isAcceptedInternational == true
                           ? "Home, EU/UK, International"
                           : consultantData?.isAcceptedHome == true &&
                             consultantData?.isAcceptedEU_UK == true &&
                             consultantData?.isAcceptedInternational == false
-                          ? "Home, EU/UK"
-                          : consultantData?.isAcceptedHome == true &&
-                            consultantData?.isAcceptedEU_UK == false &&
-                            consultantData?.isAcceptedInternational == false
-                          ? "Home"
-                          : consultantData?.isAcceptedHome == false &&
-                            consultantData?.isAcceptedEU_UK == true &&
-                            consultantData?.isAcceptedInternational == true
-                          ? "EU/UK, International"
-                          : consultantData?.isAcceptedHome == false &&
-                            consultantData?.isAcceptedEU_UK == false &&
-                            consultantData?.isAcceptedInternational == true
-                          ? "International"
-                          : consultantData?.isAcceptedHome == true &&
-                            consultantData?.isAcceptedEU_UK == false &&
-                            consultantData?.isAcceptedInternational == true
-                          ? "Home, International"
-                          : "EU/UK"}
+                            ? "Home, EU/UK"
+                            : consultantData?.isAcceptedHome == true &&
+                              consultantData?.isAcceptedEU_UK == false &&
+                              consultantData?.isAcceptedInternational == false
+                              ? "Home"
+                              : consultantData?.isAcceptedHome == false &&
+                                consultantData?.isAcceptedEU_UK == true &&
+                                consultantData?.isAcceptedInternational == true
+                                ? "EU/UK, International"
+                                : consultantData?.isAcceptedHome == false &&
+                                  consultantData?.isAcceptedEU_UK == false &&
+                                  consultantData?.isAcceptedInternational == true
+                                  ? "International"
+                                  : consultantData?.isAcceptedHome == true &&
+                                    consultantData?.isAcceptedEU_UK == false &&
+                                    consultantData?.isAcceptedInternational == true
+                                    ? "Home, International"
+                                    : "EU/UK"}
                       </td>
                     </tr>
                     <tr style={{ border: "1px solid #dee2e6" }}>
@@ -296,7 +296,7 @@ const Consent = ({ id }) => {
                         Have Right To Work
                       </td>
                       <td style={{ paddingLeft: "8px" }}>
-                        {consultantData?.haveRightToWork == null ? "No" : "Yes"}
+                        {consultantData?.haveRightToWork == true ? "Yes" : "No"}
                       </td>
                     </tr>
                   </tbody>

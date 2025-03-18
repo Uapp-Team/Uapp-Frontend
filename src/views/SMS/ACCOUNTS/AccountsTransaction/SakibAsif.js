@@ -40,7 +40,7 @@ import Typing from "../../../../components/form/Typing";
 import Filter from "../../../../components/Dropdown/Filter";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 
-const Index = () => {
+const SakibAsif = () => {
   const accountTransactionPaging = JSON.parse(
     sessionStorage.getItem("accountTransaction")
   );
@@ -48,7 +48,7 @@ const Index = () => {
   const userType = localStorage.getItem("userType");
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
-
+  const [pagedata, setfetchData] = useState([]);
   const [consultant, setConsultant] = useState([]);
 
   const [consultantLabel, setConsultantLabel] = useState(
@@ -193,26 +193,21 @@ const Index = () => {
       : 1
   );
   const [callApi, setCallApi] = useState(false);
-  const [dataPerPage, setDataPerPage] = useState(
-    accountTransactionPaging?.dataPerPage
-      ? accountTransactionPaging?.dataPerPage
-      : 20
-  );
+  const [dataPerPage, setDataPerPage] = useState(15);
   const [entity, setEntity] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // user select data per page
-  const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
-  const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+  //const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
+  //const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [progress, setProgress] = useState(false);
   const [progress1, setProgress1] = useState(false);
   const [disabledSelect, setDisabledSelect] = useState(false);
 
-  const selectDataSize = (value) => {
-    setCurrentPage(1);
-    setDataPerPage(value);
-    setCallApi((prev) => !prev);
-  };
+  //const selectDataSize = (value) => {
+  //  setDataPerPage(value);
+  //  setCallApi((prev) => !prev);
+  //};
 
   useEffect(() => {
     const tableColumnAccountsTransaction = JSON.parse(
@@ -351,25 +346,25 @@ const Index = () => {
     if (!isTyping) {
       if (consultantId) {
         get(
-          `AccountTransaction/Paged?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantId}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
+          `AccountTransaction/Index?consultanttypeid=${consultantValueType}&consultantid=${consultantId}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
             transactionCode === "" ? "emptystring" : transactionCode
-          }&consultanttypeid=${consultantValueType}&branchid=${branchValue}`
+          }&branchid=${branchValue}`
         ).then((res) => {
-          console.log(res, "sakib");
-          setEntity(res?.totalEntity);
-          setData(res?.models);
+          console.log(res);
+          setEntity(res?.length);
+          setfetchData(res);
           setLoading(false);
           //setSer(res?.firstSerialNumber);
         });
       } else {
         get(
-          `AccountTransaction/Paged?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
+          `AccountTransaction/Index?consultanttypeid=${consultantValueType}&consultantid=${consultantValue}&typeid=${transactionValue}&transactionStatusId=${statusValue}&code=${
             transactionCode === "" ? "emptystring" : transactionCode
-          }&consultanttypeid=${consultantValueType}&branchid=${branchValue}`
+          }&branchid=${branchValue}`
         ).then((res) => {
-          console.log(res, "sakib");
-          setEntity(res?.totalEntity);
-          setData(res?.models);
+          console.log(res);
+          setEntity(res?.length);
+          setfetchData(res);
           setLoading(false);
           //setSer(res?.firstSerialNumber);
         });
@@ -387,13 +382,20 @@ const Index = () => {
     statusValue,
     transactionCode,
     bonusTransactionValue,
+    //dataPerPage,
     callApi,
     currentPage,
     consultantValueType,
     branchValue,
     isTyping,
-    dataPerPage,
   ]);
+
+  useEffect(() => {
+    const form = dataPerPage * (currentPage - 1);
+    const to = form + dataPerPage;
+    setData(pagedata.slice(form, to));
+    setSer(form + 1);
+  }, [dataPerPage, currentPage, pagedata]);
 
   const gotoDetailsPage = (data) => {
     if (data?.transactionTypeId == transactionTypes?.ApplicationTransaction) {
@@ -1287,19 +1289,19 @@ const Index = () => {
 
                 <div className="col-lg-5 col-md-7 col-sm-4 col-xs-8">
                   <div className="d-flex justify-content-end flex-wrap">
-                    <div className="ml-3">
-                      <div className="d-flex align-items-center">
-                        <div className="mr-2">Showing :</div>
-                        <div className="ddzindex">
-                          <Select
-                            className="mr-2"
-                            options={dataSizeName}
-                            value={{ label: dataPerPage, value: dataPerPage }}
-                            onChange={(opt) => selectDataSize(opt.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    {/*<div className="ml-3">*/}
+                    {/*  <div className="d-flex align-items-center">*/}
+                    {/*    <div className="mr-2">Showing :</div>*/}
+                    {/*    <div>*/}
+                    {/*      <Select*/}
+                    {/*        className="mr-2"*/}
+                    {/*        options={dataSizeName}*/}
+                    {/*        value={{ label: dataPerPage, value: dataPerPage }}*/}
+                    {/*        onChange={(opt) => selectDataSize(opt.value)}*/}
+                    {/*      />*/}
+                    {/*    </div>*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
 
                     <div className="mr-2">
                       <Dropdown
@@ -1582,4 +1584,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default SakibAsif;

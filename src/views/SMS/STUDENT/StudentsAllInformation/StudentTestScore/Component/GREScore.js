@@ -310,6 +310,9 @@ export default function GREScore({ applicationStudentId }) {
   const handleSaveGreData = (event) => {
     event.preventDefault();
     const subData = new FormData(event.target);
+    if (greExamDate != null) {
+      subData.append("greExamDate", greExamDate);
+    }
 
     var gredataobject = {};
     subData.forEach(function (value, key) {
@@ -808,6 +811,7 @@ export default function GREScore({ applicationStudentId }) {
                       <FormGroup className="has-icon-left position-relative">
                         <DMYPicker
                           label="GRE Exam Date"
+                          id="greExamDate"
                           value={greExamDate}
                           setValue={handleGreExamDate}
                           error={greExamDateError}
