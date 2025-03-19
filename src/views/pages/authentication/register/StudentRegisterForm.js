@@ -212,7 +212,7 @@ const StudentRegisterForm = () => {
 
     // Join errors into a single message or clear the error
     if (errors.length > 0) {
-      setPasswordError(errors.join(" & "));
+      setPasswordError(errors.join(" & ") + " required");
     } else {
       setPasswordError(""); // Clear the error if everything is valid
     }
@@ -301,9 +301,39 @@ const StudentRegisterForm = () => {
       setPreferredCountryError("Select preferred study destination");
     }
 
-    if (subData.Password === "") {
+    // if (subData.Password === "") {
+    //   isFormValid = false;
+    //   setPasswordError("Provide a valid password");
+    // }
+
+    if (password === "") {
       isFormValid = false;
-      setPasswordError("Provide a valid password");
+      setPasswordError("Password is required");
+    } else {
+      const errors = [];
+
+      if (password.length < 8) {
+        isFormValid = false;
+        errors.push("At least 8 characters");
+      }
+      if (!/[A-Z]/.test(password)) {
+        isFormValid = false;
+        errors.push("One uppercase letter");
+      }
+      if (!/[a-z]/.test(password)) {
+        isFormValid = false;
+        errors.push("One lowercase letter");
+      }
+      if (!/\d/.test(password)) {
+        isFormValid = false;
+        errors.push("One number");
+      }
+      if (!/[@$!%*?&]/.test(password)) {
+        isFormValid = false;
+        errors.push("One special character");
+      }
+
+      setPasswordError(errors.join(" & ") + " required");
     }
 
     if (confirmPassword === "") {
