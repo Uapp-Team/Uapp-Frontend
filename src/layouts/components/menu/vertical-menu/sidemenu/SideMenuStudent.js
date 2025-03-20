@@ -7,20 +7,20 @@ import StudentRegRefer from "../../../../../components/Refer/StudentRegRefer";
 import StudentJoinBanner from "../../../../../views/SMS/Affiliate/AffiliateComponents/StudentJoinBanner";
 
 const SideMenuStudent = () => {
-  const currentUser = JSON?.parse(localStorage.getItem("current_user"));
+  // const currentUser = JSON?.parse(localStorage.getItem("current_user"));
   const referenceId = localStorage.getItem("referenceId");
-  const [canConsultant, setCanConsultant] = useState(false);
+  // const [canConsultant, setCanConsultant] = useState(false);
   const [conscentData, setConscentData] = useState({});
   const isLead = JSON?.parse(localStorage.getItem("IsLead"));
   const [modalShow, setModalShow] = useState(false);
 
-  useEffect(() => {
-    get(`Student/CanBecomeConsultant/${currentUser?.referenceId}`).then(
-      (res) => {
-        setCanConsultant(res);
-      }
-    );
-  }, [currentUser]);
+  // useEffect(() => {
+  //   get(`Student/CanBecomeConsultant/${currentUser?.referenceId}`).then(
+  //     (res) => {
+  //       setCanConsultant(res);
+  //     }
+  //   );
+  // }, [currentUser]);
 
   useEffect(() => {
     get(`StudentConsent/Get/${referenceId}`).then((res) => {
@@ -49,7 +49,7 @@ const SideMenuStudent = () => {
         </>
       )}
 
-      {canConsultant && (
+      {/* {canConsultant && (
         <li className="nav-item uapp-nav-item ">
           <Link to="/becomeConsultant" className="d-flex justify-content-start">
             <button type="button" class="btn btn-primary">
@@ -57,7 +57,7 @@ const SideMenuStudent = () => {
             </button>
           </Link>
         </li>
-      )}
+      )} */}
 
       {!isLead && (
         <>
@@ -85,9 +85,8 @@ const SideMenuStudent = () => {
           </Modal>
         </>
       )}
-      <div className="m-3">
-        <StudentJoinBanner className="my-5 text-center" />
-      </div>
+
+      <StudentJoinBanner />
     </>
   );
 };
