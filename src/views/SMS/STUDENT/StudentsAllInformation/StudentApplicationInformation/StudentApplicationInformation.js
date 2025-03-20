@@ -391,23 +391,23 @@ const StudentApplicationInformation = () => {
       setStudentTypeError("Student Type is required");
     }
 
-    if (studentTypeLabel === "Home" && hasSLC === null) {
+    if (studentTypeLabel === "Home/UK" && hasSLC === null) {
       isFormValid = false;
       setHasSLCError("Student Loan Company (SLC) is required");
     }
 
-    if (studentTypeLabel === "Home" && haveStartedEducation === null) {
+    if (studentTypeLabel === "Home/UK" && haveStartedEducation === null) {
       isFormValid = false;
       setHaveStartedEducationError("Started education is required");
     }
-    // Validate "Home" type
-    if (studentTypeLabel === "Home" && hasSLC === true && !howManyYears) {
+    // Validate "Home/UK" type
+    if (studentTypeLabel === "Home/UK" && hasSLC === true && !howManyYears) {
       isFormValid = false;
       setHowManyYearsError("Years is required");
     }
 
     if (
-      studentTypeLabel === "Home" &&
+      studentTypeLabel === "Home/UK" &&
       showResidency.showResidencyStatus === true &&
       !homeResidencyStatus
     ) {
@@ -793,7 +793,7 @@ International students in the UK are those who apply from outside from UK or ins
                                               {possibleStudentType === 1
                                                 ? " Home"
                                                 : possibleStudentType === 2
-                                                ? " Eu/Uk"
+                                                ? " EU/EEU"
                                                 : possibleStudentType === 3
                                                 ? " International"
                                                 : null}
@@ -806,7 +806,7 @@ International students in the UK are those who apply from outside from UK or ins
                                               {possibleStudentType === 1
                                                 ? " Home"
                                                 : possibleStudentType === 2
-                                                ? " Eu/Uk"
+                                                ? " EU/EEU"
                                                 : possibleStudentType === 3
                                                 ? " International"
                                                 : null}
@@ -838,7 +838,7 @@ International students in the UK are those who apply from outside from UK or ins
                                               {possibleStudentType === 1
                                                 ? " Home"
                                                 : possibleStudentType === 2
-                                                ? " Eu/Uk"
+                                                ? " EU/EEU"
                                                 : possibleStudentType === 3
                                                 ? " International"
                                                 : null}
@@ -851,7 +851,7 @@ International students in the UK are those who apply from outside from UK or ins
                                               {possibleStudentType === 1
                                                 ? " Home"
                                                 : possibleStudentType === 2
-                                                ? " Eu/Uk"
+                                                ? " EU/EEU"
                                                 : possibleStudentType === 3
                                                 ? " International"
                                                 : null}
@@ -882,7 +882,7 @@ International students in the UK are those who apply from outside from UK or ins
                                               {possibleStudentType === 1
                                                 ? " Home"
                                                 : possibleStudentType === 2
-                                                ? " Eu/Uk"
+                                                ? " EU/EEU"
                                                 : possibleStudentType === 3
                                                 ? " International"
                                                 : null}
@@ -894,7 +894,7 @@ International students in the UK are those who apply from outside from UK or ins
                                             {possibleStudentType === 1
                                               ? " Home"
                                               : possibleStudentType === 2
-                                              ? " Eu/Uk"
+                                              ? " EU/EEU"
                                               : possibleStudentType === 3
                                               ? " International"
                                               : null}
@@ -944,7 +944,7 @@ International students in the UK are those who apply from outside from UK or ins
                               </>
                             ) : null} */}
 
-                            {studentTypeLabel === "Home" ? (
+                            {studentTypeLabel === "Home/UK" ? (
                               <HomeApplicationInformation
                                 applicationInformation={applicationInformation}
                                 countryId={countryValue}

@@ -284,13 +284,13 @@
 
 //   const validateRegisterForm = () => {
 //     var isFormValid = true;
-//     if (studentTypeLabel === "Home" && hasSLC === true && !howManyYears) {
+//     if (studentTypeLabel === "Home/UK" && hasSLC === true && !howManyYears) {
 //       isFormValid = false;
 //       setHowManyYearsError("Years is required");
 //     }
 
 //     if (
-//       studentTypeLabel === "Home" &&
+//       studentTypeLabel === "Home/UK" &&
 //       showResidency.showResidencyStatus === true &&
 //       !homeResidencyStatus
 //     ) {
@@ -491,7 +491,7 @@
 //                                           {possibleStudentType === 1
 //                                             ? " Home"
 //                                             : possibleStudentType === 2
-//                                             ? " Eu/Uk"
+//                                             ? " EU/EEU"
 //                                             : possibleStudentType === 3
 //                                             ? " International"
 //                                             : null}
@@ -504,7 +504,7 @@
 //                                           {possibleStudentType === 1
 //                                             ? " Home"
 //                                             : possibleStudentType === 2
-//                                             ? " Eu/Uk"
+//                                             ? " EU/EEU"
 //                                             : possibleStudentType === 3
 //                                             ? " International"
 //                                             : null}
@@ -534,7 +534,7 @@
 //                                           {possibleStudentType === 1
 //                                             ? " Home"
 //                                             : possibleStudentType === 2
-//                                             ? " Eu/Uk"
+//                                             ? " EU/EEU"
 //                                             : possibleStudentType === 3
 //                                             ? " International"
 //                                             : null}
@@ -547,7 +547,7 @@
 //                                           {possibleStudentType === 1
 //                                             ? " Home"
 //                                             : possibleStudentType === 2
-//                                             ? " Eu/Uk"
+//                                             ? " EU/EEU"
 //                                             : possibleStudentType === 3
 //                                             ? " International"
 //                                             : null}
@@ -577,7 +577,7 @@
 //                                           {possibleStudentType === 1
 //                                             ? " Home"
 //                                             : possibleStudentType === 2
-//                                             ? " Eu/Uk"
+//                                             ? " EU/EEU"
 //                                             : possibleStudentType === 3
 //                                             ? " International"
 //                                             : null}
@@ -589,7 +589,7 @@
 //                                         {possibleStudentType === 1
 //                                           ? " Home"
 //                                           : possibleStudentType === 2
-//                                           ? " Eu/Uk"
+//                                           ? " EU/EEU"
 //                                           : possibleStudentType === 3
 //                                           ? " International"
 //                                           : null}
@@ -638,7 +638,7 @@
 //                           </>
 //                         ) : null}
 
-//                         {studentTypeLabel === "Home" ? (
+//                         {studentTypeLabel === "Home/UK" ? (
 //                           <HomeApplicationInformation
 //                             applicationInformation={applicationInformation}
 //                             countryId={countryValue}

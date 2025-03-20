@@ -372,7 +372,7 @@ const ApplicationInformation = () => {
       FileList2.length === 0 ? null : FileList2[0]?.originFileObj
     );
     subData.append("IsApplyingFromInside", intOne === "true" ? true : false);
-    if (studentTypeLabel === "Home" && homeOne === "true" && !howManyYears) {
+    if (studentTypeLabel === "Home/UK" && homeOne === "true" && !howManyYears) {
       setHowManyYearsError("Years is required");
     } else if (studentTypeLabel === "EU/EEA" && !date) {
       setDateError("Date is required");
@@ -512,7 +512,7 @@ const ApplicationInformation = () => {
                           </>
                         ) : null}
 
-                        {studentTypeLabel === "Home" ? (
+                        {studentTypeLabel === "Home/UK" ? (
                           <div>
                             <input
                               type="hidden"

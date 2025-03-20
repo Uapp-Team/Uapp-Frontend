@@ -295,9 +295,9 @@
 //       setApplicationValue(action?.applicationTypeId);
 //       setApplicationLabel(
 //         action?.applicationTypeId === 1
-//           ? "Home"
+//           ? "Home/UK"
 //           : action?.applicationTypeId === 2
-//           ? "EU/UK"
+//           ? "EU/EEU"
 //           : "International"
 //       );
 //       setIsMandatory(`${action?.isMandatory}`);
@@ -647,9 +647,9 @@
 //                           <td>{application?.document?.name}</td>
 //                           <td>
 //                             {application?.applicationTypeId === 1
-//                               ? "Home"
+//                               ? "Home/UK"
 //                               : application?.applicationTypeId === 2
-//                               ? "EU/UK"
+//                               ? "EU/EEU"
 //                               : "International"}
 //                           </td>
 

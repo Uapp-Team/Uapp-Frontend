@@ -111,7 +111,7 @@ const EditAssignUniversityModal = ({
 
             <FormGroup row>
               <Col md="5">
-                <span>Home </span>
+                <span>Home/UK </span>
               </Col>
 
               <Col md="7">
@@ -158,7 +158,7 @@ const EditAssignUniversityModal = ({
 
             <FormGroup row className="">
               <Col md="5">
-                <span>EU/UK </span>
+                <span>EU/EEU </span>
               </Col>
 
               <Col md="7">

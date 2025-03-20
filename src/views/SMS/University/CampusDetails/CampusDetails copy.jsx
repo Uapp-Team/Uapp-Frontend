@@ -288,7 +288,6 @@ const CampusDetails = () => {
     setDeleteModal1(true);
   };
 
-
   const handleUpdateData = (e) => {
     e.preventDefault();
 
@@ -994,8 +993,8 @@ const CampusDetails = () => {
                           <tr style={{ textAlign: "center" }}>
                             {/* <th>SL/NO</th> */}
                             <th>Course</th>
-                            <th>EU/UK</th>
-                            <th>Home</th>
+                            <th>EU/EEU</th>
+                            <th>Home/UK</th>
                             <th>International</th>
                             {userType == userTypes?.Student ? null : (
                               <th
@@ -1100,7 +1099,7 @@ const CampusDetails = () => {
                                         </p>
                                         <FormGroup row>
                                           <Col md="6">
-                                            <span>Home </span>
+                                            <span>Home/UK </span>
                                           </Col>
 
                                           <Col md="6">
@@ -1155,7 +1154,7 @@ const CampusDetails = () => {
 
                                         <FormGroup row className="">
                                           <Col md="6">
-                                            <span>EU/UK </span>
+                                            <span>EU/EEU </span>
                                           </Col>
 
                                           <Col md="6">
@@ -1359,7 +1358,7 @@ const CampusDetails = () => {
                       </p>
                       <FormGroup row className="">
                         <Col md="4">
-                          <span>Home</span>
+                          <span>Home/UK</span>
                         </Col>
 
                         <Col md="4">
@@ -1406,7 +1405,7 @@ const CampusDetails = () => {
 
                       <FormGroup row className="">
                         <Col md="4">
-                          <span>EU/UK</span>
+                          <span>EU/EEU</span>
                         </Col>
 
                         <Col md="4">
@@ -1774,8 +1773,8 @@ const CampusDetails = () => {
                 <div>
                   <ul className="uapp-ul text-center">
                     {campusInfo?.university?.universityCity?.name &&
-                      campusInfo?.university?.universityState?.name &&
-                      campusInfo?.university?.universityCountry?.name ? (
+                    campusInfo?.university?.universityState?.name &&
+                    campusInfo?.university?.universityCountry?.name ? (
                       <li>
                         {campusInfo?.university?.universityCity?.name}
                         {","} {campusInfo?.university?.universityState?.name}

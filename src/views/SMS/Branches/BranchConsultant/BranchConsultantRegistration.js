@@ -298,10 +298,7 @@ const BranchConsultantRegistration = () => {
   };
   return (
     <div>
-      <BranchNavbar
-        activeTab={activetab}
-        branchId={branchId}
-      />
+      <BranchNavbar activeTab={activetab} branchId={branchId} />
 
       <Card>
         <CardBody>
@@ -454,7 +451,7 @@ const BranchConsultantRegistration = () => {
                                 setHomeAccept(!homeAccept);
                               }}
                             />
-                            <span className="mr-2">Home </span>
+                            <span className="mr-2">Home/UK </span>
                           </FormGroup>
                         </Col>
 
@@ -468,7 +465,7 @@ const BranchConsultantRegistration = () => {
                                 setUkAccept(!ukAccept);
                               }}
                             />
-                            <span className="mr-2">EU/UK </span>
+                            <span className="mr-2">EU/EEU </span>
                           </FormGroup>
                         </Col>
 
