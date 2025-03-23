@@ -10,7 +10,7 @@ const SuccessCompanion = () => {
   const history = useHistory();
 
   const convertAccount = (e) => {
-    get(`AccountSwitch/SwitchToStudentFromCompanion`)
+    get(`AccountSwitch/SwitchToCompanion`)
       .then((response) => {
         if (response?.isSuccess === true) {
           localStorage.removeItem("token");
