@@ -190,7 +190,7 @@ const AddUniversitySubjectAssignToCampus = () => {
                   </tbody>
                 </Table>
 
-                <FormGroup row className="d-flex justify-content-between mt-4">
+                <FormGroup className="d-flex justify-content-between mt-4">
                   <PreviousButton action={handlePrevious} />
 
                   {permissions?.includes(permissionList?.Edit_Subjects) && (
