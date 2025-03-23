@@ -94,6 +94,16 @@ export const AdmissionCompliance = () => {
   return result;
 };
 
+export const Companion = () => {
+  const result = userType === userTypes?.Companion;
+  return result;
+};
+
+export const Affiliate = () => {
+  const result = userType === userTypes?.Affiliate;
+  return result;
+};
+
 export const AdminUsers = () => SystemAdmin() || Admin();
 export const BranchUsers = () => BranchAdmin() || BranchManager();
 export const AdmissionUsers = () =>

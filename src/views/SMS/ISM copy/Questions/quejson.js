@@ -10,12 +10,12 @@ export const queJson = [
     answerList: [
       {
         id: 11,
-        origineType: "UK",
+        origineType: "EU/EEU",
         answers: "123",
       },
       {
         id: 11,
-        origineType: "Home",
+        origineType: "Home/UK",
         answers: "",
       },
       {

@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { Card, CardBody, Form, FormGroup, Col, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Col,
+  Row,
+  Input,
+  Label,
+} from "reactstrap";
 import { Upload, Modal } from "antd";
 import get from "../../../helpers/get";
 import post from "../../../helpers/post";
@@ -9,9 +18,10 @@ import { useToasts } from "react-toast-notifications";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
+import { currentDate } from "../../../components/date/calenderFormate";
 import UploadButton from "../../../components/buttons/UploadButton";
 
-const ConvertStudentIntoConsultantForm = () => {
+const ConvertStudentIntoCompanionForm = () => {
   const referenceId = localStorage.getItem("referenceId");
 
   const history = useHistory();
@@ -35,10 +45,7 @@ const ConvertStudentIntoConsultantForm = () => {
   const [error2, setError2] = useState("");
   const [error3, setError3] = useState("");
 
-  const [visa, setVisa] = useState([]);
-  const [visaLabel, setVisaLabel] = useState("Select Visa Status");
-  const [visaValue, setVisaValue] = useState(0);
-
+  const [visa, setVisa] = useState("");
   const [residency, setResidency] = useState([]);
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
@@ -48,34 +55,23 @@ const ConvertStudentIntoConsultantForm = () => {
   const [visaError, setVisaError] = useState("");
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
+  const [exDate, setExDate] = useState(currentDate);
+  const [dateError, setDateError] = useState("");
+  const [rightToWork, setRightToWork] = useState("false");
+  const [success, setSuccess] = useState(false);
 
   const { addToast } = useToasts();
 
   useEffect(() => {
-    get(`VisaTypeDD/index`).then((res) => {
-      setVisa(res);
-    });
-
     get(`ResidencyStatusDD/index`).then((res) => {
       setResidency(res);
     });
-  }, []);
-
-  const visaOptions = visa?.map((v) => ({
-    label: v?.name,
-    value: v?.id,
-  }));
+  }, [success]);
 
   const residencyOptions = residency?.map((r) => ({
     label: r?.name,
     value: r?.id,
   }));
-
-  const selectVisa = (label, value) => {
-    setVisaLabel(label);
-    setVisaValue(value);
-    setVisaError("");
-  };
 
   const selectResidency = (label, value) => {
     setResidencyLabel(label);
@@ -119,19 +115,6 @@ const ConvertStudentIntoConsultantForm = () => {
     setError("");
   };
 
-  // Trial End1
-
-  // Trial start2
-
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
-
   const handleCancel2 = () => {
     setPreviewVisible2(false);
   };
@@ -152,19 +135,6 @@ const ConvertStudentIntoConsultantForm = () => {
     setFileList2(fileList);
     setError2("");
   };
-
-  // Trial End2
-
-  // Trial start3
-
-  function getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
 
   const handleCancel3 = () => {
     setPreviewVisible3(false);
@@ -187,7 +157,26 @@ const ConvertStudentIntoConsultantForm = () => {
     setError3("");
   };
 
-  // Trial End3
+  const handlevisaType = (e) => {
+    setVisa(e.target.value);
+    if (e.target.value === "") {
+      setVisaError("Visa type is required");
+    } else {
+      setVisaError("");
+    }
+  };
+  const handleDate = (e) => {
+    setExDate(e.target.value);
+    if (e.target.value === "") {
+      setDateError("Expiry Date of Your BRP/TRP or Visa required");
+    } else {
+      setDateError("");
+    }
+  };
+
+  const onRadioValueChange = (event) => {
+    setRightToWork(event.target.value);
+  };
 
   const validateRegisterForm = () => {
     var isFormValid = true;
@@ -204,9 +193,13 @@ const ConvertStudentIntoConsultantForm = () => {
       isFormValid = false;
       setError3("File is required");
     }
-    if (visaValue === 0) {
+    if (residencyValue === 2 && !visa) {
       isFormValid = false;
-      setVisaError("Visa status is required");
+      setVisaError("Visa Type is required");
+    }
+    if (residencyValue === 2 && !exDate) {
+      isFormValid = false;
+      setDateError("Expiry Date of Your BRP/TRP or Visa is required");
     }
     if (residencyValue === 0) {
       isFormValid = false;
@@ -220,21 +213,33 @@ const ConvertStudentIntoConsultantForm = () => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
-    subData.append("ProfOfRightToWork", FileList[0]?.originFileObj);
-    subData.append("ProfOfAddress", FileList2[0]?.originFileObj);
-    subData.append("IdOrPassport", FileList3[0]?.originFileObj);
+
+    subData.append(
+      "IdOrPassport",
+      FileList3.length === 0 ? null : FileList3[0]?.originFileObj
+    );
+    subData.append(
+      "ProfOfAddress",
+      FileList2.length === 0 ? null : FileList2[0]?.originFileObj
+    );
+    subData.append(
+      "cvfile",
+      FileList.length === 0 ? null : FileList[0]?.originFileObj
+    );
     var formIsValid = validateRegisterForm(subData);
 
     if (formIsValid) {
       setButtonStatus(true);
-      post(`BecomeConsultant/Submit`, subData).then((res) => {
+      post(`BecomeCompanion/Submit`, subData).then((res) => {
         setButtonStatus(false);
         if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {
             appearance: "success",
             autoDismiss: true,
           });
-          history.push("/");
+
+          history.push("/successCompanion");
+          setSuccess(!success);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -247,10 +252,10 @@ const ConvertStudentIntoConsultantForm = () => {
 
   return (
     <div>
-      <BreadCrumb title="Register Student As Consultant" backTo="" path={`/`} />
+      <BreadCrumb title="Register Student As Companion" backTo="" path={`/`} />
       <Card>
         <CardBody>
-          <p className="section-title">Register Student As Consultant</p>
+          <p className="section-title">Register Student As Companion</p>
           <Form onSubmit={handleSubmit} className="my-5">
             <input
               type="hidden"
@@ -259,38 +264,140 @@ const ConvertStudentIntoConsultantForm = () => {
               value={referenceId}
             />
 
+            <Row>
+              <Col lg="5" md="8">
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
+                    Residency Status <span className="text-danger">*</span>{" "}
+                  </span>
+
+                  <Select
+                    options={residencyOptions}
+                    value={{ label: residencyLabel, value: residencyValue }}
+                    onChange={(opt) => selectResidency(opt.label, opt.value)}
+                    name="residencyStatusId"
+                    id="residencyStatusId"
+                  />
+                  <span className="text-danger">{residencyError}</span>
+                </FormGroup>
+
+                {residencyValue === 2 ? (
+                  <>
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        {" "}
+                        <span className="text-danger">*</span> Visa Type
+                      </span>
+
+                      <Input
+                        type="text"
+                        name="visastatus "
+                        id="visastatus "
+                        onChange={(e) => {
+                          handlevisaType(e);
+                        }}
+                        placeholder="Enter Visa Status"
+                        defaultValue={visa}
+                        // defaultValue={eligibilityData?.visaType}
+                      />
+                      <span className="text-danger">{visaError}</span>
+                    </FormGroup>
+
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>
+                        <span className="text-danger">*</span> Expiry Date of
+                        Your BRP/TRP or Visa{" "}
+                      </span>
+
+                      <Input
+                        type="date"
+                        name="expireDate"
+                        id="expireDate"
+                        onChange={(e) => {
+                          handleDate(e);
+                        }}
+                        defaultValue={exDate}
+                      />
+                      <span className="text-danger">{dateError}</span>
+                    </FormGroup>
+
+                    <FormGroup className="has-icon-left position-relative">
+                      <span>Do You Have Right to Work? </span>
+
+                      <FormGroup check inline>
+                        <Input
+                          className="form-check-input"
+                          type="radio"
+                          id="haveRightToWork"
+                          value="true"
+                          onChange={onRadioValueChange}
+                          name="haveRightToWork"
+                          checked={rightToWork === "true"}
+                        />
+                        <Label
+                          className="form-check-label"
+                          check
+                          htmlFor="haveRightToWork"
+                        >
+                          Yes
+                        </Label>
+                      </FormGroup>
+
+                      <FormGroup check inline>
+                        <Input
+                          className="form-check-input"
+                          type="radio"
+                          id="haveRightToWork"
+                          onChange={onRadioValueChange}
+                          name="haveRightToWork"
+                          value="false"
+                          checked={rightToWork === "false"}
+                        />
+                        <Label
+                          className="form-check-label"
+                          check
+                          htmlFor="haveRightToWork"
+                        >
+                          No
+                        </Label>
+                      </FormGroup>
+                    </FormGroup>
+                  </>
+                ) : null}
+              </Col>
+            </Row>
+
             <FormGroup row className="has-icon-left position-relative">
               <Col md="2">
                 <span>
-                  Proof Of Work <span className="text-danger">*</span>{" "}
+                  Id/Passport <span className="text-danger">*</span>{" "}
                 </span>
               </Col>
               <Col md="3" className="become-consultant-align">
                 <Upload
                   multiple={false}
-                  fileList={FileList}
-                  onPreview={handlePreview}
-                  onChange={handleChange}
+                  fileList={FileList3}
+                  onPreview={handlePreview3}
+                  onChange={handleChange3}
                   beforeUpload={(file) => {
                     return false;
                   }}
-                  style={{ height: "32px" }}
                 >
-                  {FileList.length < 1 ? <UploadButton /> : ""}
+                  {FileList3.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 <Modal
-                  visible={previewVisible}
-                  title={previewTitle}
+                  visible={previewVisible3}
+                  title={previewTitle3}
                   footer={null}
-                  onCancel={handleCancel}
+                  onCancel={handleCancel3}
                 >
                   <img
                     alt="example"
                     style={{ width: "100%" }}
-                    src={previewImage}
+                    src={previewImage3}
                   />
                 </Modal>
-                <span className="text-danger d-block">{error}</span>
+                <span className="text-danger d-block">{error3}</span>
               </Col>
             </FormGroup>
 
@@ -332,79 +439,42 @@ const ConvertStudentIntoConsultantForm = () => {
             <FormGroup row className="has-icon-left position-relative">
               <Col md="2">
                 <span>
-                  Id/Passport <span className="text-danger">*</span>{" "}
+                  CV File <span className="text-danger">*</span>{" "}
                 </span>
               </Col>
               <Col md="3" className="become-consultant-align">
                 <Upload
                   multiple={false}
-                  fileList={FileList3}
-                  onPreview={handlePreview3}
-                  onChange={handleChange3}
+                  fileList={FileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
                   beforeUpload={(file) => {
                     return false;
                   }}
+                  style={{ height: "32px" }}
                 >
-                  {FileList3.length < 1 ? <UploadButton /> : ""}
+                  {FileList.length < 1 ? <UploadButton /> : ""}
                 </Upload>
                 <Modal
-                  visible={previewVisible3}
-                  title={previewTitle3}
+                  visible={previewVisible}
+                  title={previewTitle}
                   footer={null}
-                  onCancel={handleCancel3}
+                  onCancel={handleCancel}
                 >
                   <img
                     alt="example"
                     style={{ width: "100%" }}
-                    src={previewImage3}
+                    src={previewImage}
                   />
                 </Modal>
-                <span className="text-danger d-block">{error3}</span>
+                <span className="text-danger d-block">{error}</span>
               </Col>
             </FormGroup>
-
-            <Row>
-              <Col lg="5" md="8">
-                <FormGroup className="has-icon-left position-relative">
-                  <span>
-                    Visa Status <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={visaOptions}
-                    value={{ label: visaLabel, value: visaValue }}
-                    onChange={(opt) => selectVisa(opt.label, opt.value)}
-                    name="VisaStatus"
-                    id="VisaStatus"
-                  />
-                  <span className="text-danger">{visaError}</span>
-                </FormGroup>
-
-                <FormGroup className="has-icon-left position-relative">
-                  <span>
-                    Residency Status <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={residencyOptions}
-                    value={{ label: residencyLabel, value: residencyValue }}
-                    onChange={(opt) => selectResidency(opt.label, opt.value)}
-                    name="ResidencyStatusId"
-                    id="ResidencyStatusId"
-                  />
-                  <span className="text-danger">{residencyError}</span>
-                </FormGroup>
-              </Col>
-            </Row>
 
             <FormGroup row className="text-right mt-4">
               <Col lg="7" md="8">
                 <CancelButton cancel={backToDashboard}></CancelButton>
-                <SaveButton
-                  text="Submit"
-                  // progress={progress}
-                  buttonStatus={buttonStatus}
-                />
+                <SaveButton text="Submit" buttonStatus={buttonStatus} />
               </Col>
             </FormGroup>
           </Form>
@@ -414,4 +484,4 @@ const ConvertStudentIntoConsultantForm = () => {
   );
 };
 
-export default ConvertStudentIntoConsultantForm;
+export default ConvertStudentIntoCompanionForm;

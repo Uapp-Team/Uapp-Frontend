@@ -6,9 +6,9 @@ const Origine = ({ typeId }) => {
       <p className="text-gray fs-12px mb-1 fw-700">
         <i>
           {typeId === 1
-            ? "For Home Students"
+            ? "For Home/UK Students"
             : typeId === 2
-            ? "For EU/UK Students"
+            ? "For EU/EEU Students"
             : typeId === 3
             ? "For International Students"
             : ""}

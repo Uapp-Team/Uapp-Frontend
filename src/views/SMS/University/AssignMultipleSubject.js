@@ -331,11 +331,11 @@ const AssignMultipleSubject = () => {
                 <Col xs="6" sm="4" md="2"></Col>
 
                 <Col xs="6" sm="4" md="3">
-                  <span>Home </span>
+                  <span>Home/UK </span>
                 </Col>
 
                 <Col xs="6" sm="4" md="2">
-                  <span>EU/UK </span>
+                  <span>EU/EEU </span>
                 </Col>
 
                 <Col xs="6" sm="4" md="3">

@@ -424,7 +424,7 @@ const AddUniversitySubjectTestScore = () => {
                 <TabPane tabId="3">
                   <div>
                     <p className="section-title">
-                      Test Score for Home Students
+                      Test Score for Home/UK Students
                     </p>
                     {homeTestScore === false ? (
                       <>
@@ -460,7 +460,7 @@ const AddUniversitySubjectTestScore = () => {
                                 setShowForm={setShowForm}
                                 showForm={showForm}
                                 testScore={homeTestScore}
-                                name={"Home"}
+                                name={"Home/UK"}
                               />
                               {permissions?.includes(
                                 permissionList?.Edit_Subjects
@@ -512,11 +512,11 @@ const AddUniversitySubjectTestScore = () => {
                   </div>
                   {/* home test score ends here */}
 
-                  {/* eu/uk test score starts here */}
+                  {/* EU/EEU test score starts here */}
 
                   <div className="my-5">
                     <p className="section-title">
-                      Test Score for EU/UK Students
+                      Test Score for EU/EEU Students
                     </p>
                     {euTestScore === false ? (
                       <>
@@ -552,7 +552,7 @@ const AddUniversitySubjectTestScore = () => {
                                 setShowForm={setShowForm2}
                                 showForm={showForm2}
                                 testScore={euTestScore}
-                                name={"EU/UK"}
+                                name={"EU/EEU"}
                               />
                               {permissions?.includes(
                                 permissionList?.Edit_Subjects
@@ -602,7 +602,7 @@ const AddUniversitySubjectTestScore = () => {
                       </>
                     ) : null}
                   </div>
-                  {/* eu/uk test score ends here */}
+                  {/* EU/EEU test score ends here */}
 
                   {/* int test score starts here */}
                   <div>

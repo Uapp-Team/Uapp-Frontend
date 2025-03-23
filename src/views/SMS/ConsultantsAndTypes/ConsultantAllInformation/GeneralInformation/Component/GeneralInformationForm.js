@@ -149,7 +149,7 @@ const GeneralInformationForm = ({
                         }}
                         checked={homeAccept}
                       />
-                      <span className="mr-2">Home </span>
+                      <span className="mr-2">Home/UK </span>
                     </FormGroup>
                   </Col>
 
@@ -164,7 +164,7 @@ const GeneralInformationForm = ({
                         }}
                         checked={ukAccept}
                       />
-                      <span className="mr-2">EU/UK </span>
+                      <span className="mr-2">EU/EEU </span>
                     </FormGroup>
                   </Col>
 

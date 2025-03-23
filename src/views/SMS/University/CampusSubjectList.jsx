@@ -142,9 +142,10 @@ const CampusSubjectList = () => {
     value: dsn.value,
   }));
 
-
   useEffect(() => {
-    const tableColumnCampusCourse = JSON.parse(localStorage.getItem("ColumnCampusCourse"));
+    const tableColumnCampusCourse = JSON.parse(
+      localStorage.getItem("ColumnCampusCourse")
+    );
     tableColumnCampusCourse && setTableData(tableColumnCampusCourse);
     !tableColumnCampusCourse &&
       localStorage.setItem(
@@ -152,7 +153,7 @@ const CampusSubjectList = () => {
         JSON.stringify(ColumnCampusCourse)
       );
 
-    !tableColumnCampusCourse && setTableData(ColumnCampusCourse)
+    !tableColumnCampusCourse && setTableData(ColumnCampusCourse);
   }, []);
 
   const selectOrder = (label, value) => {
@@ -440,7 +441,6 @@ const CampusSubjectList = () => {
     localStorage.setItem("ColumnCampusCourse", JSON.stringify(values));
   };
 
-
   return (
     <div>
       <BreadCrumb
@@ -616,27 +616,27 @@ const CampusSubjectList = () => {
                               {permissions?.includes(
                                 permissionList.Edit_Subjects
                               ) && (
-                                  <div className="d-flex justify-content-between">
-                                    <Col md="8" className="">
-                                      <p className="">{table?.title}</p>
-                                    </Col>
+                                <div className="d-flex justify-content-between">
+                                  <Col md="8" className="">
+                                    <p className="">{table?.title}</p>
+                                  </Col>
 
-                                    <Col md="4" className="text-center">
-                                      <FormGroup check inline>
-                                        <Input
-                                          className="form-check-input"
-                                          type="checkbox"
-                                          id=""
-                                          name="check"
-                                          onChange={(e) => {
-                                            handleChecked(e, i);
-                                          }}
-                                          checked={table?.isActive}
-                                        />
-                                      </FormGroup>
-                                    </Col>
-                                  </div>
-                                )}
+                                  <Col md="4" className="text-center">
+                                    <FormGroup check inline>
+                                      <Input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id=""
+                                        name="check"
+                                        onChange={(e) => {
+                                          handleChecked(e, i);
+                                        }}
+                                        checked={table?.isActive}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </div>
+                              )}
                             </>
                           ) : (
                             <div className="d-flex justify-content-between">
@@ -661,7 +661,6 @@ const CampusSubjectList = () => {
                             </div>
                           )}
                         </div>
-
                       ))}
                     </DropdownMenu>
                   </Dropdown>
@@ -679,10 +678,9 @@ const CampusSubjectList = () => {
               <Table id="table-to-xls" className="table-sm table-bordered">
                 <thead className="thead-uapp-bg">
                   <tr style={{ textAlign: "center" }}>
-
                     {tableData[0]?.isActive ? <th>Course</th> : null}
-                    {tableData[1]?.isActive ? <th>Accept Home</th> : null}
-                    {tableData[2]?.isActive ? <th>Accept EU/UK</th> : null}
+                    {tableData[1]?.isActive ? <th>Accept Home/UK</th> : null}
+                    {tableData[2]?.isActive ? <th>Accept EU/EEU</th> : null}
                     {tableData[3]?.isActive ? (
                       <th>Accept International</th>
                     ) : null}
@@ -702,7 +700,6 @@ const CampusSubjectList = () => {
                 <tbody>
                   {subList?.map((sub, i) => (
                     <tr key={sub?.id} style={{ textAlign: "center" }}>
-
                       {tableData[0]?.isActive ? <td>{sub?.name}</td> : null}
                       {tableData[1]?.isActive ? (
                         <td>{sub?.isAcceptHome === false ? "No" : "Yes"}</td>
@@ -725,7 +722,6 @@ const CampusSubjectList = () => {
                           {sub?.department?.name} ({sub?.subDepartment?.name})
                         </td>
                       ) : null}
-
 
                       {permissions?.includes(permissionList.Edit_Subjects) ? (
                         <>
@@ -901,7 +897,7 @@ const CampusSubjectList = () => {
 
                 <FormGroup row className="">
                   <Col md="6">
-                    <span>Is Accept Home</span>
+                    <span>Is Accept Home/UK</span>
                   </Col>
 
                   <Col md="6">
@@ -948,7 +944,7 @@ const CampusSubjectList = () => {
 
                 <FormGroup row className="">
                   <Col md="6">
-                    <span>Is Accept EU/UK</span>
+                    <span>Is Accept EU/EEU</span>
                   </Col>
 
                   <Col md="6">

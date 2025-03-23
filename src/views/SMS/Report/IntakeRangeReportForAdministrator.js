@@ -94,7 +94,7 @@ const IntakeRangeReportForAdministrator = () => {
           type: "pie",
         },
         colors: ["#4BADC0", "#9AD0DB", "#B7DEE5"],
-        labels: ["Home/UK", "European", "International"],
+        labels: ["Home/UK", "EU/EEU", "International"],
         responsive: [
           // {
           //   breakpoint: 480,
@@ -137,7 +137,7 @@ const IntakeRangeReportForAdministrator = () => {
         },
 
         xaxis: {
-          categories: ["Home/UK", "European", "International"],
+          categories: ["Home/UK", "EU/EEU", "International"],
 
           axisBorder: {
             show: true,

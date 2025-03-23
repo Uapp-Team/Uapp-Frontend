@@ -347,7 +347,7 @@ const ConsultantRegistration = () => {
                             setAcceptError(false);
                           }}
                         />
-                        <span className="mr-2">Home </span>
+                        <span className="mr-2">Home/UK </span>
                       </FormGroup>
                     </Col>
 
@@ -363,7 +363,7 @@ const ConsultantRegistration = () => {
                             setAcceptError(false);
                           }}
                         />
-                        <span className="mr-2">EU/UK </span>
+                        <span className="mr-2">EU/EEU </span>
                       </FormGroup>
                     </Col>
 

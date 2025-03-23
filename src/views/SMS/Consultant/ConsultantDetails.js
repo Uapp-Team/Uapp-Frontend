@@ -166,25 +166,25 @@ const ConsultantDetails = () => {
                 <td width="40%">Recruitment Type:</td>
 
                 <td width="60%">
-                  {/* {consultantData?.isAcceptedHome == true  ? "Home, " : null}{" "}{consultantData?.isAcceptedEU_UK == true ? "EU/UK, " : null}{" "}
+                  {/* {consultantData?.isAcceptedHome == true  ? "Home/UK, " : null}{" "}{consultantData?.isAcceptedEU_UK == true ? "EU/EEU, " : null}{" "}
                               {consultantData?.isAcceptedInternational == true ? "International" : null} */}
 
                   {consultantData?.isAcceptedHome == true &&
                   consultantData?.isAcceptedEU_UK == true &&
                   consultantData?.isAcceptedInternational == true
-                    ? "Home, EU/UK, International"
+                    ? "Home/UK, EU/EEU, International"
                     : consultantData?.isAcceptedHome == true &&
                       consultantData?.isAcceptedEU_UK == true &&
                       consultantData?.isAcceptedInternational == false
-                    ? "Home, EU/UK"
+                    ? "Home/UK, EU/EEU"
                     : consultantData?.isAcceptedHome == true &&
                       consultantData?.isAcceptedEU_UK == false &&
                       consultantData?.isAcceptedInternational == false
-                    ? "Home"
+                    ? "Home/UK"
                     : consultantData?.isAcceptedHome == false &&
                       consultantData?.isAcceptedEU_UK == true &&
                       consultantData?.isAcceptedInternational == true
-                    ? "EU/UK, International"
+                    ? "EU/EEU, International"
                     : consultantData?.isAcceptedHome == false &&
                       consultantData?.isAcceptedEU_UK == false &&
                       consultantData?.isAcceptedInternational == true
@@ -192,8 +192,8 @@ const ConsultantDetails = () => {
                     : consultantData?.isAcceptedHome == true &&
                       consultantData?.isAcceptedEU_UK == false &&
                       consultantData?.isAcceptedInternational == true
-                    ? "Home, International"
-                    : "EU/UK"}
+                    ? "Home/UK, International"
+                    : "EU/EEU"}
                 </td>
               </tr>
 

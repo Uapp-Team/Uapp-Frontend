@@ -118,7 +118,7 @@ const SubjectAssignToCampus = ({
             {campus?.isAcceptHomeAvailable ? (
               <Col xs="3" sm="12" md="3" className="text-center mt-2">
                 <FormGroup check inline>
-                  <span className="mr-2">Home </span>
+                  <span className="mr-2">Home/UK </span>
                   <Input
                     className="form-check-input"
                     type="checkbox"
@@ -136,7 +136,7 @@ const SubjectAssignToCampus = ({
             {campus?.isAcceptEU_UKAvailable ? (
               <Col xs="3" sm="12" md="3" className="text-center mt-2">
                 <FormGroup check inline>
-                  <span className="mr-2">EU/UK </span>
+                  <span className="mr-2">EU/EEU </span>
                   <Input
                     className="form-check-input"
                     type="checkbox"

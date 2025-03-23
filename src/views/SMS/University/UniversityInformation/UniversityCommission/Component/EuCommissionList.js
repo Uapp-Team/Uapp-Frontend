@@ -117,7 +117,7 @@ const EuCommissionList = ({ euCommissions, univerId }) => {
         </>
       ) : (
         <>
-          <p>No commission is added for EU/UK application.</p>
+          <p>No commission is added for EU/EEU application.</p>
         </>
       )}
     </>

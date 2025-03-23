@@ -378,7 +378,7 @@ const StudentApplicationForm = () => {
                 </Col>
               </FormGroup> */}
 
-          {studentTypeLabel == "Home" ? (
+          {studentTypeLabel == "Home/UK" ? (
             <HomeStudent
               applicationStudentId={id}
               studentTypeValue={studentTypeValue}

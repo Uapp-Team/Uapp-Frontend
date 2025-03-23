@@ -255,9 +255,9 @@ const CopyUniversitySubjectDocumentRequirement = () => {
   //   setDocuValue(document?.documentGroup?.id);
   //   setAppliLabel(
   //     document?.applicationTypeId === 1
-  //       ? "Home"
+  //       ? "Home/UK"
   //       : document?.applicationTypeId === 2
-  //       ? "EU/UK"
+  //       ? "EU/EEU"
   //       : "International"
   //   );
   //   setAppliValue(document?.applicationTypeId);
@@ -512,9 +512,9 @@ const CopyUniversitySubjectDocumentRequirement = () => {
                               <td>{document?.documentGroup?.title}</td>
                               <td className="text-center">
                                 {document?.applicationTypeId === 1
-                                  ? "Home"
+                                  ? "Home/UK"
                                   : document?.applicationTypeId === 2
-                                  ? "EU/UK"
+                                  ? "EU/EEU"
                                   : "International"}
                               </td>
                               <td>

@@ -417,7 +417,7 @@ const DocumentList = () => {
                                 }}
                                 checked={homeAccept}
                               />
-                              <span className="mr-2">Home </span>
+                              <span className="mr-2">Home/UK </span>
                             </FormGroup>
                           </Col>
 
@@ -437,7 +437,7 @@ const DocumentList = () => {
                                 }}
                                 checked={ukAccept}
                               />
-                              <span className="mr-2">EU/UK </span>
+                              <span className="mr-2">EU/EEU </span>
                             </FormGroup>
                           </Col>
 
@@ -593,12 +593,12 @@ const DocumentList = () => {
                           ) : null}
                           {document?.isForHome ? (
                             <>
-                              <span>Home</span> <br />
+                              <span>Home/UK</span> <br />
                             </>
                           ) : null}
                           {document?.isForEu_uk ? (
                             <>
-                              <span>EU/UK</span>{" "}
+                              <span>EU/EEU</span>{" "}
                             </>
                           ) : null}
                         </td>
