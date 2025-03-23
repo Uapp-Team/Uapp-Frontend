@@ -18,10 +18,12 @@ const Download = ({ fileurl, fileName }) => {
 
   return (
     <>
-      <i
-        class="fas fa-arrow-circle-down text-success fs-24px pointer"
-        onClick={handleDownload}
-      ></i>
+      {fileurl && (
+        <i
+          class="fas fa-arrow-circle-down text-success fs-24px pointer"
+          onClick={handleDownload}
+        ></i>
+      )}
     </>
   );
 };

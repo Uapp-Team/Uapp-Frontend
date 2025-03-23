@@ -1230,11 +1230,6 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
-                  <Download
-                    fileurl={applicationInfo?.offerLetterUrl}
-                    fileName={`unconditional-offer-${applicationInfo?.id}`}
-                  />
-
                   {currentUser !== userTypes?.AdmissionCompliance.toString() &&
                     applicationInfo?.applicationStatusId !== 1 &&
                     applicationInfo?.confidenceLevel > 0 &&
@@ -1342,21 +1337,28 @@ const ApplicationInfo = ({
                                 ) : null}
                               </FormGroup>
                             )}
-                            {statusValue === 6 || statusValue === 9 ? (
+                            {statusValue === 9 ? (
                               <FormGroup>
                                 <span>Offer Letter </span>
-                                <br />
 
-                                <Upload
-                                  multiple={false}
-                                  fileList={file}
-                                  onChange={handleFile}
-                                  beforeUpload={(file) => {
-                                    return false;
-                                  }}
-                                >
-                                  {file.length < 1 ? <UploadButton /> : ""}
-                                </Upload>
+                                <br />
+                                <div className="d-flex justify-content-between align-items-center">
+                                  <Upload
+                                    multiple={false}
+                                    fileList={file}
+                                    onChange={handleFile}
+                                    beforeUpload={(file) => {
+                                      return false;
+                                    }}
+                                  >
+                                    {file.length < 1 ? <UploadButton /> : ""}
+                                  </Upload>
+
+                                  <Download
+                                    fileurl={applicationInfo?.offerLetterUrl}
+                                    fileName={`unconditional-offer-${applicationInfo?.id}`}
+                                  />
+                                </div>
                               </FormGroup>
                             ) : null}
                             {/* {statusValue === 12 ? (
@@ -1440,17 +1442,15 @@ const ApplicationInfo = ({
                   </div>
                 ) : null}
 
-                {applicationInfo?.applicationStatus?.name === "Offer Issued" ? (
+                {applicationInfo?.offerLetterUrl ? (
                   <div>
-                    {applicationInfo?.offerLetterUrl ? (
-                      <a
-                        href={rootUrl + applicationInfo?.offerLetterUrl}
-                        target="blank"
-                        className="file-download"
-                      >
-                        Download Offer letter
-                      </a>
-                    ) : null}
+                    <a
+                      href={rootUrl + applicationInfo?.offerLetterUrl}
+                      target="blank"
+                      className="file-download"
+                    >
+                      Download Offer letter
+                    </a>
                   </div>
                 ) : null}
                 {applicationInfo?.applicationStatus?.name ===
