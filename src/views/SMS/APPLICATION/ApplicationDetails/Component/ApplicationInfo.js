@@ -31,6 +31,7 @@ import put from "../../../../../helpers/put";
 import SpanButton from "../../../Components/SpanButton";
 import ApplicationStatus from "./Status/ApplicationStatus";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import Download from "../../../../../components/ui/Download";
 
 const ApplicationInfo = ({
   handleScroll,
@@ -59,13 +60,7 @@ const ApplicationInfo = ({
   setElptOverall,
 }) => {
   const currentUser = localStorage.getItem("userType");
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
+  console.log(applicationInfo);
 
   // const userType = localStorage.getItem("userType");
   const [statusDD, setStatusDD] = useState([]);
@@ -1229,13 +1224,16 @@ const ApplicationInfo = ({
           </thead>
           <tbody>
             <tr>
-              <td td className="w-50">
-                Status
-              </td>
+              <td className="w-50">Status</td>
 
-              <td td className="w-50">
+              <td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
+
+                  <Download
+                    fileurl={applicationInfo?.offerLetterUrl}
+                    fileName={`unconditional-offer-${applicationInfo?.id}`}
+                  />
 
                   {currentUser !== userTypes?.AdmissionCompliance.toString() &&
                     applicationInfo?.applicationStatusId !== 1 &&
@@ -1344,7 +1342,7 @@ const ApplicationInfo = ({
                                 ) : null}
                               </FormGroup>
                             )}
-                            {statusValue === 6 ? (
+                            {statusValue === 6 || statusValue === 9 ? (
                               <FormGroup>
                                 <span>Offer Letter </span>
                                 <br />
