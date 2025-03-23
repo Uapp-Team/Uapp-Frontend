@@ -216,6 +216,10 @@ const StudentRegisterForm = () => {
     } else {
       setPasswordError(""); // Clear the error if everything is valid
     }
+
+    if (confirmPassword.length > 0 && confirmPassword !== password) {
+      setConfirmPasswordError("Password doesn't match");
+    } else setConfirmPasswordError("");
   };
 
   const togglePasswordVisibility = () => {
@@ -234,7 +238,7 @@ const StudentRegisterForm = () => {
       setConfirmPasswordError("");
     }
     if (password && e.target.value !== password) {
-      setConfirmPasswordError("Passwords doesn't match.");
+      setConfirmPasswordError("Password doesn't match.");
     } else {
       setConfirmPasswordError("");
     }
@@ -332,8 +336,9 @@ const StudentRegisterForm = () => {
         isFormValid = false;
         errors.push("One special character");
       }
-
-      setPasswordError(errors.join(" & ") + " required");
+      errors.length > 0
+        ? setPasswordError(errors.join(" & ") + " required")
+        : setPasswordError("");
     }
 
     if (confirmPassword === "") {
