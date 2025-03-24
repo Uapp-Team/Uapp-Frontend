@@ -31,6 +31,7 @@ import put from "../../../../../helpers/put";
 import SpanButton from "../../../Components/SpanButton";
 import ApplicationStatus from "./Status/ApplicationStatus";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import Download from "../../../../../components/ui/Download";
 
 const ApplicationInfo = ({
   handleScroll,
@@ -59,13 +60,7 @@ const ApplicationInfo = ({
   setElptOverall,
 }) => {
   const currentUser = localStorage.getItem("userType");
-  const handleDate = (e) => {
-    var datee = e;
-    var utcDate = new Date(datee);
-    var localeDate = utcDate.toLocaleString("en-CA");
-    const x = localeDate.split(",")[0];
-    return x;
-  };
+  console.log(applicationInfo);
 
   // const userType = localStorage.getItem("userType");
   const [statusDD, setStatusDD] = useState([]);
@@ -1229,11 +1224,9 @@ const ApplicationInfo = ({
           </thead>
           <tbody>
             <tr>
-              <td td className="w-50">
-                Status
-              </td>
+              <td className="w-50">Status</td>
 
-              <td td className="w-50">
+              <td className="w-50">
                 <div className="d-flex justify-content-between">
                   {applicationInfo?.applicationStatus?.name}
 
@@ -1344,21 +1337,28 @@ const ApplicationInfo = ({
                                 ) : null}
                               </FormGroup>
                             )}
-                            {statusValue === 6 ? (
+                            {statusValue === 9 ? (
                               <FormGroup>
                                 <span>Offer Letter </span>
-                                <br />
 
-                                <Upload
-                                  multiple={false}
-                                  fileList={file}
-                                  onChange={handleFile}
-                                  beforeUpload={(file) => {
-                                    return false;
-                                  }}
-                                >
-                                  {file.length < 1 ? <UploadButton /> : ""}
-                                </Upload>
+                                <br />
+                                <div className="d-flex justify-content-between align-items-center">
+                                  <Upload
+                                    multiple={false}
+                                    fileList={file}
+                                    onChange={handleFile}
+                                    beforeUpload={(file) => {
+                                      return false;
+                                    }}
+                                  >
+                                    {file.length < 1 ? <UploadButton /> : ""}
+                                  </Upload>
+
+                                  <Download
+                                    fileurl={applicationInfo?.offerLetterUrl}
+                                    fileName={`unconditional-offer-${applicationInfo?.id}`}
+                                  />
+                                </div>
                               </FormGroup>
                             ) : null}
                             {/* {statusValue === 12 ? (
@@ -1442,17 +1442,15 @@ const ApplicationInfo = ({
                   </div>
                 ) : null}
 
-                {applicationInfo?.applicationStatus?.name === "Offer Issued" ? (
+                {applicationInfo?.offerLetterUrl ? (
                   <div>
-                    {applicationInfo?.offerLetterUrl ? (
-                      <a
-                        href={rootUrl + applicationInfo?.offerLetterUrl}
-                        target="blank"
-                        className="file-download"
-                      >
-                        Download Offer letter
-                      </a>
-                    ) : null}
+                    <a
+                      href={rootUrl + applicationInfo?.offerLetterUrl}
+                      target="blank"
+                      className="file-download"
+                    >
+                      Download Offer letter
+                    </a>
                   </div>
                 ) : null}
                 {applicationInfo?.applicationStatus?.name ===
