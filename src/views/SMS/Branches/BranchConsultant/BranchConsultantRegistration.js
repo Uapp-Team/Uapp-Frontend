@@ -441,7 +441,7 @@ const BranchConsultantRegistration = () => {
                       </span>
 
                       <Row>
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
@@ -455,7 +455,7 @@ const BranchConsultantRegistration = () => {
                           </FormGroup>
                         </Col>
 
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
@@ -469,7 +469,7 @@ const BranchConsultantRegistration = () => {
                           </FormGroup>
                         </Col>
 
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
