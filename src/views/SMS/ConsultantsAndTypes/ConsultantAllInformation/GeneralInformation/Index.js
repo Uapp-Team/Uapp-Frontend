@@ -64,17 +64,18 @@ const GeneralInformation = () => {
       setBranch(res);
       res?.length === 1 && setBranchValue(res[0].id);
     });
-  }, []);
-
-  useEffect(() => {
-    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
-      setConsParent(res);
-    });
 
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
-  }, [branchValue]);
+  }, []);
+
+  useEffect(() => {
+    // get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
+    get(`ParentConsultantDD/Index/${consultantRegisterId}`).then((res) => {
+      setConsParent(res);
+    });
+  }, [consultantRegisterId]);
 
   useEffect(() => {
     get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
