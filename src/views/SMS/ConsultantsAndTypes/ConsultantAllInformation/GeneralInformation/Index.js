@@ -71,7 +71,6 @@ const GeneralInformation = () => {
   }, []);
 
   useEffect(() => {
-    // get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
     get(`ParentConsultantDD/Index/${consultantRegisterId}`).then((res) => {
       setConsParent(res);
     });
@@ -84,7 +83,6 @@ const GeneralInformation = () => {
 
     get(`Consultant/GetGeneralInformation/${consultantRegisterId}`).then(
       (res) => {
-        console.log("cons", res);
         setConsData(res);
         // setSubmitData(true);
         setTypeValue(res?.consultantType?.id);
@@ -220,7 +218,7 @@ const GeneralInformation = () => {
     //   setParentError(true);
     // }
 
-    if (BranchAdmin() || BranchManager()) {
+    if (consData?.isDefaultConsultant === true) {
       setParentError(false);
     } else {
       if (userTypeId !== userTypes?.Consultant && parentValue === 0) {

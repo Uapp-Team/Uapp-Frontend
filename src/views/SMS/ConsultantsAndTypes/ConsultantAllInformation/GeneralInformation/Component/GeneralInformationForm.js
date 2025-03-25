@@ -206,7 +206,7 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    {!BranchAdmin() && !BranchManager() && (
+                    {consData?.isDefaultConsultant !== true && (
                       <span className="text-danger">*</span>
                     )}
                     Parent Consultant
@@ -234,7 +234,7 @@ const GeneralInformationForm = ({
             <FormGroup>
               <span>
                 {" "}
-                <span className="text-danger">*</span> Title
+                <span className="text-danger">*</span>Title
               </span>
               <div>
                 {title?.map((tt) => (
