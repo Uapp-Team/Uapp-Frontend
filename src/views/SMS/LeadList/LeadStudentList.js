@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
-import ColumnStudent from "../TableColumn/ColumnStudent";
+import ColumnLeadStudent from "../TableColumn/ColumnLeadStudent";
 import get from "../../../helpers/get";
 import { userTypes } from "../../../constants/userTypeConstant";
 import put from "../../../helpers/put";
@@ -105,13 +105,16 @@ const LeadStudentList = () => {
 
   // api starts here
   useEffect(() => {
-    const tableColumn = JSON.parse(localStorage.getItem("ColumnStudent"));
+    const tableColumn = JSON.parse(localStorage.getItem("ColumnLeadStudent"));
 
     tableColumn && setTableData(tableColumn);
 
     !tableColumn &&
-      localStorage.setItem("ColumnStudent", JSON.stringify(ColumnStudent));
-    !tableColumn && setTableData(ColumnStudent);
+      localStorage.setItem(
+        "ColumnLeadStudent",
+        JSON.stringify(ColumnLeadStudent)
+      );
+    !tableColumn && setTableData(ColumnLeadStudent);
   }, []);
 
   useEffect(() => {
@@ -555,7 +558,7 @@ const LeadStudentList = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnStudent", JSON.stringify(values));
+    localStorage.setItem("ColumnLeadStudent", JSON.stringify(values));
   };
   return (
     <div>
