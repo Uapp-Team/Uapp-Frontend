@@ -79,11 +79,11 @@ const NavbarUser = () => {
     }
 
     if (Companion()) {
-      get(
-        `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
-      ).then((res) => {
-        setcanSwitch(res);
-      });
+      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
+        (res) => {
+          setcanSwitch(res);
+        }
+      );
 
       get(`BecomeCompanion/CanSwitchToStudent/${userInfo?.displayEmail}`).then(
         (res) => {
