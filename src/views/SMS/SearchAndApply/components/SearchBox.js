@@ -1,6 +1,10 @@
+import { Select } from "antd"; // antd for dropdown
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Input } from "reactstrap";
+import "../SearchAndApply.css"; // custom CSS
+
+const { Option } = Select;
 
 const SearchBox = ({
   name,
@@ -10,7 +14,9 @@ const SearchBox = ({
   setIsTyping,
   onKeyDown,
   onBlur,
-  isIcon = false,
+  university,
+  setUniversity,
+  universityOptions = [],
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
 
@@ -26,7 +32,7 @@ const SearchBox = ({
       setTimeout(() => {
         setIsTyping(false);
       }, 1000)
-    ); // 1 second after user stops SearchBox
+    );
   };
 
   useEffect(() => {
@@ -38,35 +44,35 @@ const SearchBox = ({
   }, [typingTimeout]);
 
   return (
-    <>
-      {isIcon ? (
-        <div className="d-flex align-items-center bg-white py-2 px-3">
-          <CiSearch size={30} />
-          <Input
-            className="border-0"
-            type="text"
-            name={name}
-            value={value}
-            id={name}
-            placeholder={placeholder}
-            onChange={(e) => handleChange(e)}
-            onKeyDown={onKeyDown}
-            onBlur={onBlur}
-          />
-        </div>
-      ) : (
+    <div className="search-container">
+      <div className="search-input">
+        <CiSearch className="search-icon" />
         <Input
+          className="search-text"
           type="text"
           name={name}
           value={value}
           id={name}
           placeholder={placeholder}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           onKeyDown={onKeyDown}
           onBlur={onBlur}
         />
-      )}
-    </>
+      </div>
+      <Select
+        className="university-select"
+        value={university}
+        onChange={setUniversity}
+        placeholder="Select University"
+        bordered={false}
+      >
+        {universityOptions.map((u) => (
+          <Option key={u} value={u}>
+            {u}
+          </Option>
+        ))}
+      </Select>
+    </div>
   );
 };
 

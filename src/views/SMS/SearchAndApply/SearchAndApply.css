@@ -1,28 +1,35 @@
-.search-box {
-  position: relative;
-  top: 50px;
+.search-container {
+  display: flex;
+  background-color: #fff;
+  border-radius: 999px;
+  padding: 4px;
+  border: 1px solid #ddd;
   width: 100%;
-  margin: auto;
+  max-width: 600px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
-.search-box i {
-  position: absolute;
-  left: 12px;
-  top: 12px;
+.search-input {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 4px 12px;
 }
 
-/* controls the all type search input fields */
-input[type="search"] {
-  display: inline-block;
-  background-color: white;
-  width: 100%;
-  font-size: 1.5rem;
-  height: 30px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 0.2rem;
+.search-icon {
+  font-size: 18px;
+  color: #999;
+  margin-right: 8px;
+}
 
+.search-text {
+  border: none !important;
+  box-shadow: none !important;
   outline: none;
-  border: none;
-  border-radius: 10px;
+}
+
+.university-select {
+  border-left: 1px solid #ddd;
+  padding-left: 12px;
+  min-width: 180px;
 }
