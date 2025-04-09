@@ -1,0 +1,28 @@
+.search-box {
+  position: relative;
+  top: 50px;
+  width: 100%;
+  margin: auto;
+}
+
+.search-box i {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+}
+
+/* controls the all type search input fields */
+input[type="search"] {
+  display: inline-block;
+  background-color: white;
+  width: 100%;
+  font-size: 1.5rem;
+  height: 30px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0.2rem;
+
+  outline: none;
+  border: none;
+  border-radius: 10px;
+}

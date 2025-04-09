@@ -1,0 +1,73 @@
+import React, { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import { Input } from "reactstrap";
+
+const SearchBox = ({
+  name,
+  placeholder,
+  value,
+  setValue,
+  setIsTyping,
+  onKeyDown,
+  onBlur,
+  isIcon = false,
+}) => {
+  const [typingTimeout, setTypingTimeout] = useState(null);
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    setIsTyping(true);
+
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    setTypingTimeout(
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 1000)
+    ); // 1 second after user stops SearchBox
+  };
+
+  useEffect(() => {
+    return () => {
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+    };
+  }, [typingTimeout]);
+
+  return (
+    <>
+      {isIcon ? (
+        <div className="d-flex align-items-center bg-white py-2 px-3">
+          <CiSearch size={30} />
+          <Input
+            className="border-0"
+            type="text"
+            name={name}
+            value={value}
+            id={name}
+            placeholder={placeholder}
+            onChange={(e) => handleChange(e)}
+            onKeyDown={onKeyDown}
+            onBlur={onBlur}
+          />
+        </div>
+      ) : (
+        <Input
+          type="text"
+          name={name}
+          value={value}
+          id={name}
+          placeholder={placeholder}
+          onChange={(e) => handleChange(e)}
+          onKeyDown={onKeyDown}
+          onBlur={onBlur}
+        />
+      )}
+    </>
+  );
+};
+
+export default SearchBox;
