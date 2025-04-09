@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "reactstrap";
 import "./SearchAndApply.css";
+import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
 import SearchFilters from "./components/SearchFilters";
 
@@ -26,7 +27,7 @@ function SearchAndApply() {
   ];
   return (
     <>
-      <Row className="mb-3">
+      <Row className="mb-1">
         <Col md={6} className="d-flex h-40px">
           <SearchBox
             name="search"
@@ -53,6 +54,12 @@ function SearchAndApply() {
           />
         </Col>
       </Row>
+      <Row>
+        <Col>
+          <ResultsToolbar />
+        </Col>
+      </Row>
+      <div style={{ height: "1000px" }}></div>
     </>
   );
 }

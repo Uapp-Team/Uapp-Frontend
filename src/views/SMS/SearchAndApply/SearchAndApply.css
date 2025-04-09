@@ -37,7 +37,7 @@
 
 /* search filters */
 .filters-container {
-  margin-top: 1rem;
+  margin-top: 16px;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -83,4 +83,57 @@
   min-width: 160px;
   border-radius: 999px;
   background-color: #f3f4f6;
+}
+
+/* result toolbar */
+
+.results-toolbar {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tag {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tag-active {
+  background-color: #fff4e6;
+  color: #f48c06;
+  border: 1px solid #f1b67a;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.count {
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.filters-btn {
+  color: white;
+  background-color: #565e5e;
+  border-color: #e9e9e9;
+}
+
+.sticky-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050; /* above normal elements */
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
 }
