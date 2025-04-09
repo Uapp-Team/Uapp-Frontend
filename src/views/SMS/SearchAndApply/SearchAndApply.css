@@ -36,53 +36,64 @@
 }
 
 /* search filters */
-.filters-container {
-  margin-top: 16px;
-  font-family: "Segoe UI", sans-serif;
+.filter-container {
+  margin-top: 1rem;
 }
-
 .filters-heading {
+  font-size: 16px;
   color: #333;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
-.filters-row {
+.filter-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
 }
 
-.filters-group {
+.buttons-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
+  flex: 1;
 }
 
-.filter-chip {
-  padding: 6px 14px;
-  background-color: #f3f4f6;
-  border-radius: 999px;
+.filter-button {
+  margin-right: 5px;
+  padding: 8px 12px;
+  color: #374151;
+  background-color: white;
+  border: none;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: all 0.2s ease-in-out;
+  transition: 0.2s;
 }
 
-.filter-chip:hover {
+.filter-button:hover {
+  background-color: #dde4e3;
+}
+
+.dropdown-button {
+  padding: 8px;
+  background-color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-button:hover {
   background-color: #e5e7eb;
 }
 
-.filter-chip.active {
-  background-color: #d1d5db;
-  font-weight: 500;
+.dropdown-content {
+  margin-top: 8px;
 }
 
-.filter-select {
-  min-width: 160px;
-  border-radius: 999px;
-  background-color: #f3f4f6;
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
 }
 
 /* result toolbar */

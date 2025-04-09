@@ -34,14 +34,21 @@ function SearchAndApply() {
   }, []);
 
   const categories = [
-    { label: "Undergraduate" },
-    { label: "Pre-Masters programme" },
-    { label: "Postgraduate" },
-    { label: "Short Course" },
-    {
-      label: "Pre-sessional English",
-      options: ["Pre-sessional English", "Option 2", "Option 3"],
-    },
+    [
+      "Undergraduate",
+      "Pre-Masters programme",
+      "Postgraduate",
+      "Short Course",
+      "Pre-sessional English",
+    ],
+    [
+      "Research degrees",
+      "Pathway Programme",
+      "Professional Course",
+      "Diploma",
+      "Secondary School",
+    ],
+    ["Higher Secondary School", "HND", "HNC", "Level 3", "Level 4", "Level 5"],
   ];
 
   const dates = [
@@ -90,7 +97,7 @@ function SearchAndApply() {
         <ResultsToolbar />
       </div>
 
-      <div>
+      {/* <div>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi nobis
         error veniam atque enim odio dolorem itaque officiis earum, alias
         doloribus quasi repellendus! Libero magni quidem tenetur blanditiis
@@ -202,7 +209,7 @@ function SearchAndApply() {
         corrupti ab. Consequatur eligendi facilis ea possimus, cumque ducimus
         laudantium enim. Reprehenderit impedit magni enim vel officiis unde
         tempore mollitia!
-      </div>
+      </div> */}
     </>
   );
 }
