@@ -127,13 +127,16 @@
   border-color: #e9e9e9;
 }
 
-.sticky-toolbar {
+.toolbar-wrapper {
+  z-index: 999;
+}
+
+.results-toolbar.sticky {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1050; /* above normal elements */
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
+  top: 80px; /* height of your fixed header */
+  left: 15.5rem;
+  right: 1rem;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
