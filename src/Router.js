@@ -292,6 +292,7 @@ const CopyUniversitySubjectIntake = lazy(() =>
 
 // intake
 const Intake = lazy(() => import("./views/SMS/University/Intakes/Intake.js"));
+
 const AddNewIntakes = lazy(() =>
   import("./views/SMS/University/Intakes/Component/AddNewIntakes.jsx")
 );
@@ -1045,6 +1046,11 @@ const StudentDashboard = lazy(() =>
 const EducationLevelList = lazy(() =>
   import("./views/SMS/SETTINGS/EducationLevel/EducationLevelList")
 );
+
+const DurationSubjectList = lazy(() =>
+  import("./views/SMS/SETTINGS/DurationSubject/DurationSubjectList.js")
+);
+
 // const AddEducationLevel = lazy(() => import("./views/SMS/EducationLevel/AddEducationLevel"))
 
 // Degree
@@ -4575,6 +4581,16 @@ class AppRouter extends React.Component {
                         permissionList?.Configure_Educationlevels
                       )
                         ? EducationLevelList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/durationSubjectList"
+                    component={
+                      permissions?.includes(
+                        permissionList?.Configure_Educationlevels
+                      )
+                        ? DurationSubjectList
                         : NotAuthorized
                     }
                   />
