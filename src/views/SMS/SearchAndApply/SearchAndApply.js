@@ -116,7 +116,9 @@ function SearchAndApply() {
         <ResultsToolbar />
       </div>
 
-      <ApplyCard data={cardData} />
+      <div className="mt-3">
+        <ApplyCard data={cardData} />
+      </div>
     </>
   );
 }

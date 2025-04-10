@@ -166,13 +166,16 @@
 .card-container {
   border: 1px solid #ccc;
   border-radius: 12px;
+  width: 100%;
   overflow: hidden;
-  margin: 1rem auto;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+.card-container-horizontal {
+  width: 380px;
 }
 
 .card-container.vertical {
@@ -204,6 +207,10 @@
   font-size: 0.8rem;
 }
 
+.tags-vertical {
+  display: none;
+}
+
 .card-tag.fast-track {
   background: #ffcccb;
 }
@@ -231,6 +238,11 @@
 .card-title {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
+}
+
+.card-title-vertical {
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .card-subtitle {

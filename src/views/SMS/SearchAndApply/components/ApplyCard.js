@@ -16,14 +16,18 @@ const ApplyCard = ({ data }) => {
   const toggleLayout = () => setIsVertical(!isVertical);
 
   return (
-    <div className={`card-container ${isVertical ? "vertical" : "horizontal"}`}>
+    <div
+      className={`${
+        !isVertical ? "card-container" : "card-container-horizontal"
+      }`}
+    >
       <div className="card-header">
         <span className="card-date">
           {" "}
           <img src={BellIcon} alt="" /> {data.date}
         </span>
         <div className="d-flex">
-          <div className="tags">
+          <div className={`${!isVertical ? "tags" : "tags-vertical"}`}>
             {data.tags.map((tag, idx) => (
               <span
                 key={idx}
