@@ -60,7 +60,6 @@ const EducationLevelList = () => {
   const [durationLabel, setDurationLabel] = useState("Select Duration");
   const [durationValue, setDurationValue] = useState(0);
   const [durationError, setDurationError] = useState(false);
-
   const [multiDuration, setMultiDuration] = useState([]);
 
   useEffect(() => {

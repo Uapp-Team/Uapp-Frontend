@@ -37,6 +37,8 @@ const AddUniversitySubjectFee = () => {
   const [addIntTutionFee, setAddIntTutionFee] = useState(undefined);
   const [addEUTutionFee, setAddEUTutionFee] = useState(undefined);
   const [averageFee, setAverageFee] = useState(undefined);
+  const [firstYearTuitionFee, setFirstYearTuitionFee] = useState(undefined);
+  const [depositFee, setDepositFee] = useState(undefined);
 
   const [addLocalTutionFeeCurrencyvalue, setAddLocalTutionFeeCurrencyvalue] =
     useState("@");
@@ -51,6 +53,15 @@ const AddUniversitySubjectFee = () => {
     useState("@");
   const [averageFeeCurrencyId, setAverageFeeCurrencyId] = useState(0);
   const [averageFeeCurrencyValue, setAverageFeeCurrencyValue] = useState("@");
+
+  const [firstYearTuitionFeeId, setFirstYearTuitionFeeId] = useState(0);
+  const [
+    firstYearTuitionFeeCurrencyValue,
+    setFirstYearTuitionFeeCurrencyValue,
+  ] = useState("@");
+
+  const [depositFeeId, setDepositFeeId] = useState(0);
+  const [depositFeeCurrencyValue, setDepositFeeCurrencyValue] = useState("@");
 
   const { addToast } = useToasts();
   const { id, subjId } = useParams();
@@ -95,17 +106,27 @@ const AddUniversitySubjectFee = () => {
     const initialStatus4 = CurrencyDD.filter((status) => {
       return status.id === averageFeeCurrencyId;
     });
+    const initialStatus5 = CurrencyDD.filter((status) => {
+      return status.id === firstYearTuitionFeeId;
+    });
+    const initialStatus6 = CurrencyDD.filter((status) => {
+      return status.id === depositFeeId;
+    });
 
     setAddLocalTutionFeeCurrencyvalue(initialStatus1[0]?.name);
     setAddIntTutionFeeCurrencyValue(initialStatus2[0]?.name);
     setAddEUTutionFeeCurrencyValue(initialStatus3[0]?.name);
     setAverageFeeCurrencyValue(initialStatus4[0]?.name);
+    setFirstYearTuitionFeeCurrencyValue(initialStatus5[0]?.name);
+    setDepositFeeCurrencyValue(initialStatus6[0]?.name);
   }, [
     CurrencyDD,
     addLocalTutionFeeCurrencyId,
     addIntTutionFeeCurrencyId,
     addEUTutionFeeCurrencyId,
     averageFeeCurrencyId,
+    firstYearTuitionFeeId,
+    depositFeeId,
   ]);
 
   useEffect(() => {
@@ -114,11 +135,14 @@ const AddUniversitySubjectFee = () => {
       setAddIntTutionFeeCurrencyId(res?.internationalfeecurrencyid);
       setAddEUTutionFeeCurrencyId(res?.eututionfeecurrencyid);
       setAverageFeeCurrencyId(res?.averageapplicationfeecurrencyid);
-
+      setFirstYearTuitionFeeId(res?.firstyeartutionfeecurrencyid);
+      setDepositFeeId(res?.depositfeecurrencyid);
       setAddLocalTutionFee(res?.localtutionfee);
       setAddIntTutionFee(res?.internationaltutionfee);
       setAddEUTutionFee(res?.eututionfee);
       setAverageFee(res?.averageapplicationfee);
+      setFirstYearTuitionFee(res?.firstyeartutionfee);
+      setDepositFee(res?.depositfee);
       setRadioEvening(res?.evening);
       setRadioEveningWeekend(res?.eveningweekend);
       setRadioStandard(res?.standard);
@@ -151,6 +175,15 @@ const AddUniversitySubjectFee = () => {
   const selectCurrency4 = (label, value) => {
     setAverageFeeCurrencyValue(label);
     setAverageFeeCurrencyId(value);
+  };
+
+  const selectFirstYearTutionFeeCurrency = (label, value) => {
+    setFirstYearTuitionFeeCurrencyValue(label);
+    setFirstYearTuitionFeeId(value);
+  };
+  const selectDepositFeeCurrency = (label, value) => {
+    setDepositFeeCurrencyValue(label);
+    setDepositFeeId(value);
   };
 
   // on submit form
@@ -363,6 +396,85 @@ const AddUniversitySubjectFee = () => {
                             // defaultValue={euTutionFee}
                             defaultValue={averageFee}
                             placeholder="Enter Average Application Fee"
+                            // required
+                          />
+                        </InputGroup>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col className="col-5">
+                        <span>
+                          First Year Tution Fee
+                          {/* <span className="text-danger">*</span>{" "} */}
+                        </span>
+                      </Col>
+                      <Col className="col-5">
+                        <InputGroup className="d-flex flex-nowrap">
+                          <span className="pr-2">:</span>
+                          <Select
+                            options={currencyList}
+                            value={{
+                              label: firstYearTuitionFeeCurrencyValue,
+                              value: firstYearTuitionFeeId,
+                            }}
+                            onChange={(opt) =>
+                              selectFirstYearTutionFeeCurrency(
+                                opt.label,
+                                opt.value
+                              )
+                            }
+                            name="firstyeartutionfeecurrencyid"
+                            id="firstyeartutionfeecurrencyid"
+                          />
+
+                          <Input
+                            type="number"
+                            min="0"
+                            name="firstyeartutionfee"
+                            id="firstyeartutionfee"
+                            onChange={(e) =>
+                              setFirstYearTuitionFee(e.target.value)
+                            }
+                            // defaultValue={euTutionFee}
+                            defaultValue={firstYearTuitionFee}
+                            placeholder="Enter First Year Tution Fee "
+                            // required
+                          />
+                        </InputGroup>
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col className="col-5">
+                        <span>
+                          Deposit Fee
+                          {/* <span className="text-danger">*</span>{" "} */}
+                        </span>
+                      </Col>
+                      <Col className="col-5">
+                        <InputGroup className="d-flex flex-nowrap">
+                          <span className="pr-2">:</span>
+                          <Select
+                            options={currencyList}
+                            value={{
+                              label: depositFeeCurrencyValue,
+                              value: depositFeeId,
+                            }}
+                            onChange={(opt) =>
+                              selectDepositFeeCurrency(opt.label, opt.value)
+                            }
+                            name="depositfeecurrencyid"
+                            id="depositfeecurrencyid"
+                          />
+
+                          <Input
+                            type="number"
+                            min="0"
+                            name="depositfee"
+                            id="depositfee"
+                            onChange={(e) => setDepositFee(e.target.value)}
+                            // defaultValue={euTutionFee}
+                            defaultValue={depositFee}
+                            placeholder="Enter Deposit Fee "
                             // required
                           />
                         </InputGroup>
