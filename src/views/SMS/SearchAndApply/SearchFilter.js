@@ -2,6 +2,8 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Notification03Icon } from "@hugeicons/core-free-icons";
 
 const SearchFilter = ({ closeModal }) => {
   return (
@@ -17,6 +19,7 @@ const SearchFilter = ({ closeModal }) => {
             className="pointer"
           />
         </div>
+        <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} />
 
         <p>Study Level</p>
         <DefaultDropdown
