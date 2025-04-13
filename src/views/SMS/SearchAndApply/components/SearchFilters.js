@@ -89,10 +89,7 @@ const SearchFilters = ({
             </button>
           ))}
         </div>
-        <button
-          className="dropdown-button filter-button"
-          onClick={() => setIsOpen(!isOpen)}
-        >
+        <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <ChevronUp /> : <ChevronDown />}
         </button>
       </div>

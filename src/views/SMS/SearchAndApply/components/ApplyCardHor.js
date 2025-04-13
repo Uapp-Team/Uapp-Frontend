@@ -10,7 +10,7 @@ import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
 
-const ApplyCard = ({ data }) => {
+const ApplyCardHor = ({ data }) => {
   const [isVertical, setIsVertical] = useState(false);
 
   const toggleLayout = () => setIsVertical(!isVertical);
@@ -18,7 +18,7 @@ const ApplyCard = ({ data }) => {
   return (
     <div
       className={`${
-        !isVertical ? "card-container" : "card-container-horizontal"
+        !isVertical ? "card-container mt-3" : "card-container-horizontal mt-3"
       }`}
     >
       <div className="card-header">
@@ -99,7 +99,7 @@ const ApplyCard = ({ data }) => {
               Probability:{" "}
               <Progress
                 type="circle"
-                percent={45}
+                percent={80}
                 width={35}
                 strokeColor="#FFAD0D"
               />
@@ -156,4 +156,4 @@ const ApplyCard = ({ data }) => {
   );
 };
 
-export default ApplyCard;
+export default ApplyCardHor;

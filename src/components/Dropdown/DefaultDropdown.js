@@ -21,7 +21,7 @@ const DefaultDropdown = ({
     get(url).then((res) => {
       selectAll ? setData([{ id: 0, name: "All" }, ...res]) : setData(res);
     });
-  }, [url]);
+  }, [selectAll, url]);
 
   const options = data?.map((std) => ({
     label: std?.name,

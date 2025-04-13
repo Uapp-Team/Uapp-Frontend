@@ -1,15 +1,16 @@
 import React from "react";
-import {
-  FaAlignJustify,
-  FaExchangeAlt,
-  FaHeart,
-  FaSlidersH,
-} from "react-icons/fa";
+import { FaExchangeAlt, FaHeart, FaSlidersH } from "react-icons/fa";
 import courseIcon from "../../../../assets/icon/course.svg";
 import universityIcon from "../../../../assets/icon/university.svg";
 import "../SearchAndApply.css";
+import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
 
-const ResultsToolbar = () => {
+const ResultsToolbar = ({
+  mobileCard,
+  setMobileCard,
+  filterOpen,
+  setFilterOpen,
+}) => {
   return (
     <div className="results-toolbar d-flex justify-content-between align-items-center flex-wrap p-2">
       {/* Left Section */}
@@ -39,10 +40,20 @@ const ResultsToolbar = () => {
           <FaExchangeAlt className="mx-2" /> Compare{" "}
           <span className="count">5</span>
         </button>
-        <button className="action-btn mr-2">
-          <FaAlignJustify className="my-1" />
+        <button
+          className="action-btn mr-2 d-none d-md-block"
+          onClick={() => setMobileCard(!mobileCard)}
+        >
+          {mobileCard ? (
+            <TfiViewGrid className="my-1" />
+          ) : (
+            <TfiViewList className="my-1" />
+          )}
         </button>
-        <button className="action-btn filters-btn">
+        <button
+          className="action-btn filters-btn d-none d-md-block"
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
           <FaSlidersH className="mx-2" /> All filters
         </button>
       </div>

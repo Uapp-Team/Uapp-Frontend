@@ -1,15 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
 import "./SearchAndApply.css";
-import ApplyCard from "./components/ApplyCard";
+import ApplyCardHor from "./components/ApplyCardHor";
 import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
 import SearchFilters from "./components/SearchFilters";
+import ApplyCardVar from "./components/ApplyCardVar";
+import SearchFilter from "./SearchFilter";
 
 function SearchAndApply() {
-  const [isSticky, setIsSticky] = useState(false);
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [mobileCard, setMobileCard] = useState(true);
+
+  // Filter Data State
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [studentId, setStudentId] = useState(0);
+  const [search, setSearch] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [universityId, setUniversityId] = useState(0);
+  const [intakeId, setIntakeId] = useState(0);
+  const [filterData5, setFilterData5] = useState(0);
+  const [filterData6, setFilterData6] = useState(0);
+  const [filterData7, setFilterData7] = useState(0);
+  const [filterData8, setFilterData8] = useState(0);
+  const [filterData9, setFilterData9] = useState(0);
+  const [filterData10, setFilterData10] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -85,9 +102,9 @@ function SearchAndApply() {
           <SearchBox
             name="search"
             placeholder="Search"
-            // value={search}
-            // setValue={setSearch}
-            // setIsTyping={setIsTyping}
+            value={search}
+            setValue={setSearch}
+            setIsTyping={setIsTyping}
             // university={university}
             // setUniversity={setUniversity}
             // universityOptions={["Harvard", "MIT", "Stanford"]}
@@ -106,6 +123,17 @@ function SearchAndApply() {
             // setSelectedDate={setSelectedDate}
           />
         </Col>
+        <Col>
+          <SearchFilters
+            keyword="Search keyword"
+            categories={categories}
+            // selectedCategory={selectedCategory}
+            // setSelectedCategory={setSelectedCategory}
+            dates={dates}
+            // selectedDate={selectedDate}
+            // setSelectedDate={setSelectedDate}
+          />
+        </Col>
       </Row>
       <div ref={sentinelRef} style={{ height: 1 }} />
 
@@ -113,12 +141,27 @@ function SearchAndApply() {
         ref={toolbarRef}
         className={`results-toolbar ${isSticky ? "sticky" : ""}`}
       >
-        <ResultsToolbar />
+        <ResultsToolbar
+          mobileCard={mobileCard}
+          setMobileCard={setMobileCard}
+          filterOpen={filterOpen}
+          setFilterOpen={setFilterOpen}
+        />
       </div>
 
-      <div className="mt-3">
-        <ApplyCard data={cardData} />
+      <div className="d-block d-md-none">
+        <ApplyCardVar data={cardData} />
       </div>
+
+      <div className="d-none d-md-block">
+        {mobileCard ? (
+          <ApplyCardVar data={cardData} />
+        ) : (
+          <ApplyCardHor data={cardData} />
+        )}
+      </div>
+
+      {filterOpen && <SearchFilter closeModal={() => setFilterOpen(false)} />}
     </>
   );
 }
