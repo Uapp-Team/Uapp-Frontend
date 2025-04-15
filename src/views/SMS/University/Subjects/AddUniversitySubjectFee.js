@@ -131,12 +131,30 @@ const AddUniversitySubjectFee = () => {
 
   useEffect(() => {
     get(`SubjectFeeAndDeliveryPattern/Get/${subjId}`).then((res) => {
-      setAddLocalTutionFeeCurrencyId(res?.localfeecurrencyid);
-      setAddIntTutionFeeCurrencyId(res?.internationalfeecurrencyid);
-      setAddEUTutionFeeCurrencyId(res?.eututionfeecurrencyid);
-      setAverageFeeCurrencyId(res?.averageapplicationfeecurrencyid);
-      setFirstYearTuitionFeeId(res?.firstyeartutionfeecurrencyid);
-      setDepositFeeId(res?.depositfeecurrencyid);
+      setAddLocalTutionFeeCurrencyId(
+        res?.localfeecurrencyid === 0 ? 2 : res?.localfeecurrencyid
+      );
+      setAddIntTutionFeeCurrencyId(
+        res?.internationalfeecurrencyid === 0
+          ? 2
+          : res?.internationalfeecurrencyid
+      );
+      setAddEUTutionFeeCurrencyId(
+        res?.eututionfeecurrencyid === 0 ? 2 : res?.eututionfeecurrencyid
+      );
+      setAverageFeeCurrencyId(
+        res?.averageapplicationfeecurrencyid === 0
+          ? 2
+          : res?.averageapplicationfeecurrencyid
+      );
+      setFirstYearTuitionFeeId(
+        res?.firstyeartutionfeecurrencyid === 0
+          ? 2
+          : res?.firstyeartutionfeecurrencyid
+      );
+      setDepositFeeId(
+        res?.depositfeecurrencyid === 0 ? 2 : res?.depositfeecurrencyid
+      );
       setAddLocalTutionFee(res?.localtutionfee);
       setAddIntTutionFee(res?.internationaltutionfee);
       setAddEUTutionFee(res?.eututionfee);
