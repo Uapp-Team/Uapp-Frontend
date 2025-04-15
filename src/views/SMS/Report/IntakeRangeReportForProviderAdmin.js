@@ -93,7 +93,7 @@ const IntakeRangeReportForProviderAdmin = () => {
           type: "pie",
         },
         colors: ["#4BADC0", "#9AD0DB", "#B7DEE5"],
-        labels: ["Home/UK", "European", "International"],
+        labels: ["Home/UK", "EU/EEU", "International"],
         responsive: [
           {
             breakpoint: 480,
@@ -136,7 +136,7 @@ const IntakeRangeReportForProviderAdmin = () => {
         },
 
         xaxis: {
-          categories: ["Home/UK", "European", "International"],
+          categories: ["Home/UK", "EU/EEU", "International"],
 
           axisBorder: {
             show: false,

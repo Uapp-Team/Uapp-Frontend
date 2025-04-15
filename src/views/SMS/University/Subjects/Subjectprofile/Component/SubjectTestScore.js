@@ -162,7 +162,7 @@ const SubjectTestScore = () => {
 
       {euTestScore === false ? null : (
         <>
-          <p className="section-title">Test Score for EU/UK Students</p>
+          <p className="section-title">Test Score for EU/EEU Students</p>
           <div
             className="mb-3"
             style={{

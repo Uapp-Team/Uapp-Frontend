@@ -5,9 +5,9 @@ const Origine = ({ typeId }) => {
     <>
       <h5 className="text-gray">
         {typeId === 1
-          ? "Home"
+          ? "Home/UK"
           : typeId === 2
-          ? "EU/ UK"
+          ? "EU/EEU"
           : typeId === 3
           ? "International"
           : ""}

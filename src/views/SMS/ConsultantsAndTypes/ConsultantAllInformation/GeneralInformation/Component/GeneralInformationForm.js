@@ -138,7 +138,7 @@ const GeneralInformationForm = ({
                 </span>
 
                 <Row>
-                  <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                  <Col xs="2" sm="12" md="3" className="text-center mt-2">
                     <FormGroup check inline>
                       <Input
                         className="form-check-input"
@@ -149,11 +149,11 @@ const GeneralInformationForm = ({
                         }}
                         checked={homeAccept}
                       />
-                      <span className="mr-2">Home </span>
+                      <span className="mr-2">Home/UK </span>
                     </FormGroup>
                   </Col>
 
-                  <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                  <Col xs="2" sm="12" md="3" className="text-center mt-2">
                     <FormGroup check inline>
                       <Input
                         className="form-check-input"
@@ -164,11 +164,11 @@ const GeneralInformationForm = ({
                         }}
                         checked={ukAccept}
                       />
-                      <span className="mr-2">EU/UK </span>
+                      <span className="mr-2">EU/EEU </span>
                     </FormGroup>
                   </Col>
 
-                  <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                  <Col xs="2" sm="12" md="3" className="text-center mt-2">
                     <FormGroup check inline>
                       <Input
                         className="form-check-input"
@@ -206,7 +206,7 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    {!BranchAdmin() && !BranchManager() && (
+                    {consData?.isDefaultConsultant !== true && (
                       <span className="text-danger">*</span>
                     )}
                     Parent Consultant
@@ -234,7 +234,7 @@ const GeneralInformationForm = ({
             <FormGroup>
               <span>
                 {" "}
-                <span className="text-danger">*</span> Title
+                <span className="text-danger">*</span>Title
               </span>
               <div>
                 {title?.map((tt) => (

@@ -12,7 +12,12 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import user from "../../../assets/img/Uapp_fav.png";
-import { BranchManager, Consultant } from "../../../components/core/User";
+import {
+  BranchManager,
+  Companion,
+  Consultant,
+  Student,
+} from "../../../components/core/User";
 import { rootUrl } from "../../../constants/constants";
 import { userTypes } from "../../../constants/userTypeConstant";
 import { expireDateHandler } from "../../../helpers/checkExpireDate";
@@ -30,6 +35,8 @@ const NavbarUser = () => {
   const [notificationData, setnotificationData] = useState([]);
   const [newNotificationData, setNewNotification] = useState([]);
   const [canSwitch, setcanSwitch] = useState(false);
+  const [isCompanion, setIsCompanion] = useState(false);
+  const [isStudent, setIsStudent] = useState(false);
   const [message, setmessage] = useState([]);
   const [messageCount, setmessageCount] = useState();
 
@@ -42,6 +49,48 @@ const NavbarUser = () => {
       get(`consultant/is-switchable/${userInfo?.referenceId}`).then((res) => {
         setData(res);
       });
+
+    if (Student()) {
+      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
+        (res) => {
+          setcanSwitch(res);
+        }
+      );
+
+      get(
+        `BecomeCompanion/CanSwitchToCompanion/${userInfo?.displayEmail}`
+      ).then((res) => {
+        setIsCompanion(res);
+      });
+    }
+
+    if (Consultant()) {
+      get(
+        `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
+      ).then((res) => {
+        setcanSwitch(res);
+      });
+
+      get(
+        `BecomeCompanion/CanSwitchToCompanion/${userInfo?.displayEmail}`
+      ).then((res) => {
+        setIsCompanion(res);
+      });
+    }
+
+    if (Companion()) {
+      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
+        (res) => {
+          setcanSwitch(res);
+        }
+      );
+
+      get(`BecomeCompanion/CanSwitchToStudent/${userInfo?.displayEmail}`).then(
+        (res) => {
+          setIsStudent(res);
+        }
+      );
+    }
   }, [userInfo]);
 
   useEffect(() => {
@@ -110,15 +159,15 @@ const NavbarUser = () => {
   };
 
   const UserDropdown = (props) => {
-    useEffect(() => { }, [props]);
+    // useEffect(() => {}, [props]);
     return (
       <DropdownMenu right>
         {userInfo?.userTypeId === userTypes?.SystemAdmin ? null : (
           <Link style={{ textDecoration: "none" }} to="/profile">
             <DropdownItem
               tag="a"
-            // href="#"
-            // onClick={redirectToProfile}
+              // href="#"
+              // onClick={redirectToProfile}
             >
               <Icon.User size={14} className="mr-1 align-middle" />
               <span className="align-middle">Profile</span>
@@ -128,11 +177,11 @@ const NavbarUser = () => {
 
         {(userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
           userInfo?.userTypeId.toString() === userTypes?.Admin) && (
-            <DropdownItem tag="a" onClick={goToBin}>
-              <i className="fas fa-recycle mr-1 align-middle"></i>
-              <span className="align-middle">Recycle Bin</span>
-            </DropdownItem>
-          )}
+          <DropdownItem tag="a" onClick={goToBin}>
+            <i className="fas fa-recycle mr-1 align-middle"></i>
+            <span className="align-middle">Recycle Bin</span>
+          </DropdownItem>
+        )}
 
         <DropdownItem tag="a" onClick={goToSettings}>
           <Icon.Settings size={14} className="mr-1 align-middle" />
@@ -146,7 +195,7 @@ const NavbarUser = () => {
 
         <DropdownItem divider />
 
-        {userInfo?.userTypeId?.toString() === userTypes?.Student ? (
+        {Student() ? (
           <>
             {props?.switch ? (
               <DropdownItem
@@ -159,8 +208,20 @@ const NavbarUser = () => {
                 <span className="align-middle">Switch To Consultant</span>
               </DropdownItem>
             ) : null}
+
+            {isCompanion ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertAccount(e, "AccountSwitch/SwitchToCompanion");
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Companion</span>
+              </DropdownItem>
+            ) : null}
           </>
-        ) : userInfo?.userTypeId?.toString() === userTypes?.Consultant ? (
+        ) : Consultant() ? (
           <>
             {props?.switch ? (
               <DropdownItem
@@ -171,6 +232,44 @@ const NavbarUser = () => {
               >
                 <Icon.Repeat size={14} className="mr-1 align-middle" />
                 <span className="align-middle">Switch To Student</span>
+              </DropdownItem>
+            ) : null}
+
+            {isCompanion ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertAccount(e, "AccountSwitch/SwitchToCompanion");
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Companion</span>
+              </DropdownItem>
+            ) : null}
+          </>
+        ) : Companion() ? (
+          <>
+            {isStudent ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertAccount(e, "AccountSwitch/SwitchToStudent");
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Student</span>
+              </DropdownItem>
+            ) : null}
+
+            {props?.switch ? (
+              <DropdownItem
+                tag="a"
+                onClick={(e) => {
+                  convertAccount(e, "AccountSwitch/SwitchToConsultant");
+                }}
+              >
+                <Icon.Repeat size={14} className="mr-1 align-middle" />
+                <span className="align-middle">Switch To Consultant</span>
               </DropdownItem>
             ) : null}
           </>
@@ -218,10 +317,10 @@ const NavbarUser = () => {
     });
   };
 
-  const messageFunction = () => { };
+  const messageFunction = () => {};
 
   const countMessage = () => {
-    get(`MessageNotification/Count`).then((res) => { });
+    get(`MessageNotification/Count`).then((res) => {});
   };
 
   const allNotifications = () => {
@@ -239,7 +338,7 @@ const NavbarUser = () => {
           authorization: AuthStr,
         },
       })
-      .then((res) => { });
+      .then((res) => {});
   };
 
   const redirect = (data) => {
@@ -256,23 +355,6 @@ const NavbarUser = () => {
   };
 
   useEffect(() => {
-    if (userInfo?.userTypeId.toString() === userTypes?.Student) {
-      get(`Student/CheckIfStudentIsConsultant/${userInfo?.displayEmail}`).then(
-        (res) => {
-          console.log("Can swith to consuiltant", res);
-          setcanSwitch(res);
-        }
-      );
-    }
-
-    if (userInfo?.userTypeId?.toString() === userTypes?.Consultant) {
-      get(
-        `Consultant/CheckIfConsultantIsStudent/${userInfo?.displayEmail}`
-      ).then((res) => {
-        setcanSwitch(res);
-      });
-    }
-
     get(`Notification/UserNotificationCount`).then((res) => {
       setnotificationCount(res);
     });
@@ -327,7 +409,7 @@ const NavbarUser = () => {
               }
             });
           });
-        } catch (error) { }
+        } catch (error) {}
       }
     }
 
@@ -365,11 +447,11 @@ const NavbarUser = () => {
           {/* Message Dropdown */}
 
           {userInfo?.userTypeId.toString() === userTypes?.Consultant ||
-            userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
-            userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
-            userInfo?.userTypeId.toString() === userTypes?.Admin ||
-            userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
-            userInfo?.userTypeId.toString() === userTypes?.Student ? (
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionManager ||
+          userInfo?.userTypeId.toString() === userTypes?.AdmissionOfficer ||
+          userInfo?.userTypeId.toString() === userTypes?.Admin ||
+          userInfo?.userTypeId.toString() === userTypes?.SystemAdmin ||
+          userInfo?.userTypeId.toString() === userTypes?.Student ? (
             <UncontrolledDropdown
               tag="li"
               className="dropdown-notification nav-item"

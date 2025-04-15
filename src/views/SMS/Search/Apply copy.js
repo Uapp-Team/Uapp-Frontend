@@ -364,7 +364,7 @@ const Apply = ({
                 {!(campusValue === "0") ? (
                   <>
                     <span className="my-2">
-                      You are appling at <b>{primaryCampus?.campusName}</b>{" "}
+                      You are applying at <b>{primaryCampus?.campusName}</b>{" "}
                     </span>
 
                     <input type="hidden" name="campusId" id="campusId" />

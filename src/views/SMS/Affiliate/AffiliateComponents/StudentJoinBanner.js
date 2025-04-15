@@ -1,25 +1,42 @@
-import React from "react";
-// import banner from "../../../../assets/img/affiliate-join-banner.png";
-// import { Link } from "react-router-dom/cjs/react-router-dom";
+import React, { useEffect, useState } from "react";
+import banner from "../../../../assets/img/affiliate-join-banner.png";
+import { Link } from "react-router-dom/cjs/react-router-dom";
+import get from "../../../../helpers/get";
 
-const StudentJoinBanner = ({ className }) => {
+const StudentJoinBanner = () => {
+  const [canConsultant, setCanConsultant] = useState(false);
+  const currentUser = JSON?.parse(localStorage.getItem("current_user"));
+
+  useEffect(() => {
+    get(`Student/CanBecomeCompanion/${currentUser?.referenceId}`).then(
+      (res) => {
+        setCanConsultant(res);
+      }
+    );
+  }, [currentUser]);
+
   return (
     <>
-      {/* <div
-        className="bg-affiliate-join"
-        style={{
-          backgroundImage: `url(${banner})`,
-        }}
-      >
-        <div className={className}>
-          <p className="fs-16px fw-700 text-white">Companion program</p>
-          <Link to={`/affiliate-profile/1`}>
-          <button type="button" class="save-button">
-            Join Now
-          </button>
-          </Link>
+      {canConsultant && (
+        <div
+          className="bg-affiliate-join m-3 py-4"
+          style={{
+            backgroundImage: `url(${banner})`,
+          }}
+        >
+          <div className="text-center">
+            <p className="fs-14px fw-700 text-white">Companion program</p>
+            <Link to={`/becomeCompanion`}>
+              <button type="button" className="save-button mb-4">
+                Join Now
+              </button>
+            </Link>
+          </div>
+          <p className="fs-12px text-white fw-700">
+            Refer a Friend & <br /> <b>Earn £100</b>
+          </p>
         </div>
-      </div> */}
+      )}
     </>
   );
 };

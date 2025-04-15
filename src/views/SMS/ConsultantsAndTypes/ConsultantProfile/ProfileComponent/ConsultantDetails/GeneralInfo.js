@@ -50,11 +50,11 @@ const GeneralInfo = ({ id }) => {
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Recruitment Type</td>
             <td>
-              {data?.isAcceptedHome === true && "Home"}
+              {data?.isAcceptedHome === true && "Home/UK"}
               {data?.isAcceptedHome &&
                 (data?.isAcceptedEU_UK || data?.isAcceptedInternational) &&
                 ", "}
-              {data?.isAcceptedEU_UK === true && "EU/Uk"}
+              {data?.isAcceptedEU_UK === true && "EU/EEU"}
               {(data?.isAcceptedHome || data?.isAcceptedEU_UK) &&
                 data?.isAcceptedInternational &&
                 ", "}

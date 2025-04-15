@@ -159,7 +159,7 @@ const EditAssignOfficerUniversityModal = ({
 
             <FormGroup row className="">
               <Col md="5">
-                <span>EU/UK </span>
+                <span>EU/EEU </span>
               </Col>
 
               <Col md="7">

@@ -694,9 +694,9 @@ const SubjectProfile = () => {
                             </td> */}
                                 <td>
                                   {sub?.applicationTypeId == 1
-                                    ? "Home"
+                                    ? "Home/UK"
                                     : sub?.applicationTypeId == 2
-                                    ? "EU_UK"
+                                    ? "EU/EEU"
                                     : "International"}
                                 </td>
                               </tr>

@@ -9,6 +9,7 @@ import ProfilePreview from "../../../STUDENT/StudentProfile/ProfilePreview";
 import UserNotices from "../../Component/UserNotices";
 import ApplicationList from "./Components/ApplicationList";
 import Department from "./Components/Department";
+import BecomeConsultant from "../../../../../components/ui/BecomeConsultant";
 
 const Student = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -287,7 +288,7 @@ const Student = () => {
             otherInformation={otherInformation}
             UploadData={UploadData}
           /> */}
-          <StudentJoinBanner className="my-4" />
+          <BecomeConsultant className="my-4" />
           <div className="d-none">
             <ProfilePreview
               sId={referenceId}

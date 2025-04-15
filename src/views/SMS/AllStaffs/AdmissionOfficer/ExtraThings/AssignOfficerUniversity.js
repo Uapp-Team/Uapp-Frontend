@@ -398,8 +398,8 @@ const AssignOfficerUniversity = () => {
                       {checkType ? (
                         <td>
                           {[
-                            uni?.isAcceptHome === true ? "Home" : null,
-                            uni?.isAcceptEU_UK === true ? "EU/UK" : null,
+                            uni?.isAcceptHome === true ? "Home/UK" : null,
+                            uni?.isAcceptEU_UK === true ? "EU/EEU" : null,
                             uni?.isAcceptInternational === true
                               ? "International"
                               : null,

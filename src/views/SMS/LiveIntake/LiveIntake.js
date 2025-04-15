@@ -29,11 +29,11 @@ const LiveIntake = () => {
     },
     {
       id: 1,
-      name: "Home",
+      name: "Home/UK",
     },
     {
       id: 2,
-      name: "Eu/Uk",
+      name: "EU/EEU",
     },
     {
       id: 3,

@@ -148,9 +148,9 @@ const DocumentGroup = () => {
 
     setApplicationLabel(
       document?.applicationTypeId === 1
-        ? "Home"
+        ? "Home/UK"
         : document?.applicationTypeId === 2
-        ? "EU/UK"
+        ? "EU/EEU"
         : "International"
     );
     setApplicationValue(document?.applicationTypeId);
@@ -573,9 +573,9 @@ const DocumentGroup = () => {
                         <td className="text-center">{document?.details}</td>
                         <td className="text-center">
                           {document?.applicationTypeId === 1 ? (
-                            <span>Home</span>
+                            <span>Home/UK</span>
                           ) : document?.applicationTypeId === 2 ? (
-                            <span>EU/UK</span>
+                            <span>EU/EEU</span>
                           ) : (
                             <span>International</span>
                           )}

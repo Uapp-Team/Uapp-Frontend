@@ -283,9 +283,9 @@ const AddUniversitySubjectDocumentRequirement = () => {
   //   setDocuValue(document?.documentGroup?.id);
   //   setAppliLabel(
   //     document?.applicationTypeId === 1
-  //       ? "Home"
+  //       ? "Home/UK"
   //       : document?.applicationTypeId === 2
-  //       ? "EU/UK"
+  //       ? "EU/EEU"
   //       : "International"
   //   );
   //   setAppliValue(document?.applicationTypeId);
@@ -513,9 +513,9 @@ const AddUniversitySubjectDocumentRequirement = () => {
                               <td>
                                 {document?.documentGroup?.title} -{" "}
                                 {document?.applicationTypeId === 1
-                                  ? "Home"
+                                  ? "Home/UK"
                                   : document?.applicationTypeId === 2
-                                  ? "EU/UK"
+                                  ? "EU/EEU"
                                   : "International"}
                               </td>
                               <td className="">
@@ -743,9 +743,9 @@ const AddUniversitySubjectDocumentRequirement = () => {
                               <td>{document?.document?.name}</td>
                               <td className="text-center">
                                 {document?.applicationTypeId === 1
-                                  ? "Home"
+                                  ? "Home/UK"
                                   : document?.applicationTypeId === 2
-                                  ? "EU/UK"
+                                  ? "EU/EEU"
                                   : "International"}
                               </td>
                               <td>

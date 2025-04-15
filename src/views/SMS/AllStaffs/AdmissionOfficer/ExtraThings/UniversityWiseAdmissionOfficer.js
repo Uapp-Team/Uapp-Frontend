@@ -69,8 +69,8 @@ const UniversityWiseAdmissionOfficer = () => {
                     </td>
 
                     <td>
-                      {ad?.isAcceptEU_UK ? "EU_UK, " : null}
-                      {ad?.isAcceptHome ? "Home, " : null}
+                      {ad?.isAcceptEU_UK ? "EU/EEU, " : null}
+                      {ad?.isAcceptHome ? "Home/UK, " : null}
                       {ad?.isAcceptInternational ? "International" : null}
                     </td>
                     {permissions?.includes(permissionList.View_Subject_List) ? (

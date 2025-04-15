@@ -221,10 +221,10 @@ const LiveIntakeTable = ({
                       {tableData[3]?.isActive ? (
                         <td>
                           {liveIntake?.isAcceptHome === true ? (
-                            <span className="for-intake-table">Home</span>
+                            <span className="for-intake-table">Home/UK</span>
                           ) : null}
                           {liveIntake?.isAcceptEU_UK === true ? (
-                            <span className="for-intake-table">Eu/Uk</span>
+                            <span className="for-intake-table">EU/EEU</span>
                           ) : null}
                           {liveIntake?.isAcceptInternational === true ? (
                             <span className="for-intake-table">

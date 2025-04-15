@@ -6,7 +6,7 @@ import get from "../../../../helpers/get";
 const EstimatedIncome = ({ companionId }) => {
   const [estIncome, setEstIncome] = useState({});
   useEffect(() => {
-    get(`affiliateTransactoin/estimated-income/${companionId}`).then((res) => {
+    get(`CompanionTransactoin/estimated-income/${companionId}`).then((res) => {
       setEstIncome(res);
     });
   }, [companionId]);

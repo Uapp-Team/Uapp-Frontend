@@ -385,7 +385,7 @@ const CopyUniversitySubjectAssignToCampus = () => {
                               className="text-center mt-2"
                             >
                               <FormGroup check inline>
-                                <span className="mr-2">Home </span>
+                                <span className="mr-2">Home/UK </span>
                                 <Input
                                   className="form-check-input"
                                   type="checkbox"
@@ -415,7 +415,7 @@ const CopyUniversitySubjectAssignToCampus = () => {
                               className="text-center mt-2"
                             >
                               <FormGroup check inline>
-                                <span className="mr-2">EU/UK </span>
+                                <span className="mr-2">EU/EEU </span>
                                 <Input
                                   className="form-check-input"
                                   type="checkbox"

@@ -1376,6 +1376,11 @@ const Messages = lazy(() => import("./views/SMS/Messages/Messages"));
 const TrialNotification = lazy(() => import("./views/Test/Notification"));
 
 // MAke Student a Consultant
+const ConvertStudentIntoCompanionForm = lazy(() =>
+  import(
+    "./views/SMS/ConvertStudentIntoConsultant/ConvertStudentIntoCompanionForm"
+  )
+);
 const ConvertStudentIntoConsultantForm = lazy(() =>
   import(
     "./views/SMS/ConvertStudentIntoConsultant/ConvertStudentIntoConsultantForm"
@@ -1384,6 +1389,9 @@ const ConvertStudentIntoConsultantForm = lazy(() =>
 
 const Success = lazy(() =>
   import("./views/SMS/ConvertStudentIntoConsultant/Success")
+);
+const SuccessCompanion = lazy(() =>
+  import("./views/SMS/ConvertStudentIntoConsultant/SuccessCompanion")
 );
 
 // Login History
@@ -5288,11 +5296,20 @@ class AppRouter extends React.Component {
 
                   {/* make student a consultant path */}
                   <AppRoute
+                    path="/becomeCompanion"
+                    component={ConvertStudentIntoCompanionForm}
+                  />
+
+                  <AppRoute
                     path="/becomeConsultant"
                     component={ConvertStudentIntoConsultantForm}
                   />
 
                   <AppRoute path="/success" component={Success} />
+                  <AppRoute
+                    path="/successCompanion"
+                    component={SuccessCompanion}
+                  />
 
                   {/* trial notification */}
                   {/* <AppRoute  path="/notification" component={TrialNotification} /> */}

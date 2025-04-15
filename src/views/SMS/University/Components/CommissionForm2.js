@@ -86,9 +86,9 @@ const CommissionForm = () => {
         <CardHeader className="page-header">
           <h3 className="text-white">
             {applicationType == 1
-              ? "Home"
+              ? "Home/UK"
               : applicationType == 2
-              ? "EU/UK"
+              ? "EU/EEU"
               : "International"}{" "}
             Application Commissions
           </h3>

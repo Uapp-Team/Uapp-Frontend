@@ -64,17 +64,17 @@ const GeneralInformation = () => {
       setBranch(res);
       res?.length === 1 && setBranchValue(res[0].id);
     });
-  }, []);
-
-  useEffect(() => {
-    get(`ConsultantDD/ByBranch/${branchValue}`).then((res) => {
-      setConsParent(res);
-    });
 
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
-  }, [branchValue]);
+  }, []);
+
+  useEffect(() => {
+    get(`ParentConsultantDD/Index/${consultantRegisterId}`).then((res) => {
+      setConsParent(res);
+    });
+  }, [consultantRegisterId]);
 
   useEffect(() => {
     get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
@@ -83,7 +83,6 @@ const GeneralInformation = () => {
 
     get(`Consultant/GetGeneralInformation/${consultantRegisterId}`).then(
       (res) => {
-        console.log("cons", res);
         setConsData(res);
         // setSubmitData(true);
         setTypeValue(res?.consultantType?.id);
@@ -219,7 +218,7 @@ const GeneralInformation = () => {
     //   setParentError(true);
     // }
 
-    if (BranchAdmin() || BranchManager()) {
+    if (consData?.isDefaultConsultant === true) {
       setParentError(false);
     } else {
       if (userTypeId !== userTypes?.Consultant && parentValue === 0) {

@@ -443,9 +443,9 @@ const List = () => {
                     <td className="text-center">{doc?.document?.name}</td>
                     <td className="text-center">
                       {doc?.applicationTypeId === 1 ? (
-                        <span>Home</span>
+                        <span>Home/UK</span>
                       ) : doc?.applicationTypeId === 2 ? (
-                        <span>EU/UK</span>
+                        <span>EU/EEU</span>
                       ) : (
                         <span>International</span>
                       )}
