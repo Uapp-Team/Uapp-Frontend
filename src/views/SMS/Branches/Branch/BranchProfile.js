@@ -3,15 +3,15 @@ import { useParams } from "react-router-dom";
 import { Col, Row } from "reactstrap";
 
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
-import BranchManager from "../IndividualComponent/BranchManager";
-import BranchInfo from "./BranchInfo";
-import ConsultantListForBranch from "../../Dashboard/Pages/BranchManager/ConsultantListForBranch";
 import DashboardApplication from "../../../../components/ui/DashboardApplication";
 import DashboardReadyToApply from "../../../../components/ui/DashboardReadyToApply";
 import get from "../../../../helpers/get";
-import CountCard from "./CountCard";
-import BranchAdmin from "../IndividualComponent/BranchAdmin";
+import ConsultantListForBranch from "../../Dashboard/Pages/BranchManager/ConsultantListForBranch";
 import StaffListForBranch from "../../Dashboard/Pages/BranchManager/StaffListForBranch";
+import BranchAdmin from "../IndividualComponent/BranchAdmin";
+import BranchManager from "../IndividualComponent/BranchManager";
+import BranchInfo from "./BranchInfo";
+import CountCard from "./CountCard";
 
 const BranchProfile = () => {
   const { id } = useParams();
@@ -34,7 +34,7 @@ const BranchProfile = () => {
       <Row>
         <Col lg={8}>
           <BranchInfo id={id} />
-          <CountCard id={id} intakeRngValue={intake.id} />
+          {intake?.id && <CountCard id={id} intakeRngValue={intake?.id} />}
           <StaffListForBranch id={id} />
           <ConsultantListForBranch id={id} />
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}

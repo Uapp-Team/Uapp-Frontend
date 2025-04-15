@@ -184,7 +184,7 @@ const StaffRegister = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
-    subdata.append("employeeTypeId", type);
+    subdata.append("employeeTypeId", typeValue);
 
     var formIsValid = validateRegisterForm();
 

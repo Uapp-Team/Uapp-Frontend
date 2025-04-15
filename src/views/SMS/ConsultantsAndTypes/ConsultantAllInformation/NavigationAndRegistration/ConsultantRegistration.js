@@ -335,7 +335,7 @@ const ConsultantRegistration = () => {
                   </span>
 
                   <Row>
-                    <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                    <Col xs="2" sm="12" md="3" className="mt-2">
                       <FormGroup check inline>
                         <Input
                           className="form-check-input"
@@ -347,11 +347,11 @@ const ConsultantRegistration = () => {
                             setAcceptError(false);
                           }}
                         />
-                        <span className="mr-2">Home </span>
+                        <span className="mr-2">Home/UK </span>
                       </FormGroup>
                     </Col>
 
-                    <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                    <Col xs="2" sm="12" md="3" className="mt-2">
                       <FormGroup check inline>
                         <Input
                           className="form-check-input"
@@ -363,11 +363,11 @@ const ConsultantRegistration = () => {
                             setAcceptError(false);
                           }}
                         />
-                        <span className="mr-2">EU/UK </span>
+                        <span className="mr-2">EU/EEU </span>
                       </FormGroup>
                     </Col>
 
-                    <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                    <Col xs="2" sm="12" md="3" className="mt-2">
                       <FormGroup check inline>
                         <Input
                           className="form-check-input"

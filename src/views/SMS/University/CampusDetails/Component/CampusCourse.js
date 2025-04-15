@@ -64,7 +64,7 @@ const CampusCourse = ({ campusSubjectList }) => {
     //   {item?.isHomeVisible && item?.isAcceptHome === true ? (
     //     <b>Home</b>
     //   ) : (
-    //     "Home"
+    //     "Home/UK"
     //   )}
     // </td>
   );

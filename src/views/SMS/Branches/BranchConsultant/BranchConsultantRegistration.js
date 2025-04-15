@@ -298,10 +298,7 @@ const BranchConsultantRegistration = () => {
   };
   return (
     <div>
-      <BranchNavbar
-        activeTab={activetab}
-        branchId={branchId}
-      />
+      <BranchNavbar activeTab={activetab} branchId={branchId} />
 
       <Card>
         <CardBody>
@@ -444,7 +441,7 @@ const BranchConsultantRegistration = () => {
                       </span>
 
                       <Row>
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
@@ -454,11 +451,11 @@ const BranchConsultantRegistration = () => {
                                 setHomeAccept(!homeAccept);
                               }}
                             />
-                            <span className="mr-2">Home </span>
+                            <span className="mr-2">Home/UK </span>
                           </FormGroup>
                         </Col>
 
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"
@@ -468,11 +465,11 @@ const BranchConsultantRegistration = () => {
                                 setUkAccept(!ukAccept);
                               }}
                             />
-                            <span className="mr-2">EU/UK </span>
+                            <span className="mr-2">EU/EEU </span>
                           </FormGroup>
                         </Col>
 
-                        <Col xs="2" sm="12" md="2" className="text-center mt-2">
+                        <Col xs="2" sm="12" md="3" className="text-center mt-2">
                           <FormGroup check inline>
                             <Input
                               className="form-check-input"

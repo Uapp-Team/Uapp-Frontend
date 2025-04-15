@@ -162,9 +162,9 @@ const SubjectRequirement = () => {
                     <td>
                       {document?.documentGroup?.title} -{" "}
                       {document?.applicationTypeId === 1
-                        ? "Home"
+                        ? "Home/UK"
                         : document?.applicationTypeId === 2
-                        ? "EU/UK"
+                        ? "EU/EEU"
                         : "International"}
                     </td>
                     <td className="">
@@ -198,9 +198,9 @@ const SubjectRequirement = () => {
                   <td>{document?.document?.name}</td>
                   <td>
                     {document?.applicationTypeId === 1
-                      ? "Home"
+                      ? "Home/UK"
                       : document?.applicationTypeId === 2
-                      ? "EU/UK"
+                      ? "EU/EEU"
                       : "International"}
                   </td>
                 </tr>

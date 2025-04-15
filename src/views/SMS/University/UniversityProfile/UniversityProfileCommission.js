@@ -40,7 +40,7 @@ const UniversityProfileCommission = ({
             <div className="recruit-div">
               <div className="d-flex justify-content-around mt-3">
                 <p style={{ fontSize: "15px", fontWeight: "400" }}>
-                  Accept Home
+                  Accept Home/UK
                 </p>{" "}
                 <img
                   height="20px"
@@ -52,7 +52,7 @@ const UniversityProfileCommission = ({
             <div className="recruit-div">
               <div className="d-flex justify-content-around mt-3">
                 <p style={{ fontSize: "15px", fontWeight: "400" }}>
-                  Accept EU/UK
+                  Accept EU/EEU
                 </p>{" "}
                 <img
                   height="20px"

@@ -4,11 +4,11 @@ const ColumnCampusCourse = [
     isActive: true,
   },
   {
-    title: "Accept Home",
+    title: "Accept Home/UK",
     isActive: true,
   },
   {
-    title: "Accept EU/UK",
+    title: "Accept EU/EEU",
     isActive: true,
   },
   {

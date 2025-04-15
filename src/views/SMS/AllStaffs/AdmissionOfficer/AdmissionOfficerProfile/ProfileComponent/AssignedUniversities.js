@@ -50,8 +50,8 @@ const AssignedUniversities = ({ officerId, headData, setHeadData }) => {
               <thead className="tablehead">
                 {/* <th className="border-0">SL/NO</th> */}
                 <th className="border-0">University</th>
-                <th className="border-0">EU/UK</th>
-                <th className="border-0">Home</th>
+                <th className="border-0">EU/EEU</th>
+                <th className="border-0">Home/UK</th>
                 <th className="border-0">International</th>
               </thead>
               <tbody>

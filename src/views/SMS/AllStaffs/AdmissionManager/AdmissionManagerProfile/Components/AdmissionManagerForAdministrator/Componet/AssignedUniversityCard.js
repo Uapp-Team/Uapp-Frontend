@@ -34,10 +34,10 @@ const AssignedUniversityCard = ({
   const GetApplicationType = (eu, home, international) => {
     var applicationtype = "";
     if (home === true) {
-      applicationtype = applicationtype + "Home-";
+      applicationtype = applicationtype + "Home/UK-";
     }
     if (eu === true) {
-      applicationtype = applicationtype + "EU/UK-";
+      applicationtype = applicationtype + "EU/EEU-";
     }
     if (international === true) {
       applicationtype = applicationtype + "International";

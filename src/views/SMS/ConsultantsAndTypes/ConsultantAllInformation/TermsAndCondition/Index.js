@@ -467,19 +467,19 @@ const ConsultantTermsInformation = () => {
                       {consultantData?.isAcceptedHome == true &&
                       consultantData?.isAcceptedEU_UK == true &&
                       consultantData?.isAcceptedInternational == true
-                        ? "Home, EU/UK, International"
+                        ? "Home/UK, EU/EEU, International"
                         : consultantData?.isAcceptedHome == true &&
                           consultantData?.isAcceptedEU_UK == true &&
                           consultantData?.isAcceptedInternational == false
-                        ? "Home, EU/UK"
+                        ? "Home/UK, EU/EEU"
                         : consultantData?.isAcceptedHome == true &&
                           consultantData?.isAcceptedEU_UK == false &&
                           consultantData?.isAcceptedInternational == false
-                        ? "Home"
+                        ? "Home/UK"
                         : consultantData?.isAcceptedHome == false &&
                           consultantData?.isAcceptedEU_UK == true &&
                           consultantData?.isAcceptedInternational == true
-                        ? "EU/UK, International"
+                        ? "EU/EEU, International"
                         : consultantData?.isAcceptedHome == false &&
                           consultantData?.isAcceptedEU_UK == false &&
                           consultantData?.isAcceptedInternational == true
@@ -487,8 +487,8 @@ const ConsultantTermsInformation = () => {
                         : consultantData?.isAcceptedHome == true &&
                           consultantData?.isAcceptedEU_UK == false &&
                           consultantData?.isAcceptedInternational == true
-                        ? "Home, International"
-                        : "EU/UK"}
+                        ? "Home/UK, International"
+                        : "EU/EEU"}
                     </td>
                   </tr>
                   <tr style={{ border: "1px solid #dee2e6" }}>

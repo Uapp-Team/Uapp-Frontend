@@ -332,9 +332,9 @@
 //       setApplicationObject(action);
 //       setApplicationTypeLabel(
 //         action?.applicationTypeId === 1
-//           ? "Home"
+//           ? "Home/UK"
 //           : action?.applicationTypeId === 2
-//           ? "EU/UK"
+//           ? "EU/EEU"
 //           : "International"
 //       );
 //       setApplicationTypeValue(action?.applicationTypeId);
@@ -731,9 +731,9 @@
 //                           <td>{temp?.description}</td>
 //                           <td>
 //                             {temp?.applicationTypeId === 1
-//                               ? "Home"
+//                               ? "Home/UK"
 //                               : temp?.applicationTypeId === 2
-//                               ? "EU/UK"
+//                               ? "EU/EEU"
 //                               : "International"}
 //                           </td>
 //                           <td>

@@ -2422,7 +2422,7 @@ const UniversityDetails = () => {
                         <div className="col-md-12">
                           <div className="row">
                             <div className="col-md-4">
-                              <h5> Home </h5>
+                              <h5> Home/UK </h5>
                               <span>
                                 Commission Type:{" "}
                                 {data?.homeStudentComissionType == 1
@@ -2463,7 +2463,7 @@ const UniversityDetails = () => {
                             </div>
 
                             <div className="col-md-4">
-                              <h5> EU/UK </h5>
+                              <h5> EU/EEU </h5>
                               <span>
                                 Commission Type:{" "}
                                 {data?.eU_UKStudentComissionType == 1
@@ -2528,9 +2528,9 @@ const UniversityDetails = () => {
                             <td>{application?.document?.name}</td>
                             <td>
                               {application?.applicationTypeId === 1
-                                ? "Home"
+                                ? "Home/UK"
                                 : application?.applicationTypeId === 2
-                                ? "EU/UK"
+                                ? "EU/EEU"
                                 : "International"}
                             </td>
 
@@ -2590,9 +2590,9 @@ const UniversityDetails = () => {
                             <td>{temp?.description}</td>
                             <td>
                               {temp?.applicationTypeId === 1
-                                ? "Home"
+                                ? "Home/UK"
                                 : temp?.applicationTypeId === 2
-                                ? "EU/UK"
+                                ? "EU/EEU"
                                 : "International"}
                             </td>
                             <td>
@@ -2952,7 +2952,7 @@ const UniversityDetails = () => {
 
                 <>
                   <div className="d-flex justify-content-between">
-                    <span>Accept Home</span>
+                    <span>Accept Home/UK</span>
                     <p>
                       {universityInfo?.isAcceptHome === false ? (
                         <i className="text-danger fas fa-times-circle"></i>
@@ -2963,7 +2963,7 @@ const UniversityDetails = () => {
                   </div>
 
                   <div className="d-flex justify-content-between">
-                    <span>Accept EU/UK</span>
+                    <span>Accept EU/EEU</span>
                     <p>
                       {universityInfo?.isAcceptEU_UK === false ? (
                         <i className="text-danger fas fa-times-circle"></i>
