@@ -5880,7 +5880,7 @@ span.ant-upload-list-item-name {
 }
 
 .right-side-modal {
-  background-color: white;
+  background-color: #f9fbfb;
   position: fixed;
   bottom: 0;
   z-index: 999;

@@ -4,6 +4,7 @@ import get from "../../helpers/get";
 
 const DefaultDropdown = ({
   selectAll = false,
+  all = "All",
   label,
   setLabel,
   value,
@@ -19,9 +20,9 @@ const DefaultDropdown = ({
 
   useEffect(() => {
     get(url).then((res) => {
-      selectAll ? setData([{ id: 0, name: "All" }, ...res]) : setData(res);
+      selectAll ? setData([{ id: 0, name: all }, ...res]) : setData(res);
     });
-  }, [selectAll, url]);
+  }, [all, selectAll, url]);
 
   const options = data?.map((std) => ({
     label: std?.name,

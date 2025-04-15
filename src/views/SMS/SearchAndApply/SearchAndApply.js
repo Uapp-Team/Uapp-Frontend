@@ -19,14 +19,16 @@ function SearchAndApply() {
   const [studentId, setStudentId] = useState(0);
   const [search, setSearch] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
-  const [universityId, setUniversityId] = useState(0);
+  const [institutionId, setInstitutionId] = useState(0);
+  const [studyLevelId, setStudyLevelId] = useState(0);
   const [intakeId, setIntakeId] = useState(0);
-  const [filterData5, setFilterData5] = useState(0);
-  const [filterData6, setFilterData6] = useState(0);
-  const [filterData7, setFilterData7] = useState(0);
-  const [filterData8, setFilterData8] = useState(0);
-  const [filterData9, setFilterData9] = useState(0);
-  const [filterData10, setFilterData10] = useState(0);
+  const [countryId, setCountryId] = useState(0);
+  const [tuitionFee, setTuitionFee] = useState(100000);
+  const [applicationTypeIds, setApplicationTypeIds] = useState([]);
+  const [courseDurations, setCourseDurations] = useState([]);
+  const [isScholarships, setIsScholarships] = useState(false);
+  const [isAvailableCourses, setIsAvailableCourses] = useState(false);
+  const [isWorkPlacement, setIsWorkPlacement] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,6 +97,7 @@ function SearchAndApply() {
     tags: ["Fast Track", "Work Placement", "Scholarship Available"],
   };
 
+  console.log(applicationTypeIds);
   return (
     <>
       <Row className="mb-1">
@@ -161,7 +164,31 @@ function SearchAndApply() {
         )}
       </div>
 
-      {filterOpen && <SearchFilter closeModal={() => setFilterOpen(false)} />}
+      {filterOpen && (
+        <SearchFilter
+          closeModal={() => setFilterOpen(false)}
+          institutionId={institutionId}
+          setInstitutionId={setInstitutionId}
+          studyLevelId={studyLevelId}
+          setStudyLevelId={setStudyLevelId}
+          intakeId={intakeId}
+          setIntakeId={setIntakeId}
+          countryId={countryId}
+          setCountryId={setCountryId}
+          tuitionFee={tuitionFee}
+          setTuitionFee={setTuitionFee}
+          applicationTypeIds={applicationTypeIds}
+          setApplicationTypeIds={setApplicationTypeIds}
+          courseDurations={courseDurations}
+          setCourseDurations={setCourseDurations}
+          isScholarships={isScholarships}
+          setIsScholarships={setIsScholarships}
+          isAvailableCourses={isAvailableCourses}
+          setIsAvailableCourses={setIsAvailableCourses}
+          isWorkPlacement={isWorkPlacement}
+          setIsWorkPlacement={setIsWorkPlacement}
+        />
+      )}
     </>
   );
 }
