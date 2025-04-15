@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
-import "./SearchAndApply.css";
 import ApplyCardHor from "./components/ApplyCardHor";
+import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
 import SearchFilters from "./components/SearchFilters";
-import ApplyCardVar from "./components/ApplyCardVar";
+import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 
 function SearchAndApply() {
@@ -93,6 +93,67 @@ function SearchAndApply() {
     palcement: "On Campus",
     probability: 40,
     tags: ["Fast Track", "Work Placement", "Scholarship Available"],
+  };
+
+  const result = {
+    from: 0,
+    index: 0,
+    size: 30,
+    totalFiltered: 0,
+    total: 652,
+    pages: 22,
+    hasPrevious: false,
+    hasNext: true,
+    title: "Request Success!",
+    message: "Success!",
+    type: "https://tools.ietf.org/html/rfc7231#section-6.3.1",
+    isSuccess: true,
+    statusCode: 200,
+    errors: [],
+    items: [
+      {
+        subjectId: 3088,
+        subjectName:
+          "BSc (Hons) Business and Human Resource Management with Foundation Year",
+        eU_TutionFee: 0,
+        eU_TutionFeeCurrencyId: 2,
+        firstYearTutionFee: 0,
+        firstYearTutionFeeCurrencyId: 0,
+        internationalTutionFee: 0,
+        internationalTutionCurrencyId: 2,
+        localTutionFee: 9250,
+        localTutionFeeCurrencyId: 2,
+        depositFee: 0,
+        depositFeeCurrencyId: 0,
+        avarageApplicationFee: 0,
+        avarageApplicationFeeCurrencyId: 2,
+        studyModes: null,
+        deliveryPatternIds: "3",
+        deliveryPatternNames: "Standard",
+        durationIds: null,
+        durationNames: null,
+        campusIds: "1",
+        applicationDeadLines: "2025-05-25 00:00:00.0000000",
+        intakeIds: "72",
+        intakeNames: "May 2025",
+        subject_IsAcceptHome: true,
+        subject_IsAcceptEU_UK: true,
+        subject_IsAcceptInternational: false,
+        universityId: 1,
+        universityName: "Anglia Ruskin University, London (ARUL)",
+        university_IsAcceptHome: true,
+        university_IsAcceptEU_UK: true,
+        university_IsAcceptInternational: true,
+        summary: "Can apply",
+        canApply: true,
+        consultantCommissionAmount: 0,
+        promotionalCommissionAmount: 0,
+        commissionAmount: 0,
+        isScholarshipAvailable: false,
+        isWorkPlacementAvailable: false,
+        totalRows: 652,
+      },
+    ],
   };
 
   return (

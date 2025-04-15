@@ -22,16 +22,6 @@ const ApplyCardVar = ({ data }) => {
           <img src={BellIcon} alt="" /> {data.date}
         </span>
         <div className="d-flex">
-          <div className={`${!isVertical ? "tags" : "tags-vertical"}`}>
-            {data.tags.map((tag, idx) => (
-              <span
-                key={idx}
-                className={`card-tag ${tag.toLowerCase().replace(" ", "-")}`}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
           <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
             <LuSettings2
               className="mr-3 cursor-pointer"
@@ -61,90 +51,93 @@ const ApplyCardVar = ({ data }) => {
           >
             {data.university}
           </p>
-          <div className="d-flex justify-content-between align-items-end">
-            <ul
-              className={`${
-                !isVertical ? "card-details" : "card-details-vertical"
-              }`}
-            >
-              <li className="d-flex justify-content-between">
-                <span>
-                  <CiLocationOn />
-                  {data.location}
-                </span>
-                <span>
-                  <CiTimer />
-                  {data.duration}
-                </span>
-                <span>
-                  <FaPeopleGroup />
-                  {data.type}
-                </span>
-                <span>
-                  <VscFeedback />
-                  {data.palcement}
-                </span>
-                <span>
-                  <SlCalender />
-                  {data.intake}
-                </span>
-              </li>
-            </ul>
-            <button className="probability">
-              Probability:{" "}
-              <Progress
-                type="circle"
-                percent={80}
-                width={35}
-                strokeColor="#FFAD0D"
-              />
-            </button>
+          <div className={`${!isVertical ? "tags" : "tags-vertical"}`}>
+            <span className={`card-tag fast-track`}>Fast Track</span>
           </div>
           <div className="dashed-hr"></div>
-        </div>
-        <div className="card-action">
-          <div className={`${!isVertical && "d-flex justify-content-between"}`}>
-            <div className="d-flex">
-              <div className="mr-4">
-                <span className="card-subtitle">
+          <div>
+            <ul className="card-details-vertical">
+              <li className="d-flex justify-content-between">
+                <span>
+                  <CiLocationOn className="mr-2" />
+                  <span>Location</span>
+                </span>
+                {data.location}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
                   <MdPriceCheck className="mr-2" />
-                  Tuition Fee (1st year)
+                  <span>Tuition (1st year)</span>
                 </span>
-                <p className="card-price">{data.tuition}</p>
-              </div>
-              <div className="mr-4">
-                <span className="card-subtitle">
-                  {" "}
+                {data.tuition}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
                   <CiBag1 className="mr-2" />
-                  Deposit
+                  <span>Deposit</span>
                 </span>
-                <p className="card-price">{data.deposit}</p>
-              </div>
-              <div className="mr-4">
-                <span className="card-subtitle">
+                {data.type}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
                   <BiDonateBlood className="mr-2" />
-                  Application fee
+                  <span>Application fee</span>
                 </span>
-                <p className="card-price">{data.fee}</p>
-              </div>
-            </div>
-            <div>
-              <button
-                className={`${
-                  !isVertical ? "quick-btn" : "quick-btn-vertical"
-                }`}
-              >
-                Quick view
-              </button>
-              <button
-                className={`${
-                  !isVertical ? "apply-btn" : "apply-btn-vertical"
-                }`}
-              >
-                Apply Now
-              </button>
-            </div>
+                {data.palcement}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
+                  <CiTimer className="mr-2" />
+                  <span>Duration</span>
+                </span>
+                {data.duration}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
+                  <FaPeopleGroup className="mr-2" />
+                  <span>Study Mode</span>
+                </span>
+                {data.type}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
+                  <VscFeedback className="mr-2" />
+                  <span>Delivery Pattern</span>
+                </span>
+                {data.type}
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>
+                  <SlCalender className="mr-2" />
+                  <span>Intake</span>
+                </span>
+                {data.intake}
+              </li>
+            </ul>
           </div>
+          <div className="dashed-hr"></div>
+          <div className="tags">
+            <span className="card-tag work-placement">Work Placement</span>
+            <span className="card-tag scholarship-available">
+              Scholarship Available
+            </span>
+          </div>
+        </div>
+        <div className="my-3">
+          <button className="probability-vertical">
+            Probability:{" "}
+            <Progress
+              type="circle"
+              percent={80}
+              width={35}
+              strokeColor="#FFAD0D"
+            />
+          </button>
+        </div>
+
+        <div className="card-action-vertical">
+          <button className="quick-btn-vertical">Quick view</button>
+          <button className="apply-btn-vertical">Apply Now</button>
         </div>
       </div>
     </div>

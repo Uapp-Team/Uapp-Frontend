@@ -257,6 +257,12 @@
   margin: 0;
 }
 
+.card-details-vertical {
+  padding: 0px;
+  list-style: none;
+  width: 100%;
+}
+
 .card-details li {
   margin-bottom: 0.4rem;
 }
@@ -269,6 +275,11 @@
   gap: 0.5rem;
 }
 
+.card-action-vertical {
+  display: flex;
+  justify-content: space-between;
+}
+
 .probability {
   border: none;
   background-color: #f5f4f4;
@@ -278,9 +289,21 @@
   font-size: 1rem;
   color: #333;
 }
+.probability-vertical {
+  border: none;
+  width: 100%;
+  background-color: #f5f4f4;
+  color: #515151;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+}
 
 .apply-btn,
-.quick-btn {
+.quick-btn,
+.quick-btn-vertical,
+.apply-btn-vertical {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -293,11 +316,24 @@
   width: 131px;
 }
 
+.apply-btn-vertical {
+  background-color: #045d5e;
+  color: white;
+  width: 162px;
+}
+
 .quick-btn {
   background-color: white;
   border: 1px solid #045d5e;
   color: #045d5e;
   width: 115px;
+  margin-right: 5px;
+}
+.quick-btn-vertical {
+  background-color: white;
+  border: 1px solid #045d5e;
+  color: #045d5e;
+  width: 162px;
   margin-right: 5px;
 }
 .dashed-hr {
