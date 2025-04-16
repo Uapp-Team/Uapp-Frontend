@@ -17,7 +17,7 @@ function SearchAndApply() {
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
-  const [search, setSearch] = useState(0);
+  const [search, setSearch] = useState();
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState(0);

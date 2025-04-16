@@ -170,12 +170,8 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
-.card-container-horizontal {
+.card-container-vertical {
   width: 380px;
-}
-
-.card-container.vertical {
-  flex-direction: column;
 }
 
 .card-header {
@@ -228,9 +224,6 @@
   flex-direction: column;
 }
 
-.card-content {
-}
-
 .card-title {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
@@ -261,6 +254,9 @@
   padding: 0px;
   list-style: none;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .card-details li {

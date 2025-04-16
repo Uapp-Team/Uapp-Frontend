@@ -1,5 +1,5 @@
 import { Progress } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -11,48 +11,27 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
 
 const ApplyCardVar = ({ data }) => {
-  const [isVertical, setIsVertical] = useState(false);
-
-  const toggleLayout = () => setIsVertical(!isVertical);
-
   return (
-    <div className="card-container-horizontal mt-3">
+    <div className="card-container-vertical mt-3">
       <div className="card-header">
         <span className="card-date">
           <img src={BellIcon} alt="" /> {data.date}
         </span>
         <div className="d-flex">
           <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-            <LuSettings2
-              className="mr-3 cursor-pointer"
-              onClick={toggleLayout}
-            />
+            <LuSettings2 className="mr-3 cursor-pointer" />
             <LuShare2 className="mr-3" />
             <LuHeart />
           </div>
         </div>
       </div>
 
-      <div className={`${!isVertical ? "card-body" : "card-body-vertical"}`}>
-        <div
-          className={`${
-            !isVertical ? "card-content" : "card-content-vertical"
-          }`}
-        >
-          <h3
-            className={`${!isVertical ? "card-title" : "card-title-vertical"}`}
-          >
-            {data.title}
-          </h3>
-          <p
-            className={`${
-              !isVertical ? "card-subtitle" : "card-subtitle-vertical"
-            }`}
-          >
-            {data.university}
-          </p>
-          <div className={`${!isVertical ? "tags" : "tags-vertical"}`}>
-            <span className={`card-tag fast-track`}>Fast Track</span>
+      <div className="card-body">
+        <div className="card-content-vertical">
+          <h3 className="card-title-vertical">{data.title}</h3>
+          <p className="card-subtitle-vertical">{data.university}</p>
+          <div className="tags">
+            <span className="card-tag fast-track">Fast Track</span>
           </div>
           <div className="dashed-hr"></div>
           <div>
@@ -76,14 +55,14 @@ const ApplyCardVar = ({ data }) => {
                   <CiBag1 className="mr-2" />
                   <span>Deposit</span>
                 </span>
-                {data.type}
+                {data.deposit}
               </li>
               <li className="d-flex justify-content-between">
                 <span>
                   <BiDonateBlood className="mr-2" />
                   <span>Application fee</span>
                 </span>
-                {data.palcement}
+                {data.fee}
               </li>
               <li className="d-flex justify-content-between">
                 <span>
@@ -104,7 +83,7 @@ const ApplyCardVar = ({ data }) => {
                   <VscFeedback className="mr-2" />
                   <span>Delivery Pattern</span>
                 </span>
-                {data.type}
+                {data.palcement}
               </li>
               <li className="d-flex justify-content-between">
                 <span>
