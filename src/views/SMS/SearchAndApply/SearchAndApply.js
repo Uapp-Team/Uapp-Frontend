@@ -29,6 +29,9 @@ function SearchAndApply() {
   const [isScholarships, setIsScholarships] = useState(false);
   const [isAvailableCourses, setIsAvailableCourses] = useState(false);
   const [isWorkPlacement, setIsWorkPlacement] = useState(false);
+  const [studyModes, setStudyModes] = useState([]);
+  const [deliveryPattern, setDeliveryPattern] = useState([]);
+  const [deliverySchedule, setDeliverySchedule] = useState([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -213,16 +216,18 @@ function SearchAndApply() {
         />
       </div>
 
-      <div className="d-block d-md-none">
-        <ApplyCardVar data={cardData} />
-      </div>
-
-      <div className="d-none d-md-block">
-        {mobileCard ? (
+      <div>
+        <div className="d-block d-md-none">
           <ApplyCardVar data={cardData} />
-        ) : (
-          <ApplyCardHor data={cardData} />
-        )}
+        </div>
+
+        <div className="d-none d-md-block">
+          {mobileCard ? (
+            <ApplyCardVar data={cardData} />
+          ) : (
+            <ApplyCardHor data={cardData} />
+          )}
+        </div>
       </div>
 
       {filterOpen && (
@@ -248,6 +253,12 @@ function SearchAndApply() {
           setIsAvailableCourses={setIsAvailableCourses}
           isWorkPlacement={isWorkPlacement}
           setIsWorkPlacement={setIsWorkPlacement}
+          studyModes={studyModes}
+          setStudyModes={setStudyModes}
+          deliveryPattern={deliveryPattern}
+          setDeliveryPattern={setDeliveryPattern}
+          deliverySchedule={deliverySchedule}
+          setDeliverySchedule={setDeliverySchedule}
         />
       )}
     </>

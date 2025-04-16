@@ -8,6 +8,11 @@ import get from "../../../helpers/get";
 import CheckBoxByObj from "../../../components/form/CheckBoxByObj";
 import MultiSelectU from "../../../components/form/MultiSelectU";
 import CheckSwitch from "../../../components/form/CheckSwitch";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  studyMode,
+} from "../../../constants/presetData";
 // import { HugeiconsIcon } from "@hugeicons/react";
 // import { Notification03Icon } from "@hugeicons/core-free-icons";
 
@@ -35,6 +40,12 @@ const SearchFilter = ({
   setIsAvailableCourses,
   isWorkPlacement,
   setIsWorkPlacement,
+  studyModes,
+  setStudyModes,
+  deliveryPattern,
+  setDeliveryPattern,
+  deliverySchedule,
+  setDeliverySchedule,
 }) => {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [studyLevelName, setStudyLevelName] = useState("Select Study Level");
@@ -224,14 +235,39 @@ const SearchFilter = ({
           />
         </div>
 
-        <DefaultDropdownU
-          // label={userLable}
-          // setLabel={setUserLable}
-          // value={userValue}
-          // setValue={setUserValue}
-          url="Duration/Index"
-          // url={"Duration/Index" : "Duration/ByEducationLevel/{id}"}
-        />
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1">Study Mode  </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="studyMode"
+            list={studyMode}
+            defaultValue={studyModes}
+            action={setStudyModes}
+            className="mb-0"
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1">Delivery Pattern </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="deliveryMethods"
+            list={deliveryMethods}
+            defaultValue={deliveryPattern}
+            action={setDeliveryPattern}
+            className="mb-0"
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1">Delivery Schedule </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="deliverySchedules"
+            list={deliverySchedules}
+            defaultValue={deliverySchedule}
+            action={setDeliverySchedule}
+            className="mb-0"
+          />
+        </div>
       </div>
     </>
   );
