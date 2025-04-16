@@ -236,30 +236,36 @@ function SearchAndApply() {
           />
         </Col>
       </Row>
-      <Row className="mb-3">
-        <Col>
-          <SearchKeywords
-            keyword="Search keyword"
-            categories={categories}
-            // selectedCategory={selectedCategory}
-            // setSelectedCategory={setSelectedCategory}
-            dates={dates}
-            // selectedDate={selectedDate}
-            // setSelectedDate={setSelectedDate}
-          />
-        </Col>
-        <Col>
-          <SearchKeywords
-            keyword="Search keyword"
-            categories={categories}
-            // selectedCategory={selectedCategory}
-            // setSelectedCategory={setSelectedCategory}
-            dates={dates}
-            // selectedDate={selectedDate}
-            // setSelectedDate={setSelectedDate}
-          />
-        </Col>
-      </Row>
+      <div className="filter-container">
+        <p className="filters-heading">
+          <span className="fs-14px">Search results for</span> <br />
+          <strong className="fs-20px">Search keyword</strong>
+        </p>
+        <Row className="mb-3">
+          <Col md={9}>
+            <SearchKeywords
+              keyword="Search keyword"
+              categories={categories}
+              // selectedCategory={selectedCategory}
+              // setSelectedCategory={setSelectedCategory}
+              dates={dates}
+              // selectedDate={selectedDate}
+              // setSelectedDate={setSelectedDate}
+            />
+          </Col>
+          <Col md={3}>
+            <SearchKeywords
+              keyword="Search keyword"
+              categories={categories}
+              // selectedCategory={selectedCategory}
+              // setSelectedCategory={setSelectedCategory}
+              dates={dates}
+              // selectedDate={selectedDate}
+              // setSelectedDate={setSelectedDate}
+            />
+          </Col>
+        </Row>
+      </div>
       <div ref={sentinelRef} style={{ height: 1 }} />
 
       <div

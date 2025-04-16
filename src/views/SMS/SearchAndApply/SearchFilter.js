@@ -203,7 +203,6 @@ const SearchFilter = ({
             setValue={setCourseDurations}
           />
         </div>
-
         <div className="border rounded p-16px mb-3 bg-white">
           <CheckSwitch
             register={() => {}}
@@ -231,7 +230,6 @@ const SearchFilter = ({
             action={() => setIsWorkPlacement(!isWorkPlacement)}
           />
         </div>
-
         <div className="border rounded p-16px mb-3 bg-white">
           <p className="mb-1 fw-500">Study Mode  </p>
           <CheckBoxByObj
@@ -265,6 +263,14 @@ const SearchFilter = ({
             className="mb-0"
           />
         </div>
+        <button
+          onClick={() => {
+            closeModal();
+          }}
+          className="apply-btn-vertical w-100"
+        >
+          Apply Now
+        </button>
       </div>
     </>
   );
