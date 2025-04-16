@@ -5,6 +5,7 @@ import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { MdPriceCheck } from "react-icons/md";
+import { RiArrowRightSLine } from "react-icons/ri";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
@@ -150,7 +151,9 @@ const ApplyCardVar = ({ data }) => {
           <button className="quick-btn-vertical" onClick={handleQuickView}>
             Quick view
           </button>
-          <button className="apply-btn-vertical">Apply Now</button>
+          <button className="apply-btn-vertical">
+            Apply Now <RiArrowRightSLine />
+          </button>
         </div>
       </div>
       <QuickViewModal open={open} onClose={() => setOpen(false)} />

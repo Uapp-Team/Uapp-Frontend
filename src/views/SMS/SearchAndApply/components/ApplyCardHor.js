@@ -5,9 +5,12 @@ import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { MdPriceCheck } from "react-icons/md";
+import { RiArrowRightSLine } from "react-icons/ri";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
+import offline from "../../../../assets/icon/offline.svg";
+import online from "../../../../assets/icon/online.svg";
 import "../SearchAndApply.css";
 import QuickViewModal from "./QuickViewModal";
 
@@ -40,7 +43,11 @@ const ApplyCardHor = ({ data }) => {
             ))}
           </div>
           <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-            <LuSettings2 className="mr-3 cursor-pointer" />
+            <div className="mr-3">
+              <img src={online} alt="" />
+              <img src={offline} alt="" />
+            </div>
+            <LuSettings2 className="mr-3" />
             <LuShare2 className="mr-3" />
             <LuHeart />
           </div>
@@ -120,11 +127,22 @@ const ApplyCardHor = ({ data }) => {
                 <p className="card-price">{data.fee}</p>
               </div>
             </div>
-            <div>
-              <button className="quick-btn" onClick={handleQuickView}>
-                Quick view
-              </button>
-              <button className="apply-btn">Apply Now</button>
+            <div className="d-flex align-items-center">
+              <div className="gross">
+                <p className="d-flex flex-row">
+                  <span className="fs-12px mr-2">Gross Earning </span>{" "}
+                  <span className="fw-500">{data.gross}</span>
+                </p>
+              </div>
+              <div>
+                <button className="quick-btn" onClick={handleQuickView}>
+                  Quick view
+                </button>
+                <button className="apply-btn">
+                  Apply Now <RiArrowRightSLine />
+                </button>
+                {/* <button className="register-btn">Register Interest</button> */}
+              </div>
             </div>
           </div>
         </div>

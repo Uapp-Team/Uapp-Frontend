@@ -293,6 +293,12 @@
   font-size: 1rem;
   color: #333;
 }
+.gross {
+  background-color: #ddf6f8;
+  padding: 4px 8px;
+  height: 32px;
+  margin-right: 2rem;
+}
 .gross-vertical {
   background-color: #ddf6f8;
   padding: 4px 16px;
@@ -302,7 +308,8 @@
 .apply-btn,
 .quick-btn,
 .quick-btn-vertical,
-.apply-btn-vertical {
+.apply-btn-vertical,
+.register-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -313,6 +320,13 @@
   background-color: #045d5e;
   color: white;
   width: 131px;
+}
+
+.register-btn {
+  background-color: #fc7300;
+  color: white;
+  padding: 9px 16px;
+  cursor: pointer;
 }
 
 .apply-btn-vertical {
