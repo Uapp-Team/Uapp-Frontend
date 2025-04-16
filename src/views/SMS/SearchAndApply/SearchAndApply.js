@@ -244,24 +244,16 @@ function SearchAndApply() {
         <Row className="mb-3">
           <Col md={9}>
             <SearchKeywords
-              keyword="Search keyword"
-              categories={categories}
-              // selectedCategory={selectedCategory}
-              // setSelectedCategory={setSelectedCategory}
-              dates={dates}
-              // selectedDate={selectedDate}
-              // setSelectedDate={setSelectedDate}
+              item={studyLevelId}
+              setItem={setStudyLevelId}
+              url="SearchFilter/EducationLevels"
             />
           </Col>
           <Col md={3}>
             <SearchKeywords
-              keyword="Search keyword"
-              categories={categories}
-              // selectedCategory={selectedCategory}
-              // setSelectedCategory={setSelectedCategory}
-              dates={dates}
-              // selectedDate={selectedDate}
-              // setSelectedDate={setSelectedDate}
+              item={intakeId}
+              setItem={setIntakeId}
+              url="SearchFilter/Intakes"
             />
           </Col>
         </Row>

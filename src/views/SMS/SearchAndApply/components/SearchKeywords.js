@@ -38,24 +38,16 @@ const ChevronUp = () => (
   </svg>
 );
 
-const SearchKeywords = ({
-  keyword,
-  categories,
-  selectedCategory,
-  setSelectedCategory,
-  dates,
-  selectedDate,
-  setSelectedDate,
-}) => {
+const SearchKeywords = ({ item, setItem, url }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    get(`SearchFilter/EducationLevels`).then((res) => {
+    get(url).then((res) => {
       setData(res);
     });
-  }, []);
-  console.log(data);
+  }, [url]);
+
   return (
     <div className="filter-wrapper">
       <div
@@ -71,10 +63,7 @@ const SearchKeywords = ({
           </button>
         ))}
       </div>
-      <button
-        className="dropdown-button pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <ChevronUp /> : <ChevronDown />}
       </button>
     </div>
