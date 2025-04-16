@@ -9,8 +9,18 @@ import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
+import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardHor = ({ data }) => {
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const handleQuickView = () => {
+    setOpen(true);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
   return (
     <div className="card-container mt-3">
       <div className="card-header">
@@ -111,12 +121,19 @@ const ApplyCardHor = ({ data }) => {
               </div>
             </div>
             <div>
-              <button className="quick-btn">Quick view</button>
+              <button className="quick-btn" onClick={handleQuickView}>
+                Quick view
+              </button>
               <button className="apply-btn">Apply Now</button>
             </div>
           </div>
         </div>
       </div>
+      <QuickViewModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onReload={() => setLoading(true)}
+      />
     </div>
   );
 };
