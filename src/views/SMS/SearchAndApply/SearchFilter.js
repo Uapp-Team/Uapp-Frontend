@@ -78,8 +78,6 @@ const SearchFilter = ({
     }
   };
 
-  console.log(applicationType, applicationTypeIds);
-
   return (
     <>
       <div className="right-side-modal overflowY">
