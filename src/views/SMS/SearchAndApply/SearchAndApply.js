@@ -120,23 +120,26 @@ function SearchAndApply() {
         subjectId: 3088,
         subjectName:
           "BSc (Hons) Business and Human Resource Management with Foundation Year",
-        eU_TutionFee: 0,
+        subjectDescription: "<p>No Placement Year</p>",
+        isFavorite: false,
+        intakeStatusId: 1,
+        eU_TutionFee: 0.0,
         eU_TutionFeeCurrencyId: 2,
-        firstYearTutionFee: 0,
+        firstYearTutionFee: 0.0,
         firstYearTutionFeeCurrencyId: 0,
-        internationalTutionFee: 0,
+        internationalTutionFee: 0.0,
         internationalTutionCurrencyId: 2,
-        localTutionFee: 9250,
+        localTutionFee: 9250.0,
         localTutionFeeCurrencyId: 2,
-        depositFee: 0,
+        depositFee: 0.0,
         depositFeeCurrencyId: 0,
-        avarageApplicationFee: 0,
+        avarageApplicationFee: 0.0,
         avarageApplicationFeeCurrencyId: 2,
-        studyModes: null,
-        deliveryPatternIds: "3",
-        deliveryPatternNames: "Standard",
+        studyModes: "1,2",
+        deliverySchedules: null,
+        deliveryMethods: "1, 3, 2",
         durationIds: null,
-        durationNames: null,
+        durationNames: "1.2",
         campusIds: "1",
         applicationDeadLines: "2025-05-25 00:00:00.0000000",
         intakeIds: "72",
@@ -149,14 +152,14 @@ function SearchAndApply() {
         university_IsAcceptHome: true,
         university_IsAcceptEU_UK: true,
         university_IsAcceptInternational: true,
-        summary: "Can apply",
-        canApply: true,
+        summary: "Please select student",
+        canApply: false,
         consultantCommissionAmount: 0,
         promotionalCommissionAmount: 0,
         commissionAmount: 0,
         isScholarshipAvailable: false,
         isWorkPlacementAvailable: false,
-        totalRows: 652,
+        totalRows: 658,
       },
     ],
   };
@@ -224,7 +227,7 @@ function SearchAndApply() {
         {mobileCard ? (
           <ApplyCardVar data={cardData} />
         ) : (
-          <ApplyCardHor data={cardData} />
+          <ApplyCardHor data={result.items} />
         )}
       </div>
 
