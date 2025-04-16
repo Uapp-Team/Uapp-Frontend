@@ -8,10 +8,13 @@ import { MdPriceCheck } from "react-icons/md";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
+import offline from "../../../../assets/icon/offline.svg";
+import online from "../../../../assets/icon/online.svg";
 import "../SearchAndApply.css";
 import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({ data }) => {
+  const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const handleQuickView = () => {
@@ -31,7 +34,14 @@ const ApplyCardVar = ({ data }) => {
           <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
             <LuSettings2 className="mr-3 cursor-pointer" />
             <LuShare2 className="mr-3" />
-            <LuHeart />
+            {userType != 1 ? (
+              <LuHeart />
+            ) : (
+              <div>
+                <img src={online} alt="" />
+                <img src={offline} alt="" />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -118,7 +128,13 @@ const ApplyCardVar = ({ data }) => {
             </span>
           </div>
         </div>
-        <div className="my-3">
+        <div className="my-3 d-flex justify-content-between">
+          <div className="gross-vertical">
+            <p className="d-flex flex-column">
+              <span className="fs-12px">Gross Earning</span>{" "}
+              <span className="fw-600">{data.gross}</span>
+            </p>
+          </div>
           <button className="probability-vertical">
             Probability:{" "}
             <Progress

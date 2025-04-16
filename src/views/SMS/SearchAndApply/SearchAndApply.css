@@ -286,13 +286,17 @@
 }
 .probability-vertical {
   border: none;
-  width: 100%;
   background-color: #f5f4f4;
   color: #515151;
-  padding: 4px 8px;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 1rem;
   color: #333;
+}
+.gross-vertical {
+  background-color: #ddf6f8;
+  padding: 4px 16px;
+  height: 52px;
 }
 
 .apply-btn,

@@ -90,6 +90,7 @@ function SearchAndApply() {
     location: "Greater London, UK",
     tuition: "£28,640",
     deposit: "£5,640",
+    gross: "£5,640",
     fee: "£00",
     type: "Full Time",
     duration: "4 Years",
