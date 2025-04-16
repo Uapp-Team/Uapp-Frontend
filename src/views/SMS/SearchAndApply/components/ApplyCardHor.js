@@ -129,11 +129,7 @@ const ApplyCardHor = ({ data }) => {
           </div>
         </div>
       </div>
-      <QuickViewModal
-        open={open}
-        onClose={() => setOpen(false)}
-        onReload={() => setLoading(true)}
-      />
+      <QuickViewModal open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };

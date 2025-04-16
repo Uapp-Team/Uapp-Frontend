@@ -338,6 +338,148 @@
   margin: 1rem 0;
 }
 
+/* quick view modal  */
+
+.quickview-container {
+  font-family: "Inter", sans-serif;
+  color: #333;
+}
+
+.quickview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 16px;
+}
+
+.quickview-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.quickview-meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.quickview-meta .dot {
+  margin: 0 6px;
+}
+
+.quickview-intake {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.intake-badge {
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+.apply-now-btn {
+  background-color: #01755b;
+  border: none;
+  padding: 6px 20px;
+}
+
+.quickview-content {
+  display: flex;
+  margin-top: 24px;
+  gap: 32px;
+}
+
+.quickview-left,
+.quickview-right {
+  flex: 1;
+}
+
+.requirement-block h4 {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.requirement-block ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.university-info {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.uni-logo {
+  width: 100px;
+  margin-bottom: 8px;
+}
+
+.uni-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.uni-location,
+.uni-stats {
+  font-size: 13px;
+  color: #555;
+}
+
+.info-group {
+  margin-bottom: 12px;
+}
+
+.info-title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.info-group p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.quickview-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e8e8;
+  font-size: 13px;
+}
+
+.footer-tag {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 4px 8px 4px 0;
+}
+
+.view-more-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.view-more-btn {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* quick view end */
+
 /* Responsive */
 @media (max-width: 768px) {
   .card-container.horizontal {

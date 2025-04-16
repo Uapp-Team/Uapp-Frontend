@@ -137,11 +137,7 @@ const ApplyCardVar = ({ data }) => {
           <button className="apply-btn-vertical">Apply Now</button>
         </div>
       </div>
-      <QuickViewModal
-        open={open}
-        onClose={() => setOpen(false)}
-        onReload={() => setLoading(true)}
-      />
+      <QuickViewModal open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };
