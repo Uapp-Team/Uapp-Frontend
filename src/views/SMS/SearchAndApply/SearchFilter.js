@@ -1,16 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Notification03Icon } from "@hugeicons/core-free-icons";
+import { Input } from "reactstrap";
+import { Col, Row } from "react-bootstrap";
+import get from "../../../helpers/get";
+import CheckBoxByObj from "../../../components/form/CheckBoxByObj";
+import MultiSelectU from "../../../components/form/MultiSelectU";
+import CheckSwitch from "../../../components/form/CheckSwitch";
+// import { HugeiconsIcon } from "@hugeicons/react";
+// import { Notification03Icon } from "@hugeicons/core-free-icons";
 
-const SearchFilter = ({ closeModal }) => {
+const SearchFilter = ({
+  closeModal,
+  institutionId,
+  setInstitutionId,
+  studyLevelId,
+  setStudyLevelId,
+  intakeId,
+  setIntakeId,
+  countryId,
+  setCountryId,
+  cityId,
+  setCityId,
+  tuitionFee,
+  setTuitionFee,
+  applicationTypeIds,
+  setApplicationTypeIds,
+  courseDurations,
+  setCourseDurations,
+  isScholarships,
+  setIsScholarships,
+  isAvailableCourses,
+  setIsAvailableCourses,
+  isWorkPlacement,
+  setIsWorkPlacement,
+}) => {
+  const [institutionName, setInstitutionName] = useState("Select Institution");
+  const [studyLevelName, setStudyLevelName] = useState("Select Study Level");
+  const [intakeName, setIntakeName] = useState("Select Intake");
+  const [countryName, setCountryName] = useState("Select Country");
+  const [cityName, setCityName] = useState("Select City");
+  const [applicationType, setApplicationType] = useState([]);
+
+  useEffect(() => {
+    get(`SearchFilter/StudentTypes`).then((res) => {
+      setApplicationType(res);
+    });
+  }, []);
+
+  const handleChange = (e) => {
+    let id = parseInt(e.target.value);
+    let val = e.target.checked;
+
+    if (applicationTypeIds) {
+      if (val === true) {
+        if (!applicationTypeIds.includes(id)) {
+          setApplicationTypeIds([...applicationTypeIds, id]);
+        }
+      } else {
+        const newD = id;
+        const res = applicationTypeIds.filter((c) => c !== newD);
+
+        setApplicationTypeIds(res);
+      }
+    }
+  };
+
+  console.log(applicationType, applicationTypeIds);
+
   return (
     <>
       <div className="right-side-modal overflowY">
         <div className="d-flex justify-content-between align-items-center mb-30px">
-          <h3>Filter</h3>
+          <h3>Filters</h3>
           <AiOutlineClose
             size={24}
             onClick={() => {
@@ -19,15 +82,155 @@ const SearchFilter = ({ closeModal }) => {
             className="pointer"
           />
         </div>
-        <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} />
+        {/* <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} /> */}
+        <div className="mb-3">
+          <p className="mb-1">Institution</p>
+          <DefaultDropdown
+            label={institutionName}
+            setLabel={setInstitutionName}
+            value={institutionId}
+            setValue={setInstitutionId}
+            selectAll={true}
+            all="All Institution"
+            url="UniversityDD/Index"
+          />
+        </div>
+        <div className="mb-3">
+          <p className="mb-1">Study Level</p>
+          <DefaultDropdown
+            label={studyLevelName}
+            setLabel={setStudyLevelName}
+            value={studyLevelId}
+            setValue={setStudyLevelId}
+            selectAll={true}
+            all="All Study Level"
+            url="SearchFilter/EducationLevels"
+          />
+        </div>
+        <div className="mb-3">
+          <p className="mb-1">Intake</p>
+          <DefaultDropdown
+            label={intakeName}
+            setLabel={setIntakeName}
+            value={intakeId}
+            setValue={setIntakeId}
+            selectAll={true}
+            all="All Intake"
+            url="SearchFilter/Intakes"
+          />
+        </div>
+        <div className="mb-3">
+          <p className="mb-1">Country</p>
+          <DefaultDropdown
+            label={countryName}
+            setLabel={setCountryName}
+            value={countryId}
+            setValue={setCountryId}
+            selectAll={true}
+            all="All Country"
+            url="UniversityCountry/Index"
+          />
+        </div>
+        <div className="mb-3">
+          <p className="mb-1">City</p>
+          <DefaultDropdown
+            label={cityName}
+            setLabel={setCityName}
+            value={cityId}
+            setValue={setCityId}
+            url={`UniversityCityDD/Index/${countryId}`}
+          />
+        </div>
+        <div className="mb-3">
+          <p className="mb-1">Tuition Fee (Max)</p>
+          <Row className="align-items-center">
+            <Col xs={5}>
+              <Input
+                type="number"
+                onChange={(e) => setTuitionFee(e.target.value)}
+                value={tuitionFee}
+              />
+            </Col>
+            <Col xs={7}>
+              <Input
+                type="range"
+                className="custom-slider"
+                min={0}
+                max={100000}
+                value={tuitionFee}
+                onChange={(e) => setTuitionFee(e.target.value)}
+              />
+            </Col>
+          </Row>
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1">Application Type </p>
 
-        <p>Study Level</p>
-        <DefaultDropdown
+          {applicationType.map((item, i) => (
+            <p key={i} className="mb-0">
+              <input
+                id={`AppType-${i}`}
+                value={item.id}
+                type="checkbox"
+                onClick={handleChange}
+                checked={applicationTypeIds?.includes(item.id)}
+              />
+              <label htmlFor={`AppType-${i}`} className="fs-14px mx-2 pointer">
+                {item.name}
+              </label>
+            </p>
+          ))}
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1">Course durations </p>
+
+          <MultiSelectU
+            placeholder="Select Course Durations"
+            url={
+              studyLevelId
+                ? `Duration/ByEducationLevel/${studyLevelId}`
+                : "Duration/Index"
+            }
+            value={courseDurations}
+            setValue={setCourseDurations}
+          />
+        </div>
+
+        <div className="border rounded p-16px mb-3 bg-white">
+          <CheckSwitch
+            register={() => {}}
+            label="Scholarships Available"
+            name=""
+            defaultValue={isScholarships}
+            action={() => setIsScholarships(!isScholarships)}
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <CheckSwitch
+            register={() => {}}
+            label="Show Available Courses Only"
+            name=""
+            defaultValue={isAvailableCourses}
+            action={() => setIsAvailableCourses(!isAvailableCourses)}
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <CheckSwitch
+            register={() => {}}
+            label="Work Placement Options"
+            name=""
+            defaultValue={isWorkPlacement}
+            action={() => setIsWorkPlacement(!isWorkPlacement)}
+          />
+        </div>
+
+        <DefaultDropdownU
           // label={userLable}
           // setLabel={setUserLable}
           // value={userValue}
           // setValue={setUserValue}
-          url="SearchFilter/EducationLevels"
+          url="Duration/Index"
+          // url={"Duration/Index" : "Duration/ByEducationLevel/{id}"}
         />
       </div>
     </>
