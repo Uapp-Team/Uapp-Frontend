@@ -85,6 +85,8 @@ function SearchAndApply() {
     title:
       "Business and Management (Finance) (with Foundation Year option) (Hons)",
     university: "Bournemouth University, UK",
+    uniAddress: "Bournemouth, UK",
+    image: "https://i.imgur.com/4X2v0xk.png",
     location: "Greater London, UK",
     tuition: "£28,640",
     deposit: "£5,640",

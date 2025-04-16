@@ -1,5 +1,5 @@
 import { Progress } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -11,23 +11,15 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
 
 const ApplyCardHor = ({ data }) => {
-  const [isVertical, setIsVertical] = useState(false);
-
-  const toggleLayout = () => setIsVertical(!isVertical);
-
   return (
-    <div
-      className={`${
-        !isVertical ? "card-container mt-3" : "card-container-horizontal mt-3"
-      }`}
-    >
+    <div className="card-container mt-3">
       <div className="card-header">
         <span className="card-date">
           {" "}
           <img src={BellIcon} alt="" /> {data.date}
         </span>
         <div className="d-flex">
-          <div className={`${!isVertical ? "tags" : "tags-vertical"}`}>
+          <div className="tags">
             {data.tags.map((tag, idx) => (
               <span
                 key={idx}
@@ -38,59 +30,44 @@ const ApplyCardHor = ({ data }) => {
             ))}
           </div>
           <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-            <LuSettings2
-              className="mr-3 cursor-pointer"
-              onClick={toggleLayout}
-            />
+            <LuSettings2 className="mr-3 cursor-pointer" />
             <LuShare2 className="mr-3" />
             <LuHeart />
           </div>
         </div>
       </div>
 
-      <div className={`${!isVertical ? "card-body" : "card-body-vertical"}`}>
-        <div
-          className={`${
-            !isVertical ? "card-content" : "card-content-vertical"
-          }`}
-        >
-          <h3
-            className={`${!isVertical ? "card-title" : "card-title-vertical"}`}
-          >
-            {data.title}
-          </h3>
-          <p
-            className={`${
-              !isVertical ? "card-subtitle" : "card-subtitle-vertical"
-            }`}
-          >
-            {data.university}
-          </p>
+      <div className="card-body">
+        <div className="card-content">
+          <h3 className="card-title fw-700 fs-20px">{data.title}</h3>
+          <div className="d-flex align-items-center mb-3">
+            <img className="h-48px w-48px mr-2" src={data.image} alt="" />
+            <div className="d-flex flex-column">
+              <span className="fw-700 fs-14px">{data.university}</span>
+              <span className="fw-400 fs-12px">{data.uniAddress}</span>
+            </div>
+          </div>
           <div className="d-flex justify-content-between align-items-end">
-            <ul
-              className={`${
-                !isVertical ? "card-details" : "card-details-vertical"
-              }`}
-            >
+            <ul className="card-details">
               <li className="d-flex justify-content-between">
                 <span>
-                  <CiLocationOn />
+                  <CiLocationOn className="mr-2" />
                   {data.location}
                 </span>
                 <span>
-                  <CiTimer />
+                  <CiTimer className="mr-2" />
                   {data.duration}
                 </span>
                 <span>
-                  <FaPeopleGroup />
+                  <FaPeopleGroup className="mr-2" />
                   {data.type}
                 </span>
                 <span>
-                  <VscFeedback />
+                  <VscFeedback className="mr-2" />
                   {data.palcement}
                 </span>
                 <span>
-                  <SlCalender />
+                  <SlCalender className="mr-2" />
                   {data.intake}
                 </span>
               </li>
@@ -108,7 +85,7 @@ const ApplyCardHor = ({ data }) => {
           <div className="dashed-hr"></div>
         </div>
         <div className="card-action">
-          <div className={`${!isVertical && "d-flex justify-content-between"}`}>
+          <div className="d-flex justify-content-between">
             <div className="d-flex">
               <div className="mr-4">
                 <span className="card-subtitle">
@@ -134,20 +111,8 @@ const ApplyCardHor = ({ data }) => {
               </div>
             </div>
             <div>
-              <button
-                className={`${
-                  !isVertical ? "quick-btn" : "quick-btn-vertical"
-                }`}
-              >
-                Quick view
-              </button>
-              <button
-                className={`${
-                  !isVertical ? "apply-btn" : "apply-btn-vertical"
-                }`}
-              >
-                Apply Now
-              </button>
+              <button className="quick-btn">Quick view</button>
+              <button className="apply-btn">Apply Now</button>
             </div>
           </div>
         </div>

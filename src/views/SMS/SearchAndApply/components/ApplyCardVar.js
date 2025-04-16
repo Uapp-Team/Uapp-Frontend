@@ -28,8 +28,14 @@ const ApplyCardVar = ({ data }) => {
 
       <div className="card-body">
         <div className="card-content-vertical">
+          <div className="d-flex align-items-center mb-3">
+            <img className="h-48px w-48px mr-2" src={data.image} alt="" />
+            <div className="d-flex flex-column">
+              <span className="fw-700 fs-14px">{data.university}</span>
+              <span className="fw-400 fs-12px">{data.uniAddress}</span>
+            </div>
+          </div>
           <h3 className="card-title-vertical">{data.title}</h3>
-          <p className="card-subtitle-vertical">{data.university}</p>
           <div className="tags">
             <span className="card-tag fast-track">Fast Track</span>
           </div>
