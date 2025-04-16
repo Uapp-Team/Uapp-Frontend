@@ -4,26 +4,29 @@ import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
-import SearchFilters from "./components/SearchFilters";
+import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import post from "../../../helpers/post";
 
 function SearchAndApply() {
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
+  const [data, setData] = useState({});
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
-  const [search, setSearch] = useState(0);
+  const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState(0);
   const [intakeId, setIntakeId] = useState(0);
   const [countryId, setCountryId] = useState(0);
-  const [tuitionFee, setTuitionFee] = useState(100000);
+  const [cityId, setCityId] = useState(0);
+  const [tuitionFee, setTuitionFee] = useState(0);
   const [applicationTypeIds, setApplicationTypeIds] = useState([]);
   const [courseDurations, setCourseDurations] = useState([]);
   const [isScholarships, setIsScholarships] = useState(false);
@@ -32,6 +35,61 @@ function SearchAndApply() {
   const [studyModes, setStudyModes] = useState([]);
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
+
+  console.log(applicationTypeIds);
+
+  useEffect(() => {
+    if (!isTyping && !filterOpen) {
+      const subdata = {
+        page: 1,
+        pageSize: 30,
+        studentId: studentId,
+        universityId: institutionId,
+        campusId: 0,
+        countryId: countryId,
+        cityId: cityId,
+        departmentId: 0,
+        subdepartmentId: 0,
+        educationLevelId: studyLevelId,
+        intakeId: intakeId,
+        tuitionFeeRange: tuitionFee,
+        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        courseDurations: courseDurations,
+        isScholarshipAvailable: isScholarships,
+        isShowAvailableCoursesOnly: isAvailableCourses,
+        isWorkPlacementAvailable: isWorkPlacement,
+        studyModes: studyModes,
+        deliveryMethods: deliveryPattern,
+        deliverySchedules: deliverySchedule,
+        searchText: search,
+      };
+
+      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+        setData(res?.data);
+      });
+    }
+  }, [
+    applicationTypeIds,
+    cityId,
+    countryId,
+    courseDurations,
+    deliveryPattern,
+    deliverySchedule,
+    filterOpen,
+    institutionId,
+    intakeId,
+    isAvailableCourses,
+    isScholarships,
+    isTyping,
+    isWorkPlacement,
+    search,
+    studentId,
+    studyLevelId,
+    studyModes,
+    tuitionFee,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -180,7 +238,7 @@ function SearchAndApply() {
       </Row>
       <Row className="mb-3">
         <Col>
-          <SearchFilters
+          <SearchKeywords
             keyword="Search keyword"
             categories={categories}
             // selectedCategory={selectedCategory}
@@ -191,7 +249,7 @@ function SearchAndApply() {
           />
         </Col>
         <Col>
-          <SearchFilters
+          <SearchKeywords
             keyword="Search keyword"
             categories={categories}
             // selectedCategory={selectedCategory}
@@ -241,6 +299,8 @@ function SearchAndApply() {
           setIntakeId={setIntakeId}
           countryId={countryId}
           setCountryId={setCountryId}
+          cityId={cityId}
+          setCityId={setCityId}
           tuitionFee={tuitionFee}
           setTuitionFee={setTuitionFee}
           applicationTypeIds={applicationTypeIds}

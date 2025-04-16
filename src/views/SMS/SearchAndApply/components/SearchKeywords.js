@@ -37,7 +37,7 @@ const ChevronUp = () => (
   </svg>
 );
 
-const SearchFilters = ({
+const SearchKeywords = ({
   keyword,
   categories,
   selectedCategory,
@@ -84,7 +84,7 @@ const SearchFilters = ({
       <div className="filter-wrapper">
         <div className="buttons-container">
           {categories[0].map((item, index) => (
-            <button key={index} className="filter-button">
+            <button key={index} className="filter-button mb-1">
               {item}
             </button>
           ))}
@@ -111,4 +111,4 @@ const SearchFilters = ({
   );
 };
 
-export default SearchFilters;
+export default SearchKeywords;

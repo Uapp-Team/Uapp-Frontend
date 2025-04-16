@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -93,7 +92,7 @@ const SearchFilter = ({
         </div>
         {/* <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} /> */}
         <div className="mb-3">
-          <p className="mb-1">Institution</p>
+          <p className="mb-1 fw-500">Institution</p>
           <DefaultDropdown
             label={institutionName}
             setLabel={setInstitutionName}
@@ -105,7 +104,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Study Level</p>
+          <p className="mb-1 fw-500">Study Level</p>
           <DefaultDropdown
             label={studyLevelName}
             setLabel={setStudyLevelName}
@@ -117,7 +116,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Intake</p>
+          <p className="mb-1 fw-500">Intake</p>
           <DefaultDropdown
             label={intakeName}
             setLabel={setIntakeName}
@@ -129,7 +128,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Country</p>
+          <p className="mb-1 fw-500">Country</p>
           <DefaultDropdown
             label={countryName}
             setLabel={setCountryName}
@@ -141,7 +140,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">City</p>
+          <p className="mb-1 fw-500">City</p>
           <DefaultDropdown
             label={cityName}
             setLabel={setCityName}
@@ -151,7 +150,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Tuition Fee (Max)</p>
+          <p className="mb-1 fw-500">Tuition Fee (Max)</p>
           <Row className="align-items-center">
             <Col xs={5}>
               <Input
@@ -173,7 +172,7 @@ const SearchFilter = ({
           </Row>
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Application Type </p>
+          <p className="mb-1 fw-500">Application Type </p>
 
           {applicationType.map((item, i) => (
             <p key={i} className="mb-0">
@@ -191,7 +190,7 @@ const SearchFilter = ({
           ))}
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Course durations </p>
+          <p className="mb-1 fw-500">Course durations </p>
 
           <MultiSelectU
             placeholder="Select Course Durations"
@@ -234,7 +233,7 @@ const SearchFilter = ({
         </div>
 
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Study Mode  </p>
+          <p className="mb-1 fw-500">Study Mode  </p>
           <CheckBoxByObj
             register={() => {}}
             name="studyMode"
@@ -245,7 +244,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Delivery Pattern </p>
+          <p className="mb-1 fw-500">Delivery Pattern </p>
           <CheckBoxByObj
             register={() => {}}
             name="deliveryMethods"
@@ -256,7 +255,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Delivery Schedule </p>
+          <p className="mb-1 fw-500">Delivery Schedule </p>
           <CheckBoxByObj
             register={() => {}}
             name="deliverySchedules"
