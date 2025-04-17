@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
+import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
@@ -113,26 +114,6 @@ function SearchAndApply() {
     };
   }, []);
 
-  const cardData = {
-    date: "10 Feb, 25",
-    title:
-      "Business and Management (Finance) (with Foundation Year option) (Hons)",
-    university: "Bournemouth University, UK",
-    uniAddress: "Bournemouth, UK",
-    image: "https://i.imgur.com/4X2v0xk.png",
-    location: "Greater London, UK",
-    tuition: "£28,640",
-    deposit: "£5,640",
-    gross: "£5,640",
-    fee: "£00",
-    type: "Full Time",
-    duration: "4 Years",
-    intake: "September 2025",
-    palcement: "On Campus",
-    probability: 40,
-    tags: ["Fast Track", "Work Placement", "Scholarship Available"],
-  };
-
   const result = {
     from: 0,
     index: 0,
@@ -245,6 +226,84 @@ function SearchAndApply() {
   };
 
   console.log(applicationTypeIds);
+
+  useEffect(() => {
+    if (!isTyping && !filterOpen) {
+      const subdata = {
+        page: 1,
+        pageSize: 30,
+        studentId: studentId,
+        universityId: institutionId,
+        campusId: 0,
+        countryId: countryId,
+        cityId: cityId,
+        departmentId: 0,
+        subdepartmentId: 0,
+        educationLevelIds: studyLevelId,
+        intakeIds: intakeId,
+        tuitionFeeRange: tuitionFee,
+        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        courseDurations: courseDurations,
+        isScholarshipAvailable: isScholarships,
+        isShowAvailableCoursesOnly: isAvailableCourses,
+        isWorkPlacementAvailable: isWorkPlacement,
+        studyModes: studyModes,
+        deliveryMethods: deliveryPattern,
+        deliverySchedules: deliverySchedule,
+        searchText: search,
+      };
+
+      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+        setData(res?.data);
+      });
+    }
+  }, [
+    applicationTypeIds,
+    cityId,
+    countryId,
+    courseDurations,
+    deliveryPattern,
+    deliverySchedule,
+    filterOpen,
+    institutionId,
+    intakeId,
+    isAvailableCourses,
+    isScholarships,
+    isTyping,
+    isWorkPlacement,
+    search,
+    studentId,
+    studyLevelId,
+    studyModes,
+    tuitionFee,
+  ]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0,
+      }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, []);
+
+  console.log(data);
   return (
     <>
       <Row className="mb-1">
