@@ -169,6 +169,20 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: relative;
+}
+.tbc {
+  position: absolute;
+  background-color: #c1c6c6;
+  padding: 3px 15px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 0 0 20px 0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .card-container-vertical {
   width: 380px;
@@ -181,6 +195,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 30px;
 }
 
 .card-date {
@@ -189,7 +204,7 @@
 
 .tags {
   display: flex;
-  gap: 0.5rem;
+  padding-right: 5px;
 }
 
 .card-tag {

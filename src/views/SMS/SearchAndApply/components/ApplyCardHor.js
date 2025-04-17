@@ -1,4 +1,5 @@
-import { Progress } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Progress, Tooltip } from "antd";
 import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
@@ -31,28 +32,55 @@ const ApplyCardHor = ({ data }) => {
       {data.map((item, index) => (
         <div>
           <div className="card-container mt-3">
+            {item.intakeStatusId !== 1 && (
+              <span className="tbc">
+                TBC
+                <Tooltip
+                  title={<span>To Be Continue</span>}
+                  placement="top"
+                  overlayClassName="custom-tooltip"
+                >
+                  <InfoCircleOutlined
+                    style={{
+                      fontSize: "12px",
+                      color: "#fff",
+                      cursor: "pointer",
+                      marginLeft: "5px",
+                    }}
+                  />
+                </Tooltip>
+              </span>
+            )}
             <div className="card-header">
               <span className="card-date">
                 {" "}
                 <img src={BellIcon} alt="" /> {item.applicationDeadLines}
               </span>
               <div className="d-flex">
-                {/* <div className="tags">
-                  {data.tags.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className={`card-tag ${tag
-                        .toLowerCase()
-                        .replace(" ", "-")}`}
-                    >
-                      {tag}
+                <div className="tags">
+                  <span className="card-tag fast-track">Fast Track</span>
+                </div>
+                {item.isScholarshipAvailable && (
+                  <div className="tags">
+                    <span className="card-tag scholarship-available">
+                      Scholarship Available
                     </span>
-                  ))}
-                </div> */}
-                <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
+                  </div>
+                )}
+                {item.isWorkPlacementAvailable && (
+                  <div className="tags">
+                    <span className="card-tag scholarship-available">
+                      Work Placement
+                    </span>
+                  </div>
+                )}
+                <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
-                    <img src={online} alt="" />
-                    <img src={offline} alt="" />
+                    {item.intakeStatusId == 1 ? (
+                      <img src={online} alt="" />
+                    ) : (
+                      <img src={offline} alt="" />
+                    )}
                   </div>
                   <LuSettings2 className="mr-3" />
                   <LuShare2 className="mr-3" />
@@ -72,19 +100,21 @@ const ApplyCardHor = ({ data }) => {
                     <span className="fw-700 fs-14px">
                       {item.universityName}
                     </span>
-                    <span className="fw-400 fs-12px">{item.uniAddress}</span>
+                    <span className="fw-400 fs-12px">
+                      {item.campusNames.split(",")[0].trim()}
+                    </span>
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-end">
                   <ul className="card-details">
                     <li className="d-flex justify-content-between">
-                      <span>
+                      <span className="d-flex align-items-center">
                         <CiLocationOn className="mr-2" />
-                        {item.location}
+                        <CustomToolTip methodIds={item.campusNames} />
                       </span>
-                      <span>
+                      <span className="d-flex align-items-center">
                         <CiTimer className="mr-2" />
-                        {item.durationNames}
+                        <CustomToolTip methodIds={item.durationNames} />
                       </span>
                       <span className="d-flex align-items-center">
                         <FaPeopleGroup className="mr-2" />
