@@ -57,9 +57,9 @@ const ApplyCardHor = ({ data }) => {
                 <img src={BellIcon} alt="" /> {item.applicationDeadLines}
               </span>
               <div className="d-flex">
-                <div className="tags">
+                {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
-                </div>
+                </div> */}
                 {item.isScholarshipAvailable && (
                   <div className="tags">
                     <span className="card-tag scholarship-available">
@@ -135,9 +135,12 @@ const ApplyCardHor = ({ data }) => {
                           title="Devlivery Pattern"
                         />
                       </span>
-                      <span>
+                      <span className="d-flex align-items-center">
                         <SlCalender className="mr-2" />
-                        {item.intakeNames}
+                        <CustomToolTip
+                          methodIds={item.intakeNames}
+                          title="Intakes"
+                        />
                       </span>
                     </li>
                   </ul>

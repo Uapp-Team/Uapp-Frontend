@@ -184,7 +184,8 @@
 }
 .card-container-vertical {
   width: 380px;
-  position: relative;
+  border: none;
+  border-radius: 12px !important;
 }
 
 .card-header {
