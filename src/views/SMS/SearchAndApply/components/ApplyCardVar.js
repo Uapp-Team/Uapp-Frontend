@@ -57,7 +57,7 @@ const ApplyCardVar = ({ data }) => {
                 )}
                 <div className="card-header">
                   <span className="card-date">
-                    <img src={BellIcon} alt="" /> {item.applicationDeadLines}
+                    <img src={BellIcon} alt="" /> {item.applicationDeadLine}
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
@@ -83,11 +83,13 @@ const ApplyCardVar = ({ data }) => {
                     <div className="d-flex align-items-center mb-3">
                       <img
                         className="h-48px w-48px mr-2"
-                        src={item.image}
+                        src={
+                          "https://localtest.uapp.uk/" + item.universityLogoUrl
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column">
-                        <span className="fw-700 fs-14px">
+                        <span className="fw-600 fs-14px">
                           {item.universityName}
                         </span>
                         <span className="fw-400 fs-12px">
@@ -95,7 +97,7 @@ const ApplyCardVar = ({ data }) => {
                         </span>
                       </div>
                     </div>
-                    <h3 className="card-title fw-700 fs-20px">
+                    <h3 className="card-title-vertical fw-700 fs-20px">
                       {item.subjectName}
                     </h3>
                     {/* <div className="tags">
@@ -217,12 +219,12 @@ const ApplyCardVar = ({ data }) => {
                     </button>
                   </div>
                 </div>
-                <QuickViewModal open={open} onClose={() => setOpen(false)} />
               </div>
             </div>
           </Col>
         ))}
       </Row>
+      <QuickViewModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };

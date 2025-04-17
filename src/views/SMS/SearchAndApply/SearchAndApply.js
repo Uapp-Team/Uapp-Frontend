@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
@@ -10,108 +11,6 @@ import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 
 function SearchAndApply() {
-  const sentinelRef = useRef(null);
-  const toolbarRef = useRef(null);
-  const [isSticky, setIsSticky] = useState(false);
-  const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState([]);
-
-  // Filter Data State
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [studentId, setStudentId] = useState(0);
-  const [search, setSearch] = useState();
-  const [isTyping, setIsTyping] = useState(false);
-  const [institutionId, setInstitutionId] = useState(0);
-  const [studyLevelId, setStudyLevelId] = useState([]);
-  const [intakeId, setIntakeId] = useState([]);
-  const [countryId, setCountryId] = useState(0);
-  const [cityId, setCityId] = useState(0);
-  const [tuitionFee, setTuitionFee] = useState(0);
-  const [applicationTypeIds, setApplicationTypeIds] = useState([]);
-  const [courseDurations, setCourseDurations] = useState([]);
-  const [isScholarships, setIsScholarships] = useState(false);
-  const [isAvailableCourses, setIsAvailableCourses] = useState(false);
-  const [isWorkPlacement, setIsWorkPlacement] = useState(false);
-  const [studyModes, setStudyModes] = useState([]);
-  const [deliveryPattern, setDeliveryPattern] = useState([]);
-  const [deliverySchedule, setDeliverySchedule] = useState([]);
-
-  console.log(data, "data from API");
-  useEffect(() => {
-    if (isTyping && !filterOpen) {
-      const subdata = {
-        page: 1,
-        pageSize: 30,
-        studentId: studentId,
-        universityId: institutionId,
-        campusId: 0,
-        countryId: countryId,
-        cityId: cityId,
-        departmentId: 0,
-        subdepartmentId: 0,
-        educationLevelIds: studyLevelId,
-        intakeIds: intakeId,
-        tuitionFeeRange: tuitionFee,
-        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
-        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
-        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
-        courseDurations: courseDurations,
-        isScholarshipAvailable: isScholarships,
-        isShowAvailableCoursesOnly: isAvailableCourses,
-        isWorkPlacementAvailable: isWorkPlacement,
-        studyModes: studyModes,
-        deliveryMethods: deliveryPattern,
-        deliverySchedules: deliverySchedule,
-        searchText: search,
-      };
-      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        console.log(res, "response filter data");
-        setData(res);
-      });
-    }
-  }, [
-    applicationTypeIds,
-    cityId,
-    countryId,
-    courseDurations,
-    deliveryPattern,
-    deliverySchedule,
-    filterOpen,
-    institutionId,
-    intakeId,
-    isAvailableCourses,
-    isScholarships,
-    isTyping,
-    isWorkPlacement,
-    search,
-    studentId,
-    studyLevelId,
-    studyModes,
-    tuitionFee,
-  ]);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSticky(!entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: "-80px 0px 0px 0px",
-        threshold: 0,
-      }
-    );
-
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, []);
-
   const result = {
     from: 0,
     index: 0,
@@ -202,7 +101,7 @@ function SearchAndApply() {
         campusNames: "Bournemouth University,University of Sunderland",
         applicationDeadLines: "10 Feb, 25",
         intakeIds: "72",
-        intakeNames: "May 2025,June 2025",
+        intakeNames: "May 2025",
         subject_IsAcceptHome: true,
         subject_IsAcceptEU_UK: true,
         subject_IsAcceptInternational: false,
@@ -216,14 +115,94 @@ function SearchAndApply() {
         consultantCommissionAmount: 0,
         promotionalCommissionAmount: 0,
         commissionAmount: 0,
-        isScholarshipAvailable: false,
+        isScholarshipAvailable: true,
         isWorkPlacementAvailable: true,
         totalRows: 658,
       },
     ],
   };
 
+  const sentinelRef = useRef(null);
+  const toolbarRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [mobileCard, setMobileCard] = useState(true);
+  const [data, setData] = useState(result);
+
+  // Filter Data State
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [studentId, setStudentId] = useState(0);
+  const [studentName, setStudentName] = useState("");
+  const [search, setSearch] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [institutionId, setInstitutionId] = useState(0);
+  const [studyLevelId, setStudyLevelId] = useState([]);
+  const [intakeId, setIntakeId] = useState([]);
+  const [countryId, setCountryId] = useState(0);
+  const [cityId, setCityId] = useState(0);
+  const [tuitionFee, setTuitionFee] = useState(0);
+  const [applicationTypeIds, setApplicationTypeIds] = useState([]);
+  const [courseDurations, setCourseDurations] = useState([]);
+  const [isScholarships, setIsScholarships] = useState(false);
+  const [isAvailableCourses, setIsAvailableCourses] = useState(false);
+  const [isWorkPlacement, setIsWorkPlacement] = useState(false);
+  const [studyModes, setStudyModes] = useState([]);
+  const [deliveryPattern, setDeliveryPattern] = useState([]);
+  const [deliverySchedule, setDeliverySchedule] = useState([]);
+
   console.log(applicationTypeIds);
+
+  useEffect(() => {
+    if (!isTyping && !filterOpen) {
+      const subdata = {
+        page: 1,
+        pageSize: 30,
+        studentId: studentId,
+        universityId: institutionId,
+        campusId: 0,
+        countryId: countryId,
+        cityId: cityId,
+        departmentId: 0,
+        subdepartmentId: 0,
+        educationLevelIds: studyLevelId,
+        intakeIds: intakeId,
+        tuitionFeeRange: tuitionFee,
+        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        courseDurations: courseDurations,
+        isScholarshipAvailable: isScholarships,
+        isShowAvailableCoursesOnly: isAvailableCourses,
+        isWorkPlacementAvailable: isWorkPlacement,
+        studyModes: studyModes,
+        deliveryMethods: deliveryPattern,
+        deliverySchedules: deliverySchedule,
+        searchText: search,
+      };
+
+      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+        setData(res?.data);
+      });
+    }
+  }, [
+    applicationTypeIds,
+    cityId,
+    countryId,
+    courseDurations,
+    deliveryPattern,
+    deliverySchedule,
+    filterOpen,
+    institutionId,
+    intakeId,
+    isAvailableCourses,
+    isScholarships,
+    isTyping,
+    isWorkPlacement,
+    search,
+    studentId,
+    studyLevelId,
+    studyModes,
+    tuitionFee,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -252,6 +231,17 @@ function SearchAndApply() {
   return (
     <>
       <Row className="mb-1">
+        <Col md={3} className="h-40px">
+          <DefaultDropdown
+            label={studentName}
+            setLabel={setStudentName}
+            value={studentId}
+            setValue={setStudentId}
+            selectAll={true}
+            all="All Student"
+            url="SearchFilter/Students"
+          />
+        </Col>
         <Col md={6} className="d-flex h-40px">
           <SearchBox
             name="search"
