@@ -14,7 +14,7 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -36,61 +36,59 @@ function SearchAndApply() {
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
 
-  console.log(applicationTypeIds);
-
-  // useEffect(() => {
-  //   if (!isTyping && !filterOpen) {
-  //     const subdata = {
-  //       page: 1,
-  //       pageSize: 30,
-  //       studentId: studentId,
-  //       universityId: institutionId,
-  //       campusId: 0,
-  //       countryId: countryId,
-  //       cityId: cityId,
-  //       departmentId: 0,
-  //       subdepartmentId: 0,
-  //       educationLevelIds: studyLevelId,
-  //       intakeIds: intakeId,
-  //       tuitionFeeRange: tuitionFee,
-  //       isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
-  //       isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
-  //       isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
-  //       courseDurations: courseDurations,
-  //       isScholarshipAvailable: isScholarships,
-  //       isShowAvailableCoursesOnly: isAvailableCourses,
-  //       isWorkPlacementAvailable: isWorkPlacement,
-  //       studyModes: studyModes,
-  //       deliveryMethods: deliveryPattern,
-  //       deliverySchedules: deliverySchedule,
-  //       searchText: search,
-  //     };
-
-  //     post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-  //       setData(res?.data);
-  //     });
-  //   }
-  // }, [
-  //   applicationTypeIds,
-  //   cityId,
-  //   countryId,
-  //   courseDurations,
-  //   deliveryPattern,
-  //   deliverySchedule,
-  //   filterOpen,
-  //   institutionId,
-  //   intakeId,
-  //   isAvailableCourses,
-  //   isScholarships,
-  //   isTyping,
-  //   isWorkPlacement,
-  //   search,
-  //   studentId,
-  //   studyLevelId,
-  //   studyModes,
-  //   tuitionFee,
-  // ]);
-
+  console.log(data, "data from API");
+  useEffect(() => {
+    if (isTyping && !filterOpen) {
+      const subdata = {
+        page: 1,
+        pageSize: 30,
+        studentId: studentId,
+        universityId: institutionId,
+        campusId: 0,
+        countryId: countryId,
+        cityId: cityId,
+        departmentId: 0,
+        subdepartmentId: 0,
+        educationLevelIds: studyLevelId,
+        intakeIds: intakeId,
+        tuitionFeeRange: tuitionFee,
+        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        courseDurations: courseDurations,
+        isScholarshipAvailable: isScholarships,
+        isShowAvailableCoursesOnly: isAvailableCourses,
+        isWorkPlacementAvailable: isWorkPlacement,
+        studyModes: studyModes,
+        deliveryMethods: deliveryPattern,
+        deliverySchedules: deliverySchedule,
+        searchText: search,
+      };
+      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+        console.log(res, "response filter data");
+        setData(res);
+      });
+    }
+  }, [
+    applicationTypeIds,
+    cityId,
+    countryId,
+    courseDurations,
+    deliveryPattern,
+    deliverySchedule,
+    filterOpen,
+    institutionId,
+    intakeId,
+    isAvailableCourses,
+    isScholarships,
+    isTyping,
+    isWorkPlacement,
+    search,
+    studentId,
+    studyLevelId,
+    studyModes,
+    tuitionFee,
+  ]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -228,59 +226,6 @@ function SearchAndApply() {
   console.log(applicationTypeIds);
 
   useEffect(() => {
-    if (!isTyping && !filterOpen) {
-      const subdata = {
-        page: 1,
-        pageSize: 30,
-        studentId: studentId,
-        universityId: institutionId,
-        campusId: 0,
-        countryId: countryId,
-        cityId: cityId,
-        departmentId: 0,
-        subdepartmentId: 0,
-        educationLevelIds: studyLevelId,
-        intakeIds: intakeId,
-        tuitionFeeRange: tuitionFee,
-        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
-        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
-        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
-        courseDurations: courseDurations,
-        isScholarshipAvailable: isScholarships,
-        isShowAvailableCoursesOnly: isAvailableCourses,
-        isWorkPlacementAvailable: isWorkPlacement,
-        studyModes: studyModes,
-        deliveryMethods: deliveryPattern,
-        deliverySchedules: deliverySchedule,
-        searchText: search,
-      };
-
-      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        setData(res?.data);
-      });
-    }
-  }, [
-    applicationTypeIds,
-    cityId,
-    countryId,
-    courseDurations,
-    deliveryPattern,
-    deliverySchedule,
-    filterOpen,
-    institutionId,
-    intakeId,
-    isAvailableCourses,
-    isScholarships,
-    isTyping,
-    isWorkPlacement,
-    search,
-    studentId,
-    studyLevelId,
-    studyModes,
-    tuitionFee,
-  ]);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
@@ -357,14 +302,14 @@ function SearchAndApply() {
       </div>
 
       <div className="d-block d-md-none">
-        <ApplyCardVar data={result.items} />
+        <ApplyCardVar data={data.items} />
       </div>
 
       <div className="d-none d-md-block">
         {mobileCard ? (
-          <ApplyCardVar data={result.items} />
+          <ApplyCardVar data={data.items} />
         ) : (
-          <ApplyCardHor data={result.items} />
+          <ApplyCardHor data={data.items} />
         )}
       </div>
 
