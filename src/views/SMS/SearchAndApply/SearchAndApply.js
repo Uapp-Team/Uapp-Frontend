@@ -267,12 +267,12 @@ function SearchAndApply() {
       </div>
 
       <div className="d-block d-md-none">
-        <ApplyCardVar data={cardData} />
+        <ApplyCardVar data={result.items} />
       </div>
 
       <div className="d-none d-md-block">
         {mobileCard ? (
-          <ApplyCardVar data={cardData} />
+          <ApplyCardVar data={result.items} />
         ) : (
           <ApplyCardHor data={result.items} />
         )}

@@ -110,7 +110,10 @@ const ApplyCardHor = ({ data }) => {
                     <li className="d-flex justify-content-between">
                       <span className="d-flex align-items-center">
                         <CiLocationOn className="mr-2" />
-                        <CustomToolTip methodIds={item.campusNames} />
+                        <CustomToolTip
+                          methodIds={item.campusNames}
+                          title="Campus Name"
+                        />
                       </span>
                       <span className="d-flex align-items-center">
                         <CiTimer className="mr-2" />

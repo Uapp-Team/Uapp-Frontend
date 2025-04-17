@@ -186,6 +186,7 @@
 }
 .card-container-vertical {
   width: 380px;
+  position: relative;
 }
 
 .card-header {
