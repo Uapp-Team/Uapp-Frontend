@@ -128,7 +128,7 @@ const SearchFilter = ({
             url="UniversityDD/Index"
           />
         </div>
-        <div className="mb-3">
+        <div className="mb-3 d-none">
           <p className="mb-1 fw-500">Study Level</p>
           {/* <DefaultDropdown
             label={studyLevelName}
@@ -147,7 +147,7 @@ const SearchFilter = ({
             setValue={setStudyLevelList}
           />
         </div>
-        <div className="mb-3">
+        <div className="mb-3 d-none">
           <p className="mb-1 fw-500">Intake</p>
           {/* <DefaultDropdown
             label={intakeName}
