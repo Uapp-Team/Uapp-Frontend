@@ -20,6 +20,7 @@ function SearchAndApply() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
   const [search, setSearch] = useState("");
+  const [search, setSearch] = useState();
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState([]);
@@ -119,9 +120,12 @@ function SearchAndApply() {
     title:
       "Business and Management (Finance) (with Foundation Year option) (Hons)",
     university: "Bournemouth University, UK",
+    uniAddress: "Bournemouth, UK",
+    image: "https://i.imgur.com/4X2v0xk.png",
     location: "Greater London, UK",
     tuition: "£28,640",
     deposit: "£5,640",
+    gross: "£5,640",
     fee: "£00",
     type: "Full Time",
     duration: "4 Years",
@@ -131,6 +135,119 @@ function SearchAndApply() {
     tags: ["Fast Track", "Work Placement", "Scholarship Available"],
   };
   console.log(studyLevelId);
+
+  const result = {
+    from: 0,
+    index: 0,
+    size: 30,
+    totalFiltered: 0,
+    total: 652,
+    pages: 22,
+    hasPrevious: false,
+    hasNext: true,
+    title: "Request Success!",
+    message: "Success!",
+    type: "https://tools.ietf.org/html/rfc7231#section-6.3.1",
+    isSuccess: true,
+    statusCode: 200,
+    errors: [],
+    items: [
+      {
+        subjectId: 3088,
+        subjectName:
+          "BSc (Hons) Business and Human Resource Management with Foundation Year",
+        subjectDescription: "<p>No Placement Year</p>",
+        isFavorite: false,
+        intakeStatusId: 1,
+        eU_TutionFee: 0.0,
+        eU_TutionFeeCurrencyId: 2,
+        firstYearTutionFee: 0.0,
+        firstYearTutionFeeCurrencyId: 0,
+        internationalTutionFee: 0.0,
+        internationalTutionCurrencyId: 2,
+        localTutionFee: 9250.0,
+        localTutionFeeCurrencyId: 2,
+        depositFee: 0.0,
+        depositFeeCurrencyId: 0,
+        avarageApplicationFee: 0.0,
+        avarageApplicationFeeCurrencyId: 2,
+        studyModes: "1,2",
+        deliverySchedules: null,
+        deliveryMethods: "1, 3, 2",
+        durationIds: null,
+        durationNames: "4 Years,2 Years",
+        campusIds: "1",
+        campusNames: "Bournemouth University,University of Sunderland",
+        applicationDeadLines: "10 Feb, 25",
+        intakeIds: "72",
+        intakeNames: "May 2025",
+        subject_IsAcceptHome: true,
+        subject_IsAcceptEU_UK: true,
+        subject_IsAcceptInternational: false,
+        universityId: 1,
+        universityName: "Anglia Ruskin University, London (ARUL)",
+        university_IsAcceptHome: true,
+        university_IsAcceptEU_UK: true,
+        university_IsAcceptInternational: true,
+        summary: "Please select student",
+        canApply: false,
+        consultantCommissionAmount: 0,
+        promotionalCommissionAmount: 0,
+        commissionAmount: 0,
+        isScholarshipAvailable: true,
+        isWorkPlacementAvailable: true,
+        totalRows: 658,
+      },
+      {
+        subjectId: 3088,
+        subjectName:
+          "BSc (Hons) Business and Human Resource Management with Foundation Year",
+        subjectDescription: "<p>No Placement Year</p>",
+        isFavorite: false,
+        intakeStatusId: 3,
+        eU_TutionFee: 0.0,
+        eU_TutionFeeCurrencyId: 2,
+        firstYearTutionFee: 0.0,
+        firstYearTutionFeeCurrencyId: 0,
+        internationalTutionFee: 0.0,
+        internationalTutionCurrencyId: 2,
+        localTutionFee: 9250.0,
+        localTutionFeeCurrencyId: 2,
+        depositFee: 0.0,
+        depositFeeCurrencyId: 0,
+        avarageApplicationFee: 0.0,
+        avarageApplicationFeeCurrencyId: 2,
+        studyModes: "1,2",
+        deliverySchedules: null,
+        deliveryMethods: "1, 3, 2",
+        durationIds: null,
+        durationNames: "4 Years,2 Years",
+        campusIds: "1",
+        campusNames: "Bournemouth University,University of Sunderland",
+        applicationDeadLines: "10 Feb, 25",
+        intakeIds: "72",
+        intakeNames: "May 2025",
+        subject_IsAcceptHome: true,
+        subject_IsAcceptEU_UK: true,
+        subject_IsAcceptInternational: false,
+        universityId: 1,
+        universityName: "Anglia Ruskin University, London (ARUL)",
+        university_IsAcceptHome: true,
+        university_IsAcceptEU_UK: true,
+        university_IsAcceptInternational: true,
+        summary: "Please select student",
+        canApply: false,
+        consultantCommissionAmount: 0,
+        promotionalCommissionAmount: 0,
+        commissionAmount: 0,
+        isScholarshipAvailable: true,
+        isWorkPlacementAvailable: true,
+        totalRows: 658,
+      },
+    ],
+  };
+
+  console.log(applicationTypeIds);
   return (
     <>
       <Row className="mb-1">
@@ -183,18 +300,16 @@ function SearchAndApply() {
         />
       </div>
 
-      <div>
-        <div className="d-block d-md-none">
-          <ApplyCardVar data={cardData} />
-        </div>
+      <div className="d-block d-md-none">
+        <ApplyCardVar data={result.items} />
+      </div>
 
-        <div className="d-none d-md-block">
-          {mobileCard ? (
-            <ApplyCardVar data={cardData} />
-          ) : (
-            <ApplyCardHor data={cardData} />
-          )}
-        </div>
+      <div className="d-none d-md-block">
+        {mobileCard ? (
+          <ApplyCardVar data={result.items} />
+        ) : (
+          <ApplyCardHor data={result.items} />
+        )}
       </div>
 
       {filterOpen && (

@@ -167,13 +167,24 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: relative;
 }
-.card-container-horizontal {
+.tbc {
+  position: absolute;
+  background-color: #c1c6c6;
+  padding: 3px 15px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 0 0 20px 0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-container-vertical {
   width: 380px;
-}
-
-.card-container.vertical {
-  flex-direction: column;
+  position: relative;
 }
 
 .card-header {
@@ -183,6 +194,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 30px;
 }
 
 .card-date {
@@ -191,7 +203,7 @@
 
 .tags {
   display: flex;
-  gap: 0.5rem;
+  padding-right: 5px;
 }
 
 .card-tag {
@@ -227,8 +239,7 @@
 }
 
 .card-title {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 12px;
 }
 
 .card-title-vertical {
@@ -256,6 +267,9 @@
   padding: 0px;
   list-style: none;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .card-details li {
@@ -286,19 +300,30 @@
 }
 .probability-vertical {
   border: none;
-  width: 100%;
   background-color: #f5f4f4;
   color: #515151;
-  padding: 4px 8px;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 1rem;
   color: #333;
+}
+.gross {
+  background-color: #ddf6f8;
+  padding: 4px 8px;
+  height: 32px;
+  margin-right: 2rem;
+}
+.gross-vertical {
+  background-color: #ddf6f8;
+  padding: 4px 16px;
+  height: 52px;
 }
 
 .apply-btn,
 .quick-btn,
 .quick-btn-vertical,
-.apply-btn-vertical {
+.apply-btn-vertical,
+.register-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -309,6 +334,13 @@
   background-color: #045d5e;
   color: white;
   width: 131px;
+}
+
+.register-btn {
+  background-color: #fc7300;
+  color: white;
+  padding: 9px 16px;
+  cursor: pointer;
 }
 
 .apply-btn-vertical {
@@ -337,6 +369,173 @@
   border-top: 1px dashed #ccc;
   margin: 1rem 0;
 }
+
+/* tooltip styles */
+
+/* Optional custom tooltip wrapper */
+.custom-tooltip .ant-tooltip-inner {
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.custom-tooltip-content {
+  background: #fff;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tooltip-method {
+  font-weight: 500;
+}
+
+/* quick view modal  */
+
+.quickview-container {
+  font-family: "Inter", sans-serif;
+  color: #333;
+}
+
+.quickview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 16px;
+}
+
+.quickview-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.quickview-meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.quickview-meta .dot {
+  margin: 0 6px;
+}
+
+.quickview-intake {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.intake-badge {
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+.apply-now-btn {
+  background-color: #01755b;
+  border: none;
+  padding: 6px 20px;
+}
+
+.quickview-content {
+  display: flex;
+  margin-top: 24px;
+  gap: 32px;
+}
+
+.quickview-left,
+.quickview-right {
+  flex: 1;
+}
+
+.requirement-block h4 {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.requirement-block ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.university-info {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.uni-logo {
+  width: 100px;
+  margin-bottom: 8px;
+}
+
+.uni-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.uni-location,
+.uni-stats {
+  font-size: 13px;
+  color: #555;
+}
+
+.info-group {
+  margin-bottom: 12px;
+}
+
+.info-title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.info-group p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.quickview-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e8e8;
+  font-size: 13px;
+}
+
+.footer-tag {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 4px 8px 4px 0;
+}
+
+.view-more-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.view-more-btn {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* quick view end */
 
 /* Responsive */
 @media (max-width: 768px) {
