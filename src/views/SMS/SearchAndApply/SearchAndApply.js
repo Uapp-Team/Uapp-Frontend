@@ -8,6 +8,7 @@ import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 import post from "../../../helpers/post";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 
 function SearchAndApply() {
   const result = {
@@ -130,6 +131,7 @@ function SearchAndApply() {
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
+  const [studentName, setStudentName] = useState("");
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
@@ -229,6 +231,17 @@ function SearchAndApply() {
   return (
     <>
       <Row className="mb-1">
+        <Col md={3} className="h-40px">
+          <DefaultDropdown
+            label={studentName}
+            setLabel={setStudentName}
+            value={studentId}
+            setValue={setStudentId}
+            selectAll={true}
+            all="All Student"
+            url="SearchFilter/Students"
+          />
+        </Col>
         <Col md={6} className="d-flex h-40px">
           <SearchBox
             name="search"
