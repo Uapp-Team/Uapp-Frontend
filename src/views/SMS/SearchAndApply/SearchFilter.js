@@ -12,6 +12,7 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../constants/presetData";
+import MultiSelect from "../../../components/form/MultiSelect";
 // import { HugeiconsIcon } from "@hugeicons/react";
 // import { Notification03Icon } from "@hugeicons/core-free-icons";
 
@@ -47,8 +48,9 @@ const SearchFilter = ({
   setDeliverySchedule,
 }) => {
   const [institutionName, setInstitutionName] = useState("Select Institution");
-  const [studyLevelName, setStudyLevelName] = useState("Select Study Level");
-  const [intakeName, setIntakeName] = useState("Select Intake");
+  const [intakeList, setIntakeList] = useState([]);
+  const [studyLevelList, setStudyLevelList] = useState([]);
+  const [studyLevelQuery, setStudyLevelQuery] = useState("");
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
   const [applicationType, setApplicationType] = useState([]);
@@ -58,6 +60,29 @@ const SearchFilter = ({
       setApplicationType(res);
     });
   }, []);
+
+  useEffect(() => {
+    const list = [];
+    intakeList.map((item) => list.push(item.value));
+    setIntakeId(list);
+  }, [setIntakeId, intakeList]);
+
+  useEffect(() => {
+    const studyLevelListId = [];
+    studyLevelList.map((item) => studyLevelListId.push(item.value));
+    setStudyLevelId(studyLevelListId);
+  }, [setStudyLevelId, studyLevelList]);
+
+  useEffect(() => {
+    const studyLevelListQuery = [];
+    studyLevelId.map((item) =>
+      studyLevelListQuery.push(`educationlevels=${item}`)
+    );
+    const converttostring = studyLevelListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setStudyLevelQuery(converted);
+  }, [studyLevelId]);
 
   const handleChange = (e) => {
     let id = parseInt(e.target.value);
@@ -105,7 +130,7 @@ const SearchFilter = ({
         </div>
         <div className="mb-3">
           <p className="mb-1 fw-500">Study Level</p>
-          <DefaultDropdown
+          {/* <DefaultDropdown
             label={studyLevelName}
             setLabel={setStudyLevelName}
             value={studyLevelId}
@@ -113,11 +138,18 @@ const SearchFilter = ({
             selectAll={true}
             all="All Study Level"
             url="SearchFilter/EducationLevels"
+          /> */}
+
+          <MultiSelect
+            placeholder="Select Study Level"
+            url="SearchFilter/EducationLevels"
+            value={studyLevelList}
+            setValue={setStudyLevelList}
           />
         </div>
         <div className="mb-3">
           <p className="mb-1 fw-500">Intake</p>
-          <DefaultDropdown
+          {/* <DefaultDropdown
             label={intakeName}
             setLabel={setIntakeName}
             value={intakeId}
@@ -125,6 +157,13 @@ const SearchFilter = ({
             selectAll={true}
             all="All Intake"
             url="SearchFilter/Intakes"
+          /> */}
+
+          <MultiSelect
+            placeholder="Select Intake"
+            url="SearchFilter/Intakes"
+            value={intakeList}
+            setValue={setIntakeList}
           />
         </div>
         <div className="mb-3">
@@ -195,8 +234,8 @@ const SearchFilter = ({
           <MultiSelectU
             placeholder="Select Course Durations"
             url={
-              studyLevelId
-                ? `Duration/ByEducationLevel/${studyLevelId}`
+              studyLevelId?.length > 0
+                ? `Duration/ByEducationLevels?${studyLevelQuery}`
                 : "Duration/Index"
             }
             value={courseDurations}

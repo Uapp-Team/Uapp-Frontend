@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../SearchAndApply.css";
 import get from "../../../../helpers/get";
+import { AiOutlineClose } from "react-icons/ai";
 
 const ChevronDown = () => (
   <svg
@@ -38,7 +39,7 @@ const ChevronUp = () => (
   </svg>
 );
 
-const SearchKeywords = ({ item, setItem, url }) => {
+const SearchKeywords = ({ state, setState, url }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
 
@@ -47,6 +48,19 @@ const SearchKeywords = ({ item, setItem, url }) => {
       setData(res);
     });
   }, [url]);
+
+  const handleChange = (e) => {
+    let id = parseInt(e);
+    if (!state?.includes(id)) {
+      setState([...state, id]);
+    }
+  };
+
+  const handleChange2 = (e) => {
+    let id = parseInt(e);
+    const res = state?.filter((c) => c !== id);
+    setState(res);
+  };
 
   return (
     <div className="filter-wrapper">
@@ -58,8 +72,21 @@ const SearchKeywords = ({ item, setItem, url }) => {
         }}
       >
         {data.map((item, index) => (
-          <button key={index} className="filter-button mb-1">
+          <button
+            key={index}
+            className={`filter-button mb-2 mr-2 ${
+              state?.includes(item.id) ? "filter-button-clicked" : ""
+            } `}
+            onClick={() => handleChange(item?.id)}
+          >
             {item?.name}
+            {state?.includes(item.id) && (
+              <AiOutlineClose
+                size={16}
+                onClick={() => handleChange2(item?.id)}
+                className="pointer ml-2"
+              />
+            )}
           </button>
         ))}
       </div>

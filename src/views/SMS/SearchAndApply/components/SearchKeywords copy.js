@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../SearchAndApply.css";
+import get from "../../../../helpers/get";
+import { AiOutlineClose } from "react-icons/ai";
 
 const ChevronDown = () => (
   <svg
@@ -37,84 +39,60 @@ const ChevronUp = () => (
   </svg>
 );
 
-const SearchKeywords = ({
-  keyword,
-  categories,
-  selectedCategory,
-  setSelectedCategory,
-  dates,
-  selectedDate,
-  setSelectedDate,
-}) => {
+const SearchKeywords = ({ state, setState, url }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [hoveredButton, setHoveredButton] = useState(null);
+  const [data, setData] = useState([]);
 
-  // const categories = [
-  //   [
-  //     "Undergraduate",
-  //     "Pre-Masters programme",
-  //     "Postgraduate",
-  //     "Short Course",
-  //     "Pre-sessional English",
-  //   ],
-  //   [
-  //     "Research degrees",
-  //     "Pathway Programme",
-  //     "Professional Course",
-  //     "Diploma",
-  //     "Secondary School",
-  //   ],
-  //   ["Higher Secondary School", "HND", "HNC", "Level 3", "Level 4", "Level 5"],
-  // ];
+  useEffect(() => {
+    get(url).then((res) => {
+      setData(res);
+    });
+  }, [url]);
 
-  const handleMouseEnter = (index) => {
-    setHoveredButton(index);
+  const handleChange = (e) => {
+    let id = parseInt(e);
+    if (!state?.includes(id)) {
+      setState([...state, id]);
+    }
   };
 
-  const handleMouseLeave = () => {
-    setHoveredButton(null);
+  const handleChange2 = (e) => {
+    let id = parseInt(e);
+    const res = state?.filter((c) => c !== id);
+    setState(res);
   };
 
   return (
-    <div className="filter-container">
-      <p className="filters-heading">
-        <span className="fs-14px">Search results for</span> <br />
-        <strong className="fs-20px">{keyword}</strong>
-      </p>
-      <div className="filter-wrapper">
-        <div
-          className="buttons-container"
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            width: "100%",
-          }}
-        >
-          {categories[0].map((item, index) => (
-            <button key={index} className="filter-button mb-1">
-              {item}
-            </button>
-          ))}
-        </div>
-        <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <ChevronUp /> : <ChevronDown />}
-        </button>
+    <div className="filter-wrapper">
+      <div
+        className="buttons-container"
+        style={{
+          overflow: "hidden",
+          height: isOpen ? "auto" : "40px",
+        }}
+      >
+        {data.map((item, index) => (
+          <button
+            key={index}
+            className={`filter-button mb-2 mr-2 ${
+              state?.includes(item.id) ? "filter-button-clicked" : ""
+            } `}
+            onClick={() => handleChange(item?.id)}
+          >
+            {item?.name}
+            {state?.includes(item.id) && (
+              <AiOutlineClose
+                size={16}
+                onClick={() => handleChange2(item?.id)}
+                className="pointer ml-2"
+              />
+            )}
+          </button>
+        ))}
       </div>
-
-      {isOpen && (
-        <div className="dropdown-content">
-          {categories.slice(1).map((row, rowIndex) => (
-            <div key={rowIndex} className="button-row">
-              {row.map((item, itemIndex) => (
-                <button key={itemIndex} className="filter-button">
-                  {item}
-                </button>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+      <button className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <ChevronUp /> : <ChevronDown />}
+      </button>
     </div>
   );
 };

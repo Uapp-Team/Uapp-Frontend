@@ -22,8 +22,8 @@ function SearchAndApply() {
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
-  const [studyLevelId, setStudyLevelId] = useState(0);
-  const [intakeId, setIntakeId] = useState(0);
+  const [studyLevelId, setStudyLevelId] = useState([]);
+  const [intakeId, setIntakeId] = useState([]);
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
   const [tuitionFee, setTuitionFee] = useState(0);
@@ -38,58 +38,58 @@ function SearchAndApply() {
 
   console.log(applicationTypeIds);
 
-  useEffect(() => {
-    if (!isTyping && !filterOpen) {
-      const subdata = {
-        page: 1,
-        pageSize: 30,
-        studentId: studentId,
-        universityId: institutionId,
-        campusId: 0,
-        countryId: countryId,
-        cityId: cityId,
-        departmentId: 0,
-        subdepartmentId: 0,
-        educationLevelId: studyLevelId,
-        intakeId: intakeId,
-        tuitionFeeRange: tuitionFee,
-        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
-        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
-        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
-        courseDurations: courseDurations,
-        isScholarshipAvailable: isScholarships,
-        isShowAvailableCoursesOnly: isAvailableCourses,
-        isWorkPlacementAvailable: isWorkPlacement,
-        studyModes: studyModes,
-        deliveryMethods: deliveryPattern,
-        deliverySchedules: deliverySchedule,
-        searchText: search,
-      };
+  // useEffect(() => {
+  //   if (!isTyping && !filterOpen) {
+  //     const subdata = {
+  //       page: 1,
+  //       pageSize: 30,
+  //       studentId: studentId,
+  //       universityId: institutionId,
+  //       campusId: 0,
+  //       countryId: countryId,
+  //       cityId: cityId,
+  //       departmentId: 0,
+  //       subdepartmentId: 0,
+  //       educationLevelIds: studyLevelId,
+  //       intakeIds: intakeId,
+  //       tuitionFeeRange: tuitionFee,
+  //       isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+  //       isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+  //       isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+  //       courseDurations: courseDurations,
+  //       isScholarshipAvailable: isScholarships,
+  //       isShowAvailableCoursesOnly: isAvailableCourses,
+  //       isWorkPlacementAvailable: isWorkPlacement,
+  //       studyModes: studyModes,
+  //       deliveryMethods: deliveryPattern,
+  //       deliverySchedules: deliverySchedule,
+  //       searchText: search,
+  //     };
 
-      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        setData(res?.data);
-      });
-    }
-  }, [
-    applicationTypeIds,
-    cityId,
-    countryId,
-    courseDurations,
-    deliveryPattern,
-    deliverySchedule,
-    filterOpen,
-    institutionId,
-    intakeId,
-    isAvailableCourses,
-    isScholarships,
-    isTyping,
-    isWorkPlacement,
-    search,
-    studentId,
-    studyLevelId,
-    studyModes,
-    tuitionFee,
-  ]);
+  //     post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+  //       setData(res?.data);
+  //     });
+  //   }
+  // }, [
+  //   applicationTypeIds,
+  //   cityId,
+  //   countryId,
+  //   courseDurations,
+  //   deliveryPattern,
+  //   deliverySchedule,
+  //   filterOpen,
+  //   institutionId,
+  //   intakeId,
+  //   isAvailableCourses,
+  //   isScholarships,
+  //   isTyping,
+  //   isWorkPlacement,
+  //   search,
+  //   studentId,
+  //   studyLevelId,
+  //   studyModes,
+  //   tuitionFee,
+  // ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -114,33 +114,6 @@ function SearchAndApply() {
     };
   }, []);
 
-  const categories = [
-    [
-      "Undergraduate",
-      "Pre-Masters programme",
-      "Postgraduate",
-      "Short Course",
-      "Pre-sessional English",
-    ],
-    [
-      "Research degrees",
-      "Pathway Programme",
-      "Professional Course",
-      "Diploma",
-      "Secondary School",
-    ],
-    ["Higher Secondary School", "HND", "HNC", "Level 3", "Level 4", "Level 5"],
-  ];
-
-  const dates = [
-    { label: "April 2025" },
-    { label: "May 2025" },
-    {
-      label: "June 2025",
-      options: ["June 2025", "July 2025", "August 2025"],
-    },
-  ];
-
   const cardData = {
     date: "10 Feb, 25",
     title:
@@ -157,69 +130,7 @@ function SearchAndApply() {
     probability: 40,
     tags: ["Fast Track", "Work Placement", "Scholarship Available"],
   };
-
-  const result = {
-    from: 0,
-    index: 0,
-    size: 30,
-    totalFiltered: 0,
-    total: 652,
-    pages: 22,
-    hasPrevious: false,
-    hasNext: true,
-    title: "Request Success!",
-    message: "Success!",
-    type: "https://tools.ietf.org/html/rfc7231#section-6.3.1",
-    isSuccess: true,
-    statusCode: 200,
-    errors: [],
-    items: [
-      {
-        subjectId: 3088,
-        subjectName:
-          "BSc (Hons) Business and Human Resource Management with Foundation Year",
-        eU_TutionFee: 0,
-        eU_TutionFeeCurrencyId: 2,
-        firstYearTutionFee: 0,
-        firstYearTutionFeeCurrencyId: 0,
-        internationalTutionFee: 0,
-        internationalTutionCurrencyId: 2,
-        localTutionFee: 9250,
-        localTutionFeeCurrencyId: 2,
-        depositFee: 0,
-        depositFeeCurrencyId: 0,
-        avarageApplicationFee: 0,
-        avarageApplicationFeeCurrencyId: 2,
-        studyModes: null,
-        deliveryPatternIds: "3",
-        deliveryPatternNames: "Standard",
-        durationIds: null,
-        durationNames: null,
-        campusIds: "1",
-        applicationDeadLines: "2025-05-25 00:00:00.0000000",
-        intakeIds: "72",
-        intakeNames: "May 2025",
-        subject_IsAcceptHome: true,
-        subject_IsAcceptEU_UK: true,
-        subject_IsAcceptInternational: false,
-        universityId: 1,
-        universityName: "Anglia Ruskin University, London (ARUL)",
-        university_IsAcceptHome: true,
-        university_IsAcceptEU_UK: true,
-        university_IsAcceptInternational: true,
-        summary: "Can apply",
-        canApply: true,
-        consultantCommissionAmount: 0,
-        promotionalCommissionAmount: 0,
-        commissionAmount: 0,
-        isScholarshipAvailable: false,
-        isWorkPlacementAvailable: false,
-        totalRows: 652,
-      },
-    ],
-  };
-
-  console.log(applicationTypeIds);
+  console.log(studyLevelId);
   return (
     <>
       <Row className="mb-1">
@@ -244,15 +155,15 @@ function SearchAndApply() {
         <Row className="mb-3">
           <Col md={9}>
             <SearchKeywords
-              item={studyLevelId}
-              setItem={setStudyLevelId}
+              state={studyLevelId}
+              setState={setStudyLevelId}
               url="SearchFilter/EducationLevels"
             />
           </Col>
           <Col md={3}>
             <SearchKeywords
-              item={intakeId}
-              setItem={setIntakeId}
+              state={intakeId}
+              setState={setIntakeId}
               url="SearchFilter/Intakes"
             />
           </Col>
