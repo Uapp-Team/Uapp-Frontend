@@ -4,7 +4,7 @@ import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
-import SearchFilters from "./components/SearchFilters";
+import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 
@@ -13,6 +13,7 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
+  const [data, setData] = useState({});
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -20,15 +21,74 @@ function SearchAndApply() {
   const [search, setSearch] = useState();
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
-  const [studyLevelId, setStudyLevelId] = useState(0);
-  const [intakeId, setIntakeId] = useState(0);
+  const [studyLevelId, setStudyLevelId] = useState([]);
+  const [intakeId, setIntakeId] = useState([]);
   const [countryId, setCountryId] = useState(0);
-  const [tuitionFee, setTuitionFee] = useState(100000);
+  const [cityId, setCityId] = useState(0);
+  const [tuitionFee, setTuitionFee] = useState(0);
   const [applicationTypeIds, setApplicationTypeIds] = useState([]);
   const [courseDurations, setCourseDurations] = useState([]);
   const [isScholarships, setIsScholarships] = useState(false);
   const [isAvailableCourses, setIsAvailableCourses] = useState(false);
   const [isWorkPlacement, setIsWorkPlacement] = useState(false);
+  const [studyModes, setStudyModes] = useState([]);
+  const [deliveryPattern, setDeliveryPattern] = useState([]);
+  const [deliverySchedule, setDeliverySchedule] = useState([]);
+
+  console.log(applicationTypeIds);
+
+  // useEffect(() => {
+  //   if (!isTyping && !filterOpen) {
+  //     const subdata = {
+  //       page: 1,
+  //       pageSize: 30,
+  //       studentId: studentId,
+  //       universityId: institutionId,
+  //       campusId: 0,
+  //       countryId: countryId,
+  //       cityId: cityId,
+  //       departmentId: 0,
+  //       subdepartmentId: 0,
+  //       educationLevelIds: studyLevelId,
+  //       intakeIds: intakeId,
+  //       tuitionFeeRange: tuitionFee,
+  //       isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+  //       isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+  //       isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+  //       courseDurations: courseDurations,
+  //       isScholarshipAvailable: isScholarships,
+  //       isShowAvailableCoursesOnly: isAvailableCourses,
+  //       isWorkPlacementAvailable: isWorkPlacement,
+  //       studyModes: studyModes,
+  //       deliveryMethods: deliveryPattern,
+  //       deliverySchedules: deliverySchedule,
+  //       searchText: search,
+  //     };
+
+  //     post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+  //       setData(res?.data);
+  //     });
+  //   }
+  // }, [
+  //   applicationTypeIds,
+  //   cityId,
+  //   countryId,
+  //   courseDurations,
+  //   deliveryPattern,
+  //   deliverySchedule,
+  //   filterOpen,
+  //   institutionId,
+  //   intakeId,
+  //   isAvailableCourses,
+  //   isScholarships,
+  //   isTyping,
+  //   isWorkPlacement,
+  //   search,
+  //   studentId,
+  //   studyLevelId,
+  //   studyModes,
+  //   tuitionFee,
+  // ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,33 +112,6 @@ function SearchAndApply() {
       }
     };
   }, []);
-
-  const categories = [
-    [
-      "Undergraduate",
-      "Pre-Masters programme",
-      "Postgraduate",
-      "Short Course",
-      "Pre-sessional English",
-    ],
-    [
-      "Research degrees",
-      "Pathway Programme",
-      "Professional Course",
-      "Diploma",
-      "Secondary School",
-    ],
-    ["Higher Secondary School", "HND", "HNC", "Level 3", "Level 4", "Level 5"],
-  ];
-
-  const dates = [
-    { label: "April 2025" },
-    { label: "May 2025" },
-    {
-      label: "June 2025",
-      options: ["June 2025", "July 2025", "August 2025"],
-    },
-  ];
 
   const cardData = {
     date: "10 Feb, 25",
@@ -228,30 +261,28 @@ function SearchAndApply() {
           />
         </Col>
       </Row>
-      <Row className="mb-3">
-        <Col>
-          <SearchFilters
-            keyword="Search keyword"
-            categories={categories}
-            // selectedCategory={selectedCategory}
-            // setSelectedCategory={setSelectedCategory}
-            dates={dates}
-            // selectedDate={selectedDate}
-            // setSelectedDate={setSelectedDate}
-          />
-        </Col>
-        <Col>
-          <SearchFilters
-            keyword="Search keyword"
-            categories={categories}
-            // selectedCategory={selectedCategory}
-            // setSelectedCategory={setSelectedCategory}
-            dates={dates}
-            // selectedDate={selectedDate}
-            // setSelectedDate={setSelectedDate}
-          />
-        </Col>
-      </Row>
+      <div className="filter-container">
+        <p className="filters-heading">
+          <span className="fs-14px">Search results for</span> <br />
+          <strong className="fs-20px">Search keyword</strong>
+        </p>
+        <Row className="mb-3">
+          <Col md={9}>
+            <SearchKeywords
+              state={studyLevelId}
+              setState={setStudyLevelId}
+              url="SearchFilter/EducationLevels"
+            />
+          </Col>
+          <Col md={3}>
+            <SearchKeywords
+              state={intakeId}
+              setState={setIntakeId}
+              url="SearchFilter/Intakes"
+            />
+          </Col>
+        </Row>
+      </div>
       <div ref={sentinelRef} style={{ height: 1 }} />
 
       <div
@@ -289,6 +320,8 @@ function SearchAndApply() {
           setIntakeId={setIntakeId}
           countryId={countryId}
           setCountryId={setCountryId}
+          cityId={cityId}
+          setCityId={setCityId}
           tuitionFee={tuitionFee}
           setTuitionFee={setTuitionFee}
           applicationTypeIds={applicationTypeIds}
@@ -301,6 +334,12 @@ function SearchAndApply() {
           setIsAvailableCourses={setIsAvailableCourses}
           isWorkPlacement={isWorkPlacement}
           setIsWorkPlacement={setIsWorkPlacement}
+          studyModes={studyModes}
+          setStudyModes={setStudyModes}
+          deliveryPattern={deliveryPattern}
+          setDeliveryPattern={setDeliveryPattern}
+          deliverySchedule={deliverySchedule}
+          setDeliverySchedule={setDeliverySchedule}
         />
       )}
     </>

@@ -11,6 +11,7 @@ const CheckBoxByObj = ({
   defaultValue,
   error,
   action,
+  className = "mb-3",
 }) => {
   const handleChange = (e) => {
     const type = typeof list[0].id;
@@ -39,20 +40,24 @@ const CheckBoxByObj = ({
 
   return (
     <>
-      <Form.Group className="mb-3">
-        {label && <Form.Label className="me-4">{label}</Form.Label>}
-        <br />
+      <Form.Group className={className}>
+        {label && (
+          <>
+            <Form.Label className="me-4">{label}</Form.Label> <br />
+          </>
+        )}
+
         {list.map((item, i) => (
           <span key={i} className="d-inline-block">
             <input
-              id={`${label}-${i}`}
+              id={`${name}-${i}`}
               value={item.id}
               type={type}
               {...register(name)}
               onClick={handleChange}
               checked={defaultValue?.includes(item.id)}
             />
-            <label htmlFor={`${label}-${i}`} className="mx-2 pointer">
+            <label htmlFor={`${name}-${i}`} className="mx-2 pointer">
               {item.name}
             </label>
           </span>

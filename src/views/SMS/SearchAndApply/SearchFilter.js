@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -8,6 +7,12 @@ import get from "../../../helpers/get";
 import CheckBoxByObj from "../../../components/form/CheckBoxByObj";
 import MultiSelectU from "../../../components/form/MultiSelectU";
 import CheckSwitch from "../../../components/form/CheckSwitch";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  studyMode,
+} from "../../../constants/presetData";
+import MultiSelect from "../../../components/form/MultiSelect";
 // import { HugeiconsIcon } from "@hugeicons/react";
 // import { Notification03Icon } from "@hugeicons/core-free-icons";
 
@@ -35,10 +40,17 @@ const SearchFilter = ({
   setIsAvailableCourses,
   isWorkPlacement,
   setIsWorkPlacement,
+  studyModes,
+  setStudyModes,
+  deliveryPattern,
+  setDeliveryPattern,
+  deliverySchedule,
+  setDeliverySchedule,
 }) => {
   const [institutionName, setInstitutionName] = useState("Select Institution");
-  const [studyLevelName, setStudyLevelName] = useState("Select Study Level");
-  const [intakeName, setIntakeName] = useState("Select Intake");
+  const [intakeList, setIntakeList] = useState([]);
+  const [studyLevelList, setStudyLevelList] = useState([]);
+  const [studyLevelQuery, setStudyLevelQuery] = useState("");
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
   const [applicationType, setApplicationType] = useState([]);
@@ -48,6 +60,29 @@ const SearchFilter = ({
       setApplicationType(res);
     });
   }, []);
+
+  useEffect(() => {
+    const list = [];
+    intakeList.map((item) => list.push(item.value));
+    setIntakeId(list);
+  }, [setIntakeId, intakeList]);
+
+  useEffect(() => {
+    const studyLevelListId = [];
+    studyLevelList.map((item) => studyLevelListId.push(item.value));
+    setStudyLevelId(studyLevelListId);
+  }, [setStudyLevelId, studyLevelList]);
+
+  useEffect(() => {
+    const studyLevelListQuery = [];
+    studyLevelId.map((item) =>
+      studyLevelListQuery.push(`educationlevels=${item}`)
+    );
+    const converttostring = studyLevelListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setStudyLevelQuery(converted);
+  }, [studyLevelId]);
 
   const handleChange = (e) => {
     let id = parseInt(e.target.value);
@@ -67,8 +102,6 @@ const SearchFilter = ({
     }
   };
 
-  console.log(applicationType, applicationTypeIds);
-
   return (
     <>
       <div className="right-side-modal overflowY">
@@ -84,7 +117,7 @@ const SearchFilter = ({
         </div>
         {/* <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} /> */}
         <div className="mb-3">
-          <p className="mb-1">Institution</p>
+          <p className="mb-1 fw-500">Institution</p>
           <DefaultDropdown
             label={institutionName}
             setLabel={setInstitutionName}
@@ -96,8 +129,8 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Study Level</p>
-          <DefaultDropdown
+          <p className="mb-1 fw-500">Study Level</p>
+          {/* <DefaultDropdown
             label={studyLevelName}
             setLabel={setStudyLevelName}
             value={studyLevelId}
@@ -105,11 +138,18 @@ const SearchFilter = ({
             selectAll={true}
             all="All Study Level"
             url="SearchFilter/EducationLevels"
+          /> */}
+
+          <MultiSelect
+            placeholder="Select Study Level"
+            url="SearchFilter/EducationLevels"
+            value={studyLevelList}
+            setValue={setStudyLevelList}
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Intake</p>
-          <DefaultDropdown
+          <p className="mb-1 fw-500">Intake</p>
+          {/* <DefaultDropdown
             label={intakeName}
             setLabel={setIntakeName}
             value={intakeId}
@@ -117,10 +157,17 @@ const SearchFilter = ({
             selectAll={true}
             all="All Intake"
             url="SearchFilter/Intakes"
+          /> */}
+
+          <MultiSelect
+            placeholder="Select Intake"
+            url="SearchFilter/Intakes"
+            value={intakeList}
+            setValue={setIntakeList}
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Country</p>
+          <p className="mb-1 fw-500">Country</p>
           <DefaultDropdown
             label={countryName}
             setLabel={setCountryName}
@@ -132,7 +179,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">City</p>
+          <p className="mb-1 fw-500">City</p>
           <DefaultDropdown
             label={cityName}
             setLabel={setCityName}
@@ -142,7 +189,7 @@ const SearchFilter = ({
           />
         </div>
         <div className="mb-3">
-          <p className="mb-1">Tuition Fee (Max)</p>
+          <p className="mb-1 fw-500">Tuition Fee (Max)</p>
           <Row className="align-items-center">
             <Col xs={5}>
               <Input
@@ -164,7 +211,7 @@ const SearchFilter = ({
           </Row>
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Application Type </p>
+          <p className="mb-1 fw-500">Application Type </p>
 
           {applicationType.map((item, i) => (
             <p key={i} className="mb-0">
@@ -182,20 +229,19 @@ const SearchFilter = ({
           ))}
         </div>
         <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1">Course durations </p>
+          <p className="mb-1 fw-500">Course durations </p>
 
           <MultiSelectU
             placeholder="Select Course Durations"
             url={
-              studyLevelId
-                ? `Duration/ByEducationLevel/${studyLevelId}`
+              studyLevelId?.length > 0
+                ? `Duration/ByEducationLevels?${studyLevelQuery}`
                 : "Duration/Index"
             }
             value={courseDurations}
             setValue={setCourseDurations}
           />
         </div>
-
         <div className="border rounded p-16px mb-3 bg-white">
           <CheckSwitch
             register={() => {}}
@@ -223,15 +269,47 @@ const SearchFilter = ({
             action={() => setIsWorkPlacement(!isWorkPlacement)}
           />
         </div>
-
-        <DefaultDropdownU
-          // label={userLable}
-          // setLabel={setUserLable}
-          // value={userValue}
-          // setValue={setUserValue}
-          url="Duration/Index"
-          // url={"Duration/Index" : "Duration/ByEducationLevel/{id}"}
-        />
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1 fw-500">Study Mode  </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="studyMode"
+            list={studyMode}
+            defaultValue={studyModes}
+            action={setStudyModes}
+            className="mb-0"
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1 fw-500">Delivery Pattern </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="deliveryMethods"
+            list={deliveryMethods}
+            defaultValue={deliveryPattern}
+            action={setDeliveryPattern}
+            className="mb-0"
+          />
+        </div>
+        <div className="border rounded p-16px mb-3 bg-white">
+          <p className="mb-1 fw-500">Delivery Schedule </p>
+          <CheckBoxByObj
+            register={() => {}}
+            name="deliverySchedules"
+            list={deliverySchedules}
+            defaultValue={deliverySchedule}
+            action={setDeliverySchedule}
+            className="mb-0"
+          />
+        </div>
+        <button
+          onClick={() => {
+            closeModal();
+          }}
+          className="apply-btn-vertical w-100"
+        >
+          Apply Now
+        </button>
       </div>
     </>
   );

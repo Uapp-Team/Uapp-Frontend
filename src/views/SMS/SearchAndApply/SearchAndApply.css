@@ -48,6 +48,7 @@
 .filter-wrapper {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .buttons-container {
@@ -57,18 +58,15 @@
 }
 
 .filter-button {
-  margin-right: 5px;
   padding: 8px 12px;
-  color: #374151;
-  background-color: #eff2f2;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.2s;
+  gap: 4px;
+  border-radius: 999px;
+  border: 0.5px solid rgba(37, 37, 37, 0.12);
+  background: #eff2f2;
 }
 
-.filter-button:hover {
-  background-color: #dde4e3;
+.filter-button-clicked {
+  background-color: #fcefe5;
 }
 
 .dropdown-button {
