@@ -9,6 +9,8 @@ import SearchBox from "./components/SearchBox";
 import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
+import get from "../../../helpers/get";
 
 function SearchAndApply() {
   const result = {
@@ -131,7 +133,7 @@ function SearchAndApply() {
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
-  const [studentName, setStudentName] = useState("");
+  const [studentName, setStudentName] = useState("Select Student");
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
@@ -232,7 +234,8 @@ function SearchAndApply() {
     <>
       <Row className="mb-1">
         <Col md={3} className="h-40px">
-          <DefaultDropdown
+          <DropdownCircle
+            method={get}
             label={studentName}
             setLabel={setStudentName}
             value={studentId}
