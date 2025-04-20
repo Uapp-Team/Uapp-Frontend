@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Progress, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
@@ -170,7 +170,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       </span>
                     </li>
                   </ul>
-                  <button className="probability">
+                  {/* <button className="probability">
                     Probability:{" "}
                     <Progress
                       type="circle"
@@ -178,7 +178,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       width={35}
                       strokeColor="#FFAD0D"
                     />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="dashed-hr"></div>
               </div>

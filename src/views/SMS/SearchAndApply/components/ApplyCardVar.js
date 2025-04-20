@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Progress, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
@@ -213,7 +213,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                           </span>
                         </p>
                       </div>
-                      <button className="probability-vertical">
+                      {/* <button className="probability-vertical">
                         Probability:{" "}
                         <Progress
                           type="circle"
@@ -221,7 +221,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                           width={35}
                           strokeColor="#FFAD0D"
                         />
-                      </button>
+                      </button> */}
                     </div>
 
                     <div className="card-action-vertical">

@@ -336,6 +336,8 @@
 .gross-vertical {
   background-color: #ddf6f8;
   padding: 4px 16px;
+  width: 100%;
+  text-align: center;
   height: 52px;
 }
 
