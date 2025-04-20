@@ -291,17 +291,21 @@ function SearchAndApply() {
         />
       </div>
 
-      <div className="d-block d-md-none">
-        <ApplyCardVar data={data.items} />
-      </div>
+      {data?.items?.length > 0 && (
+        <>
+          <div className="d-block d-md-none">
+            <ApplyCardVar data={data?.items} />
+          </div>
 
-      <div className="d-none d-md-block">
-        {mobileCard ? (
-          <ApplyCardVar data={data.items} />
-        ) : (
-          <ApplyCardHor data={data.items} />
-        )}
-      </div>
+          <div className="d-none d-md-block">
+            {mobileCard ? (
+              <ApplyCardVar data={data?.items} />
+            ) : (
+              <ApplyCardHor data={data?.items} />
+            )}
+          </div>
+        </>
+      )}
 
       {filterOpen && (
         <SearchFilter

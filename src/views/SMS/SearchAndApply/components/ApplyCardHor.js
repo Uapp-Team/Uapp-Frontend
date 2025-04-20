@@ -29,9 +29,9 @@ const ApplyCardHor = ({ data }) => {
   };
   return (
     <>
-      {data.map((item, index) => (
-        <div>
-          <div className="card-container mt-3">
+      {data?.length > 0 &&
+        data?.map((item, index) => (
+          <div className="card-container mt-3" key={index}>
             {item.intakeStatusId !== 1 && (
               <span className="tbc">
                 TBC
@@ -209,8 +209,7 @@ const ApplyCardHor = ({ data }) => {
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       <QuickViewModal open={open} onClose={() => setOpen(false)} />
     </>
   );
