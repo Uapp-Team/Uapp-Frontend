@@ -180,7 +180,7 @@ function SearchAndApply() {
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        setData(res?.data);
+        setData(res?.data?.items);
       });
     }
   }, [
@@ -226,6 +226,28 @@ function SearchAndApply() {
       }
     };
   }, []);
+
+  const handleFavourite = (subjectId) => {
+    post(
+      `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.subjectId === subjectId
+                ? { ...item, isFavorite: !item.isFavorite }
+                : item
+            )
+          );
+        } else {
+          console.log("error", res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
 
   console.log(data);
   return (
@@ -291,17 +313,17 @@ function SearchAndApply() {
         />
       </div>
 
-      {data?.items?.length > 0 && (
+      {data?.length > 0 && (
         <>
           <div className="d-block d-md-none">
-            <ApplyCardVar data={data?.items} />
+            <ApplyCardVar data={data} />
           </div>
 
           <div className="d-none d-md-block">
             {mobileCard ? (
-              <ApplyCardVar data={data?.items} />
+              <ApplyCardVar data={data} handleFavourite={handleFavourite} />
             ) : (
-              <ApplyCardHor data={data?.items} />
+              <ApplyCardHor data={data} />
             )}
           </div>
         </>

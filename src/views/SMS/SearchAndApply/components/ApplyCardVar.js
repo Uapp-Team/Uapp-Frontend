@@ -18,10 +18,11 @@ import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardVar = ({ data }) => {
+const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+
   const handleQuickView = () => {
     setOpen(true);
     setLoading(true);
@@ -64,11 +65,23 @@ const ApplyCardVar = ({ data }) => {
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                         <LuSettings2 className="mr-3 cursor-pointer" />
                         <LuShare2 className="mr-3" />
-                        {userType != 1 ? (
-                          <LuHeart />
+                        {userType == 6 ? (
+                          item.isFavorite ? (
+                            <LuHeart
+                              onClick={() => handleFavourite(item.subjectId)}
+                              color="red"
+                              fill="red"
+                              className="cursor-pointer"
+                            />
+                          ) : (
+                            <LuHeart
+                              onClick={() => handleFavourite(item.subjectId)}
+                              className="cursor-pointer"
+                            />
+                          )
                         ) : (
                           <div>
-                            {item.intakeStatusId == 1 ? (
+                            {item.intakeStatusId ? (
                               <img src={online} alt="" />
                             ) : (
                               <img src={offline} alt="" />
