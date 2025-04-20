@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
+import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
@@ -7,8 +9,6 @@ import SearchBox from "./components/SearchBox";
 import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
-import post from "../../../helpers/post";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 
 function SearchAndApply() {
   const result = {
@@ -292,14 +292,14 @@ function SearchAndApply() {
       </div>
 
       <div className="d-block d-md-none">
-        <ApplyCardVar data={result.items} />
+        <ApplyCardVar data={data.items} />
       </div>
 
       <div className="d-none d-md-block">
         {mobileCard ? (
-          <ApplyCardVar data={result.items} />
+          <ApplyCardVar data={data.items} />
         ) : (
-          <ApplyCardHor data={result.items} />
+          <ApplyCardHor data={data.items} />
         )}
       </div>
 

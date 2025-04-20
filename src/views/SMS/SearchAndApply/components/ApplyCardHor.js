@@ -54,12 +54,12 @@ const ApplyCardHor = ({ data }) => {
             <div className="card-header">
               <span className="card-date">
                 {" "}
-                <img src={BellIcon} alt="" /> {item.applicationDeadLines}
+                <img src={BellIcon} alt="" /> {item.applicationDeadLine}
               </span>
               <div className="d-flex">
-                <div className="tags">
+                {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
-                </div>
+                </div> */}
                 {item.isScholarshipAvailable && (
                   <div className="tags">
                     <span className="card-tag scholarship-available">
@@ -95,7 +95,11 @@ const ApplyCardHor = ({ data }) => {
                   {item.subjectName}
                 </h3>
                 <div className="d-flex align-items-center mb-3">
-                  <img className="h-48px w-48px mr-2" src={item.image} alt="" />
+                  <img
+                    className="h-48px w-48px mr-2"
+                    src={"https://localtest.uapp.uk/" + item.universityLogoUrl}
+                    alt=""
+                  />
                   <div className="d-flex flex-column">
                     <span className="fw-700 fs-14px">
                       {item.universityName}
@@ -135,9 +139,12 @@ const ApplyCardHor = ({ data }) => {
                           title="Devlivery Pattern"
                         />
                       </span>
-                      <span>
+                      <span className="d-flex align-items-center">
                         <SlCalender className="mr-2" />
-                        {item.intakeNames}
+                        <CustomToolTip
+                          methodIds={item.intakeNames}
+                          title="Intakes"
+                        />
                       </span>
                     </li>
                   </ul>
@@ -201,10 +208,10 @@ const ApplyCardHor = ({ data }) => {
                 </div>
               </div>
             </div>
-            <QuickViewModal open={open} onClose={() => setOpen(false)} />
           </div>
         </div>
       ))}
+      <QuickViewModal open={open} onClose={() => setOpen(false)} />
     </>
   );
 };
