@@ -204,15 +204,17 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                         )}
                       </div>
                     </div>
-                    <div className="my-3 d-flex justify-content-between">
-                      <div className="gross-vertical">
-                        <p className="d-flex flex-column">
-                          <span className="fs-12px">Gross Earning</span>{" "}
-                          <span className="fw-600">
-                            £{item.commissionAmount}
-                          </span>
-                        </p>
-                      </div>
+                    <div className="d-flex justify-content-between">
+                      {userType == 13 && (
+                        <div className="gross-vertical my-3">
+                          <p className="d-flex flex-column">
+                            <span className="fs-12px">Gross Earning</span>{" "}
+                            <span className="fw-600">
+                              £{item.commissionAmount}
+                            </span>
+                          </p>
+                        </div>
+                      )}
                       {/* <button className="probability-vertical">
                         Probability:{" "}
                         <Progress

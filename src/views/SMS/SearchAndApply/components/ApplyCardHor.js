@@ -211,12 +211,17 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
-                    <div className="gross">
-                      <p className="d-flex flex-row">
-                        <span className="fs-12px mr-2">Gross Earning </span>{" "}
-                        <span className="fw-500">£{item.commissionAmount}</span>
-                      </p>
-                    </div>
+                    {userType == 13 && (
+                      <div className="gross">
+                        <p className="d-flex flex-row">
+                          <span className="fs-12px mr-2">Gross Earning </span>{" "}
+                          <span className="fw-500">
+                            £{item.commissionAmount}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+
                     <div>
                       <button className="quick-btn" onClick={handleQuickView}>
                         Quick view
