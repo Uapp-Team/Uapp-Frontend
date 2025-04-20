@@ -130,7 +130,7 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState(result);
+  const [data, setData] = useState(result.items);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -181,30 +181,30 @@ function SearchAndApply() {
   //       searchText: search,
   //     };
 
-  //     post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-  //       setData(res?.data);
-  //     });
-  //   }
-  // }, [
-  //   applicationTypeIds,
-  //   cityId,
-  //   countryId,
-  //   courseDurations,
-  //   deliveryPattern,
-  //   deliverySchedule,
-  //   filterOpen,
-  //   institutionId,
-  //   intakeId,
-  //   isAvailableCourses,
-  //   isScholarships,
-  //   isTyping,
-  //   isWorkPlacement,
-  //   search,
-  //   studentId,
-  //   studyLevelId,
-  //   studyModes,
-  //   tuitionFee,
-  // ]);
+      post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
+        setData(res?.data?.items);
+      });
+    }
+  }, [
+    applicationTypeIds,
+    cityId,
+    countryId,
+    courseDurations,
+    deliveryPattern,
+    deliverySchedule,
+    filterOpen,
+    institutionId,
+    intakeId,
+    isAvailableCourses,
+    isScholarships,
+    isTyping,
+    isWorkPlacement,
+    search,
+    studentId,
+    studyLevelId,
+    studyModes,
+    tuitionFee,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -228,6 +228,28 @@ function SearchAndApply() {
       }
     };
   }, []);
+
+  const handleFavourite = (subjectId) => {
+    post(
+      `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.subjectId === subjectId
+                ? { ...item, isFavorite: !item.isFavorite }
+                : item
+            )
+          );
+        } else {
+          console.log("error", res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
 
   console.log(data);
   return (
@@ -306,17 +328,17 @@ function SearchAndApply() {
         />
       </div>
 
-      {data?.items?.length > 0 && (
+      {data?.length > 0 && (
         <>
           <div className="d-block d-md-none">
-            <ApplyCardVar data={data?.items} />
+            <ApplyCardVar data={data} handleFavourite={handleFavourite} />
           </div>
 
           <div className="d-none d-md-block">
             {mobileCard ? (
-              <ApplyCardVar data={data?.items} />
+              <ApplyCardVar data={data} handleFavourite={handleFavourite} />
             ) : (
-              <ApplyCardHor data={data?.items} />
+              <ApplyCardHor data={data} handleFavourite={handleFavourite} />
             )}
           </div>
         </>

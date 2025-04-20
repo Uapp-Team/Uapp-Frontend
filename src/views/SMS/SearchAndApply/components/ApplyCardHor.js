@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Progress, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
@@ -17,7 +17,8 @@ import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardHor = ({ data }) => {
+const ApplyCardHor = ({ data, handleFavourite }) => {
+  const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const handleQuickView = () => {
@@ -76,15 +77,36 @@ const ApplyCardHor = ({ data }) => {
                 )}
                 <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
-                    {item.intakeStatusId == 1 ? (
-                      <img src={online} alt="" />
-                    ) : (
-                      <img src={offline} alt="" />
+                    {Number(userType) !== 6 && (
+                      <img
+                        src={
+                          Number(item.intakeStatusId) === 1 ? online : offline
+                        }
+                        alt={
+                          Number(item.intakeStatusId) === 1
+                            ? "Online"
+                            : "Offline"
+                        }
+                      />
                     )}
                   </div>
                   <LuSettings2 className="mr-3" />
                   <LuShare2 className="mr-3" />
-                  <LuHeart />
+                  {userType == 6 ? (
+                    item.isFavorite ? (
+                      <LuHeart
+                        onClick={() => handleFavourite(item.subjectId)}
+                        color="red"
+                        fill="red"
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <LuHeart
+                        onClick={() => handleFavourite(item.subjectId)}
+                        className="cursor-pointer"
+                      />
+                    )
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -148,7 +170,7 @@ const ApplyCardHor = ({ data }) => {
                       </span>
                     </li>
                   </ul>
-                  <button className="probability">
+                  {/* <button className="probability">
                     Probability:{" "}
                     <Progress
                       type="circle"
@@ -156,7 +178,7 @@ const ApplyCardHor = ({ data }) => {
                       width={35}
                       strokeColor="#FFAD0D"
                     />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="dashed-hr"></div>
               </div>
@@ -189,12 +211,17 @@ const ApplyCardHor = ({ data }) => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
-                    <div className="gross">
-                      <p className="d-flex flex-row">
-                        <span className="fs-12px mr-2">Gross Earning </span>{" "}
-                        <span className="fw-500">£{item.commissionAmount}</span>
-                      </p>
-                    </div>
+                    {userType == 13 && (
+                      <div className="gross">
+                        <p className="d-flex flex-row">
+                          <span className="fs-12px mr-2">Gross Earning </span>{" "}
+                          <span className="fw-500">
+                            £{item.commissionAmount}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+
                     <div>
                       <button className="quick-btn" onClick={handleQuickView}>
                         Quick view

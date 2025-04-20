@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Progress, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import React from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
@@ -18,11 +18,13 @@ import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardVar = ({ data }) => {
+const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const handleQuickView = () => {
+
+  const handleQuickView = (subjectId, universityId) => {
+    console.log(subjectId, universityId, "subjectId");
     setOpen(true);
     setLoading(true);
     setTimeout(() => {
@@ -31,12 +33,12 @@ const ApplyCardVar = ({ data }) => {
   };
   return (
     <>
-      <Row>
+      <Row className="mt-3">
         {data?.length > 0 &&
           data?.map((item, index) => (
             <Col xs={12} md={6} lg={4} key={index}>
-              <div>
-                <div className="card-container-vertical mt-3">
+              <div className="mb-3">
+                <div className="card-container-vertical">
                   {item.intakeStatusId !== 1 && (
                     <span className="tbc">
                       TBC
@@ -56,7 +58,7 @@ const ApplyCardVar = ({ data }) => {
                       </Tooltip>
                     </span>
                   )}
-                  <div className="card-header">
+                  <div className="card-header-vertical">
                     <span className="card-date">
                       <img src={BellIcon} alt="" /> {item.applicationDeadLine}
                     </span>
@@ -64,11 +66,23 @@ const ApplyCardVar = ({ data }) => {
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                         <LuSettings2 className="mr-3 cursor-pointer" />
                         <LuShare2 className="mr-3" />
-                        {userType != 1 ? (
-                          <LuHeart />
+                        {userType == 6 ? (
+                          item.isFavorite ? (
+                            <LuHeart
+                              onClick={() => handleFavourite(item.subjectId)}
+                              color="red"
+                              fill="red"
+                              className="cursor-pointer"
+                            />
+                          ) : (
+                            <LuHeart
+                              onClick={() => handleFavourite(item.subjectId)}
+                              className="cursor-pointer"
+                            />
+                          )
                         ) : (
                           <div>
-                            {item.intakeStatusId == 1 ? (
+                            {item.intakeStatusId ? (
                               <img src={online} alt="" />
                             ) : (
                               <img src={offline} alt="" />
@@ -79,7 +93,7 @@ const ApplyCardVar = ({ data }) => {
                     </div>
                   </div>
 
-                  <div className="card-body">
+                  <div className="card-body-vertical">
                     <div className="card-content-vertical">
                       <div className="d-flex align-items-center mb-3">
                         <img
@@ -178,7 +192,7 @@ const ApplyCardVar = ({ data }) => {
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags">
+                      <div className="tags my-3">
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
@@ -191,16 +205,18 @@ const ApplyCardVar = ({ data }) => {
                         )}
                       </div>
                     </div>
-                    <div className="my-3 d-flex justify-content-between">
-                      <div className="gross-vertical">
-                        <p className="d-flex flex-column">
-                          <span className="fs-12px">Gross Earning</span>{" "}
-                          <span className="fw-600">
-                            £{item.commissionAmount}
-                          </span>
-                        </p>
-                      </div>
-                      <button className="probability-vertical">
+                    <div className="d-flex justify-content-between">
+                      {userType == 13 && (
+                        <div className="gross-vertical my-3">
+                          <p className="d-flex flex-column">
+                            <span className="fs-12px">Gross Earning</span>{" "}
+                            <span className="fw-600">
+                              £{item.commissionAmount}
+                            </span>
+                          </p>
+                        </div>
+                      )}
+                      {/* <button className="probability-vertical">
                         Probability:{" "}
                         <Progress
                           type="circle"
@@ -208,13 +224,15 @@ const ApplyCardVar = ({ data }) => {
                           width={35}
                           strokeColor="#FFAD0D"
                         />
-                      </button>
+                      </button> */}
                     </div>
 
                     <div className="card-action-vertical">
                       <button
                         className="quick-btn-vertical"
-                        onClick={handleQuickView}
+                        onClick={() =>
+                          handleQuickView(item.subjectId, item.universityId)
+                        }
                       >
                         Quick view
                       </button>

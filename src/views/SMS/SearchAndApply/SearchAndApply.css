@@ -158,15 +158,12 @@
 /* Apply card */
 
 .card-container {
-  border: 1px solid #ccc;
+  background: #ffffff;
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease-in-out;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   position: relative;
 }
 .tbc {
@@ -183,14 +180,13 @@
   justify-content: center;
 }
 .card-container-vertical {
-  width: 380px;
+  background: #ffffff;
   border: none;
-  border-radius: 12px !important;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .card-header {
-  width: 100%;
-  background: #f5f5f5;
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -198,6 +194,14 @@
   padding-top: 30px;
 }
 
+.card-header-vertical {
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+  border-radius: 10px 10px 0 0;
+}
 .card-date {
   color: #666;
 }
@@ -234,6 +238,15 @@
   flex-direction: row;
   gap: 1rem;
   padding: 1rem;
+}
+
+.card-body-vertical {
+  background: #fff;
+  flex: 1;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0 0 10px 10px;
 }
 
 .card-container.vertical .card-body {
@@ -323,6 +336,8 @@
 .gross-vertical {
   background-color: #ddf6f8;
   padding: 4px 16px;
+  width: 100%;
+  text-align: center;
   height: 52px;
 }
 
@@ -410,17 +425,14 @@
 }
 
 .quickview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   border-bottom: 1px solid #e8e8e8;
   padding-bottom: 16px;
 }
 
 .quickview-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 1rem;
 }
 
 .quickview-meta {
@@ -452,9 +464,7 @@
 }
 
 .quickview-content {
-  display: flex;
-  margin-top: 24px;
-  gap: 32px;
+  margin-top: 20px;
 }
 
 .quickview-left,

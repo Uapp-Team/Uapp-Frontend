@@ -1,11 +1,12 @@
-import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import React from "react";
+import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
 
 const QuickViewModal = ({ open, onClose }) => {
   return (
-    <Modal open={open} onCancel={onClose} footer={null} width={900}>
+    <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
       <div className="quickview-container">
         <div className="quickview-header">
           <div>
@@ -13,7 +14,7 @@ const QuickViewModal = ({ open, onClose }) => {
               BMus (Hons) Popular Music Performance – Guitar, Bass, Drums,
               Keyboards and Vocals
             </h2>
-            <div className="quickview-meta">
+            {/* <div className="quickview-meta">
               <span>
                 <CalendarOutlined /> 10 Feb, 25
               </span>
@@ -31,14 +32,23 @@ const QuickViewModal = ({ open, onClose }) => {
               <span className="intake-badge">April 2025</span>
               <span className="intake-badge">May 2025</span>
               <span className="intake-badge">June 2025</span>
-            </div>
+            </div> */}
           </div>
-          <Button type="primary" className="apply-now-btn">
-            Apply Now
-          </Button>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="">
+              <LuSettings2 className="mr-3 cursor-pointer" />
+              <LuShare2 className="mr-3" />
+              <LuHeart color="red" fill="red" className="cursor-pointer mr-3" />
+              <LuArrowUpRight className="fs-20px" />
+            </div>
+            <button className="apply-btn">Apply Now</button>
+          </div>
         </div>
 
         <div className="quickview-content">
+          <span className="card-date">
+            <img src={BellIcon} alt="" /> 10 Feb, 25
+          </span>
           <div className="quickview-left">
             <h3>Requirements (Bachelor’s)</h3>
             <div className="requirement-block">
