@@ -113,7 +113,15 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                         </div>
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
-                        {item.subjectName}
+                        {(() => {
+                          const spellingLength = item.subjectName.replace(
+                            /[^a-zA-Z]/g,
+                            ""
+                          ).length;
+                          return spellingLength > 70
+                            ? item.subjectName.slice(0, 70) + "..."
+                            : item.subjectName;
+                        })()}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
@@ -191,7 +199,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags">
+                      <div className="tags my-3">
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
