@@ -126,7 +126,7 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState(result);
+  const [data, setData] = useState(result.items);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);

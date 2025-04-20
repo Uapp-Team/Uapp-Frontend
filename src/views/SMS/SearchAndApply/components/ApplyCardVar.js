@@ -23,7 +23,8 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  const handleQuickView = () => {
+  const handleQuickView = (subjectId, universityId) => {
+    console.log(subjectId, universityId, "subjectId");
     setOpen(true);
     setLoading(true);
     setTimeout(() => {
@@ -229,7 +230,9 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                     <div className="card-action-vertical">
                       <button
                         className="quick-btn-vertical"
-                        onClick={handleQuickView}
+                        onClick={() =>
+                          handleQuickView(item.subjectId, item.universityId)
+                        }
                       >
                         Quick view
                       </button>

@@ -425,17 +425,14 @@
 }
 
 .quickview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   border-bottom: 1px solid #e8e8e8;
   padding-bottom: 16px;
 }
 
 .quickview-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 1rem;
 }
 
 .quickview-meta {
@@ -467,9 +464,7 @@
 }
 
 .quickview-content {
-  display: flex;
-  margin-top: 24px;
-  gap: 32px;
+  margin-top: 20px;
 }
 
 .quickview-left,
