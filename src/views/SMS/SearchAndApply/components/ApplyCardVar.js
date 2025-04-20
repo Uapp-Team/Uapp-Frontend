@@ -113,15 +113,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                         </div>
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
-                        {(() => {
-                          const spellingLength = item.subjectName.replace(
-                            /[^a-zA-Z]/g,
-                            ""
-                          ).length;
-                          return spellingLength > 70
-                            ? item.subjectName.slice(0, 70) + "..."
-                            : item.subjectName;
-                        })()}
+                        {item.subjectName}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
