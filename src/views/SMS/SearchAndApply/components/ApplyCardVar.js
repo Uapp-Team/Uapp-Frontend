@@ -31,12 +31,12 @@ const ApplyCardVar = ({ data }) => {
   };
   return (
     <>
-      <Row>
+      <Row className="mt-3">
         {data?.length > 0 &&
           data?.map((item, index) => (
             <Col xs={12} md={6} lg={4} key={index}>
-              <div>
-                <div className="card-container-vertical mt-3">
+              <div className="mb-3">
+                <div className="card-container-vertical">
                   {item.intakeStatusId !== 1 && (
                     <span className="tbc">
                       TBC
@@ -56,7 +56,7 @@ const ApplyCardVar = ({ data }) => {
                       </Tooltip>
                     </span>
                   )}
-                  <div className="card-header">
+                  <div className="card-header-vertical">
                     <span className="card-date">
                       <img src={BellIcon} alt="" /> {item.applicationDeadLine}
                     </span>
@@ -79,7 +79,7 @@ const ApplyCardVar = ({ data }) => {
                     </div>
                   </div>
 
-                  <div className="card-body">
+                  <div className="card-body-vertical">
                     <div className="card-content-vertical">
                       <div className="d-flex align-items-center mb-3">
                         <img
