@@ -116,57 +116,7 @@ const SearchFilter = ({
           />
         </div>
         {/* <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} /> */}
-        <div className="mb-3">
-          <p className="mb-1 fw-500">Institution</p>
-          <DefaultDropdown
-            label={institutionName}
-            setLabel={setInstitutionName}
-            value={institutionId}
-            setValue={setInstitutionId}
-            selectAll={true}
-            all="All Institution"
-            url="UniversityDD/Index"
-          />
-        </div>
-        <div className="mb-3 d-none">
-          <p className="mb-1 fw-500">Study Level</p>
-          {/* <DefaultDropdown
-            label={studyLevelName}
-            setLabel={setStudyLevelName}
-            value={studyLevelId}
-            setValue={setStudyLevelId}
-            selectAll={true}
-            all="All Study Level"
-            url="SearchFilter/EducationLevels"
-          /> */}
-
-          <MultiSelect
-            placeholder="Select Study Level"
-            url="SearchFilter/EducationLevels"
-            value={studyLevelList}
-            setValue={setStudyLevelList}
-          />
-        </div>
-        <div className="mb-3 d-none">
-          <p className="mb-1 fw-500">Intake</p>
-          {/* <DefaultDropdown
-            label={intakeName}
-            setLabel={setIntakeName}
-            value={intakeId}
-            setValue={setIntakeId}
-            selectAll={true}
-            all="All Intake"
-            url="SearchFilter/Intakes"
-          /> */}
-
-          <MultiSelect
-            placeholder="Select Intake"
-            url="SearchFilter/Intakes"
-            value={intakeList}
-            setValue={setIntakeList}
-          />
-        </div>
-        <div className="mb-3">
+        <div className="mb-3 d-block d-md-none">
           <p className="mb-1 fw-500">Country</p>
           <DefaultDropdown
             label={countryName}
@@ -178,8 +128,42 @@ const SearchFilter = ({
             url="UniversityCountry/Index"
           />
         </div>
+
+        <div className="mb-3 d-block d-md-none">
+          <p className="mb-1 fw-500">Institution</p>
+          <DefaultDropdown
+            label={institutionName}
+            setLabel={setInstitutionName}
+            value={institutionId}
+            setValue={setInstitutionId}
+            selectAll={true}
+            all="All Institution"
+            url="UniversityDD/Index"
+          />
+        </div>
+        <div className="mb-3 d-block d-md-none">
+          <p className="mb-1 fw-500">Study Level</p>
+
+          <MultiSelect
+            placeholder="Select Study Level"
+            url="SearchFilter/EducationLevels"
+            value={studyLevelList}
+            setValue={setStudyLevelList}
+          />
+        </div>
+        <div className="mb-3 d-block d-md-none">
+          <p className="mb-1 fw-500">Intake</p>
+
+          <MultiSelect
+            placeholder="Select Intake"
+            url="SearchFilter/Intakes"
+            value={intakeList}
+            setValue={setIntakeList}
+          />
+        </div>
+
         <div className="mb-3">
-          <p className="mb-1 fw-500">City</p>
+          <p className="mb-1 fw-500">Campus City</p>
           <DefaultDropdown
             label={cityName}
             setLabel={setCityName}
@@ -302,14 +286,6 @@ const SearchFilter = ({
             className="mb-0"
           />
         </div>
-        <button
-          onClick={() => {
-            closeModal();
-          }}
-          className="apply-btn-vertical w-100"
-        >
-          Apply Now
-        </button>
       </div>
     </>
   );

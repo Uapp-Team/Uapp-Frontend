@@ -1,10 +1,8 @@
-import { Select } from "antd"; // antd for dropdown
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Input } from "reactstrap";
 import "../SearchAndApply.css"; // custom CSS
-
-const { Option } = Select;
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 
 const SearchBox = ({
   name,
@@ -14,11 +12,14 @@ const SearchBox = ({
   setIsTyping,
   onKeyDown,
   onBlur,
-  university,
-  setUniversity,
-  universityOptions = [],
+  institutionId,
+  setInstitutionId,
+  countryId,
+  setCountryId,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
+  const [institutionName, setInstitutionName] = useState("Select Institution");
+  const [countryName, setCountryName] = useState("Select Country");
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -44,9 +45,9 @@ const SearchBox = ({
   }, [typingTimeout]);
 
   return (
-    <div className="search-container">
+    <div className="d-flex dropdown-circle w-100">
       <div className="search-input">
-        <CiSearch className="search-icon" />
+        <CiSearch size={20} />
         <Input
           className="search-text"
           type="text"
@@ -59,19 +60,28 @@ const SearchBox = ({
           onBlur={onBlur}
         />
       </div>
-      <Select
-        className="university-select"
-        value={university}
-        onChange={setUniversity}
-        placeholder="Select University"
-        bordered={false}
-      >
-        {universityOptions.map((u) => (
-          <Option key={u} value={u}>
-            {u}
-          </Option>
-        ))}
-      </Select>
+      <div className="d-none d-md-block">
+        <div className="d-flex">
+          <DefaultDropdown
+            label={countryName}
+            setLabel={setCountryName}
+            value={countryId}
+            setValue={setCountryId}
+            selectAll={true}
+            all="All Country"
+            url="UniversityCountry/Index"
+          />
+          <DefaultDropdown
+            label={institutionName}
+            setLabel={setInstitutionName}
+            value={institutionId}
+            setValue={setInstitutionId}
+            selectAll={true}
+            all="All Institution"
+            url="UniversityDD/Index"
+          />
+        </div>
+      </div>
     </div>
   );
 };
