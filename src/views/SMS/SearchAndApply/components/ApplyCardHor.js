@@ -17,7 +17,8 @@ import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardHor = ({ data }) => {
+const ApplyCardHor = ({ data, handleFavourite }) => {
+  const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const handleQuickView = () => {
@@ -76,15 +77,36 @@ const ApplyCardHor = ({ data }) => {
                 )}
                 <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
-                    {item.intakeStatusId == 1 ? (
-                      <img src={online} alt="" />
-                    ) : (
-                      <img src={offline} alt="" />
+                    {Number(userType) !== 6 && (
+                      <img
+                        src={
+                          Number(item.intakeStatusId) === 1 ? online : offline
+                        }
+                        alt={
+                          Number(item.intakeStatusId) === 1
+                            ? "Online"
+                            : "Offline"
+                        }
+                      />
                     )}
                   </div>
                   <LuSettings2 className="mr-3" />
                   <LuShare2 className="mr-3" />
-                  <LuHeart />
+                  {userType == 6 ? (
+                    item.isFavorite ? (
+                      <LuHeart
+                        onClick={() => handleFavourite(item.subjectId)}
+                        color="red"
+                        fill="red"
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <LuHeart
+                        onClick={() => handleFavourite(item.subjectId)}
+                        className="cursor-pointer"
+                      />
+                    )
+                  ) : null}
                 </div>
               </div>
             </div>

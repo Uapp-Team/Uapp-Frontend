@@ -316,14 +316,14 @@ function SearchAndApply() {
       {data?.length > 0 && (
         <>
           <div className="d-block d-md-none">
-            <ApplyCardVar data={data} />
+            <ApplyCardVar data={data} handleFavourite={handleFavourite} />
           </div>
 
           <div className="d-none d-md-block">
             {mobileCard ? (
               <ApplyCardVar data={data} handleFavourite={handleFavourite} />
             ) : (
-              <ApplyCardHor data={data} />
+              <ApplyCardHor data={data} handleFavourite={handleFavourite} />
             )}
           </div>
         </>
