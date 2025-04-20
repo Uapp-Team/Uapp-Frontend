@@ -12,9 +12,9 @@ const ResultsToolbar = ({
   setFilterOpen,
 }) => {
   return (
-    <div className="results-toolbar d-flex justify-content-between align-items-center flex-wrap p-2">
+    <div className="results-toolbar d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
       {/* Left Section */}
-      <div className="d-flex gap-2 align-items-center flex-wrap">
+      <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2">
         <span className="tag mr-2">50 Result</span>
         <span className="tag tag-active mr-2">
           <img src={courseIcon} alt="course" className="w-20px h-20px mr-2" />{" "}
@@ -31,7 +31,7 @@ const ResultsToolbar = ({
       </div>
 
       {/* Right Section */}
-      <div className="d-flex align-items-center flex-wrap">
+      <div className="d-flex align-items-center flex-wrap mb-2">
         <button className="action-btn mr-2">
           <FaHeart className="mx-2" /> Favourites{" "}
           <span className="count">24</span>
@@ -54,7 +54,7 @@ const ResultsToolbar = ({
           className="action-btn filters-btn d-none d-md-block"
           onClick={() => setFilterOpen(!filterOpen)}
         >
-          <FaSlidersH className="mx-2" /> All filters
+          <FaSlidersH size={20} className="mx-2" /> All filters
         </button>
       </div>
     </div>

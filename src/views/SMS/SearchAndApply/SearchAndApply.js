@@ -9,6 +9,10 @@ import SearchBox from "./components/SearchBox";
 import SearchKeywords from "./components/SearchKeywords";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
+import get from "../../../helpers/get";
+import { FaSlidersH } from "react-icons/fa";
+import { Student } from "../../../components/core/User";
 
 function SearchAndApply() {
   const result = {
@@ -131,7 +135,7 @@ function SearchAndApply() {
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [studentId, setStudentId] = useState(0);
-  const [studentName, setStudentName] = useState("");
+  const [studentName, setStudentName] = useState("Select Student");
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
@@ -148,8 +152,6 @@ function SearchAndApply() {
   const [studyModes, setStudyModes] = useState([]);
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
-
-  console.log(applicationTypeIds);
 
   useEffect(() => {
     if (!isTyping && !filterOpen) {
@@ -252,36 +254,49 @@ function SearchAndApply() {
   console.log(data);
   return (
     <>
-      <Row className="mb-1">
-        <Col md={3} className="h-40px">
-          <DefaultDropdown
-            label={studentName}
-            setLabel={setStudentName}
-            value={studentId}
-            setValue={setStudentId}
-            selectAll={true}
-            all="All Student"
-            url="SearchFilter/Students"
-          />
-        </Col>
-        <Col md={6} className="d-flex h-40px">
+      <Row className="mt-3 mt-md-0">
+        {!Student() && (
+          <Col md={3} className="h-40px mb-3">
+            <DropdownCircle
+              method={get}
+              label={studentName}
+              setLabel={setStudentName}
+              value={studentId}
+              setValue={setStudentId}
+              selectAll={true}
+              all="All Student"
+              url="SearchFilter/Students"
+            />
+          </Col>
+        )}
+        <Col md={8} className="d-flex h-40px mb-3">
           <SearchBox
             name="search"
-            placeholder="Search"
+            placeholder="Search for courses"
             value={search}
             setValue={setSearch}
             setIsTyping={setIsTyping}
-            // university={university}
-            // setUniversity={setUniversity}
-            // universityOptions={["Harvard", "MIT", "Stanford"]}
+            institutionId={institutionId}
+            setInstitutionId={setInstitutionId}
+            countryId={countryId}
+            setCountryId={setCountryId}
           />
+
+          <button
+            className="ml-2 action-btn filters-btn d-block d-md-none"
+            onClick={() => setFilterOpen(!filterOpen)}
+          >
+            <FaSlidersH size={18} className="" />
+          </button>
         </Col>
       </Row>
-      <div className="filter-container">
-        <p className="filters-heading">
-          <span className="fs-14px">Search results for</span> <br />
-          <strong className="fs-20px">Search keyword</strong>
-        </p>
+      <div className="filter-container d-none d-md-block">
+        {search && (
+          <p className="filters-heading">
+            <span className="fs-14px">Search results for</span> <br />
+            <strong className="fs-20px">{search}</strong>
+          </p>
+        )}
         <Row className="mb-3">
           <Col md={9}>
             <SearchKeywords
