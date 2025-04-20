@@ -379,10 +379,10 @@ const EligibilityInformation = () => {
       isValid = false;
       setCvError("File is required");
     }
-    if (FileList7 === null && bacFile == null) {
-      isValid = false;
-      setBacError("File is required");
-    }
+    // if (FileList7 === null && bacFile == null) {
+    //   isValid = false;
+    //   setBacError("File is required");
+    // }
     return isValid;
   };
 

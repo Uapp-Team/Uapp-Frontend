@@ -321,7 +321,7 @@ const EligibilityForm = ({
           </FormGroup>
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
-              <span className="text-danger">*</span>
+              {/* <span className="text-danger">*</span> */}
               <span>BAC Certificate : </span>
             </Col>
 
@@ -333,8 +333,8 @@ const EligibilityForm = ({
                   setFile={setFileList7}
                   defaultValue={bacFile}
                   setRemove={setBacFile}
-                  error={bacError}
-                  setError={setBacError}
+                  // error={bacError}
+                  // setError={setBacError}
                 />
               </div>
             </Col>
