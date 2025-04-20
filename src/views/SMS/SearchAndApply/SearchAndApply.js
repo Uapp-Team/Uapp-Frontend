@@ -153,33 +153,33 @@ function SearchAndApply() {
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
 
-  // useEffect(() => {
-  //   if (!isTyping && !filterOpen) {
-  //     const subdata = {
-  //       page: 1,
-  //       pageSize: 30,
-  //       studentId: studentId,
-  //       universityId: institutionId,
-  //       campusId: 0,
-  //       countryId: countryId,
-  //       cityId: cityId,
-  //       departmentId: 0,
-  //       subdepartmentId: 0,
-  //       educationLevelIds: studyLevelId,
-  //       intakeIds: intakeId,
-  //       tuitionFeeRange: tuitionFee,
-  //       isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
-  //       isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
-  //       isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
-  //       courseDurations: courseDurations,
-  //       isScholarshipAvailable: isScholarships,
-  //       isShowAvailableCoursesOnly: isAvailableCourses,
-  //       isWorkPlacementAvailable: isWorkPlacement,
-  //       studyModes: studyModes,
-  //       deliveryMethods: deliveryPattern,
-  //       deliverySchedules: deliverySchedule,
-  //       searchText: search,
-  //     };
+  useEffect(() => {
+    if (!isTyping && !filterOpen) {
+      const subdata = {
+        page: 1,
+        pageSize: 30,
+        studentId: studentId,
+        universityId: institutionId,
+        campusId: 0,
+        countryId: countryId,
+        cityId: cityId,
+        departmentId: 0,
+        subdepartmentId: 0,
+        educationLevelIds: studyLevelId,
+        intakeIds: intakeId,
+        tuitionFeeRange: tuitionFee,
+        isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
+        isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
+        isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        courseDurations: courseDurations,
+        isScholarshipAvailable: isScholarships,
+        isShowAvailableCoursesOnly: isAvailableCourses,
+        isWorkPlacementAvailable: isWorkPlacement,
+        studyModes: studyModes,
+        deliveryMethods: deliveryPattern,
+        deliverySchedules: deliverySchedule,
+        searchText: search,
+      };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data?.items);
