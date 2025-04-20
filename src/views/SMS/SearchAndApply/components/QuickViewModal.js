@@ -1,6 +1,8 @@
 import { Modal } from "antd";
 import React from "react";
+import { CiTimer } from "react-icons/ci";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { SlCalender } from "react-icons/sl";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import "../SearchAndApply.css";
 
@@ -46,11 +48,26 @@ const QuickViewModal = ({ open, onClose }) => {
         </div>
 
         <div className="quickview-content">
-          <span className="card-date">
+          <span className="mb-3">
             <img src={BellIcon} alt="" /> 10 Feb, 25
           </span>
-          <div className="quickview-left">
-            <h3>Requirements (Bachelor’s)</h3>
+          <div className="mt-3">
+            <p className="fs-14px">
+              Course Start Date <span className="fw-600">25 Mar 2025</span>
+            </p>
+            <div className="d-flex align-items-center my-2">
+              <CiTimer className="mr-2" />
+              <div className="fs-14px">
+                Duration <span className="fw-600">4 Years</span>
+              </div>
+            </div>
+            <div className="my-4">
+              <div className="fs-14px d-flex my-2">
+                <SlCalender className="mr-2" />
+                <p>Intake</p>
+              </div>
+              <span className="filter-button">May 2025</span>
+            </div>
             <div className="requirement-block">
               <h4>Academic Qualification</h4>
               <ul>

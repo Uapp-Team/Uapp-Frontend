@@ -469,7 +469,7 @@
 
 .quickview-left,
 .quickview-right {
-  flex: 1;
+  margin-top: 10px;
 }
 
 .requirement-block h4 {
