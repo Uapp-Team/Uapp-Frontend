@@ -18,6 +18,7 @@ import PopOverText from "../../../../components/PopOverText";
 import { Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { dateFormate } from "../../../../components/date/calenderFormate";
+import ChangePassword from "../../../../components/password/ChangePassword";
 
 const LeadTable = ({
   componentRef,
@@ -53,10 +54,14 @@ const LeadTable = ({
   handleDeleteData,
   success,
   setSuccess,
+  pass,
+  cPass,
 }) => {
   const [popoverOpen, setPopoverOpen] = useState("");
   const userType = localStorage.getItem("userType");
   const { addToast } = useToasts();
+  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+  const [PasswordEye, setPasswordEye] = useState(false);
 
   const reSendEmail = (e, id) => {
     e.preventDefault();
@@ -349,45 +354,22 @@ const LeadTable = ({
           <h5>
             Change password for {passData?.fullName} ({passData?.uappId})
           </h5>
-          <form onSubmit={submitModalForm} className="mt-3">
-            <FormGroup row className="has-icon-left position-relative">
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    passValidate(e);
-                  }}
-                />
-                <span className="text-danger">{error}</span>
-              </Col>
-            </FormGroup>
-            <FormGroup row className="has-icon-left position-relative">
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Confirm Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    confirmPassword(e);
-                  }}
-                />
-                <span className="text-danger">{passError}</span>
-                <br />
-              </Col>
-            </FormGroup>
-
-            <FormGroup className="d-flex justify-content-between mt-3">
-              <CancelButton cancel={() => handleToggle(false)} />
-
-              <SaveButton text="Submit" buttonStatus={buttonStatus} />
-            </FormGroup>
-          </form>
+          <ChangePassword
+            submitModalForm={submitModalForm}
+            PasswordEye={PasswordEye}
+            setPasswordEye={setPasswordEye}
+            passValidation={passValidate}
+            password={pass}
+            passError={error}
+            ConPasswordEye={confirmPasswordEye}
+            setConPasswordEye={setConfirmPasswordEye}
+            ConPassValidation={confirmPassword}
+            conPassword={cPass}
+            conPassError={passError}
+            handleToggle={handleToggle}
+            progress={progress}
+            buttonStatus={buttonStatus}
+          />
         </ModalBody>
       </Modal>
 
