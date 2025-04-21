@@ -22,9 +22,15 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+  const [quickViewData, setQuickViewData] = React.useState({});
 
   const handleQuickView = (subjectId, universityId) => {
-    console.log(subjectId, universityId, "subjectId");
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
+    console.log(quickViewData, "quicViewData");
     setOpen(true);
     setLoading(true);
     setTimeout(() => {
@@ -246,7 +252,11 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
             </Col>
           ))}
       </Row>
-      <QuickViewModal open={open} onClose={() => setOpen(false)} />
+      <QuickViewModal
+        open={open}
+        onClose={() => setOpen(false)}
+        quickViewData={quickViewData}
+      />
     </>
   );
 };

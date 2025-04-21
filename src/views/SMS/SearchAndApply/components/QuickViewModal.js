@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CiBag1, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
@@ -11,18 +11,42 @@ import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  studyMode,
+} from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 
-const QuickViewModal = ({ open, onClose }) => {
+const QuickViewModal = ({ open, onClose, quickViewData }) => {
+  const [modalWidth, setModalWidth] = useState(820); // default
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (window.innerWidth < 640) {
+        setModalWidth("90%"); // small screens
+      } else {
+        setModalWidth(520); // default or larger
+      }
+    };
+
+    updateWidth(); // on mount
+    window.addEventListener("resize", updateWidth);
+
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
   return (
-    <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
+    <Modal
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      title="Quick View"
+      width={modalWidth}
+    >
       <div className="quickview-container">
         <div className="quickview-header">
           <div>
-            <h2 className="quickview-title">
-              BMus (Hons) Popular Music Performance – Guitar, Bass, Drums,
-              Keyboards and Vocals
-            </h2>
+            <h2 className="quickview-title">{quickViewData?.subjectName}</h2>
           </div>
           <div className="d-flex align-items-center justify-content-between">
             <div className="">
@@ -36,48 +60,68 @@ const QuickViewModal = ({ open, onClose }) => {
         </div>
 
         <div className="quickview-content">
-          <span className="mb-3">
-            <img src={BellIcon} alt="" /> 10 Feb, 25
-          </span>
-          <div className="mt-3">
-            <p className="fs-14px">
-              Course Start Date <span className="fw-600">25 Mar 2025</span>
-            </p>
-            <div className="d-flex align-items-center my-2">
-              <CiTimer className="mr-2" />
-              <div className="fs-14px">
-                Duration <span className="fw-600">4 Years</span>
+          <div className="quickview-left">
+            <div className="quickview-left__deadline my-3">
+              <span>
+                <img src={BellIcon} alt="" />{" "}
+                {quickViewData?.applicationDeadLine}
+              </span>
+              <p className="fs-14px">
+                Course Start Date <span className="fw-600">25 Mar 2025</span>
+              </p>
+            </div>
+            <div className="mt-3">
+              <div className="my-4">
+                <div className="fs-14px d-flex mt-3">
+                  <CiTimer className="mr-2 mt-1" />
+                  <p>Duration</p>
+                </div>
+                <div className="d-flex flex-wrap">
+                  {quickViewData?.durationNames
+                    ?.split(",")
+                    .map((duration, index) => (
+                      <span className="filter-button mr-2 mb-2">
+                        {duration}
+                      </span>
+                    ))}
+                </div>
               </div>
-            </div>
-            <div className="my-4">
-              <div className="fs-14px d-flex my-3">
-                <SlCalender className="mr-2 mt-1" />
-                <p>Intake</p>
+              <div className="my-4">
+                <div className="fs-14px d-flex mt-3">
+                  <SlCalender className="mr-2 mt-1" />
+                  <p>Intake</p>
+                </div>
+                <div className="d-flex flex-wrap">
+                  {quickViewData?.intakeNames
+                    ?.split(",")
+                    .map((intake, index) => (
+                      <span className="filter-button">{intake}</span>
+                    ))}
+                </div>
               </div>
-              <span className="filter-button">May 2025</span>
-            </div>
-            <div className="dashed-hr"></div>
-            <div className="requirement-block">
-              <h3 className="my-4">Requirements (Bachelor’s)</h3>
-              <h4>Academic Qualification</h4>
-              <ul>
-                <li>Minimum UCAS tariff points: 96–112</li>
-                <li>
-                  Equivalent Higher Secondary Certificate (HSC) or A-Level
-                  results
-                </li>
-                <li>GPA of 4.0+ out of 5.0 in HSC or equivalent diploma</li>
-              </ul>
-            </div>
-            <div className="requirement-block">
-              <h4>English Language</h4>
-              <ul>
-                <li>IELTS 6.0 (no band below 5.5) or</li>
-                <li>PTE Academic: 60 overall or</li>
-                <li>
-                  Medium of Instruction (MOI) letter + Internal English test
-                </li>
-              </ul>
+              <div className="dashed-hr"></div>
+              <div className="requirement-block">
+                <h3 className="my-4">Requirements (Bachelor’s)</h3>
+                <h4>Academic Qualification</h4>
+                <ul>
+                  <li>Minimum UCAS tariff points: 96–112</li>
+                  <li>
+                    Equivalent Higher Secondary Certificate (HSC) or A-Level
+                    results
+                  </li>
+                  <li>GPA of 4.0+ out of 5.0 in HSC or equivalent diploma</li>
+                </ul>
+              </div>
+              <div className="requirement-block">
+                <h4>English Language</h4>
+                <ul>
+                  <li>IELTS 6.0 (no band below 5.5) or</li>
+                  <li>PTE Academic: 60 overall or</li>
+                  <li>
+                    Medium of Instruction (MOI) letter + Internal English test
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -85,13 +129,18 @@ const QuickViewModal = ({ open, onClose }) => {
             <div className="d-flex align-items-center my-4">
               <img
                 className="h-48px w-48px mr-2"
-                src={"https://localtest.uapp.uk/"}
+                src={
+                  "https://localtest.uapp.uk/" +
+                  quickViewData?.universityLogoUrl
+                }
                 alt=""
               />
               <div className="d-flex flex-column">
-                <span className="fw-600 fs-14px">Bournemouth University</span>
+                <span className="fw-600 fs-14px">
+                  {quickViewData?.universityName}
+                </span>
                 <span className="fw-400 fs-12px">
-                  Bournemouth, England, United Kingdom
+                  {quickViewData?.campusNames?.split(",")[0].trim()}
                 </span>
               </div>
             </div>
@@ -99,7 +148,9 @@ const QuickViewModal = ({ open, onClose }) => {
             <div className="d-flex align-items-center my-4">
               <img src={ranking} alt="" className="h-24px w-24px mr-2 mt-1" />
               <div className="d-flex flex-column">
-                <span className="fs-14px fw-600">#01</span>
+                <span className="fs-14px fw-600">
+                  #{quickViewData?.globalRankNumber}
+                </span>
                 <span className="fs-12px">Global Rank</span>
               </div>
             </div>
@@ -109,9 +160,15 @@ const QuickViewModal = ({ open, onClose }) => {
               <div>
                 <span className="info-title">Campus Location</span>
                 <ul>
-                  <li>Greater London, UK</li>
-                  <li>Greater London, UK</li>
-                  <li>Greater London, UK</li>
+                  {quickViewData?.campusNames ? (
+                    quickViewData.campusNames
+                      ?.split(",")
+                      .map((campus, index) => (
+                        <li key={index}>{campus.trim()}</li>
+                      ))
+                  ) : (
+                    <li>No campus information available</li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -120,11 +177,18 @@ const QuickViewModal = ({ open, onClose }) => {
               <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
               <div>
                 <span className="info-title">Tuition Fees</span>
-                <ul>
-                  <li>Home/UK: £28,640</li>
-                  <li>EU/EEU: £28,640</li>
-                  <li>International: £28,640</li>
-                </ul>
+                <div className="w-150px">
+                  <div className="d-flex justify-content-between min-vw-75">
+                    Home/UK: <span>£{quickViewData?.localTutionFee}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    EU/EEU: <span>£{quickViewData?.eU_TutionFee}</span>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    International:{" "}
+                    <span>£{quickViewData?.internationalTutionFee}</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="dashed-hr"></div>
@@ -151,7 +215,7 @@ const QuickViewModal = ({ open, onClose }) => {
               <div>
                 <span className="info-title">Application Fee</span>
                 <ul>
-                  <li>£00 GBP</li>
+                  <li>£{quickViewData?.avarageApplicationFee}</li>
                 </ul>
               </div>
             </div>
@@ -166,7 +230,18 @@ const QuickViewModal = ({ open, onClose }) => {
             </div>
             <div className="footer-tag__content">
               <ul>
-                <li>Online</li>
+                {quickViewData?.deliveryMethods
+                  ?.split(",")
+                  .map((id) => {
+                    const method = deliveryMethods.find(
+                      (m) => m.id === parseInt(id.trim(), 10)
+                    );
+                    return method?.name;
+                  })
+                  .filter(Boolean)
+                  .map((name, index) => (
+                    <li key={index}>{name}</li>
+                  ))}
               </ul>
             </div>
           </div>
@@ -177,18 +252,40 @@ const QuickViewModal = ({ open, onClose }) => {
             </div>
             <div className="footer-tag__content">
               <ul>
-                <li>Full-time</li>
+                {quickViewData?.studyModes
+                  ?.split(",")
+                  .map((id) => {
+                    const method = studyMode.find(
+                      (m) => m.id === parseInt(id.trim(), 10)
+                    );
+                    return method?.name;
+                  })
+                  .filter(Boolean)
+                  .map((name, index) => (
+                    <li key={index}>{name}</li>
+                  ))}
               </ul>
             </div>
           </div>
           <div className="footer-tag">
             <div>
-              <VscFeedback className="mr-2" />
+              <CiTimer className="mr-2" />
               Delivery Schedule{" "}
             </div>
             <div className="footer-tag__content">
               <ul>
-                <li>Standard</li>
+                {quickViewData?.deliverySchedules
+                  ?.split(",")
+                  .map((id) => {
+                    const method = deliverySchedules.find(
+                      (m) => m.id === parseInt(id.trim(), 10)
+                    );
+                    return method?.name;
+                  })
+                  .filter(Boolean)
+                  .map((name, index) => (
+                    <li key={index}>{name}</li>
+                  ))}
               </ul>
             </div>
           </div>
@@ -199,7 +296,7 @@ const QuickViewModal = ({ open, onClose }) => {
             </div>
             <div className="footer-tag__content">
               <ul>
-                <li>£5,640</li>
+                <li>£{quickViewData?.depositFee}</li>
               </ul>
             </div>
           </div>
