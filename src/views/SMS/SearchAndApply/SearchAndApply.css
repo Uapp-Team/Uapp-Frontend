@@ -483,7 +483,9 @@
   padding-left: 18px;
   font-size: 14px;
 }
-
+.requirement-block ul li {
+  margin-bottom: 8px;
+}
 .university-info {
   text-align: center;
   margin-bottom: 16px;
@@ -506,6 +508,7 @@
 }
 
 .info-group {
+  display: flex;
   margin-bottom: 12px;
 }
 
@@ -516,27 +519,34 @@
   font-size: 14px;
 }
 
-.info-group p {
+.info-group ul {
+  list-style: none;
+  padding: 0;
   margin: 0;
   font-size: 13px;
 }
 
 .quickview-footer {
-  display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #e8e8e8;
-  font-size: 13px;
+  padding: 16px 0;
+  font-size: 14px;
+  background: #eef4f4;
+  border-radius: 10px;
 }
 
 .footer-tag {
-  background: #fafafa;
-  border: 1px solid #eee;
-  padding: 4px 10px;
+  display: flex;
+  background: #eef4f4;
+  padding: 0 4px;
   border-radius: 6px;
-  margin: 4px 8px 4px 0;
+  margin-top: 10px;
+}
+.footer-tag__content ul {
+  padding: 0;
+  margin: 0 20px;
+  font-weight: 600;
 }
 
 .view-more-container {
@@ -548,6 +558,7 @@
   background: transparent;
   border: 1px solid #ccc;
   padding: 6px 16px;
+  width: 100%;
   border-radius: 4px;
   cursor: pointer;
 }

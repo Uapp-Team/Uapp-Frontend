@@ -68,7 +68,9 @@ const QuickViewModal = ({ open, onClose }) => {
               </div>
               <span className="filter-button">May 2025</span>
             </div>
+            <div className="dashed-hr"></div>
             <div className="requirement-block">
+              <h3 className="my-4">Requirements (Bachelor’s)</h3>
               <h4>Academic Qualification</h4>
               <ul>
                 <li>Minimum UCAS tariff points: 96–112</li>
@@ -92,58 +94,146 @@ const QuickViewModal = ({ open, onClose }) => {
           </div>
 
           <div className="quickview-right">
-            <div className="university-info">
+            <div className="d-flex align-items-center my-4">
               <img
-                src="https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Bournemouth_University_logo.svg/2560px-Bournemouth_University_logo.svg.png"
-                alt="University Logo"
-                className="uni-logo"
+                className="h-48px w-48px mr-2"
+                src={"https://localtest.uapp.uk/"}
+                alt=""
               />
-              <p className="uni-name">Bournemouth University</p>
-              <p className="uni-location">
-                Bournemouth, England, United Kingdom
-              </p>
-              <p className="uni-stats">30% Worldwide</p>
+              <div className="d-flex flex-column">
+                <span className="fw-600 fs-14px">Bournemouth University</span>
+                <span className="fw-400 fs-12px">
+                  Bournemouth, England, United Kingdom
+                </span>
+              </div>
+            </div>
+
+            <div className="d-flex align-items-center my-4">
+              <img
+                src={"https://localtest.uapp.uk/"}
+                alt=""
+                className="h-30px w-30px mr-2"
+              />
+              <div className="d-flex flex-column">
+                <span className="fs-14px fw-600">#01</span>
+                <span className="fs-12px">Global Rank</span>
+              </div>
             </div>
 
             <div className="info-group">
-              <span className="info-title">Campus Location</span>
-              <p>Greater London, UK</p>
-              <p>Greater London, UK</p>
-              <p>Greater London, UK</p>
-              <p>Greater London, UK</p>
+              <img
+                src={"https://localtest.uapp.uk/"}
+                alt=""
+                className="h-30px w-30px mr-2 mt-1"
+              />
+              <div>
+                <span className="info-title">Campus Location</span>
+                <ul>
+                  <li>Greater London, UK</li>
+                  <li>Greater London, UK</li>
+                  <li>Greater London, UK</li>
+                </ul>
+              </div>
             </div>
 
             <div className="info-group">
-              <span className="info-title">Tuition Fees</span>
-              <p>Home/UK: £28,640</p>
-              <p>EU/EEU: £28,640</p>
-              <p>International: £28,640</p>
+              <img
+                src={"https://localtest.uapp.uk/"}
+                alt=""
+                className="h-30px w-30px mr-2 mt-1"
+              />
+              <div>
+                <span className="info-title">Tuition Fees</span>
+                <ul>
+                  <li>Home/UK: £28,640</li>
+                  <li>EU/EEU: £28,640</li>
+                  <li>International: £28,640</li>
+                </ul>
+              </div>
             </div>
 
             <div className="info-group">
-              <span className="info-title">Scholarship</span>
-              <p>10% or £5000</p>
+              <img
+                src={"https://localtest.uapp.uk/"}
+                alt=""
+                className="h-30px w-30px mr-2 mt-1"
+              />
+              <div>
+                <span className="info-title">Scholarship</span>
+                <ul>
+                  <li>10% or £5000</li>
+                </ul>
+              </div>
             </div>
 
             <div className="info-group">
-              <span className="info-title">Application Fee</span>
-              <p>£00 GBP</p>
+              <img
+                src={"https://localtest.uapp.uk/"}
+                alt=""
+                className="h-30px w-30px mr-2 mt-1"
+              />
+              <div>
+                <span className="info-title">Application Fee</span>
+                <ul>
+                  <li>£00 GBP</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="quickview-footer">
           <div className="footer-tag">
-            Delivery Pattern <b>On-campus</b>
+            <img
+              src={"https://localtest.uapp.uk/"}
+              alt=""
+              className="h-30px w-30px mr-2 mt-1"
+            />
+            <div className="footer-tag__content">
+              Delivery Pattern{" "}
+              <ul>
+                <li>Online</li>
+              </ul>
+            </div>
           </div>
           <div className="footer-tag">
-            Study Mode <b>Full-time</b>
+            <img
+              src={"https://localtest.uapp.uk/"}
+              alt=""
+              className="h-30px w-30px mr-2 mt-1"
+            />
+            <div className="footer-tag__content">
+              Study Mode{" "}
+              <ul>
+                <li>Full-time</li>
+              </ul>
+            </div>
           </div>
           <div className="footer-tag">
-            Delivery Schedule <b>Standard</b>
+            <img
+              src={"https://localtest.uapp.uk/"}
+              alt=""
+              className="h-30px w-30px mr-2 mt-1"
+            />
+            <div className="footer-tag__content">
+              Delivery Schedule{" "}
+              <ul>
+                <li>Standard</li>
+              </ul>
+            </div>
           </div>
           <div className="footer-tag">
-            Deposit <b>£5,640</b>
+            <img
+              src={"https://localtest.uapp.uk/"}
+              alt=""
+              className="h-30px w-30px mr-2 mt-1"
+            />
+            <div className="footer-tag__content">
+              Deposit{" "}
+              <ul>
+                <li>£5,640</li>
+              </ul>
+            </div>
           </div>
         </div>
 
