@@ -467,9 +467,11 @@
   margin-top: 20px;
 }
 
-.quickview-left,
 .quickview-right {
   margin-top: 10px;
+  border: 1px solid #ebebeb;
+  border-radius: 5px;
+  padding: 0 15px;
 }
 
 .requirement-block h4 {
@@ -537,14 +539,13 @@
 }
 
 .footer-tag {
-  display: flex;
   background: #eef4f4;
-  padding: 0 4px;
+  padding: 0 20px;
   border-radius: 6px;
   margin-top: 10px;
 }
 .footer-tag__content ul {
-  padding: 0;
+  padding: 0 15px;
   margin: 0 20px;
   font-weight: 600;
 }

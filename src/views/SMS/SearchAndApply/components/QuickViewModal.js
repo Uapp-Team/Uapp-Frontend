@@ -1,9 +1,16 @@
 import { Modal } from "antd";
 import React from "react";
-import { CiTimer } from "react-icons/ci";
+import { CiBag1, CiTimer } from "react-icons/ci";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { SlCalender } from "react-icons/sl";
+import { VscFeedback } from "react-icons/vsc";
+import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
+import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
+import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
+import ranking from "../../../../assets/icon/ranking.svg";
+import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import "../SearchAndApply.css";
 
 const QuickViewModal = ({ open, onClose }) => {
@@ -16,25 +23,6 @@ const QuickViewModal = ({ open, onClose }) => {
               BMus (Hons) Popular Music Performance – Guitar, Bass, Drums,
               Keyboards and Vocals
             </h2>
-            {/* <div className="quickview-meta">
-              <span>
-                <CalendarOutlined /> 10 Feb, 25
-              </span>
-              <span className="dot">•</span>
-              <span>
-                Course Start Date <b>25 Mar 2025</b>
-              </span>
-              <span className="dot">•</span>
-              <span>
-                <ClockCircleOutlined /> Duration <b>4 Years</b>
-              </span>
-            </div>
-            <div className="quickview-intake">
-              <span>Intake:</span>
-              <span className="intake-badge">April 2025</span>
-              <span className="intake-badge">May 2025</span>
-              <span className="intake-badge">June 2025</span>
-            </div> */}
           </div>
           <div className="d-flex align-items-center justify-content-between">
             <div className="">
@@ -62,8 +50,8 @@ const QuickViewModal = ({ open, onClose }) => {
               </div>
             </div>
             <div className="my-4">
-              <div className="fs-14px d-flex my-2">
-                <SlCalender className="mr-2" />
+              <div className="fs-14px d-flex my-3">
+                <SlCalender className="mr-2 mt-1" />
                 <p>Intake</p>
               </div>
               <span className="filter-button">May 2025</span>
@@ -107,25 +95,17 @@ const QuickViewModal = ({ open, onClose }) => {
                 </span>
               </div>
             </div>
-
+            <div className="dashed-hr"></div>
             <div className="d-flex align-items-center my-4">
-              <img
-                src={"https://localtest.uapp.uk/"}
-                alt=""
-                className="h-30px w-30px mr-2"
-              />
+              <img src={ranking} alt="" className="h-24px w-24px mr-2 mt-1" />
               <div className="d-flex flex-column">
                 <span className="fs-14px fw-600">#01</span>
                 <span className="fs-12px">Global Rank</span>
               </div>
             </div>
-
+            <div className="dashed-hr"></div>
             <div className="info-group">
-              <img
-                src={"https://localtest.uapp.uk/"}
-                alt=""
-                className="h-30px w-30px mr-2 mt-1"
-              />
+              <img src={Campus} alt="" className="h-24px w-24px mr-2 mt-1" />
               <div>
                 <span className="info-title">Campus Location</span>
                 <ul>
@@ -135,13 +115,9 @@ const QuickViewModal = ({ open, onClose }) => {
                 </ul>
               </div>
             </div>
-
+            <div className="dashed-hr"></div>
             <div className="info-group">
-              <img
-                src={"https://localtest.uapp.uk/"}
-                alt=""
-                className="h-30px w-30px mr-2 mt-1"
-              />
+              <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
               <div>
                 <span className="info-title">Tuition Fees</span>
                 <ul>
@@ -151,12 +127,12 @@ const QuickViewModal = ({ open, onClose }) => {
                 </ul>
               </div>
             </div>
-
+            <div className="dashed-hr"></div>
             <div className="info-group">
               <img
-                src={"https://localtest.uapp.uk/"}
+                src={mortarboard}
                 alt=""
-                className="h-30px w-30px mr-2 mt-1"
+                className="h-24px w-24px mr-2 mt-1"
               />
               <div>
                 <span className="info-title">Scholarship</span>
@@ -165,12 +141,12 @@ const QuickViewModal = ({ open, onClose }) => {
                 </ul>
               </div>
             </div>
-
+            <div className="dashed-hr"></div>
             <div className="info-group">
               <img
-                src={"https://localtest.uapp.uk/"}
+                src={Application}
                 alt=""
-                className="h-30px w-30px mr-2 mt-1"
+                className="h-24px w-24px mr-2 mt-1"
               />
               <div>
                 <span className="info-title">Application Fee</span>
@@ -184,52 +160,44 @@ const QuickViewModal = ({ open, onClose }) => {
 
         <div className="quickview-footer">
           <div className="footer-tag">
-            <img
-              src={"https://localtest.uapp.uk/"}
-              alt=""
-              className="h-30px w-30px mr-2 mt-1"
-            />
+            <div>
+              <VscFeedback className="mr-2" />
+              <span>Delivery Pattern</span>
+            </div>
             <div className="footer-tag__content">
-              Delivery Pattern{" "}
               <ul>
                 <li>Online</li>
               </ul>
             </div>
           </div>
           <div className="footer-tag">
-            <img
-              src={"https://localtest.uapp.uk/"}
-              alt=""
-              className="h-30px w-30px mr-2 mt-1"
-            />
-            <div className="footer-tag__content">
+            <div>
+              <FaPeopleGroup className="mr-2" />
               Study Mode{" "}
+            </div>
+            <div className="footer-tag__content">
               <ul>
                 <li>Full-time</li>
               </ul>
             </div>
           </div>
           <div className="footer-tag">
-            <img
-              src={"https://localtest.uapp.uk/"}
-              alt=""
-              className="h-30px w-30px mr-2 mt-1"
-            />
-            <div className="footer-tag__content">
+            <div>
+              <VscFeedback className="mr-2" />
               Delivery Schedule{" "}
+            </div>
+            <div className="footer-tag__content">
               <ul>
                 <li>Standard</li>
               </ul>
             </div>
           </div>
           <div className="footer-tag">
-            <img
-              src={"https://localtest.uapp.uk/"}
-              alt=""
-              className="h-30px w-30px mr-2 mt-1"
-            />
-            <div className="footer-tag__content">
+            <div>
+              <CiBag1 className="mr-2" />
               Deposit{" "}
+            </div>
+            <div className="footer-tag__content">
               <ul>
                 <li>£5,640</li>
               </ul>
