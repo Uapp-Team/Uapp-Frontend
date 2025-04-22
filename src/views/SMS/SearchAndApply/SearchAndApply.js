@@ -258,78 +258,81 @@ function SearchAndApply() {
   console.log(data);
   return (
     <>
-      <Row className="mt-3 mt-md-0">
-        {!Student() && (
-          <Col md={3} className="h-40px mb-3">
-            <DropdownCircle
-              method={get}
-              label={studentName}
-              setLabel={setStudentName}
-              value={studentId}
-              setValue={setStudentId}
-              selectAll={true}
-              all="All Student"
-              url="SearchFilter/Students"
+      <div className="search-header">
+        <Row className="mt-3 mt-md-0">
+          {!Student() && (
+            <Col md={3} className="h-40px mb-3">
+              <DropdownCircle
+                method={get}
+                label={studentName}
+                setLabel={setStudentName}
+                value={studentId}
+                setValue={setStudentId}
+                selectAll={true}
+                all="All Student"
+                url="SearchFilter/Students"
+              />
+            </Col>
+          )}
+          <Col md={8} className="d-flex h-40px mb-3">
+            <SearchBox
+              name="search"
+              placeholder="Search for courses"
+              value={search}
+              setValue={setSearch}
+              setIsTyping={setIsTyping}
+              institutionId={institutionId}
+              setInstitutionId={setInstitutionId}
+              countryId={countryId}
+              setCountryId={setCountryId}
             />
-          </Col>
-        )}
-        <Col md={8} className="d-flex h-40px mb-3">
-          <SearchBox
-            name="search"
-            placeholder="Search for courses"
-            value={search}
-            setValue={setSearch}
-            setIsTyping={setIsTyping}
-            institutionId={institutionId}
-            setInstitutionId={setInstitutionId}
-            countryId={countryId}
-            setCountryId={setCountryId}
-          />
 
-          <button
-            className="ml-2 action-btn filters-btn d-block d-md-none"
-            onClick={() => setFilterOpen(!filterOpen)}
-          >
-            <FaSlidersH size={18} className="" />
-          </button>
-        </Col>
-      </Row>
-      <div className="filter-container d-none d-md-block">
-        {search && (
-          <p className="filters-heading">
-            <span className="fs-14px">Search results for</span> <br />
-            <strong className="fs-20px">{search}</strong>
-          </p>
-        )}
-        <Row className="mb-3">
-          <Col md={9}>
-            <SearchKeywords
-              state={studyLevelId}
-              setState={setStudyLevelId}
-              url="SearchFilter/EducationLevels"
-            />
-          </Col>
-          <Col md={3}>
-            <SearchKeywords
-              state={intakeId}
-              setState={setIntakeId}
-              url="SearchFilter/Intakes"
-            />
+            <button
+              className="ml-2 filters-btn d-block d-md-none"
+              onClick={() => setFilterOpen(!filterOpen)}
+            >
+              <FaSlidersH size={18} className="" />
+            </button>
           </Col>
         </Row>
-      </div>
-      <div ref={sentinelRef} style={{ height: 1 }} />
+        <div className="filter-container d-none d-md-block">
+          {search && (
+            <p className="filters-heading">
+              <span className="fs-14px">Search results for</span> <br />
+              <strong className="fs-20px">{search}</strong>
+            </p>
+          )}
+          <Row className="mb-3">
+            <Col md={9}>
+              <SearchKeywords
+                state={studyLevelId}
+                setState={setStudyLevelId}
+                url="SearchFilter/EducationLevels"
+              />
+            </Col>
+            <Col md={3}>
+              <SearchKeywords
+                state={intakeId}
+                setState={setIntakeId}
+                url="SearchFilter/Intakes"
+              />
+            </Col>
+          </Row>
+        </div>
+        <div ref={sentinelRef} style={{ height: 1 }} />
 
-      <div
-        ref={toolbarRef}
-        className={`results-toolbar ${isSticky ? "sticky" : ""}`}
-      >
-        <ResultsToolbar
-          mobileCard={mobileCard}
-          setMobileCard={setMobileCard}
-          filterOpen={filterOpen}
-          setFilterOpen={setFilterOpen}
-        />
+        <div
+          ref={toolbarRef}
+          className={`results-toolbar ${isSticky ? "sticky" : ""}`}
+        >
+          <ResultsToolbar
+            mobileCard={mobileCard}
+            setMobileCard={setMobileCard}
+            filterOpen={filterOpen}
+            setFilterOpen={setFilterOpen}
+            data={data}
+          />
+        </div>
       </div>
 
       {data?.items?.length > 0 && (
@@ -361,7 +364,6 @@ function SearchAndApply() {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         dataPerPage={dataPerPage}
-        // setDataPerPage={setDataPerPage}
         totalData={data?.total}
       />
 
