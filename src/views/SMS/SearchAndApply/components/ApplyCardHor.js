@@ -20,13 +20,15 @@ import QuickViewModal from "./QuickViewModal";
 const ApplyCardHor = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const handleQuickView = () => {
+  const [quickViewData, setQuickViewData] = React.useState({});
+
+  const handleQuickView = (subjectId, universityId) => {
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
     setOpen(true);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
   };
   return (
     <>
@@ -223,7 +225,12 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                     )}
 
                     <div>
-                      <button className="quick-btn" onClick={handleQuickView}>
+                      <button
+                        className="quick-btn"
+                        onClick={() =>
+                          handleQuickView(item.subjectId, item.universityId)
+                        }
+                      >
                         Quick view
                       </button>
                       <button className="apply-btn">
@@ -237,7 +244,11 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
             </div>
           </div>
         ))}
-      <QuickViewModal open={open} onClose={() => setOpen(false)} />
+      <QuickViewModal
+        open={open}
+        onClose={() => setOpen(false)}
+        quickViewData={quickViewData}
+      />
     </>
   );
 };

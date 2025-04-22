@@ -30,12 +30,8 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
         item.subjectId === subjectId && item.universityId === universityId
     );
     setQuickViewData(quickViewData[0]);
-    console.log(quickViewData, "quicViewData");
     setOpen(true);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
   };
   return (
     <>
