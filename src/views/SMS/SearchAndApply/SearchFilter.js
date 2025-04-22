@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import React, { useEffect, useRef, useState } from "react";
+import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -47,6 +47,8 @@ const SearchFilter = ({
   deliverySchedule,
   setDeliverySchedule,
 }) => {
+  const divRef = useRef(null);
+
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
@@ -54,6 +56,7 @@ const SearchFilter = ({
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
   const [applicationType, setApplicationType] = useState([]);
+  const [isSearch, setIsSearch] = useState(true);
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes`).then((res) => {
@@ -102,190 +105,225 @@ const SearchFilter = ({
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setIsSearch(false);
+      } else setIsSearch(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      <div className="right-side-modal overflowY">
-        <div className="d-flex justify-content-between align-items-center mb-30px">
-          <h3>Filters</h3>
-          <AiOutlineClose
-            size={24}
-            onClick={() => {
-              closeModal();
-            }}
-            className="pointer"
-          />
-        </div>
-        {/* <HugeiconsIcon icon={Notification03Icon} size={44} strokeWidth={3} /> */}
-        <div className="mb-3 d-block d-md-none">
-          <p className="mb-1 fw-500">Country</p>
-          <DefaultDropdown
-            label={countryName}
-            setLabel={setCountryName}
-            value={countryId}
-            setValue={setCountryId}
-            selectAll={true}
-            all="All Country"
-            url="UniversityCountry/Index"
-          />
-        </div>
-
-        <div className="mb-3 d-block d-md-none">
-          <p className="mb-1 fw-500">Institution</p>
-          <DefaultDropdown
-            label={institutionName}
-            setLabel={setInstitutionName}
-            value={institutionId}
-            setValue={setInstitutionId}
-            selectAll={true}
-            all="All Institution"
-            url="UniversityDD/Index"
-          />
-        </div>
-        <div className="mb-3 d-block d-md-none">
-          <p className="mb-1 fw-500">Study Level</p>
-
-          <MultiSelect
-            placeholder="Select Study Level"
-            url="SearchFilter/EducationLevels"
-            value={studyLevelList}
-            setValue={setStudyLevelList}
-          />
-        </div>
-        <div className="mb-3 d-block d-md-none">
-          <p className="mb-1 fw-500">Intake</p>
-
-          <MultiSelect
-            placeholder="Select Intake"
-            url="SearchFilter/Intakes"
-            value={intakeList}
-            setValue={setIntakeList}
-          />
-        </div>
-
-        <div className="mb-3">
-          <p className="mb-1 fw-500">Campus City</p>
-          <DefaultDropdown
-            label={cityName}
-            setLabel={setCityName}
-            value={cityId}
-            setValue={setCityId}
-            url={`UniversityCityDD/Index/${countryId}`}
-          />
-        </div>
-        <div className="mb-3">
-          <p className="mb-1 fw-500">Tuition Fee (Max)</p>
-          <Row className="align-items-center">
-            <Col xs={5}>
-              <Input
-                type="number"
-                onChange={(e) => setTuitionFee(e.target.value)}
-                value={tuitionFee}
+      <div
+        ref={divRef}
+        className="right-side-modal overflowY"
+        style={{
+          width: isSearch ? "315px" : "30px",
+          transition: "width 1s",
+          backgroundColor: isSearch ? "white" : "#B3B3B3",
+        }}
+      >
+        {isSearch ? (
+          <>
+            <div className="d-flex justify-content-between align-items-center mb-30px">
+              <h3>Filters</h3>
+              <AiOutlineClose
+                size={24}
+                onClick={() => {
+                  closeModal();
+                }}
+                className="pointer"
               />
-            </Col>
-            <Col xs={7}>
-              <Input
-                type="range"
-                className="custom-slider"
-                min={0}
-                max={100000}
-                value={tuitionFee}
-                onChange={(e) => setTuitionFee(e.target.value)}
-              />
-            </Col>
-          </Row>
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1 fw-500">Application Type </p>
+            </div>
 
-          {applicationType.map((item, i) => (
-            <p key={i} className="mb-0">
-              <input
-                id={`AppType-${i}`}
-                value={item.id}
-                type="checkbox"
-                onClick={handleChange}
-                checked={applicationTypeIds?.includes(item.id)}
+            <div className="mb-3 d-block d-md-none">
+              <p className="mb-1 fw-500">Country</p>
+              <DefaultDropdown
+                label={countryName}
+                setLabel={setCountryName}
+                value={countryId}
+                setValue={setCountryId}
+                selectAll={true}
+                all="All Country"
+                url="UniversityCountry/Index"
               />
-              <label htmlFor={`AppType-${i}`} className="fs-14px mx-2 pointer">
-                {item.name}
-              </label>
-            </p>
-          ))}
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1 fw-500">Course durations </p>
+            </div>
 
-          <MultiSelectU
-            placeholder="Select Course Durations"
-            url={
-              studyLevelId?.length > 0
-                ? `Duration/ByEducationLevels?${studyLevelQuery}`
-                : "Duration/Index"
-            }
-            value={courseDurations}
-            setValue={setCourseDurations}
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <CheckSwitch
-            register={() => {}}
-            label="Scholarships Available"
-            name=""
-            defaultValue={isScholarships}
-            action={() => setIsScholarships(!isScholarships)}
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <CheckSwitch
-            register={() => {}}
-            label="Show Available Courses Only"
-            name=""
-            defaultValue={isAvailableCourses}
-            action={() => setIsAvailableCourses(!isAvailableCourses)}
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <CheckSwitch
-            register={() => {}}
-            label="Work Placement Options"
-            name=""
-            defaultValue={isWorkPlacement}
-            action={() => setIsWorkPlacement(!isWorkPlacement)}
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1 fw-500">Study Mode  </p>
-          <CheckBoxByObj
-            register={() => {}}
-            name="studyMode"
-            list={studyMode}
-            defaultValue={studyModes}
-            action={setStudyModes}
-            className="mb-0"
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1 fw-500">Delivery Pattern </p>
-          <CheckBoxByObj
-            register={() => {}}
-            name="deliveryMethods"
-            list={deliveryMethods}
-            defaultValue={deliveryPattern}
-            action={setDeliveryPattern}
-            className="mb-0"
-          />
-        </div>
-        <div className="border rounded p-16px mb-3 bg-white">
-          <p className="mb-1 fw-500">Delivery Schedule </p>
-          <CheckBoxByObj
-            register={() => {}}
-            name="deliverySchedules"
-            list={deliverySchedules}
-            defaultValue={deliverySchedule}
-            action={setDeliverySchedule}
-            className="mb-0"
-          />
-        </div>
+            <div className="mb-3 d-block d-md-none">
+              <p className="mb-1 fw-500">Institution</p>
+              <DefaultDropdown
+                label={institutionName}
+                setLabel={setInstitutionName}
+                value={institutionId}
+                setValue={setInstitutionId}
+                selectAll={true}
+                all="All Institution"
+                url="UniversityDD/Index"
+              />
+            </div>
+            <div className="mb-3 d-block d-md-none">
+              <p className="mb-1 fw-500">Study Level</p>
+
+              <MultiSelect
+                placeholder="Select Study Level"
+                url="SearchFilter/EducationLevels"
+                value={studyLevelList}
+                setValue={setStudyLevelList}
+              />
+            </div>
+            <div className="mb-3 d-block d-md-none">
+              <p className="mb-1 fw-500">Intake</p>
+
+              <MultiSelect
+                placeholder="Select Intake"
+                url="SearchFilter/Intakes"
+                value={intakeList}
+                setValue={setIntakeList}
+              />
+            </div>
+
+            <div className="mb-3">
+              <p className="mb-1 fw-500">Campus City</p>
+              <DefaultDropdown
+                label={cityName}
+                setLabel={setCityName}
+                value={cityId}
+                setValue={setCityId}
+                url={`UniversityCityDD/Index/${countryId}`}
+              />
+            </div>
+            <div className="mb-3">
+              <p className="mb-1 fw-500">Tuition Fee (Max)</p>
+              <Row className="align-items-center">
+                <Col xs={5}>
+                  <Input
+                    type="number"
+                    onChange={(e) => setTuitionFee(e.target.value)}
+                    value={tuitionFee}
+                  />
+                </Col>
+                <Col xs={7}>
+                  <Input
+                    type="range"
+                    className="custom-slider"
+                    min={0}
+                    max={100000}
+                    value={tuitionFee}
+                    onChange={(e) => setTuitionFee(e.target.value)}
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Application Type </p>
+
+              {applicationType.map((item, i) => (
+                <p key={i} className="mb-0">
+                  <input
+                    id={`AppType-${i}`}
+                    value={item.id}
+                    type="checkbox"
+                    onClick={handleChange}
+                    checked={applicationTypeIds?.includes(item.id)}
+                  />
+                  <label
+                    htmlFor={`AppType-${i}`}
+                    className="fs-14px mx-2 pointer"
+                  >
+                    {item.name}
+                  </label>
+                </p>
+              ))}
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Course durations </p>
+
+              <MultiSelectU
+                placeholder="Select Course Durations"
+                url={
+                  studyLevelId?.length > 0
+                    ? `Duration/ByEducationLevels?${studyLevelQuery}`
+                    : "Duration/Index"
+                }
+                value={courseDurations}
+                setValue={setCourseDurations}
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <CheckSwitch
+                register={() => {}}
+                label="Scholarships Available"
+                name=""
+                defaultValue={isScholarships}
+                action={() => setIsScholarships(!isScholarships)}
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <CheckSwitch
+                register={() => {}}
+                label="Show Available Courses Only"
+                name=""
+                defaultValue={isAvailableCourses}
+                action={() => setIsAvailableCourses(!isAvailableCourses)}
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <CheckSwitch
+                register={() => {}}
+                label="Work Placement Options"
+                name=""
+                defaultValue={isWorkPlacement}
+                action={() => setIsWorkPlacement(!isWorkPlacement)}
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Study Mode  </p>
+              <CheckBoxByObj
+                register={() => {}}
+                name="studyMode"
+                list={studyMode}
+                defaultValue={studyModes}
+                action={setStudyModes}
+                className="mb-0"
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Delivery Pattern </p>
+              <CheckBoxByObj
+                register={() => {}}
+                name="deliveryMethods"
+                list={deliveryMethods}
+                defaultValue={deliveryPattern}
+                action={setDeliveryPattern}
+                className="mb-0"
+              />
+            </div>
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Delivery Schedule </p>
+              <CheckBoxByObj
+                register={() => {}}
+                name="deliverySchedules"
+                list={deliverySchedules}
+                defaultValue={deliverySchedule}
+                action={setDeliverySchedule}
+                className="mb-0"
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="right-icon">
+              <AiOutlineArrowLeft size={20} />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
