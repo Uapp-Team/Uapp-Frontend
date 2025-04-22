@@ -653,3 +653,8 @@
 }
 /* Input Range  End  */
 /* Input Range  End  */
+
+/* Pagination  */
+span.visually-hidden {
+  display: none;
+}

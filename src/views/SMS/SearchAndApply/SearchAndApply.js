@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
@@ -13,6 +12,7 @@ import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
 import get from "../../../helpers/get";
 import { FaSlidersH } from "react-icons/fa";
 import { Student } from "../../../components/core/User";
+import SearchPaginations from "./components/SearchPaginations";
 
 function SearchAndApply() {
   const result = {
@@ -130,7 +130,9 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState(result.items);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dataPerPage = 15;
+  const [data, setData] = useState(result);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -156,8 +158,8 @@ function SearchAndApply() {
   useEffect(() => {
     if (!isTyping && !filterOpen) {
       const subdata = {
-        page: 1,
-        pageSize: 30,
+        page: currentPage,
+        pageSize: dataPerPage,
         studentId: studentId,
         universityId: institutionId,
         campusId: 0,
@@ -182,7 +184,8 @@ function SearchAndApply() {
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        setData(res?.data?.items);
+        console.log(res?.data);
+        setData(res?.data);
       });
     }
   }, [
@@ -190,6 +193,7 @@ function SearchAndApply() {
     cityId,
     countryId,
     courseDurations,
+    currentPage,
     deliveryPattern,
     deliverySchedule,
     filterOpen,
@@ -328,21 +332,38 @@ function SearchAndApply() {
         />
       </div>
 
-      {data?.length > 0 && (
+      {data?.items?.length > 0 && (
         <>
           <div className="d-block d-md-none">
-            <ApplyCardVar data={data} handleFavourite={handleFavourite} />
+            <ApplyCardVar
+              data={data?.items}
+              handleFavourite={handleFavourite}
+            />
           </div>
 
           <div className="d-none d-md-block">
             {mobileCard ? (
-              <ApplyCardVar data={data} handleFavourite={handleFavourite} />
+              <ApplyCardVar
+                data={data?.items}
+                handleFavourite={handleFavourite}
+              />
             ) : (
-              <ApplyCardHor data={data} handleFavourite={handleFavourite} />
+              <ApplyCardHor
+                data={data?.items}
+                handleFavourite={handleFavourite}
+              />
             )}
           </div>
         </>
       )}
+
+      <SearchPaginations
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        dataPerPage={dataPerPage}
+        // setDataPerPage={setDataPerPage}
+        totalData={data?.total}
+      />
 
       {filterOpen && (
         <SearchFilter
