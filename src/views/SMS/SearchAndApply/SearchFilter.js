@@ -13,8 +13,6 @@ import {
   studyMode,
 } from "../../../constants/presetData";
 import MultiSelect from "../../../components/form/MultiSelect";
-// import { HugeiconsIcon } from "@hugeicons/react";
-// import { Notification03Icon } from "@hugeicons/core-free-icons";
 
 const SearchFilter = ({
   closeModal,
@@ -109,7 +107,7 @@ const SearchFilter = ({
     const handleClickOutside = (event) => {
       if (divRef.current && !divRef.current.contains(event.target)) {
         setIsSearch(false);
-      } else setIsSearch(false);
+      } else setIsSearch(true);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
