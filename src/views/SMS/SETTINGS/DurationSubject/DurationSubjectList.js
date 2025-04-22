@@ -173,7 +173,7 @@ const EducationLevelList = () => {
   };
 
   useEffect(() => {
-    Uget("Duration").then((res) => {
+    Uget("Duration/Index").then((res) => {
       setEducationLevelData(res?.data);
       setLoading(false);
     });

@@ -63,7 +63,7 @@ const EducationLevelList = () => {
   const [multiDuration, setMultiDuration] = useState([]);
 
   useEffect(() => {
-    Uget("Duration").then((res) => {
+    Uget("Duration/Index").then((res) => {
       setDurationDD(res?.data);
     });
   }, [success]);
