@@ -16,6 +16,7 @@ import online from "../../../../assets/icon/online.svg";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
+import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
@@ -25,6 +26,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
   const [loading, setLoading] = React.useState(true);
   const [quickViewData, setQuickViewData] = React.useState({});
   const [eligibility, setEligibility] = React.useState({});
+  const [openApplyModal, setOpenApplyModal] = React.useState(true);
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -38,6 +40,9 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     setQuickViewData(quickViewData[0]);
     setOpen(true);
     setLoading(true);
+  };
+  const handleApply = () => {
+    setOpenApplyModal(true);
   };
   return (
     <>
@@ -244,7 +249,10 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       >
                         Quick view
                       </button>
-                      <button className="apply-btn-vertical">
+                      <button
+                        className="apply-btn-vertical"
+                        onClick={() => handleApply()}
+                      >
                         Apply Now <RiArrowRightSLine />
                       </button>
                     </div>
@@ -259,6 +267,10 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
         onClose={() => setOpen(false)}
         quickViewData={quickViewData}
         eligibility={eligibility}
+      />
+      <ApplyModal
+        open={openApplyModal}
+        onClose={() => setOpenApplyModal(false)}
       />
     </>
   );
