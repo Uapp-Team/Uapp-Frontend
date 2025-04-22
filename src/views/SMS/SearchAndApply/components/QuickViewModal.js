@@ -1,5 +1,6 @@
 import { Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Col, Row } from "react-bootstrap";
 import { CiBag1, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
@@ -19,48 +20,30 @@ import {
 import "../SearchAndApply.css";
 
 const QuickViewModal = ({ open, onClose, quickViewData }) => {
-  const [modalWidth, setModalWidth] = useState(820); // default
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (window.innerWidth < 640) {
-        setModalWidth("90%"); // small screens
-      } else {
-        setModalWidth(520); // default or larger
-      }
-    };
-
-    updateWidth(); // on mount
-    window.addEventListener("resize", updateWidth);
-
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
   return (
-    <Modal
-      open={open}
-      onCancel={onClose}
-      footer={null}
-      title="Quick View"
-      width={modalWidth}
-    >
+    <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
       <div className="quickview-container">
-        <div className="quickview-header">
-          <div>
+        <Row className="quickview-header">
+          <Col xs={12} sm={7}>
             <h2 className="quickview-title">{quickViewData?.subjectName}</h2>
-          </div>
-          <div className="d-flex align-items-center justify-content-between">
-            <div className="">
-              <LuSettings2 className="mr-3 cursor-pointer" />
-              <LuShare2 className="mr-3" />
-              <LuHeart color="red" fill="red" className="cursor-pointer mr-3" />
+          </Col>
+          <Col
+            xs={12}
+            sm={5}
+            className="d-flex align-items-center justify-content-between"
+          >
+            <div>
+              <LuSettings2 className="mr-4 cursor-pointer" />
+              <LuShare2 className="mr-4" />
+              <LuHeart color="red" fill="red" className="cursor-pointer mr-4" />
               <LuArrowUpRight className="fs-20px" />
             </div>
             <button className="apply-btn">Apply Now</button>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="quickview-content">
-          <div className="quickview-left">
+        <Row className="quickview-content">
+          <Col xs={12} sm={7} className="quickview-left">
             <div className="quickview-left__deadline my-3">
               <span>
                 <img src={BellIcon} alt="" />{" "}
@@ -123,9 +106,9 @@ const QuickViewModal = ({ open, onClose, quickViewData }) => {
                 </ul>
               </div>
             </div>
-          </div>
+          </Col>
 
-          <div className="quickview-right">
+          <Col xs={12} sm={5} className="quickview-right">
             <div className="d-flex align-items-center my-4">
               <img
                 className="h-48px w-48px mr-2"
@@ -219,8 +202,8 @@ const QuickViewModal = ({ open, onClose, quickViewData }) => {
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
         <div className="quickview-footer">
           <div className="footer-tag">

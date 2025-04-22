@@ -497,7 +497,7 @@
   margin-top: 10px;
   border: 1px solid #ebebeb;
   border-radius: 5px;
-  padding: 0 15px;
+  padding: 0 25px;
 }
 
 .requirement-block h4 {
@@ -561,7 +561,7 @@
   padding: 16px 0;
   font-size: 14px;
   background: #eef4f4;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .footer-tag {
