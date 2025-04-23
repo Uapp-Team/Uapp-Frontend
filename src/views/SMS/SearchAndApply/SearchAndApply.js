@@ -14,8 +14,10 @@ import { FaSlidersH } from "react-icons/fa";
 import { Student } from "../../../components/core/User";
 import SearchPaginations from "./components/SearchPaginations";
 import Loader from "../../../components/Loader";
+import { useToasts } from "react-toast-notifications";
 
 function SearchAndApply() {
+  const { addToast } = useToasts();
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
@@ -24,13 +26,14 @@ function SearchAndApply() {
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 15;
   const [data, setData] = useState({});
+  const [favoriteList, setFavoriteList] = useState([]);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
-  const [studentId, setStudentId] = useState(0);
-  const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [search, setSearch] = useState("");
+  const [studentId, setStudentId] = useState(0);
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState([]);
   const [intakeId, setIntakeId] = useState([]);
@@ -45,6 +48,7 @@ function SearchAndApply() {
   const [studyModes, setStudyModes] = useState([]);
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   // level
   const [studentName, setStudentName] = useState("Select Student");
@@ -52,8 +56,6 @@ function SearchAndApply() {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
-
-  console.log(intakeId);
 
   useEffect(() => {
     if (!isTyping) {
@@ -81,10 +83,15 @@ function SearchAndApply() {
         deliveryMethods: deliveryPattern,
         deliverySchedules: deliverySchedule,
         searchText: search,
+        // isFavorite: isFavorite,
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data);
+        const filterFavorite = res?.data?.items.filter(
+          (item) => item.isFavorite === true
+        );
+        setFavoriteList(filterFavorite);
         setLoading(false);
       });
     }
@@ -140,31 +147,27 @@ function SearchAndApply() {
       .then((res) => {
         if (res.status === 200) {
           setLoading(true);
-          let formData = data;
-          console.log(formData.items[i]?.isFavorite);
-          formData.items[i].isFavorite = !formData.items[i].isFavorite;
-          console.log(formData);
-          setData(formData);
+          let modifyData = data;
+          modifyData.items[i].isFavorite = !modifyData.items[i].isFavorite;
+
+          const filterFavorite = modifyData?.items.filter(
+            (item) => item.isFavorite === true
+          );
+          setFavoriteList(filterFavorite);
+          setData(modifyData);
           setLoading(false);
-          // const updateData = data?.map((item) =>
-          //   item.subjectId === subjectId
-          //     ? { ...item, isFavorite: !item.isFavorite }
-          //     : item
-          // );
-          // setData(updateData);
-          // setData((prevData) =>
-          //   prevData?.map((item) =>
-          //     item.subjectId === subjectId
-          //       ? { ...item, isFavorite: !item.isFavorite }
-          //       : item
-          //   )
-          // );
         } else {
-          console.log("error", res.data);
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
         }
       })
       .catch((err) => {
-        console.log("error", err);
+        addToast(err, {
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
   };
 
@@ -246,9 +249,11 @@ function SearchAndApply() {
         >
           <ResultsToolbar
             loading={loading}
+            isFavorite={isFavorite}
+            setIsFavorite={setIsFavorite}
+            favoriteList={favoriteList}
             mobileCard={mobileCard}
             setMobileCard={setMobileCard}
-            filterOpen={filterOpen}
             setFilterOpen={() => {
               setFilterOpen(true);
               setIsSearch(true);

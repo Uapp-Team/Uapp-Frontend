@@ -7,9 +7,11 @@ import { Student } from "../../../../components/core/User";
 
 const ResultsToolbar = ({
   loading,
+  isFavorite,
+  setIsFavorite,
+  favoriteList,
   mobileCard,
   setMobileCard,
-  filterOpen,
   setFilterOpen,
   data,
 }) => {
@@ -41,10 +43,16 @@ const ResultsToolbar = ({
           {/* Right Section */}
           <div className="d-flex align-items-center flex-wrap mb-2">
             {Student() && (
-              <button className="action-btn mr-2">
+              <button
+                className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
+                onClick={() => setIsFavorite(!isFavorite)}
+              >
                 <FaHeart className="mx-2" /> Favourites{" "}
                 <span className="count">
-                  {!loading && data?.items?.[0]?.favoriteSubjectCount}
+                  {favoriteList?.length}
+                  {/* {loading === false
+                    ? data?.items?.[0]?.favoriteSubjectCount
+                    : null} */}
                 </span>
               </button>
             )}
@@ -91,7 +99,10 @@ const ResultsToolbar = ({
         <hr />
         <div className="d-flex justify-content-between pl-25px pr-25px">
           {Student() && (
-            <button className="action-btn mr-2">
+            <button
+              className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
+              onClick={() => setIsFavorite(!isFavorite)}
+            >
               <FaHeart className="mx-2" /> Favourites{" "}
               <span className="count">
                 {!loading && data?.items?.[0]?.favoriteSubjectCount}
