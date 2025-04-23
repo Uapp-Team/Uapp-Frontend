@@ -13,6 +13,7 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
@@ -21,12 +22,17 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
   const [open, setOpen] = React.useState(false);
   const [quickViewData, setQuickViewData] = React.useState({});
+  const [eligibility, setEligibility] = React.useState({});
 
-  const handleQuickView = (subjectId, universityId) => {
+  const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
       (item) =>
         item.subjectId === subjectId && item.universityId === universityId
     );
+    const eligibilityData = await get(
+      `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+    );
+    setEligibility(eligibilityData);
     setQuickViewData(quickViewData[0]);
     setOpen(true);
   };
@@ -247,6 +253,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
       <QuickViewModal
         open={open}
         onClose={() => setOpen(false)}
+        eligibility={eligibility}
         quickViewData={quickViewData}
       />
     </>

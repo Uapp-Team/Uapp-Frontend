@@ -19,7 +19,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 
-const QuickViewModal = ({ open, onClose, quickViewData }) => {
+const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
   return (
     <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
       <div className="quickview-container">
@@ -84,27 +84,30 @@ const QuickViewModal = ({ open, onClose, quickViewData }) => {
               </div>
               <div className="dashed-hr"></div>
               <div className="requirement-block">
-                <h3 className="my-4">Requirements (Bachelor’s)</h3>
-                <h4>Academic Qualification</h4>
-                <ul>
-                  <li>Minimum UCAS tariff points: 96–112</li>
-                  <li>
-                    Equivalent Higher Secondary Certificate (HSC) or A-Level
-                    results
-                  </li>
-                  <li>GPA of 4.0+ out of 5.0 in HSC or equivalent diploma</li>
-                </ul>
+                <h3 className="my-4">{eligibility?.requiredEducationlevel}</h3>
+                {eligibility?.requiredResultInPercentage && (
+                  <div>
+                    <h4>Academic Qualification</h4>
+                    <ul>
+                      <li>{eligibility?.requiredResultInPercentage}</li>
+                    </ul>
+                  </div>
+                )}
               </div>
-              <div className="requirement-block">
-                <h4>English Language</h4>
-                <ul>
-                  <li>IELTS 6.0 (no band below 5.5) or</li>
-                  <li>PTE Academic: 60 overall or</li>
-                  <li>
-                    Medium of Instruction (MOI) letter + Internal English test
-                  </li>
-                </ul>
-              </div>
+              {eligibility?.englishLanguages?.length > 0 && (
+                <div className="requirement-block">
+                  <h4>English Language</h4>
+                  <ul>
+                    {eligibility?.englishLanguages?.map((item, index) => (
+                      <li key={index}>
+                        {item}
+                        {index === eligibility.englishLanguages.length - 2 &&
+                          " or"}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </Col>
 
