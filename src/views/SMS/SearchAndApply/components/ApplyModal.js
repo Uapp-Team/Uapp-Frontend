@@ -65,33 +65,24 @@ const ApplyModal = ({ open, onClose }) => {
             </Row>
             <div className="dashed-hr"></div>
           </div>
-
-          <Row xs={8} className="apply-modal-study">
-            <Col xs={2} className="apply-modal-study__info">
-              <img className="h-48px w-48px mr-2 my-1" src={Tuition} alt="" />
+          <div className="apply-modal-study">
+            <div className="apply-modal-study__info">
+              <img className="h-24px w-24px " src={Tuition} alt="" />
               <div className="fs-12px">Tution fees</div>
               <div className="fs-14px">£28,640</div>
-            </Col>
-            <Col xs={3} className="apply-modal-study__info">
-              <img
-                className="h-48px w-48px mr-2 my-1"
-                src={mortarboard}
-                alt=""
-              />
+            </div>
+            <div className="apply-modal-study__info">
+              <img className="h-24px w-24px" src={mortarboard} alt="" />
               <div className="fs-12px">Scholarship</div>
               <div className="fs-14px">10% or £5000</div>
-            </Col>
-            <Col xs={3} className="apply-modal-study__info">
-              <img
-                className="h-48px w-48px mr-2 my-1"
-                src={Application}
-                alt=""
-              />
+            </div>
+            <div className="apply-modal-study__info">
+              <img className="h-24px w-24px " src={Application} alt="" />
               <div className="fs-12px">Application fees</div>
               <div className="fs-14px">£28,640</div>
-            </Col>
-          </Row>
-
+            </div>
+          </div>
+          <div className="dashed-hr"></div>
           <div className="program-modal__info">
             <span className="program-modal__deadline">
               Application deadline <strong>10 Feb, 2025</strong>
