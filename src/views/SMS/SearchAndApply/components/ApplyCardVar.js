@@ -22,11 +22,13 @@ import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
+  const userTypeId = localStorage.getItem("userTypeId");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [quickViewData, setQuickViewData] = React.useState({});
   const [eligibility, setEligibility] = React.useState({});
-  const [openApplyModal, setOpenApplyModal] = React.useState(true);
+  const [applyEligibility, setApplyEligibility] = React.useState({});
+  const [openApplyModal, setOpenApplyModal] = React.useState(false);
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -41,7 +43,10 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     setOpen(true);
     setLoading(true);
   };
-  const handleApply = () => {
+  const handleApply = async (subjectId, universityId) => {
+    await get(
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${userTypeId}`
+    ).then((res) => setApplyEligibility(res));
     setOpenApplyModal(true);
   };
   return (
@@ -251,7 +256,9 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       </button>
                       <button
                         className="apply-btn-vertical"
-                        onClick={() => handleApply()}
+                        onClick={() =>
+                          handleApply(item.subjectId, item.universityId)
+                        }
                       >
                         Apply Now <RiArrowRightSLine />
                       </button>
@@ -271,6 +278,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
+        applyEligibility={applyEligibility}
       />
     </>
   );

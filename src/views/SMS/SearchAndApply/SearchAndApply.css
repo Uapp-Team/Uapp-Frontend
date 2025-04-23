@@ -754,12 +754,7 @@
 .program-modal__card ul {
   padding-left: 20px;
   font-size: 14px;
-  list-style: none;
-}
-
-.program-modal__card ul li::before {
-  content: "• ";
-  margin-right: 6px;
+  list-style: none !important;
 }
 
 .program-modal__form-group {

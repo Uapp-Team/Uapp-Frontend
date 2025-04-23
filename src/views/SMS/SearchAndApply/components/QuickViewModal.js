@@ -18,8 +18,15 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
+import ApplyModal from "./ApplyModal";
 
 const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
+  const [openApplyModal, setOpenApplyModal] = React.useState(false);
+
+  const handleApply = (subjectId, universityId) => {
+    console.log(subjectId, universityId);
+    setOpenApplyModal(true);
+  };
   return (
     <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
       <div className="quickview-container">
@@ -38,7 +45,9 @@ const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
               <LuHeart color="red" fill="red" className="cursor-pointer mr-4" />
               <LuArrowUpRight className="fs-20px" />
             </div>
-            <button className="apply-btn">Apply Now</button>
+            <button className="apply-btn" onClick={() => handleApply()}>
+              Apply Now
+            </button>
           </Col>
         </Row>
 
@@ -292,6 +301,10 @@ const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
           <button className="view-more-btn">View More</button>
         </div>
       </div>
+      <ApplyModal
+        open={openApplyModal}
+        onClose={() => setOpenApplyModal(false)}
+      />
     </Modal>
   );
 };

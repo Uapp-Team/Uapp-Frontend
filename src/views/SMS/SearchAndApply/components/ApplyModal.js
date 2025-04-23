@@ -1,9 +1,10 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-
 import { Modal } from "antd";
 import React from "react";
 import { CiTimer } from "react-icons/ci";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoCheckmark } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 import { SlCalender } from "react-icons/sl";
 import { Col, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
@@ -12,7 +13,7 @@ import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import "../SearchAndApply.css";
 
-const ApplyModal = ({ open, onClose }) => {
+const ApplyModal = ({ open, onClose, applyEligibility }) => {
   const [programCard, setProgramCard] = React.useState(true);
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -117,27 +118,65 @@ const ApplyModal = ({ open, onClose }) => {
           </div>
           {programCard && (
             <div className="program-modal__card">
-              <div>
+              <div className="program-modal__list">
                 <h4>Admission Requirements</h4>
-                <ul>
-                  <li> Previous Education: 3 Years Bachelor Degree</li>
-                  <li> Results: 50% Marks</li>
-                  <li> Test Score: IELTS overall 6.5 and 5.5 each band</li>
-                  <li> GRE: 300 (and no minimum individual score)</li>
-                  <li> GMAT: 700</li>
-                </ul>
+                {applyEligibility?.admissionRequirements?.length > 0 ? (
+                  applyEligibility?.admissionRequirements?.map(
+                    (item, index) => (
+                      <ul key={index}>
+                        <li>
+                          {item?.isEligible === true ? (
+                            <IoCheckmark
+                              fill="green"
+                              color="green"
+                              className="mr-2"
+                            />
+                          ) : (
+                            <RxCross1 fill="red" color="red" className="mr-2" />
+                          )}
+                          {item?.details}
+                        </li>
+                      </ul>
+                    )
+                  )
+                ) : (
+                  <ul>
+                    <li>No Required qualification</li>
+                  </ul>
+                )}
               </div>
               <div>
                 <div>
                   <h4>Student Qualification</h4>
-                  <ul>
-                    <li> Highest Education Level: 3 Years bachelor (Degree)</li>
-                    <li> Result: 50%</li>
-                    <li>
-                      IELTS Score: IELTS 7.5 (or IELTS Equivalent 6.5
-                      (Duolingo))
-                    </li>
-                  </ul>
+                  {applyEligibility?.studentQualifications?.length > 0 ? (
+                    applyEligibility?.studentQualifications?.map(
+                      (item, index) => (
+                        <ul key={index}>
+                          <li>
+                            {item?.isEligible === true ? (
+                              <IoCheckmark
+                                fill="green"
+                                color="green"
+                                className="mr-2"
+                              />
+                            ) : (
+                              <RxCross1
+                                fill="red"
+                                color="red"
+                                className="mr-2"
+                              />
+                            )}
+                            {item}
+                          </li>
+                        </ul>
+                      )
+                    )
+                  ) : (
+                    <ul>
+                      {" "}
+                      <li>No Required qualification</li>{" "}
+                    </ul>
+                  )}
                 </div>
               </div>
             </div>

@@ -15,14 +15,18 @@ import online from "../../../../assets/icon/online.svg";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
+import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardHor = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
+  const userTypeId = localStorage.getItem("referenceId");
   const [open, setOpen] = React.useState(false);
   const [quickViewData, setQuickViewData] = React.useState({});
   const [eligibility, setEligibility] = React.useState({});
+  const [applyEligibility, setApplyEligibility] = React.useState({});
+  const [openApplyModal, setOpenApplyModal] = React.useState(false);
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -35,6 +39,12 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
     setEligibility(eligibilityData);
     setQuickViewData(quickViewData[0]);
     setOpen(true);
+  };
+  const handleApply = async (subjectId, universityId) => {
+    await get(
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${userTypeId}`
+    ).then((res) => setApplyEligibility(res));
+    setOpenApplyModal(true);
   };
   return (
     <>
@@ -239,7 +249,12 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       >
                         Quick view
                       </button>
-                      <button className="apply-btn">
+                      <button
+                        className="apply-btn"
+                        onClick={() =>
+                          handleApply(item.subjectId, item.universityId)
+                        }
+                      >
                         Apply Now <RiArrowRightSLine />
                       </button>
                       {/* <button className="register-btn">Register Interest</button> */}
@@ -255,6 +270,11 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
         onClose={() => setOpen(false)}
         eligibility={eligibility}
         quickViewData={quickViewData}
+      />
+      <ApplyModal
+        open={openApplyModal}
+        onClose={() => setOpenApplyModal(false)}
+        applyEligibility={applyEligibility}
       />
     </>
   );
