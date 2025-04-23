@@ -140,6 +140,8 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
                         {item.subjectName}
+                        {/* {item.subjectName?.slice(0, 60)} */}
+                        {/* {item.subjectName?.length > 60 && "..."} */}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
