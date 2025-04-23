@@ -13,7 +13,7 @@ const SearchPaginations = ({
 }) => {
   let initialPage = Math.ceil(totalData / dataPerPage);
   // const list = [10, 20, 30, 50, 100, 1000];
-
+  console.log(totalData);
   const pageList = initialPage;
   const [first, setFirst] = useState(1);
   const [last, setLast] = useState(initialPage);
@@ -35,7 +35,7 @@ const SearchPaginations = ({
   }, [first, last]);
 
   return (
-    <div className="overflowX-auto mt-16px ">
+    <div className="overflowX-auto mt-16px">
       {pages?.length > 0 && (
         <Pagination className="d-flex justify-content-between align-items-center">
           <span

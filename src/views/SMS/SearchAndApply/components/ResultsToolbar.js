@@ -19,7 +19,7 @@ const ResultsToolbar = ({
         <div className="d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
           {/* Left Section */}
           <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2">
-            <span className="tag mr-2">0 Result</span>
+            {/* <span className="tag mr-2">0 Result</span> */}
             <span className="tag tag-active mr-2">
               <img
                 src={courseIcon}
@@ -28,14 +28,14 @@ const ResultsToolbar = ({
               />{" "}
               {data?.total} Courses
             </span>
-            <span className="tag">
+            {/* <span className="tag">
               <img
                 src={universityIcon}
                 alt="course"
                 className="w-20px h-20px mr-2"
               />
               0 University
-            </span>
+            </span> */}
           </div>
 
           {/* Right Section */}
@@ -62,7 +62,7 @@ const ResultsToolbar = ({
             </button>
             <button
               className="action-btn filters-btn d-none d-md-block"
-              onClick={() => setFilterOpen(!filterOpen)}
+              onClick={() => setFilterOpen()}
             >
               <FaSlidersH size={20} className="mx-2" /> All filters
             </button>
@@ -72,19 +72,19 @@ const ResultsToolbar = ({
       <div className="d-block d-md-none">
         <hr className="mt-0" />
         <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2 pl-25px pr-25px">
-          <span className="tag mr-2">0 Result</span>
+          {/* <span className="tag mr-2">0 Result</span> */}
           <span className="tag tag-active mr-2">
             <img src={courseIcon} alt="course" className="w-20px h-20px mr-2" />{" "}
             {data?.total} Courses
           </span>
-          <span className="tag">
+          {/* <span className="tag">
             <img
               src={universityIcon}
               alt="course"
               className="w-20px h-20px mr-2"
             />
             0 University
-          </span>
+          </span> */}
         </div>
         <hr />
         <div className="d-flex justify-content-between pl-25px pr-25px">

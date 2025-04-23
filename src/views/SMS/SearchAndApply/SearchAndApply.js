@@ -15,127 +15,17 @@ import { Student } from "../../../components/core/User";
 import SearchPaginations from "./components/SearchPaginations";
 
 function SearchAndApply() {
-  const result = {
-    from: 0,
-    index: 0,
-    size: 30,
-    totalFiltered: 0,
-    total: 652,
-    pages: 22,
-    hasPrevious: false,
-    hasNext: true,
-    title: "Request Success!",
-    message: "Success!",
-    type: "https://tools.ietf.org/html/rfc7231#section-6.3.1",
-    isSuccess: true,
-    statusCode: 200,
-    errors: [],
-    items: [
-      {
-        subjectId: 3088,
-        subjectName:
-          "BSc (Hons) Business and Human Resource Management with Foundation Year",
-        subjectDescription: "<p>No Placement Year</p>",
-        isFavorite: false,
-        intakeStatusId: 1,
-        eU_TutionFee: 0.0,
-        eU_TutionFeeCurrencyId: 2,
-        firstYearTutionFee: 0.0,
-        firstYearTutionFeeCurrencyId: 0,
-        internationalTutionFee: 0.0,
-        internationalTutionCurrencyId: 2,
-        localTutionFee: 9250.0,
-        localTutionFeeCurrencyId: 2,
-        depositFee: 0.0,
-        depositFeeCurrencyId: 0,
-        avarageApplicationFee: 0.0,
-        avarageApplicationFeeCurrencyId: 2,
-        studyModes: "1,2",
-        deliverySchedules: null,
-        deliveryMethods: "1, 3, 2",
-        durationIds: null,
-        durationNames: "4 Years,2 Years",
-        campusIds: "1",
-        campusNames: "Bournemouth University,University of Sunderland",
-        applicationDeadLines: "10 Feb, 25",
-        intakeIds: "72",
-        intakeNames: "May 2025",
-        subject_IsAcceptHome: true,
-        subject_IsAcceptEU_UK: true,
-        subject_IsAcceptInternational: false,
-        universityId: 1,
-        universityName: "Anglia Ruskin University, London (ARUL)",
-        university_IsAcceptHome: true,
-        university_IsAcceptEU_UK: true,
-        university_IsAcceptInternational: true,
-        summary: "Please select student",
-        canApply: false,
-        consultantCommissionAmount: 0,
-        promotionalCommissionAmount: 0,
-        commissionAmount: 0,
-        isScholarshipAvailable: true,
-        isWorkPlacementAvailable: true,
-        totalRows: 658,
-      },
-      {
-        subjectId: 3088,
-        subjectName:
-          "BSc (Hons) Business and Human Resource Management with Foundation Year",
-        subjectDescription: "<p>No Placement Year</p>",
-        isFavorite: false,
-        intakeStatusId: 3,
-        eU_TutionFee: 0.0,
-        eU_TutionFeeCurrencyId: 2,
-        firstYearTutionFee: 0.0,
-        firstYearTutionFeeCurrencyId: 0,
-        internationalTutionFee: 0.0,
-        internationalTutionCurrencyId: 2,
-        localTutionFee: 9250.0,
-        localTutionFeeCurrencyId: 2,
-        depositFee: 0.0,
-        depositFeeCurrencyId: 0,
-        avarageApplicationFee: 0.0,
-        avarageApplicationFeeCurrencyId: 2,
-        studyModes: "1,2",
-        deliverySchedules: null,
-        deliveryMethods: "1, 3, 2",
-        durationIds: null,
-        durationNames: "4 Years,2 Years",
-        campusIds: "1",
-        campusNames: "Bournemouth University,University of Sunderland",
-        applicationDeadLines: "10 Feb, 25",
-        intakeIds: "72",
-        intakeNames: "May 2025",
-        subject_IsAcceptHome: true,
-        subject_IsAcceptEU_UK: true,
-        subject_IsAcceptInternational: false,
-        universityId: 1,
-        universityName: "Anglia Ruskin University, London (ARUL)",
-        university_IsAcceptHome: true,
-        university_IsAcceptEU_UK: true,
-        university_IsAcceptInternational: true,
-        summary: "Please select student",
-        canApply: false,
-        consultantCommissionAmount: 0,
-        promotionalCommissionAmount: 0,
-        commissionAmount: 0,
-        isScholarshipAvailable: true,
-        isWorkPlacementAvailable: true,
-        totalRows: 658,
-      },
-    ],
-  };
-
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 15;
-  const [data, setData] = useState(result);
+  const [data, setData] = useState({});
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const [studentId, setStudentId] = useState(0);
   const [studentName, setStudentName] = useState("Select Student");
   const [search, setSearch] = useState("");
@@ -184,7 +74,6 @@ function SearchAndApply() {
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        console.log(res?.data);
         setData(res?.data);
       });
     }
@@ -289,7 +178,10 @@ function SearchAndApply() {
 
             <button
               className="ml-2 filters-btn d-block d-md-none"
-              onClick={() => setFilterOpen(!filterOpen)}
+              onClick={() => {
+                setFilterOpen(true);
+                setIsSearch(true);
+              }}
             >
               <FaSlidersH size={18} className="" />
             </button>
@@ -329,7 +221,10 @@ function SearchAndApply() {
             mobileCard={mobileCard}
             setMobileCard={setMobileCard}
             filterOpen={filterOpen}
-            setFilterOpen={setFilterOpen}
+            setFilterOpen={() => {
+              setFilterOpen(true);
+              setIsSearch(true);
+            }}
             data={data}
           />
         </div>
@@ -370,6 +265,8 @@ function SearchAndApply() {
       {filterOpen && (
         <SearchFilter
           closeModal={() => setFilterOpen(false)}
+          isSearch={isSearch}
+          setIsSearch={setIsSearch}
           institutionId={institutionId}
           setInstitutionId={setInstitutionId}
           studyLevelId={studyLevelId}

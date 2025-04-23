@@ -16,6 +16,8 @@ import MultiSelect from "../../../components/form/MultiSelect";
 
 const SearchFilter = ({
   closeModal,
+  isSearch,
+  setIsSearch,
   institutionId,
   setInstitutionId,
   studyLevelId,
@@ -54,7 +56,6 @@ const SearchFilter = ({
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
   const [applicationType, setApplicationType] = useState([]);
-  const [isSearch, setIsSearch] = useState(true);
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes`).then((res) => {
@@ -115,7 +116,7 @@ const SearchFilter = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setIsSearch]);
 
   return (
     <>
