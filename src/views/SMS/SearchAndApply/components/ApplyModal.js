@@ -1,6 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 import { Modal } from "antd";
 import React from "react";
+import { CiTimer } from "react-icons/ci";
 import { SlCalender } from "react-icons/sl";
 import { Col, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
@@ -10,7 +13,7 @@ import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import "../SearchAndApply.css";
 
 const ApplyModal = ({ open, onClose }) => {
-  const [programCard, setProgramCard] = React.useState(false);
+  const [programCard, setProgramCard] = React.useState(true);
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
   };
@@ -36,7 +39,7 @@ const ApplyModal = ({ open, onClose }) => {
               </span>
             </div>
           </div>
-          <div>
+          <div className="mt-4">
             <Row className="apply-modal-details">
               <Col xs={4} md={2} className="apply-modal-details__title">
                 Course
@@ -97,7 +100,8 @@ const ApplyModal = ({ open, onClose }) => {
               Course Start Date <strong>25 Mar 2025</strong>
             </div>
             <div className="program-modal__duration">
-              Duration <strong>4 Years</strong>
+              <CiTimer className="mr-2" />
+              Duration <strong className="ml-2">4 Years</strong>
             </div>
           </div>
         </Row>
@@ -107,7 +111,7 @@ const ApplyModal = ({ open, onClose }) => {
             <div className="program-modal__eligibility">
               <div className="program-modal__badge">You are eligible</div>
               <div className="cursor-pointer" onClick={handleHideProgramCard}>
-                Hide
+                Hide {programCard ? <IoIosArrowUp /> : <IoIosArrowDown />}
               </div>
             </div>
           </div>
@@ -141,8 +145,8 @@ const ApplyModal = ({ open, onClose }) => {
         </Row>
 
         {/* Dropdown & Selects */}
-        <Row className="d-flex flex-column my-4">
-          <div className="fs-14px d-flex mt-3">
+        <Row className="program-modal__intake my-3">
+          <div className="fs-14px d-flex">
             <SlCalender className="mr-2 mt-1" />
             <p>Intake</p>
           </div>
@@ -160,10 +164,10 @@ const ApplyModal = ({ open, onClose }) => {
           <label>Study Mode</label>
           <div className="program-modal__radio-group">
             <label>
-              <input type="radio" name="mode" /> Part-Time
+              <input type="radio" name="mode" /> <span>Part-Time</span>
             </label>
             <label>
-              <input type="radio" name="mode" /> Full-Time
+              <input type="radio" name="mode" /> <span>Full-Time</span>
             </label>
           </div>
         </Row>
@@ -172,55 +176,62 @@ const ApplyModal = ({ open, onClose }) => {
           <label>Delivery Pattern</label>
           <div className="program-modal__radio-group">
             <label>
-              <input type="radio" name="mode" /> Online
+              <input type="radio" name="mode" /> <span>Online</span>
             </label>
             <label>
-              <input type="radio" name="mode" /> On-Campus
+              <input type="radio" name="mode" /> <span>On-Campus</span>
             </label>
             <label>
-              <input type="radio" name="mode" /> Hybrid
+              <input type="radio" name="mode" /> <span>Hybrid</span>
             </label>
           </div>
         </Row>
 
         <Row className="program-modal__form-group">
           <label>Delivery Schedule</label>
-          <div className="program-modal__checkbox-group">
+          <div className="program-modal__radio-group">
             <label>
-              <input type="radio" /> Standard
+              <input type="radio" name="deliverySchedule" />
+              <span>Standard </span>
             </label>
             <label>
-              <input type="radio" /> Evening
+              <input type="radio" name="deliverySchedule" />{" "}
+              <span>Evening</span>
             </label>
             <label>
-              <input type="radio" /> Flexible
+              <input type="radio" name="deliverySchedule" />{" "}
+              <span>Flexible</span>
             </label>
             <label>
-              <input type="radio" /> Weekend
+              <input type="radio" name="deliverySchedule" />{" "}
+              <span>Weekend</span>
             </label>
             <label>
-              <input type="radio" /> Evening + Weekend
+              <input type="radio" name="deliverySchedule" />{" "}
+              <span>Evening + Weekend</span>
             </label>
           </div>
         </Row>
 
         {/* Footer */}
-        <Row className="program-modal__confirmation">
+        <Row className="program-modal__confirmation mb-3">
           <label>
             <input type="checkbox" className="mr-2" />
             Are you sure you want to apply this program?
           </label>
         </Row>
-        <div className="p-1 color-#FFF1E6">
-          You can apply maximum 3 applications at a time for free.
-        </div>
+        <Row className="program-condition">
+          <p className="pl-2">
+            You can apply maximum 3 applications at a time for free.
+          </p>
+        </Row>
 
-        <div className="program-modal__footer">
+        <Row className="program-modal__footer">
           <button className="program-modal__cancel" onClick={onClose}>
             Cancel
           </button>
           <button className="apply-btn">Apply →</button>
-        </div>
+        </Row>
       </div>
     </Modal>
   );
