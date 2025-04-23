@@ -13,12 +13,14 @@ import get from "../../../helpers/get";
 import { FaSlidersH } from "react-icons/fa";
 import { Student } from "../../../components/core/User";
 import SearchPaginations from "./components/SearchPaginations";
+import Loader from "../../../components/Loader";
 
 function SearchAndApply() {
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 15;
   const [data, setData] = useState({});
@@ -27,7 +29,6 @@ function SearchAndApply() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [studentId, setStudentId] = useState(0);
-  const [studentName, setStudentName] = useState("Select Student");
   const [search, setSearch] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [institutionId, setInstitutionId] = useState(0);
@@ -45,8 +46,17 @@ function SearchAndApply() {
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
 
+  // level
+  const [studentName, setStudentName] = useState("Select Student");
+  const [studyLevelQuery, setStudyLevelQuery] = useState("");
+  const [institutionName, setInstitutionName] = useState("Select Institution");
+  const [countryName, setCountryName] = useState("Select Country");
+  const [cityName, setCityName] = useState("Select City");
+
+  console.log(intakeId);
+
   useEffect(() => {
-    if (!isTyping && !filterOpen) {
+    if (!isTyping) {
       const subdata = {
         page: currentPage,
         pageSize: dataPerPage,
@@ -75,6 +85,7 @@ function SearchAndApply() {
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data);
+        setLoading(false);
       });
     }
   }, [
@@ -122,19 +133,32 @@ function SearchAndApply() {
     };
   }, []);
 
-  const handleFavourite = (subjectId) => {
+  const handleFavourite = (subjectId, i) => {
     post(
       `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
     )
       .then((res) => {
         if (res.status === 200) {
-          setData((prevData) =>
-            prevData.map((item) =>
-              item.subjectId === subjectId
-                ? { ...item, isFavorite: !item.isFavorite }
-                : item
-            )
-          );
+          setLoading(true);
+          let formData = data;
+          console.log(formData.items[i]?.isFavorite);
+          formData.items[i].isFavorite = !formData.items[i].isFavorite;
+          console.log(formData);
+          setData(formData);
+          setLoading(false);
+          // const updateData = data?.map((item) =>
+          //   item.subjectId === subjectId
+          //     ? { ...item, isFavorite: !item.isFavorite }
+          //     : item
+          // );
+          // setData(updateData);
+          // setData((prevData) =>
+          //   prevData?.map((item) =>
+          //     item.subjectId === subjectId
+          //       ? { ...item, isFavorite: !item.isFavorite }
+          //       : item
+          //   )
+          // );
         } else {
           console.log("error", res.data);
         }
@@ -144,7 +168,6 @@ function SearchAndApply() {
       });
   };
 
-  console.log(data);
   return (
     <>
       <div className="search-header">
@@ -174,6 +197,10 @@ function SearchAndApply() {
               setInstitutionId={setInstitutionId}
               countryId={countryId}
               setCountryId={setCountryId}
+              institutionName={institutionName}
+              setInstitutionName={setInstitutionName}
+              countryName={countryName}
+              setCountryName={setCountryName}
             />
 
             <button
@@ -218,6 +245,7 @@ function SearchAndApply() {
           className={`results-toolbar ${isSticky ? "sticky" : ""}`}
         >
           <ResultsToolbar
+            loading={loading}
             mobileCard={mobileCard}
             setMobileCard={setMobileCard}
             filterOpen={filterOpen}
@@ -230,7 +258,9 @@ function SearchAndApply() {
         </div>
       </div>
 
-      {data?.items?.length > 0 && (
+      {loading === true ? (
+        <Loader />
+      ) : data?.items?.length > 0 ? (
         <>
           <div className="d-block d-md-none">
             <ApplyCardVar
@@ -253,6 +283,8 @@ function SearchAndApply() {
             )}
           </div>
         </>
+      ) : (
+        <h3 className="text-center my-4">No data Found</h3>
       )}
 
       <SearchPaginations
@@ -295,6 +327,14 @@ function SearchAndApply() {
           setDeliveryPattern={setDeliveryPattern}
           deliverySchedule={deliverySchedule}
           setDeliverySchedule={setDeliverySchedule}
+          studyLevelQuery={studyLevelQuery}
+          setStudyLevelQuery={setStudyLevelQuery}
+          institutionName={institutionName}
+          setInstitutionName={setInstitutionName}
+          countryName={countryName}
+          setCountryName={setCountryName}
+          cityName={cityName}
+          setCityName={setCityName}
         />
       )}
     </>

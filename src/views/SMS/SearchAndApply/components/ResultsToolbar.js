@@ -1,12 +1,12 @@
 import React from "react";
 import { FaExchangeAlt, FaHeart, FaSlidersH } from "react-icons/fa";
 import courseIcon from "../../../../assets/icon/course.svg";
-import universityIcon from "../../../../assets/icon/university.svg";
 import "../SearchAndApply.css";
 import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
 import { Student } from "../../../../components/core/User";
 
 const ResultsToolbar = ({
+  loading,
   mobileCard,
   setMobileCard,
   filterOpen,
@@ -43,7 +43,9 @@ const ResultsToolbar = ({
             {Student() && (
               <button className="action-btn mr-2">
                 <FaHeart className="mx-2" /> Favourites{" "}
-                <span className="count">0</span>
+                <span className="count">
+                  {!loading && data?.items?.[0]?.favoriteSubjectCount}
+                </span>
               </button>
             )}
             <button className="action-btn mr-2">
@@ -91,7 +93,9 @@ const ResultsToolbar = ({
           {Student() && (
             <button className="action-btn mr-2">
               <FaHeart className="mx-2" /> Favourites{" "}
-              <span className="count">0</span>
+              <span className="count">
+                {!loading && data?.items?.[0]?.favoriteSubjectCount}
+              </span>
             </button>
           )}
 

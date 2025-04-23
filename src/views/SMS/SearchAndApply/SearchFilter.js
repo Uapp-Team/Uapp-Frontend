@@ -46,16 +46,21 @@ const SearchFilter = ({
   setDeliveryPattern,
   deliverySchedule,
   setDeliverySchedule,
+  studyLevelQuery,
+  setStudyLevelQuery,
+  institutionName,
+  setInstitutionName,
+  countryName,
+  setCountryName,
+  cityName,
+  setCityName,
 }) => {
   const divRef = useRef(null);
 
-  const [institutionName, setInstitutionName] = useState("Select Institution");
+  const [applicationType, setApplicationType] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
-  const [studyLevelQuery, setStudyLevelQuery] = useState("");
-  const [countryName, setCountryName] = useState("Select Country");
-  const [cityName, setCityName] = useState("Select City");
-  const [applicationType, setApplicationType] = useState([]);
+  const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes`).then((res) => {
@@ -76,6 +81,12 @@ const SearchFilter = ({
   }, [setStudyLevelId, studyLevelList]);
 
   useEffect(() => {
+    const list = [];
+    courseDurationsList.map((item) => list.push(item.value));
+    setCourseDurations(list);
+  }, [setCourseDurations, courseDurationsList]);
+
+  useEffect(() => {
     const studyLevelListQuery = [];
     studyLevelId.map((item) =>
       studyLevelListQuery.push(`educationlevels=${item}`)
@@ -84,7 +95,7 @@ const SearchFilter = ({
     const noSpaces = converttostring.replace(/ /g, "");
     const converted = noSpaces.replace(/,/g, "&");
     setStudyLevelQuery(converted);
-  }, [studyLevelId]);
+  }, [setStudyLevelQuery, studyLevelId]);
 
   const handleChange = (e) => {
     let id = parseInt(e.target.value);
@@ -251,8 +262,8 @@ const SearchFilter = ({
                     ? `Duration/ByEducationLevels?${studyLevelQuery}`
                     : "Duration/Index"
                 }
-                value={courseDurations}
-                setValue={setCourseDurations}
+                value={courseDurationsList}
+                setValue={setCourseDurationsList}
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -318,7 +329,7 @@ const SearchFilter = ({
           </>
         ) : (
           <>
-            <div className="right-icon">
+            <div className="right-icon pointer">
               <AiOutlineArrowLeft size={20} />
             </div>
           </>

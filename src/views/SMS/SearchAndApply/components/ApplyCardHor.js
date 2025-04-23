@@ -103,14 +103,14 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                   {userType == 6 ? (
                     item.isFavorite ? (
                       <LuHeart
-                        onClick={() => handleFavourite(item.subjectId)}
+                        onClick={() => handleFavourite(item.subjectId, index)}
                         color="red"
                         fill="red"
                         className="cursor-pointer"
                       />
                     ) : (
                       <LuHeart
-                        onClick={() => handleFavourite(item.subjectId)}
+                        onClick={() => handleFavourite(item.subjectId, index)}
                         className="cursor-pointer"
                       />
                     )
