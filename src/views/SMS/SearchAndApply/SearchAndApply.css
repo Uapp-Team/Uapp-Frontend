@@ -1,3 +1,19 @@
+.search-header {
+  background: rgb(233, 233, 233);
+  margin: -18px -21px 0;
+  padding: 18px 21px 0;
+}
+
+.right-icon {
+  margin: -30px;
+  position: fixed;
+  top: 50%;
+  background: #045d5e;
+  color: white;
+  border-radius: 20px;
+  padding: 5px;
+}
+
 /* search box */
 .search-container {
   display: flex;
@@ -138,10 +154,13 @@
   color: white;
   background-color: #565e5e;
   border-color: #e9e9e9;
+  border-radius: 6px;
+  border: 1px solid var(--Neutral-100, #e9e9e9);
+  padding: 6px 12px;
 }
 
 .toolbar-wrapper {
-  z-index: 999;
+  z-index: 99;
 }
 
 .results-toolbar.sticky {
@@ -149,7 +168,7 @@
   top: 80px; /* height of your fixed header */
   left: 15.5rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 100;
   background: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -795,6 +814,35 @@
   .card-container.horizontal {
     flex-direction: column;
   }
+
+  .results-toolbar {
+    background: rgb(233, 233, 233);
+    margin: 0 -25px;
+  }
+
+  .results-toolbar.sticky {
+    padding-bottom: 0;
+    top: 75px;
+    background: rgb(233, 233, 233);
+  }
+
+  .tag {
+    border-radius: 999px;
+    border: 0.5px solid rgba(37, 37, 37, 0.12);
+    background: #eff2f2;
+  }
+
+  .tag-active {
+    background-color: #fff4e6;
+    color: #f48c06;
+    border: 1px solid #f1b67a;
+  }
+
+  .action-btn {
+    border-radius: 6px;
+    border: 1px solid var(--Neutral-100, #e9e9e9);
+    background: #fff;
+  }
 }
 
 /* Responsive */
@@ -851,3 +899,8 @@
 }
 /* Input Range  End  */
 /* Input Range  End  */
+
+/* Pagination  */
+span.visually-hidden {
+  display: none;
+}

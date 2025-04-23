@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "reactstrap";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
@@ -13,6 +12,7 @@ import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
 import get from "../../../helpers/get";
 import { FaSlidersH } from "react-icons/fa";
 import { Student } from "../../../components/core/User";
+import SearchPaginations from "./components/SearchPaginations";
 
 function SearchAndApply() {
   const result = {
@@ -130,7 +130,9 @@ function SearchAndApply() {
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileCard, setMobileCard] = useState(true);
-  const [data, setData] = useState(result.items);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dataPerPage = 15;
+  const [data, setData] = useState(result);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -156,8 +158,8 @@ function SearchAndApply() {
   useEffect(() => {
     if (!isTyping && !filterOpen) {
       const subdata = {
-        page: 1,
-        pageSize: 30,
+        page: currentPage,
+        pageSize: dataPerPage,
         studentId: studentId,
         universityId: institutionId,
         campusId: 0,
@@ -182,7 +184,8 @@ function SearchAndApply() {
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
-        setData(res?.data?.items);
+        console.log(res?.data);
+        setData(res?.data);
       });
     }
   }, [
@@ -190,6 +193,7 @@ function SearchAndApply() {
     cityId,
     countryId,
     courseDurations,
+    currentPage,
     deliveryPattern,
     deliverySchedule,
     filterOpen,
@@ -254,95 +258,114 @@ function SearchAndApply() {
   console.log(data);
   return (
     <>
-      <Row className="mt-3 mt-md-0">
-        {!Student() && (
-          <Col md={3} className="h-40px mb-3">
-            <DropdownCircle
-              method={get}
-              label={studentName}
-              setLabel={setStudentName}
-              value={studentId}
-              setValue={setStudentId}
-              selectAll={true}
-              all="All Student"
-              url="SearchFilter/Students"
+      <div className="search-header">
+        <Row className="mt-3 mt-md-0">
+          {!Student() && (
+            <Col md={3} className="h-40px mb-3">
+              <DropdownCircle
+                method={get}
+                label={studentName}
+                setLabel={setStudentName}
+                value={studentId}
+                setValue={setStudentId}
+                selectAll={true}
+                all="All Student"
+                url="SearchFilter/Students"
+              />
+            </Col>
+          )}
+          <Col md={8} className="d-flex h-40px mb-3">
+            <SearchBox
+              name="search"
+              placeholder="Search for courses"
+              value={search}
+              setValue={setSearch}
+              setIsTyping={setIsTyping}
+              institutionId={institutionId}
+              setInstitutionId={setInstitutionId}
+              countryId={countryId}
+              setCountryId={setCountryId}
             />
-          </Col>
-        )}
-        <Col md={8} className="d-flex h-40px mb-3">
-          <SearchBox
-            name="search"
-            placeholder="Search for courses"
-            value={search}
-            setValue={setSearch}
-            setIsTyping={setIsTyping}
-            institutionId={institutionId}
-            setInstitutionId={setInstitutionId}
-            countryId={countryId}
-            setCountryId={setCountryId}
-          />
 
-          <button
-            className="ml-2 action-btn filters-btn d-block d-md-none"
-            onClick={() => setFilterOpen(!filterOpen)}
-          >
-            <FaSlidersH size={18} className="" />
-          </button>
-        </Col>
-      </Row>
-      <div className="filter-container d-none d-md-block">
-        {search && (
-          <p className="filters-heading">
-            <span className="fs-14px">Search results for</span> <br />
-            <strong className="fs-20px">{search}</strong>
-          </p>
-        )}
-        <Row className="mb-3">
-          <Col md={9}>
-            <SearchKeywords
-              state={studyLevelId}
-              setState={setStudyLevelId}
-              url="SearchFilter/EducationLevels"
-            />
-          </Col>
-          <Col md={3}>
-            <SearchKeywords
-              state={intakeId}
-              setState={setIntakeId}
-              url="SearchFilter/Intakes"
-            />
+            <button
+              className="ml-2 filters-btn d-block d-md-none"
+              onClick={() => setFilterOpen(!filterOpen)}
+            >
+              <FaSlidersH size={18} className="" />
+            </button>
           </Col>
         </Row>
-      </div>
-      <div ref={sentinelRef} style={{ height: 1 }} />
+        <div className="filter-container d-none d-md-block">
+          {search && (
+            <p className="filters-heading">
+              <span className="fs-14px">Search results for</span> <br />
+              <strong className="fs-20px">{search}</strong>
+            </p>
+          )}
+          <Row className="mb-3">
+            <Col md={9}>
+              <SearchKeywords
+                state={studyLevelId}
+                setState={setStudyLevelId}
+                url="SearchFilter/EducationLevels"
+              />
+            </Col>
+            <Col md={3}>
+              <SearchKeywords
+                state={intakeId}
+                setState={setIntakeId}
+                url="SearchFilter/Intakes"
+              />
+            </Col>
+          </Row>
+        </div>
+        <div ref={sentinelRef} style={{ height: 1 }} />
 
-      <div
-        ref={toolbarRef}
-        className={`results-toolbar ${isSticky ? "sticky" : ""}`}
-      >
-        <ResultsToolbar
-          mobileCard={mobileCard}
-          setMobileCard={setMobileCard}
-          filterOpen={filterOpen}
-          setFilterOpen={setFilterOpen}
-        />
+        <div
+          ref={toolbarRef}
+          className={`results-toolbar ${isSticky ? "sticky" : ""}`}
+        >
+          <ResultsToolbar
+            mobileCard={mobileCard}
+            setMobileCard={setMobileCard}
+            filterOpen={filterOpen}
+            setFilterOpen={setFilterOpen}
+            data={data}
+          />
+        </div>
       </div>
 
-      {data?.length > 0 && (
+      {data?.items?.length > 0 && (
         <>
           <div className="d-block d-md-none">
-            <ApplyCardVar data={data} handleFavourite={handleFavourite} />
+            <ApplyCardVar
+              data={data?.items}
+              handleFavourite={handleFavourite}
+            />
           </div>
 
           <div className="d-none d-md-block">
             {mobileCard ? (
-              <ApplyCardVar data={data} handleFavourite={handleFavourite} />
+              <ApplyCardVar
+                data={data?.items}
+                handleFavourite={handleFavourite}
+              />
             ) : (
-              <ApplyCardHor data={data} handleFavourite={handleFavourite} />
+              <ApplyCardHor
+                data={data?.items}
+                handleFavourite={handleFavourite}
+              />
             )}
           </div>
         </>
       )}
+
+      <SearchPaginations
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        dataPerPage={dataPerPage}
+        totalData={data?.total}
+      />
 
       {filterOpen && (
         <SearchFilter
