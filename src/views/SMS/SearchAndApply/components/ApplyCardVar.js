@@ -26,7 +26,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
   const [loading, setLoading] = React.useState(true);
   const [quickViewData, setQuickViewData] = React.useState({});
   const [eligibility, setEligibility] = React.useState({});
-  const [openApplyModal, setOpenApplyModal] = React.useState(true);
+  const [openApplyModal, setOpenApplyModal] = React.useState(false);
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -83,7 +83,11 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                           item.isFavorite ? (
                             <LuHeart
                               onClick={() =>
-                                handleFavourite(item.subjectId, index)
+                                handleFavourite(
+                                  item.isFavorite,
+                                  item.subjectId,
+                                  index
+                                )
                               }
                               color="red"
                               fill="red"
@@ -92,7 +96,11 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                           ) : (
                             <LuHeart
                               onClick={() =>
-                                handleFavourite(item.subjectId, index)
+                                handleFavourite(
+                                  item.isFavorite,
+                                  item.subjectId,
+                                  index
+                                )
                               }
                               className="cursor-pointer"
                             />

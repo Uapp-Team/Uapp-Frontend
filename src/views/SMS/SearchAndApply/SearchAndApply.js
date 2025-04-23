@@ -26,7 +26,7 @@ function SearchAndApply() {
   const [currentPage, setCurrentPage] = useState(1);
   const dataPerPage = 15;
   const [data, setData] = useState({});
-  const [favoriteList, setFavoriteList] = useState([]);
+  const [favorites, setFavorites] = useState(0);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -83,15 +83,12 @@ function SearchAndApply() {
         deliveryMethods: deliveryPattern,
         deliverySchedules: deliverySchedule,
         searchText: search,
-        // isFavorite: isFavorite,
+        isFavorite: isFavorite,
       };
 
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data);
-        const filterFavorite = res?.data?.items.filter(
-          (item) => item.isFavorite === true
-        );
-        setFavoriteList(filterFavorite);
+        setFavorites(res.data?.items[0]?.favoriteSubjectCount);
         setLoading(false);
       });
     }
@@ -107,6 +104,7 @@ function SearchAndApply() {
     institutionId,
     intakeId,
     isAvailableCourses,
+    isFavorite,
     isScholarships,
     isTyping,
     isWorkPlacement,
@@ -140,7 +138,8 @@ function SearchAndApply() {
     };
   }, []);
 
-  const handleFavourite = (subjectId, i) => {
+  const handleFavourite = (value, subjectId, i) => {
+    console.log(value);
     post(
       `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
     )
@@ -149,12 +148,8 @@ function SearchAndApply() {
           setLoading(true);
           let modifyData = data;
           modifyData.items[i].isFavorite = !modifyData.items[i].isFavorite;
-
-          const filterFavorite = modifyData?.items.filter(
-            (item) => item.isFavorite === true
-          );
-          setFavoriteList(filterFavorite);
           setData(modifyData);
+          !value ? setFavorites(favorites + 1) : setFavorites(favorites - 1);
           setLoading(false);
         } else {
           addToast(res?.data?.message, {
@@ -248,17 +243,16 @@ function SearchAndApply() {
           className={`results-toolbar ${isSticky ? "sticky" : ""}`}
         >
           <ResultsToolbar
-            loading={loading}
+            data={data}
             isFavorite={isFavorite}
             setIsFavorite={setIsFavorite}
-            favoriteList={favoriteList}
+            favorites={favorites}
             mobileCard={mobileCard}
             setMobileCard={setMobileCard}
             setFilterOpen={() => {
               setFilterOpen(true);
               setIsSearch(true);
             }}
-            data={data}
           />
         </div>
       </div>

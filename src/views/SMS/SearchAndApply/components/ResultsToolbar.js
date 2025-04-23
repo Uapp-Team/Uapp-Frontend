@@ -6,14 +6,13 @@ import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
 import { Student } from "../../../../components/core/User";
 
 const ResultsToolbar = ({
-  loading,
+  data,
   isFavorite,
   setIsFavorite,
-  favoriteList,
+  favorites,
   mobileCard,
   setMobileCard,
   setFilterOpen,
-  data,
 }) => {
   return (
     <>
@@ -48,12 +47,7 @@ const ResultsToolbar = ({
                 onClick={() => setIsFavorite(!isFavorite)}
               >
                 <FaHeart className="mx-2" /> Favourites{" "}
-                <span className="count">
-                  {favoriteList?.length}
-                  {/* {loading === false
-                    ? data?.items?.[0]?.favoriteSubjectCount
-                    : null} */}
-                </span>
+                <span className="count">{favorites}</span>
               </button>
             )}
             <button className="action-btn mr-2">
@@ -104,9 +98,7 @@ const ResultsToolbar = ({
               onClick={() => setIsFavorite(!isFavorite)}
             >
               <FaHeart className="mx-2" /> Favourites{" "}
-              <span className="count">
-                {!loading && data?.items?.[0]?.favoriteSubjectCount}
-              </span>
+              <span className="count">{favorites}</span>
             </button>
           )}
 
