@@ -1,13 +1,19 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import React from "react";
+import { SlCalender } from "react-icons/sl";
 import { Col, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import "../SearchAndApply.css";
 
 const ApplyModal = ({ open, onClose }) => {
+  const [programCard, setProgramCard] = React.useState(false);
+  const handleHideProgramCard = () => {
+    setProgramCard(!programCard);
+  };
   return (
     <Modal
       open={open}
@@ -84,78 +90,73 @@ const ApplyModal = ({ open, onClose }) => {
           </div>
           <div className="dashed-hr"></div>
           <div className="program-modal__info">
-            <span className="program-modal__deadline">
+            <div className="program-modal__deadline">
               Application deadline <strong>10 Feb, 2025</strong>
-            </span>
-            <span className="program-modal__start">
+            </div>
+            <div className="program-modal__start">
               Course Start Date <strong>25 Mar 2025</strong>
-            </span>
-            <span className="program-modal__duration">
+            </div>
+            <div className="program-modal__duration">
               Duration <strong>4 Years</strong>
-            </span>
+            </div>
           </div>
         </Row>
 
-        {/* Eligibility */}
-        <div className="program-modal__eligibility">
-          <span className="program-modal__badge">✅ You are eligible</span>
-        </div>
-
-        {/* Requirements Grid */}
-        <div className="program-modal__requirements">
-          <div className="program-modal__card">
-            <h4>Admission Requirements</h4>
-            <ul>
-              <li>✅ Previous Education: 3 Years Bachelor Degree</li>
-              <li>✅ Results: 50% Marks</li>
-              <li>❌ Test Score: IELTS overall 6.5 and 5.5 each band</li>
-              <li>❌ GRE: 300 (and no minimum individual score)</li>
-              <li>✅ GMAT: 700</li>
-            </ul>
+        <Row className="program-modal__requirements">
+          <div className="px-4">
+            <div className="program-modal__eligibility">
+              <div className="program-modal__badge">You are eligible</div>
+              <div className="cursor-pointer" onClick={handleHideProgramCard}>
+                Hide
+              </div>
+            </div>
           </div>
-
-          <div className="program-modal__card">
-            <h4>Student Qualification</h4>
-            <ul>
-              <li>✅ Highest Education Level: 3 Years bachelor (Degree)</li>
-              <li>✅ Result: 50%</li>
-              <li>
-                ✅ IELTS Score: IELTS 7.5 (or IELTS Equivalent 6.5 (Duolingo))
-              </li>
-            </ul>
-          </div>
-        </div>
+          {programCard && (
+            <div className="program-modal__card">
+              <div>
+                <h4>Admission Requirements</h4>
+                <ul>
+                  <li> Previous Education: 3 Years Bachelor Degree</li>
+                  <li> Results: 50% Marks</li>
+                  <li> Test Score: IELTS overall 6.5 and 5.5 each band</li>
+                  <li> GRE: 300 (and no minimum individual score)</li>
+                  <li> GMAT: 700</li>
+                </ul>
+              </div>
+              <div>
+                <div>
+                  <h4>Student Qualification</h4>
+                  <ul>
+                    <li> Highest Education Level: 3 Years bachelor (Degree)</li>
+                    <li> Result: 50%</li>
+                    <li>
+                      IELTS Score: IELTS 7.5 (or IELTS Equivalent 6.5
+                      (Duolingo))
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+        </Row>
 
         {/* Dropdown & Selects */}
-        <div className="program-modal__form-group">
-          <label>Intakes</label>
-          <div className="program-modal__chips">
-            {[
-              "April 2025",
-              "May 2025",
-              "June 2025",
-              "September 2025",
-              "January 2026",
-              "February 2026",
-            ].map((item) => (
-              <span className="program-modal__chip" key={item}>
-                {item}
-              </span>
-            ))}
+        <Row className="d-flex flex-column my-4">
+          <div className="fs-14px d-flex mt-3">
+            <SlCalender className="mr-2 mt-1" />
+            <p>Intake</p>
           </div>
-        </div>
+          <div className="d-flex flex-wrap">
+            <span className="filter-button">April 2025</span>
+          </div>
+        </Row>
 
-        <div className="program-modal__form-group">
+        <Row className="program-modal__form-group">
           <label htmlFor="campus">Campus City</label>
-          <select id="campus" className="program-modal__select">
-            <option value="">Select location</option>
-            <option value="dhaka">Dhaka</option>
-            <option value="rajshahi">Rajshahi</option>
-            <option value="ctg">Chittagong</option>
-          </select>
-        </div>
+          <DefaultDropdown />
+        </Row>
 
-        <div className="program-modal__form-group">
+        <Row className="program-modal__form-group">
           <label>Study Mode</label>
           <div className="program-modal__radio-group">
             <label>
@@ -165,57 +166,60 @@ const ApplyModal = ({ open, onClose }) => {
               <input type="radio" name="mode" /> Full-Time
             </label>
           </div>
-        </div>
+        </Row>
 
-        <div className="program-modal__form-group">
+        <Row className="program-modal__form-group">
           <label>Delivery Pattern</label>
           <div className="program-modal__radio-group">
             <label>
-              <input type="radio" name="pattern" /> Online
+              <input type="radio" name="mode" /> Online
             </label>
             <label>
-              <input type="radio" name="pattern" /> On-Campus
+              <input type="radio" name="mode" /> On-Campus
             </label>
             <label>
-              <input type="radio" name="pattern" /> Hybrid
+              <input type="radio" name="mode" /> Hybrid
             </label>
           </div>
-        </div>
+        </Row>
 
-        <div className="program-modal__form-group">
+        <Row className="program-modal__form-group">
           <label>Delivery Schedule</label>
           <div className="program-modal__checkbox-group">
             <label>
-              <input type="checkbox" /> Standard
+              <input type="radio" /> Standard
             </label>
             <label>
-              <input type="checkbox" /> Evening
+              <input type="radio" /> Evening
             </label>
             <label>
-              <input type="checkbox" /> Flexible
+              <input type="radio" /> Flexible
             </label>
             <label>
-              <input type="checkbox" /> Weekend
+              <input type="radio" /> Weekend
             </label>
             <label>
-              <input type="checkbox" /> Evening + Weekend
+              <input type="radio" /> Evening + Weekend
             </label>
           </div>
-        </div>
+        </Row>
 
         {/* Footer */}
-        <div className="program-modal__confirmation">
-          <p>✅ Are you sure you want to apply this program?</p>
-          <small>
-            You can apply maximum 3 applications at a time for free.
-          </small>
+        <Row className="program-modal__confirmation">
+          <label>
+            <input type="checkbox" className="mr-2" />
+            Are you sure you want to apply this program?
+          </label>
+        </Row>
+        <div className="p-1 color-#FFF1E6">
+          You can apply maximum 3 applications at a time for free.
         </div>
 
         <div className="program-modal__footer">
           <button className="program-modal__cancel" onClick={onClose}>
             Cancel
           </button>
-          <button className="program-modal__apply">Apply →</button>
+          <button className="apply-btn">Apply →</button>
         </div>
       </div>
     </Modal>
