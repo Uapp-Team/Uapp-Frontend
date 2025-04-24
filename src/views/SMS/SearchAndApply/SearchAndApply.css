@@ -4,6 +4,13 @@
   padding: 18px 21px 0;
 }
 
+.icon-design {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(127, 127, 127, 0.08);
+  cursor: pointer;
+}
+
 .right-icon {
   margin: -30px;
   position: fixed;
@@ -457,7 +464,7 @@
   }
   .quickview-left__deadline {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
   .quickview-footer {
     display: flex;
@@ -472,11 +479,10 @@
 
 .quickview-header {
   border-bottom: 1px solid #e8e8e8;
-  padding-bottom: 16px;
 }
 
 .quickview-title {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
   margin-bottom: 1rem;
 }
