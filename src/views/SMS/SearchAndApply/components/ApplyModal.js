@@ -10,6 +10,7 @@ import { Col, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import Filter from "../../../../components/Dropdown/Filter";
 import {
   deliveryMethods,
   deliverySchedules,
@@ -17,9 +18,30 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 
-const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
+const ApplyModal = ({
+  open,
+  onClose,
+  applyEligibility,
+  quickViewData,
+  handleSubmit,
+}) => {
   const [programCard, setProgramCard] = React.useState(true);
-  const [selectedCampus, setSelectedCampus] = React.useState("");
+  const [selectedStudyModeId, setSelectedStudyModeId] = React.useState();
+  const [selectedCampusLabel, setSelectedCampusLabel] =
+    React.useState("Select Campus");
+  const [selectedCampusValue, setSelectedCampusValue] = React.useState("");
+  const [selectedDeliveryPatternId, setSelectedDeliveryPatternId] =
+    React.useState("");
+  const [selectedDeliveryScheduleId, setSelectedDeliveryScheduleId] =
+    React.useState("");
+
+  console.log(
+    selectedCampusLabel,
+    selectedCampusValue,
+    selectedStudyModeId,
+    selectedDeliveryPatternId,
+    selectedDeliveryScheduleId
+  );
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -219,19 +241,20 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
 
         <Row className="program-modal__form-group">
           <label htmlFor="campus">Campus City</label>
-          <select
-            id="campus"
-            className="form-control"
-            value={selectedCampus} // Replace with your state variable
-            onChange={(e) => setSelectedCampus(e.target.value)} // Replace with your state handler
-          >
-            <option value="">Please Select Campus</option>
-            {quickViewData?.campusNames?.split(",").map((campus, index) => (
-              <option key={index} value={campus.trim()}>
-                {campus.trim()}
-              </option>
-            ))}
-          </select>
+          <Filter
+            data={quickViewData?.campuses?.map((campus) => ({
+              name: campus.name,
+              id: campus.id,
+            }))}
+            label={selectedCampusLabel}
+            setLabel={setSelectedCampusLabel}
+            value={selectedCampusValue}
+            setValue={setSelectedCampusValue}
+            onChange={(label, value) => {
+              setSelectedCampusLabel(label);
+              setSelectedCampusValue(value);
+            }}
+          />
         </Row>
 
         <Row className="program-modal__form-group">
@@ -243,13 +266,19 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
                 const method = studyMode.find(
                   (m) => m.id === parseInt(id.trim(), 10)
                 );
-                return method?.name;
+                return method;
               })
               .filter(Boolean)
-              .map((name, index) => (
+              .map((method, index) => (
                 <label key={index}>
-                  <input type="radio" name="mode" value={name} />
-                  <span>{name}</span>
+                  <input
+                    type="radio"
+                    name="mode"
+                    value={method.id}
+                    checked={selectedStudyModeId === method.id.toString()}
+                    onChange={(e) => setSelectedStudyModeId(e.target.value)}
+                  />
+                  <span>{method.name}</span>
                 </label>
               ))}
           </div>
@@ -264,13 +293,21 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
                 const method = deliveryMethods.find(
                   (m) => m.id === parseInt(id.trim(), 10)
                 );
-                return method?.name;
+                return method;
               })
               .filter(Boolean)
-              .map((name, index) => (
+              .map((method, index) => (
                 <label key={index}>
-                  <input type="radio" name="deliveryPattern" value={name} />
-                  <span>{name}</span>
+                  <input
+                    type="radio"
+                    name="deliveryPattern"
+                    value={method.id}
+                    checked={selectedDeliveryPatternId === method.id.toString()}
+                    onChange={(e) =>
+                      setSelectedDeliveryPatternId(e.target.value)
+                    }
+                  />
+                  <span>{method.name}</span>
                 </label>
               ))}
           </div>
@@ -285,13 +322,23 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
                 const method = deliverySchedules.find(
                   (m) => m.id === parseInt(id.trim(), 10)
                 );
-                return method?.name;
+                return method;
               })
               .filter(Boolean)
-              .map((name, index) => (
+              .map((method, index) => (
                 <label key={index}>
-                  <input type="radio" name="deliveryPattern" value={name} />
-                  <span>{name}</span>
+                  <input
+                    type="radio"
+                    name="deliverySchedule"
+                    value={method.id}
+                    checked={
+                      selectedDeliveryScheduleId === method.id.toString()
+                    }
+                    onChange={(e) =>
+                      setSelectedDeliveryScheduleId(e.target.value)
+                    }
+                  />
+                  <span>{method.name}</span>
                 </label>
               ))}
           </div>
@@ -314,7 +361,9 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
           <button className="program-modal__cancel" onClick={onClose}>
             Cancel
           </button>
-          <button className="apply-btn">Apply →</button>
+          <button onClick={() => handleSubmit()} className="apply-btn">
+            Apply →
+          </button>
         </Row>
       </div>
     </Modal>

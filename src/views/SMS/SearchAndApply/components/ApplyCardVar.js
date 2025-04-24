@@ -25,7 +25,7 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardVar = ({ data, handleFavourite }) => {
+const ApplyCardVar = ({ data, handleFavourite, handleSubmit }) => {
   const [open, setOpen] = useState(false);
   const [quickViewData, setQuickViewData] = useState({});
   const [eligibility, setEligibility] = useState({});
@@ -294,12 +294,14 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
         onClose={() => setOpen(false)}
         quickViewData={quickViewData}
         eligibility={eligibility}
+        handleSubmit={handleSubmit}
       />
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
         applyEligibility={applyEligibility}
         quickViewData={quickViewData}
+        handleSubmit={handleSubmit}
       />
     </>
   );
