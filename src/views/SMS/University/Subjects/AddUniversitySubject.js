@@ -404,7 +404,6 @@ const AddUniversitySubject = () => {
   // on submit form
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("sakib");
 
     const subdata = {
       id: subId !== 0 ? subId : undefined,

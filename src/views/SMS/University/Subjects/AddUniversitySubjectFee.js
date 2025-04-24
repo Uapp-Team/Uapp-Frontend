@@ -23,6 +23,11 @@ import SubjectNavbar from "./Components/SubjectNavbar";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
+import {
+  deliveryMethods,
+  deliverySchedules,
+} from "../../../../constants/presetData";
 
 const AddUniversitySubjectFee = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -32,6 +37,8 @@ const AddUniversitySubjectFee = () => {
   const [progress, setProgress] = useState(false);
 
   const [CurrencyDD, setCurrencyDD] = useState([]);
+  const [deliverySchedule, setDeliverySchedule] = useState([]);
+  const [deliveryMethod, setDeliveryMethod] = useState([]);
 
   const [addLocalTutionFee, setAddLocalTutionFee] = useState(undefined);
   const [addIntTutionFee, setAddIntTutionFee] = useState(undefined);
@@ -65,27 +72,6 @@ const AddUniversitySubjectFee = () => {
 
   const { addToast } = useToasts();
   const { id, subjId } = useParams();
-
-  const [radioEvening, setRadioEvening] = useState(false);
-  const [radioEveningWeekend, setRadioEveningWeekend] = useState(false);
-  const [radioStandard, setRadioStandard] = useState(false);
-  const [radioWeekend, setRadioWeekend] = useState(false);
-
-  const onChangeEvening = (event) => {
-    console.log(event.target.checked);
-    setRadioEvening(event.target.checked);
-  };
-  const onChangeEveningWeekend = (event) => {
-    setRadioEveningWeekend(event.target.checked);
-  };
-
-  const onChangeStandard = (event) => {
-    setRadioStandard(event.target.checked);
-  };
-
-  const onChangeWeekend = (event) => {
-    setRadioWeekend(event.target.checked);
-  };
 
   useEffect(() => {
     get(`CurrencyDD/Index`).then((res) => {
@@ -161,10 +147,8 @@ const AddUniversitySubjectFee = () => {
       setAverageFee(res?.averageapplicationfee);
       setFirstYearTuitionFee(res?.firstyeartutionfee);
       setDepositFee(res?.depositfee);
-      setRadioEvening(res?.evening);
-      setRadioEveningWeekend(res?.eveningweekend);
-      setRadioStandard(res?.standard);
-      setRadioWeekend(res?.weekend);
+      setDeliverySchedule(res?.deliverySchedules);
+      setDeliveryMethod(res?.deliveryMethods);
     });
   }, [subjId]);
 
@@ -207,14 +191,32 @@ const AddUniversitySubjectFee = () => {
   // on submit form
   const handleSubmit = (event) => {
     event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("evening", radioEvening);
-    subdata.append("eveningweekend", radioEveningWeekend);
-    subdata.append("standard", radioStandard);
-    subdata.append("weekend", radioWeekend);
-    for (var value of subdata.values()) {
-      console.log("valuess", value);
-    }
+
+    const subdata = {
+      online: deliveryMethod?.includes(1) ? true : false,
+      onCampus: deliveryMethod?.includes(2) ? true : false,
+      hybrid: deliveryMethod?.includes(3) ? true : false,
+
+      evening: deliverySchedule?.includes(1) ? true : false,
+      eveningweekend: deliverySchedule?.includes(2) ? true : false,
+      standard: deliverySchedule?.includes(3) ? true : false,
+      weekend: deliverySchedule?.includes(4) ? true : false,
+      flexible: deliverySchedule?.includes(5) ? true : false,
+      subjectId: subjId,
+      localfeecurrencyid: addLocalTutionFeeCurrencyId,
+      localtutionfee: addLocalTutionFee,
+      internationalfeecurrencyid: addIntTutionFeeCurrencyId,
+      internationaltutionfee: addIntTutionFee,
+      eututionfeecurrencyid: addEUTutionFeeCurrencyId,
+      eututionfee: addEUTutionFee,
+      averageapplicationfeecurrencyid: averageFeeCurrencyId,
+      averageapplicationfee: averageFee,
+      firstyeartutionfeecurrencyid: firstYearTuitionFeeId,
+      firstyeartutionfee: firstYearTuitionFee,
+      depositfeecurrencyid: depositFeeId,
+      depositfee: depositFee,
+    };
+
     setProgress(true);
     Axios.post(`${rootUrl}SubjectFeeAndDeliveryPattern/Save`, subdata, {
       headers: {
@@ -499,77 +501,25 @@ const AddUniversitySubjectFee = () => {
                       </Col>
                     </FormGroup>
                   </Col>
-                  <Col md={4}>
-                    <p className="section-title">Delivery Pattern</p>
-
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="evening"
-                        // name="evening"
-                        onChange={(e) => {
-                          onChangeEvening(e);
-                        }}
-                        value={radioEvening}
-                        checked={radioEvening === true ? true : false}
-                      />
-                      <span>Evening</span>
-                    </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="eveningweekend"
-                        // name="eveningweekend"
-                        onChange={(e) => {
-                          onChangeEveningWeekend(e);
-                        }}
-                        value={radioEveningWeekend}
-                        checked={radioEveningWeekend === true ? true : false}
-                      />
-                      <span>Evening Weekend</span>
-                    </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="standard"
-                        // name="standard"
-                        onChange={(e) => {
-                          onChangeStandard(e);
-                        }}
-                        value={radioStandard}
-                        checked={radioStandard === true ? true : false}
-                      />
-                      <span>Standard</span>
-                    </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="weekend"
-                        // name="standard"
-                        onChange={(e) => {
-                          onChangeWeekend(e);
-                        }}
-                        value={radioWeekend}
-                        checked={radioWeekend === true ? true : false}
-                      />
-                      <span>Weekend</span>
-                    </FormGroup>
+                  <Col md={2}>
+                    <p className="section-title">Delivery Methods</p>
+                    <CheckBoxByObj
+                      register={() => {}}
+                      name="deliveryMethods"
+                      list={deliveryMethods}
+                      defaultValue={deliveryMethod}
+                      action={setDeliveryMethod}
+                      className="mb-0"
+                    />
+                    <p className="section-title">Delivery Schedules</p>
+                    <CheckBoxByObj
+                      register={() => {}}
+                      name="deliverySchedules"
+                      list={deliverySchedules}
+                      defaultValue={deliverySchedule}
+                      action={setDeliverySchedule}
+                      className="mb-0"
+                    />
                   </Col>
                 </Row>
                 <Row className=" mt-4">
