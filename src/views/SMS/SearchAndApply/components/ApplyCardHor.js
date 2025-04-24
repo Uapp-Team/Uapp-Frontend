@@ -1,6 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -18,15 +18,18 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
+import {
+  Consultant,
+  referenceId,
+  Student,
+} from "../../../../components/core/User";
 
 const ApplyCardHor = ({ data, handleFavourite }) => {
-  const userType = localStorage.getItem("userType");
-  const userTypeId = localStorage.getItem("referenceId");
-  const [open, setOpen] = React.useState(false);
-  const [quickViewData, setQuickViewData] = React.useState({});
-  const [eligibility, setEligibility] = React.useState({});
-  const [applyEligibility, setApplyEligibility] = React.useState({});
-  const [openApplyModal, setOpenApplyModal] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [quickViewData, setQuickViewData] = useState({});
+  const [eligibility, setEligibility] = useState({});
+  const [applyEligibility, setApplyEligibility] = useState({});
+  const [openApplyModal, setOpenApplyModal] = useState(false);
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -42,7 +45,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
   };
   const handleApply = async (subjectId, universityId) => {
     await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${userTypeId}`
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
     setOpenApplyModal(true);
   };
@@ -95,7 +98,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                 )}
                 <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
-                    {Number(userType) !== 6 && (
+                    {!Student() && (
                       <img
                         src={
                           Number(item.intakeStatusId) === 1 ? online : offline
@@ -110,7 +113,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                   </div>
                   <LuSettings2 className="mr-3" />
                   <LuShare2 className="mr-3" />
-                  {userType == 6 ? (
+                  {Student() ? (
                     item.isFavorite ? (
                       <LuHeart
                         onClick={() =>
@@ -241,7 +244,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
-                    {userType == 13 && (
+                    {Consultant() && (
                       <div className="gross">
                         <p className="d-flex flex-row">
                           <span className="fs-12px mr-2">Gross Earning </span>{" "}

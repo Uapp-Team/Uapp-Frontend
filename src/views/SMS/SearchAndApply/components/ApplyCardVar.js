@@ -1,6 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -13,7 +13,11 @@ import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
-import { Consultant } from "../../../../components/core/User";
+import {
+  Consultant,
+  referenceId,
+  Student,
+} from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
@@ -22,14 +26,11 @@ import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
-  const userType = localStorage.getItem("userType");
-  const userTypeId = localStorage.getItem("referenceId");
-  const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [quickViewData, setQuickViewData] = React.useState({});
-  const [eligibility, setEligibility] = React.useState({});
-  const [openApplyModal, setOpenApplyModal] = React.useState(false);
-  const [applyEligibility, setApplyEligibility] = React.useState({});
+  const [open, setOpen] = useState(false);
+  const [quickViewData, setQuickViewData] = useState({});
+  const [eligibility, setEligibility] = useState({});
+  const [openApplyModal, setOpenApplyModal] = useState(false);
+  const [applyEligibility, setApplyEligibility] = useState({});
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -42,11 +43,10 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     setEligibility(eligibilityData);
     setQuickViewData(quickViewData[0]);
     setOpen(true);
-    setLoading(true);
   };
   const handleApply = async (subjectId, universityId) => {
     await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${userTypeId}`
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
     setOpenApplyModal(true);
   };
@@ -85,7 +85,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                         <LuSettings2 className="mr-3 cursor-pointer" />
                         <LuShare2 className="mr-3" />
-                        {userType == 6 ? (
+                        {Student() ? (
                           item.isFavorite ? (
                             <LuHeart
                               onClick={() =>
