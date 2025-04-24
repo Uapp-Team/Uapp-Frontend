@@ -24,11 +24,6 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import {
-  Consultant,
-  referenceId,
-  Student,
-} from "../../../../components/core/User";
 import { FaHeart } from "react-icons/fa";
 
 const ApplyCardVar = ({ data, handleFavourite, handleSubmit }) => {
