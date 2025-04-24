@@ -1,6 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -19,15 +19,18 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { Consultant, Student } from "../../../../components/core/User";
+import {
+  Consultant,
+  referenceId,
+  Student,
+} from "../../../../components/core/User";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
-  const userTypeId = localStorage.getItem("referenceId");
-  const [open, setOpen] = React.useState(false);
-  const [quickViewData, setQuickViewData] = React.useState({});
-  const [eligibility, setEligibility] = React.useState({});
-  const [openApplyModal, setOpenApplyModal] = React.useState(false);
-  const [applyEligibility, setApplyEligibility] = React.useState({});
+  const [open, setOpen] = useState(false);
+  const [quickViewData, setQuickViewData] = useState({});
+  const [eligibility, setEligibility] = useState({});
+  const [openApplyModal, setOpenApplyModal] = useState(false);
+  const [applyEligibility, setApplyEligibility] = useState({});
 
   const handleQuickView = async (subjectId, universityId) => {
     const quickViewData = data.filter(
@@ -43,7 +46,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
   };
   const handleApply = async (subjectId, universityId) => {
     await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${userTypeId}`
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
     setOpenApplyModal(true);
   };
