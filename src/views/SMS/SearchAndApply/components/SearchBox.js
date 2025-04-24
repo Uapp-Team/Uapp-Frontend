@@ -16,10 +16,12 @@ const SearchBox = ({
   setInstitutionId,
   countryId,
   setCountryId,
+  institutionName,
+  setInstitutionName,
+  countryName,
+  setCountryName,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
-  const [institutionName, setInstitutionName] = useState("Select Institution");
-  const [countryName, setCountryName] = useState("Select Country");
 
   const handleChange = (event) => {
     setValue(event.target.value);
