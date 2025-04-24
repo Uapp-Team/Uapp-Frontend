@@ -19,6 +19,7 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
+import { Consultant } from "../../../../components/core/User";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
@@ -238,7 +239,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       </div>
                     </div>
                     <div className="d-flex justify-content-between">
-                      {userType == 13 && (
+                      {Consultant() && (
                         <div className="gross-vertical my-3">
                           <p className="d-flex flex-column">
                             <span className="fs-12px">Gross Earning</span>{" "}
