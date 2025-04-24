@@ -31,7 +31,7 @@ class SidebarHeader extends Component {
                   <img src={logoLg} alt="" />
                 </div>
                 <div className="show-max-678">
-                  <img src={logoSm} alt="" />
+                  <img src={logoSm} alt="" style={{ height: "45px" }} />
                 </div>
                 {/* <div className="hide-min-678">
               <img  src={Lgimage}/>

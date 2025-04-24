@@ -1095,6 +1095,9 @@ const CountryList = lazy(() =>
 // Search
 
 const Search = lazy(() => import("./views/SMS/Search/Search"));
+const SearchAndApply = lazy(() =>
+  import("./views/SMS/SearchAndApply/SearchAndApply")
+);
 
 // Comission
 const AccountIntake = lazy(() =>
@@ -5274,6 +5277,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute path="/search" component={Search} />
+                  <AppRoute path="/searchAndApply" component={SearchAndApply} />
                   <AppRoute
                     path="/searchByStudent/:student"
                     component={Search}
