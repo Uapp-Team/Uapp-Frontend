@@ -37,16 +37,6 @@ const ApplyModal = ({
   const [selectedDurationId, setSelectedDurationId] = React.useState("");
   const [selectedIntakeId, setSelectedIntakeId] = React.useState("");
 
-  console.log(
-    selectedCampusLabel,
-    selectedCampusValue,
-    selectedStudyModeId,
-    selectedDeliveryPatternId,
-    selectedDeliveryScheduleId,
-    selectedDurationId,
-    selectedIntakeId
-  );
-
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
   };
