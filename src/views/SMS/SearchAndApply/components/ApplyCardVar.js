@@ -15,6 +15,7 @@ import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
@@ -22,30 +23,32 @@ import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({
   data,
-  quickViewData,
+  confirmLoading,
+  // quickViewData,
   openApplyModal,
   setOpenApplyModal,
-  handleQuickView,
   handleApply,
-  eligibility,
+  // eligibility,
   applyEligibility,
   handleFavourite,
   handleSubmit,
 }) => {
   const [open, setOpen] = useState(false);
+  const [eligibility, setEligibility] = useState({});
+  const [quickViewData, setQuickViewData] = useState({});
 
-  // const handleQuickView = async (subjectId, universityId) => {
-  //   const quickViewData = data.filter(
-  //     (item) =>
-  //       item.subjectId === subjectId && item.universityId === universityId
-  //   );
-  //   const eligibilityData = await get(
-  //     `Eligibility/ShowEligibility/${universityId}/${subjectId}`
-  //   );
-  //   setEligibility(eligibilityData);
-  //   setQuickViewData(quickViewData[0]);
-  //   setOpen(true);
-  // };
+  const handleQuickView = async (subjectId, universityId) => {
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    const eligibilityData = await get(
+      `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+    );
+    setEligibility(eligibilityData);
+    setQuickViewData(quickViewData[0]);
+    setOpen(true);
+  };
   // const handleApply = async (subjectId, universityId) => {
   //   await get(
   //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
@@ -270,17 +273,15 @@ const ApplyCardVar = ({
                     <div className="card-action-vertical">
                       <button
                         className="quick-btn-vertical"
-                        onClick={() =>
-                          handleQuickView(item.subjectId, item.universityId)
-                        }
+                        onClick={() => {
+                          handleQuickView(item.subjectId, item.universityId);
+                        }}
                       >
                         Quick view
                       </button>
                       <button
                         className="apply-btn-vertical"
                         onClick={() => {
-                          console.log("apply");
-
                           handleApply(item.subjectId, item.universityId);
                         }}
                       >
@@ -293,9 +294,11 @@ const ApplyCardVar = ({
             </Col>
           ))}
       </Row>
+
       <QuickViewModal
         open={open}
         onClose={() => setOpen(false)}
+        confirmLoading={confirmLoading}
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleSubmit={handleSubmit}

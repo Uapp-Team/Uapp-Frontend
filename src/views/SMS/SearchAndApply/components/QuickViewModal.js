@@ -20,15 +20,28 @@ import {
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 
-const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
+const QuickViewModal = ({
+  open,
+  onClose,
+  confirmLoading,
+  quickViewData,
+  eligibility,
+}) => {
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
+  console.log(quickViewData, "quickViewData");
 
   const handleApply = (subjectId, universityId) => {
     console.log(subjectId, universityId);
     setOpenApplyModal(true);
   };
   return (
-    <Modal open={open} onCancel={onClose} footer={null} title="Quick View">
+    <Modal
+      open={open}
+      onCancel={onClose}
+      confirmLoading={confirmLoading}
+      footer={null}
+      title="Quick View"
+    >
       <div className="quickview-container">
         <Row className="quickview-header">
           <Col xs={12} sm={7}>

@@ -238,7 +238,7 @@ const ApplyModal = ({
             {quickViewData?.intakes?.map((intake) => (
               <span
                 key={intake.id}
-                className={`filter-button mr-2 mb-2 ponter ${
+                className={`filter-button mr-2 mb-2 pointer ${
                   selectedIntakeId === intake.id ? "filter-button-clicked" : ""
                 }`}
                 onClick={() => setSelectedIntakeId(intake.id)}
