@@ -361,7 +361,18 @@ const ApplyModal = ({
           <button className="program-modal__cancel" onClick={onClose}>
             Cancel
           </button>
-          <button onClick={() => handleSubmit()} className="apply-btn">
+          <button
+            onClick={() =>
+              handleSubmit(
+                selectedCampusLabel,
+                selectedCampusValue,
+                selectedStudyModeId,
+                selectedDeliveryPatternId,
+                selectedDeliveryScheduleId
+              )
+            }
+            className="apply-btn"
+          >
             Apply →
           </button>
         </Row>

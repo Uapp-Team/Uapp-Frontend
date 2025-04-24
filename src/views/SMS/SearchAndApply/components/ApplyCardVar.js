@@ -13,48 +13,50 @@ import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
-import {
-  Consultant,
-  referenceId,
-  Student,
-} from "../../../../components/core/User";
+import { Consultant, Student } from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
-import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 
-const ApplyCardVar = ({ data, handleFavourite, handleSubmit }) => {
+const ApplyCardVar = ({
+  data,
+  quickViewData,
+  openApplyModal,
+  setOpenApplyModal,
+  handleQuickView,
+  handleApply,
+  eligibility,
+  applyEligibility,
+  handleFavourite,
+  handleSubmit,
+}) => {
   const [open, setOpen] = useState(false);
-  const [quickViewData, setQuickViewData] = useState({});
-  const [eligibility, setEligibility] = useState({});
-  const [openApplyModal, setOpenApplyModal] = useState(false);
-  const [applyEligibility, setApplyEligibility] = useState({});
 
-  const handleQuickView = async (subjectId, universityId) => {
-    const quickViewData = data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
-    const eligibilityData = await get(
-      `Eligibility/ShowEligibility/${universityId}/${subjectId}`
-    );
-    setEligibility(eligibilityData);
-    setQuickViewData(quickViewData[0]);
-    setOpen(true);
-  };
-  const handleApply = async (subjectId, universityId) => {
-    await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
-    ).then((res) => setApplyEligibility(res));
-    const quickViewData = data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
-    setQuickViewData(quickViewData[0]);
-    setOpenApplyModal(true);
-  };
+  // const handleQuickView = async (subjectId, universityId) => {
+  //   const quickViewData = data.filter(
+  //     (item) =>
+  //       item.subjectId === subjectId && item.universityId === universityId
+  //   );
+  //   const eligibilityData = await get(
+  //     `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+  //   );
+  //   setEligibility(eligibilityData);
+  //   setQuickViewData(quickViewData[0]);
+  //   setOpen(true);
+  // };
+  // const handleApply = async (subjectId, universityId) => {
+  //   await get(
+  //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+  //   ).then((res) => setApplyEligibility(res));
+  //   const quickViewData = data.filter(
+  //     (item) =>
+  //       item.subjectId === subjectId && item.universityId === universityId
+  //   );
+  //   setQuickViewData(quickViewData[0]);
+  //   setOpenApplyModal(true);
+  // };
   return (
     <>
       <Row className="mt-3">
@@ -276,9 +278,11 @@ const ApplyCardVar = ({ data, handleFavourite, handleSubmit }) => {
                       </button>
                       <button
                         className="apply-btn-vertical"
-                        onClick={() =>
-                          handleApply(item.subjectId, item.universityId)
-                        }
+                        onClick={() => {
+                          console.log("apply");
+
+                          handleApply(item.subjectId, item.universityId);
+                        }}
                       >
                         Apply Now <RiArrowRightSLine />
                       </button>
