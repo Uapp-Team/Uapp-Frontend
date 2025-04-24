@@ -22,7 +22,7 @@ import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
-  const userTypeId = localStorage.getItem("userTypeId");
+  const userTypeId = localStorage.getItem("referenceId");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [quickViewData, setQuickViewData] = React.useState({});
