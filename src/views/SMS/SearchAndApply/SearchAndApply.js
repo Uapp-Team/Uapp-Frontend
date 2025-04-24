@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaSlidersH } from "react-icons/fa";
+import { useToasts } from "react-toast-notifications";
 import { Col, Row } from "reactstrap";
+import { Student } from "../../../components/core/User";
+import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
+import Loader from "../../../components/Loader";
+import get from "../../../helpers/get";
 import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
 import SearchBox from "./components/SearchBox";
 import SearchKeywords from "./components/SearchKeywords";
+import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
-import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
-import get from "../../../helpers/get";
-import { FaSlidersH } from "react-icons/fa";
-import { Student } from "../../../components/core/User";
-import SearchPaginations from "./components/SearchPaginations";
-import Loader from "../../../components/Loader";
-import { useToasts } from "react-toast-notifications";
 
 function SearchAndApply() {
   const { addToast } = useToasts();
@@ -179,6 +179,9 @@ function SearchAndApply() {
       });
   };
 
+  const handleSubmit = () => {
+    console.log("submit");
+  };
   return (
     <>
       <div className="search-header">
@@ -278,6 +281,7 @@ function SearchAndApply() {
             <ApplyCardVar
               data={data?.items}
               handleFavourite={handleFavourite}
+              handleSubmit={handleSubmit}
             />
           </div>
 
@@ -286,11 +290,13 @@ function SearchAndApply() {
               <ApplyCardVar
                 data={data?.items}
                 handleFavourite={handleFavourite}
+                handleSubmit={handleSubmit}
               />
             ) : (
               <ApplyCardHor
                 data={data?.items}
                 handleFavourite={handleFavourite}
+                handleSubmit={handleSubmit}
               />
             )}
           </div>

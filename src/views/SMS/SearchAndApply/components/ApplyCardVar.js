@@ -13,6 +13,11 @@ import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
+import {
+  Consultant,
+  referenceId,
+  Student,
+} from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
@@ -26,7 +31,7 @@ import {
 } from "../../../../components/core/User";
 import { FaHeart } from "react-icons/fa";
 
-const ApplyCardVar = ({ data, handleFavourite }) => {
+const ApplyCardVar = ({ data, handleFavourite, handleSubmit }) => {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [quickViewData, setQuickViewData] = useState({});
@@ -51,6 +56,11 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
     setOpenApplyModal(true);
   };
   return (
@@ -296,11 +306,14 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleFavourite={handleFavourite}
+        handleSubmit={handleSubmit}
       />
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
         applyEligibility={applyEligibility}
+        quickViewData={quickViewData}
+        handleSubmit={handleSubmit}
       />
     </>
   );
