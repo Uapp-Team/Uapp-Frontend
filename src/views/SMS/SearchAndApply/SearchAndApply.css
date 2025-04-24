@@ -4,6 +4,9 @@
   padding: 18px 21px 0;
 }
 
+.text-515151 {
+  color: #515151;
+}
 .icon-design {
   padding: 8px;
   border-radius: 4px;
@@ -85,6 +88,10 @@
   border-radius: 999px;
   border: 0.5px solid rgba(37, 37, 37, 0.12);
   background: #eff2f2;
+  color: #3d3d3d;
+  font-weight: 500;
+  margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .filter-button-clicked {
@@ -411,9 +418,8 @@
   margin-right: 5px;
 }
 .dashed-hr {
-  border: none;
   border-top: 1px dashed #ccc;
-  margin: 16px 0;
+  margin: 12px 0;
   display: block; /* Ensure it is not flex */
   width: 100%; /* Optional: Ensure it spans the full width */
 }
@@ -477,10 +483,6 @@
   }
 }
 
-.quickview-header {
-  border-bottom: 1px solid #e8e8e8;
-}
-
 .quickview-title {
   font-size: 24px;
   font-weight: 600;
@@ -513,10 +515,6 @@
   background-color: #01755b;
   border: none;
   padding: 6px 20px;
-}
-
-.quickview-content {
-  margin-top: 20px;
 }
 
 .quickview-right {
