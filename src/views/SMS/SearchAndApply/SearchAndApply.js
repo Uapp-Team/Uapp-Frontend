@@ -62,6 +62,8 @@ function SearchAndApply() {
   const referenceId = localStorage.getItem("referenceId");
   const [eligibility, setEligibility] = useState({});
   const [open, setOpen] = useState(false);
+  const [subjectId, setSubjectId] = React.useState(0);
+  const [universityId, setUniversityId] = React.useState(0);
 
   useEffect(() => {
     if (!isTyping) {
@@ -172,6 +174,8 @@ function SearchAndApply() {
       });
   };
   const handleApply = async (subjectId, universityId) => {
+    setSubjectId(subjectId);
+    setUniversityId(universityId);
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
@@ -183,6 +187,8 @@ function SearchAndApply() {
     setOpenApplyModal(true);
   };
   const handleQuickView = async (subjectId, universityId) => {
+    setSubjectId(subjectId);
+    setUniversityId(universityId);
     const quickViewData = data?.items?.filter(
       (item) =>
         item.subjectId === subjectId && item.universityId === universityId
@@ -195,20 +201,48 @@ function SearchAndApply() {
     setOpen(true);
   };
 
-  const handleSubmit = (
+  const handleSubmit = async (
     selectedCampusLabel,
     selectedCampusValue,
     selectedStudyModeId,
     selectedDeliveryPatternId,
-    selectedDeliveryScheduleId
+    selectedDeliveryScheduleId,
+    selectedDurationId,
+    selectedIntakeId
   ) => {
-    console.log(
-      selectedCampusLabel,
-      selectedCampusValue,
-      selectedStudyModeId,
-      selectedDeliveryPatternId,
-      selectedDeliveryScheduleId
-    );
+    const data = {
+      studentId: Number(referenceId),
+      campusId: Number(selectedCampusValue),
+      UniversitySubjectId: Number(subjectId),
+      intakeId: Number(selectedIntakeId),
+      deliveryScheduleId: Number(selectedDeliveryScheduleId),
+      StudyMode: Number(selectedStudyModeId),
+      DeliveryMethod: Number(selectedDeliveryPatternId),
+      durationId: Number(selectedDurationId),
+    };
+
+    try {
+      const res = await post(`Apply/SubmitApplication`, data);
+
+      if (res?.status === 200) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setOpenApplyModal(false);
+        setOpen(false);
+      } else {
+        addToast(res?.data?.message || "An error occurred", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    } catch (error) {
+      addToast("An unexpected error occurred. Please try again.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    }
   };
   return (
     <>
