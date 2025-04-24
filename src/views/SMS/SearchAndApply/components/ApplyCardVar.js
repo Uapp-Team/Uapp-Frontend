@@ -19,13 +19,11 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { Consultant } from "../../../../components/core/User";
+import { Consultant, Student } from "../../../../components/core/User";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
-  const userType = localStorage.getItem("userType");
   const userTypeId = localStorage.getItem("referenceId");
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
   const [quickViewData, setQuickViewData] = React.useState({});
   const [eligibility, setEligibility] = React.useState({});
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
@@ -42,7 +40,6 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     setEligibility(eligibilityData);
     setQuickViewData(quickViewData[0]);
     setOpen(true);
-    setLoading(true);
   };
   const handleApply = async (subjectId, universityId) => {
     await get(
@@ -85,7 +82,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                         <LuSettings2 className="mr-3 cursor-pointer" />
                         <LuShare2 className="mr-3" />
-                        {userType == 6 ? (
+                        {Student() ? (
                           item.isFavorite ? (
                             <LuHeart
                               onClick={() =>
