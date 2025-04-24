@@ -287,6 +287,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
         applyEligibility={applyEligibility}
+        quickViewData={quickViewData}
       />
     </>
   );

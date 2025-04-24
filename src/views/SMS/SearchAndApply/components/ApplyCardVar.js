@@ -13,13 +13,13 @@ import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
+import { Consultant } from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { Consultant } from "../../../../components/core/User";
 
 const ApplyCardVar = ({ data, handleFavourite }) => {
   const userType = localStorage.getItem("userType");
@@ -294,6 +294,7 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
         applyEligibility={applyEligibility}
+        quickViewData={quickViewData}
       />
     </>
   );

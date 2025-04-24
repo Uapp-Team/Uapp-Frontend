@@ -13,7 +13,7 @@ import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import "../SearchAndApply.css";
 
-const ApplyModal = ({ open, onClose, applyEligibility }) => {
+const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
   const [programCard, setProgramCard] = React.useState(true);
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -34,9 +34,11 @@ const ApplyModal = ({ open, onClose, applyEligibility }) => {
               alt=""
             />
             <div className="d-flex flex-column">
-              <span className="fw-600 fs-14px">Bournemouth University</span>
+              <span className="fw-600 fs-14px">
+                {quickViewData?.universityName}
+              </span>
               <span className="fw-400 fs-12px">
-                Bournemouth, England, United Kingdom
+                {quickViewData?.campusNames?.split(",")[0].trim()}
               </span>
             </div>
           </div>
@@ -46,8 +48,7 @@ const ApplyModal = ({ open, onClose, applyEligibility }) => {
                 Course
               </Col>
               <Col xs={8} md={10} className="fw-600">
-                BMus (Hons) Popular Music Performance – Guitar, Bass, Drums,
-                Keyboards and Vocals
+                {quickViewData?.subjectName}
               </Col>
             </Row>
             <Row className="apply-modal-details">
@@ -55,7 +56,7 @@ const ApplyModal = ({ open, onClose, applyEligibility }) => {
                 Student
               </Col>
               <Col xs={8} md={10}>
-                Rakib Hasan
+                {quickViewData?.studentName}
               </Col>
             </Row>
             <Row className="apply-modal-details">
@@ -70,7 +71,9 @@ const ApplyModal = ({ open, onClose, applyEligibility }) => {
                 />
               </Col>
               <Col xs={8} md={10}>
-                June 2025
+                {quickViewData?.intakeNames?.split(",").map((intake, index) => (
+                  <span className="filter-button">{intake}</span>
+                ))}
               </Col>
             </Row>
             <div className="dashed-hr"></div>
