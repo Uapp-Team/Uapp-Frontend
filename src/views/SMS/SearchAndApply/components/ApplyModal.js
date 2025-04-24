@@ -10,11 +10,17 @@ import { Col, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
-import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  studyMode,
+} from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 
 const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
   const [programCard, setProgramCard] = React.useState(true);
+  const [selectedCampus, setSelectedCampus] = React.useState("");
+
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
   };
@@ -26,11 +32,13 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
       footer={null}
     >
       <div className="apply-modal">
-        <Row className="apply-modal-card">
+        <div className="apply-modal-card">
           <div className="apply-modal__header">
             <img
               className="h-48px w-48px mr-2"
-              src={"https://localtest.uapp.uk/"}
+              src={
+                "https://localtest.uapp.uk/" + quickViewData?.universityLogoUrl
+              }
               alt=""
             />
             <div className="d-flex flex-column">
@@ -72,7 +80,7 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
               </Col>
               <Col xs={8} md={10}>
                 {quickViewData?.intakeNames?.split(",").map((intake, index) => (
-                  <span className="filter-button">{intake}</span>
+                  <span>{intake}</span>
                 ))}
               </Col>
             </Row>
@@ -82,7 +90,7 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
             <div className="apply-modal-study__info">
               <img className="h-24px w-24px " src={Tuition} alt="" />
               <div className="fs-12px">Tution fees</div>
-              <div className="fs-14px">£28,640</div>
+              <div className="fs-14px">£{quickViewData?.localTutionFee}</div>
             </div>
             <div className="apply-modal-study__info">
               <img className="h-24px w-24px" src={mortarboard} alt="" />
@@ -92,23 +100,33 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
             <div className="apply-modal-study__info">
               <img className="h-24px w-24px " src={Application} alt="" />
               <div className="fs-12px">Application fees</div>
-              <div className="fs-14px">£28,640</div>
+              <div className="fs-14px">
+                £{quickViewData?.avarageApplicationFee}
+              </div>
             </div>
           </div>
           <div className="dashed-hr"></div>
           <div className="program-modal__info">
             <div className="program-modal__deadline">
-              Application deadline <strong>10 Feb, 2025</strong>
+              Application deadline{" "}
+              <strong>{quickViewData?.applicationDeadLine}</strong>
             </div>
             <div className="program-modal__start">
               Course Start Date <strong>25 Mar 2025</strong>
             </div>
             <div className="program-modal__duration">
               <CiTimer className="mr-2" />
-              Duration <strong className="ml-2">4 Years</strong>
+              Duration{" "}
+              <strong className="ml-2">
+                {quickViewData?.durationNames
+                  ?.split(",")
+                  .map((duration, index) => (
+                    <span className="filter-button mr-2 mb-2">{duration}</span>
+                  ))}
+              </strong>
             </div>
           </div>
-        </Row>
+        </div>
 
         <Row className="program-modal__requirements">
           <div className="px-4">
@@ -193,65 +211,89 @@ const ApplyModal = ({ open, onClose, applyEligibility, quickViewData }) => {
             <p>Intake</p>
           </div>
           <div className="d-flex flex-wrap">
-            <span className="filter-button">April 2025</span>
+            {quickViewData?.intakeNames?.split(",").map((intake, index) => (
+              <span className="filter-button">{intake}</span>
+            ))}
           </div>
         </Row>
 
         <Row className="program-modal__form-group">
           <label htmlFor="campus">Campus City</label>
-          <DefaultDropdown />
+          <select
+            id="campus"
+            className="form-control"
+            value={selectedCampus} // Replace with your state variable
+            onChange={(e) => setSelectedCampus(e.target.value)} // Replace with your state handler
+          >
+            <option value="">Please Select Campus</option>
+            {quickViewData?.campusNames?.split(",").map((campus, index) => (
+              <option key={index} value={campus.trim()}>
+                {campus.trim()}
+              </option>
+            ))}
+          </select>
         </Row>
 
         <Row className="program-modal__form-group">
           <label>Study Mode</label>
           <div className="program-modal__radio-group">
-            <label>
-              <input type="radio" name="mode" /> <span>Part-Time</span>
-            </label>
-            <label>
-              <input type="radio" name="mode" /> <span>Full-Time</span>
-            </label>
+            {quickViewData?.studyModes
+              ?.split(",")
+              .map((id) => {
+                const method = studyMode.find(
+                  (m) => m.id === parseInt(id.trim(), 10)
+                );
+                return method?.name;
+              })
+              .filter(Boolean)
+              .map((name, index) => (
+                <label key={index}>
+                  <input type="radio" name="mode" value={name} />
+                  <span>{name}</span>
+                </label>
+              ))}
           </div>
         </Row>
 
         <Row className="program-modal__form-group">
           <label>Delivery Pattern</label>
           <div className="program-modal__radio-group">
-            <label>
-              <input type="radio" name="mode" /> <span>Online</span>
-            </label>
-            <label>
-              <input type="radio" name="mode" /> <span>On-Campus</span>
-            </label>
-            <label>
-              <input type="radio" name="mode" /> <span>Hybrid</span>
-            </label>
+            {quickViewData?.deliveryMethods
+              ?.split(",")
+              .map((id) => {
+                const method = deliveryMethods.find(
+                  (m) => m.id === parseInt(id.trim(), 10)
+                );
+                return method?.name;
+              })
+              .filter(Boolean)
+              .map((name, index) => (
+                <label key={index}>
+                  <input type="radio" name="deliveryPattern" value={name} />
+                  <span>{name}</span>
+                </label>
+              ))}
           </div>
         </Row>
 
         <Row className="program-modal__form-group">
           <label>Delivery Schedule</label>
           <div className="program-modal__radio-group">
-            <label>
-              <input type="radio" name="deliverySchedule" />
-              <span>Standard </span>
-            </label>
-            <label>
-              <input type="radio" name="deliverySchedule" />{" "}
-              <span>Evening</span>
-            </label>
-            <label>
-              <input type="radio" name="deliverySchedule" />{" "}
-              <span>Flexible</span>
-            </label>
-            <label>
-              <input type="radio" name="deliverySchedule" />{" "}
-              <span>Weekend</span>
-            </label>
-            <label>
-              <input type="radio" name="deliverySchedule" />{" "}
-              <span>Evening + Weekend</span>
-            </label>
+            {quickViewData?.deliverySchedules
+              ?.split(",")
+              .map((id) => {
+                const method = deliverySchedules.find(
+                  (m) => m.id === parseInt(id.trim(), 10)
+                );
+                return method?.name;
+              })
+              .filter(Boolean)
+              .map((name, index) => (
+                <label key={index}>
+                  <input type="radio" name="deliveryPattern" value={name} />
+                  <span>{name}</span>
+                </label>
+              ))}
           </div>
         </Row>
 

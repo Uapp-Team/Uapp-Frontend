@@ -48,6 +48,11 @@ const ApplyCardVar = ({ data, handleFavourite }) => {
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
     setOpenApplyModal(true);
   };
   return (
