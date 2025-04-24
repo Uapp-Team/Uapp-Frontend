@@ -53,6 +53,7 @@ const AddUniversitySubject = () => {
   const [subNameError, setSubNameError] = useState("");
   const [description, setDescription] = useState("");
   const [scholarshipDetails, setScholarshipDetails] = useState("");
+  const [scholarshipDetailsError, setScholarshipDetailsError] = useState("");
 
   const [progLvlError, setProgLvlError] = useState(false);
   const [deptDropError, setDeptDropError] = useState(false);
@@ -139,7 +140,6 @@ const AddUniversitySubject = () => {
           setSubId(res?.id);
           setSubName(res?.name);
           setDescription(res?.description);
-          setScholarshipDetails(res?.duration);
           setUniLabel(res?.university?.name);
           setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
@@ -150,7 +150,7 @@ const AddUniversitySubject = () => {
           setSubDepValue(res?.subDepartment?.id);
           setIsScholarshipAvailable(res?.isScholarshipAvailable);
           setIsWorkPlacement(res?.isWorkPlacementAvailable);
-          setScholarshipDetails(res?.scholarshipDetails);
+          setScholarshipDetails(res?.scholarshipDescription);
           const studyModes = res?.subjectStudyModes || [];
 
           studyModes.forEach((data) => {
@@ -174,7 +174,6 @@ const AddUniversitySubject = () => {
           setSubId(res?.id);
           setSubName(res?.name);
           setDescription(res?.description);
-          setScholarshipDetails(res?.duration);
           setUniLabel(res?.university?.name);
           setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
@@ -185,7 +184,7 @@ const AddUniversitySubject = () => {
           setSubDepValue(res?.subDepartment?.id);
           setIsScholarshipAvailable(res?.isScholarshipAvailable);
           setIsWorkPlacement(res?.isWorkPlacementAvailable);
-          setScholarshipDetails(res?.scholarshipDetails);
+          setScholarshipDetails(res?.scholarshipDescription);
           const studyModes = res?.subjectStudyModes || [];
 
           studyModes.forEach((data) => {
@@ -215,7 +214,7 @@ const AddUniversitySubject = () => {
         setDepartmentList(res);
       })
       .catch();
-  }, [subjId, subjectId, id, programValue]);
+  }, [subjId, subjectId, id]);
 
   useEffect(() => {
     Uget(`Duration/ByEducationLevel/${programValue}`).then((res) => {
@@ -368,6 +367,14 @@ const AddUniversitySubject = () => {
       setSubNameError("");
     }
   };
+  const handleScholarshipDetails = (e) => {
+    setScholarshipDetails(e.target.value);
+    if (e.target.value === "") {
+      setScholarshipDetailsError("Scholarship Details is required");
+    } else {
+      setScholarshipDetailsError("");
+    }
+  };
 
   const ValidateForm = () => {
     var isValid = true;
@@ -395,7 +402,10 @@ const AddUniversitySubject = () => {
   };
 
   // on submit form
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("sakib");
+
     const subdata = {
       id: subId !== 0 ? subId : undefined,
       universityId: uniValue,
@@ -406,7 +416,7 @@ const AddUniversitySubject = () => {
       subDepartmentId: subDepValue,
       isWorkPlacementAvailable: isWorkPlacement,
       isScholarshipAvailable: isScholarshipAvailable,
-      scholarshipDetails: scholarshipDetails,
+      scholarshipDescription: scholarshipDetails,
       subjectStudyModes: subjectStudyOptions,
     };
 
@@ -864,18 +874,21 @@ const AddUniversitySubject = () => {
 
                         <Input
                           type="text"
-                          name="scholarshipDetails"
-                          id="scholarshipDetails"
-                          defaultValue={scholarshipDetails}
+                          name="scholarshipDescription"
+                          id="scholarshipDescription"
+                          value={scholarshipDetails}
                           placeholder="Enter Scholarship Details "
-                          // required
+                          onChange={(e) => {
+                            handleScholarshipDetails(e);
+                          }}
                         />
+                        <span className="text-danger">{subNameError}</span>
                       </FormGroup>
                     )}
                     <FormGroup>
                       <span>
-                        <span className="text-danger">*</span>Study Modes and
-                        Durations
+                        {/* <span className="text-danger">*</span> */}
+                        Study Modes and Durations
                       </span>
                       <Row>
                         <Col>
