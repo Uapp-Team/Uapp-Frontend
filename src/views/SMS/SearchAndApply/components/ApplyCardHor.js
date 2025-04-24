@@ -23,15 +23,18 @@ import {
   referenceId,
   Student,
 } from "../../../../components/core/User";
+import { FaHeart } from "react-icons/fa";
 
 const ApplyCardHor = ({ data, handleFavourite }) => {
   const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
   const [quickViewData, setQuickViewData] = useState({});
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});
   const [openApplyModal, setOpenApplyModal] = useState(false);
 
-  const handleQuickView = async (subjectId, universityId) => {
+  const handleQuickView = async (subjectId, universityId, index) => {
+    setIndex(index);
     const quickViewData = data.filter(
       (item) =>
         item.subjectId === subjectId && item.universityId === universityId
@@ -115,7 +118,7 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                   <LuShare2 className="mr-3" />
                   {Student() ? (
                     item.isFavorite ? (
-                      <LuHeart
+                      <FaHeart
                         onClick={() =>
                           handleFavourite(
                             item.isFavorite,
@@ -123,8 +126,6 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                             index
                           )
                         }
-                        color="red"
-                        fill="red"
                         className="cursor-pointer"
                       />
                     ) : (
@@ -259,7 +260,11 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       <button
                         className="quick-btn"
                         onClick={() =>
-                          handleQuickView(item.subjectId, item.universityId)
+                          handleQuickView(
+                            item.subjectId,
+                            item.universityId,
+                            index
+                          )
                         }
                       >
                         Quick view
@@ -282,9 +287,11 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
         ))}
       <QuickViewModal
         open={open}
+        index={index}
         onClose={() => setOpen(false)}
         eligibility={eligibility}
         quickViewData={quickViewData}
+        handleFavourite={handleFavourite}
       />
       <ApplyModal
         open={openApplyModal}

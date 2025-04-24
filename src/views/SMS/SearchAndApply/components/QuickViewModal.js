@@ -19,10 +19,19 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
+import { Student } from "../../../../components/core/User";
+import { FaHeart } from "react-icons/fa";
 
-const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
+const QuickViewModal = ({
+  open,
+  index,
+  onClose,
+  quickViewData,
+  eligibility,
+  handleFavourite,
+}) => {
   const [openApplyModal, setOpenApplyModal] = React.useState(false);
-
+  console.log(quickViewData);
   const handleApply = (subjectId, universityId) => {
     console.log(subjectId, universityId);
     setOpenApplyModal(true);
@@ -42,7 +51,34 @@ const QuickViewModal = ({ open, onClose, quickViewData, eligibility }) => {
             <div>
               <LuSettings2 className="mr-4 cursor-pointer" />
               <LuShare2 className="mr-4" />
-              <LuHeart color="red" fill="red" className="cursor-pointer mr-4" />
+
+              {Student() ? (
+                quickViewData.isFavorite ? (
+                  <FaHeart
+                    onClick={() =>
+                      handleFavourite(
+                        quickViewData.isFavorite,
+                        quickViewData.subjectId,
+                        index
+                      )
+                    }
+                    className="cursor-pointer mr-4"
+                  />
+                ) : (
+                  <LuHeart
+                    onClick={() =>
+                      handleFavourite(
+                        quickViewData.isFavorite,
+                        quickViewData.subjectId,
+                        index
+                      )
+                    }
+                    className="cursor-pointer mr-4"
+                  />
+                )
+              ) : null}
+
+              {/* <LuHeart color="red" fill="red" className="cursor-pointer mr-4" /> */}
               <LuArrowUpRight className="fs-20px" />
             </div>
             <button className="apply-btn" onClick={() => handleApply()}>

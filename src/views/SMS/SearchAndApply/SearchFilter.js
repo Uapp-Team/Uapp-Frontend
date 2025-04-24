@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
-import get from "../../../helpers/get";
 import CheckBoxByObj from "../../../components/form/CheckBoxByObj";
 import MultiSelectU from "../../../components/form/MultiSelectU";
 import CheckSwitch from "../../../components/form/CheckSwitch";
@@ -54,19 +53,15 @@ const SearchFilter = ({
   setCountryName,
   cityName,
   setCityName,
+  applicationType,
+  intakeList,
+  setIntakeList,
+  studyLevelList,
+  setStudyLevelList,
+  courseDurationsList,
+  setCourseDurationsList,
 }) => {
   const divRef = useRef(null);
-
-  const [applicationType, setApplicationType] = useState([]);
-  const [intakeList, setIntakeList] = useState([]);
-  const [studyLevelList, setStudyLevelList] = useState([]);
-  const [courseDurationsList, setCourseDurationsList] = useState([]);
-
-  useEffect(() => {
-    get(`SearchFilter/StudentTypes`).then((res) => {
-      setApplicationType(res);
-    });
-  }, []);
 
   useEffect(() => {
     const list = [];

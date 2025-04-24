@@ -24,9 +24,16 @@ function SearchAndApply() {
   const [mobileCard, setMobileCard] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const dataPerPage = 15;
+  const [dataPerPage, setDataPerPage] = useState(15);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
+  const [totalData, setTotaldata] = useState(0);
+
+  // list
+  const [applicationType, setApplicationType] = useState([]);
+  const [intakeList, setIntakeList] = useState([]);
+  const [studyLevelList, setStudyLevelList] = useState([]);
+  const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   // Filter Data State
   const [filterOpen, setFilterOpen] = useState(false);
@@ -85,10 +92,11 @@ function SearchAndApply() {
         searchText: search,
         isFavorite: isFavorite,
       };
-
+      setLoading(true);
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data);
         setFavorites(res.data?.items[0]?.favoriteSubjectCount);
+        setTotaldata(res?.data?.total);
         setLoading(false);
       });
     }
@@ -98,6 +106,7 @@ function SearchAndApply() {
     countryId,
     courseDurations,
     currentPage,
+    dataPerPage,
     deliveryPattern,
     deliverySchedule,
     filterOpen,
@@ -114,6 +123,12 @@ function SearchAndApply() {
     studyModes,
     tuitionFee,
   ]);
+
+  useEffect(() => {
+    get(`SearchFilter/StudentTypes`).then((res) => {
+      setApplicationType(res);
+    });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -145,12 +160,10 @@ function SearchAndApply() {
     )
       .then((res) => {
         if (res.status === 200) {
-          setLoading(true);
           let modifyData = data;
           modifyData.items[i].isFavorite = !modifyData.items[i].isFavorite;
           setData(modifyData);
           !value ? setFavorites(favorites + 1) : setFavorites(favorites - 1);
-          setLoading(false);
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -286,12 +299,15 @@ function SearchAndApply() {
         <h3 className="text-center my-4">No data Found</h3>
       )}
 
-      <SearchPaginations
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        dataPerPage={dataPerPage}
-        totalData={data?.total}
-      />
+      {loading ? null : (
+        <SearchPaginations
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          dataPerPage={dataPerPage}
+          setDataPerPage={setDataPerPage}
+          totalData={data?.total}
+        />
+      )}
 
       {filterOpen && (
         <SearchFilter
@@ -334,6 +350,13 @@ function SearchAndApply() {
           setCountryName={setCountryName}
           cityName={cityName}
           setCityName={setCityName}
+          applicationType={applicationType}
+          intakeList={intakeList}
+          setIntakeList={setIntakeList}
+          studyLevelList={studyLevelList}
+          setStudyLevelList={setStudyLevelList}
+          courseDurationsList={courseDurationsList}
+          setCourseDurationsList={setCourseDurationsList}
         />
       )}
     </>
