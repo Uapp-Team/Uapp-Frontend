@@ -23,6 +23,7 @@ import {
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
+import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -164,12 +165,12 @@ const QuickViewModal = ({
 
                 <div className="dashed-hr"></div>
                 <div className="requirement-block">
-                  <h3 className="my-4 text-515151 fw-600 fs-18px">
+                  <h3 className="my-4 text-515151 fw-600 fs-18px mb-24px">
                     {eligibility?.requiredEducationlevel}
                   </h3>
                   {eligibility?.requiredResultInPercentage && (
-                    <div>
-                      <h4>Academic Qualification</h4>
+                    <div className="text-515151 mb-24px">
+                      <p className="fs-16px fw-600">Academic Qualification</p>
                       <ul>
                         <li>{eligibility?.requiredResultInPercentage}</li>
                       </ul>
@@ -177,8 +178,8 @@ const QuickViewModal = ({
                   )}
                 </div>
                 {eligibility?.englishLanguages?.length > 0 && (
-                  <div className="requirement-block">
-                    <h4>English Language</h4>
+                  <div className="requirement-block text-515151 mb-24px">
+                    <p className="fs-16px fw-600">English Language</p>
                     <ul>
                       {eligibility?.englishLanguages?.map((item, index) => (
                         <li key={index}>
@@ -197,10 +198,7 @@ const QuickViewModal = ({
               <div className="d-flex align-items-center my-2">
                 <img
                   className="h-48px w-48px mr-2"
-                  src={
-                    "https://localtest.uapp.uk/" +
-                    quickViewData?.universityLogoUrl
-                  }
+                  src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
                 <div className="d-flex flex-column">
@@ -212,7 +210,6 @@ const QuickViewModal = ({
                   </span>
                 </div>
               </div>
-              <div className="dashed-hr"></div>
               <div className="d-flex align-items-center my-4">
                 <img src={ranking} alt="" className="h-24px w-24px mr-2 mt-1" />
                 <div className="d-flex flex-column">
