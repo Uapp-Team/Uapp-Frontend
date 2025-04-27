@@ -23,6 +23,7 @@ import {
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
+import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -164,12 +165,12 @@ const QuickViewModal = ({
 
                 <div className="dashed-hr"></div>
                 <div className="requirement-block">
-                  <h3 className="my-4 text-515151 fw-600 fs-18px">
+                  <h3 className="my-4 text-515151 fw-600 fs-18px mb-24px">
                     {eligibility?.requiredEducationlevel}
                   </h3>
                   {eligibility?.requiredResultInPercentage && (
-                    <div>
-                      <h4>Academic Qualification</h4>
+                    <div className="text-515151 mb-24px">
+                      <p className="fs-16px fw-600">Academic Qualification</p>
                       <ul>
                         <li>{eligibility?.requiredResultInPercentage}</li>
                       </ul>
@@ -177,8 +178,8 @@ const QuickViewModal = ({
                   )}
                 </div>
                 {eligibility?.englishLanguages?.length > 0 && (
-                  <div className="requirement-block">
-                    <h4>English Language</h4>
+                  <div className="requirement-block text-515151 mb-24px">
+                    <p className="fs-16px fw-600">English Language</p>
                     <ul>
                       {eligibility?.englishLanguages?.map((item, index) => (
                         <li key={index}>
@@ -197,10 +198,7 @@ const QuickViewModal = ({
               <div className="d-flex align-items-center my-2">
                 <img
                   className="h-48px w-48px mr-2"
-                  src={
-                    "https://localtest.uapp.uk/" +
-                    quickViewData?.universityLogoUrl
-                  }
+                  src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
                 <div className="d-flex flex-column">
@@ -212,8 +210,7 @@ const QuickViewModal = ({
                   </span>
                 </div>
               </div>
-              <div className="dashed-hr"></div>
-              <div className="d-flex align-items-center my-4">
+              <div className="d-flex align-items-start my-4">
                 <img src={ranking} alt="" className="h-24px w-24px mr-2 mt-1" />
                 <div className="d-flex flex-column">
                   <span className="fs-14px fw-600">
@@ -245,15 +242,17 @@ const QuickViewModal = ({
                 <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
                 <div>
                   <span className="info-title">Tuition Fees</span>
-                  <div className="w-150px">
-                    <div className="d-flex justify-content-between min-vw-75">
-                      Home/UK: <span>£{quickViewData?.localTutionFee}</span>
+                  <div>
+                    <div className="d-flex justify-content-between w-75">
+                      <span> Home/UK:</span>
+                      <span>£{quickViewData?.localTutionFee}</span>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      EU/EEU: <span>£{quickViewData?.eU_TutionFee}</span>
+                    <div className="d-flex justify-content-between w-75">
+                      <span>EU/EEU:</span>
+                      <span>£{quickViewData?.eU_TutionFee}</span>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      International:{" "}
+                    <div className="d-flex justify-content-between w-75">
+                      <span>International:</span>
                       <span>£{quickViewData?.internationalTutionFee}</span>
                     </div>
                   </div>
@@ -292,8 +291,8 @@ const QuickViewModal = ({
 
           <div className="quickview-footer">
             <div className="footer-tag">
-              <div>
-                <VscFeedback className="mr-2" />
+              <div className="mb-2 fw-500">
+                <VscFeedback size={20} className="mr-2" />
                 <span>Delivery Pattern</span>
               </div>
               <div className="footer-tag__content">
@@ -314,8 +313,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <FaPeopleGroup className="mr-2" />
+              <div className="mb-2 fw-500">
+                <FaPeopleGroup size={20} className="mr-2" />
                 Study Mode{" "}
               </div>
               <div className="footer-tag__content">
@@ -336,8 +335,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <CiTimer className="mr-2" />
+              <div className="mb-2 fw-500">
+                <CiTimer size={20} className="mr-2" />
                 Delivery Schedule{" "}
               </div>
               <div className="footer-tag__content">
@@ -358,8 +357,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <CiBag1 className="mr-2" />
+              <div className="mb-2 fw-500">
+                <CiBag1 size={20} className="mr-2" />
                 Deposit{" "}
               </div>
               <div className="footer-tag__content">
@@ -370,7 +369,7 @@ const QuickViewModal = ({
             </div>
           </div>
           <div className="view-more-container">
-            <button className="view-more-btn">View More</button>
+            <button className="view-more-btn">View course profile</button>
           </div>
         </ModalBody>
         <ApplyModal

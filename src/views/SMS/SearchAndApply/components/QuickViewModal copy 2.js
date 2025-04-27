@@ -1,28 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CiBag1, CiTimer } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
+import { Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import CloseBtn from "../../../../components/buttons/CloseBtn";
+import { Student } from "../../../../components/core/User";
 import {
   deliveryMethods,
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
+import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
-import { Student } from "../../../../components/core/User";
-import { FaHeart } from "react-icons/fa";
-import { Modal, ModalBody } from "reactstrap";
-import CloseBtn from "../../../../components/buttons/CloseBtn";
-// import { ModalBody } from "reactstrap";
 
 const QuickViewModal = ({
   open,
@@ -31,11 +31,16 @@ const QuickViewModal = ({
   quickViewData,
   eligibility,
   handleFavourite,
+  handleSubmit,
 }) => {
-  const [openApplyModal, setOpenApplyModal] = React.useState(false);
-  console.log(quickViewData);
-  const handleApply = (subjectId, universityId) => {
-    console.log(subjectId, universityId);
+  const referenceId = localStorage.getItem("referenceId");
+  const [openApplyModal, setOpenApplyModal] = useState(false);
+  const [applyEligibility, setApplyEligibility] = useState({});
+  const handleApply = async (subjectId, universityId) => {
+    await get(
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+    ).then((res) => setApplyEligibility(res));
+    setOpenApplyModal(true);
     setOpenApplyModal(true);
   };
   return (
@@ -103,7 +108,15 @@ const QuickViewModal = ({
                   <LuArrowUpRight size={16} className="fs-20px" />
                 </div>
               </div>
-              <button className="apply-btn" onClick={() => handleApply()}>
+              <button
+                className="apply-btn"
+                onClick={() =>
+                  handleApply(
+                    quickViewData?.subjectId,
+                    quickViewData?.universityId
+                  )
+                }
+              >
                 Apply Now
               </button>
             </Col>
@@ -363,6 +376,9 @@ const QuickViewModal = ({
         <ApplyModal
           open={openApplyModal}
           onClose={() => setOpenApplyModal(false)}
+          applyEligibility={applyEligibility}
+          quickViewData={quickViewData}
+          handleSubmit={handleSubmit}
         />
       </Modal>
     </>
