@@ -24,6 +24,7 @@ import {
   Student,
 } from "../../../../components/core/User";
 import { FaHeart } from "react-icons/fa";
+import { rootUrl } from "../../../../constants/constants";
 
 const ApplyCardHor = ({
   data,
@@ -168,7 +169,7 @@ const ApplyCardHor = ({
                 <div className="d-flex align-items-center mb-3">
                   <img
                     className="h-48px w-48px mr-2"
-                    src={"https://localtest.uapp.uk/" + item.universityLogoUrl}
+                    src={rootUrl + item.universityLogoUrl}
                     alt=""
                   />
                   <div className="d-flex flex-column">

@@ -21,6 +21,7 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
+import { rootUrl } from "../../../../constants/constants";
 
 const ApplyCardVar = ({
   data,
@@ -141,10 +142,7 @@ const ApplyCardVar = ({
                       <div className="d-flex align-items-center mb-3">
                         <img
                           className="h-48px w-48px mr-2"
-                          src={
-                            "https://localtest.uapp.uk/" +
-                            item.universityLogoUrl
-                          }
+                          src={rootUrl + item.universityLogoUrl}
                           alt=""
                         />
                         <div className="d-flex flex-column">
