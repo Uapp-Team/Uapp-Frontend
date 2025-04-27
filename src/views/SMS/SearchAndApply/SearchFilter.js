@@ -64,28 +64,22 @@ const SearchFilter = ({
   const divRef = useRef(null);
 
   useEffect(() => {
-    if (intakeList?.length > 0) {
-      const list = [];
-      intakeList.map((item) => list.push(item.value));
-      setIntakeId(list);
-    }
-  }, [setIntakeId, intakeList]);
+    const list = [];
+    intakeList.map((item) => list.push(item.value));
+    intakeId.length !== list.length && setIntakeId(list);
+  }, [setIntakeId, intakeList, intakeId.length]);
 
   useEffect(() => {
-    if (studyLevelList?.length > 0) {
-      const studyLevelListId = [];
-      studyLevelList.map((item) => studyLevelListId.push(item.value));
-      setStudyLevelId(studyLevelListId);
-    }
-  }, [setStudyLevelId, studyLevelList]);
+    const list = [];
+    studyLevelList.map((item) => list.push(item.value));
+    studyLevelId.length !== list.length && setStudyLevelId(list);
+  }, [setStudyLevelId, studyLevelId, studyLevelList]);
 
   useEffect(() => {
-    if (courseDurationsList?.length > 0) {
-      const list = [];
-      courseDurationsList.map((item) => list.push(item.value));
-      setCourseDurations(list);
-    }
-  }, [setCourseDurations, courseDurationsList]);
+    const list = [];
+    courseDurationsList.map((item) => list.push(item.value));
+    courseDurations.length !== list.length && setCourseDurations(list);
+  }, [setCourseDurations, courseDurationsList, courseDurations.length]);
 
   useEffect(() => {
     const studyLevelListQuery = [];
@@ -216,8 +210,11 @@ const SearchFilter = ({
                 <Col xs={5}>
                   <Input
                     type="number"
-                    onChange={(e) => setTuitionFee(e.target.value)}
+                    onChange={(e) =>
+                      setTuitionFee(e.target.value > 0 ? e.target.value : 0)
+                    }
                     value={tuitionFee}
+                    min={0}
                   />
                 </Col>
                 <Col xs={7}>

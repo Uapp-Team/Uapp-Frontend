@@ -366,7 +366,7 @@ function SearchAndApply() {
           </div>
         </>
       ) : (
-        <h3 className="text-center my-4">No data Found</h3>
+        <h3 className="text-center my-5 py-5">No data Found</h3>
       )}
 
       {loading ? null : (
