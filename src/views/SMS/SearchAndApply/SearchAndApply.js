@@ -63,6 +63,15 @@ function SearchAndApply() {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
+  const [applyEligibility, setApplyEligibility] = useState({});
+  const [quickViewData, setQuickViewData] = useState({});
+  const [openApplyModal, setOpenApplyModal] = useState(false);
+  const referenceId = localStorage.getItem("referenceId");
+  const [eligibility, setEligibility] = useState({});
+  const [open, setOpen] = useState(false);
+  const [subjectId, setSubjectId] = React.useState(0);
+  const [universityId, setUniversityId] = React.useState(0);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
     if (!isTyping) {
@@ -154,7 +163,6 @@ function SearchAndApply() {
   }, []);
 
   const handleFavourite = (value, subjectId, i) => {
-    console.log(value);
     post(
       `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
     )
@@ -178,9 +186,76 @@ function SearchAndApply() {
         });
       });
   };
+  const handleApply = async (subjectId, universityId) => {
+    setSubjectId(subjectId);
+    setUniversityId(universityId);
+    await get(
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+    ).then((res) => setApplyEligibility(res));
+    const quickViewData = data?.items?.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
+    setOpenApplyModal(true);
+  };
+  // const handleQuickView = async (subjectId, universityId) => {
+  //   setSubjectId(subjectId);
+  //   setUniversityId(universityId);
+  //   const quickViewData = await data?.items?.filter(
+  //     (item) =>
+  //       item.subjectId === subjectId && item.universityId === universityId
+  //   );
+  //   const eligibilityData = await get(
+  //     `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+  //   );
+  //   setEligibility(eligibilityData);
+  //   setQuickViewData(quickViewData[0]);
+  //   setOpen(true);
+  // };
 
-  const handleSubmit = () => {
-    console.log("submit");
+  const handleSubmit = async (
+    selectedCampusLabel,
+    selectedCampusValue,
+    selectedStudyModeId,
+    selectedDeliveryPatternId,
+    selectedDeliveryScheduleId,
+    selectedDurationId,
+    selectedIntakeId
+  ) => {
+    const data = {
+      studentId: Number(referenceId),
+      campusId: Number(selectedCampusValue),
+      UniversitySubjectId: Number(subjectId),
+      intakeId: Number(selectedIntakeId),
+      deliveryScheduleId: Number(selectedDeliveryScheduleId),
+      StudyMode: Number(selectedStudyModeId),
+      DeliveryMethod: Number(selectedDeliveryPatternId),
+      durationId: Number(selectedDurationId),
+    };
+
+    try {
+      const res = await post(`Apply/SubmitApplication`, data);
+
+      if (res?.status === 200) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setOpenApplyModal(false);
+        setOpen(false);
+      } else {
+        addToast(res?.data?.message || "An error occurred", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    } catch (error) {
+      addToast("An unexpected error occurred. Please try again.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    }
   };
   return (
     <>
@@ -280,6 +355,14 @@ function SearchAndApply() {
           <div className="d-block d-md-none">
             <ApplyCardVar
               data={data?.items}
+              confirmLoading={confirmLoading}
+              quickViewData={quickViewData}
+              openApplyModal={openApplyModal}
+              setOpenApplyModal={setOpenApplyModal}
+              // handleQuickView={handleQuickView}
+              handleApply={handleApply}
+              eligibility={eligibility}
+              applyEligibility={applyEligibility}
               handleFavourite={handleFavourite}
               handleSubmit={handleSubmit}
             />
@@ -289,6 +372,14 @@ function SearchAndApply() {
             {mobileCard ? (
               <ApplyCardVar
                 data={data?.items}
+                confirmLoading={confirmLoading}
+                quickViewData={quickViewData}
+                openApplyModal={openApplyModal}
+                setOpenApplyModal={setOpenApplyModal}
+                // handleQuickView={handleQuickView}
+                handleApply={handleApply}
+                eligibility={eligibility}
+                applyEligibility={applyEligibility}
                 handleFavourite={handleFavourite}
                 handleSubmit={handleSubmit}
               />

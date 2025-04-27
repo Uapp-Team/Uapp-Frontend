@@ -34,14 +34,8 @@ const ApplyModal = ({
     React.useState("");
   const [selectedDeliveryScheduleId, setSelectedDeliveryScheduleId] =
     React.useState("");
-
-  console.log(
-    selectedCampusLabel,
-    selectedCampusValue,
-    selectedStudyModeId,
-    selectedDeliveryPatternId,
-    selectedDeliveryScheduleId
-  );
+  const [selectedDurationId, setSelectedDurationId] = React.useState("");
+  const [selectedIntakeId, setSelectedIntakeId] = React.useState("");
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -140,11 +134,19 @@ const ApplyModal = ({
               <CiTimer className="mr-2" />
               Duration{" "}
               <strong className="ml-2">
-                {quickViewData?.durationNames
-                  ?.split(",")
-                  .map((duration, index) => (
-                    <span className="filter-button mr-2 mb-2">{duration}</span>
-                  ))}
+                {quickViewData?.durations?.map((duration) => (
+                  <span
+                    key={duration.id}
+                    className={`filter-button mr-2 mb-2 pointer ${
+                      selectedDurationId === duration.id
+                        ? "filter-button-clicked"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedDurationId(duration.id)}
+                  >
+                    {duration.name}
+                  </span>
+                ))}
               </strong>
             </div>
           </div>
@@ -233,8 +235,16 @@ const ApplyModal = ({
             <p>Intake</p>
           </div>
           <div className="d-flex flex-wrap">
-            {quickViewData?.intakeNames?.split(",").map((intake, index) => (
-              <span className="filter-button">{intake}</span>
+            {quickViewData?.intakes?.map((intake) => (
+              <span
+                key={intake.id}
+                className={`filter-button mr-2 mb-2 pointer ${
+                  selectedIntakeId === intake.id ? "filter-button-clicked" : ""
+                }`}
+                onClick={() => setSelectedIntakeId(intake.id)}
+              >
+                {intake.name}
+              </span>
             ))}
           </div>
         </Row>
@@ -361,7 +371,20 @@ const ApplyModal = ({
           <button className="program-modal__cancel" onClick={onClose}>
             Cancel
           </button>
-          <button onClick={() => handleSubmit()} className="apply-btn">
+          <button
+            onClick={() =>
+              handleSubmit(
+                selectedCampusLabel,
+                selectedCampusValue,
+                selectedStudyModeId,
+                selectedDeliveryPatternId,
+                selectedDeliveryScheduleId,
+                selectedDurationId,
+                selectedIntakeId
+              )
+            }
+            className="apply-btn"
+          >
             Apply →
           </button>
         </Row>
