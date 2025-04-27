@@ -23,6 +23,7 @@ import {
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
+import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -197,10 +198,7 @@ const QuickViewModal = ({
               <div className="d-flex align-items-center my-2">
                 <img
                   className="h-48px w-48px mr-2"
-                  src={
-                    "https://localtest.uapp.uk/" +
-                    quickViewData?.universityLogoUrl
-                  }
+                  src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
                 <div className="d-flex flex-column">
