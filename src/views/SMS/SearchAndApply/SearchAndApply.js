@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaSlidersH } from "react-icons/fa";
 import { useToasts } from "react-toast-notifications";
+import { useHistory } from "react-router-dom";
 import { Col, Row } from "reactstrap";
 import { Student } from "../../../components/core/User";
 import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
@@ -18,6 +19,7 @@ import SearchFilter from "./SearchFilter";
 
 function SearchAndApply() {
   const { addToast } = useToasts();
+  const history = useHistory();
   const sentinelRef = useRef(null);
   const toolbarRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
@@ -211,7 +213,14 @@ function SearchAndApply() {
           appearance: "success",
           autoDismiss: true,
         });
+
         setOpenApplyModal(false);
+        console.log(res?.data);
+        history.push(
+          `/applicationDetails/${res?.data?.data?.applicationId}/${
+            Student() ? referenceId : studentId
+          }`
+        );
       } else {
         addToast(res?.data?.message || "An error occurred", {
           appearance: "error",
