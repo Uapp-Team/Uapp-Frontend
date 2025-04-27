@@ -64,21 +64,27 @@ const SearchFilter = ({
   const divRef = useRef(null);
 
   useEffect(() => {
-    const list = [];
-    intakeList.map((item) => list.push(item.value));
-    setIntakeId(list);
+    if (intakeList?.length > 0) {
+      const list = [];
+      intakeList.map((item) => list.push(item.value));
+      setIntakeId(list);
+    }
   }, [setIntakeId, intakeList]);
 
   useEffect(() => {
-    const studyLevelListId = [];
-    studyLevelList.map((item) => studyLevelListId.push(item.value));
-    setStudyLevelId(studyLevelListId);
+    if (studyLevelList?.length > 0) {
+      const studyLevelListId = [];
+      studyLevelList.map((item) => studyLevelListId.push(item.value));
+      setStudyLevelId(studyLevelListId);
+    }
   }, [setStudyLevelId, studyLevelList]);
 
   useEffect(() => {
-    const list = [];
-    courseDurationsList.map((item) => list.push(item.value));
-    setCourseDurations(list);
+    if (courseDurationsList?.length > 0) {
+      const list = [];
+      courseDurationsList.map((item) => list.push(item.value));
+      setCourseDurations(list);
+    }
   }, [setCourseDurations, courseDurationsList]);
 
   useEffect(() => {
