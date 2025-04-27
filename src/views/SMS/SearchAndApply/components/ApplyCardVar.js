@@ -294,10 +294,14 @@ const ApplyCardVar = ({
                         </button>
                       ) : (
                         <button
-                          className="apply-btn-vertical"
+                          className={`apply-btn-vertical ${
+                            !item?.canApply && "disabled"
+                          } `}
                           onClick={() => {
                             handleApply(item.subjectId, item.universityId);
                           }}
+                          disabled={!item?.canApply}
+                          title={!item?.canApply && item?.summary}
                         >
                           Apply Now <RiArrowRightSLine />
                         </button>
