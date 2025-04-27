@@ -118,7 +118,6 @@ function SearchAndApply() {
     dataPerPage,
     deliveryPattern,
     deliverySchedule,
-    filterOpen,
     institutionId,
     intakeId,
     isAvailableCourses,

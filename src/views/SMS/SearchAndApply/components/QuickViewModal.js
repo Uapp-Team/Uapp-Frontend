@@ -210,7 +210,7 @@ const QuickViewModal = ({
                   </span>
                 </div>
               </div>
-              <div className="d-flex align-items-center my-4">
+              <div className="d-flex align-items-start my-4">
                 <img src={ranking} alt="" className="h-24px w-24px mr-2 mt-1" />
                 <div className="d-flex flex-column">
                   <span className="fs-14px fw-600">
@@ -242,15 +242,17 @@ const QuickViewModal = ({
                 <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
                 <div>
                   <span className="info-title">Tuition Fees</span>
-                  <div className="w-150px">
-                    <div className="d-flex justify-content-between min-vw-75">
-                      Home/UK: <span>£{quickViewData?.localTutionFee}</span>
+                  <div>
+                    <div className="d-flex justify-content-between w-75">
+                      <span> Home/UK:</span>
+                      <span>£{quickViewData?.localTutionFee}</span>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      EU/EEU: <span>£{quickViewData?.eU_TutionFee}</span>
+                    <div className="d-flex justify-content-between w-75">
+                      <span>EU/EEU:</span>
+                      <span>£{quickViewData?.eU_TutionFee}</span>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      International:{" "}
+                    <div className="d-flex justify-content-between w-75">
+                      <span>International:</span>
                       <span>£{quickViewData?.internationalTutionFee}</span>
                     </div>
                   </div>
@@ -289,8 +291,8 @@ const QuickViewModal = ({
 
           <div className="quickview-footer">
             <div className="footer-tag">
-              <div>
-                <VscFeedback className="mr-2" />
+              <div className="mb-2 fw-500">
+                <VscFeedback size={20} className="mr-2" />
                 <span>Delivery Pattern</span>
               </div>
               <div className="footer-tag__content">
@@ -311,8 +313,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <FaPeopleGroup className="mr-2" />
+              <div className="mb-2 fw-500">
+                <FaPeopleGroup size={20} className="mr-2" />
                 Study Mode{" "}
               </div>
               <div className="footer-tag__content">
@@ -333,8 +335,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <CiTimer className="mr-2" />
+              <div className="mb-2 fw-500">
+                <CiTimer size={20} className="mr-2" />
                 Delivery Schedule{" "}
               </div>
               <div className="footer-tag__content">
@@ -355,8 +357,8 @@ const QuickViewModal = ({
               </div>
             </div>
             <div className="footer-tag">
-              <div>
-                <CiBag1 className="mr-2" />
+              <div className="mb-2 fw-500">
+                <CiBag1 size={20} className="mr-2" />
                 Deposit{" "}
               </div>
               <div className="footer-tag__content">
@@ -367,7 +369,7 @@ const QuickViewModal = ({
             </div>
           </div>
           <div className="view-more-container">
-            <button className="view-more-btn">View More</button>
+            <button className="view-more-btn">View course profile</button>
           </div>
         </ModalBody>
         <ApplyModal
