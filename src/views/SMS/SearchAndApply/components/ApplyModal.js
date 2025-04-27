@@ -10,7 +10,9 @@ import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
+import { Student } from "../../../../components/core/User";
 import Filter from "../../../../components/Dropdown/Filter";
+import { rootUrl } from "../../../../constants/constants";
 import {
   deliveryMethods,
   deliverySchedules,
@@ -18,7 +20,6 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
-import { Student } from "../../../../components/core/User";
 
 const ApplyModal = ({
   open,
@@ -89,10 +90,7 @@ const ApplyModal = ({
               <div className="apply-modal__header">
                 <img
                   className="h-48px w-48px mr-2"
-                  src={
-                    "https://localtest.uapp.uk/" +
-                    quickViewData?.universityLogoUrl
-                  }
+                  src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
                 <div className="d-flex flex-column">
@@ -146,11 +144,15 @@ const ApplyModal = ({
                     £{quickViewData?.localTutionFee}
                   </div>
                 </div>
-                <div className="apply-modal-study__info">
-                  <img className="h-24px w-24px" src={mortarboard} alt="" />
-                  <div className="fs-12px">Scholarship</div>
-                  <div className="fs-14px">10% or £5000</div>
-                </div>
+                {quickViewData?.scholarshipDetails && (
+                  <div className="apply-modal-study__info">
+                    <img className="h-24px w-24px" src={mortarboard} alt="" />
+                    <div className="fs-12px">Scholarship</div>
+                    <div className="fs-14px">
+                      {quickViewData?.scholarshipDetails}
+                    </div>
+                  </div>
+                )}
                 <div className="apply-modal-study__info">
                   <img className="h-24px w-24px " src={Application} alt="" />
                   <div className="fs-12px">Application fees</div>
@@ -187,7 +189,15 @@ const ApplyModal = ({
                     className="cursor-pointer"
                     onClick={handleHideProgramCard}
                   >
-                    Hide {programCard ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                    {programCard ? (
+                      <div className="d-flex align-items-center">
+                        <span className="mr-2">Hide</span> <IoIosArrowUp />
+                      </div>
+                    ) : (
+                      <div className="d-flex align-items-center">
+                        <span className="mr-2">Show</span> <IoIosArrowDown />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

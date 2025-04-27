@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaSlidersH } from "react-icons/fa";
-import { useToasts } from "react-toast-notifications";
 import { useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import { Col, Row } from "reactstrap";
 import { Student } from "../../../components/core/User";
 import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
