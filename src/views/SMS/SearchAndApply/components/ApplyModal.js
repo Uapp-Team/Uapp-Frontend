@@ -144,11 +144,15 @@ const ApplyModal = ({
                     £{quickViewData?.localTutionFee}
                   </div>
                 </div>
-                <div className="apply-modal-study__info">
-                  <img className="h-24px w-24px" src={mortarboard} alt="" />
-                  <div className="fs-12px">Scholarship</div>
-                  <div className="fs-14px">10% or £5000</div>
-                </div>
+                {quickViewData?.scholarshipDetails && (
+                  <div className="apply-modal-study__info">
+                    <img className="h-24px w-24px" src={mortarboard} alt="" />
+                    <div className="fs-12px">Scholarship</div>
+                    <div className="fs-14px">
+                      {quickViewData?.scholarshipDetails}
+                    </div>
+                  </div>
+                )}
                 <div className="apply-modal-study__info">
                   <img className="h-24px w-24px " src={Application} alt="" />
                   <div className="fs-12px">Application fees</div>
