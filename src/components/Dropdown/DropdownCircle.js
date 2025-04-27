@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import get from "../../helpers/get";
 
-const DefaultDropdown = ({
+const DropdownCircle = ({
+  method,
   selectAll = false,
   all = "All",
   label,
@@ -19,10 +19,10 @@ const DefaultDropdown = ({
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    get(url).then((res) => {
+    method(url).then((res) => {
       selectAll ? setData([{ id: 0, name: all }, ...res]) : setData(res);
     });
-  }, [all, selectAll, url]);
+  }, [method, all, selectAll, url]);
 
   const options = data?.map((std) => ({
     label: std?.name,
@@ -38,19 +38,21 @@ const DefaultDropdown = ({
 
   return (
     <>
-      <Select
-        options={options}
-        value={{
-          label: label,
-          value: value,
-        }}
-        onChange={(opt) => select(opt.label, opt.value)}
-        name={name}
-        id={name}
-      />
+      <div className="dropdown-circle">
+        <Select
+          options={options}
+          value={{
+            label: label,
+            value: value,
+          }}
+          onChange={(opt) => select(opt.label, opt.value)}
+          name={name}
+          id={name}
+        />
+      </div>
       {error === true ? <span className="text-danger">{errorText}</span> : null}
     </>
   );
 };
 
-export default DefaultDropdown;
+export default DropdownCircle;

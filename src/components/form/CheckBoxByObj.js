@@ -2,8 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import ErrorText from "./ErrorText";
 
-const CheckBox = ({
-  id,
+const CheckBoxByObj = ({
   label,
   type = "checkbox",
   name,
@@ -12,21 +11,17 @@ const CheckBox = ({
   defaultValue,
   error,
   action,
-  isValueShow = true,
   className = "mb-3",
 }) => {
-  // const handleChange = (e) => {
-  //   if (e.target.checked) {
-  //     defaultValue.push(e.target.value);
-  //   } else {
-  //     let index = defaultValue.indexOf(e.target.value);
-  //     defaultValue.splice(index, 1);
-  //   }
-  //   action(defaultValue);
-  // };
-
   const handleChange = (e) => {
-    let id = e.target.value;
+    const type = typeof list[0].id;
+
+    let id =
+      type === "string"
+        ? e.target.value.toString()
+        : type === "number"
+        ? parseInt(e.target.value)
+        : e.target.value;
     let val = e.target.checked;
 
     if (defaultValue) {
@@ -52,24 +47,19 @@ const CheckBox = ({
           </>
         )}
 
-        {list?.map((item, i) => (
-          <span key={i} className="d-flex align-items-center mb-3">
+        {list.map((item, i) => (
+          <span key={i} className="d-inline-block">
             <input
-              id={`${id}-${i}`}
-              value={item}
+              id={`${name}-${i}`}
+              value={item.id}
               type={type}
               {...register(name)}
-              onChange={handleChange}
-              defaultChecked={defaultValue?.includes(item)}
+              onClick={handleChange}
+              checked={defaultValue?.includes(item.id)}
             />
-            {isValueShow && (
-              <label
-                htmlFor={`${id}-${i}`}
-                className="mx-2 pointer fs-16px mb-0"
-              >
-                {item}
-              </label>
-            )}
+            <label htmlFor={`${name}-${i}`} className="mx-2 pointer">
+              {item.name}
+            </label>
           </span>
         ))}
 
@@ -79,4 +69,4 @@ const CheckBox = ({
   );
 };
 
-export default CheckBox;
+export default CheckBoxByObj;
