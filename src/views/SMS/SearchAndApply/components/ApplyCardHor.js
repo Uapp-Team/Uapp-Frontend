@@ -271,15 +271,28 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       </button>
 
                       {item.intakeStatusId !== 1 ? (
-                        <button className="register-btn">
+                        <button
+                          className={`register-btn ${
+                            !item?.canApply && "disabled"
+                          } `}
+                          onClick={() => {
+                            handleApply(item.subjectId, item.universityId);
+                          }}
+                          disabled={!item?.canApply}
+                          title={!item?.canApply && item?.summary}
+                        >
                           Register Interest <RiArrowRightSLine />
                         </button>
                       ) : (
                         <button
-                          className="apply-btn"
-                          onClick={() =>
-                            handleApply(item.subjectId, item.universityId)
-                          }
+                          className={`apply-btn ${
+                            !item?.canApply && "disabled"
+                          } `}
+                          onClick={() => {
+                            handleApply(item.subjectId, item.universityId);
+                          }}
+                          disabled={!item?.canApply}
+                          title={!item?.canApply && item?.summary}
                         >
                           Apply Now <RiArrowRightSLine />
                         </button>
