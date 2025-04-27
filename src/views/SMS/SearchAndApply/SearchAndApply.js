@@ -185,33 +185,6 @@ function SearchAndApply() {
         });
       });
   };
-  // const handleApply = async (subjectId, universityId) => {
-  //   setSubjectId(subjectId);
-  //   setUniversityId(universityId);
-  //   await get(
-  //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
-  //   ).then((res) => setApplyEligibility(res));
-  //   const quickViewData = data?.items?.filter(
-  //     (item) =>
-  //       item.subjectId === subjectId && item.universityId === universityId
-  //   );
-  //   setQuickViewData(quickViewData[0]);
-  //   setOpenApplyModal(true);
-  // };
-  // const handleQuickView = async (subjectId, universityId) => {
-  //   setSubjectId(subjectId);
-  //   setUniversityId(universityId);
-  //   const quickViewData = await data?.items?.filter(
-  //     (item) =>
-  //       item.subjectId === subjectId && item.universityId === universityId
-  //   );
-  //   const eligibilityData = await get(
-  //     `Eligibility/ShowEligibility/${universityId}/${subjectId}`
-  //   );
-  //   setEligibility(eligibilityData);
-  //   setQuickViewData(quickViewData[0]);
-  //   setOpen(true);
-  // };
 
   const handleSubmit = async (
     selectedCampusLabel,
@@ -354,6 +327,7 @@ function SearchAndApply() {
           <div className="d-block d-md-none">
             <ApplyCardVar
               data={data?.items}
+              studentName={studentName}
               setUniversityId={setUniversityId}
               handleSubmit={handleSubmit}
               openApplyModal={openApplyModal}
@@ -367,6 +341,7 @@ function SearchAndApply() {
             {mobileCard ? (
               <ApplyCardVar
                 data={data?.items}
+                studentName={studentName}
                 setUniversityId={setUniversityId}
                 handleSubmit={handleSubmit}
                 openApplyModal={openApplyModal}
@@ -377,6 +352,7 @@ function SearchAndApply() {
             ) : (
               <ApplyCardHor
                 data={data?.items}
+                studentName={studentName}
                 setUniversityId={setUniversityId}
                 handleSubmit={handleSubmit}
                 openApplyModal={openApplyModal}

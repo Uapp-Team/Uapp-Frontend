@@ -27,6 +27,7 @@ import { FaHeart } from "react-icons/fa";
 
 const ApplyCardHor = ({
   data,
+  studentName,
   setSubjectId,
   setUniversityId,
   openApplyModal,
@@ -329,12 +330,12 @@ const ApplyCardHor = ({
         handleFavourite={handleFavourite}
         handleSubmit={handleSubmit}
         handleApply={handleApply}
-        setSubjectId={setSubjectId}
-        setUniversityId={setUniversityId}
+        applyEligibility={applyEligibility}
       />
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
+        studentName={studentName}
         applyEligibility={applyEligibility}
         quickViewData={quickViewData}
         handleSubmit={handleSubmit}

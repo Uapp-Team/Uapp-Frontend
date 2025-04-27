@@ -24,6 +24,7 @@ import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({
   data,
+  studentName,
   setSubjectId,
   setUniversityId,
   openApplyModal,
@@ -262,15 +263,6 @@ const ApplyCardVar = ({
                           </p>
                         </div>
                       )}
-                      {/* <button className="probability-vertical">
-                        Probability:{" "}
-                        <Progress
-                          type="circle"
-                          percent={80}
-                          width={35}
-                          strokeColor="#FFAD0D"
-                        />
-                      </button> */}
                     </div>
 
                     <div className="card-action-vertical">
@@ -331,12 +323,12 @@ const ApplyCardVar = ({
         handleFavourite={handleFavourite}
         handleSubmit={handleSubmit}
         handleApply={handleApply}
-        setSubjectId={setSubjectId}
-        setUniversityId={setUniversityId}
+        applyEligibility={applyEligibility}
       />
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
+        studentName={studentName}
         applyEligibility={applyEligibility}
         quickViewData={quickViewData}
         handleSubmit={handleSubmit}

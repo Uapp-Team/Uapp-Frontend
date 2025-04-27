@@ -1,5 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
@@ -18,14 +18,17 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
+import { Student } from "../../../../components/core/User";
 
 const ApplyModal = ({
   open,
   onClose,
+  studentName,
   applyEligibility,
   quickViewData,
   handleSubmit,
 }) => {
+  const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [programCard, setProgramCard] = useState(true);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
@@ -38,7 +41,6 @@ const ApplyModal = ({
     useState("");
   const [selectedDeliveryScheduleId, setSelectedDeliveryScheduleId] =
     useState("");
-  const [selectedDurationId, setSelectedDurationId] = useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
 
@@ -54,6 +56,19 @@ const ApplyModal = ({
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
   };
+
+  useEffect(() => {
+    if (open) {
+      setSelectedIntakeId("");
+      setSelectedCampusValue("");
+      setSelectedCampusLabel("Select Campus");
+      setSelectedDurationValue("");
+      setSelectedDurationLabel("Select Duration");
+      setSelectedStudyModeId("");
+      setSelectedDeliveryPatternId("");
+      setSelectedDeliveryScheduleId("");
+    }
+  }, [open]);
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -103,7 +118,7 @@ const ApplyModal = ({
                     Student
                   </Col>
                   <Col xs={8} md={10}>
-                    {quickViewData?.studentName}
+                    {Student() ? current_user?.displayName : studentName}
                   </Col>
                 </Row>
                 <Row className="apply-modal-details">
