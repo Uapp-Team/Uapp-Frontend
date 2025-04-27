@@ -285,10 +285,14 @@ const ApplyCardVar = ({
 
                       {item.intakeStatusId !== 1 ? (
                         <button
-                          className="register-btn w-50"
+                          className={`w-50 register-btn ${
+                            !item?.canApply && "disabled"
+                          } `}
                           onClick={() => {
                             handleApply(item.subjectId, item.universityId);
                           }}
+                          disabled={!item?.canApply}
+                          title={!item?.canApply && item?.summary}
                         >
                           Register Interest <RiArrowRightSLine />
                         </button>

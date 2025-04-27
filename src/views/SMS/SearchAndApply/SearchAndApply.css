@@ -413,6 +413,11 @@
   cursor: not-allowed;
 }
 
+.register-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .quick-btn {
   background-color: white;
   border: 1px solid #045d5e;
