@@ -33,17 +33,22 @@ const QuickViewModal = ({
   eligibility,
   handleFavourite,
   handleSubmit,
+  setSubjectId,
+  setUniversityId,
+  handleApply,
 }) => {
   const referenceId = localStorage.getItem("referenceId");
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const [applyEligibility, setApplyEligibility] = useState({});
-  const handleApply = async (subjectId, universityId) => {
-    await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
-    ).then((res) => setApplyEligibility(res));
-    setOpenApplyModal(true);
-    setOpenApplyModal(true);
-  };
+  // const handleApply = async (subjectId, universityId) => {
+  //   setSubjectId(subjectId);
+  //   setUniversityId(universityId);
+  //   await get(
+  //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+  //   ).then((res) => setApplyEligibility(res));
+  //   setOpenApplyModal(true);
+  //   setOpenApplyModal(true);
+  // };
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">

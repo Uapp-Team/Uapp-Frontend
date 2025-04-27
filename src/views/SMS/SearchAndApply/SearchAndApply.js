@@ -185,19 +185,19 @@ function SearchAndApply() {
         });
       });
   };
-  const handleApply = async (subjectId, universityId) => {
-    setSubjectId(subjectId);
-    setUniversityId(universityId);
-    await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
-    ).then((res) => setApplyEligibility(res));
-    const quickViewData = data?.items?.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
-    setQuickViewData(quickViewData[0]);
-    setOpenApplyModal(true);
-  };
+  // const handleApply = async (subjectId, universityId) => {
+  //   setSubjectId(subjectId);
+  //   setUniversityId(universityId);
+  //   await get(
+  //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+  //   ).then((res) => setApplyEligibility(res));
+  //   const quickViewData = data?.items?.filter(
+  //     (item) =>
+  //       item.subjectId === subjectId && item.universityId === universityId
+  //   );
+  //   setQuickViewData(quickViewData[0]);
+  //   setOpenApplyModal(true);
+  // };
   // const handleQuickView = async (subjectId, universityId) => {
   //   setSubjectId(subjectId);
   //   setUniversityId(universityId);
@@ -354,10 +354,12 @@ function SearchAndApply() {
           <div className="d-block d-md-none">
             <ApplyCardVar
               data={data?.items}
+              setUniversityId={setUniversityId}
+              handleSubmit={handleSubmit}
               openApplyModal={openApplyModal}
               setOpenApplyModal={setOpenApplyModal}
               handleFavourite={handleFavourite}
-              handleSubmit={handleSubmit}
+              setSubjectId={setSubjectId}
             />
           </div>
 
@@ -365,22 +367,22 @@ function SearchAndApply() {
             {mobileCard ? (
               <ApplyCardVar
                 data={data?.items}
-                confirmLoading={confirmLoading}
-                quickViewData={quickViewData}
+                setUniversityId={setUniversityId}
+                handleSubmit={handleSubmit}
                 openApplyModal={openApplyModal}
                 setOpenApplyModal={setOpenApplyModal}
-                // handleQuickView={handleQuickView}
-                handleApply={handleApply}
-                eligibility={eligibility}
-                applyEligibility={applyEligibility}
                 handleFavourite={handleFavourite}
-                handleSubmit={handleSubmit}
+                setSubjectId={setSubjectId}
               />
             ) : (
               <ApplyCardHor
                 data={data?.items}
-                handleFavourite={handleFavourite}
+                setUniversityId={setUniversityId}
                 handleSubmit={handleSubmit}
+                openApplyModal={openApplyModal}
+                setOpenApplyModal={setOpenApplyModal}
+                handleFavourite={handleFavourite}
+                setSubjectId={setSubjectId}
               />
             )}
           </div>

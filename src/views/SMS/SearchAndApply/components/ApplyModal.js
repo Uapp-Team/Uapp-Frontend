@@ -423,7 +423,7 @@ const ApplyModal = ({
                     selectedStudyModeId,
                     selectedDeliveryPatternId,
                     selectedDeliveryScheduleId,
-                    selectedDurationId,
+                    selectedDurationsValue,
                     selectedIntakeId
                   )
                 }

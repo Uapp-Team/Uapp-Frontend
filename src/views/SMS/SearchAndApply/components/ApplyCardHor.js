@@ -25,13 +25,20 @@ import {
 } from "../../../../components/core/User";
 import { FaHeart } from "react-icons/fa";
 
-const ApplyCardHor = ({ data, handleFavourite }) => {
+const ApplyCardHor = ({
+  data,
+  setSubjectId,
+  setUniversityId,
+  openApplyModal,
+  setOpenApplyModal,
+  handleFavourite,
+  handleSubmit,
+}) => {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [quickViewData, setQuickViewData] = useState({});
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});
-  const [openApplyModal, setOpenApplyModal] = useState(false);
 
   const handleQuickView = async (subjectId, universityId, index) => {
     setIndex(index);
@@ -46,12 +53,21 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
     setQuickViewData(quickViewData[0]);
     setOpen(true);
   };
+
   const handleApply = async (subjectId, universityId) => {
+    setSubjectId(subjectId);
+    setUniversityId(universityId);
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
     setOpenApplyModal(true);
   };
+
   return (
     <>
       {data?.length > 0 &&
@@ -308,15 +324,20 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
         open={open}
         index={index}
         onClose={() => setOpen(false)}
-        eligibility={eligibility}
         quickViewData={quickViewData}
+        eligibility={eligibility}
         handleFavourite={handleFavourite}
+        handleSubmit={handleSubmit}
+        handleApply={handleApply}
+        setSubjectId={setSubjectId}
+        setUniversityId={setUniversityId}
       />
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
         applyEligibility={applyEligibility}
         quickViewData={quickViewData}
+        handleSubmit={handleSubmit}
       />
     </>
   );

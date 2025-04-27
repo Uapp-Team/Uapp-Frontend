@@ -24,6 +24,8 @@ import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({
   data,
+  setSubjectId,
+  setUniversityId,
   openApplyModal,
   setOpenApplyModal,
   handleFavourite,
@@ -51,6 +53,8 @@ const ApplyCardVar = ({
   };
 
   const handleApply = async (subjectId, universityId) => {
+    setSubjectId(subjectId);
+    setUniversityId(universityId);
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
@@ -326,6 +330,9 @@ const ApplyCardVar = ({
         eligibility={eligibility}
         handleFavourite={handleFavourite}
         handleSubmit={handleSubmit}
+        handleApply={handleApply}
+        setSubjectId={setSubjectId}
+        setUniversityId={setUniversityId}
       />
       <ApplyModal
         open={openApplyModal}
