@@ -224,7 +224,7 @@ function SearchAndApply() {
     selectedIntakeId
   ) => {
     const data = {
-      studentId: Number(referenceId),
+      studentId: Student() ? Number(referenceId) : Number(studentId),
       campusId: Number(selectedCampusValue),
       UniversitySubjectId: Number(subjectId),
       intakeId: Number(selectedIntakeId),
