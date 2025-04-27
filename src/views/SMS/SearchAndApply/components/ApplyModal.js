@@ -433,7 +433,6 @@ const ApplyModal = ({
               <button
                 onClick={() =>
                   handleSubmit(
-                    selectedCampusLabel,
                     selectedCampusValue,
                     selectedStudyModeId,
                     selectedDeliveryPatternId,
