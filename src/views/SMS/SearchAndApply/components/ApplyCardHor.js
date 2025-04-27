@@ -72,7 +72,7 @@ const ApplyCardHor = ({
       {data?.length > 0 &&
         data?.map((item, index) => (
           <div className="card-container mt-3" key={index}>
-            {item.intakeStatusId !== 1 && (
+            {item.intakeStatusId === 3 && (
               <span className="tbc">
                 TBC
                 <Tooltip
@@ -285,7 +285,7 @@ const ApplyCardHor = ({
                         Quick view
                       </button>
 
-                      {item.intakeStatusId !== 1 ? (
+                      {item.intakeStatusId === 3 ? (
                         <button
                           className={`register-btn ${
                             !item?.canApply && "disabled"

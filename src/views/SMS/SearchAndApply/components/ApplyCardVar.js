@@ -72,7 +72,7 @@ const ApplyCardVar = ({
             <Col xs={12} md={6} lg={4} key={index}>
               <div className="mb-3">
                 <div className="card-container-vertical">
-                  {item.intakeStatusId !== 1 && (
+                  {item.intakeStatusId === 3 && (
                     <span className="tbc">
                       TBC
                       <Tooltip
@@ -277,7 +277,7 @@ const ApplyCardVar = ({
                         Quick view
                       </button>
 
-                      {item.intakeStatusId !== 1 ? (
+                      {item.intakeStatusId === 3 ? (
                         <button
                           className={`w-50 register-btn ${
                             !item?.canApply && "disabled"
