@@ -187,7 +187,6 @@ function SearchAndApply() {
   };
 
   const handleSubmit = async (
-    selectedCampusLabel,
     selectedCampusValue,
     selectedStudyModeId,
     selectedDeliveryPatternId,
