@@ -19,7 +19,6 @@ import {
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
 import { Student } from "../../../../components/core/User";
-import { rootUrl } from "../../../../constants/constants";
 
 const ApplyModal = ({
   open,
@@ -90,7 +89,10 @@ const ApplyModal = ({
               <div className="apply-modal__header">
                 <img
                   className="h-48px w-48px mr-2"
-                  src={rootUrl + quickViewData?.universityLogoUrl}
+                  src={
+                    "https://localtest.uapp.uk/" +
+                    quickViewData?.universityLogoUrl
+                  }
                   alt=""
                 />
                 <div className="d-flex flex-column">
