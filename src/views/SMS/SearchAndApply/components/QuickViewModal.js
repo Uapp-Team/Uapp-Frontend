@@ -109,17 +109,6 @@ const QuickViewModal = ({
                   <LuArrowUpRight size={16} className="fs-20px" />
                 </div>
               </div>
-              {/* <button
-                className="apply-btn"
-                onClick={() =>
-                  handleApply(
-                    quickViewData?.subjectId,
-                    quickViewData?.universityId
-                  )
-                }
-              >
-                Apply Now
-              </button> */}
 
               {quickViewData.intakeStatusId !== 1 ? (
                 <button
