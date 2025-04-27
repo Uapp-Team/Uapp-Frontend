@@ -1,15 +1,15 @@
-import React, { useState } from "react";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Modal, ModalBody } from "reactstrap";
+import React, { useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { SlCalender } from "react-icons/sl";
-import { Col, Row } from "reactstrap";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import CloseBtn from "../../../../components/buttons/CloseBtn";
 import Filter from "../../../../components/Dropdown/Filter";
 import {
   deliveryMethods,
@@ -17,7 +17,7 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
-import CloseBtn from "../../../../components/buttons/CloseBtn";
+import CustomToolTip from "./CustomToolTip";
 
 const ApplyModal = ({
   open,
@@ -31,12 +31,16 @@ const ApplyModal = ({
   const [selectedCampusLabel, setSelectedCampusLabel] =
     useState("Select Campus");
   const [selectedCampusValue, setSelectedCampusValue] = useState("");
+  const [selectedDurationsLabel, setSelectedDurationLabel] =
+    useState("Select Duration");
+  const [selectedDurationsValue, setSelectedDurationValue] = useState("");
   const [selectedDeliveryPatternId, setSelectedDeliveryPatternId] =
     useState("");
   const [selectedDeliveryScheduleId, setSelectedDeliveryScheduleId] =
     useState("");
   const [selectedDurationId, setSelectedDurationId] = useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
+  const [selectedIntake, setSelectedIntake] = useState("Select Intake");
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -105,11 +109,7 @@ const ApplyModal = ({
                     />
                   </Col>
                   <Col xs={8} md={10}>
-                    {quickViewData?.intakeNames
-                      ?.split(",")
-                      .map((intake, index) => (
-                        <span>{intake}</span>
-                      ))}
+                    {selectedIntake}
                   </Col>
                 </Row>
                 <div className="dashed-hr"></div>
@@ -147,21 +147,10 @@ const ApplyModal = ({
                 <div className="program-modal__duration">
                   <CiTimer className="mr-2" />
                   Duration{" "}
-                  <strong className="ml-2">
-                    {quickViewData?.durations?.map((duration) => (
-                      <span
-                        key={duration.id}
-                        className={`filter-button mr-2 mb-2 pointer ${
-                          selectedDurationId === duration.id
-                            ? "filter-button-clicked"
-                            : ""
-                        }`}
-                        onClick={() => setSelectedDurationId(duration.id)}
-                      >
-                        {duration.name}
-                      </span>
-                    ))}
-                  </strong>
+                  <CustomToolTip
+                    methodIds={quickViewData?.durationNames}
+                    title="Duration"
+                  />
                 </div>
               </div>
             </div>
@@ -264,7 +253,10 @@ const ApplyModal = ({
                         ? "filter-button-clicked"
                         : ""
                     }`}
-                    onClick={() => setSelectedIntakeId(intake.id)}
+                    onClick={() => {
+                      setSelectedIntake(intake.name);
+                      setSelectedIntakeId(intake.id);
+                    }}
                   >
                     {intake.name}
                   </span>
@@ -286,6 +278,24 @@ const ApplyModal = ({
                 onChange={(label, value) => {
                   setSelectedCampusLabel(label);
                   setSelectedCampusValue(value);
+                }}
+              />
+            </Row>
+
+            <Row className="program-modal__form-group">
+              <label htmlFor="duration">Course Durations</label>
+              <Filter
+                data={quickViewData?.durations?.map((campus) => ({
+                  name: campus.name,
+                  id: campus.id,
+                }))}
+                label={selectedDurationsLabel}
+                setLabel={setSelectedDurationLabel}
+                value={selectedDurationsValue}
+                setValue={setSelectedDurationValue}
+                onChange={(label, value) => {
+                  setSelectedDurationLabel(label);
+                  setSelectedDurationValue(value);
                 }}
               />
             </Row>
