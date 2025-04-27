@@ -41,18 +41,15 @@ const ApplyModal = ({
   const [selectedDurationId, setSelectedDurationId] = useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
-  // const [isApplyDisabled, setIsApplyDisabled] = useState(false);
 
   const isApplyDisabled = !(
     selectedIntakeId &&
     selectedCampusValue &&
-    selectedDurationId &&
+    selectedDurationsValue &&
     selectedStudyModeId &&
     selectedDeliveryPatternId &&
     selectedDeliveryScheduleId
   );
-
-  console.log(isApplyDisabled, "isappliedDiasbled");
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
@@ -297,9 +294,9 @@ const ApplyModal = ({
             <Row className="program-modal__form-group">
               <label htmlFor="duration">Course Durations</label>
               <Filter
-                data={quickViewData?.durations?.map((campus) => ({
-                  name: campus.name,
-                  id: campus.id,
+                data={quickViewData?.durations?.map((duration) => ({
+                  name: duration.name,
+                  id: duration.id,
                 }))}
                 label={selectedDurationsLabel}
                 setLabel={setSelectedDurationLabel}
