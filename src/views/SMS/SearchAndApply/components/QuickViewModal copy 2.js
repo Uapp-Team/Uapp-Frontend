@@ -360,12 +360,11 @@ const QuickViewModal = ({
             <button className="view-more-btn">View More</button>
           </div>
         </ModalBody>
+        <ApplyModal
+          open={openApplyModal}
+          onClose={() => setOpenApplyModal(false)}
+        />
       </Modal>
-
-      <ApplyModal
-        open={openApplyModal}
-        onClose={() => setOpenApplyModal(false)}
-      />
     </>
   );
 };
