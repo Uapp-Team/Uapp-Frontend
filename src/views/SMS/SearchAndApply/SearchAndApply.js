@@ -27,7 +27,6 @@ function SearchAndApply() {
   const [dataPerPage, setDataPerPage] = useState(15);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
-  const [totalData, setTotaldata] = useState(0);
 
   // list
   const [applicationType, setApplicationType] = useState([]);
@@ -63,15 +62,15 @@ function SearchAndApply() {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select Country");
   const [cityName, setCityName] = useState("Select City");
-  const [applyEligibility, setApplyEligibility] = useState({});
-  const [quickViewData, setQuickViewData] = useState({});
+  // const [applyEligibility, setApplyEligibility] = useState({});
+  // const [quickViewData, setQuickViewData] = useState({});
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const referenceId = localStorage.getItem("referenceId");
-  const [eligibility, setEligibility] = useState({});
-  const [open, setOpen] = useState(false);
+  // const [eligibility, setEligibility] = useState({});
+  // const [open, setOpen] = useState(false);
   const [subjectId, setSubjectId] = React.useState(0);
-  const [universityId, setUniversityId] = React.useState(0);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  // const [universityId, setUniversityId] = React.useState(0);
+  // const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
     if (!isTyping) {
@@ -105,7 +104,6 @@ function SearchAndApply() {
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
         setData(res?.data);
         setFavorites(res.data?.items[0]?.favoriteSubjectCount);
-        setTotaldata(res?.data?.total);
         setLoading(false);
       });
     }
@@ -214,7 +212,6 @@ function SearchAndApply() {
           autoDismiss: true,
         });
         setOpenApplyModal(false);
-        setOpen(false);
       } else {
         addToast(res?.data?.message || "An error occurred", {
           appearance: "error",
@@ -327,7 +324,6 @@ function SearchAndApply() {
             <ApplyCardVar
               data={data?.items}
               studentName={studentName}
-              setUniversityId={setUniversityId}
               handleSubmit={handleSubmit}
               openApplyModal={openApplyModal}
               setOpenApplyModal={setOpenApplyModal}
@@ -341,7 +337,6 @@ function SearchAndApply() {
               <ApplyCardVar
                 data={data?.items}
                 studentName={studentName}
-                setUniversityId={setUniversityId}
                 handleSubmit={handleSubmit}
                 openApplyModal={openApplyModal}
                 setOpenApplyModal={setOpenApplyModal}
@@ -352,7 +347,6 @@ function SearchAndApply() {
               <ApplyCardHor
                 data={data?.items}
                 studentName={studentName}
-                setUniversityId={setUniversityId}
                 handleSubmit={handleSubmit}
                 openApplyModal={openApplyModal}
                 setOpenApplyModal={setOpenApplyModal}

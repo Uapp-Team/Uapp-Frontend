@@ -20,7 +20,6 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
-import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import { rootUrl } from "../../../../constants/constants";

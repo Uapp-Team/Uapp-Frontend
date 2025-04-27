@@ -29,7 +29,6 @@ const ApplyCardHor = ({
   data,
   studentName,
   setSubjectId,
-  setUniversityId,
   openApplyModal,
   setOpenApplyModal,
   handleFavourite,
@@ -57,7 +56,6 @@ const ApplyCardHor = ({
 
   const handleApply = async (subjectId, universityId) => {
     setSubjectId(subjectId);
-    setUniversityId(universityId);
     await get(
       `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
