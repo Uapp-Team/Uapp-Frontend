@@ -282,14 +282,26 @@ const ApplyCardVar = ({
                       >
                         Quick view
                       </button>
-                      <button
-                        className="apply-btn-vertical"
-                        onClick={() => {
-                          handleApply(item.subjectId, item.universityId);
-                        }}
-                      >
-                        Apply Now <RiArrowRightSLine />
-                      </button>
+
+                      {item.intakeStatusId !== 1 ? (
+                        <button
+                          className="register-btn w-50"
+                          onClick={() => {
+                            handleApply(item.subjectId, item.universityId);
+                          }}
+                        >
+                          Register Interest <RiArrowRightSLine />
+                        </button>
+                      ) : (
+                        <button
+                          className="apply-btn-vertical"
+                          onClick={() => {
+                            handleApply(item.subjectId, item.universityId);
+                          }}
+                        >
+                          Apply Now <RiArrowRightSLine />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

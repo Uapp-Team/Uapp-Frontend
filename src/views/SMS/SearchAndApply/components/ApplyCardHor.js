@@ -269,15 +269,21 @@ const ApplyCardHor = ({ data, handleFavourite }) => {
                       >
                         Quick view
                       </button>
-                      <button
-                        className="apply-btn"
-                        onClick={() =>
-                          handleApply(item.subjectId, item.universityId)
-                        }
-                      >
-                        Apply Now <RiArrowRightSLine />
-                      </button>
-                      {/* <button className="register-btn">Register Interest</button> */}
+
+                      {item.intakeStatusId !== 1 ? (
+                        <button className="register-btn">
+                          Register Interest <RiArrowRightSLine />
+                        </button>
+                      ) : (
+                        <button
+                          className="apply-btn"
+                          onClick={() =>
+                            handleApply(item.subjectId, item.universityId)
+                          }
+                        >
+                          Apply Now <RiArrowRightSLine />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
