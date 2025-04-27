@@ -3,6 +3,7 @@ import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { MdPriceCheck } from "react-icons/md";
@@ -20,23 +21,19 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { FaHeart } from "react-icons/fa";
 
 const ApplyCardVar = ({
   data,
-  confirmLoading,
-  // quickViewData,
   openApplyModal,
   setOpenApplyModal,
-  handleApply,
-  // eligibility,
-  applyEligibility,
   handleFavourite,
   handleSubmit,
 }) => {
+  const referenceId = localStorage.getItem("referenceId");
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
   const [eligibility, setEligibility] = useState({});
+  const [applyEligibility, setApplyEligibility] = useState({});
   const [quickViewData, setQuickViewData] = useState({});
 
   const handleQuickView = async (subjectId, universityId, index) => {
@@ -52,17 +49,18 @@ const ApplyCardVar = ({
     setQuickViewData(quickViewData[0]);
     setOpen(true);
   };
-  // const handleApply = async (subjectId, universityId) => {
-  //   await get(
-  //     `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
-  //   ).then((res) => setApplyEligibility(res));
-  //   const quickViewData = data.filter(
-  //     (item) =>
-  //       item.subjectId === subjectId && item.universityId === universityId
-  //   );
-  //   setQuickViewData(quickViewData[0]);
-  //   setOpenApplyModal(true);
-  // };
+
+  const handleApply = async (subjectId, universityId) => {
+    await get(
+      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+    ).then((res) => setApplyEligibility(res));
+    const quickViewData = data.filter(
+      (item) =>
+        item.subjectId === subjectId && item.universityId === universityId
+    );
+    setQuickViewData(quickViewData[0]);
+    setOpenApplyModal(true);
+  };
   return (
     <>
       <Row className="mt-3">
@@ -304,7 +302,6 @@ const ApplyCardVar = ({
         open={open}
         index={index}
         onClose={() => setOpen(false)}
-        confirmLoading={confirmLoading}
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleFavourite={handleFavourite}

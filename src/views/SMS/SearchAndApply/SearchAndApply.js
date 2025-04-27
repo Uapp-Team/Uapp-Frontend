@@ -355,14 +355,8 @@ function SearchAndApply() {
           <div className="d-block d-md-none">
             <ApplyCardVar
               data={data?.items}
-              confirmLoading={confirmLoading}
-              quickViewData={quickViewData}
               openApplyModal={openApplyModal}
               setOpenApplyModal={setOpenApplyModal}
-              // handleQuickView={handleQuickView}
-              handleApply={handleApply}
-              eligibility={eligibility}
-              applyEligibility={applyEligibility}
               handleFavourite={handleFavourite}
               handleSubmit={handleSubmit}
             />
