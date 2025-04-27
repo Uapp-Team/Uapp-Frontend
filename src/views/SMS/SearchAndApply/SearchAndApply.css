@@ -390,6 +390,11 @@
   width: 131px;
 }
 
+.apply-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .register-btn {
   background-color: #fc7300;
   color: white;
