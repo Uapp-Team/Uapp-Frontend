@@ -109,7 +109,7 @@ const QuickViewModal = ({
                   <LuArrowUpRight size={16} className="fs-20px" />
                 </div>
               </div>
-              <button
+              {/* <button
                 className="apply-btn"
                 onClick={() =>
                   handleApply(
@@ -119,7 +119,41 @@ const QuickViewModal = ({
                 }
               >
                 Apply Now
-              </button>
+              </button> */}
+
+              {quickViewData.intakeStatusId !== 1 ? (
+                <button
+                  className={`w-50 register-btn ${
+                    !quickViewData?.canApply && "disabled"
+                  } `}
+                  onClick={() => {
+                    handleApply(
+                      quickViewData.subjectId,
+                      quickViewData.universityId
+                    );
+                  }}
+                  disabled={!quickViewData?.canApply}
+                  title={!quickViewData?.canApply && quickViewData?.summary}
+                >
+                  Register Interest
+                </button>
+              ) : (
+                <button
+                  className={`apply-btn-vertical ${
+                    !quickViewData?.canApply && "disabled"
+                  } `}
+                  onClick={() => {
+                    handleApply(
+                      quickViewData.subjectId,
+                      quickViewData.universityId
+                    );
+                  }}
+                  disabled={!quickViewData?.canApply}
+                  title={!quickViewData?.canApply && quickViewData?.summary}
+                >
+                  Apply Now
+                </button>
+              )}
             </Col>
           </Row>
 
