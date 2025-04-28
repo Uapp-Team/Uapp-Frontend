@@ -1,4 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -31,6 +32,7 @@ const ApplyModal = ({
 }) => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [programCard, setProgramCard] = useState(true);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
@@ -61,6 +63,24 @@ const ApplyModal = ({
   };
   const handleCheckboxChange = (e) => {
     setIsCheckboxChecked(e.target.checked);
+  };
+
+  const handleApplyClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleSubmit(
+        selectedCampusValue,
+        selectedStudyModeId,
+        selectedDeliveryPatternId,
+        selectedDeliveryScheduleId,
+        selectedDurationsValue,
+        selectedIntakeId
+      );
+    } catch (error) {
+      console.error("Error during submission:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
 
   useEffect(() => {
@@ -472,20 +492,13 @@ const ApplyModal = ({
                 Cancel
               </button>
               <button
-                onClick={() =>
-                  handleSubmit(
-                    selectedCampusValue,
-                    selectedStudyModeId,
-                    selectedDeliveryPatternId,
-                    selectedDeliveryScheduleId,
-                    selectedDurationsValue,
-                    selectedIntakeId
-                  )
-                }
-                className={`apply-btn ${isApplyDisabled ? "disabled" : ""}`}
-                disabled={isApplyDisabled}
+                onClick={handleApplyClick}
+                className={`apply-btn ${
+                  isApplyDisabled || isLoading ? "disabled" : ""
+                }`}
+                disabled={isApplyDisabled || isLoading}
               >
-                Apply →
+                {isLoading ? <Spin size="small" /> : "Apply →"}
               </button>
             </Row>
           </div>
