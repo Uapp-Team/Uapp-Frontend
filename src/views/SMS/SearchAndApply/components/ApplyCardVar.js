@@ -170,6 +170,7 @@ const ApplyCardVar = ({
                       <OverflowHeightText
                         text={item.subjectName}
                         className="card-title-vertical fw-700 fs-20px"
+                        height="60px"
                         line={2}
                       />
                       {/* <div className="tags">
