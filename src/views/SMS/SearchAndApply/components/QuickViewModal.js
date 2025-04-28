@@ -15,6 +15,7 @@ import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
+import { rootUrl } from "../../../../constants/constants";
 import {
   deliveryMethods,
   deliverySchedules,
@@ -22,7 +23,6 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
-import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -275,19 +275,21 @@ const QuickViewModal = ({
                 </div>
               </div>
               <div className="dashed-hr"></div>
-              <div className="info-group">
-                <img
-                  src={mortarboard}
-                  alt=""
-                  className="h-24px w-24px mr-2 mt-1"
-                />
-                <div>
-                  <span className="info-title">Scholarship</span>
-                  <ul>
-                    <li>10% or £5000</li>
-                  </ul>
+              {quickViewData?.scholarshipDetails && (
+                <div className="info-group">
+                  <img
+                    src={mortarboard}
+                    alt=""
+                    className="h-24px w-24px mr-2 mt-1"
+                  />
+                  <div>
+                    <span className="info-title">Scholarship</span>
+                    <ul>
+                      <li>{quickViewData?.scholarshipDetails}</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="dashed-hr"></div>
               <div className="info-group">
                 <img
