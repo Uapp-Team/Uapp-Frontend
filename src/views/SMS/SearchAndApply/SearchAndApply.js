@@ -132,11 +132,11 @@ function SearchAndApply() {
     tuitionFee,
   ]);
 
-  useEffect(() => {
-    get(`SearchFilter/StudentTypes`).then((res) => {
-      setApplicationType(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   get(`SearchFilter/StudentTypes`).then((res) => {
+  //     setApplicationType(res);
+  //   });
+  // }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -421,6 +421,7 @@ function SearchAndApply() {
           cityName={cityName}
           setCityName={setCityName}
           applicationType={applicationType}
+          setApplicationType={setApplicationType}
           intakeList={intakeList}
           setIntakeList={setIntakeList}
           studyLevelList={studyLevelList}
