@@ -319,7 +319,10 @@ const QuickViewModal = ({
                 <div>
                   <span className="info-title">Application Fee</span>
                   <ul>
-                    <li>£{quickViewData?.avarageApplicationFee}</li>
+                    <li>
+                      {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                      {quickViewData?.avarageApplicationFee}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -400,7 +403,10 @@ const QuickViewModal = ({
               </div>
               <div className="footer-tag__content">
                 <ul>
-                  <li>£{quickViewData?.depositFee}</li>
+                  <li>
+                    {currency(quickViewData.depositFeeCurrencyId)}
+                    {quickViewData?.depositFee}
+                  </li>
                 </ul>
               </div>
             </div>
