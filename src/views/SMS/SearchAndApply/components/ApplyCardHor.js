@@ -3,6 +3,7 @@ import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { BiDonateBlood } from "react-icons/bi";
 import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { MdPriceCheck } from "react-icons/md";
@@ -13,6 +14,12 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import {
+  Consultant,
+  referenceId,
+  Student,
+} from "../../../../components/core/User";
+import { rootUrl } from "../../../../constants/constants";
+import {
   currency,
   deliveryMethods,
   studyMode,
@@ -22,13 +29,6 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import {
-  Consultant,
-  referenceId,
-  Student,
-} from "../../../../components/core/User";
-import { FaHeart } from "react-icons/fa";
-import { rootUrl } from "../../../../constants/constants";
 
 const ApplyCardHor = ({
   data,
@@ -297,31 +297,85 @@ const ApplyCardHor = ({
                       </button>
 
                       {item.intakeStatusId === 3 ? (
-                        <button
-                          className={`register-btn ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Register Interest <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`w-50 register-btn ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                Register Interest
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       ) : (
-                        <button
-                          className={`apply-btn ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Apply Now <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`apply-btn-vertical ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                <span className="mr-2">Apply Now</span>
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       )}
                     </div>
                   </div>

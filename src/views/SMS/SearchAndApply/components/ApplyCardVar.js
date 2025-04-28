@@ -288,33 +288,86 @@ const ApplyCardVar = ({
                       >
                         Quick view
                       </button>
-
                       {item.intakeStatusId === 3 ? (
-                        <button
-                          className={`w-50 register-btn ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Register Interest <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`w-50 register-btn ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                Register Interest
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       ) : (
-                        <button
-                          className={`apply-btn-vertical ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Apply Now <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`apply-btn-vertical ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                <span className="mr-2">Apply Now</span>
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       )}
                     </div>
                   </div>
