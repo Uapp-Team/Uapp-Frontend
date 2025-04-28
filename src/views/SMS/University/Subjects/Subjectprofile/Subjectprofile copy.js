@@ -1,15 +1,13 @@
+import DOMPurify from "dompurify";
 import React, { useEffect, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Modal, ModalBody, Nav, NavItem } from "reactstrap";
 import locationIcon from "../../../../../assets/img/pages/marker-pin-03.png";
-import get from "../../../../../helpers/get";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { rootUrl } from "../../../../../constants/constants";
-import { useHistory } from "react-router-dom";
 import { userTypes } from "../../../../../constants/userTypeConstant";
-import Apply from "./Apply";
+import get from "../../../../../helpers/get";
 import ApplicationRequirment from "./ApplicationRequirment";
-import DOMPurify from "dompurify";
+import Apply from "./Apply";
 
 const Subjectprofile = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -216,7 +214,7 @@ const Subjectprofile = () => {
                     ))}
                   </p>
                 </div>
-                <div className="mt-3">
+                {/* <div className="mt-3">
                   <button
                     type="submit"
                     className="subject-profile-btn"
@@ -224,7 +222,7 @@ const Subjectprofile = () => {
                   >
                     Apply Now
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
+import { useHistory } from "react-router-dom";
 import { Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
@@ -35,8 +36,11 @@ const QuickViewModal = ({
   handleApply,
   applyEligibility,
 }) => {
+  let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
-
+  const handleCourseDetails = (subjectId) => {
+    router.push(`subjectProfile/${subjectId}`);
+  };
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -392,7 +396,12 @@ const QuickViewModal = ({
             </div>
           </div>
           <div className="view-more-container">
-            <button className="view-more-btn">View course profile</button>
+            <button
+              className="view-more-btn"
+              onClick={() => handleCourseDetails(quickViewData?.subjectId)}
+            >
+              View course profile
+            </button>
           </div>
         </ModalBody>
         <ApplyModal
