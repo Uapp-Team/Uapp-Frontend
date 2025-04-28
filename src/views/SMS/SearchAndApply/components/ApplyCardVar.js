@@ -15,7 +15,11 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
-import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import {
+  currency,
+  deliveryMethods,
+  studyMode,
+} from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
@@ -177,21 +181,24 @@ const ApplyCardVar = ({
                               <MdPriceCheck className="mr-2" />
                               <span>Tuition (1st year)</span>
                             </span>
-                            £{item.localTutionFee}
+                            {currency(item.firstYearTutionFeeCurrencyId)}
+                            {item.firstYearTutionFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <CiBag1 className="mr-2" />
                               <span>Deposit</span>
                             </span>
-                            £{item.depositFee}
+                            {currency(item.depositFeeCurrencyId)}
+                            {item.depositFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <BiDonateBlood className="mr-2" />
                               <span>Application fee</span>
                             </span>
-                            £{item.avarageApplicationFee}
+                            {currency(item.avarageApplicationFeeCurrencyId)}
+                            {item.avarageApplicationFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
