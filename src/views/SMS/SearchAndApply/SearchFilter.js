@@ -117,8 +117,8 @@ const SearchFilter = ({
   useEffect(() => {
     const list = [];
     intakeList.map((item) => list.push(item.value));
-    intakeId.length !== list.length && setIntakeId(list);
-  }, [setIntakeId, intakeList, intakeId]);
+    isMobileDevice && intakeId.length !== list.length && setIntakeId(list);
+  }, [setIntakeId, intakeList, intakeId, isMobileDevice]);
 
   useEffect(() => {
     const list = [];
@@ -135,8 +135,10 @@ const SearchFilter = ({
   useEffect(() => {
     const list = [];
     studyLevelList.map((item) => list.push(item.value));
-    studyLevelId.length !== list.length && setStudyLevelId(list);
-  }, [setStudyLevelId, studyLevelId, studyLevelList]);
+    isMobileDevice &&
+      studyLevelId.length !== list.length &&
+      setStudyLevelId(list);
+  }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
   useEffect(() => {
     const studyLevelListQuery = [];
