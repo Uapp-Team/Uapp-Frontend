@@ -193,8 +193,8 @@ const ApplyModal = ({
               <div className="dashed-hr"></div>
               <div className="program-modal__info">
                 <div className="program-modal__deadline">
-                  Application deadline{" "}
-                  <strong>{quickViewData?.applicationDeadLine}</strong>
+                  <strong>Application deadline </strong>
+                  {quickViewData?.applicationDeadLine}
                 </div>
                 {quickViewData?.classStartDate && (
                   <div className="program-modal__start">
