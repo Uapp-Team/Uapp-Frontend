@@ -31,6 +31,7 @@ function SearchAndApply() {
   const [favorites, setFavorites] = useState(0);
 
   // list
+  const [applicationTypelist, setApplicationTypelist] = useState([]);
   const [applicationType, setApplicationType] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
@@ -49,6 +50,7 @@ function SearchAndApply() {
   const [cityId, setCityId] = useState(0);
   const [tuitionFee, setTuitionFee] = useState(0);
   const [applicationTypeIds, setApplicationTypeIds] = useState([]);
+  const [loans, setLoans] = useState([]);
   const [courseDurations, setCourseDurations] = useState([]);
   const [isScholarships, setIsScholarships] = useState(false);
   const [isAvailableCourses, setIsAvailableCourses] = useState(false);
@@ -92,6 +94,8 @@ function SearchAndApply() {
         isAcceptHome: applicationTypeIds?.includes(1) ? true : false,
         isAcceptEU_UK: applicationTypeIds?.includes(2) ? true : false,
         isAcceptInternational: applicationTypeIds?.includes(3) ? true : false,
+        isGovernmentLoan: loans?.includes(1) ? true : false,
+        isPrivateLoan: loans?.includes(2) ? true : false,
         courseDurations: courseDurations,
         isScholarshipAvailable: isScholarships,
         isShowAvailableCoursesOnly: isAvailableCourses,
@@ -125,12 +129,21 @@ function SearchAndApply() {
     isScholarships,
     isTyping,
     isWorkPlacement,
+    loans,
     search,
     studentId,
     studyLevelId,
     studyModes,
     tuitionFee,
   ]);
+
+  useEffect(() => {
+    get(`SearchFilter/StudentTypes`).then((res) => {
+      console.log(res);
+      setApplicationTypelist(res);
+      setLoans([]);
+    });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -392,6 +405,8 @@ function SearchAndApply() {
           setTuitionFee={setTuitionFee}
           applicationTypeIds={applicationTypeIds}
           setApplicationTypeIds={setApplicationTypeIds}
+          loans={loans}
+          setLoans={setLoans}
           courseDurations={courseDurations}
           setCourseDurations={setCourseDurations}
           isScholarships={isScholarships}
@@ -414,6 +429,7 @@ function SearchAndApply() {
           setCountryName={setCountryName}
           cityName={cityName}
           setCityName={setCityName}
+          applicationTypelist={applicationTypelist}
           applicationType={applicationType}
           setApplicationType={setApplicationType}
           intakeList={intakeList}

@@ -35,9 +35,7 @@ export const currencyData = [
 ];
 
 export const currency = (id) => {
-  console.log(id);
   const filter = currencyData.filter((item) => item.id === id);
-  console.log(filter);
   const result = filter.length > 0 ? filter[0].name : null;
   return result;
 };
