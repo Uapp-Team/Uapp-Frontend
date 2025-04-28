@@ -16,6 +16,7 @@ import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
 import {
+  currency,
   deliveryMethods,
   deliverySchedules,
   studyMode,
@@ -261,15 +262,24 @@ const QuickViewModal = ({
                   <div>
                     <div className="d-flex justify-content-between w-75">
                       <span> Home/UK:</span>
-                      <span>£{quickViewData?.localTutionFee}</span>
+                      <span>
+                        {currency(quickViewData.localTutionFeeCurrencyId)}
+                        {quickViewData?.localTutionFee}
+                      </span>
                     </div>
                     <div className="d-flex justify-content-between w-75">
                       <span>EU/EEU:</span>
-                      <span>£{quickViewData?.eU_TutionFee}</span>
+                      <span>
+                        {currency(quickViewData.eU_TutionFeeCurrencyId)}
+                        {quickViewData?.eU_TutionFee}
+                      </span>
                     </div>
                     <div className="d-flex justify-content-between w-75">
                       <span>International:</span>
-                      <span>£{quickViewData?.internationalTutionFee}</span>
+                      <span>
+                        {currency(quickViewData.internationalTutionCurrencyId)}
+                        {quickViewData?.internationalTutionFee}
+                      </span>
                     </div>
                   </div>
                 </div>
