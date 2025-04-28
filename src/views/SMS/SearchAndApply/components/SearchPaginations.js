@@ -49,7 +49,7 @@ const SearchPaginations = ({
   return (
     <>
       {pages?.length > 0 && (
-        <Row>
+        <Row className="mt-4">
           <Col>
             <Pagination className="d-flex align-items-center">
               {currentPage !== 1 && (
