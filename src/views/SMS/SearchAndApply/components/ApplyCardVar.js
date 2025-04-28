@@ -167,8 +167,8 @@ const ApplyCardVar = ({
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
                         {/* {item.subjectName} */}
-                        {item.subjectName?.slice(0, 70)}
-                        {item.subjectName?.length > 70 && "..."}
+                        {item.subjectName?.slice(0, 65)}
+                        {item.subjectName?.length > 65 && "..."}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>

@@ -31,6 +31,7 @@ const ApplyModal = ({
   quickViewData,
   handleSubmit,
 }) => {
+  console.log(applyEligibility);
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
