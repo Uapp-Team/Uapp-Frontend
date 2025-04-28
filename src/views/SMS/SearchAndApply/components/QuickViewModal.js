@@ -6,6 +6,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
+import { useHistory } from "react-router-dom";
 import { Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
@@ -15,6 +16,7 @@ import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
+import { rootUrl } from "../../../../constants/constants";
 import {
   currency,
   deliveryMethods,
@@ -23,7 +25,6 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
-import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -36,8 +37,11 @@ const QuickViewModal = ({
   handleApply,
   applyEligibility,
 }) => {
+  let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
-
+  const handleCourseDetails = (subjectId) => {
+    router.push(`subjectProfile/${subjectId}`);
+  };
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -147,9 +151,14 @@ const QuickViewModal = ({
                   <img src={BellIcon} alt="" />{" "}
                   {quickViewData?.applicationDeadLine}
                 </span>
-                <p className="fs-14px">
-                  Course Start Date <span className="fw-600">25 Mar 2025</span>
-                </p>
+                {quickViewData?.classStartDate && (
+                  <p className="fs-14px">
+                    Course Start Date{" "}
+                    <span className="fw-600">
+                      {quickViewData?.classStartDate}
+                    </span>
+                  </p>
+                )}
               </div>
               <div className="mt-3">
                 <div className="my-2 d-flex flex-wrap align-items-center">
@@ -285,19 +294,21 @@ const QuickViewModal = ({
                 </div>
               </div>
               <div className="dashed-hr"></div>
-              <div className="info-group">
-                <img
-                  src={mortarboard}
-                  alt=""
-                  className="h-24px w-24px mr-2 mt-1"
-                />
-                <div>
-                  <span className="info-title">Scholarship</span>
-                  <ul>
-                    <li>10% or £5000</li>
-                  </ul>
+              {quickViewData?.scholarshipDetails && (
+                <div className="info-group">
+                  <img
+                    src={mortarboard}
+                    alt=""
+                    className="h-24px w-24px mr-2 mt-1"
+                  />
+                  <div>
+                    <span className="info-title">Scholarship</span>
+                    <ul>
+                      <li>{quickViewData?.scholarshipDetails}</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="dashed-hr"></div>
               <div className="info-group">
                 <img
@@ -395,7 +406,12 @@ const QuickViewModal = ({
             </div>
           </div>
           <div className="view-more-container">
-            <button className="view-more-btn">View course profile</button>
+            <button
+              className="view-more-btn"
+              onClick={() => handleCourseDetails(quickViewData?.subjectId)}
+            >
+              View course profile
+            </button>
           </div>
         </ModalBody>
         <ApplyModal
