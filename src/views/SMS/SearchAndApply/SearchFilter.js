@@ -97,8 +97,9 @@ const SearchFilter = ({
         ? [{ id: 2, name: "Private Loan" }]
         : null;
 
+    setLoans([]);
     setLoanList(checkLoan);
-  }, [applicationType, applicationTypelist]);
+  }, [applicationType, applicationTypelist, setLoans]);
 
   useEffect(() => {
     const list = [];
