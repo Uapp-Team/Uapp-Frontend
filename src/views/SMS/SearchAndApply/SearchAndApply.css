@@ -371,6 +371,7 @@
   width: 100%;
   text-align: center;
   height: 52px;
+  border-radius: 6px;
 }
 
 .apply-btn,
