@@ -423,6 +423,12 @@ const AddUniversitySubject = () => {
       isValid = false;
       setSubNameError("Course Name is required");
     }
+
+    if (isScholarshipAvailable === true && !scholarshipDetails) {
+      isValid = false;
+      setScholarshipDetailsError("Scholarship Details is required");
+    }
+
     if (programValue === 0) {
       isValid = false;
       setProgLvlError(true);
@@ -915,7 +921,10 @@ const AddUniversitySubject = () => {
                     </FormGroup>
                     {isScholarshipAvailable === true && (
                       <FormGroup>
-                        <span>Scholarship Details </span>
+                        <span>
+                          <span className="text-danger">*</span>Scholarship
+                          Details{" "}
+                        </span>
 
                         <Input
                           type="text"
@@ -927,7 +936,9 @@ const AddUniversitySubject = () => {
                             handleScholarshipDetails(e);
                           }}
                         />
-                        <span className="text-danger">{subNameError}</span>
+                        <span className="text-danger">
+                          {scholarshipDetailsError}
+                        </span>
                       </FormGroup>
                     )}
                     <FormGroup>
