@@ -15,6 +15,7 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
+import { rootUrl } from "../../../../constants/constants";
 import {
   currency,
   deliveryMethods,
@@ -25,7 +26,6 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { rootUrl } from "../../../../constants/constants";
 
 const ApplyCardVar = ({
   data,
@@ -242,7 +242,7 @@ const ApplyCardVar = ({
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags my-1">
+                      <div className="tags my-2">
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
