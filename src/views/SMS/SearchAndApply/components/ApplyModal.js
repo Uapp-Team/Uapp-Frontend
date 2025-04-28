@@ -281,7 +281,7 @@ const ApplyModal = ({
                 <SlCalender className="mr-2 mt-1" />
                 <p>Intake</p>
               </div>
-              <div className="d-flex flex-wrap">
+              <div className="d-flex flex-wrap justify-centent-between align-item-center">
                 {quickViewData?.intakes?.map((intake) => (
                   <span
                     key={intake.id}
@@ -291,11 +291,29 @@ const ApplyModal = ({
                         : ""
                     }`}
                     onClick={() => {
-                      setSelectedIntake(intake.name);
-                      setSelectedIntakeId(intake.id);
+                      if (selectedIntakeId === intake.id) {
+                        // Deselect the intake if it's already selected
+                        setSelectedIntake("Select Intake");
+                        setSelectedIntakeId("");
+                      } else {
+                        // Select the intake
+                        setSelectedIntake(intake.name);
+                        setSelectedIntakeId(intake.id);
+                      }
                     }}
                   >
-                    {intake.name}
+                    <span>{intake.name}</span>
+                    <span>
+                      {selectedIntakeId === intake.id && (
+                        <RxCross1
+                          className="ml-2 pointer"
+                          onClick={() => {
+                            setSelectedIntake("Select Intake");
+                            setSelectedIntakeId("");
+                          }}
+                        />
+                      )}
+                    </span>
                   </span>
                 ))}
               </div>
