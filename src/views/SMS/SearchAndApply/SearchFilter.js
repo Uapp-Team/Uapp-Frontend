@@ -54,6 +54,7 @@ const SearchFilter = ({
   cityName,
   setCityName,
   applicationType,
+  setApplicationType,
   intakeList,
   setIntakeList,
   studyLevelList,
@@ -67,19 +68,25 @@ const SearchFilter = ({
     const list = [];
     intakeList.map((item) => list.push(item.value));
     intakeId.length !== list.length && setIntakeId(list);
-  }, [setIntakeId, intakeList, intakeId.length]);
+  }, [setIntakeId, intakeList, intakeId]);
+
+  useEffect(() => {
+    const list = [];
+    applicationType.map((item) => list.push(item.value));
+    applicationTypeIds.length !== list.length && setApplicationTypeIds(list);
+  }, [applicationType, applicationTypeIds, setApplicationTypeIds]);
+
+  useEffect(() => {
+    const list = [];
+    courseDurationsList.map((item) => list.push(item.value));
+    courseDurations.length !== list.length && setCourseDurations(list);
+  }, [setCourseDurations, courseDurationsList, courseDurations]);
 
   useEffect(() => {
     const list = [];
     studyLevelList.map((item) => list.push(item.value));
     studyLevelId.length !== list.length && setStudyLevelId(list);
   }, [setStudyLevelId, studyLevelId, studyLevelList]);
-
-  useEffect(() => {
-    const list = [];
-    courseDurationsList.map((item) => list.push(item.value));
-    courseDurations.length !== list.length && setCourseDurations(list);
-  }, [setCourseDurations, courseDurationsList, courseDurations.length]);
 
   useEffect(() => {
     const studyLevelListQuery = [];
@@ -91,24 +98,6 @@ const SearchFilter = ({
     const converted = noSpaces.replace(/,/g, "&");
     setStudyLevelQuery(converted);
   }, [setStudyLevelQuery, studyLevelId]);
-
-  const handleChange = (e) => {
-    let id = parseInt(e.target.value);
-    let val = e.target.checked;
-
-    if (applicationTypeIds) {
-      if (val === true) {
-        if (!applicationTypeIds.includes(id)) {
-          setApplicationTypeIds([...applicationTypeIds, id]);
-        }
-      } else {
-        const newD = id;
-        const res = applicationTypeIds.filter((c) => c !== newD);
-
-        setApplicationTypeIds(res);
-      }
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -232,23 +221,12 @@ const SearchFilter = ({
             <div className="border rounded p-16px mb-3 bg-white">
               <p className="mb-1 fw-500">Application Type </p>
 
-              {applicationType.map((item, i) => (
-                <p key={i} className="mb-0">
-                  <input
-                    id={`AppType-${i}`}
-                    value={item.id}
-                    type="checkbox"
-                    onClick={handleChange}
-                    checked={applicationTypeIds?.includes(item.id)}
-                  />
-                  <label
-                    htmlFor={`AppType-${i}`}
-                    className="fs-14px mx-2 pointer"
-                  >
-                    {item.name}
-                  </label>
-                </p>
-              ))}
+              <MultiSelect
+                placeholder="Select Application Type"
+                url="SearchFilter/StudentTypes"
+                value={applicationType}
+                setValue={setApplicationType}
+              />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
               <p className="mb-1 fw-500">Course durations </p>

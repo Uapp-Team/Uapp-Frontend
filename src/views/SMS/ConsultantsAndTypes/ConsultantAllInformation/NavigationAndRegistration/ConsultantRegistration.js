@@ -20,9 +20,14 @@ const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { branchId } = useParams();
   const [consParent, setConsParent] = useState([]);
+  const [consSalesManager, setConsSalesManager] = useState([]);
   const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
   const [parentValue, setParentValue] = useState(0);
+  const [salesManagerLabel, setSalesManagerLabel] = useState(
+    "Select Sales Manager"
+  );
+  const [salesManagerValue, setSalesManagerValue] = useState(0);
   const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
   const [typeValue, setTypeValue] = useState(0);
   const [email, setEmail] = useState("");
@@ -37,6 +42,7 @@ const ConsultantRegistration = () => {
   const [branchError, setBranchError] = useState(false);
   const [consultantError, setConsultantError] = useState(false);
   const [parentError, setParentError] = useState(false);
+  const [salesManagerError, setSalesManagerError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [title, setTitle] = useState([]);
   const [titleValue, setTitleValue] = useState(0);
@@ -67,6 +73,10 @@ const ConsultantRegistration = () => {
       setConsParent(res);
     });
 
+    get(`SalesManagerDD/Index/${branchValue}`).then((res) => {
+      setConsSalesManager(res);
+    });
+
     get("ConsultantTypeDD/index").then((res) => {
       setConsType(res);
     });
@@ -76,6 +86,14 @@ const ConsultantRegistration = () => {
     label: consParentOptions?.name,
     value: consParentOptions?.id,
   }));
+
+  const consSalesManagerMenu = consSalesManager?.map(
+    (consSalesManagerOptions) => ({
+      label: consSalesManagerOptions?.name,
+      value: consSalesManagerOptions?.id,
+    })
+  );
+
   const consTypeMenu = consType?.map((consTypeOptions) => ({
     label: consTypeOptions?.name,
     value: consTypeOptions?.id,
@@ -85,6 +103,12 @@ const ConsultantRegistration = () => {
     setParentError(false);
     setParentLabel(label);
     setParentValue(value);
+  };
+
+  const selectSalesManagerCons = (label, value) => {
+    setSalesManagerError(false);
+    setSalesManagerLabel(label);
+    setSalesManagerValue(value);
   };
 
   const selectConsType = (label, value) => {
@@ -168,6 +192,16 @@ const ConsultantRegistration = () => {
         setParentError(true);
       } else {
         setParentError(false);
+      }
+    }
+    if (BranchAdmin() || BranchManager()) {
+      setSalesManagerError(false);
+    } else {
+      if (salesManagerValue === 0) {
+        isValid = false;
+        setSalesManagerError(true);
+      } else {
+        setSalesManagerError(false);
       }
     }
     if (titleValue === 0) {
@@ -410,6 +444,34 @@ const ConsultantRegistration = () => {
                   {parentError && (
                     <span className="text-danger">
                       Parent consultant is required.
+                    </span>
+                  )}
+                </FormGroup>
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
+                    {!BranchAdmin() && !BranchManager() && (
+                      <span className="text-danger">*</span>
+                    )}
+                    Sales Manager
+                  </span>
+
+                  <Select
+                    className="form-mt"
+                    options={consSalesManagerMenu}
+                    value={{
+                      label: salesManagerLabel,
+                      value: salesManagerValue,
+                    }}
+                    onChange={(opt) =>
+                      selectSalesManagerCons(opt.label, opt.value)
+                    }
+                    name="salesManagerId"
+                    id="salesManagerId"
+                  />
+
+                  {salesManagerError && (
+                    <span className="text-danger">
+                      Sales Manager is required.
                     </span>
                   )}
                 </FormGroup>

@@ -133,12 +133,6 @@ function SearchAndApply() {
   ]);
 
   useEffect(() => {
-    get(`SearchFilter/StudentTypes`).then((res) => {
-      setApplicationType(res);
-    });
-  }, []);
-
-  useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
@@ -421,6 +415,7 @@ function SearchAndApply() {
           cityName={cityName}
           setCityName={setCityName}
           applicationType={applicationType}
+          setApplicationType={setApplicationType}
           intakeList={intakeList}
           setIntakeList={setIntakeList}
           studyLevelList={studyLevelList}
