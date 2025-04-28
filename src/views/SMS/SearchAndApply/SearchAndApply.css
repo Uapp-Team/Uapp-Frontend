@@ -291,16 +291,12 @@
 
 .card-title-vertical {
   margin-bottom: 12px;
-  min-height: 80px;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .card-title {
   margin-bottom: 12px;
-}
-
-.card-title-vertical {
-  font-size: 20px;
-  font-weight: 700;
 }
 
 .card-subtitle {
