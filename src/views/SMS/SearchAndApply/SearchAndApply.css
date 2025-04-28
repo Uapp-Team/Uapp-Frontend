@@ -581,6 +581,7 @@
 
 .info-group {
   margin-bottom: 12px;
+  display: flex;
 }
 
 .info-title {
