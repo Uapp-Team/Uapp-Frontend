@@ -68,7 +68,6 @@ const SearchFilter = ({
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
-  console.log(applicationType);
 
   const multiOption = (list) =>
     list?.map((item) => ({
@@ -97,8 +96,8 @@ const SearchFilter = ({
         ? [{ id: 2, name: "Private Loan" }]
         : null;
 
-    setLoans([]);
     setLoanList(checkLoan);
+    setLoans([]);
   }, [applicationType, applicationTypelist, setLoans]);
 
   useEffect(() => {
