@@ -26,6 +26,7 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
+import OverflowHeightText from "./OverflowHeightText";
 
 const ApplyCardVar = ({
   data,
@@ -80,7 +81,7 @@ const ApplyCardVar = ({
       <Row className="mt-3">
         {data?.length > 0 &&
           data?.map((item, index) => (
-            <Col xs={12} md={6} lg={4} key={index}>
+            <Col xs={12} md={6} lg={4} xxl={3} key={index}>
               <div className="mb-3">
                 <div className="card-container-vertical">
                   {item.intakeStatusId === 3 && (
@@ -171,11 +172,13 @@ const ApplyCardVar = ({
                           </span>
                         </div>
                       </div>
-                      <h3 className="card-title-vertical fw-700 fs-20px">
-                        {/* {item.subjectName} */}
-                        {item.subjectName?.slice(0, 65)}
-                        {item.subjectName?.length > 65 && "..."}
-                      </h3>
+
+                      <OverflowHeightText
+                        text={item.subjectName}
+                        className="card-title-vertical fw-700 fs-20px"
+                        height="60px"
+                        line={2}
+                      />
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
                 </div> */}
