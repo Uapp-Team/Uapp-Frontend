@@ -17,6 +17,7 @@ import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
+import SaveMoney from "../../../../assets/img/save-money-pound.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
 import { rootUrl } from "../../../../constants/constants";
@@ -39,12 +40,14 @@ const QuickViewModal = ({
   handleSubmit,
   handleApply,
   applyEligibility,
+  subjectInfo,
 }) => {
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
+
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -326,21 +329,21 @@ const QuickViewModal = ({
                 <div>
                   <span className="info-title">Tuition Fees</span>
                   <div>
-                    <div className="d-flex justify-content-between w-75">
+                    <div className="d-flex justify-content-between">
                       <span> Home/UK:</span>
                       <span>
                         {currency(quickViewData.localTutionFeeCurrencyId)}
                         {quickViewData?.localTutionFee}
                       </span>
                     </div>
-                    <div className="d-flex justify-content-between w-75">
+                    <div className="d-flex justify-content-between">
                       <span>EU/EEU:</span>
                       <span>
                         {currency(quickViewData.eU_TutionFeeCurrencyId)}
                         {quickViewData?.eU_TutionFee}
                       </span>
                     </div>
-                    <div className="d-flex justify-content-between w-75">
+                    <div className="d-flex justify-content-between">
                       <span>International:</span>
                       <span>
                         {currency(quickViewData.internationalTutionCurrencyId)}
@@ -350,21 +353,23 @@ const QuickViewModal = ({
                   </div>
                 </div>
               </div>
-              <div className="dashed-hr"></div>
               {quickViewData?.scholarshipDetails && (
-                <div className="info-group">
-                  <img
-                    src={mortarboard}
-                    alt=""
-                    className="h-24px w-24px mr-2 mt-1"
-                  />
-                  <div>
-                    <span className="info-title">Scholarship</span>
-                    <ul>
-                      <li>{quickViewData?.scholarshipDetails}</li>
-                    </ul>
+                <>
+                  <div className="dashed-hr"></div>
+                  <div className="info-group">
+                    <img
+                      src={mortarboard}
+                      alt=""
+                      className="h-24px w-24px mr-2 mt-1"
+                    />
+                    <div>
+                      <span className="info-title">Scholarship</span>
+                      <ul>
+                        <li>{quickViewData?.scholarshipDetails}</li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                </>
               )}
               <div className="dashed-hr"></div>
               <div className="info-group">
@@ -383,6 +388,28 @@ const QuickViewModal = ({
                   </ul>
                 </div>
               </div>
+              {quickViewData?.isLoanAvailable === false && (
+                <div className="info-group">
+                  <img
+                    src={SaveMoney}
+                    alt=""
+                    className="h-24px w-24px mr-2 mt-1"
+                  />
+                  <div>
+                    <span className="info-title">Loan Available</span>
+                    {subjectInfo?.isGovernmentLoan && (
+                      <a href={subjectInfo?.governmentLoanUrl} target="_blank">
+                        Government Loan
+                      </a>
+                    )}
+                    {subjectInfo?.isPrivateLoan && (
+                      <a href={subjectInfo?.privateLoanUrl} target="_blank">
+                        Private Loan
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
             </Col>
           </Row>
 

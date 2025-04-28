@@ -42,16 +42,22 @@ const ApplyCardVar = ({
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});
   const [quickViewData, setQuickViewData] = useState({});
+  const [subjectInfo, setSubjectInfo] = useState({});
 
   const handleQuickView = async (subjectId, universityId, index) => {
     setIndex(index);
-    const quickViewData = data.filter(
+    const quickViewData = await data.filter(
       (item) =>
         item.subjectId === subjectId && item.universityId === universityId
     );
     const eligibilityData = await get(
       `Eligibility/ShowEligibility/${universityId}/${subjectId}`
     );
+    if (quickViewData[0]?.isLoanAvailable === false) {
+      get(`Subject/Get/${subjectId}`).then((res) => {
+        setSubjectInfo(res.data);
+      });
+    }
     setEligibility(eligibilityData);
     setQuickViewData(quickViewData[0]);
     setOpen(true);
@@ -250,6 +256,11 @@ const ApplyCardVar = ({
                       </div>
                       <div className="dashed-hr"></div>
                       <div className="tags my-2">
+                        {item.isLoanAvailable && (
+                          <span className="card-tag work-placement mr-1">
+                            Loan Available
+                          </span>
+                        )}
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
@@ -387,6 +398,7 @@ const ApplyCardVar = ({
         handleSubmit={handleSubmit}
         handleApply={handleApply}
         applyEligibility={applyEligibility}
+        subjectInfo={subjectInfo}
       />
       <ApplyModal
         open={openApplyModal}
