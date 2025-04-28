@@ -130,23 +130,23 @@ const ApplyModal = ({
                 </div>
               </div>
               <div className="mt-4">
-                <Row className="apply-modal-details">
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Course
                   </Col>
                   <Col xs={8} md={10} className="fw-600">
                     {quickViewData?.subjectName}
                   </Col>
-                </Row>
-                <Row className="apply-modal-details">
+                </div>
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Student
                   </Col>
                   <Col xs={8} md={10}>
                     {Student() ? current_user?.displayName : studentName}
                   </Col>
-                </Row>
-                <Row className="apply-modal-details">
+                </div>
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Intake{" "}
                     <InfoCircleOutlined
@@ -160,7 +160,7 @@ const ApplyModal = ({
                   <Col xs={8} md={10}>
                     {selectedIntake}
                   </Col>
-                </Row>
+                </div>
                 <div className="dashed-hr"></div>
               </div>
               <div className="apply-modal-study">
@@ -213,7 +213,7 @@ const ApplyModal = ({
               </div>
             </div>
 
-            <Row className="program-modal__requirements">
+            <div className="program-modal__requirements">
               <div className="px-4">
                 <div className="program-modal__eligibility">
                   <div className="program-modal__badge">You are eligible</div>
@@ -302,10 +302,10 @@ const ApplyModal = ({
                   </div>
                 </div>
               )}
-            </Row>
+            </div>
 
             {/* Dropdown & Selects */}
-            <Row className="program-modal__intake my-3">
+            <div className="program-modal__intake my-3">
               <div className="fs-14px d-flex">
                 <SlCalender className="mr-2 mt-1" />
                 <p>Intake</p>
@@ -346,9 +346,9 @@ const ApplyModal = ({
                   </span>
                 ))}
               </div>
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label htmlFor="campus">Campus City</label>
               <Filter
                 data={quickViewData?.campuses?.map((campus) => ({
@@ -364,9 +364,9 @@ const ApplyModal = ({
                   setSelectedCampusValue(value);
                 }}
               />
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label htmlFor="duration">Course Durations</label>
               <Filter
                 data={quickViewData?.durations?.map((duration) => ({
@@ -382,9 +382,9 @@ const ApplyModal = ({
                   setSelectedDurationValue(value);
                 }}
               />
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label>Study Mode</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.studyModes
@@ -409,9 +409,9 @@ const ApplyModal = ({
                     </label>
                   ))}
               </div>
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label>Delivery Pattern</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliveryMethods
@@ -440,9 +440,9 @@ const ApplyModal = ({
                     </label>
                   ))}
               </div>
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label>Delivery Schedule</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliverySchedules
@@ -471,10 +471,10 @@ const ApplyModal = ({
                     </label>
                   ))}
               </div>
-            </Row>
+            </div>
 
             {/* Footer */}
-            <Row className="program-modal__confirmation mb-3">
+            <div className="program-modal__confirmation mb-3">
               <label>
                 <input
                   type="checkbox"
@@ -484,14 +484,14 @@ const ApplyModal = ({
                 />
                 Are you sure you want to apply this program?
               </label>
-            </Row>
-            <Row className="program-condition">
+            </div>
+            <div className="program-condition">
               <p className="pl-2">
                 You can apply maximum 3 applications at a time for free.
               </p>
-            </Row>
+            </div>
 
-            <Row className="program-modal__footer">
+            <div className="program-modal__footer">
               <button className="program-modal__cancel" onClick={onClose}>
                 Cancel
               </button>
@@ -504,7 +504,7 @@ const ApplyModal = ({
               >
                 {isLoading ? <Spin size="small" /> : "Apply →"}
               </button>
-            </Row>
+            </div>
           </div>
         </ModalBody>
       </Modal>
