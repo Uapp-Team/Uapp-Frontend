@@ -68,7 +68,7 @@ const SearchFilter = ({
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
-
+  console.log(applicationTypelist);
   const multiOption = (list) =>
     list?.map((item) => ({
       name: item?.label,
@@ -98,7 +98,15 @@ const SearchFilter = ({
 
     setLoanList(checkLoan);
     setLoans([]);
-  }, [applicationType, applicationTypelist, setLoans]);
+    // loans.length > 0 && setLoans([]);
+    // loans.length !== loanList.length && setLoans([]);
+  }, [applicationType, applicationTypelist]);
+
+  // useEffect(() => {
+  //   const filteredArray = loanList.filter((item) => loans.includes(item.id));
+  //   console.log(filteredArray);
+  //   filteredArray.length > 0 ? setLoans(filteredArray) : setLoans([]);
+  // }, [loanList, loans, setLoans]);
 
   useEffect(() => {
     const list = [];

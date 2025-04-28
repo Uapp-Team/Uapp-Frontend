@@ -139,7 +139,6 @@ function SearchAndApply() {
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes`).then((res) => {
-      console.log(res);
       setApplicationTypelist(res);
       setLoans([]);
     });
