@@ -169,7 +169,7 @@ const QuickViewModal = ({
                 >
                   <span className="inline-block">
                     <button
-                      className={`apply-btn-vertical ${
+                      className={`apply-btn ${
                         !quickViewData?.canApply ? "disabled" : ""
                       }`}
                       onClick={() =>
