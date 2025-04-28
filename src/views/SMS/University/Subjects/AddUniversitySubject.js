@@ -29,6 +29,8 @@ import "react-quill/dist/quill.snow.css";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import Uget from "../../../../helpers/Uget";
+import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
+import { loansAvailable } from "../../../../constants/presetData";
 
 const AddUniversitySubject = () => {
   const userType = localStorage.getItem("userType");
@@ -73,8 +75,10 @@ const AddUniversitySubject = () => {
   const referenceId = localStorage.getItem("referenceId");
 
   const history = useHistory();
+  const [loanAvailable, setLoanAvailable] = useState([]);
   const [isWorkPlacement, setIsWorkPlacement] = useState(false);
   const [isScholarshipAvailable, setIsScholarshipAvailable] = useState(false);
+  const [isLoanAvailable, setIsLoanAvailable] = useState(false);
   const [fullTimeList, setFullTimeList] = useState([]);
   const [fullTimeLabel, setFullTimeLabel] = useState("Full Time");
   const [fullTimeValue, setFullTimeValue] = useState(0);
@@ -86,6 +90,15 @@ const AddUniversitySubject = () => {
   const [sandwichList, setSandwichTimeList] = useState([]);
   const [sandwichLabel, setSandwichLabel] = useState("Sandwich");
   const [sandwichValue, setSandwichValue] = useState(0);
+  const [govtLoan, setGovtLoan] = useState(false);
+  const [govtLoanLink, setGovtLoanLink] = useState("");
+  const [govtLoanLinkError, setGovtLoanLinkError] = useState("");
+
+  console.log(govtLoan, "govtloan");
+
+  const [privateLoan, setPrivateLoan] = useState(false);
+  const [privateLoanLink, setPrivateLoanLink] = useState("");
+  const [privateLoanLinkError, setPrivateLoanLinkError] = useState("");
 
   const subjectStudyOptions = [
     { StudyMode: 1, DurationId: partTimeValue },
@@ -151,6 +164,12 @@ const AddUniversitySubject = () => {
           setIsScholarshipAvailable(res?.isScholarshipAvailable);
           setIsWorkPlacement(res?.isWorkPlacementAvailable);
           setScholarshipDetails(res?.scholarshipDescription);
+          setIsLoanAvailable(res?.isLoanAvailable);
+          setGovtLoan(res?.isGovernmentLoan);
+          setGovtLoanLink(res?.governmentLoanUrl);
+          setPrivateLoan(res?.isPrivateLoan);
+          setPrivateLoanLink(res?.privateLoanUrl);
+
           const studyModes = res?.subjectStudyModes || [];
 
           studyModes.forEach((data) => {
@@ -185,6 +204,12 @@ const AddUniversitySubject = () => {
           setIsScholarshipAvailable(res?.isScholarshipAvailable);
           setIsWorkPlacement(res?.isWorkPlacementAvailable);
           setScholarshipDetails(res?.scholarshipDescription);
+          setIsLoanAvailable(res?.isLoanAvailable);
+          setGovtLoan(res?.isGovernmentLoan);
+          setGovtLoanLink(res?.governmentLoanUrl);
+          setPrivateLoan(res?.isPrivateLoan);
+          setPrivateLoanLink(res?.privateLoanUrl);
+
           const studyModes = res?.subjectStudyModes || [];
 
           studyModes.forEach((data) => {
@@ -375,6 +400,22 @@ const AddUniversitySubject = () => {
       setScholarshipDetailsError("");
     }
   };
+  const handleGovtLoanLink = (e) => {
+    setGovtLoanLink(e.target.value);
+    if (e.target.value === "") {
+      setGovtLoanLinkError("Link is required");
+    } else {
+      setGovtLoanLinkError("");
+    }
+  };
+  const handlePrivateLoanLink = (e) => {
+    setPrivateLoanLink(e.target.value);
+    if (e.target.value === "") {
+      setPrivateLoanLinkError("Link is required");
+    } else {
+      setPrivateLoanLinkError("");
+    }
+  };
 
   const ValidateForm = () => {
     var isValid = true;
@@ -417,6 +458,11 @@ const AddUniversitySubject = () => {
       isScholarshipAvailable: isScholarshipAvailable,
       scholarshipDescription: scholarshipDetails,
       subjectStudyModes: subjectStudyOptions,
+      isLoanAvailable: isLoanAvailable,
+      isGovernmentLoan: govtLoan,
+      isPrivateLoan: privateLoan,
+      governmentLoanUrl: govtLoan === true ? govtLoanLink : "",
+      privateLoanUrl: privateLoan === true ? privateLoanLink : "",
     };
 
     if (ValidateForm()) {
@@ -946,6 +992,107 @@ const AddUniversitySubject = () => {
                         </Col>
                       </Row>
                     </FormGroup>
+
+                    <FormGroup>
+                      <span>Is Loan Available </span>
+                      <div>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isLoanAvailable"
+                            name="isLoanAvailable"
+                            value={true}
+                            onClick={() => setIsLoanAvailable(!isLoanAvailable)}
+                            checked={isLoanAvailable === true}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isLoanAvailable"
+                          >
+                            Yes
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isLoanAvailable"
+                            name="isLoanAvailable"
+                            value={false}
+                            onClick={() => setIsLoanAvailable(!isLoanAvailable)}
+                            checked={isLoanAvailable === false}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isLoanAvailable"
+                          >
+                            No
+                          </Label>
+                        </FormGroup>
+                      </div>
+                    </FormGroup>
+                    {isLoanAvailable === true && (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>Available Loan</span>
+
+                        <Row>
+                          <Col xs="12" className="mt-2">
+                            <FormGroup check>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setGovtLoan(e.target.checked);
+                                }}
+                                checked={govtLoan}
+                              />
+                              <span className="mr-2">Government Loan</span>
+                            </FormGroup>
+                            {govtLoan === true && (
+                              <FormGroup>
+                                <Input
+                                  type="text"
+                                  value={govtLoanLink}
+                                  placeholder="Enter Link here"
+                                  onChange={(e) => {
+                                    handleGovtLoanLink(e);
+                                  }}
+                                />
+                              </FormGroup>
+                            )}
+                          </Col>
+
+                          <Col xs="12" className="mt-2">
+                            <FormGroup check>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setPrivateLoan(e.target.checked);
+                                }}
+                                checked={privateLoan}
+                              />
+                              <span className="mr-2">Private Loan</span>
+                            </FormGroup>
+                            {privateLoan === true && (
+                              <FormGroup>
+                                <Input
+                                  type="text"
+                                  value={privateLoanLink}
+                                  placeholder="Enter Link here"
+                                  onChange={(e) => {
+                                    handlePrivateLoanLink(e);
+                                  }}
+                                />
+                              </FormGroup>
+                            )}
+                          </Col>
+                        </Row>
+                      </FormGroup>
+                    )}
                   </Col>
                 </Row>
 
