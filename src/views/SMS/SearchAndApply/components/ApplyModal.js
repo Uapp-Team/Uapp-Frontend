@@ -15,6 +15,7 @@ import { Student } from "../../../../components/core/User";
 import Filter from "../../../../components/Dropdown/Filter";
 import { rootUrl } from "../../../../constants/constants";
 import {
+  currency,
   deliveryMethods,
   deliverySchedules,
   studyMode,
@@ -166,7 +167,8 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Tuition} alt="" />
                   <div className="fs-12px">Tution fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.localTutionFee}
+                    {currency(quickViewData.localTutionFeeCurrencyId)}
+                    {quickViewData?.localTutionFee}
                   </div>
                 </div>
                 {quickViewData?.scholarshipDetails && (
@@ -182,7 +184,8 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Application} alt="" />
                   <div className="fs-12px">Application fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.avarageApplicationFee}
+                    {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                    {quickViewData?.avarageApplicationFee}
                   </div>
                 </div>
               </div>
