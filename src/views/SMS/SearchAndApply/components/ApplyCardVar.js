@@ -151,7 +151,9 @@ const ApplyCardVar = ({
                         />
                         <div className="d-flex flex-column">
                           <span className="fw-600 fs-14px">
-                            {item.universityName}
+                            {/* {item.universityName} */}
+                            {item.universityName?.slice(0, 31)}
+                            {item.universityName?.length > 31 && "..."}
                           </span>
                           <span className="fw-400 fs-12px">
                             {item.campusNames.split(",")[0].trim()}
@@ -159,9 +161,9 @@ const ApplyCardVar = ({
                         </div>
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
-                        {item.subjectName}
-                        {/* {item.subjectName?.slice(0, 60)} */}
-                        {/* {item.subjectName?.length > 60 && "..."} */}
+                        {/* {item.subjectName} */}
+                        {item.subjectName?.slice(0, 70)}
+                        {item.subjectName?.length > 70 && "..."}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
