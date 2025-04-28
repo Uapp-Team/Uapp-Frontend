@@ -25,7 +25,9 @@ const BecomeConsultant = ({ className }) => {
           }}
         >
           <div className={className}>
-            <p className="fs-16px fw-700 text-white">Become a consultant</p>
+            <p className="fs-16px fw-700 text-white">
+              Earn unlimited by counselling
+            </p>
             <Link to={`/becomeConsultant`}>
               <button type="button" class="save-button">
                 Join Now

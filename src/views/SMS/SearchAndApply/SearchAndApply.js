@@ -132,12 +132,6 @@ function SearchAndApply() {
     tuitionFee,
   ]);
 
-  // useEffect(() => {
-  //   get(`SearchFilter/StudentTypes`).then((res) => {
-  //     setApplicationType(res);
-  //   });
-  // }, []);
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

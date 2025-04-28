@@ -99,24 +99,6 @@ const SearchFilter = ({
     setStudyLevelQuery(converted);
   }, [setStudyLevelQuery, studyLevelId]);
 
-  // const handleChange = (e) => {
-  //   let id = parseInt(e.target.value);
-  //   let val = e.target.checked;
-
-  //   if (applicationTypeIds) {
-  //     if (val === true) {
-  //       if (!applicationTypeIds.includes(id)) {
-  //         setApplicationTypeIds([...applicationTypeIds, id]);
-  //       }
-  //     } else {
-  //       const newD = id;
-  //       const res = applicationTypeIds.filter((c) => c !== newD);
-
-  //       setApplicationTypeIds(res);
-  //     }
-  //   }
-  // };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (divRef.current && !divRef.current.contains(event.target)) {
@@ -245,24 +227,6 @@ const SearchFilter = ({
                 value={applicationType}
                 setValue={setApplicationType}
               />
-
-              {/* {applicationType.map((item, i) => (
-                <p key={i} className="mb-0">
-                  <input
-                    id={`AppType-${i}`}
-                    value={item.id}
-                    type="checkbox"
-                    onClick={handleChange}
-                    checked={applicationTypeIds?.includes(item.id)}
-                  />
-                  <label
-                    htmlFor={`AppType-${i}`}
-                    className="fs-14px mx-2 pointer"
-                  >
-                    {item.name}
-                  </label>
-                </p>
-              ))} */}
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
               <p className="mb-1 fw-500">Course durations </p>
