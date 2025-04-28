@@ -24,3 +24,7 @@ export const deliverySchedules = [
   { id: 4, name: "Weekend" },
   { id: 5, name: "Flexible" },
 ];
+export const loansAvailable = [
+  { id: 1, name: "Government Loan" },
+  { id: 2, name: "Private Loan" },
+];
