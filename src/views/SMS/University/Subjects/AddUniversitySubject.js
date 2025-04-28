@@ -946,9 +946,9 @@ const AddUniversitySubject = () => {
                         {/* <span className="text-danger">*</span> */}
                         Study Modes and Durations
                       </span>
-                      <Row>
+                      <Row className="mt-3">
                         <Col>
-                          {" "}
+                          <span>Full Time</span>
                           <Select
                             options={fullTimeMenu}
                             value={{
@@ -966,7 +966,7 @@ const AddUniversitySubject = () => {
                           )} */}
                         </Col>
                         <Col>
-                          {" "}
+                          <span>Part Time</span>
                           <Select
                             options={partTimeMenu}
                             value={{
@@ -984,7 +984,7 @@ const AddUniversitySubject = () => {
                           )} */}
                         </Col>
                         <Col>
-                          {" "}
+                          <span>Sandwich</span>
                           <Select
                             options={sandwichMenu}
                             value={{
