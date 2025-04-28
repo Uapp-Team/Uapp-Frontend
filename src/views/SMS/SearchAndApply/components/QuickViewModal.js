@@ -146,9 +146,14 @@ const QuickViewModal = ({
                   <img src={BellIcon} alt="" />{" "}
                   {quickViewData?.applicationDeadLine}
                 </span>
-                <p className="fs-14px">
-                  Course Start Date <span className="fw-600">25 Mar 2025</span>
-                </p>
+                {quickViewData?.classStartDate && (
+                  <p className="fs-14px">
+                    Course Start Date{" "}
+                    <span className="fw-600">
+                      {quickViewData?.classStartDate}
+                    </span>
+                  </p>
+                )}
               </div>
               <div className="mt-3">
                 <div className="my-2 d-flex flex-wrap align-items-center">

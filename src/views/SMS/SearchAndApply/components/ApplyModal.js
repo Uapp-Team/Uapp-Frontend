@@ -167,12 +167,15 @@ const ApplyModal = ({
                   Application deadline{" "}
                   <strong>{quickViewData?.applicationDeadLine}</strong>
                 </div>
-                <div className="program-modal__start">
-                  Course Start Date <strong>25 Mar 2025</strong>
-                </div>
+                {quickViewData?.classStartDate && (
+                  <div className="program-modal__start">
+                    Course Start Date{" "}
+                    <strong>{quickViewData?.classStartDate}</strong>
+                  </div>
+                )}
                 <div className="program-modal__duration">
                   <CiTimer className="mr-2" />
-                  Duration{" "}
+                  <span className="mr-2 fw-600">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
