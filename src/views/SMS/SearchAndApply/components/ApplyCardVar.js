@@ -242,7 +242,7 @@ const ApplyCardVar = ({
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags my-3">
+                      <div className="tags my-1">
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
@@ -255,9 +255,9 @@ const ApplyCardVar = ({
                         )}
                       </div>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      {Consultant() && (
-                        <div className="gross-vertical my-3">
+                    {Consultant() && (
+                      <div className="d-flex justify-content-between">
+                        <div className="gross-vertical my-2 rounded-2">
                           <p className="d-flex flex-column">
                             <span className="fs-12px">Gross Earning</span>{" "}
                             <span className="fw-600">
@@ -265,8 +265,8 @@ const ApplyCardVar = ({
                             </span>
                           </p>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     <div className="card-action-vertical">
                       <button
