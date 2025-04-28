@@ -1,4 +1,5 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -14,6 +15,7 @@ import { Student } from "../../../../components/core/User";
 import Filter from "../../../../components/Dropdown/Filter";
 import { rootUrl } from "../../../../constants/constants";
 import {
+  currency,
   deliveryMethods,
   deliverySchedules,
   studyMode,
@@ -30,6 +32,8 @@ const ApplyModal = ({
   handleSubmit,
 }) => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [programCard, setProgramCard] = useState(true);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
@@ -46,6 +50,7 @@ const ApplyModal = ({
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
 
   const isApplyDisabled = !(
+    isCheckboxChecked &&
     selectedIntakeId &&
     selectedCampusValue &&
     selectedDurationsValue &&
@@ -56,6 +61,27 @@ const ApplyModal = ({
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
+  };
+  const handleCheckboxChange = (e) => {
+    setIsCheckboxChecked(e.target.checked);
+  };
+
+  const handleApplyClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleSubmit(
+        selectedCampusValue,
+        selectedStudyModeId,
+        selectedDeliveryPatternId,
+        selectedDeliveryScheduleId,
+        selectedDurationsValue,
+        selectedIntakeId
+      );
+    } catch (error) {
+      console.error("Error during submission:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
 
   useEffect(() => {
@@ -141,7 +167,8 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Tuition} alt="" />
                   <div className="fs-12px">Tution fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.localTutionFee}
+                    {currency(quickViewData.localTutionFeeCurrencyId)}
+                    {quickViewData?.localTutionFee}
                   </div>
                 </div>
                 {quickViewData?.scholarshipDetails && (
@@ -157,7 +184,8 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Application} alt="" />
                   <div className="fs-12px">Application fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.avarageApplicationFee}
+                    {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                    {quickViewData?.avarageApplicationFee}
                   </div>
                 </div>
               </div>
@@ -167,12 +195,15 @@ const ApplyModal = ({
                   Application deadline{" "}
                   <strong>{quickViewData?.applicationDeadLine}</strong>
                 </div>
-                <div className="program-modal__start">
-                  Course Start Date <strong>25 Mar 2025</strong>
-                </div>
+                {quickViewData?.classStartDate && (
+                  <div className="program-modal__start">
+                    Course Start Date{" "}
+                    <strong>{quickViewData?.classStartDate}</strong>
+                  </div>
+                )}
                 <div className="program-modal__duration">
                   <CiTimer className="mr-2" />
-                  Duration{" "}
+                  <span className="mr-2 fw-600">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
@@ -278,7 +309,7 @@ const ApplyModal = ({
                 <SlCalender className="mr-2 mt-1" />
                 <p>Intake</p>
               </div>
-              <div className="d-flex flex-wrap">
+              <div className="d-flex flex-wrap justify-centent-between align-item-center">
                 {quickViewData?.intakes?.map((intake) => (
                   <span
                     key={intake.id}
@@ -288,11 +319,29 @@ const ApplyModal = ({
                         : ""
                     }`}
                     onClick={() => {
-                      setSelectedIntake(intake.name);
-                      setSelectedIntakeId(intake.id);
+                      if (selectedIntakeId === intake.id) {
+                        // Deselect the intake if it's already selected
+                        setSelectedIntake("Select Intake");
+                        setSelectedIntakeId("");
+                      } else {
+                        // Select the intake
+                        setSelectedIntake(intake.name);
+                        setSelectedIntakeId(intake.id);
+                      }
                     }}
                   >
-                    {intake.name}
+                    <span>{intake.name}</span>
+                    <span>
+                      {selectedIntakeId === intake.id && (
+                        <RxCross1
+                          className="ml-2 pointer"
+                          onClick={() => {
+                            setSelectedIntake("Select Intake");
+                            setSelectedIntakeId("");
+                          }}
+                        />
+                      )}
+                    </span>
                   </span>
                 ))}
               </div>
@@ -426,7 +475,12 @@ const ApplyModal = ({
             {/* Footer */}
             <Row className="program-modal__confirmation mb-3">
               <label>
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={isCheckboxChecked}
+                  onChange={handleCheckboxChange}
+                />
                 Are you sure you want to apply this program?
               </label>
             </Row>
@@ -441,20 +495,13 @@ const ApplyModal = ({
                 Cancel
               </button>
               <button
-                onClick={() =>
-                  handleSubmit(
-                    selectedCampusValue,
-                    selectedStudyModeId,
-                    selectedDeliveryPatternId,
-                    selectedDeliveryScheduleId,
-                    selectedDurationsValue,
-                    selectedIntakeId
-                  )
-                }
-                className={`apply-btn ${isApplyDisabled ? "disabled" : ""}`}
-                disabled={isApplyDisabled}
+                onClick={handleApplyClick}
+                className={`apply-btn ${
+                  isApplyDisabled || isLoading ? "disabled" : ""
+                }`}
+                disabled={isApplyDisabled || isLoading}
               >
-                Apply →
+                {isLoading ? <Spin size="small" /> : "Apply →"}
               </button>
             </Row>
           </div>

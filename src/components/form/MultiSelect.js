@@ -3,6 +3,7 @@ import Select from "react-select";
 import get from "../../helpers/get";
 
 const MultiSelect = ({
+  dataList = [],
   url,
   value,
   setValue,
@@ -13,7 +14,7 @@ const MultiSelect = ({
   className,
   placeholder,
 }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(dataList);
 
   useEffect(() => {
     get(url).then((res) => {

@@ -24,7 +24,18 @@ export const deliverySchedules = [
   { id: 4, name: "Weekend" },
   { id: 5, name: "Flexible" },
 ];
-export const loansAvailable = [
-  { id: 1, name: "Government Loan" },
-  { id: 2, name: "Private Loan" },
+
+export const currencyData = [
+  { id: 1, name: "$" },
+  { id: 2, name: "£" },
+  { id: 3, name: "$" },
+  { id: 4, name: "$" },
+  { id: 5, name: "€" },
+  { id: 5, name: "AED" },
 ];
+
+export const currency = (id) => {
+  const filter = currencyData.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0].name : null;
+  return result;
+};

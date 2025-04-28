@@ -1,9 +1,9 @@
 import React from "react";
 import { FaExchangeAlt, FaHeart, FaSlidersH } from "react-icons/fa";
-import courseIcon from "../../../../assets/icon/course.svg";
-import "../SearchAndApply.css";
 import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
+import courseIcon from "../../../../assets/icon/course.svg";
 import { Student } from "../../../../components/core/User";
+import "../SearchAndApply.css";
 
 const ResultsToolbar = ({
   data,
@@ -16,8 +16,8 @@ const ResultsToolbar = ({
 }) => {
   return (
     <>
-      <div className="d-none d-md-block">
-        <div className="d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
+      <div className="results-toolbar d-none d-md-block">
+        <div className="results-toolbar d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
           {/* Left Section */}
           <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2">
             {/* <span className="tag mr-2">0 Result</span> */}

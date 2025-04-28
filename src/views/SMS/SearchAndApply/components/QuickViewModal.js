@@ -1,11 +1,15 @@
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CiBag1, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { RiArrowRightSLine } from "react-icons/ri";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
+import { useHistory } from "react-router-dom";
 import { Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
@@ -15,14 +19,15 @@ import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
 import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
+import { rootUrl } from "../../../../constants/constants";
 import {
+  currency,
   deliveryMethods,
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
-import { rootUrl } from "../../../../constants/constants";
 
 const QuickViewModal = ({
   open,
@@ -35,8 +40,11 @@ const QuickViewModal = ({
   handleApply,
   applyEligibility,
 }) => {
+  let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
-
+  const handleCourseDetails = (subjectId) => {
+    router.push(`subjectProfile/${subjectId}`);
+  };
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -104,37 +112,91 @@ const QuickViewModal = ({
               </div>
 
               {quickViewData.intakeStatusId !== 1 ? (
-                <button
-                  className={`w-50 register-btn ${
-                    !quickViewData?.canApply && "disabled"
-                  } `}
-                  onClick={() => {
-                    handleApply(
-                      quickViewData.subjectId,
-                      quickViewData.universityId
-                    );
-                  }}
-                  disabled={!quickViewData?.canApply}
-                  title={!quickViewData?.canApply && quickViewData?.summary}
+                <Tooltip
+                  title={
+                    !quickViewData?.canApply ? (
+                      <div className="custom-tooltip-content">
+                        <span>{quickViewData?.summary}</span>
+                      </div>
+                    ) : null
+                  }
+                  placement="top"
+                  overlayClassName="custom-tooltip"
+                  disabled={quickViewData?.canApply}
                 >
-                  Register Interest
-                </button>
+                  <span className="inline-block">
+                    <button
+                      className={`w-50 register-btn ${
+                        !quickViewData?.canApply ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        handleApply(
+                          quickViewData.subjectId,
+                          quickViewData.universityId
+                        )
+                      }
+                      disabled={!quickViewData?.canApply}
+                    >
+                      <div className="flex items-center gap-1">
+                        Register Interest
+                        {!quickViewData?.canApply ? (
+                          <InfoCircleOutlined
+                            style={{
+                              fontSize: "14px",
+                              color: "#fff",
+                              cursor: "pointer",
+                            }}
+                          />
+                        ) : (
+                          <RiArrowRightSLine />
+                        )}
+                      </div>
+                    </button>
+                  </span>
+                </Tooltip>
               ) : (
-                <button
-                  className={`apply-btn-vertical ${
-                    !quickViewData?.canApply && "disabled"
-                  } `}
-                  onClick={() => {
-                    handleApply(
-                      quickViewData.subjectId,
-                      quickViewData.universityId
-                    );
-                  }}
-                  disabled={!quickViewData?.canApply}
-                  title={!quickViewData?.canApply && quickViewData?.summary}
+                <Tooltip
+                  title={
+                    !quickViewData?.canApply ? (
+                      <div className="custom-tooltip-content">
+                        <span>{quickViewData?.summary}</span>
+                      </div>
+                    ) : null
+                  }
+                  placement="top"
+                  overlayClassName="custom-tooltip"
+                  disabled={quickViewData?.canApply}
                 >
-                  Apply Now
-                </button>
+                  <span className="inline-block">
+                    <button
+                      className={`apply-btn ${
+                        !quickViewData?.canApply ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        handleApply(
+                          quickViewData.subjectId,
+                          quickViewData.universityId
+                        )
+                      }
+                      disabled={!quickViewData?.canApply}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="mr-2">Apply Now</span>
+                        {!quickViewData?.canApply ? (
+                          <InfoCircleOutlined
+                            style={{
+                              fontSize: "14px",
+                              color: "#fff",
+                              cursor: "pointer",
+                            }}
+                          />
+                        ) : (
+                          <RiArrowRightSLine />
+                        )}
+                      </div>
+                    </button>
+                  </span>
+                </Tooltip>
               )}
             </Col>
           </Row>
@@ -146,9 +208,14 @@ const QuickViewModal = ({
                   <img src={BellIcon} alt="" />{" "}
                   {quickViewData?.applicationDeadLine}
                 </span>
-                <p className="fs-14px">
-                  Course Start Date <span className="fw-600">25 Mar 2025</span>
-                </p>
+                {quickViewData?.classStartDate && (
+                  <p className="fs-14px">
+                    Course Start Date{" "}
+                    <span className="fw-600">
+                      {quickViewData?.classStartDate}
+                    </span>
+                  </p>
+                )}
               </div>
               <div className="mt-3">
                 <div className="my-2 d-flex flex-wrap align-items-center">
@@ -261,33 +328,44 @@ const QuickViewModal = ({
                   <div>
                     <div className="d-flex justify-content-between w-75">
                       <span> Home/UK:</span>
-                      <span>£{quickViewData?.localTutionFee}</span>
+                      <span>
+                        {currency(quickViewData.localTutionFeeCurrencyId)}
+                        {quickViewData?.localTutionFee}
+                      </span>
                     </div>
                     <div className="d-flex justify-content-between w-75">
                       <span>EU/EEU:</span>
-                      <span>£{quickViewData?.eU_TutionFee}</span>
+                      <span>
+                        {currency(quickViewData.eU_TutionFeeCurrencyId)}
+                        {quickViewData?.eU_TutionFee}
+                      </span>
                     </div>
                     <div className="d-flex justify-content-between w-75">
                       <span>International:</span>
-                      <span>£{quickViewData?.internationalTutionFee}</span>
+                      <span>
+                        {currency(quickViewData.internationalTutionCurrencyId)}
+                        {quickViewData?.internationalTutionFee}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="dashed-hr"></div>
-              <div className="info-group">
-                <img
-                  src={mortarboard}
-                  alt=""
-                  className="h-24px w-24px mr-2 mt-1"
-                />
-                <div>
-                  <span className="info-title">Scholarship</span>
-                  <ul>
-                    <li>10% or £5000</li>
-                  </ul>
+              {quickViewData?.scholarshipDetails && (
+                <div className="info-group">
+                  <img
+                    src={mortarboard}
+                    alt=""
+                    className="h-24px w-24px mr-2 mt-1"
+                  />
+                  <div>
+                    <span className="info-title">Scholarship</span>
+                    <ul>
+                      <li>{quickViewData?.scholarshipDetails}</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="dashed-hr"></div>
               <div className="info-group">
                 <img
@@ -298,7 +376,10 @@ const QuickViewModal = ({
                 <div>
                   <span className="info-title">Application Fee</span>
                   <ul>
-                    <li>£{quickViewData?.avarageApplicationFee}</li>
+                    <li>
+                      {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                      {quickViewData?.avarageApplicationFee}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -379,13 +460,21 @@ const QuickViewModal = ({
               </div>
               <div className="footer-tag__content">
                 <ul>
-                  <li>£{quickViewData?.depositFee}</li>
+                  <li>
+                    {currency(quickViewData.depositFeeCurrencyId)}
+                    {quickViewData?.depositFee}
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
           <div className="view-more-container">
-            <button className="view-more-btn">View course profile</button>
+            <button
+              className="view-more-btn"
+              onClick={() => handleCourseDetails(quickViewData?.subjectId)}
+            >
+              View course profile
+            </button>
           </div>
         </ModalBody>
         <ApplyModal

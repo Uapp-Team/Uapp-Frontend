@@ -15,13 +15,17 @@ import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
-import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import { rootUrl } from "../../../../constants/constants";
+import {
+  currency,
+  deliveryMethods,
+  studyMode,
+} from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
-import { rootUrl } from "../../../../constants/constants";
 
 const ApplyCardVar = ({
   data,
@@ -145,9 +149,16 @@ const ApplyCardVar = ({
                           src={rootUrl + item.universityLogoUrl}
                           alt=""
                         />
-                        <div className="d-flex flex-column">
+                        <div
+                          className="d-flex flex-column"
+                          style={{
+                            height: "60px",
+                          }}
+                        >
                           <span className="fw-600 fs-14px">
-                            {item.universityName}
+                            {/* {item.universityName} */}
+                            {item.universityName?.slice(0, 55)}
+                            {item.universityName?.length > 55 && "..."}
                           </span>
                           <span className="fw-400 fs-12px">
                             {item.campusNames.split(",")[0].trim()}
@@ -155,9 +166,9 @@ const ApplyCardVar = ({
                         </div>
                       </div>
                       <h3 className="card-title-vertical fw-700 fs-20px">
-                        {item.subjectName}
-                        {/* {item.subjectName?.slice(0, 60)} */}
-                        {/* {item.subjectName?.length > 60 && "..."} */}
+                        {/* {item.subjectName} */}
+                        {item.subjectName?.slice(0, 70)}
+                        {item.subjectName?.length > 70 && "..."}
                       </h3>
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
@@ -177,21 +188,24 @@ const ApplyCardVar = ({
                               <MdPriceCheck className="mr-2" />
                               <span>Tuition (1st year)</span>
                             </span>
-                            £{item.localTutionFee}
+                            {currency(item.firstYearTutionFeeCurrencyId)}
+                            {item.firstYearTutionFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <CiBag1 className="mr-2" />
                               <span>Deposit</span>
                             </span>
-                            £{item.depositFee}
+                            {currency(item.depositFeeCurrencyId)}
+                            {item.depositFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <BiDonateBlood className="mr-2" />
                               <span>Application fee</span>
                             </span>
-                            £{item.avarageApplicationFee}
+                            {currency(item.avarageApplicationFeeCurrencyId)}
+                            {item.avarageApplicationFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
@@ -235,7 +249,7 @@ const ApplyCardVar = ({
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags my-3">
+                      <div className="tags my-2">
                         {item.isWorkPlacementAvailable && (
                           <span className="card-tag work-placement mr-1">
                             Work Placement
@@ -248,9 +262,9 @@ const ApplyCardVar = ({
                         )}
                       </div>
                     </div>
-                    <div className="d-flex justify-content-between">
-                      {Consultant() && (
-                        <div className="gross-vertical my-3">
+                    {Consultant() && (
+                      <div className="d-flex justify-content-between">
+                        <div className="gross-vertical my-2 rounded-2">
                           <p className="d-flex flex-column">
                             <span className="fs-12px">Gross Earning</span>{" "}
                             <span className="fw-600">
@@ -258,8 +272,8 @@ const ApplyCardVar = ({
                             </span>
                           </p>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     <div className="card-action-vertical">
                       <button
@@ -274,33 +288,86 @@ const ApplyCardVar = ({
                       >
                         Quick view
                       </button>
-
                       {item.intakeStatusId === 3 ? (
-                        <button
-                          className={`w-50 register-btn ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Register Interest <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`w-50 register-btn ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                Register Interest
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       ) : (
-                        <button
-                          className={`apply-btn-vertical ${
-                            !item?.canApply && "disabled"
-                          } `}
-                          onClick={() => {
-                            handleApply(item.subjectId, item.universityId);
-                          }}
-                          disabled={!item?.canApply}
-                          title={!item?.canApply && item?.summary}
+                        <Tooltip
+                          title={
+                            !item?.canApply ? (
+                              <div className="custom-tooltip-content">
+                                <span>{item?.summary}</span>
+                              </div>
+                            ) : null
+                          }
+                          placement="top"
+                          overlayClassName="custom-tooltip"
+                          disabled={item?.canApply}
                         >
-                          Apply Now <RiArrowRightSLine />
-                        </button>
+                          <span className="inline-block">
+                            <button
+                              className={`apply-btn-vertical ${
+                                !item?.canApply ? "disabled" : ""
+                              }`}
+                              onClick={() =>
+                                handleApply(item.subjectId, item.universityId)
+                              }
+                              disabled={!item?.canApply}
+                            >
+                              <div className="flex items-center gap-1">
+                                <span className="mr-2">Apply Now</span>
+                                {!item?.canApply ? (
+                                  <InfoCircleOutlined
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#fff",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                ) : (
+                                  <RiArrowRightSLine />
+                                )}
+                              </div>
+                            </button>
+                          </span>
+                        </Tooltip>
                       )}
                     </div>
                   </div>
