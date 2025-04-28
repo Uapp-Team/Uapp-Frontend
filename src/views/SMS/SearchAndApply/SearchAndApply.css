@@ -655,12 +655,13 @@
   width: 60%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .apply-modal-study__info {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-right: 20px;
 }
 .apply-modal-details__title {
   padding-right: 15px;
