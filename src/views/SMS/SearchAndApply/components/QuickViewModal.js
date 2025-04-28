@@ -388,7 +388,7 @@ const QuickViewModal = ({
                   </ul>
                 </div>
               </div>
-              {quickViewData?.isLoanAvailable === false && (
+              {quickViewData?.isLoanAvailable && (
                 <div className="info-group">
                   <img
                     src={SaveMoney}

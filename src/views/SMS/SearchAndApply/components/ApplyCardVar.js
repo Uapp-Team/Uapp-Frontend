@@ -25,8 +25,8 @@ import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
-import QuickViewModal from "./QuickViewModal";
 import OverflowHeightText from "./OverflowHeightText";
+import QuickViewModal from "./QuickViewModal";
 
 const ApplyCardVar = ({
   data,
@@ -54,7 +54,7 @@ const ApplyCardVar = ({
     const eligibilityData = await get(
       `Eligibility/ShowEligibility/${universityId}/${subjectId}`
     );
-    if (quickViewData[0]?.isLoanAvailable === false) {
+    if (quickViewData[0]?.isLoanAvailable) {
       get(`Subject/Get/${subjectId}`).then((res) => {
         setSubjectInfo(res.data);
       });

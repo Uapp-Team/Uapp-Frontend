@@ -55,7 +55,7 @@ const ApplyCardHor = ({
     const eligibilityData = await get(
       `Eligibility/ShowEligibility/${universityId}/${subjectId}`
     );
-    if (quickViewData[0]?.isLoanAvailable === false) {
+    if (quickViewData[0]?.isLoanAvailable) {
       get(`Subject/Get/${subjectId}`).then((res) => {
         setSubjectInfo(res.data);
       });
