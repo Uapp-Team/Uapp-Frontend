@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
@@ -31,6 +31,8 @@ const SearchFilter = ({
   setTuitionFee,
   applicationTypeIds,
   setApplicationTypeIds,
+  loans,
+  setLoans,
   courseDurations,
   setCourseDurations,
   isScholarships,
@@ -53,6 +55,7 @@ const SearchFilter = ({
   setCountryName,
   cityName,
   setCityName,
+  applicationTypelist,
   applicationType,
   setApplicationType,
   intakeList,
@@ -63,6 +66,39 @@ const SearchFilter = ({
   setCourseDurationsList,
 }) => {
   const divRef = useRef(null);
+
+  const [loanList, setLoanList] = useState([]);
+  console.log(applicationType);
+
+  const multiOption = (list) =>
+    list?.map((item) => ({
+      name: item?.label,
+      id: item?.value,
+    }));
+
+  useEffect(() => {
+    const listData =
+      applicationType.length > 0
+        ? multiOption(applicationType)
+        : applicationTypelist;
+
+    const checkHome = listData.filter((item) => item.name === "Home/UK");
+    const checkEu = listData.filter((item) => item.name === "EU/EEA");
+    const checkInt = listData.filter((item) => item.name === "International");
+    const checkLoan =
+      checkHome?.length === 1 || checkEu?.length === 1
+        ? [
+            { id: 1, name: "Government Loan" },
+            { id: 2, name: "Private Loan" },
+          ]
+        : checkHome?.length === 0 &&
+          checkEu?.length === 0 &&
+          checkInt?.length === 1
+        ? [{ id: 2, name: "Private Loan" }]
+        : null;
+
+    setLoanList(checkLoan);
+  }, [applicationType, applicationTypelist]);
 
   useEffect(() => {
     const list = [];
@@ -218,14 +254,27 @@ const SearchFilter = ({
                 </Col>
               </Row>
             </div>
-            <div className="border rounded p-16px mb-3 bg-white">
+            <div className="mb-3">
               <p className="mb-1 fw-500">Application Type </p>
 
               <MultiSelect
                 placeholder="Select Application Type"
-                url="SearchFilter/StudentTypes"
+                dataList={applicationTypelist}
                 value={applicationType}
                 setValue={setApplicationType}
+              />
+            </div>
+
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Loan available </p>
+
+              <CheckBoxByObj
+                register={() => {}}
+                name="loans"
+                list={loanList}
+                defaultValue={loans}
+                action={setLoans}
+                className="mb-0"
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
