@@ -149,11 +149,16 @@ const ApplyCardVar = ({
                           src={rootUrl + item.universityLogoUrl}
                           alt=""
                         />
-                        <div className="d-flex flex-column">
+                        <div
+                          className="d-flex flex-column"
+                          style={{
+                            height: "60px",
+                          }}
+                        >
                           <span className="fw-600 fs-14px">
                             {/* {item.universityName} */}
-                            {item.universityName?.slice(0, 31)}
-                            {item.universityName?.length > 31 && "..."}
+                            {item.universityName?.slice(0, 55)}
+                            {item.universityName?.length > 55 && "..."}
                           </span>
                           <span className="fw-400 fs-12px">
                             {item.campusNames.split(",")[0].trim()}
