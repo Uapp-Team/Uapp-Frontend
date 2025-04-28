@@ -68,7 +68,13 @@ const SearchFilter = ({
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
-  console.log(applicationTypelist);
+  const isMobileDevice =
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+  console.log(isMobileDevice); // true if mobile, false if desktop
+
   const multiOption = (list) =>
     list?.map((item) => ({
       name: item?.label,
@@ -97,7 +103,7 @@ const SearchFilter = ({
         : null;
 
     setLoanList(checkLoan);
-    setLoans([]);
+    loans.length > 0 && setLoans([]);
     // loans.length > 0 && setLoans([]);
     // loans.length !== loanList.length && setLoans([]);
   }, [applicationType, applicationTypelist]);
@@ -234,6 +240,8 @@ const SearchFilter = ({
                 setLabel={setCityName}
                 value={cityId}
                 setValue={setCityId}
+                selectAll={true}
+                all="All Campus"
                 url={`UniversityCityDD/Index/${countryId}`}
               />
             </div>
