@@ -1,9 +1,12 @@
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CiBag1, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { RiArrowRightSLine } from "react-icons/ri";
 import { SlCalender } from "react-icons/sl";
 import { VscFeedback } from "react-icons/vsc";
 import { useHistory } from "react-router-dom";
@@ -109,37 +112,91 @@ const QuickViewModal = ({
               </div>
 
               {quickViewData.intakeStatusId !== 1 ? (
-                <button
-                  className={`w-50 register-btn ${
-                    !quickViewData?.canApply && "disabled"
-                  } `}
-                  onClick={() => {
-                    handleApply(
-                      quickViewData.subjectId,
-                      quickViewData.universityId
-                    );
-                  }}
-                  disabled={!quickViewData?.canApply}
-                  title={!quickViewData?.canApply && quickViewData?.summary}
+                <Tooltip
+                  title={
+                    !quickViewData?.canApply ? (
+                      <div className="custom-tooltip-content">
+                        <span>{quickViewData?.summary}</span>
+                      </div>
+                    ) : null
+                  }
+                  placement="top"
+                  overlayClassName="custom-tooltip"
+                  disabled={quickViewData?.canApply}
                 >
-                  Register Interest
-                </button>
+                  <span className="inline-block">
+                    <button
+                      className={`w-50 register-btn ${
+                        !quickViewData?.canApply ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        handleApply(
+                          quickViewData.subjectId,
+                          quickViewData.universityId
+                        )
+                      }
+                      disabled={!quickViewData?.canApply}
+                    >
+                      <div className="flex items-center gap-1">
+                        Register Interest
+                        {!quickViewData?.canApply ? (
+                          <InfoCircleOutlined
+                            style={{
+                              fontSize: "14px",
+                              color: "#fff",
+                              cursor: "pointer",
+                            }}
+                          />
+                        ) : (
+                          <RiArrowRightSLine />
+                        )}
+                      </div>
+                    </button>
+                  </span>
+                </Tooltip>
               ) : (
-                <button
-                  className={`apply-btn-vertical ${
-                    !quickViewData?.canApply && "disabled"
-                  } `}
-                  onClick={() => {
-                    handleApply(
-                      quickViewData.subjectId,
-                      quickViewData.universityId
-                    );
-                  }}
-                  disabled={!quickViewData?.canApply}
-                  title={!quickViewData?.canApply && quickViewData?.summary}
+                <Tooltip
+                  title={
+                    !quickViewData?.canApply ? (
+                      <div className="custom-tooltip-content">
+                        <span>{quickViewData?.summary}</span>
+                      </div>
+                    ) : null
+                  }
+                  placement="top"
+                  overlayClassName="custom-tooltip"
+                  disabled={quickViewData?.canApply}
                 >
-                  Apply Now
-                </button>
+                  <span className="inline-block">
+                    <button
+                      className={`apply-btn ${
+                        !quickViewData?.canApply ? "disabled" : ""
+                      }`}
+                      onClick={() =>
+                        handleApply(
+                          quickViewData.subjectId,
+                          quickViewData.universityId
+                        )
+                      }
+                      disabled={!quickViewData?.canApply}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span className="mr-2">Apply Now</span>
+                        {!quickViewData?.canApply ? (
+                          <InfoCircleOutlined
+                            style={{
+                              fontSize: "14px",
+                              color: "#fff",
+                              cursor: "pointer",
+                            }}
+                          />
+                        ) : (
+                          <RiArrowRightSLine />
+                        )}
+                      </div>
+                    </button>
+                  </span>
+                </Tooltip>
               )}
             </Col>
           </Row>
