@@ -30,6 +30,7 @@ const ApplyModal = ({
   handleSubmit,
 }) => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [programCard, setProgramCard] = useState(true);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
@@ -46,6 +47,7 @@ const ApplyModal = ({
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
 
   const isApplyDisabled = !(
+    isCheckboxChecked &&
     selectedIntakeId &&
     selectedCampusValue &&
     selectedDurationsValue &&
@@ -56,6 +58,9 @@ const ApplyModal = ({
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
+  };
+  const handleCheckboxChange = (e) => {
+    setIsCheckboxChecked(e.target.checked);
   };
 
   useEffect(() => {
@@ -447,7 +452,12 @@ const ApplyModal = ({
             {/* Footer */}
             <Row className="program-modal__confirmation mb-3">
               <label>
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={isCheckboxChecked}
+                  onChange={handleCheckboxChange}
+                />
                 Are you sure you want to apply this program?
               </label>
             </Row>
