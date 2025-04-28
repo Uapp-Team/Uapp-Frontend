@@ -12,7 +12,11 @@ import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
-import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import {
+  currency,
+  deliveryMethods,
+  studyMode,
+} from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
@@ -240,15 +244,20 @@ const ApplyCardHor = ({
                         <MdPriceCheck className="mr-2" />
                         Tuition Fee (1st year)
                       </span>
-                      <p className="card-price">£{item.localTutionFee}</p>
+                      <p className="card-price">
+                        {currency(item.firstYearTutionFeeCurrencyId)}
+                        {item.firstYearTutionFee}
+                      </p>
                     </div>
                     <div className="mr-4">
                       <span className="card-subtitle">
-                        {" "}
                         <CiBag1 className="mr-2" />
                         Deposit
                       </span>
-                      <p className="card-price">£{item.depositFee}</p>
+                      <p className="card-price">
+                        {currency(item.depositFeeCurrencyId)}
+                        {item.depositFee}
+                      </p>
                     </div>
                     <div className="mr-4">
                       <span className="card-subtitle">
@@ -256,7 +265,8 @@ const ApplyCardHor = ({
                         Application fee
                       </span>
                       <p className="card-price">
-                        £{item.avarageApplicationFee}
+                        {currency(item.avarageApplicationFeeCurrencyId)}
+                        {item.avarageApplicationFee}
                       </p>
                     </div>
                   </div>
