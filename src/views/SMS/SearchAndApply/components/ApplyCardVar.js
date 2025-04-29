@@ -32,13 +32,12 @@ const ApplyCardVar = ({
   data,
   studentName,
   setSubjectId,
-  openApplyModal,
-  setOpenApplyModal,
   handleFavourite,
   handleSubmit,
 }) => {
   const referenceId = localStorage.getItem("referenceId");
   const [open, setOpen] = useState(false);
+  const [openApplyModal, setOpenApplyModal] = useState(false);
   const [index, setIndex] = useState(0);
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});

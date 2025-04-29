@@ -34,12 +34,11 @@ const ApplyCardHor = ({
   data,
   studentName,
   setSubjectId,
-  openApplyModal,
-  setOpenApplyModal,
   handleFavourite,
   handleSubmit,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openApplyModal, setOpenApplyModal] = useState(false);
   const [index, setIndex] = useState(0);
   const [quickViewData, setQuickViewData] = useState({});
   const [eligibility, setEligibility] = useState({});

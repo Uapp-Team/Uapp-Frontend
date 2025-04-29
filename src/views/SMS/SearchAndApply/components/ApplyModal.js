@@ -367,24 +367,6 @@ const ApplyModal = ({
             </div>
 
             <div className="program-modal__form-group">
-              <label htmlFor="duration">Course Durations</label>
-              <Filter
-                data={quickViewData?.durations?.map((duration) => ({
-                  name: duration.name,
-                  id: duration.id,
-                }))}
-                label={selectedDurationsLabel}
-                setLabel={setSelectedDurationLabel}
-                value={selectedDurationsValue}
-                setValue={setSelectedDurationValue}
-                onChange={(label, value) => {
-                  setSelectedDurationLabel(label);
-                  setSelectedDurationValue(value);
-                }}
-              />
-            </div>
-
-            <div className="program-modal__form-group">
               <label>Delivery Pattern</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliveryMethods
@@ -417,7 +399,7 @@ const ApplyModal = ({
 
             <div className="program-modal__form-group">
               <label>Study Mode</label>
-              <div className="program-modal__radio-group">
+              {/* <div className="program-modal__radio-group">
                 {quickViewData?.studyModes
                   ?.split(",")
                   .map((id) => {
@@ -439,7 +421,52 @@ const ApplyModal = ({
                       <span>{method.name}</span>
                     </label>
                   ))}
+              </div> */}
+              <div className="program-modal__radio-group">
+                {Array.from(
+                  new Set(
+                    (quickViewData?.durations || []).map((duration) =>
+                      Number(duration.studyMode)
+                    )
+                  )
+                )
+                  .map((id) => studyMode.find((mode) => mode.id === id))
+                  .filter(Boolean)
+                  .map((method) => (
+                    <label key={method.id}>
+                      <input
+                        type="radio"
+                        name="mode"
+                        value={method.id}
+                        checked={selectedStudyModeId === method.id.toString()}
+                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
+                      />
+                      <span>{method.name}</span>
+                    </label>
+                  ))}
               </div>
+            </div>
+
+            <div className="program-modal__form-group">
+              <label htmlFor="duration">Course Durations</label>
+              <Filter
+                data={(quickViewData?.durations || [])
+                  .filter(
+                    (duration) => duration.studyMode === selectedStudyModeId
+                  )
+                  .map((duration) => ({
+                    name: duration.name,
+                    id: duration.id,
+                  }))}
+                label={selectedDurationsLabel}
+                setLabel={setSelectedDurationLabel}
+                value={selectedDurationsValue}
+                setValue={setSelectedDurationValue}
+                onChange={(label, value) => {
+                  setSelectedDurationLabel(label);
+                  setSelectedDurationValue(value);
+                }}
+              />
             </div>
 
             <div className="program-modal__form-group">
