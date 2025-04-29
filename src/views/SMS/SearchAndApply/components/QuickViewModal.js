@@ -50,7 +50,7 @@ const QuickViewModal = ({
 
   return (
     <>
-      <Modal isOpen={open} toggle={onClose} className="modal-lg">
+      <Modal isOpen={open} toggle={onClose} className="modal-xl">
         <div
           className="d-flex justify-content-between py-3 px-4"
           style={{
@@ -206,6 +206,23 @@ const QuickViewModal = ({
 
           <Row className="quickview-content">
             <Col xs={12} sm={7} className="quickview-left">
+              <div className="tags my-3">
+                {quickViewData?.isLoanAvailable && (
+                  <span className="card-tag work-placement mr-1">
+                    Loan Available
+                  </span>
+                )}
+                {quickViewData?.isWorkPlacementAvailable && (
+                  <span className="card-tag work-placement mr-1">
+                    Work Placement
+                  </span>
+                )}
+                {quickViewData?.isScholarshipAvailable && (
+                  <span className="card-tag scholarship-available">
+                    Scholarship Available
+                  </span>
+                )}
+              </div>
               <div className="quickview-left__deadline my-2">
                 <span className="mr-3">
                   <img src={BellIcon} alt="" />{" "}
@@ -221,32 +238,38 @@ const QuickViewModal = ({
                 )}
               </div>
               <div className="mt-3">
-                <div className="my-2 d-flex flex-wrap align-items-center">
-                  <span className="fs-14px d-flex align-items-center">
+                <div className="my-4 d-flex">
+                  <div className="fs-14px d-flex">
                     <CiTimer size={20} className="mr-2" />
                     <span className="mr-3">Duration</span>
-                  </span>
-                  {quickViewData?.durationNames
-                    ?.split(",")
-                    .map((duration, index) => (
-                      <span className="filter-button" key={index}>
-                        {duration}
-                      </span>
-                    ))}
+                  </div>
+                  <div className="d-flex flex-wrap">
+                    {quickViewData?.durationNames
+                      ?.split(",")
+                      .map((duration, index) => (
+                        <span className="filter-button" key={index}>
+                          {duration}
+                        </span>
+                      ))}
+                  </div>
                 </div>
 
-                <div className="mt-2 d-flex flex-wrap align-items-center">
-                  <span className="fs-14px d-flex align-items-center">
-                    <SlCalender size={20} className="mr-2" />
-                    <span className="mr-3">Intake</span>
-                  </span>
-                  {quickViewData?.intakeNames
-                    ?.split(",")
-                    .map((intake, index) => (
-                      <span className="filter-button" key={index}>
-                        {intake}
-                      </span>
-                    ))}
+                <div className="mt-2">
+                  <div className="my-4 d-flex">
+                    <div className="fs-14px d-flex">
+                      <SlCalender size={20} className="mr-2" />
+                      <span className="mr-3">Intake</span>
+                    </div>
+                    <div className="d-flex flex-wrap">
+                      {quickViewData?.intakeNames
+                        ?.split(",")
+                        .map((intake, index) => (
+                          <span className="filter-button" key={index}>
+                            {intake}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="dashed-hr"></div>
@@ -397,23 +420,37 @@ const QuickViewModal = ({
                   />
                   <div>
                     <span className="info-title">Loan Available</span>
-                    {subjectInfo?.isGovernmentLoan && (
-                      <a href={subjectInfo?.governmentLoanUrl} target="_blank">
-                        Government Loan
-                      </a>
-                    )}
-                    {subjectInfo?.isPrivateLoan && (
-                      <a href={subjectInfo?.privateLoanUrl} target="_blank">
-                        Private Loan
-                      </a>
-                    )}
+                    <div>
+                      {subjectInfo?.isGovernmentLoan &&
+                        subjectInfo?.governmentLoanUrl && (
+                          <a
+                            href={`${subjectInfo.governmentLoanUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <span>Government Loan</span>
+                          </a>
+                        )}
+                    </div>
+                    <div>
+                      {subjectInfo?.isPrivateLoan &&
+                        subjectInfo?.privateLoanUrl && (
+                          <a
+                            href={subjectInfo.privateLoanUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Private Loan
+                          </a>
+                        )}
+                    </div>
                   </div>
                 </div>
               )}
             </Col>
           </Row>
 
-          <div className="quickview-footer">
+          <Row className="quickview-footer">
             <div className="footer-tag">
               <div className="mb-2 fw-500">
                 <VscFeedback size={20} className="mr-2" />
@@ -494,15 +531,15 @@ const QuickViewModal = ({
                 </ul>
               </div>
             </div>
-          </div>
-          <div className="view-more-container">
+          </Row>
+          <Row className="view-more-container">
             <button
               className="view-more-btn"
               onClick={() => handleCourseDetails(quickViewData?.subjectId)}
             >
               View course profile
             </button>
-          </div>
+          </Row>
         </ModalBody>
         <ApplyModal
           open={openApplyModal}

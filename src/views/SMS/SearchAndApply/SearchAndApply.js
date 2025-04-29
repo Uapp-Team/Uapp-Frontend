@@ -68,7 +68,7 @@ function SearchAndApply() {
   const [cityName, setCityName] = useState("Select City");
   // const [applyEligibility, setApplyEligibility] = useState({});
   // const [quickViewData, setQuickViewData] = useState({});
-  const [openApplyModal, setOpenApplyModal] = useState(false);
+  // const [openApplyModal, setOpenApplyModal] = useState(false);
   const referenceId = localStorage.getItem("referenceId");
   // const [eligibility, setEligibility] = useState({});
   // const [open, setOpen] = useState(false);
@@ -138,11 +138,11 @@ function SearchAndApply() {
   ]);
 
   useEffect(() => {
-    get(`SearchFilter/StudentTypes`).then((res) => {
+    get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
       setApplicationTypelist(res);
       setLoans([]);
     });
-  }, []);
+  }, [studentId]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -220,8 +220,6 @@ function SearchAndApply() {
           autoDismiss: true,
         });
 
-        setOpenApplyModal(false);
-        console.log(res?.data);
         history.push(
           `/applicationDetails/${res?.data?.data?.applicationId}/${
             Student() ? referenceId : studentId
@@ -340,8 +338,6 @@ function SearchAndApply() {
               data={data?.items}
               studentName={studentName}
               handleSubmit={handleSubmit}
-              openApplyModal={openApplyModal}
-              setOpenApplyModal={setOpenApplyModal}
               handleFavourite={handleFavourite}
               setSubjectId={setSubjectId}
             />
@@ -353,8 +349,6 @@ function SearchAndApply() {
                 data={data?.items}
                 studentName={studentName}
                 handleSubmit={handleSubmit}
-                openApplyModal={openApplyModal}
-                setOpenApplyModal={setOpenApplyModal}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
               />
@@ -363,8 +357,6 @@ function SearchAndApply() {
                 data={data?.items}
                 studentName={studentName}
                 handleSubmit={handleSubmit}
-                openApplyModal={openApplyModal}
-                setOpenApplyModal={setOpenApplyModal}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
               />

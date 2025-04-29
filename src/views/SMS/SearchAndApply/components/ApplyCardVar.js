@@ -32,13 +32,12 @@ const ApplyCardVar = ({
   data,
   studentName,
   setSubjectId,
-  openApplyModal,
-  setOpenApplyModal,
   handleFavourite,
   handleSubmit,
 }) => {
   const referenceId = localStorage.getItem("referenceId");
   const [open, setOpen] = useState(false);
+  const [openApplyModal, setOpenApplyModal] = useState(false);
   const [index, setIndex] = useState(0);
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});
@@ -55,8 +54,8 @@ const ApplyCardVar = ({
       `Eligibility/ShowEligibility/${universityId}/${subjectId}`
     );
     if (quickViewData[0]?.isLoanAvailable) {
-      get(`Subject/Get/${subjectId}`).then((res) => {
-        setSubjectInfo(res.data);
+      await get(`Subject/Get/${subjectId}`).then((res) => {
+        setSubjectInfo(res);
       });
     }
     setEligibility(eligibilityData);
@@ -197,7 +196,7 @@ const ApplyCardVar = ({
                               <MdPriceCheck className="mr-2" />
                               <span>Tuition (1st year)</span>
                             </span>
-                            {currency(item.firstYearTutionFeeCurrencyId)}
+                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                             {item.firstYearTutionFee}
                           </li>
                           <li className="d-flex justify-content-between">
@@ -205,7 +204,7 @@ const ApplyCardVar = ({
                               <CiBag1 className="mr-2" />
                               <span>Deposit</span>
                             </span>
-                            {currency(item.depositFeeCurrencyId)}
+                            {currency(item.depositFeeCurrencyId)}{" "}
                             {item.depositFee}
                           </li>
                           <li className="d-flex justify-content-between">
@@ -213,7 +212,7 @@ const ApplyCardVar = ({
                               <BiDonateBlood className="mr-2" />
                               <span>Application fee</span>
                             </span>
-                            {currency(item.avarageApplicationFeeCurrencyId)}
+                            {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                             {item.avarageApplicationFee}
                           </li>
                           <li className="d-flex justify-content-between">
@@ -258,22 +257,37 @@ const ApplyCardVar = ({
                         </ul>
                       </div>
                       <div className="dashed-hr"></div>
-                      <div className="tags my-2">
-                        {item.isLoanAvailable && (
-                          <span className="card-tag work-placement mr-1">
-                            Loan Available
-                          </span>
-                        )}
-                        {item.isWorkPlacementAvailable && (
-                          <span className="card-tag work-placement mr-1">
-                            Work Placement
-                          </span>
-                        )}
-                        {item.isScholarshipAvailable && (
-                          <span className="card-tag scholarship-available">
-                            Scholarship Available
-                          </span>
-                        )}
+                      <div className="tags my-3">
+                        {
+                          [
+                            item?.isLoanAvailable && (
+                              <span
+                                className="card-tag work-placement mr-1"
+                                key="loan"
+                              >
+                                Loan Available
+                              </span>
+                            ),
+                            item?.isWorkPlacementAvailable && (
+                              <span
+                                className="card-tag work-placement mr-1"
+                                key="work-placement"
+                              >
+                                Work Placement
+                              </span>
+                            ),
+                            item?.isScholarshipAvailable && (
+                              <span
+                                className="card-tag scholarship-available"
+                                key="scholarship"
+                              >
+                                Scholarship Available
+                              </span>
+                            ),
+                          ]
+                            .filter(Boolean) // Filter out any `false` values
+                            .slice(0, 2) // Show only the first two tags
+                        }
                       </div>
                     </div>
                     {Consultant() && (

@@ -909,6 +909,9 @@
   .program-modal__card {
     flex-direction: column;
   }
+  .filter-button {
+    font-size: 0.8rem;
+  }
 }
 
 /* Responsive */
