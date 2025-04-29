@@ -197,7 +197,7 @@ const ApplyCardVar = ({
                               <MdPriceCheck className="mr-2" />
                               <span>Tuition (1st year)</span>
                             </span>
-                            {currency(item.firstYearTutionFeeCurrencyId)}
+                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                             {item.firstYearTutionFee}
                           </li>
                           <li className="d-flex justify-content-between">
@@ -205,7 +205,7 @@ const ApplyCardVar = ({
                               <CiBag1 className="mr-2" />
                               <span>Deposit</span>
                             </span>
-                            {currency(item.depositFeeCurrencyId)}
+                            {currency(item.depositFeeCurrencyId)}{" "}
                             {item.depositFee}
                           </li>
                           <li className="d-flex justify-content-between">
@@ -213,7 +213,7 @@ const ApplyCardVar = ({
                               <BiDonateBlood className="mr-2" />
                               <span>Application fee</span>
                             </span>
-                            {currency(item.avarageApplicationFeeCurrencyId)}
+                            {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                             {item.avarageApplicationFee}
                           </li>
                           <li className="d-flex justify-content-between">

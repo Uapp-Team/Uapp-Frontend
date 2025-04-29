@@ -256,7 +256,7 @@ const ApplyCardHor = ({
                         Tuition Fee (1st year)
                       </span>
                       <p className="card-price">
-                        {currency(item.firstYearTutionFeeCurrencyId)}
+                        {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                         {item.firstYearTutionFee}
                       </p>
                     </div>
@@ -266,8 +266,7 @@ const ApplyCardHor = ({
                         Deposit
                       </span>
                       <p className="card-price">
-                        {currency(item.depositFeeCurrencyId)}
-                        {item.depositFee}
+                        {currency(item.depositFeeCurrencyId)} {item.depositFee}
                       </p>
                     </div>
                     <div className="mr-4">
@@ -276,7 +275,7 @@ const ApplyCardHor = ({
                         Application fee
                       </span>
                       <p className="card-price">
-                        {currency(item.avarageApplicationFeeCurrencyId)}
+                        {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                         {item.avarageApplicationFee}
                       </p>
                     </div>
