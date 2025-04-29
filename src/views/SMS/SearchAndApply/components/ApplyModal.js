@@ -1,4 +1,4 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { CiTimer } from "react-icons/ci";
@@ -6,7 +6,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { SlCalender } from "react-icons/sl";
-import { Col, Modal, ModalBody, Row } from "reactstrap";
+import { Col, Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
@@ -22,6 +22,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
   open,
@@ -385,33 +386,6 @@ const ApplyModal = ({
             </div>
 
             <div className="program-modal__form-group">
-              <label>Study Mode</label>
-              <div className="program-modal__radio-group">
-                {quickViewData?.studyModes
-                  ?.split(",")
-                  .map((id) => {
-                    const method = studyMode.find(
-                      (m) => m.id === parseInt(id.trim(), 10)
-                    );
-                    return method;
-                  })
-                  .filter(Boolean)
-                  .map((method, index) => (
-                    <label key={index}>
-                      <input
-                        type="radio"
-                        name="mode"
-                        value={method.id}
-                        checked={selectedStudyModeId === method.id.toString()}
-                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
-                      />
-                      <span>{method.name}</span>
-                    </label>
-                  ))}
-              </div>
-            </div>
-
-            <div className="program-modal__form-group">
               <label>Delivery Pattern</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliveryMethods
@@ -435,6 +409,33 @@ const ApplyModal = ({
                         onChange={(e) =>
                           setSelectedDeliveryPatternId(e.target.value)
                         }
+                      />
+                      <span>{method.name}</span>
+                    </label>
+                  ))}
+              </div>
+            </div>
+
+            <div className="program-modal__form-group">
+              <label>Study Mode</label>
+              <div className="program-modal__radio-group">
+                {quickViewData?.studyModes
+                  ?.split(",")
+                  .map((id) => {
+                    const method = studyMode.find(
+                      (m) => m.id === parseInt(id.trim(), 10)
+                    );
+                    return method;
+                  })
+                  .filter(Boolean)
+                  .map((method, index) => (
+                    <label key={index}>
+                      <input
+                        type="radio"
+                        name="mode"
+                        value={method.id}
+                        checked={selectedStudyModeId === method.id.toString()}
+                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
                       />
                       <span>{method.name}</span>
                     </label>
@@ -502,7 +503,11 @@ const ApplyModal = ({
                 }`}
                 disabled={isApplyDisabled || isLoading}
               >
-                {isLoading ? <Spin size="small" /> : "Apply →"}
+                {isLoading ? (
+                  <Spin indicator={antIcon} size="small" />
+                ) : (
+                  "Apply →"
+                )}
               </button>
             </div>
           </div>
