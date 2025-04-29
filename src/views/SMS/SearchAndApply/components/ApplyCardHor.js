@@ -111,25 +111,38 @@ const ApplyCardHor = ({
                 {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
                 </div> */}
-                {item.isLoanAvailable && (
-                  <span className="card-tag work-placement mr-1">
-                    Loan Available
-                  </span>
-                )}
-                {item.isScholarshipAvailable && (
-                  <div className="tags">
-                    <span className="card-tag scholarship-available">
-                      Scholarship Available
-                    </span>
-                  </div>
-                )}
-                {item.isWorkPlacementAvailable && (
-                  <div className="tags">
-                    <span className="card-tag scholarship-available">
-                      Work Placement
-                    </span>
-                  </div>
-                )}
+                <div className="tags">
+                  {
+                    [
+                      item.isLoanAvailable && (
+                        <span
+                          className="card-tag work-placement mr-1"
+                          key="loan"
+                        >
+                          Loan Available
+                        </span>
+                      ),
+                      item.isScholarshipAvailable && (
+                        <span
+                          className="card-tag scholarship-available"
+                          key="scholarship"
+                        >
+                          Scholarship Available
+                        </span>
+                      ),
+                      item.isWorkPlacementAvailable && (
+                        <span
+                          className="card-tag scholarship-available"
+                          key="work-placement"
+                        >
+                          Work Placement
+                        </span>
+                      ),
+                    ]
+                      .filter(Boolean) // Filter out any `false` values
+                      .slice(0, 2) // Show only the first two tags
+                  }
+                </div>
                 <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
                     {!Student() && (

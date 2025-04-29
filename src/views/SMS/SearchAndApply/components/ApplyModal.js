@@ -32,7 +32,6 @@ const ApplyModal = ({
   quickViewData,
   handleSubmit,
 }) => {
-  console.log(applyEligibility);
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -100,7 +99,7 @@ const ApplyModal = ({
   }, [open]);
   return (
     <>
-      <Modal isOpen={open} toggle={onClose} className="modal-lg">
+      <Modal isOpen={open} toggle={onClose} className="modal-xl">
         <div
           className="d-flex justify-content-between py-3 px-4"
           style={{
