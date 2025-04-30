@@ -189,7 +189,7 @@ const SearchFilter = ({
               />
             </div>
 
-            <div className="mb-3 d-block d-md-none">
+            <div className="mb-3">
               <p className="mb-1 fw-500">Country</p>
               <DefaultDropdown
                 label={countryName}
