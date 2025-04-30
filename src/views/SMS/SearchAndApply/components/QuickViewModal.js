@@ -50,7 +50,7 @@ const QuickViewModal = ({
 
   return (
     <>
-      <Modal isOpen={open} toggle={onClose} className="modal-xl">
+      <Modal isOpen={open} toggle={onClose} className="modal-lg">
         <div
           className="d-flex justify-content-between py-3 px-4"
           style={{
