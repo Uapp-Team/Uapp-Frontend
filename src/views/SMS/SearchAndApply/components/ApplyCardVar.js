@@ -1,15 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
-import { BiDonateBlood } from "react-icons/bi";
-import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
-import { MdPriceCheck } from "react-icons/md";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { SlCalender } from "react-icons/sl";
-import { VscFeedback } from "react-icons/vsc";
 import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
@@ -27,6 +21,16 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import OverflowHeightText from "./OverflowHeightText";
 import QuickViewModal from "./QuickViewModal";
+import {
+  CalenderIcon,
+  DeliverPatternIcon,
+  DepositIcon,
+  DonationIcon,
+  LocationIcon,
+  MoneyIcon,
+  StudyModeIcon,
+  TimerIcon,
+} from "./icons";
 
 const ApplyCardVar = ({
   data,
@@ -186,39 +190,39 @@ const ApplyCardVar = ({
                         <ul className="card-details-vertical">
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiLocationOn className="mr-2" />
-                              <span>Location</span>
+                              <LocationIcon />
+                              <span className="ml-1">Location</span>
                             </span>
                             <CustomToolTip methodIds={item.campusNames} />
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <MdPriceCheck className="mr-2" />
-                              <span>Tuition (1st year)</span>
+                              <MoneyIcon />
+                              <span className="ml-1">Tuition (1st year)</span>
                             </span>
                             {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                             {item.firstYearTutionFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiBag1 className="mr-2" />
-                              <span>Deposit</span>
+                              <DepositIcon />
+                              <span className="ml-1">Deposit</span>
                             </span>
                             {currency(item.depositFeeCurrencyId)}{" "}
                             {item.depositFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <BiDonateBlood className="mr-2" />
-                              <span>Application fee</span>
+                              <DonationIcon />
+                              <span className="ml-1">Application fee</span>
                             </span>
                             {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                             {item.avarageApplicationFee}
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiTimer className="mr-2" />
-                              <span>Duration</span>
+                              <TimerIcon />
+                              <span className="ml-1">Duration</span>
                             </span>
                             <span>
                               {(() => {
@@ -274,8 +278,8 @@ const ApplyCardVar = ({
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <FaPeopleGroup className="mr-2" />
-                              <span>Study Mode</span>
+                              <StudyModeIcon />
+                              <span className="ml-1">Study Mode</span>
                             </span>
                             <span>
                               {(() => {
@@ -338,8 +342,8 @@ const ApplyCardVar = ({
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <VscFeedback className="mr-2" />
-                              <span>Delivery Pattern</span>
+                              <DeliverPatternIcon />
+                              <span className="ml-1">Delivery Pattern</span>
                             </span>
                             <CustomToolTip
                               methodIds={item.deliveryMethods}
@@ -349,8 +353,8 @@ const ApplyCardVar = ({
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <SlCalender className="mr-2" />
-                              <span>Intake</span>
+                              <CalenderIcon />
+                              <span className="ml-1">Intake</span>
                             </span>
                             <CustomToolTip
                               methodIds={item.intakeNames}

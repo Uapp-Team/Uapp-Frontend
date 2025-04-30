@@ -145,16 +145,13 @@ const ApplyCardHor = ({
                 <div className="d-flex ml-2 align-items-center justify-content-center">
                   <div className="mr-3">
                     {!Student() && (
-                      <img
-                        src={
-                          Number(item.intakeStatusId) === 1 ? online : offline
-                        }
-                        alt={
-                          Number(item.intakeStatusId) === 1
-                            ? "Online"
-                            : "Offline"
-                        }
-                      />
+                      <div>
+                        {item.intakeStatusId === 3 ? (
+                          <img src={offline} alt="" />
+                        ) : (
+                          <img src={online} alt="" />
+                        )}
+                      </div>
                     )}
                   </div>
                   <LuSettings2 className="mr-3" />
