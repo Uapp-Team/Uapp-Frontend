@@ -278,7 +278,7 @@ const CopyUniversitySubjectFee = () => {
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="2">
                     <span>
-                      Local Tution Fee
+                      Home Tution Fee
                       {/* <span className="text-danger">*</span>{" "} */}
                     </span>
                   </Col>
@@ -291,7 +291,7 @@ const CopyUniversitySubjectFee = () => {
                       defaultValue={addLocalTutionFee}
                       name="localTutionFee"
                       id="localTutionFee"
-                      placeholder="Enter Local Tution Fee"
+                      placeholder="Enter Home Tution Fee"
                       // required
                     />
                   </Col>

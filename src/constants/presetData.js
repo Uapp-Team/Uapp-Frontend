@@ -18,11 +18,11 @@ export const deliveryMethods = [
 ];
 
 export const deliverySchedules = [
-  { id: 1, name: "Evening" },
-  { id: 2, name: "Evening + Weekend" },
   { id: 3, name: "Standard" },
-  { id: 4, name: "Weekend" },
+  { id: 1, name: "Evening" },
   { id: 5, name: "Flexible" },
+  { id: 4, name: "Weekend" },
+  { id: 2, name: "Evening + Weekend" },
 ];
 
 export const countryList = [

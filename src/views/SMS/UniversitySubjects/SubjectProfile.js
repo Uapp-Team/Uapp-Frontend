@@ -575,7 +575,7 @@ const SubjectProfile = () => {
                     </div>
 
                     <div className="d-flex justify-content-between">
-                      <span>Local Tution Fee</span>
+                      <span>Home Tution Fee</span>
                       <p>
                         {subjectData?.university?.universityCountry?.id == 1
                           ? "£"

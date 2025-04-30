@@ -275,7 +275,7 @@ const AddUniversitySubjectFee = () => {
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
-                        <span>Local Tution Fee</span>
+                        <span>Home Tution Fee</span>
                       </Col>
                       <Col className="col-5">
                         <InputGroup className="d-flex flex-nowrap">
@@ -303,7 +303,7 @@ const AddUniversitySubjectFee = () => {
                             defaultValue={addLocalTutionFee}
                             name="localtutionfee"
                             id="localtutionfee"
-                            placeholder="Enter Local Tution Fee"
+                            placeholder="Enter Home Tution Fee"
                             // required
                           />
                         </InputGroup>
@@ -421,11 +421,10 @@ const AddUniversitySubjectFee = () => {
                         </InputGroup>
                       </Col>
                     </FormGroup>
-                    <FormGroup row className="has-icon-left position-relative">
+                    {/* <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
                         <span>
                           First Year Tution Fee
-                          {/* <span className="text-danger">*</span>{" "} */}
                         </span>
                       </Col>
                       <Col className="col-5">
@@ -455,14 +454,12 @@ const AddUniversitySubjectFee = () => {
                             onChange={(e) =>
                               setFirstYearTuitionFee(e.target.value)
                             }
-                            // defaultValue={euTutionFee}
                             defaultValue={firstYearTuitionFee}
                             placeholder="Enter First Year Tution Fee "
-                            // required
                           />
                         </InputGroup>
                       </Col>
-                    </FormGroup>
+                    </FormGroup> */}
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
                         <span>
@@ -511,7 +508,7 @@ const AddUniversitySubjectFee = () => {
                       action={setDeliveryMethod}
                       className="mb-0"
                     />
-                    <p className="section-title">Delivery Schedules</p>
+                    <p className="section-title mt-3">Delivery Schedules</p>
                     <CheckBoxByObj
                       register={() => {}}
                       name="deliverySchedules"
