@@ -205,7 +205,7 @@ const QuickViewModal = ({
           </Row>
 
           <Row className="quickview-content">
-            <Col xs={12} sm={7} className="quickview-left">
+            <Col xs={12} lg={7} className="quickview-left">
               <div className="tags my-3">
                 {quickViewData?.isLoanAvailable && (
                   <span className="card-tag work-placement mr-1">
@@ -303,7 +303,7 @@ const QuickViewModal = ({
               </div>
             </Col>
 
-            <Col xs={12} sm={5} className="quickview-right">
+            <Col xs={12} lg={5} className="quickview-right">
               <div className="d-flex align-items-center my-2">
                 <img
                   className="h-48px w-48px mr-2"
