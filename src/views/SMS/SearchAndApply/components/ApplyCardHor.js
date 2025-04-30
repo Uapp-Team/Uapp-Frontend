@@ -441,7 +441,7 @@ const ApplyCardHor = ({
                               disabled={!item?.canApply}
                             >
                               <div className="flex items-center gap-1">
-                                Register Interest
+                                <span className="mr-2">Register Interest</span>
                                 {!item?.canApply ? (
                                   <InfoCircleOutlined
                                     style={{

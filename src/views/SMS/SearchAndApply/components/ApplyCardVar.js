@@ -443,7 +443,7 @@ const ApplyCardVar = ({
                               disabled={!item?.canApply}
                             >
                               <div>
-                                <span className="mr-1">Register Interest</span>
+                                <span className="mr-2">Register Interest</span>
                                 {!item?.canApply ? (
                                   <InfoCircleOutlined
                                     style={{
