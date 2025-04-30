@@ -64,7 +64,7 @@ function SearchAndApply() {
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
   const [institutionName, setInstitutionName] = useState("Select Institution");
-  const [countryName, setCountryName] = useState("Select Country");
+  const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
   // const [applyEligibility, setApplyEligibility] = useState({});
   // const [quickViewData, setQuickViewData] = useState({});

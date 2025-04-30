@@ -64,15 +64,17 @@ const SearchBox = ({
       </div>
       <div className="d-none d-md-block">
         <div className="d-flex">
-          <DefaultDropdown
-            label={countryName}
-            setLabel={setCountryName}
-            value={countryId}
-            setValue={setCountryId}
-            selectAll={true}
-            all="All Country"
-            url="UniversityCountry/Index"
-          />
+          <span className="border-left border-right">
+            <DefaultDropdown
+              label={countryName}
+              setLabel={setCountryName}
+              value={countryId}
+              setValue={setCountryId}
+              selectAll={true}
+              all="All Country"
+              url="UniversityCountry/Index"
+            />
+          </span>
           <DefaultDropdown
             label={institutionName}
             setLabel={setInstitutionName}
