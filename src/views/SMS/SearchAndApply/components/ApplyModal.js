@@ -399,29 +399,6 @@ const ApplyModal = ({
 
             <div className="program-modal__form-group">
               <label>Study Mode</label>
-              {/* <div className="program-modal__radio-group">
-                {quickViewData?.studyModes
-                  ?.split(",")
-                  .map((id) => {
-                    const method = studyMode.find(
-                      (m) => m.id === parseInt(id.trim(), 10)
-                    );
-                    return method;
-                  })
-                  .filter(Boolean)
-                  .map((method, index) => (
-                    <label key={index}>
-                      <input
-                        type="radio"
-                        name="mode"
-                        value={method.id}
-                        checked={selectedStudyModeId === method.id.toString()}
-                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
-                      />
-                      <span>{method.name}</span>
-                    </label>
-                  ))}
-              </div> */}
               <div className="program-modal__radio-group">
                 {Array.from(
                   new Set(

@@ -136,10 +136,10 @@ const ApplyCardVar = ({
                           )
                         ) : (
                           <div>
-                            {item.intakeStatusId ? (
-                              <img src={online} alt="" />
-                            ) : (
+                            {item.intakeStatusId === 3 ? (
                               <img src={offline} alt="" />
+                            ) : (
+                              <img src={online} alt="" />
                             )}
                           </div>
                         )}
