@@ -25,18 +25,23 @@ export const deliverySchedules = [
   { id: 5, name: "Flexible" },
 ];
 
-export const currencyData = [
-  { id: 0, name: "£" },
-  { id: 1, name: "$" },
-  { id: 2, name: "£" },
-  { id: 3, name: "$" },
-  { id: 4, name: "$" },
-  { id: 5, name: "€" },
-  { id: 6, name: "AED" },
+export const countryList = [
+  { id: 1, name: "USA", currency: "$" },
+  { id: 2, name: "UK", currency: "£" },
+  { id: 3, name: "Canada", currency: "$" },
+  { id: 4, name: "Australia", currency: "$" },
+  { id: 5, name: "Germany", currency: "€" },
+  { id: 6, name: "UAE", currency: "AED" },
 ];
 
 export const currency = (id) => {
-  const filter = currencyData.filter((item) => item.id === id);
-  const result = filter.length > 0 ? filter[0].name : null;
+  const filter = countryList.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0].currency : null;
+  return result;
+};
+
+export const countryInfo = (id) => {
+  const filter = countryList.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0] : null;
   return result;
 };

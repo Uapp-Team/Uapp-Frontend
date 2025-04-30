@@ -49,35 +49,29 @@ const ApplyCardHor = ({
   const [applyEligibility, setApplyEligibility] = useState({});
   const [subjectInfo, setSubjectInfo] = useState({});
 
-  const handleQuickView = async (subjectId, universityId, index) => {
+  const handleQuickView = async (item, index) => {
     setIndex(index);
-    const quickViewData = data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
+
     const eligibilityData = await get(
-      `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+      `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
     );
-    if (quickViewData[0]?.isLoanAvailable) {
-      get(`Subject/Get/${subjectId}`).then((res) => {
-        setSubjectInfo(res.data);
+    if (item?.isLoanAvailable) {
+      await get(`Subject/Get/${item.subjectId}`).then((res) => {
+        setSubjectInfo(res);
       });
     }
     setEligibility(eligibilityData);
-    setQuickViewData(quickViewData[0]);
+    setQuickViewData(item);
     setOpen(true);
   };
 
-  const handleApply = async (subjectId, universityId) => {
-    setSubjectId(subjectId);
+  const handleApply = async (item) => {
+    setSubjectId(item.subjectId);
     await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+      `Eligibility/ApplicationOverview/${item.universityId}/${item.subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
-    const quickViewData = data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
-    setQuickViewData(quickViewData[0]);
+
+    setQuickViewData(item);
     setOpenApplyModal(true);
   };
 
@@ -423,13 +417,7 @@ const ApplyCardHor = ({
                     <div>
                       <button
                         className="quick-btn"
-                        onClick={() =>
-                          handleQuickView(
-                            item.subjectId,
-                            item.universityId,
-                            index
-                          )
-                        }
+                        onClick={() => handleQuickView(item, index)}
                       >
                         Quick view
                       </button>
@@ -452,9 +440,7 @@ const ApplyCardHor = ({
                               className={`w-50 register-btn ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
-                              onClick={() =>
-                                handleApply(item.subjectId, item.universityId)
-                              }
+                              onClick={() => handleApply(item)}
                               disabled={!item?.canApply}
                             >
                               <div className="flex items-center gap-1">
@@ -492,9 +478,7 @@ const ApplyCardHor = ({
                               className={`apply-btn-vertical ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
-                              onClick={() =>
-                                handleApply(item.subjectId, item.universityId)
-                              }
+                              onClick={() => handleApply(item)}
                               disabled={!item?.canApply}
                             >
                               <div className="flex items-center gap-1">

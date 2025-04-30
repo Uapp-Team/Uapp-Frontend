@@ -22,6 +22,7 @@ import CloseBtn from "../../../../components/buttons/CloseBtn";
 import { Student } from "../../../../components/core/User";
 import { rootUrl } from "../../../../constants/constants";
 import {
+  countryInfo,
   currency,
   deliveryMethods,
   deliverySchedules,
@@ -42,6 +43,7 @@ const QuickViewModal = ({
   applyEligibility,
   subjectInfo,
 }) => {
+  console.log(quickViewData);
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const handleCourseDetails = (subjectId) => {
@@ -135,16 +137,11 @@ const QuickViewModal = ({
                       className={`w-50 register-btn ${
                         !quickViewData?.canApply ? "disabled" : ""
                       }`}
-                      onClick={() =>
-                        handleApply(
-                          quickViewData.subjectId,
-                          quickViewData.universityId
-                        )
-                      }
+                      onClick={() => handleApply(quickViewData)}
                       disabled={!quickViewData?.canApply}
                     >
                       <div className="flex items-center gap-1">
-                        Register Interest
+                        <span className="mr-2">Register Interest</span>
                         {!quickViewData?.canApply ? (
                           <InfoCircleOutlined
                             style={{
@@ -178,12 +175,7 @@ const QuickViewModal = ({
                       className={`apply-btn ${
                         !quickViewData?.canApply ? "disabled" : ""
                       }`}
-                      onClick={() =>
-                        handleApply(
-                          quickViewData.subjectId,
-                          quickViewData.universityId
-                        )
-                      }
+                      onClick={() => handleApply(quickViewData)}
                       disabled={!quickViewData?.canApply}
                     >
                       <div className="flex items-center gap-1">
@@ -319,6 +311,8 @@ const QuickViewModal = ({
                   </span>
                   <span className="fw-400 fs-12px">
                     {quickViewData?.campusNames?.split(",")[0].trim()}
+                    {", "}
+                    {countryInfo(quickViewData?.universityCountryId)?.name}
                   </span>
                 </div>
               </div>
