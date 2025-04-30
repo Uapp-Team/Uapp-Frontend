@@ -109,7 +109,10 @@ const QuickViewModal = ({
                   )
                 ) : null}
 
-                <div className="mr-2 icon-design">
+                <div
+                  className="mr-2 icon-design"
+                  onClick={() => handleCourseDetails(quickViewData?.subjectId)}
+                >
                   <LuArrowUpRight size={16} className="fs-20px" />
                 </div>
               </div>
@@ -353,21 +356,21 @@ const QuickViewModal = ({
                   <span className="info-title">Tuition Fees</span>
                   <div>
                     <div className="d-flex justify-content-between">
-                      <span> Home/UK:</span>
+                      <span className="mr-3"> Home/UK: </span>
                       <span>
                         {currency(quickViewData.localTutionFeeCurrencyId)}
                         {quickViewData?.localTutionFee}
                       </span>
                     </div>
                     <div className="d-flex justify-content-between">
-                      <span>EU/EEU:</span>
+                      <span className="mr-3">EU/EEU: </span>
                       <span>
                         {currency(quickViewData.eU_TutionFeeCurrencyId)}
                         {quickViewData?.eU_TutionFee}
                       </span>
                     </div>
                     <div className="d-flex justify-content-between">
-                      <span>International:</span>
+                      <span className="mr-3">International: </span>
                       <span>
                         {currency(quickViewData.internationalTutionCurrencyId)}
                         {quickViewData?.internationalTutionFee}
