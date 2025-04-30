@@ -374,7 +374,7 @@ const ApplyCardHor = ({
                         <span className="mr-1">
                           <MoneyIcon />
                         </span>
-                        Tuition Fee (1st year)
+                        Tuition Fee
                       </span>
                       <p className="card-price">
                         {currency(item.firstYearTutionFeeCurrencyId)}{" "}

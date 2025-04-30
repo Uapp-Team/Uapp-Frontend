@@ -36,7 +36,7 @@ export const countryList = [
 
 export const currency = (id) => {
   const filter = countryList.filter((item) => item.id === id);
-  const result = filter.length > 0 ? filter[0].currency : null;
+  const result = filter.length > 0 ? filter[0].currency : "£";
   return result;
 };
 

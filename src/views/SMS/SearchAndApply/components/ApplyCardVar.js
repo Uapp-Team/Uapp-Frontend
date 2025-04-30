@@ -195,7 +195,7 @@ const ApplyCardVar = ({
                           <li className="d-flex justify-content-between">
                             <span>
                               <MoneyIcon />
-                              <span className="ml-1">Tuition (1st year)</span>
+                              <span className="ml-1">Tuition Fee</span>
                             </span>
                             {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                             {item.firstYearTutionFee}
