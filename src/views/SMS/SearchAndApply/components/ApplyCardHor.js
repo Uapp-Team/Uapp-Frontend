@@ -115,7 +115,7 @@ const ApplyCardHor = ({
                     [
                       item.isLoanAvailable && (
                         <span
-                          className="card-tag work-placement mr-1"
+                          className="card-tag work-placement mr-2"
                           key="loan"
                         >
                           Loan Available
@@ -123,7 +123,7 @@ const ApplyCardHor = ({
                       ),
                       item.isScholarshipAvailable && (
                         <span
-                          className="card-tag scholarship-available"
+                          className="card-tag scholarship-available mr-2"
                           key="scholarship"
                         >
                           Scholarship Available
@@ -220,15 +220,114 @@ const ApplyCardHor = ({
                       </span>
                       <span className="d-flex align-items-center">
                         <CiTimer className="mr-2" />
-                        <CustomToolTip methodIds={item.durationNames} />
+                        <span>
+                          {(() => {
+                            const fullTimeDuration = item.durations.find(
+                              (duration) => Number(duration.studyMode) === 2
+                            );
+                            const otherDurations = item.durations.filter(
+                              (duration) => Number(duration.studyMode) !== 2
+                            );
+
+                            return (
+                              <>
+                                {fullTimeDuration && (
+                                  <span className="duration-tag">
+                                    {fullTimeDuration.name}
+                                  </span>
+                                )}
+                                {otherDurations.length > 0 && (
+                                  <Tooltip
+                                    title={
+                                      <div className="custom-tooltip-content">
+                                        <div className="tooltip-header">
+                                          Others
+                                        </div>
+                                        <ul className="tooltip-method">
+                                          {otherDurations.map(
+                                            (method, index) => (
+                                              <li key={index}>{method.name}</li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    }
+                                    placement="top"
+                                    overlayClassName="custom-tooltip"
+                                  >
+                                    <InfoCircleOutlined
+                                      style={{
+                                        fontSize: "14px",
+                                        color: "#1890ff",
+                                        cursor: "pointer",
+                                        marginLeft: "4px",
+                                      }}
+                                    />
+                                  </Tooltip>
+                                )}
+                              </>
+                            );
+                          })()}
+                        </span>
                       </span>
                       <span className="d-flex align-items-center">
                         <FaPeopleGroup className="mr-2" />
-                        <CustomToolTip
-                          methodIds={item.studyModes}
-                          methods={studyMode}
-                          title="Study Mode"
-                        />
+                        <span>
+                          {(() => {
+                            const methods = item.durations
+                              ?.map((duration) => {
+                                return studyMode.find(
+                                  (mode) =>
+                                    mode.id === Number(duration.studyMode)
+                                );
+                              })
+                              .filter(Boolean);
+
+                            const fullTime = methods.find(
+                              (method) => method.id === 2
+                            );
+                            const others = methods.filter(
+                              (method) => method.id !== 2
+                            );
+
+                            return (
+                              <>
+                                {fullTime && (
+                                  <span className="study-mode-tag">
+                                    {fullTime.name}
+                                  </span>
+                                )}
+                                {others.length > 0 && (
+                                  <Tooltip
+                                    title={
+                                      <div className="custom-tooltip-content">
+                                        <div className="tooltip-header">
+                                          Others
+                                        </div>
+                                        <ul className="tooltip-method">
+                                          {others.map((method, index) => (
+                                            <li key={index}>{method.name}</li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    }
+                                    placement="top"
+                                    overlayClassName="custom-tooltip"
+                                  >
+                                    <InfoCircleOutlined
+                                      style={{
+                                        fontSize: "14px",
+                                        color: "#1890ff",
+                                        cursor: "pointer",
+                                        marginLeft: "4px",
+                                      }}
+                                    />
+                                  </Tooltip>
+                                )}
+                              </>
+                            );
+                          })()}
+                        </span>
                       </span>
                       <span className="d-flex align-items-center">
                         <VscFeedback className="mr-2" />
