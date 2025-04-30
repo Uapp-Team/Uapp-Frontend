@@ -377,8 +377,7 @@
 .apply-btn,
 .quick-btn,
 .quick-btn-vertical,
-.apply-btn-vertical,
-.register-btn {
+.apply-btn-vertical {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -399,8 +398,11 @@
 .register-btn {
   background-color: #fc7300;
   color: white;
-  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  min-width: 160px;
+  padding: 9px 16px;
 }
 
 .apply-btn-vertical {
@@ -417,6 +419,7 @@
 .register-btn.disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  border: none;
 }
 
 .quick-btn {
@@ -490,6 +493,9 @@
   }
   .quickview-footer {
     display: flex;
+  }
+  .register-btn {
+    padding: 9px;
   }
 }
 

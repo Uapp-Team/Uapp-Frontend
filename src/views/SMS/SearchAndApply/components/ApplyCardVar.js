@@ -136,10 +136,10 @@ const ApplyCardVar = ({
                           )
                         ) : (
                           <div>
-                            {item.intakeStatusId ? (
-                              <img src={online} alt="" />
-                            ) : (
+                            {item.intakeStatusId === 3 ? (
                               <img src={offline} alt="" />
+                            ) : (
+                              <img src={online} alt="" />
                             )}
                           </div>
                         )}
@@ -329,9 +329,9 @@ const ApplyCardVar = ({
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
                         >
-                          <span className="inline-block">
+                          <span>
                             <button
-                              className={`w-50 register-btn ${
+                              className={`register-btn ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
                               onClick={() =>
@@ -339,12 +339,12 @@ const ApplyCardVar = ({
                               }
                               disabled={!item?.canApply}
                             >
-                              <div className="flex items-center gap-1">
-                                Register Interest
+                              <div>
+                                <span className="mr-1">Register Interest</span>
                                 {!item?.canApply ? (
                                   <InfoCircleOutlined
                                     style={{
-                                      fontSize: "14px",
+                                      fontSize: "12px",
                                       color: "#fff",
                                       cursor: "pointer",
                                     }}
