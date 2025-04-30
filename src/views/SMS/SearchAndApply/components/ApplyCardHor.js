@@ -1,15 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
-import { BiDonateBlood } from "react-icons/bi";
-import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
-import { MdPriceCheck } from "react-icons/md";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { SlCalender } from "react-icons/sl";
-import { VscFeedback } from "react-icons/vsc";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -29,6 +23,16 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
+import {
+  CalenderIcon,
+  DeliverPatternIcon,
+  DepositIcon,
+  DonationIcon,
+  LocationIcon,
+  MoneyIcon,
+  StudyModeIcon,
+  TimerIcon,
+} from "./icons";
 
 const ApplyCardHor = ({
   data,
@@ -209,14 +213,18 @@ const ApplyCardHor = ({
                   <ul className="card-details">
                     <li className="d-flex justify-content-between">
                       <span className="d-flex align-items-center">
-                        <CiLocationOn className="mr-2" />
+                        <span className="mr-1">
+                          <LocationIcon />
+                        </span>
                         <CustomToolTip
                           methodIds={item.campusNames}
                           title="Campus Name"
                         />
                       </span>
                       <span className="d-flex align-items-center">
-                        <CiTimer className="mr-2" />
+                        <span className="mr-1">
+                          <TimerIcon />
+                        </span>
                         <span>
                           {(() => {
                             const fullTimeDuration = item.durations.find(
@@ -268,7 +276,9 @@ const ApplyCardHor = ({
                         </span>
                       </span>
                       <span className="d-flex align-items-center">
-                        <FaPeopleGroup className="mr-2" />
+                        <span className="mr-1">
+                          <StudyModeIcon />
+                        </span>
                         <span>
                           {(() => {
                             const methods = item.durations
@@ -327,7 +337,9 @@ const ApplyCardHor = ({
                         </span>
                       </span>
                       <span className="d-flex align-items-center">
-                        <VscFeedback className="mr-2" />
+                        <span className="mr-1">
+                          <DeliverPatternIcon />
+                        </span>
                         <CustomToolTip
                           methodIds={item.deliveryMethods}
                           methods={deliveryMethods}
@@ -335,7 +347,9 @@ const ApplyCardHor = ({
                         />
                       </span>
                       <span className="d-flex align-items-center">
-                        <SlCalender className="mr-2" />
+                        <span className="mr-1">
+                          <CalenderIcon />
+                        </span>
                         <CustomToolTip
                           methodIds={item.intakeNames}
                           title="Intakes"
@@ -360,7 +374,9 @@ const ApplyCardHor = ({
                   <div className="d-flex">
                     <div className="mr-4">
                       <span className="card-subtitle">
-                        <MdPriceCheck className="mr-2" />
+                        <span className="mr-1">
+                          <MoneyIcon />
+                        </span>
                         Tuition Fee (1st year)
                       </span>
                       <p className="card-price">
@@ -370,7 +386,9 @@ const ApplyCardHor = ({
                     </div>
                     <div className="mr-4">
                       <span className="card-subtitle">
-                        <CiBag1 className="mr-2" />
+                        <span className="mr-1">
+                          <DepositIcon />
+                        </span>
                         Deposit
                       </span>
                       <p className="card-price">
@@ -379,7 +397,9 @@ const ApplyCardHor = ({
                     </div>
                     <div className="mr-4">
                       <span className="card-subtitle">
-                        <BiDonateBlood className="mr-2" />
+                        <span className="mr-1">
+                          <DonationIcon />
+                        </span>
                         Application fee
                       </span>
                       <p className="card-price">
