@@ -12,6 +12,7 @@ const CheckBoxByObj = ({
   error,
   action,
   className = "mb-3",
+  itemClassName = "d-block d-flex align-items-center mb-1",
 }) => {
   const handleChange = (e) => {
     const type = typeof list[0].id;
@@ -48,7 +49,7 @@ const CheckBoxByObj = ({
         )}
 
         {list.map((item, i) => (
-          <span key={i} className="d-inline-block">
+          <span key={i} className={itemClassName}>
             <input
               id={`${name}-${i}`}
               value={item.id}
@@ -57,7 +58,7 @@ const CheckBoxByObj = ({
               onClick={handleChange}
               checked={defaultValue?.includes(item.id)}
             />
-            <label htmlFor={`${name}-${i}`} className="mx-2 pointer">
+            <label htmlFor={`${name}-${i}`} className="mx-2 pointer mb-0">
               {item.name}
             </label>
           </span>
