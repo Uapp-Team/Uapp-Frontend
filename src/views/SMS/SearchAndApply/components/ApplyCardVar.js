@@ -482,7 +482,7 @@ const ApplyCardVar = ({
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
                         >
-                          <span className="inline-block">
+                          <span className="register-btn-vertical-top">
                             <button
                               className={`apply-btn-vertical ${
                                 !item?.canApply ? "disabled" : ""

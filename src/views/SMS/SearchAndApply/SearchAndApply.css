@@ -235,11 +235,11 @@
 }
 
 .card-header-vertical {
-  padding: 0.5rem 1rem;
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: 24px;
   border-radius: 10px 10px 0 0;
 }
 .card-date {
@@ -277,14 +277,13 @@
   flex: 1;
   flex-direction: row;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .card-body-vertical {
   background: #fff;
   flex: 1;
   flex-direction: row;
-  gap: 1rem;
   padding: 1rem;
   border-radius: 0 0 10px 10px;
 }
@@ -431,7 +430,6 @@
 .apply-btn-vertical {
   background-color: #045d5e;
   color: white;
-  width: 162px;
 }
 
 .apply-btn-vertical.disabled {
@@ -520,7 +518,7 @@
     padding: 9px;
   }
   .card-body-vertical {
-    padding: 1.5rem;
+    padding: 0rem 1.5rem 1.5rem;
   }
 }
 
