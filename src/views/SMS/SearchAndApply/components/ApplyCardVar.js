@@ -88,7 +88,7 @@ const ApplyCardVar = ({
                     <span className="tbc">
                       TBC
                       <Tooltip
-                        title={<span>To Be Continue</span>}
+                        title={<span>To Be Confirm</span>}
                         placement="top"
                         overlayClassName="custom-tooltip"
                       >
@@ -362,7 +362,7 @@ const ApplyCardVar = ({
                             <CustomToolTip
                               methodIds={item.deliveryMethods}
                               methods={deliveryMethods}
-                              title="Devlivery Pattern"
+                              title="Delivery Pattern"
                             />
                           </li>
                           <li className="d-flex justify-content-between">

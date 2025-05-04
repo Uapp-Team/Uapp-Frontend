@@ -85,7 +85,7 @@ const ApplyCardHor = ({
               <span className="tbc">
                 TBC
                 <Tooltip
-                  title={<span>To Be Continue</span>}
+                  title={<span>To Be Confirm</span>}
                   placement="top"
                   overlayClassName="custom-tooltip"
                 >
@@ -340,7 +340,7 @@ const ApplyCardHor = ({
                         <CustomToolTip
                           methodIds={item.deliveryMethods}
                           methods={deliveryMethods}
-                          title="Devlivery Pattern"
+                          title="Delivery Pattern"
                         />
                       </span>
                       <span className="d-flex align-items-center">
