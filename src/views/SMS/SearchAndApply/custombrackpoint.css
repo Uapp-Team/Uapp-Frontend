@@ -13,14 +13,14 @@
 }
 
 /* Custom Breakpoint: Medium (≥ 800px) — 3 columns */
-@media (min-width: 1050px) {
+@media (min-width: 1350px) {
   .grid-columns {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* Custom Breakpoint: Large (≥ 1100px) — 4 columns */
-@media (min-width: 1600px) {
+@media (min-width: 1750px) {
   .grid-columns {
     grid-template-columns: repeat(4, 1fr);
   }

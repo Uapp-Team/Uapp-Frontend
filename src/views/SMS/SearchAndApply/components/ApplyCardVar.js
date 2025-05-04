@@ -1,3 +1,4 @@
+import "./../custombrackpoint.css";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
@@ -78,10 +79,10 @@ const ApplyCardVar = ({
   };
   return (
     <>
-      <Row className="mt-3">
+      <div className="mt-3 grid-columns">
         {data?.length > 0 &&
           data?.map((item, index) => (
-            <Col xs={12} md={6} lg={4} xxl={3} key={index}>
+            <div className="" key={index}>
               <div className="mb-3">
                 <div className="card-container-vertical">
                   {item.intakeStatusId === 3 && (
@@ -512,9 +513,9 @@ const ApplyCardVar = ({
                   </div>
                 </div>
               </div>
-            </Col>
+            </div>
           ))}
-      </Row>
+      </div>
 
       <QuickViewModal
         open={open}
