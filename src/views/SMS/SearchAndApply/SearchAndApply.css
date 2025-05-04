@@ -18,13 +18,10 @@
 }
 
 .right-icon {
-  margin: -30px;
   position: fixed;
   top: 50%;
-  background: #045d5e;
-  color: white;
+  color: black;
   border-radius: 20px;
-  padding: 5px;
 }
 
 /* search box */
