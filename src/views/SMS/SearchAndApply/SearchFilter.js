@@ -352,6 +352,7 @@ const SearchFilter = ({
                 defaultValue={studyModes}
                 action={setStudyModes}
                 className="mb-0"
+                colSize="col-6"
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -363,6 +364,7 @@ const SearchFilter = ({
                 defaultValue={deliveryPattern}
                 action={setDeliveryPattern}
                 className="mb-0"
+                colSize={["col-12", "col-6", "col-6"]}
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -374,13 +376,14 @@ const SearchFilter = ({
                 defaultValue={deliverySchedule}
                 action={setDeliverySchedule}
                 className="mb-0"
+                colSize={["col-6", "col-6", "col-6", "col-6", "col-12"]}
               />
             </div>
           </>
         ) : (
           <>
-            <div>
-              <AiOutlineLeft size={30} className="right-icon pointer" />
+            <div className="pointer h-100">
+              <AiOutlineLeft size={30} className="right-icon" />
             </div>
           </>
         )}
