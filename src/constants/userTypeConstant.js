@@ -20,4 +20,5 @@ export const userTypes = {
   Companion: "19",
   BranchManager: "22",
   ConsultantCompliance: "101",
+  SalesManager: "102",
 };

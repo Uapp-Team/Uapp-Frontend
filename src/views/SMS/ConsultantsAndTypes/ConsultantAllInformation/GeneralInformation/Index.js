@@ -21,11 +21,11 @@ const GeneralInformation = () => {
   const [nameValue, setNameValue] = useState(0);
   const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
   const [parentValue, setParentValue] = useState(0);
-  const [consSalesManager, setConsSalesManager] = useState([]);
-  const [salesManagerLabel, setSalesManagerLabel] = useState(
-    "Select Sales Manager"
-  );
-  const [salesManagerValue, setSalesManagerValue] = useState(0);
+  // const [consSalesManager, setConsSalesManager] = useState([]);
+  // const [salesManagerLabel, setSalesManagerLabel] = useState(
+  //   "Select Sales Manager"
+  // );
+  // const [salesManagerValue, setSalesManagerValue] = useState(0);
   const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
   const [typeValue, setTypeValue] = useState(0);
   const [homeAccept, setHomeAccept] = useState(false);
@@ -38,7 +38,7 @@ const GeneralInformation = () => {
   const [branchError, setBranchError] = useState(false);
   const [consultantError, setConsultantError] = useState(false);
   const [parentError, setParentError] = useState(false);
-  const [salesManagerError, setSalesManagerError] = useState(false);
+  // const [salesManagerError, setSalesManagerError] = useState(false);
 
   const [buttonStatus, setButtonStatus] = useState(false);
   const { addToast } = useToasts();
@@ -81,10 +81,13 @@ const GeneralInformation = () => {
     get(`ParentConsultantDD/Index/${consultantRegisterId}`).then((res) => {
       setConsParent(res);
     });
-    get(`SalesManagerDD/Index/${branchValue}`).then((res) => {
-      setConsSalesManager(res);
-    });
-  }, [consultantRegisterId, branchValue]);
+    // get(`SalesManagerDD/Index/${branchValue}`).then((res) => {
+    //   setConsSalesManager(res);
+    // });
+  }, [
+    consultantRegisterId,
+    //  branchValue
+  ]);
 
   useEffect(() => {
     get(`ConsultantNavBar/GetNavbar/${consultantRegisterId}`).then((res) => {
@@ -107,14 +110,14 @@ const GeneralInformation = () => {
                 res?.parentConsultant?.lastName
             : "Select Parent Consultant"
         );
-        setSalesManagerValue(
-          res?.salesManagerId?.id ? res?.salesManagerId?.id : 0
-        );
-        setSalesManagerLabel(
-          res?.salesManager?.firstName
-            ? res?.salesManager?.firstName + " " + res?.salesManager?.lastName
-            : "Select Sales Manager"
-        );
+        // setSalesManagerValue(
+        //   res?.salesManagerId?.id ? res?.salesManagerId?.id : 0
+        // );
+        // setSalesManagerLabel(
+        //   res?.salesManager?.firstName
+        //     ? res?.salesManager?.firstName + " " + res?.salesManager?.lastName
+        //     : "Select Sales Manager"
+        // );
         setBranchValue(res?.branch?.id);
         setBranchLabel(res?.branch?.name);
         // setNameValue(res?.nameTittle?.id);
@@ -139,12 +142,12 @@ const GeneralInformation = () => {
     value: consParentOptions?.id,
   }));
 
-  const consSalesManagerMenu = consSalesManager?.map(
-    (consSalesManagerOptions) => ({
-      label: consSalesManagerOptions?.name,
-      value: consSalesManagerOptions?.id,
-    })
-  );
+  // const consSalesManagerMenu = consSalesManager?.map(
+  //   (consSalesManagerOptions) => ({
+  //     label: consSalesManagerOptions?.name,
+  //     value: consSalesManagerOptions?.id,
+  //   })
+  // );
   const consTypeMenu = consType?.map((consTypeOptions) => ({
     label: consTypeOptions?.name,
     value: consTypeOptions?.id,
@@ -162,11 +165,11 @@ const GeneralInformation = () => {
     setParentValue(value);
   };
 
-  const selectSalesManagerCons = (label, value) => {
-    setSalesManagerError(false);
-    setSalesManagerLabel(label);
-    setSalesManagerValue(value);
-  };
+  // const selectSalesManagerCons = (label, value) => {
+  //   setSalesManagerError(false);
+  //   setSalesManagerLabel(label);
+  //   setSalesManagerValue(value);
+  // };
 
   const selectConsType = (label, value) => {
     setConsultantError(false);
@@ -380,11 +383,11 @@ const GeneralInformation = () => {
                 setTitleValue={setTitleValue}
                 titleValue={titleValue}
                 title={title}
-                consSalesManagerMenu={consSalesManagerMenu}
-                selectSalesManagerCons={selectSalesManagerCons}
-                salesManagerValue={salesManagerValue}
-                salesManagerLabel={salesManagerLabel}
-                salesManagerError={salesManagerError}
+                // consSalesManagerMenu={consSalesManagerMenu}
+                // selectSalesManagerCons={selectSalesManagerCons}
+                // salesManagerValue={salesManagerValue}
+                // salesManagerLabel={salesManagerLabel}
+                // salesManagerError={salesManagerError}
               ></GeneralInformationForm>
             </TabPane>
           </TabContent>
