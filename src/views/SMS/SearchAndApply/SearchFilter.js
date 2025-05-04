@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineClose,
+  AiOutlineLeft,
+} from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -171,9 +175,12 @@ const SearchFilter = ({
         ref={divRef}
         className="right-side-modal overflowY"
         style={{
-          width: isSearch ? "315px" : "30px",
+          width: isSearch ? "315px" : "25px",
           transition: "width 1s",
-          backgroundColor: isSearch ? "white" : "#B3B3B3",
+          background: isSearch
+            ? "white"
+            : "linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, #FFF 100%)",
+          padding: isSearch ? "16px" : "2px",
         }}
       >
         {isSearch ? (
@@ -372,8 +379,8 @@ const SearchFilter = ({
           </>
         ) : (
           <>
-            <div className="right-icon pointer">
-              <AiOutlineArrowLeft size={20} />
+            <div>
+              <AiOutlineLeft size={30} className="right-icon pointer" />
             </div>
           </>
         )}
