@@ -58,7 +58,10 @@ const CheckBoxByObj = ({
               onClick={handleChange}
               checked={defaultValue?.includes(item.id)}
             />
-            <label htmlFor={`${name}-${i}`} className="mx-2 pointer mb-0">
+            <label
+              htmlFor={`${name}-${i}`}
+              className="mx-2 pointer mb-0 fs-13px"
+            >
               {item.name}
             </label>
           </span>
