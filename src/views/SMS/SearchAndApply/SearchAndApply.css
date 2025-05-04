@@ -231,11 +231,11 @@
 }
 
 .card-headers {
-  padding: 0.5rem 1rem;
+  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: 24px;
 }
 
 .card-header-vertical {
@@ -282,7 +282,7 @@
   flex: 1;
   flex-direction: row;
   gap: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
 }
 
 .card-body-vertical {
@@ -343,7 +343,9 @@
   justify-content: end;
   gap: 0.5rem;
 }
-
+.duration-tag {
+  font-weight: 600;
+}
 .card-action-vertical {
   width: 100%;
   display: flex;

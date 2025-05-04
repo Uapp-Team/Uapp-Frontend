@@ -314,7 +314,7 @@ const ApplyCardHor = ({
                             return (
                               <>
                                 {fullTime && (
-                                  <span className="study-mode-tag">
+                                  <span className="duration-tag">
                                     {fullTime.name}
                                   </span>
                                 )}
@@ -395,7 +395,9 @@ const ApplyCardHor = ({
                       </span>
                       <p className="card-price">
                         {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                        {item.firstYearTutionFee}
+                        <span className="fw-600">
+                          {item.firstYearTutionFee}
+                        </span>
                       </p>
                     </div>
                     <div className="mr-4">
@@ -406,7 +408,8 @@ const ApplyCardHor = ({
                         Deposit
                       </span>
                       <p className="card-price">
-                        {currency(item.depositFeeCurrencyId)} {item.depositFee}
+                        {currency(item.depositFeeCurrencyId)}{" "}
+                        <span className="fw-600">{item.depositFee}</span>
                       </p>
                     </div>
                     <div className="mr-4">
@@ -418,7 +421,9 @@ const ApplyCardHor = ({
                       </span>
                       <p className="card-price">
                         {currency(item.avarageApplicationFeeCurrencyId)}{" "}
-                        {item.avarageApplicationFee}
+                        <span className="fw-600">
+                          {item.avarageApplicationFee}
+                        </span>
                       </p>
                     </div>
                   </div>
