@@ -2,8 +2,9 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { useHistory } from "react-router-dom";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -25,12 +26,14 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import QuickViewModal from "./QuickViewModal";
 import {
+  ArrowLeftRightIcon,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
   DonationIcon,
   LocationIcon,
   MoneyIcon,
+  ShareIcon,
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
@@ -49,6 +52,11 @@ const ApplyCardHor = ({
   const [eligibility, setEligibility] = useState({});
   const [applyEligibility, setApplyEligibility] = useState({});
   const [subjectInfo, setSubjectInfo] = useState({});
+
+  const router = useHistory();
+  const handleCourseDetails = (subjectId) => {
+    router.push(`subjectProfile/${subjectId}`);
+  };
 
   const handleQuickView = async (item, index) => {
     setIndex(index);
@@ -100,7 +108,7 @@ const ApplyCardHor = ({
                 </Tooltip>
               </span>
             )}
-            <div className="card-header">
+            <div className="card-headers">
               <span className="card-date">
                 {" "}
                 <img src={BellIcon} alt="" /> {item.applicationDeadLine}
@@ -153,8 +161,12 @@ const ApplyCardHor = ({
                       </div>
                     )}
                   </div>
-                  <LuSettings2 className="mr-3" />
-                  <LuShare2 className="mr-3" />
+                  <span className="mr-3 cursor-pointer">
+                    <ArrowLeftRightIcon />
+                  </span>
+                  <span className="mr-3 cursor-pointer">
+                    <ShareIcon />
+                  </span>
                   {Student() ? (
                     item.isFavorite ? (
                       <FaHeart
@@ -187,7 +199,12 @@ const ApplyCardHor = ({
             <div className="card-body">
               <div className="card-content">
                 <h3 className="card-title fw-700 fs-20px">
-                  {item.subjectName}
+                  <span
+                    onClick={() => handleCourseDetails(item.subjectId)}
+                    className="cursor-pointer"
+                  >
+                    {item.subjectName}
+                  </span>
                 </h3>
                 <div className="d-flex align-items-center mb-3">
                   <img
@@ -260,7 +277,7 @@ const ApplyCardHor = ({
                                     <InfoCircleOutlined
                                       style={{
                                         fontSize: "14px",
-                                        color: "#1890ff",
+                                        color: "#5D5D5D",
                                         cursor: "pointer",
                                         marginLeft: "4px",
                                       }}
@@ -321,7 +338,7 @@ const ApplyCardHor = ({
                                     <InfoCircleOutlined
                                       style={{
                                         fontSize: "14px",
-                                        color: "#1890ff",
+                                        color: "#5D5D5D",
                                         cursor: "pointer",
                                         marginLeft: "4px",
                                       }}

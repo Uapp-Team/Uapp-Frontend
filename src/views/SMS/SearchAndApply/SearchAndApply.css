@@ -198,9 +198,13 @@
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
   position: relative;
+}
+.card-container:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .tbc {
   position: absolute;
@@ -226,7 +230,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-header {
+.card-headers {
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -253,10 +257,11 @@
 }
 
 .card-tag {
-  background: #e0e0e0;
+  background: #e7fae7;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 0.8rem;
+  color: #4f6b50;
 }
 
 .tags-vertical {
