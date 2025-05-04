@@ -121,8 +121,8 @@ const AddUniversitySubjectIntake = () => {
   const handleStartDate = (e) => {
     if (e) {
       setStartDate(e);
-    } else {
-      setstartDateError("Class Start Date Required");
+      // } else {
+      //   setstartDateError("Class Start Date Required");
     }
   };
 
@@ -141,10 +141,10 @@ const AddUniversitySubjectIntake = () => {
       isFormValid = false;
       setDateError(true);
     }
-    if (!startDate && statusValue === 1) {
-      isFormValid = false;
-      setstartDateError("Class Start Date Required");
-    }
+    // if (!startDate && statusValue === 1) {
+    //   isFormValid = false;
+    //   setstartDateError("Class Start Date Required");
+    // }
     if (checked?.length === 0) {
       isFormValid = false;
       setCheckedError(true);
@@ -366,7 +366,6 @@ const AddUniversitySubjectIntake = () => {
                               setValue={handleStartDate}
                               error={startdateError}
                               action={setstartDateError}
-                              required={true}
                             />
                           </Col>
                         )}
