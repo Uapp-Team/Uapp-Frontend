@@ -27,6 +27,15 @@ export default function HomeApplicationInformation({
   hasSCLError,
   haveStartedEducationError,
   setHasSLCError,
+  currentOtherStatus,
+  setCurrentOtherStatus,
+  currentStatusUk,
+  setCurrentStatusUk,
+  currentStatusUkError,
+  setCurrentStatusUkError,
+  handleCurrentOtherStatusUK,
+  currentOtherStatusError,
+  setCurrentOtherStatusError,
 }) {
   useEffect(() => {
     setHasSLC(
@@ -38,6 +47,22 @@ export default function HomeApplicationInformation({
         ? false
         : null
     );
+    setCurrentStatusUk(
+      applicationInformation != null &&
+        applicationInformation?.hasBritishCitizenship === true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.hasBritishCitizenship === false
+        ? false
+        : applicationInformation != null &&
+          applicationInformation?.hasOtherCitizenship === true
+        ? true
+        : applicationInformation != null &&
+          applicationInformation?.hasOtherCitizenship === false
+        ? false
+        : null
+    );
+
     setHaveStartedEducation(
       applicationInformation != null &&
         applicationInformation?.havingUndergraduatePostgraduateCourseForHome ===
@@ -84,6 +109,76 @@ export default function HomeApplicationInformation({
         id="studentTypeId"
         value={studentTypeValue}
       />
+
+      <FormGroup className="has-icon-left position-relative">
+        <span>
+          <span className="text-danger">*</span> What is your current status in
+          the UK?
+        </span>
+        <br />
+
+        <FormGroup check className="form-mt">
+          <input
+            className="form-check-input"
+            id="hasBritishCitizenship"
+            type="radio"
+            name="hasBritishCitizenship"
+            value={true}
+            onChange={() => setCurrentStatusUk(true)}
+            checked={currentStatusUk === true}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="hasBritishCitizenship"
+          >
+            <span style={{ fontSize: "13px" }}>I have British Citizenship</span>
+          </Label>
+        </FormGroup>
+
+        <FormGroup check inline>
+          <input
+            className="form-check-input"
+            id="hasOtherCitizenship"
+            type="radio"
+            name="hasOtherCitizenship"
+            value={false}
+            onChange={() => setCurrentStatusUk(false)}
+            checked={currentStatusUk === false}
+          />
+          <Label
+            className="form-check-label"
+            check
+            htmlFor="hasOtherCitizenship"
+          >
+            <span style={{ fontSize: "13px" }}>I have other status</span>
+          </Label>
+        </FormGroup>
+        <br />
+        <span className="text-danger">{currentStatusUkError}</span>
+      </FormGroup>
+
+      {currentStatusUk === false ? (
+        <FormGroup className="has-icon-left position-relative">
+          <span>
+            <span className="text-danger">*</span> What is Your other Status in
+            the UK?
+          </span>
+
+          <Input
+            className="form-mt"
+            type="text"
+            name="OtherCitizenshipStatus"
+            id="OtherCitizenshipStatus"
+            placeholder="Enter Other Status"
+            value={currentOtherStatus}
+            onChange={(e) => {
+              handleCurrentOtherStatusUK(e);
+            }}
+          />
+          <span className="text-danger">{currentOtherStatusError}</span>
+        </FormGroup>
+      ) : null}
 
       <FormGroup className="has-icon-left position-relative">
         <span>

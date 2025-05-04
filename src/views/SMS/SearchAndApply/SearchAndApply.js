@@ -284,13 +284,13 @@ function SearchAndApply() {
             </button>
           </Col>
         </Row>
+        {search && (
+          <p className="filters-heading">
+            <span className="fs-14px">Search results for</span> <br />
+            <strong className="fs-20px">{search}</strong>
+          </p>
+        )}
         <div className="filter-container d-none d-md-block">
-          {search && (
-            <p className="filters-heading">
-              <span className="fs-14px">Search results for</span> <br />
-              <strong className="fs-20px">{search}</strong>
-            </p>
-          )}
           <Row className="mb-3">
             <Col md={9}>
               <SearchKeywords

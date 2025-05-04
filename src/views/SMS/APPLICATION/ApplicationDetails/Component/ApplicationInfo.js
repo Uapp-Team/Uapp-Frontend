@@ -1825,6 +1825,22 @@ const ApplicationInfo = ({
                 <>
                   {" "}
                   <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                    <td>Current Status in the UK</td>
+                    <td>
+                      {applicationProfileData?.hasBritishCitizenship === true
+                        ? "British Citizenship"
+                        : applicationProfileData?.hasOtherCitizenship === false
+                        ? "Others Status"
+                        : null}
+                    </td>
+                  </tr>
+                  {applicationProfileData?.hasOtherCitizenship === false && (
+                    <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                      <td>Other Status in the UK</td>
+                      <td>{applicationProfileData?.otherCitizenshipStatus}</td>
+                    </tr>
+                  )}
+                  <tr style={{ borderBottom: "1px solid #dee2e6" }}>
                     <td>Loan From Student Loans Company</td>
                     <td>
                       {applicationProfileData?.loanfromStudentLoansCompanyForHome ===
