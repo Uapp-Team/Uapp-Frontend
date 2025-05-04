@@ -1,6 +1,11 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
-const OverflowHeightText = ({ text, className, height, line = 1 }) => {
+const OverflowHeightText = ({ text, className, height, line = 1, link }) => {
+  const router = useHistory();
+  const handleCourseDetails = () => {
+    router.push(`subjectProfile/${link}`);
+  };
   return (
     <>
       <div
@@ -12,10 +17,13 @@ const OverflowHeightText = ({ text, className, height, line = 1 }) => {
           WebkitBoxOrient: "vertical",
           overflow: "hidden",
           textOverflow: "ellipsis",
+          color: "#515151",
         }}
         title={text}
       >
-        {text}
+        <span className="cursor-pointer" onClick={handleCourseDetails}>
+          {text}
+        </span>
       </div>
     </>
   );

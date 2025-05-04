@@ -1,3 +1,6 @@
+* {
+  font-family: "Inter", sans-serif;
+}
 .search-header {
   background: linear-gradient(0deg, #f9fbfb 0%, rgba(249, 251, 251, 0) 100%);
   margin: -18px -21px 0;
@@ -209,7 +212,7 @@
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  border-radius: 0 0 20px 0;
+  border-radius: 12px 0 12px 0;
   color: #fff;
   display: flex;
   align-items: center;
@@ -475,7 +478,6 @@
 /* quick view modal  */
 
 .quickview-container {
-  font-family: "Inter", sans-serif;
   color: #333;
 }
 @media (min-width: 768px) {
@@ -645,7 +647,6 @@
 
 /* apply modal start */
 .apply-modal {
-  font-family: "Inter", sans-serif;
   color: #333;
 }
 .apply-modal-card {
@@ -726,7 +727,6 @@
 .program-modal .ant-modal-content {
   padding: 32px;
   border-radius: 16px;
-  font-family: "Inter", sans-serif;
 }
 
 .program-modal__info {

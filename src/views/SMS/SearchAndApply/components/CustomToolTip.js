@@ -24,7 +24,7 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
         className="delivery-methods-wrapper"
         style={{ display: "flex", alignItems: "center", gap: "4px" }}
       >
-        <span className="delivery-methods">{first.name}</span>
+        <span className="delivery-methods fw-600">{first.name}</span>
         {others.length > 0 && (
           <Tooltip
             title={
@@ -41,7 +41,7 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
             overlayClassName="custom-tooltip"
           >
             <InfoCircleOutlined
-              style={{ fontSize: "14px", color: "#1890ff", cursor: "pointer" }}
+              style={{ fontSize: "14px", color: "#5D5D5D", cursor: "pointer" }}
             />
           </Tooltip>
         )}
@@ -56,7 +56,7 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
       className="delivery-methods-wrapper"
       style={{ display: "flex", alignItems: "center", gap: "4px" }}
     >
-      <span className="delivery-methods">{first}</span>
+      <span className="delivery-methods fw-600">{first}</span>
 
       {others.length > 0 && (
         <Tooltip
@@ -74,7 +74,11 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
           overlayClassName="custom-tooltip"
         >
           <InfoCircleOutlined
-            style={{ fontSize: "14px", color: "#1890ff", cursor: "pointer" }}
+            style={{
+              fontSize: "14px",
+              color: "#5D5D5D",
+              cursor: "pointer",
+            }}
           />
         </Tooltip>
       )}

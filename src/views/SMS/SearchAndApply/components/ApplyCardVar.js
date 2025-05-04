@@ -2,7 +2,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
@@ -23,12 +23,14 @@ import CustomToolTip from "./CustomToolTip";
 import OverflowHeightText from "./OverflowHeightText";
 import QuickViewModal from "./QuickViewModal";
 import {
+  ArrowLeftRightIcon,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
   DonationIcon,
   LocationIcon,
   MoneyIcon,
+  ShareIcon,
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
@@ -107,8 +109,12 @@ const ApplyCardVar = ({
                     </span>
                     <div className="d-flex">
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                        <LuSettings2 className="mr-3 cursor-pointer" />
-                        <LuShare2 className="mr-3" />
+                        <span className="mr-3 cursor-pointer">
+                          <ArrowLeftRightIcon />
+                        </span>
+                        <span className="mr-3 cursor-pointer">
+                          <ShareIcon />
+                        </span>
                         {Student() ? (
                           item.isFavorite ? (
                             <FaHeart
@@ -148,9 +154,9 @@ const ApplyCardVar = ({
 
                   <div className="card-body-vertical">
                     <div className="card-content-vertical">
-                      <div className="d-flex align-items-center mb-3">
+                      <div className="d-flex mb-2">
                         <img
-                          className="h-48px w-48px mr-2"
+                          className="h-48px w-48px mr-2 rounded"
                           src={rootUrl + item.universityLogoUrl}
                           alt=""
                         />
@@ -178,6 +184,7 @@ const ApplyCardVar = ({
                         className="card-title-vertical fw-700 fs-20px"
                         height="60px"
                         line={2}
+                        link={item.subjectId}
                       />
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
@@ -188,38 +195,46 @@ const ApplyCardVar = ({
                           <li className="d-flex justify-content-between">
                             <span>
                               <LocationIcon />
-                              <span className="ml-1">Location</span>
+                              <span className="ml-1 fw-500">Location</span>
                             </span>
                             <CustomToolTip methodIds={item.campusNames} />
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <MoneyIcon />
-                              <span className="ml-1">Tuition Fee</span>
+                              <span className="ml-1 fw-500">Tuition Fee</span>
                             </span>
-                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee}
+                            <span className="fw-600">
+                              {currency(item.firstYearTutionFeeCurrencyId)}{" "}
+                              {item.firstYearTutionFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <DepositIcon />
-                              <span className="ml-1">Deposit</span>
+                              <span className="ml-1 fw-500">Deposit</span>
                             </span>
-                            {currency(item.depositFeeCurrencyId)}{" "}
-                            {item.depositFee}
+                            <span className="fw-600">
+                              {currency(item.depositFeeCurrencyId)}{" "}
+                              {item.depositFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <DonationIcon />
-                              <span className="ml-1">Application fee</span>
+                              <span className="ml-1 fw-500">
+                                Application fee
+                              </span>
                             </span>
-                            {currency(item.avarageApplicationFeeCurrencyId)}{" "}
-                            {item.avarageApplicationFee}
+                            <span className="fw-600">
+                              {currency(item.avarageApplicationFeeCurrencyId)}{" "}
+                              {item.avarageApplicationFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
                               <TimerIcon />
-                              <span className="ml-1">Duration</span>
+                              <span className="ml-1 fw-500">Duration</span>
                             </span>
                             <span>
                               {(() => {
@@ -233,7 +248,7 @@ const ApplyCardVar = ({
                                 return (
                                   <>
                                     {fullTimeDuration && (
-                                      <span className="duration-tag">
+                                      <span className="duration-tag fw-600">
                                         {fullTimeDuration.name}
                                       </span>
                                     )}
@@ -261,7 +276,7 @@ const ApplyCardVar = ({
                                         <InfoCircleOutlined
                                           style={{
                                             fontSize: "14px",
-                                            color: "#1890ff",
+                                            color: "#5D5D5D",
                                             cursor: "pointer",
                                             marginLeft: "4px",
                                           }}
@@ -276,7 +291,7 @@ const ApplyCardVar = ({
                           <li className="d-flex justify-content-between">
                             <span>
                               <StudyModeIcon />
-                              <span className="ml-1">Study Mode</span>
+                              <span className="ml-1 fw-500">Study Mode</span>
                             </span>
                             <span>
                               {(() => {
@@ -299,7 +314,7 @@ const ApplyCardVar = ({
                                 return (
                                   <>
                                     {fullTime && (
-                                      <span className="study-mode-tag">
+                                      <span className="study-mode-tag fw-600">
                                         {fullTime.name}
                                       </span>
                                     )}
@@ -325,7 +340,7 @@ const ApplyCardVar = ({
                                         <InfoCircleOutlined
                                           style={{
                                             fontSize: "14px",
-                                            color: "#1890ff",
+                                            color: "#5D5D5D",
                                             cursor: "pointer",
                                             marginLeft: "4px",
                                           }}
@@ -340,7 +355,9 @@ const ApplyCardVar = ({
                           <li className="d-flex justify-content-between">
                             <span>
                               <DeliverPatternIcon />
-                              <span className="ml-1">Delivery Pattern</span>
+                              <span className="ml-1 fw-500">
+                                Delivery Pattern
+                              </span>
                             </span>
                             <CustomToolTip
                               methodIds={item.deliveryMethods}
@@ -351,7 +368,7 @@ const ApplyCardVar = ({
                           <li className="d-flex justify-content-between">
                             <span>
                               <CalenderIcon />
-                              <span className="ml-1">Intake</span>
+                              <span className="ml-1 fw-500">Intake</span>
                             </span>
                             <CustomToolTip
                               methodIds={item.intakeNames}

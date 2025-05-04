@@ -43,7 +43,6 @@ const QuickViewModal = ({
   applyEligibility,
   subjectInfo,
 }) => {
-  console.log(quickViewData);
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const handleCourseDetails = (subjectId) => {
