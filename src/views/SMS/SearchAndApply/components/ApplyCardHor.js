@@ -226,18 +226,20 @@ const ApplyCardHor = ({
                 <div className="d-flex justify-content-between align-items-end">
                   <ul className="card-details">
                     <li className="d-flex justify-content-between">
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <LocationIcon />
+                          <span className="ml-1 fw-500">Location</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.campusNames}
                           title="Campus Name"
                         />
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <TimerIcon />
+                          <span className="ml-1 fw-500">Duration</span>
                         </span>
                         <span>
                           {(() => {
@@ -289,9 +291,10 @@ const ApplyCardHor = ({
                           })()}
                         </span>
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <StudyModeIcon />
+                          <span className="ml-1 fw-500">Study Mode</span>
                         </span>
                         <span>
                           {(() => {
@@ -350,9 +353,10 @@ const ApplyCardHor = ({
                           })()}
                         </span>
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <DeliverPatternIcon />
+                          <span className="ml-1 fw-500">Delivery Pattern</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.deliveryMethods}
@@ -360,9 +364,10 @@ const ApplyCardHor = ({
                           title="Delivery Pattern"
                         />
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <CalenderIcon />
+                          <span className="ml-1 fw-500">Intake</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.intakeNames}
