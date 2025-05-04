@@ -59,9 +59,9 @@ const ResultsToolbar = ({
               onClick={() => setMobileCard(!mobileCard)}
             >
               {mobileCard ? (
-                <TfiViewGrid className="my-1" />
-              ) : (
                 <TfiViewList className="my-1" />
+              ) : (
+                <TfiViewGrid className="my-1" />
               )}
             </button>
             <button
