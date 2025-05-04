@@ -5887,7 +5887,6 @@ span.ant-upload-list-item-name {
   right: 0;
   width: 315px;
   height: calc(100% - 75px);
-  padding: 16px;
   box-shadow: 0px 10px 9px 1px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0px 10px 9px 1px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0px 10px 9px 1px rgba(0, 0, 0, 0.1);

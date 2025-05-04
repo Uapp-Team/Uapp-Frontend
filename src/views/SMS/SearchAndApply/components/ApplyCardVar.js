@@ -1,15 +1,9 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
-import { BiDonateBlood } from "react-icons/bi";
-import { CiBag1, CiLocationOn, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
-import { MdPriceCheck } from "react-icons/md";
+import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { SlCalender } from "react-icons/sl";
-import { VscFeedback } from "react-icons/vsc";
 import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
@@ -17,6 +11,7 @@ import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
 import { rootUrl } from "../../../../constants/constants";
 import {
+  countryInfo,
   currency,
   deliveryMethods,
   studyMode,
@@ -27,6 +22,18 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import OverflowHeightText from "./OverflowHeightText";
 import QuickViewModal from "./QuickViewModal";
+import {
+  ArrowLeftRightIcon,
+  CalenderIcon,
+  DeliverPatternIcon,
+  DepositIcon,
+  DonationIcon,
+  LocationIcon,
+  MoneyIcon,
+  ShareIcon,
+  StudyModeIcon,
+  TimerIcon,
+} from "./icons";
 
 const ApplyCardVar = ({
   data,
@@ -44,35 +51,29 @@ const ApplyCardVar = ({
   const [quickViewData, setQuickViewData] = useState({});
   const [subjectInfo, setSubjectInfo] = useState({});
 
-  const handleQuickView = async (subjectId, universityId, index) => {
+  const handleQuickView = async (item, index) => {
     setIndex(index);
-    const quickViewData = await data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
+
     const eligibilityData = await get(
-      `Eligibility/ShowEligibility/${universityId}/${subjectId}`
+      `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
     );
-    if (quickViewData[0]?.isLoanAvailable) {
-      await get(`Subject/Get/${subjectId}`).then((res) => {
+    if (item?.isLoanAvailable) {
+      await get(`Subject/Get/${item.subjectId}`).then((res) => {
         setSubjectInfo(res);
       });
     }
     setEligibility(eligibilityData);
-    setQuickViewData(quickViewData[0]);
+    setQuickViewData(item);
     setOpen(true);
   };
 
-  const handleApply = async (subjectId, universityId) => {
-    setSubjectId(subjectId);
+  const handleApply = async (item) => {
+    setSubjectId(item.subjectId);
     await get(
-      `Eligibility/ApplicationOverview/${universityId}/${subjectId}/${referenceId}`
+      `Eligibility/ApplicationOverview/${item.universityId}/${item.subjectId}/${referenceId}`
     ).then((res) => setApplyEligibility(res));
-    const quickViewData = data.filter(
-      (item) =>
-        item.subjectId === subjectId && item.universityId === universityId
-    );
-    setQuickViewData(quickViewData[0]);
+
+    setQuickViewData(item);
     setOpenApplyModal(true);
   };
   return (
@@ -87,7 +88,7 @@ const ApplyCardVar = ({
                     <span className="tbc">
                       TBC
                       <Tooltip
-                        title={<span>To Be Continue</span>}
+                        title={<span>To Be Confirm</span>}
                         placement="top"
                         overlayClassName="custom-tooltip"
                       >
@@ -108,8 +109,12 @@ const ApplyCardVar = ({
                     </span>
                     <div className="d-flex">
                       <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                        <LuSettings2 className="mr-3 cursor-pointer" />
-                        <LuShare2 className="mr-3" />
+                        <span className="mr-3 cursor-pointer">
+                          <ArrowLeftRightIcon />
+                        </span>
+                        <span className="mr-3 cursor-pointer">
+                          <ShareIcon />
+                        </span>
                         {Student() ? (
                           item.isFavorite ? (
                             <FaHeart
@@ -136,10 +141,10 @@ const ApplyCardVar = ({
                           )
                         ) : (
                           <div>
-                            {item.intakeStatusId ? (
-                              <img src={online} alt="" />
-                            ) : (
+                            {item.intakeStatusId === 3 ? (
                               <img src={offline} alt="" />
+                            ) : (
+                              <img src={online} alt="" />
                             )}
                           </div>
                         )}
@@ -149,9 +154,9 @@ const ApplyCardVar = ({
 
                   <div className="card-body-vertical">
                     <div className="card-content-vertical">
-                      <div className="d-flex align-items-center mb-3">
+                      <div className="d-flex mb-2">
                         <img
-                          className="h-48px w-48px mr-2"
+                          className="h-48px w-48px mr-2 rounded"
                           src={rootUrl + item.universityLogoUrl}
                           alt=""
                         />
@@ -168,6 +173,8 @@ const ApplyCardVar = ({
                           </span>
                           <span className="fw-400 fs-12px">
                             {item.campusNames.split(",")[0].trim()}
+                            {", "}
+                            {countryInfo(item?.universityCountryId)?.name}
                           </span>
                         </div>
                       </div>
@@ -177,6 +184,7 @@ const ApplyCardVar = ({
                         className="card-title-vertical fw-700 fs-20px"
                         height="60px"
                         line={2}
+                        link={item.subjectId}
                       />
                       {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>
@@ -186,68 +194,181 @@ const ApplyCardVar = ({
                         <ul className="card-details-vertical">
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiLocationOn className="mr-2" />
-                              <span>Location</span>
+                              <LocationIcon />
+                              <span className="ml-1 fw-500">Location</span>
                             </span>
                             <CustomToolTip methodIds={item.campusNames} />
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <MdPriceCheck className="mr-2" />
-                              <span>Tuition (1st year)</span>
+                              <MoneyIcon />
+                              <span className="ml-1 fw-500">Tuition Fee</span>
                             </span>
-                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee}
+                            <span className="fw-600">
+                              {currency(item.firstYearTutionFeeCurrencyId)}{" "}
+                              {item.firstYearTutionFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiBag1 className="mr-2" />
-                              <span>Deposit</span>
+                              <DepositIcon />
+                              <span className="ml-1 fw-500">Deposit</span>
                             </span>
-                            {currency(item.depositFeeCurrencyId)}{" "}
-                            {item.depositFee}
+                            <span className="fw-600">
+                              {currency(item.depositFeeCurrencyId)}{" "}
+                              {item.depositFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <BiDonateBlood className="mr-2" />
-                              <span>Application fee</span>
+                              <DonationIcon />
+                              <span className="ml-1 fw-500">
+                                Application fee
+                              </span>
                             </span>
-                            {currency(item.avarageApplicationFeeCurrencyId)}{" "}
-                            {item.avarageApplicationFee}
+                            <span className="fw-600">
+                              {currency(item.avarageApplicationFeeCurrencyId)}{" "}
+                              {item.avarageApplicationFee}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <CiTimer className="mr-2" />
-                              <span>Duration</span>
+                              <TimerIcon />
+                              <span className="ml-1 fw-500">Duration</span>
                             </span>
-                            <CustomToolTip methodIds={item.durationNames} />
+                            <span>
+                              {(() => {
+                                const fullTimeDuration = item.durations.find(
+                                  (duration) => Number(duration.studyMode) === 2
+                                );
+                                const otherDurations = item.durations.filter(
+                                  (duration) => Number(duration.studyMode) !== 2
+                                );
+
+                                return (
+                                  <>
+                                    {fullTimeDuration && (
+                                      <span className="duration-tag fw-600">
+                                        {fullTimeDuration.name}
+                                      </span>
+                                    )}
+                                    {otherDurations.length > 0 && (
+                                      <Tooltip
+                                        title={
+                                          <div className="custom-tooltip-content">
+                                            <div className="tooltip-header">
+                                              Others
+                                            </div>
+                                            <ul className="tooltip-method">
+                                              {otherDurations.map(
+                                                (method, index) => (
+                                                  <li key={index}>
+                                                    {method.name}
+                                                  </li>
+                                                )
+                                              )}
+                                            </ul>
+                                          </div>
+                                        }
+                                        placement="top"
+                                        overlayClassName="custom-tooltip"
+                                      >
+                                        <InfoCircleOutlined
+                                          style={{
+                                            fontSize: "14px",
+                                            color: "#5D5D5D",
+                                            cursor: "pointer",
+                                            marginLeft: "4px",
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )}
+                                  </>
+                                );
+                              })()}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <FaPeopleGroup className="mr-2" />
-                              <span>Study Mode</span>
+                              <StudyModeIcon />
+                              <span className="ml-1 fw-500">Study Mode</span>
                             </span>
-                            <CustomToolTip
-                              methodIds={item.studyModes}
-                              methods={studyMode}
-                              title="Study Mode"
-                            />
+                            <span>
+                              {(() => {
+                                const methods = item.durations
+                                  ?.map((duration) => {
+                                    return studyMode.find(
+                                      (mode) =>
+                                        mode.id === Number(duration.studyMode)
+                                    );
+                                  })
+                                  .filter(Boolean);
+
+                                const fullTime = methods.find(
+                                  (method) => method.id === 2
+                                );
+                                const others = methods.filter(
+                                  (method) => method.id !== 2
+                                );
+
+                                return (
+                                  <>
+                                    {fullTime && (
+                                      <span className="study-mode-tag fw-600">
+                                        {fullTime.name}
+                                      </span>
+                                    )}
+                                    {others.length > 0 && (
+                                      <Tooltip
+                                        title={
+                                          <div className="custom-tooltip-content">
+                                            <div className="tooltip-header">
+                                              Others
+                                            </div>
+                                            <ul className="tooltip-method">
+                                              {others.map((method, index) => (
+                                                <li key={index}>
+                                                  {method.name}
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        }
+                                        placement="top"
+                                        overlayClassName="custom-tooltip"
+                                      >
+                                        <InfoCircleOutlined
+                                          style={{
+                                            fontSize: "14px",
+                                            color: "#5D5D5D",
+                                            cursor: "pointer",
+                                            marginLeft: "4px",
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )}
+                                  </>
+                                );
+                              })()}
+                            </span>
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <VscFeedback className="mr-2" />
-                              <span>Delivery Pattern</span>
+                              <DeliverPatternIcon />
+                              <span className="ml-1 fw-500">
+                                Delivery Pattern
+                              </span>
                             </span>
                             <CustomToolTip
                               methodIds={item.deliveryMethods}
                               methods={deliveryMethods}
-                              title="Devlivery Pattern"
+                              title="Delivery Pattern"
                             />
                           </li>
                           <li className="d-flex justify-content-between">
                             <span>
-                              <SlCalender className="mr-2" />
-                              <span>Intake</span>
+                              <CalenderIcon />
+                              <span className="ml-1 fw-500">Intake</span>
                             </span>
                             <CustomToolTip
                               methodIds={item.intakeNames}
@@ -262,7 +383,7 @@ const ApplyCardVar = ({
                           [
                             item?.isLoanAvailable && (
                               <span
-                                className="card-tag work-placement mr-1"
+                                className="card-tag work-placement mr-2"
                                 key="loan"
                               >
                                 Loan Available
@@ -270,7 +391,7 @@ const ApplyCardVar = ({
                             ),
                             item?.isWorkPlacementAvailable && (
                               <span
-                                className="card-tag work-placement mr-1"
+                                className="card-tag work-placement mr-2"
                                 key="work-placement"
                               >
                                 Work Placement
@@ -306,13 +427,7 @@ const ApplyCardVar = ({
                     <div className="card-action-vertical">
                       <button
                         className="quick-btn-vertical"
-                        onClick={() =>
-                          handleQuickView(
-                            item.subjectId,
-                            item.universityId,
-                            index
-                          )
-                        }
+                        onClick={() => handleQuickView(item, index)}
                       >
                         Quick view
                       </button>
@@ -329,22 +444,20 @@ const ApplyCardVar = ({
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
                         >
-                          <span className="inline-block">
+                          <span className="register-btn-vertical-top">
                             <button
-                              className={`w-50 register-btn ${
+                              className={`register-btn-vertical ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
-                              onClick={() =>
-                                handleApply(item.subjectId, item.universityId)
-                              }
+                              onClick={() => handleApply(item)}
                               disabled={!item?.canApply}
                             >
-                              <div className="flex items-center gap-1">
-                                Register Interest
+                              <div>
+                                <span className="mr-2">Register Interest</span>
                                 {!item?.canApply ? (
                                   <InfoCircleOutlined
                                     style={{
-                                      fontSize: "14px",
+                                      fontSize: "12px",
                                       color: "#fff",
                                       cursor: "pointer",
                                     }}
@@ -369,14 +482,12 @@ const ApplyCardVar = ({
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
                         >
-                          <span className="inline-block">
+                          <span className="register-btn-vertical-top">
                             <button
                               className={`apply-btn-vertical ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
-                              onClick={() =>
-                                handleApply(item.subjectId, item.universityId)
-                              }
+                              onClick={() => handleApply(item)}
                               disabled={!item?.canApply}
                             >
                               <div className="flex items-center gap-1">

@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineClose,
+  AiOutlineLeft,
+} from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -171,9 +175,12 @@ const SearchFilter = ({
         ref={divRef}
         className="right-side-modal overflowY"
         style={{
-          width: isSearch ? "315px" : "30px",
+          width: isSearch ? "315px" : "25px",
           transition: "width 1s",
-          backgroundColor: isSearch ? "white" : "#B3B3B3",
+          background: isSearch
+            ? "white"
+            : "linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, #FFF 100%)",
+          padding: isSearch ? "16px" : "2px",
         }}
       >
         {isSearch ? (
@@ -189,7 +196,7 @@ const SearchFilter = ({
               />
             </div>
 
-            <div className="mb-3 d-block d-md-none">
+            <div className="mb-3">
               <p className="mb-1 fw-500">Country</p>
               <DefaultDropdown
                 label={countryName}
@@ -345,6 +352,7 @@ const SearchFilter = ({
                 defaultValue={studyModes}
                 action={setStudyModes}
                 className="mb-0"
+                colSize="col-6"
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -356,6 +364,7 @@ const SearchFilter = ({
                 defaultValue={deliveryPattern}
                 action={setDeliveryPattern}
                 className="mb-0"
+                colSize={["col-12", "col-6", "col-6"]}
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -367,13 +376,14 @@ const SearchFilter = ({
                 defaultValue={deliverySchedule}
                 action={setDeliverySchedule}
                 className="mb-0"
+                colSize={["col-6", "col-6", "col-6", "col-6", "col-12"]}
               />
             </div>
           </>
         ) : (
           <>
-            <div className="right-icon pointer">
-              <AiOutlineArrowLeft size={20} />
+            <div className="pointer h-100">
+              <AiOutlineLeft size={30} className="right-icon" />
             </div>
           </>
         )}

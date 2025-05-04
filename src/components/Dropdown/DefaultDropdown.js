@@ -5,6 +5,7 @@ import get from "../../helpers/get";
 const DefaultDropdown = ({
   selectAll = false,
   all = "All",
+  list = [],
   label,
   setLabel,
   value,
@@ -16,7 +17,7 @@ const DefaultDropdown = ({
   errorText,
   action,
 }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(list);
 
   useEffect(() => {
     get(url).then((res) => {
@@ -30,8 +31,8 @@ const DefaultDropdown = ({
   }));
 
   const select = (label, value) => {
-    setLabel(label);
-    setValue(value);
+    setLabel && setLabel(label);
+    setValue && setValue(value);
     setError && setError(false);
     action && action(label, value);
   };

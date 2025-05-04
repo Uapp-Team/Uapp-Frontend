@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -11,11 +10,9 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalFooter,
   ButtonGroup,
   ModalHeader,
 } from "reactstrap";
-import { useHistory } from "react-router-dom";
 import ButtonForFunction from "../../Components/ButtonForFunction";
 import remove from "../../../../helpers/remove";
 import { useToasts } from "react-toast-notifications";
@@ -23,16 +20,15 @@ import Loader from "../../Search/Loader/Loader";
 import put from "../../../../helpers/put";
 import post from "../../../../helpers/post";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
-import ButtonLoader from "../../Components/ButtonLoader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import { number } from "prop-types";
 import Uget from "../../../../helpers/Uget";
+import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
+import { durationInfo, durationType } from "../../../../constants/presetData";
 
 const EducationLevelList = () => {
-  const history = useHistory();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   const [educationLevelData, setEducationLevelData] = useState([]);
@@ -40,20 +36,21 @@ const EducationLevelList = () => {
 
   const { addToast } = useToasts();
   const [deleteModal, setDeleteModal] = useState(false);
-  const [serialNum, setSerialNum] = useState(1);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [progress1, setProgress1] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [data, setData] = useState({});
-  const [Name, setName] = useState("");
-  const [NameError, setNameError] = useState("");
-  const [Description, setDescription] = useState("");
-  const [DescriptionError, setDescriptionError] = useState("");
-  const [LevelValu, setLevelValu] = useState("");
-  const [LevelValuError, setLevelValuError] = useState("");
+  const [value, setValue] = useState("");
+  const [valueError, setValueError] = useState("");
+
+  const [durationTypeId, setDurationTypeId] = useState(0);
+  const [durationTypeIdName, setDurationTypeIdName] = useState(
+    "Select Duration Type"
+  );
+  const [durationTypeIdErrorText, setDurationTypeIdErrorText] = useState("");
+  const [durationTypeIdError, setDurationTypeIdError] = useState(false);
 
   // Delete Modal
 
@@ -82,31 +79,36 @@ const EducationLevelList = () => {
   };
 
   const closeModal = () => {
-    setData({});
-    setName("");
-    setDescription("");
-    setLevelValu("");
     setModalOpen(false);
-    setLevelValuError("");
-    setDescriptionError("");
-    setNameError("");
+    setData({});
+    setValue("");
+    setDurationTypeId(0);
+    setDurationTypeIdName("Select Duration Type");
+    setDurationTypeIdErrorText("");
+    setValueError("");
   };
 
   const handleName = (e) => {
-    setName(e.target.value);
+    setValue(e.target.value);
     if (e.target.value === "") {
-      setNameError("Name is required");
+      setValueError("Value is required");
     } else {
-      setNameError("");
+      setValueError("");
     }
   };
 
   const validateForm = () => {
     var isFormValid = true;
 
-    if (!Name) {
+    if (durationTypeId === 0) {
       isFormValid = false;
-      setNameError("Name is required");
+      setDurationTypeIdError(true);
+      setDurationTypeIdErrorText("Duration Type is required");
+    }
+
+    if (!value) {
+      isFormValid = false;
+      setValueError("Name is required");
     }
 
     return isFormValid;
@@ -116,14 +118,15 @@ const EducationLevelList = () => {
     event.preventDefault();
     const subData = new FormData(event.target);
     subData.append("id", data?.id ? data?.id : 0);
+    subData.append("name", "");
+    subData.append("durationTypeId", durationTypeId);
+    subData.append("value", value);
     var formIsValid = validateForm(subData);
     if (formIsValid) {
       if (data?.id) {
         setButtonStatus(true);
-        setProgress1(true);
         put(`Duration/${data?.id}`, subData).then((res) => {
           setButtonStatus(false);
-          setProgress1(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {
             addToast(res?.data?.message, {
               appearance: "success",
@@ -131,7 +134,7 @@ const EducationLevelList = () => {
             });
             setSuccess(!success);
             setData({});
-            setName("");
+            setValue("");
             setModalOpen(false);
           } else {
             addToast(res?.data?.message, {
@@ -142,10 +145,8 @@ const EducationLevelList = () => {
         });
       } else {
         setButtonStatus(true);
-        setProgress1(true);
         post(`Duration`, subData).then((res) => {
           setButtonStatus(false);
-          setProgress1(false);
           if (res?.status === 200 && res?.data?.isSuccess === true) {
             addToast(res?.data?.message, {
               appearance: "success",
@@ -153,7 +154,7 @@ const EducationLevelList = () => {
             });
             setSuccess(!success);
             setData({});
-            setName("");
+            setValue("");
             setModalOpen(false);
           } else {
             addToast(res?.data?.message, {
@@ -179,17 +180,12 @@ const EducationLevelList = () => {
     });
   }, [success]);
 
-  // back to dashboard
-
-  const backToDashboard = () => {
-    history.push("/");
-  };
-
   const redirectToUpdate = (data) => {
     setData(data);
-    setName(data?.name);
-    setDescription(data?.description);
-    setLevelValu(data?.levelValue);
+    setValue(data?.value);
+    setDurationTypeId(data?.durationTypeId);
+    setDurationTypeIdName(durationInfo(data?.durationTypeId)?.name);
+    // setDurationTypeIdName(data?.name.split(" ")[1]);
     setModalOpen(true);
   };
 
@@ -207,29 +203,46 @@ const EducationLevelList = () => {
           <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
             <ModalHeader>Duration Details</ModalHeader>
             <ModalBody>
-              <Form onSubmit={handleSubmit} className="mt-5">
+              <Form onSubmit={handleSubmit}>
                 {/* {data?.id ? (
                   <input type="hidden" name="id" id="id" value={data?.id} />
                 ) : null} */}
 
-                <FormGroup row className="has-icon-left position-relative">
-                  <Col md="4">
-                    <span>
+                <FormGroup row>
+                  {/* <Col md="4">
+                    <p>
                       Name <span className="text-danger">*</span>{" "}
-                    </span>
-                  </Col>
+                    </p>
+                  </Col> */}
                   <Col md="8">
+                    <div className="mb-3">
+                      <span>
+                        Duration Type <span className="text-danger">*</span>
+                      </span>
+                      <DefaultDropdown
+                        list={durationType}
+                        label={durationTypeIdName}
+                        setLabel={setDurationTypeIdName}
+                        value={durationTypeId}
+                        setValue={setDurationTypeId}
+                        error={durationTypeIdError}
+                        setError={setDurationTypeIdError}
+                        errorText={durationTypeIdErrorText}
+                      />
+                    </div>
+
+                    <span>
+                      Value <span className="text-danger">*</span>{" "}
+                    </span>
                     <Input
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="Enter Name"
-                      value={Name}
+                      type="number"
+                      placeholder="Enter value"
+                      value={value}
                       onChange={(e) => {
                         handleName(e);
                       }}
                     />
-                    <span className="text-danger">{NameError}</span>
+                    <span className="text-danger">{valueError}</span>
                   </Col>
                 </FormGroup>
 
@@ -290,7 +303,6 @@ const EducationLevelList = () => {
                 <Table className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      {/* <th>SL/NO</th> */}
                       <th>Duration Name</th>
 
                       <th style={{ width: "8%" }} className="text-center">
@@ -304,7 +316,6 @@ const EducationLevelList = () => {
                         key={educationInfo?.id}
                         style={{ textAlign: "center" }}
                       >
-                        {/* <th scope="row">{serialNum + i}</th> */}
                         <td>{educationInfo?.name}</td>
                         <td style={{ width: "8%" }} className="text-center">
                           <ButtonGroup variant="text">

@@ -64,7 +64,7 @@ function SearchAndApply() {
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
   const [institutionName, setInstitutionName] = useState("Select Institution");
-  const [countryName, setCountryName] = useState("Select Country");
+  const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
   // const [applyEligibility, setApplyEligibility] = useState({});
   // const [quickViewData, setQuickViewData] = useState({});
@@ -284,13 +284,13 @@ function SearchAndApply() {
             </button>
           </Col>
         </Row>
+        {search && (
+          <p className="filters-heading">
+            <span className="fs-14px">Search results for</span> <br />
+            <strong className="fs-20px">{search}</strong>
+          </p>
+        )}
         <div className="filter-container d-none d-md-block">
-          {search && (
-            <p className="filters-heading">
-              <span className="fs-14px">Search results for</span> <br />
-              <strong className="fs-20px">{search}</strong>
-            </p>
-          )}
           <Row className="mb-3">
             <Col md={9}>
               <SearchKeywords

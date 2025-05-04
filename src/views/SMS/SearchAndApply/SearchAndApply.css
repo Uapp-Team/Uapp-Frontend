@@ -1,3 +1,6 @@
+* {
+  font-family: "Inter", sans-serif;
+}
 .search-header {
   background: linear-gradient(0deg, #f9fbfb 0%, rgba(249, 251, 251, 0) 100%);
   margin: -18px -21px 0;
@@ -15,13 +18,10 @@
 }
 
 .right-icon {
-  margin: -30px;
   position: fixed;
   top: 50%;
-  background: #045d5e;
-  color: white;
+  color: black;
   border-radius: 20px;
-  padding: 5px;
 }
 
 /* search box */
@@ -198,9 +198,13 @@
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
   position: relative;
+}
+.card-container:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .tbc {
   position: absolute;
@@ -209,7 +213,7 @@
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  border-radius: 0 0 20px 0;
+  border-radius: 12px 0 12px 0;
   color: #fff;
   display: flex;
   align-items: center;
@@ -219,10 +223,14 @@
   background: #ffffff;
   border: none;
   border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.card-container-vertical:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-header {
+.card-headers {
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -231,11 +239,11 @@
 }
 
 .card-header-vertical {
-  padding: 0.5rem 1rem;
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: 24px;
   border-radius: 10px 10px 0 0;
 }
 .card-date {
@@ -249,10 +257,11 @@
 }
 
 .card-tag {
-  background: #e0e0e0;
+  background: #e7fae7;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 0.8rem;
+  color: #4f6b50;
 }
 
 .tags-vertical {
@@ -273,14 +282,13 @@
   flex: 1;
   flex-direction: row;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .card-body-vertical {
   background: #fff;
   flex: 1;
   flex-direction: row;
-  gap: 1rem;
   padding: 1rem;
   border-radius: 0 0 10px 10px;
 }
@@ -337,6 +345,7 @@
 }
 
 .card-action-vertical {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -377,8 +386,7 @@
 .apply-btn,
 .quick-btn,
 .quick-btn-vertical,
-.apply-btn-vertical,
-.register-btn {
+.apply-btn-vertical {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -399,14 +407,34 @@
 .register-btn {
   background-color: #fc7300;
   color: white;
-  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  min-width: 160px;
+  padding: 9px 16px;
+}
+
+.register-btn-vertical {
+  background-color: #fc7300;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 9px 16px;
+}
+.register-btn-vertical-top {
+  display: grid;
+  width: 50%;
+}
+
+.register-btn-vertical.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .apply-btn-vertical {
   background-color: #045d5e;
   color: white;
-  width: 162px;
 }
 
 .apply-btn-vertical.disabled {
@@ -417,6 +445,7 @@
 .register-btn.disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  border: none;
 }
 
 .quick-btn {
@@ -430,8 +459,8 @@
   background-color: white;
   border: 1px solid #045d5e;
   color: #045d5e;
-  width: 162px;
   margin-right: 5px;
+  width: 50%;
 }
 .dashed-hr {
   border-top: 1px dashed #ccc;
@@ -468,7 +497,6 @@
 /* quick view modal  */
 
 .quickview-container {
-  font-family: "Inter", sans-serif;
   color: #333;
 }
 @media (min-width: 768px) {
@@ -490,6 +518,12 @@
   }
   .quickview-footer {
     display: flex;
+  }
+  .register-btn {
+    padding: 9px;
+  }
+  .card-body-vertical {
+    padding: 0rem 1.5rem 1.5rem;
   }
 }
 
@@ -635,7 +669,6 @@
 
 /* apply modal start */
 .apply-modal {
-  font-family: "Inter", sans-serif;
   color: #333;
 }
 .apply-modal-card {
@@ -716,7 +749,6 @@
 .program-modal .ant-modal-content {
   padding: 32px;
   border-radius: 16px;
-  font-family: "Inter", sans-serif;
 }
 
 .program-modal__info {
