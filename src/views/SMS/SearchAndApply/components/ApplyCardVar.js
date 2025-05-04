@@ -444,9 +444,9 @@ const ApplyCardVar = ({
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
                         >
-                          <span>
+                          <span className="register-btn-vertical-top">
                             <button
-                              className={`register-btn ${
+                              className={`register-btn-vertical ${
                                 !item?.canApply ? "disabled" : ""
                               }`}
                               onClick={() => handleApply(item)}

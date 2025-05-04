@@ -344,6 +344,7 @@
 }
 
 .card-action-vertical {
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
@@ -412,6 +413,24 @@
   padding: 9px 16px;
 }
 
+.register-btn-vertical {
+  background-color: #fc7300;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 9px 16px;
+}
+.register-btn-vertical-top {
+  display: grid;
+  width: 50%;
+}
+
+.register-btn-vertical.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .apply-btn-vertical {
   background-color: #045d5e;
   color: white;
@@ -440,8 +459,8 @@
   background-color: white;
   border: 1px solid #045d5e;
   color: #045d5e;
-  width: 162px;
   margin-right: 5px;
+  width: 50%;
 }
 .dashed-hr {
   border-top: 1px dashed #ccc;
@@ -502,6 +521,9 @@
   }
   .register-btn {
     padding: 9px;
+  }
+  .card-body-vertical {
+    padding: 1.5rem;
   }
 }
 
