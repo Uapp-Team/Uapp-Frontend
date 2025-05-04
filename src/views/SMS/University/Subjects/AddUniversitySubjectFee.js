@@ -270,7 +270,7 @@ const AddUniversitySubjectFee = () => {
                   />
                 </FormGroup>
                 <Row>
-                  <Col md="7">
+                  <Col md={7}>
                     <p className="section-title">Course Fee</p>
 
                     <FormGroup row className="has-icon-left position-relative">
@@ -498,7 +498,7 @@ const AddUniversitySubjectFee = () => {
                       </Col>
                     </FormGroup>
                   </Col>
-                  <Col md={2}>
+                  <Col md={5}>
                     <p className="section-title">Delivery Methods</p>
                     <CheckBoxByObj
                       register={() => {}}

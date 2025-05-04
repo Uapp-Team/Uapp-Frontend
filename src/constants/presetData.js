@@ -11,6 +11,14 @@ export const studyMode = [
   { id: 3, name: "Sandwich" },
 ];
 
+export const durationType = [
+  { id: 1, name: "Hours" },
+  { id: 2, name: "Days" },
+  { id: 3, name: "Weeks" },
+  { id: 4, name: "Months" },
+  { id: 5, name: "Years" },
+];
+
 export const deliveryMethods = [
   { id: 2, name: "On-Campus" },
   { id: 1, name: "Online" },
@@ -33,6 +41,12 @@ export const countryList = [
   { id: 5, name: "Germany", currency: "€" },
   { id: 6, name: "UAE", currency: "AED" },
 ];
+
+export const durationInfo = (id) => {
+  const filter = durationType.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0] : null;
+  return result;
+};
 
 export const currency = (id) => {
   const filter = countryList.filter((item) => item.id === id);
