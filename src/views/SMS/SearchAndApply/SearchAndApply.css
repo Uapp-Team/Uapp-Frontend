@@ -198,9 +198,13 @@
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
   position: relative;
+}
+.card-container:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .tbc {
   position: absolute;
@@ -226,7 +230,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-header {
+.card-headers {
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -235,11 +239,11 @@
 }
 
 .card-header-vertical {
-  padding: 0.5rem 1rem;
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: 24px;
   border-radius: 10px 10px 0 0;
 }
 .card-date {
@@ -253,10 +257,11 @@
 }
 
 .card-tag {
-  background: #e0e0e0;
+  background: #e7fae7;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 0.8rem;
+  color: #4f6b50;
 }
 
 .tags-vertical {
@@ -277,14 +282,13 @@
   flex: 1;
   flex-direction: row;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .card-body-vertical {
   background: #fff;
   flex: 1;
   flex-direction: row;
-  gap: 1rem;
   padding: 1rem;
   border-radius: 0 0 10px 10px;
 }
@@ -431,7 +435,6 @@
 .apply-btn-vertical {
   background-color: #045d5e;
   color: white;
-  width: 162px;
 }
 
 .apply-btn-vertical.disabled {
@@ -520,7 +523,7 @@
     padding: 9px;
   }
   .card-body-vertical {
-    padding: 1.5rem;
+    padding: 0rem 1.5rem 1.5rem;
   }
 }
 

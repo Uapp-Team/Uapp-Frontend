@@ -4,6 +4,7 @@ import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
 import courseIcon from "../../../../assets/icon/course.svg";
 import { Student } from "../../../../components/core/User";
 import "../SearchAndApply.css";
+import { ArrowLeftRightIcon } from "./icons";
 
 const ResultsToolbar = ({
   data,
@@ -51,8 +52,10 @@ const ResultsToolbar = ({
               </button>
             )}
             <button className="action-btn mr-2">
-              <FaExchangeAlt className="mx-2" /> Compare{" "}
-              <span className="count">0</span>
+              <span className="mr-2">
+                <ArrowLeftRightIcon />
+              </span>{" "}
+              Compare <span className="count">0</span>
             </button>
             <button
               className="action-btn mr-2 d-none d-md-block"
