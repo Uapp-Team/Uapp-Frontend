@@ -183,7 +183,7 @@
   top: 75px;
   width: 100%;
   margin: 0 -21px;
-  padding: 0 25px;
+  padding: 0 20px;
   z-index: 100;
   background: #f5f7f7;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -912,7 +912,7 @@
   .results-toolbar {
     background: rgb(233, 233, 233);
     margin: 0 -21px;
-    padding: 0 25px;
+    padding: 0 20px;
   }
 
   .results-toolbar.sticky {

@@ -19,7 +19,7 @@ const ResultsToolbar = ({
     <>
       <div className="d-none d-md-block">
         <hr className="margin0" />
-        <div className="d-flex justify-content-between align-items-center flex-wrap mt-16px px-2 pb-0">
+        <div className="d-flex justify-content-between align-items-center flex-wrap mt-16px pb-0">
           {/* Left Section */}
           <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-16px">
             {/* <span className="tag mr-2">0 Result</span> */}
