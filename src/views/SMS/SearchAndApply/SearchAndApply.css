@@ -256,7 +256,7 @@
 
 .card-tag {
   background: #e7fae7;
-  padding: 0.2rem 0.5rem;
+  padding: 3px 8px;
   border-radius: 999px;
   font-size: 0.8rem;
   color: #4f6b50;
@@ -774,7 +774,7 @@
   background-color: #e6fffb;
   color: #079455;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: 999px;
   font-size: 14px;
   display: inline-block;
 }

@@ -34,7 +34,7 @@ const ApplyModal = ({
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [programCard, setProgramCard] = useState(true);
+  const [programCard, setProgramCard] = useState(false);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
     useState("Select Campus");
@@ -48,6 +48,8 @@ const ApplyModal = ({
     useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
+  const [selectedClassStartDate, setSelectedClassStartDate] = useState();
+  const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
 
   const isApplyDisabled = !(
     isCheckboxChecked &&
@@ -192,21 +194,28 @@ const ApplyModal = ({
               <div className="dashed-hr"></div>
               <div className="program-modal__info">
                 <div className="program-modal__deadline">
-                  <strong>Application deadline </strong>
-                  {selectedIntake !== "Select Intake"
-                    ? quickViewData?.applicationDeadLine
-                    : "Not Selected"}
+                  <div className="d-flex">
+                    <div className="mr-2">Application deadline </div>
+                    <div>
+                      {selectedIntakeDeadLine ? (
+                        <strong>{selectedIntakeDeadLine}</strong>
+                      ) : (
+                        <strong>Not Selected</strong>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div className="line-vr"></div>
-                {quickViewData?.classStartDate && (
+                <div className="program-modal__start">Course Start Date </div>
+                {selectedClassStartDate ? (
                   <>
-                    <div className="program-modal__start">
-                      Course Start Date{" "}
-                      <strong>{quickViewData?.classStartDate}</strong>
-                    </div>
+                    <strong>{selectedClassStartDate}</strong>
                     <div className="line-vr"></div>
                   </>
+                ) : (
+                  <strong>Not Yet Confirm</strong>
                 )}
+                <div className="line-vr"></div>
                 <div className="program-modal__duration">
                   <span className="mr-2">
                     <TimerIcon />
@@ -336,10 +345,14 @@ const ApplyModal = ({
                         // Deselect the intake if it's already selected
                         setSelectedIntake("Select Intake");
                         setSelectedIntakeId("");
+                        setSelectedIntakeDeadLine("");
+                        setSelectedClassStartDate("");
                       } else {
                         // Select the intake
                         setSelectedIntake(intake.name);
                         setSelectedIntakeId(intake.id);
+                        setSelectedIntakeDeadLine(intake.applicationDeadLine);
+                        setSelectedClassStartDate(intake.classStartDate);
                       }
                     }}
                   >
