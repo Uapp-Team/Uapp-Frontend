@@ -62,6 +62,7 @@ const SearchFilter = ({
   applicationTypelist,
   applicationType,
   setApplicationType,
+  applicationTypeSelected,
   intakeList,
   setIntakeList,
   studyLevelList,
@@ -77,23 +78,16 @@ const SearchFilter = ({
       navigator.userAgent
     );
 
-  console.log(isMobileDevice); // true if mobile, false if desktop
-
-  const multiOption = (list) =>
-    list?.map((item) => ({
-      name: item?.label,
-      id: item?.value,
-    }));
-
   useEffect(() => {
-    const listData =
-      applicationType.length > 0
-        ? multiOption(applicationType)
-        : applicationTypelist;
-
-    const checkHome = listData.filter((item) => item.name === "Home/UK");
-    const checkEu = listData.filter((item) => item.name === "EU/EEA");
-    const checkInt = listData.filter((item) => item.name === "International");
+    const checkHome = applicationTypeSelected.filter(
+      (item) => item.name === "Home/UK"
+    );
+    const checkEu = applicationTypeSelected.filter(
+      (item) => item.name === "EU/EEA"
+    );
+    const checkInt = applicationTypeSelected.filter(
+      (item) => item.name === "International"
+    );
     const checkLoan =
       checkHome?.length === 1 || checkEu?.length === 1
         ? [
@@ -110,7 +104,7 @@ const SearchFilter = ({
     loans.length > 0 && setLoans([]);
     // loans.length > 0 && setLoans([]);
     // loans.length !== loanList.length && setLoans([]);
-  }, [applicationType, applicationTypelist]);
+  }, [applicationTypeSelected]);
 
   // useEffect(() => {
   //   const filteredArray = loanList.filter((item) => loans.includes(item.id));
@@ -175,12 +169,12 @@ const SearchFilter = ({
         ref={divRef}
         className="right-side-modal overflowY"
         style={{
-          width: isSearch ? "315px" : "25px",
+          width: isSearch ? "315px" : "32px",
           transition: "width 1s",
           background: isSearch
             ? "white"
-            : "linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, #FFF 100%)",
-          padding: isSearch ? "16px" : "2px",
+            : "linear-gradient(90deg, rgba(242, 242, 242, 0.00) 0%, rgba(4, 93, 94, 0.20) 100%)",
+          padding: isSearch ? "16px" : "1px",
         }}
       >
         {isSearch ? (

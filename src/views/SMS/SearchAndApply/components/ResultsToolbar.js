@@ -17,10 +17,11 @@ const ResultsToolbar = ({
 }) => {
   return (
     <>
-      <div className="results-toolbar d-none d-md-block">
-        <div className="results-toolbar d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
+      <div className="d-none d-md-block">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between align-items-center flex-wrap mt-16px pb-0">
           {/* Left Section */}
-          <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2">
+          <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-16px">
             {/* <span className="tag mr-2">0 Result</span> */}
             <span className="tag tag-active mr-2">
               <img
@@ -41,7 +42,7 @@ const ResultsToolbar = ({
           </div>
 
           {/* Right Section */}
-          <div className="d-flex align-items-center flex-wrap mb-2">
+          <div className="d-flex align-items-center flex-wrap mb-16px">
             {Student() && (
               <button
                 className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
@@ -75,10 +76,11 @@ const ResultsToolbar = ({
             </button>
           </div>
         </div>
+        <hr className="margin0" />
       </div>
       <div className="d-block d-md-none">
-        <hr className="mt-0" />
-        <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2 pl-25px pr-25px">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap mt-16px mb-16px">
           {/* <span className="tag mr-2">0 Result</span> */}
           <span className="tag tag-active mr-2">
             <img src={courseIcon} alt="course" className="w-20px h-20px mr-2" />{" "}
@@ -93,8 +95,8 @@ const ResultsToolbar = ({
             0 University
           </span> */}
         </div>
-        <hr />
-        <div className="d-flex justify-content-between pl-25px pr-25px">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between mt-16px mb-16px">
           {Student() && (
             <button
               className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
@@ -110,7 +112,7 @@ const ResultsToolbar = ({
             <span className="count">0</span>
           </button>
         </div>
-        <hr className="mb-0" />
+        <hr className="margin0" />
       </div>
     </>
   );

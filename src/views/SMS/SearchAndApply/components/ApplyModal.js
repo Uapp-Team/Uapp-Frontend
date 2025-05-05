@@ -1,12 +1,10 @@
 import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
-import { SlCalender } from "react-icons/sl";
-import { Col, Modal, ModalBody } from "reactstrap";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
@@ -22,6 +20,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
+import { ArrowRightIcon, CalenderIcon, TimerIcon } from "./icons";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -35,7 +34,7 @@ const ApplyModal = ({
   const current_user = JSON.parse(localStorage.getItem("current_user"));
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [programCard, setProgramCard] = useState(true);
+  const [programCard, setProgramCard] = useState(false);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
     useState("Select Campus");
@@ -49,6 +48,8 @@ const ApplyModal = ({
     useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
+  const [selectedClassStartDate, setSelectedClassStartDate] = useState();
+  const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
 
   const isApplyDisabled = !(
     isCheckboxChecked &&
@@ -193,18 +194,33 @@ const ApplyModal = ({
               <div className="dashed-hr"></div>
               <div className="program-modal__info">
                 <div className="program-modal__deadline">
-                  <strong>Application deadline </strong>
-                  {quickViewData?.applicationDeadLine}
-                </div>
-                {quickViewData?.classStartDate && (
-                  <div className="program-modal__start">
-                    Course Start Date{" "}
-                    <strong>{quickViewData?.classStartDate}</strong>
+                  <div className="d-flex">
+                    <div className="mr-2">Application deadline </div>
+                    <div>
+                      {selectedIntakeDeadLine ? (
+                        <strong>{selectedIntakeDeadLine}</strong>
+                      ) : (
+                        <strong>Not Selected</strong>
+                      )}
+                    </div>
                   </div>
+                </div>
+                <div className="line-vr"></div>
+                <div className="program-modal__start">Course Start Date </div>
+                {selectedClassStartDate ? (
+                  <>
+                    <strong>{selectedClassStartDate}</strong>
+                    <div className="line-vr"></div>
+                  </>
+                ) : (
+                  <strong>Not Yet Confirm</strong>
                 )}
+                <div className="line-vr"></div>
                 <div className="program-modal__duration">
-                  <CiTimer className="mr-2" />
-                  <span className="mr-2 fw-600">Duration </span>
+                  <span className="mr-2">
+                    <TimerIcon />
+                  </span>
+                  <span className="mr-2">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
@@ -234,14 +250,50 @@ const ApplyModal = ({
                 </div>
               </div>
               {programCard && (
-                <div className="program-modal__card">
-                  <div className="program-modal__list">
-                    <h4>Admission Requirements</h4>
+                <Row className="program-modal__card">
+                  <Col className="program-modal__list">
+                    <div className="fw-600 mb-1">Admission Requirements</div>
                     {applyEligibility?.admissionRequirements?.length > 0 ? (
                       applyEligibility?.admissionRequirements?.map(
                         (item, index) => (
-                          <ul key={index}>
-                            <li>
+                          <div key={index}>
+                            <span>
+                              {item?.isEligible === true ? (
+                                <IoCheckmark
+                                  size={16}
+                                  fill="green"
+                                  color="green"
+                                  className="mr-2"
+                                />
+                              ) : (
+                                <RxCross1
+                                  size={16}
+                                  fill="red"
+                                  color="red"
+                                  className="mr-2"
+                                />
+                              )}
+                              {item?.details}
+                            </span>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <div>
+                        <span>No Required qualification</span>
+                      </div>
+                    )}
+                  </Col>
+
+                  <div className="line-vr"></div>
+
+                  <Col className="program-modal__list">
+                    <div className="fw-600 mb-1">Student Qualification</div>
+                    {applyEligibility?.studentQualifications?.length > 0 ? (
+                      applyEligibility?.studentQualifications?.map(
+                        (item, index) => (
+                          <div key={index}>
+                            <span>
                               {item?.isEligible === true ? (
                                 <IoCheckmark
                                   fill="green"
@@ -255,60 +307,29 @@ const ApplyModal = ({
                                   className="mr-2"
                                 />
                               )}
-                              {item?.details}
-                            </li>
-                          </ul>
+                              {item}
+                            </span>
+                          </div>
                         )
                       )
                     ) : (
-                      <ul>
-                        <li>No Required qualification</li>
-                      </ul>
+                      <div>
+                        {" "}
+                        <span>No Required qualification</span>{" "}
+                      </div>
                     )}
-                  </div>
-                  <div>
-                    <div>
-                      <h4>Student Qualification</h4>
-                      {applyEligibility?.studentQualifications?.length > 0 ? (
-                        applyEligibility?.studentQualifications?.map(
-                          (item, index) => (
-                            <ul key={index}>
-                              <li>
-                                {item?.isEligible === true ? (
-                                  <IoCheckmark
-                                    fill="green"
-                                    color="green"
-                                    className="mr-2"
-                                  />
-                                ) : (
-                                  <RxCross1
-                                    fill="red"
-                                    color="red"
-                                    className="mr-2"
-                                  />
-                                )}
-                                {item}
-                              </li>
-                            </ul>
-                          )
-                        )
-                      ) : (
-                        <ul>
-                          {" "}
-                          <li>No Required qualification</li>{" "}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               )}
             </div>
 
             {/* Dropdown & Selects */}
             <div className="program-modal__intake my-3">
               <div className="fs-14px d-flex">
-                <SlCalender className="mr-2 mt-1" />
-                <p>Intake</p>
+                <div className="mr-1">
+                  <CalenderIcon />
+                </div>
+                <p>Select Intake</p>
               </div>
               <div className="d-flex flex-wrap justify-centent-between align-item-center">
                 {quickViewData?.intakes?.map((intake) => (
@@ -324,10 +345,14 @@ const ApplyModal = ({
                         // Deselect the intake if it's already selected
                         setSelectedIntake("Select Intake");
                         setSelectedIntakeId("");
+                        setSelectedIntakeDeadLine("");
+                        setSelectedClassStartDate("");
                       } else {
                         // Select the intake
                         setSelectedIntake(intake.name);
                         setSelectedIntakeId(intake.id);
+                        setSelectedIntakeDeadLine(intake.applicationDeadLine);
+                        setSelectedClassStartDate(intake.classStartDate);
                       }
                     }}
                   >
@@ -509,7 +534,9 @@ const ApplyModal = ({
                 {isLoading ? (
                   <Spin indicator={antIcon} size="small" />
                 ) : (
-                  "Apply →"
+                  <span className="fw-600">
+                    Apply <ArrowRightIcon />
+                  </span>
                 )}
               </button>
             </div>

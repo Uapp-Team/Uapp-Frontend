@@ -37,10 +37,12 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import TuitionFee from "./TuitionFee";
 
 const ApplyCardHor = ({
   data,
   studentName,
+  applicationTypeSelected,
   setSubjectId,
   handleFavourite,
   handleSubmit,
@@ -226,18 +228,20 @@ const ApplyCardHor = ({
                 <div className="d-flex justify-content-between align-items-end">
                   <ul className="card-details">
                     <li className="d-flex justify-content-between">
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <LocationIcon />
+                          <span className="ml-1 fw-500">Location</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.campusNames}
                           title="Campus Name"
                         />
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <TimerIcon />
+                          <span className="ml-1 fw-500">Duration</span>
                         </span>
                         <span>
                           {(() => {
@@ -289,9 +293,10 @@ const ApplyCardHor = ({
                           })()}
                         </span>
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <StudyModeIcon />
+                          <span className="ml-1 fw-500">Study Mode</span>
                         </span>
                         <span>
                           {(() => {
@@ -314,7 +319,7 @@ const ApplyCardHor = ({
                             return (
                               <>
                                 {fullTime && (
-                                  <span className="study-mode-tag">
+                                  <span className="duration-tag">
                                     {fullTime.name}
                                   </span>
                                 )}
@@ -350,9 +355,10 @@ const ApplyCardHor = ({
                           })()}
                         </span>
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <DeliverPatternIcon />
+                          <span className="ml-1 fw-500">Delivery Pattern</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.deliveryMethods}
@@ -360,9 +366,10 @@ const ApplyCardHor = ({
                           title="Delivery Pattern"
                         />
                       </span>
-                      <span className="d-flex align-items-center">
-                        <span className="mr-1">
+                      <span className="d-flex align-items-center mr-5">
+                        <span className="mr-2 d-flex justify-content-center">
                           <CalenderIcon />
+                          <span className="ml-1 fw-500">Intake</span>
                         </span>
                         <CustomToolTip
                           methodIds={item.intakeNames}
@@ -394,8 +401,12 @@ const ApplyCardHor = ({
                         Tuition Fee
                       </span>
                       <p className="card-price">
-                        {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                        {item.firstYearTutionFee}
+                        <span className="fw-600">
+                          <TuitionFee
+                            applicationTypeSelected={applicationTypeSelected}
+                            item={item}
+                          />
+                        </span>
                       </p>
                     </div>
                     <div className="mr-4">
@@ -406,7 +417,10 @@ const ApplyCardHor = ({
                         Deposit
                       </span>
                       <p className="card-price">
-                        {currency(item.depositFeeCurrencyId)} {item.depositFee}
+                        <span className="fw-600">
+                          {currency(item.depositFeeCurrencyId)}{" "}
+                          {item.depositFee}
+                        </span>
                       </p>
                     </div>
                     <div className="mr-4">
@@ -417,8 +431,10 @@ const ApplyCardHor = ({
                         Application fee
                       </span>
                       <p className="card-price">
-                        {currency(item.avarageApplicationFeeCurrencyId)}{" "}
-                        {item.avarageApplicationFee}
+                        <span className="fw-600">
+                          {currency(item.avarageApplicationFeeCurrencyId)}{" "}
+                          {item.avarageApplicationFee}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -530,6 +546,7 @@ const ApplyCardHor = ({
         open={open}
         index={index}
         onClose={() => setOpen(false)}
+        applicationTypeSelected={applicationTypeSelected}
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleFavourite={handleFavourite}

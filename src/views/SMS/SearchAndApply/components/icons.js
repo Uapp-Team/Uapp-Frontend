@@ -356,6 +356,33 @@ export function ArrowLeftRightIcon() {
   );
 }
 
+export function ArrowRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M20 12H4"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M15.0001 17C15.0001 17 20 13.3176 20 12C20 10.6824 15 7 15 7"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ShareIcon() {
   return (
     <svg
@@ -401,6 +428,37 @@ export function HeartIcon() {
       <path
         d="M13.6417 2.66277C11.8539 1.56615 10.2936 2.00807 9.35627 2.71201C8.97187 3.00064 8.77973 3.14495 8.66667 3.14495C8.5536 3.14495 8.36147 3.00064 7.97707 2.71201C7.03975 2.00807 5.47939 1.56615 3.69163 2.66277C1.34538 4.10196 0.81448 8.84993 6.22635 12.8556C7.25715 13.6185 7.77253 14 8.66667 14C9.5608 14 10.0762 13.6185 11.107 12.8556C16.5189 8.84993 15.9879 4.10196 13.6417 2.66277Z"
         stroke="#494949"
+        stroke-width="1.5"
+        stroke-linecap="round"
+      />
+    </svg>
+  );
+}
+
+export function DeliveryScheduleIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        d="M10 6.66699V10.0003L11.25 11.2503"
+        stroke="#5D5D5D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M16.2885 13.7111C17.6522 14.4475 18.334 14.8157 18.334 15.4166C18.334 16.0176 17.6522 16.3858 16.2885 17.1221L15.3599 17.6236C14.3127 18.1891 13.7891 18.4719 13.5373 18.2663C12.9207 17.7628 13.8812 16.4634 14.1176 16.0031C14.3571 15.5366 14.3527 15.2882 14.1176 14.8302C13.8812 14.3699 12.9207 13.0705 13.5373 12.567C13.7891 12.3614 14.3127 12.6441 15.3599 13.2096L16.2885 13.7111Z"
+        stroke="#5D5D5D"
+        stroke-width="1.5"
+      />
+      <path
+        d="M10.8564 18.2903C10.5753 18.319 10.29 18.3337 10.0013 18.3337C5.39893 18.3337 1.66797 14.6027 1.66797 10.0003C1.66797 5.39795 5.39893 1.66699 10.0013 1.66699C14.6036 1.66699 18.3346 5.39795 18.3346 10.0003C18.3346 10.5711 18.2772 11.1285 18.168 11.667"
+        stroke="#5D5D5D"
         stroke-width="1.5"
         stroke-linecap="round"
       />

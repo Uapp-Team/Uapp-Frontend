@@ -29,16 +29,16 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
           <Tooltip
             title={
               <div className="custom-tooltip-content">
-                <div className="tooltip-header">{title}</div>
-                <ul className="tooltip-method">
-                  {others.map((item) => (
-                    <li key={item.id}>{item.name}</li>
-                  ))}
-                </ul>
+                {others.map((item) => (
+                  <div className="tooltip-method">
+                    <span key={item.id}>{item.name}</span>
+                  </div>
+                ))}
               </div>
             }
             placement="top"
             overlayClassName="custom-tooltip"
+            color="white"
           >
             <InfoCircleOutlined
               style={{ fontSize: "14px", color: "#5D5D5D", cursor: "pointer" }}
@@ -62,16 +62,16 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
         <Tooltip
           title={
             <div className="custom-tooltip-content">
-              <div className="tooltip-header">{title}</div>
-              <ul className="tooltip-method">
-                {others.map((val, idx) => (
-                  <li key={idx}>{val}</li>
-                ))}
-              </ul>
+              {others.map((val, idx) => (
+                <div className="tooltip-method">
+                  <span key={idx}>{val}</span>
+                </div>
+              ))}
             </div>
           }
           placement="top"
           overlayClassName="custom-tooltip"
+          color="white"
         >
           <InfoCircleOutlined
             style={{

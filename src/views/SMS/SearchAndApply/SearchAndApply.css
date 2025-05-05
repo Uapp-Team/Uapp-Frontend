@@ -1,6 +1,10 @@
 * {
   font-family: "Inter", sans-serif;
 }
+.margin0 {
+  margin: 0 -20px;
+}
+
 .search-header {
   background: linear-gradient(0deg, #f9fbfb 0%, rgba(249, 251, 251, 0) 100%);
   margin: -18px -21px 0;
@@ -21,7 +25,10 @@
   position: fixed;
   top: 50%;
   color: black;
-  border-radius: 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(127, 127, 127, 0.08);
+  background: #fff;
+  padding: 8px;
 }
 
 /* search box */
@@ -121,16 +128,6 @@
 
 /* result toolbar */
 
-.results-toolbar {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.1)
-  );
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
 .tag {
   display: flex;
   align-items: center;
@@ -183,11 +180,12 @@
 
 .results-toolbar.sticky {
   position: fixed;
-  top: 80px; /* height of your fixed header */
-  left: 15.5rem;
-  right: 1rem;
+  top: 75px;
+  width: 100%;
+  margin: 0 -21px;
+  padding: 0 20px;
   z-index: 100;
-  background: white;
+  background: #f5f7f7;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -231,11 +229,11 @@
 }
 
 .card-headers {
-  padding: 0.5rem 1rem;
+  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
+  padding-top: 24px;
 }
 
 .card-header-vertical {
@@ -258,7 +256,7 @@
 
 .card-tag {
   background: #e7fae7;
-  padding: 0.2rem 0.5rem;
+  padding: 3px 8px;
   border-radius: 999px;
   font-size: 0.8rem;
   color: #4f6b50;
@@ -282,7 +280,7 @@
   flex: 1;
   flex-direction: row;
   gap: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
 }
 
 .card-body-vertical {
@@ -318,7 +316,6 @@
 
 .card-details {
   list-style: none;
-  width: 70%;
   padding: 0;
   margin: 0;
 }
@@ -343,7 +340,9 @@
   justify-content: end;
   gap: 0.5rem;
 }
-
+.duration-tag {
+  font-weight: 600;
+}
 .card-action-vertical {
   width: 100%;
   display: flex;
@@ -469,29 +468,33 @@
   width: 100%; /* Optional: Ensure it spans the full width */
 }
 
+.line-vr {
+  display: none;
+}
 /* tooltip styles */
 
 /* Optional custom tooltip wrapper */
 .custom-tooltip .ant-tooltip-inner {
   background-color: #fff;
   color: #000;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 6.5px 0px rgba(0, 0, 0, 0.08),
+    0px 0.5px 1px 0px rgba(0, 0, 0, 0.11);
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .custom-tooltip-content {
   background: #fff;
-  width: 130px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
 .tooltip-method {
-  font-weight: 500;
+  font-weight: 400;
+  color: #5d5d5d;
 }
 
 /* quick view modal  */
@@ -524,6 +527,10 @@
   }
   .card-body-vertical {
     padding: 0rem 1.5rem 1.5rem;
+  }
+  .line-vr {
+    display: block;
+    border-right: 0.5px solid #ccc;
   }
 }
 
@@ -641,7 +648,7 @@
 .footer-tag {
   background: #eef4f4;
   color: #5d5d5d;
-  padding: 0 20px;
+  padding: 0 16px;
   border-radius: 6px;
   margin-bottom: 16px;
 }
@@ -652,8 +659,7 @@
 }
 
 .view-more-container {
-  text-align: center;
-  margin-top: 20px;
+  background: #f9fbfb;
 }
 
 .view-more-btn {
@@ -663,6 +669,7 @@
   width: 100%;
   border-radius: 4px;
   cursor: pointer;
+  margin: 8px 8px;
 }
 
 /* quick view end */
@@ -705,6 +712,10 @@
   font-weight: 600;
   margin-bottom: 16px;
   text-align: center;
+}
+
+.program-modal__list {
+  line-height: 2;
 }
 
 .apply-modal__label {
@@ -763,7 +774,7 @@
   background-color: #e6fffb;
   color: #079455;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: 999px;
   font-size: 14px;
   display: inline-block;
 }
@@ -794,13 +805,13 @@
 }
 .program-modal__card {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   min-width: 240px;
   background: #fafafa;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
-  padding: 16px;
-  margin: 16px;
+  padding: 16px 0;
+  margin: 0 16px 16px;
 }
 
 .program-modal__card h4 {
@@ -878,12 +889,13 @@
 }
 
 .program-modal__cancel {
-  padding: 5px 15px;
+  padding: 8px 16px;
   background: #e9e9e9;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .program-modal__apply {
@@ -896,9 +908,32 @@
   cursor: pointer;
 }
 
+input[type="radio"]:checked {
+  background-color: #045d5e; /* Set the fill color */
+  border-color: #045d5e; /* Optional: Match the border color */
+}
+
+input[type="radio"] {
+  accent-color: #045d5e; /* Modern browsers support this for styling radio buttons */
+}
+
+input[type="checkbox"]:checked {
+  background-color: #045d5e; /* Set the fill color */
+  border-color: #045d5e; /* Optional: Match the border color */
+}
+
+input[type="checkbox"] {
+  accent-color: #045d5e; /* Modern browsers support this for styling radio buttons */
+}
+
 /* apply modal end */
 
 /* Responsive */
+@media (min-width: 1200px) {
+  .results-toolbar.sticky {
+    width: calc(100% - 200px);
+  }
+}
 @media (max-width: 768px) {
   .card-container.horizontal {
     flex-direction: column;
@@ -906,10 +941,12 @@
 
   .results-toolbar {
     background: rgb(233, 233, 233);
-    margin: 0 -25px;
+    margin: 0 -21px;
+    padding: 0 20px;
   }
 
   .results-toolbar.sticky {
+    width: 100%;
     padding-bottom: 0;
     top: 75px;
     background: rgb(233, 233, 233);
@@ -943,13 +980,6 @@
   }
   .filter-button {
     font-size: 0.8rem;
-  }
-}
-
-/* Responsive */
-@media (max-width: 1200px) {
-  .results-toolbar.sticky {
-    left: 1rem;
   }
 }
 
