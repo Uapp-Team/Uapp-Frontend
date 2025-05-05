@@ -243,46 +243,48 @@ const ApplyModal = ({
               {programCard && (
                 <div className="program-modal__card">
                   <div className="program-modal__list">
-                    <h4>Admission Requirements</h4>
+                    <div className="fw-600 mb-1">Admission Requirements</div>
                     {applyEligibility?.admissionRequirements?.length > 0 ? (
                       applyEligibility?.admissionRequirements?.map(
                         (item, index) => (
-                          <ul key={index}>
-                            <li>
+                          <div key={index}>
+                            <span>
                               {item?.isEligible === true ? (
                                 <IoCheckmark
+                                  size={16}
                                   fill="green"
                                   color="green"
                                   className="mr-2"
                                 />
                               ) : (
                                 <RxCross1
+                                  size={16}
                                   fill="red"
                                   color="red"
                                   className="mr-2"
                                 />
                               )}
                               {item?.details}
-                            </li>
-                          </ul>
+                            </span>
+                          </div>
                         )
                       )
                     ) : (
-                      <ul>
-                        <li>No Required qualification</li>
-                      </ul>
+                      <div>
+                        <span>No Required qualification</span>
+                      </div>
                     )}
                   </div>
 
                   <div className="line-vr"></div>
 
                   <div className="program-modal__list">
-                    <h4>Student Qualification</h4>
+                    <div className="fw-600 mb-1">Student Qualification</div>
                     {applyEligibility?.studentQualifications?.length > 0 ? (
                       applyEligibility?.studentQualifications?.map(
                         (item, index) => (
-                          <ul key={index}>
-                            <li>
+                          <div key={index}>
+                            <span>
                               {item?.isEligible === true ? (
                                 <IoCheckmark
                                   fill="green"
@@ -297,15 +299,15 @@ const ApplyModal = ({
                                 />
                               )}
                               {item}
-                            </li>
-                          </ul>
+                            </span>
+                          </div>
                         )
                       )
                     ) : (
-                      <ul>
+                      <div>
                         {" "}
-                        <li>No Required qualification</li>{" "}
-                      </ul>
+                        <span>No Required qualification</span>{" "}
+                      </div>
                     )}
                   </div>
                 </div>
