@@ -200,7 +200,7 @@ const ApplyModal = ({
                       {selectedIntakeDeadLine ? (
                         <strong>{selectedIntakeDeadLine}</strong>
                       ) : (
-                        <strong>Not Selected</strong>
+                        <strong>Not Found</strong>
                       )}
                     </div>
                   </div>
