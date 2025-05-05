@@ -899,8 +899,8 @@
 /* apply modal end */
 
 /* Responsive */
-@media (max-width: 768px) {
-  .results-toolbar {
+@media (min-width: 1200px) {
+  .results-toolbar.sticky {
     width: calc(100% - 200px);
   }
 }
