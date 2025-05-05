@@ -13,6 +13,7 @@ import {
   countryInfo,
   currency,
   deliveryMethods,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
@@ -34,10 +35,12 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import TuitionFee from "./TuitionFee";
 
 const ApplyCardVar = ({
   data,
   studentName,
+  applicationTypeSelected,
   setSubjectId,
   handleFavourite,
   handleSubmit,
@@ -206,11 +209,22 @@ const ApplyCardVar = ({
                         <li className="d-flex justify-content-between">
                           <span>
                             <MoneyIcon />
-                            <span className="ml-1 fw-500">Tuition Fee</span>
+                            <span className="ml-1 fw-500">
+                              Tuition Fee{" "}
+                              {item?.durationTypeId > 0 && (
+                                <>
+                                  ({durationInfo(item?.durationTypeId)?.name})
+                                </>
+                              )}
+                            </span>
                           </span>
                           <span className="fw-600">
-                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee}
+                            <TuitionFee
+                              applicationTypeSelected={applicationTypeSelected}
+                              item={item}
+                            />
+                            {/* {currency(item.firstYearTutionFeeCurrencyId)}{" "}
+                            {item.firstYearTutionFee} */}
                           </span>
                         </li>
                         <li className="d-flex justify-content-between">
