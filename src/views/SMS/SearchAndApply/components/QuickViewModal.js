@@ -2,15 +2,11 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { CiBag1, CiTimer } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { SlCalender } from "react-icons/sl";
-import { VscFeedback } from "react-icons/vsc";
 import { useHistory } from "react-router-dom";
-import { Modal, ModalBody } from "reactstrap";
+import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
@@ -30,6 +26,14 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
+import {
+  CalenderIcon,
+  DeliverPatternIcon,
+  DeliveryScheduleIcon,
+  DepositIcon,
+  StudyModeIcon,
+  TimerIcon,
+} from "./icons";
 
 const QuickViewModal = ({
   open,
@@ -61,7 +65,7 @@ const QuickViewModal = ({
           <span className="fs-20px fw-600 text-515151">Quick view</span>
           <CloseBtn action={onClose} />
         </div>
-        <ModalBody className="p-4 modal-overflow">
+        <ModalBody className="p-30px modal-overflow">
           <Row className="quickview-header">
             <Col md={12} lg={7}>
               <h2 className="quickview-title mb-3">
@@ -130,6 +134,7 @@ const QuickViewModal = ({
                   placement="top"
                   overlayClassName="custom-tooltip"
                   disabled={quickViewData?.canApply}
+                  color="white"
                 >
                   <span className="inline-block">
                     <button
@@ -233,8 +238,10 @@ const QuickViewModal = ({
               </div>
               <div className="mt-3">
                 <div className="my-4 d-flex">
-                  <div className="fs-14px d-flex">
-                    <CiTimer size={20} className="mr-2" />
+                  <div className="fs-14px d-flex align-items-center">
+                    <span className="mr-2">
+                      <TimerIcon />
+                    </span>
                     <span className="mr-3">Duration</span>
                   </div>
                   <div className="d-flex flex-wrap">
@@ -250,8 +257,10 @@ const QuickViewModal = ({
 
                 <div className="mt-2">
                   <div className="my-4 d-flex">
-                    <div className="fs-14px d-flex">
-                      <SlCalender size={20} className="mr-2" />
+                    <div className="fs-14px d-flex align-items-center">
+                      <span className="mr-2">
+                        <CalenderIcon />
+                      </span>
                       <span className="mr-3">Intake</span>
                     </div>
                     <div className="d-flex flex-wrap">
@@ -449,7 +458,9 @@ const QuickViewModal = ({
           <Row className="quickview-footer">
             <div className="footer-tag">
               <div className="mb-2 fw-500">
-                <VscFeedback size={20} className="mr-2" />
+                <span className="mr-1">
+                  <DeliverPatternIcon />
+                </span>
                 <span>Delivery Pattern</span>
               </div>
               <div className="footer-tag__content">
@@ -471,7 +482,9 @@ const QuickViewModal = ({
             </div>
             <div className="footer-tag">
               <div className="mb-2 fw-500">
-                <FaPeopleGroup size={20} className="mr-2" />
+                <span className="mr-1">
+                  <StudyModeIcon />
+                </span>
                 Study Mode{" "}
               </div>
               <div className="footer-tag__content">
@@ -493,7 +506,9 @@ const QuickViewModal = ({
             </div>
             <div className="footer-tag">
               <div className="mb-2 fw-500">
-                <CiTimer size={20} className="mr-2" />
+                <span className="mr-1">
+                  <DeliveryScheduleIcon />
+                </span>
                 Delivery Schedule{" "}
               </div>
               <div className="footer-tag__content">
@@ -515,7 +530,9 @@ const QuickViewModal = ({
             </div>
             <div className="footer-tag">
               <div className="mb-2 fw-500">
-                <CiBag1 size={20} className="mr-2" />
+                <span className="mr-1">
+                  <DepositIcon />
+                </span>
                 Deposit{" "}
               </div>
               <div className="footer-tag__content">
@@ -528,15 +545,15 @@ const QuickViewModal = ({
               </div>
             </div>
           </Row>
-          <Row className="view-more-container">
-            <button
-              className="view-more-btn"
-              onClick={() => handleCourseDetails(quickViewData?.subjectId)}
-            >
-              View course profile
-            </button>
-          </Row>
         </ModalBody>
+        <ModalFooter className="view-more-container">
+          <button
+            className="view-more-btn"
+            onClick={() => handleCourseDetails(quickViewData?.subjectId)}
+          >
+            View course profile
+          </button>
+        </ModalFooter>
         <ApplyModal
           open={openApplyModal}
           onClose={() => setOpenApplyModal(false)}
