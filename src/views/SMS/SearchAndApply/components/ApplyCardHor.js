@@ -37,10 +37,12 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import TuitionFee from "./TuitionFee";
 
 const ApplyCardHor = ({
   data,
   studentName,
+  applicationTypeSelected,
   setSubjectId,
   handleFavourite,
   handleSubmit,
@@ -399,9 +401,11 @@ const ApplyCardHor = ({
                         Tuition Fee
                       </span>
                       <p className="card-price">
-                        {currency(item.firstYearTutionFeeCurrencyId)}{" "}
                         <span className="fw-600">
-                          {item.firstYearTutionFee}
+                          <TuitionFee
+                            applicationTypeSelected={applicationTypeSelected}
+                            item={item}
+                          />
                         </span>
                       </p>
                     </div>
@@ -413,8 +417,10 @@ const ApplyCardHor = ({
                         Deposit
                       </span>
                       <p className="card-price">
-                        {currency(item.depositFeeCurrencyId)}{" "}
-                        <span className="fw-600">{item.depositFee}</span>
+                        <span className="fw-600">
+                          {currency(item.depositFeeCurrencyId)}{" "}
+                          {item.depositFee}
+                        </span>
                       </p>
                     </div>
                     <div className="mr-4">
@@ -425,8 +431,8 @@ const ApplyCardHor = ({
                         Application fee
                       </span>
                       <p className="card-price">
-                        {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                         <span className="fw-600">
+                          {currency(item.avarageApplicationFeeCurrencyId)}{" "}
                           {item.avarageApplicationFee}
                         </span>
                       </p>

@@ -17,7 +17,7 @@ const SearchPaginations = ({
   totalData,
 }) => {
   let initialPage = Math.ceil(totalData / dataPerPage);
-  const list = [24, 48, 72, 96, 240, 480];
+  const list = [12, 24, 48, 72, 96, 240, 480];
   console.log(totalData);
   const [pageList, setPageList] = useState(initialPage);
   const [first, setFirst] = useState(1);

@@ -16,6 +16,7 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import { optionLabelToName } from "../../../constants/hooks";
 
 function SearchAndApply() {
   const { addToast } = useToasts();
@@ -26,13 +27,14 @@ function SearchAndApply() {
   const [mobileCard, setMobileCard] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataPerPage, setDataPerPage] = useState(15);
+  const [dataPerPage, setDataPerPage] = useState(12);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
 
   // list
   const [applicationTypelist, setApplicationTypelist] = useState([]);
   const [applicationType, setApplicationType] = useState([]);
+  const [applicationTypeSelected, setApplicationTypeSelected] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
   const [courseDurationsList, setCourseDurationsList] = useState([]);
@@ -66,15 +68,8 @@ function SearchAndApply() {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
-  // const [applyEligibility, setApplyEligibility] = useState({});
-  // const [quickViewData, setQuickViewData] = useState({});
-  // const [openApplyModal, setOpenApplyModal] = useState(false);
   const referenceId = localStorage.getItem("referenceId");
-  // const [eligibility, setEligibility] = useState({});
-  // const [open, setOpen] = useState(false);
-  const [subjectId, setSubjectId] = React.useState(0);
-  // const [universityId, setUniversityId] = React.useState(0);
-  // const [confirmLoading, setConfirmLoading] = useState(false);
+  const [subjectId, setSubjectId] = useState(0);
 
   useEffect(() => {
     if (!isTyping) {
@@ -140,9 +135,18 @@ function SearchAndApply() {
   useEffect(() => {
     get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
       setApplicationTypelist(res);
+      setApplicationTypeIds([]);
       setLoans([]);
     });
   }, [studentId]);
+
+  useEffect(() => {
+    const listData =
+      applicationType.length > 0
+        ? optionLabelToName(applicationType)
+        : applicationTypelist;
+    setApplicationTypeSelected(listData);
+  }, [applicationType, applicationTypelist]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -337,6 +341,7 @@ function SearchAndApply() {
             <ApplyCardVar
               data={data?.items}
               studentName={studentName}
+              applicationTypeSelected={applicationTypeSelected}
               handleSubmit={handleSubmit}
               handleFavourite={handleFavourite}
               setSubjectId={setSubjectId}
@@ -348,6 +353,7 @@ function SearchAndApply() {
               <ApplyCardVar
                 data={data?.items}
                 studentName={studentName}
+                applicationTypeSelected={applicationTypeSelected}
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
@@ -356,6 +362,7 @@ function SearchAndApply() {
               <ApplyCardHor
                 data={data?.items}
                 studentName={studentName}
+                applicationTypeSelected={applicationTypeSelected}
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
@@ -423,6 +430,7 @@ function SearchAndApply() {
           applicationTypelist={applicationTypelist}
           applicationType={applicationType}
           setApplicationType={setApplicationType}
+          applicationTypeSelected={applicationTypeSelected}
           intakeList={intakeList}
           setIntakeList={setIntakeList}
           studyLevelList={studyLevelList}

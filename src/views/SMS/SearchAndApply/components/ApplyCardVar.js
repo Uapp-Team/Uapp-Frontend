@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -36,10 +35,12 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import TuitionFee from "./TuitionFee";
 
 const ApplyCardVar = ({
   data,
   studentName,
+  applicationTypeSelected,
   setSubjectId,
   handleFavourite,
   handleSubmit,
@@ -213,8 +214,12 @@ const ApplyCardVar = ({
                             </span>
                           </span>
                           <span className="fw-600">
-                            {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee}
+                            <TuitionFee
+                              applicationTypeSelected={applicationTypeSelected}
+                              item={item}
+                            />
+                            {/* {currency(item.firstYearTutionFeeCurrencyId)}{" "}
+                            {item.firstYearTutionFee} */}
                           </span>
                         </li>
                         <li className="d-flex justify-content-between">
