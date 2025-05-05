@@ -356,6 +356,33 @@ export function ArrowLeftRightIcon() {
   );
 }
 
+export function ArrowRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M20 12H4"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M15.0001 17C15.0001 17 20 13.3176 20 12C20 10.6824 15 7 15 7"
+        stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ShareIcon() {
   return (
     <svg

@@ -20,7 +20,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
-import { CalenderIcon, TimerIcon } from "./icons";
+import { ArrowRightIcon, CalenderIcon, TimerIcon } from "./icons";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -267,39 +267,40 @@ const ApplyModal = ({
                       </ul>
                     )}
                   </div>
-                  <div>
-                    <div>
-                      <h4>Student Qualification</h4>
-                      {applyEligibility?.studentQualifications?.length > 0 ? (
-                        applyEligibility?.studentQualifications?.map(
-                          (item, index) => (
-                            <ul key={index}>
-                              <li>
-                                {item?.isEligible === true ? (
-                                  <IoCheckmark
-                                    fill="green"
-                                    color="green"
-                                    className="mr-2"
-                                  />
-                                ) : (
-                                  <RxCross1
-                                    fill="red"
-                                    color="red"
-                                    className="mr-2"
-                                  />
-                                )}
-                                {item}
-                              </li>
-                            </ul>
-                          )
+
+                  <div className="line-vr"></div>
+
+                  <div className="program-modal__list">
+                    <h4>Student Qualification</h4>
+                    {applyEligibility?.studentQualifications?.length > 0 ? (
+                      applyEligibility?.studentQualifications?.map(
+                        (item, index) => (
+                          <ul key={index}>
+                            <li>
+                              {item?.isEligible === true ? (
+                                <IoCheckmark
+                                  fill="green"
+                                  color="green"
+                                  className="mr-2"
+                                />
+                              ) : (
+                                <RxCross1
+                                  fill="red"
+                                  color="red"
+                                  className="mr-2"
+                                />
+                              )}
+                              {item}
+                            </li>
+                          </ul>
                         )
-                      ) : (
-                        <ul>
-                          {" "}
-                          <li>No Required qualification</li>{" "}
-                        </ul>
-                      )}
-                    </div>
+                      )
+                    ) : (
+                      <ul>
+                        {" "}
+                        <li>No Required qualification</li>{" "}
+                      </ul>
+                    )}
                   </div>
                 </div>
               )}
@@ -512,7 +513,9 @@ const ApplyModal = ({
                 {isLoading ? (
                   <Spin indicator={antIcon} size="small" />
                 ) : (
-                  "Apply →"
+                  <span className="fw-600">
+                    Apply <ArrowRightIcon />
+                  </span>
                 )}
               </button>
             </div>
