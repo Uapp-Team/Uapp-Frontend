@@ -1,11 +1,9 @@
-import "./../custombrackpoint.css";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { Col, Row } from "reactstrap";
 import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -19,6 +17,7 @@ import {
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
+import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import OverflowHeightText from "./OverflowHeightText";
@@ -88,9 +87,14 @@ const ApplyCardVar = ({
                   <span className="tbc">
                     TBC
                     <Tooltip
-                      title={<span>To Be Confirm</span>}
+                      title={
+                        <div className="custom-tooltip-content">
+                          <span className="tooltip-method">To Be Confirm</span>
+                        </div>
+                      }
                       placement="top"
                       overlayClassName="custom-tooltip"
+                      color="white"
                     >
                       <InfoCircleOutlined
                         style={{
@@ -254,22 +258,20 @@ const ApplyCardVar = ({
                                     <Tooltip
                                       title={
                                         <div className="custom-tooltip-content">
-                                          <div className="tooltip-header">
-                                            Others
-                                          </div>
-                                          <ul className="tooltip-method">
-                                            {otherDurations.map(
-                                              (method, index) => (
-                                                <li key={index}>
+                                          {otherDurations.map(
+                                            (method, index) => (
+                                              <div className="tooltip-method">
+                                                <span key={index}>
                                                   {method.name}
-                                                </li>
-                                              )
-                                            )}
-                                          </ul>
+                                                </span>
+                                              </div>
+                                            )
+                                          )}
                                         </div>
                                       }
                                       placement="top"
                                       overlayClassName="custom-tooltip"
+                                      color="white"
                                     >
                                       <InfoCircleOutlined
                                         style={{
@@ -320,18 +322,18 @@ const ApplyCardVar = ({
                                     <Tooltip
                                       title={
                                         <div className="custom-tooltip-content">
-                                          <div className="tooltip-header">
-                                            Others
-                                          </div>
-                                          <ul className="tooltip-method">
-                                            {others.map((method, index) => (
-                                              <li key={index}>{method.name}</li>
-                                            ))}
-                                          </ul>
+                                          {others.map((method, index) => (
+                                            <div className="tooltip-method">
+                                              <span key={index}>
+                                                {method.name}
+                                              </span>
+                                            </div>
+                                          ))}
                                         </div>
                                       }
                                       placement="top"
                                       overlayClassName="custom-tooltip"
+                                      color="white"
                                     >
                                       <InfoCircleOutlined
                                         style={{
@@ -439,6 +441,7 @@ const ApplyCardVar = ({
                         placement="top"
                         overlayClassName="custom-tooltip"
                         disabled={item?.canApply}
+                        color="white"
                       >
                         <span className="register-btn-vertical-top">
                           <button
@@ -477,6 +480,7 @@ const ApplyCardVar = ({
                         placement="top"
                         overlayClassName="custom-tooltip"
                         disabled={item?.canApply}
+                        color="white"
                       >
                         <span className="register-btn-vertical-top">
                           <button
