@@ -1,11 +1,9 @@
 import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
-import { SlCalender } from "react-icons/sl";
 import { Col, Modal, ModalBody } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
@@ -22,6 +20,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
+import { CalenderIcon, TimerIcon } from "./icons";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -203,7 +202,9 @@ const ApplyModal = ({
                   </div>
                 )}
                 <div className="program-modal__duration">
-                  <CiTimer className="mr-2" />
+                  <span className="mr-2">
+                    <TimerIcon />
+                  </span>
                   <span className="mr-2 fw-600">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
@@ -307,7 +308,9 @@ const ApplyModal = ({
             {/* Dropdown & Selects */}
             <div className="program-modal__intake my-3">
               <div className="fs-14px d-flex">
-                <SlCalender className="mr-2 mt-1" />
+                <span className="mr-1">
+                  <CalenderIcon />
+                </span>
                 <p>Intake</p>
               </div>
               <div className="d-flex flex-wrap justify-centent-between align-item-center">
