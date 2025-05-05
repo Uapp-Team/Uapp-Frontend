@@ -21,7 +21,10 @@
   position: fixed;
   top: 50%;
   color: black;
-  border-radius: 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(127, 127, 127, 0.08);
+  background: #fff;
+  padding: 8px;
 }
 
 /* search box */

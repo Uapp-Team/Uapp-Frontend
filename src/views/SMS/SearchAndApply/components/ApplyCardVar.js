@@ -223,8 +223,6 @@ const ApplyCardVar = ({
                               applicationTypeSelected={applicationTypeSelected}
                               item={item}
                             />
-                            {/* {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee} */}
                           </span>
                         </li>
                         <li className="d-flex justify-content-between">
