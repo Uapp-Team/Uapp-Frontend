@@ -157,7 +157,7 @@ const AddUniversitySubjectIntake = () => {
     e.preventDefault();
     const subdata = new FormData(e.target);
     subdata.append(`campusIds`, checked);
-    subdata.append(`classStartDate`, startDate);
+    startDate && subdata.append(`classStartDate`, startDate);
 
     // for (let value of subdata) {
     // }

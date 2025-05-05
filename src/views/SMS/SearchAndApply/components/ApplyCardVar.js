@@ -15,6 +15,7 @@ import {
   countryInfo,
   currency,
   deliveryMethods,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
@@ -202,7 +203,14 @@ const ApplyCardVar = ({
                         <li className="d-flex justify-content-between">
                           <span>
                             <MoneyIcon />
-                            <span className="ml-1 fw-500">Tuition Fee</span>
+                            <span className="ml-1 fw-500">
+                              Tuition Fee{" "}
+                              {item?.durationTypeId > 0 && (
+                                <>
+                                  ({durationInfo(item?.durationTypeId)?.name})
+                                </>
+                              )}
+                            </span>
                           </span>
                           <span className="fw-600">
                             {currency(item.firstYearTutionFeeCurrencyId)}{" "}
