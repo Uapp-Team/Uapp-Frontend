@@ -169,12 +169,12 @@ const SearchFilter = ({
         ref={divRef}
         className="right-side-modal overflowY"
         style={{
-          width: isSearch ? "315px" : "25px",
+          width: isSearch ? "315px" : "32px",
           transition: "width 1s",
           background: isSearch
             ? "white"
-            : "linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, #FFF 100%)",
-          padding: isSearch ? "16px" : "2px",
+            : "linear-gradient(90deg, rgba(242, 242, 242, 0.00) 0%, rgba(4, 93, 94, 0.20) 100%)",
+          padding: isSearch ? "16px" : "1px",
         }}
       >
         {isSearch ? (

@@ -223,8 +223,6 @@ const ApplyCardVar = ({
                               applicationTypeSelected={applicationTypeSelected}
                               item={item}
                             />
-                            {/* {currency(item.firstYearTutionFeeCurrencyId)}{" "}
-                            {item.firstYearTutionFee} */}
                           </span>
                         </li>
                         <li className="d-flex justify-content-between">
@@ -533,6 +531,7 @@ const ApplyCardVar = ({
         open={open}
         index={index}
         onClose={() => setOpen(false)}
+        applicationTypeSelected={applicationTypeSelected}
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleFavourite={handleFavourite}
