@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
-import { Col, Modal, ModalBody } from "reactstrap";
+import { Col, Modal, ModalBody, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
@@ -241,8 +241,8 @@ const ApplyModal = ({
                 </div>
               </div>
               {programCard && (
-                <div className="program-modal__card">
-                  <div className="program-modal__list">
+                <Row className="program-modal__card">
+                  <Col className="program-modal__list">
                     <div className="fw-600 mb-1">Admission Requirements</div>
                     {applyEligibility?.admissionRequirements?.length > 0 ? (
                       applyEligibility?.admissionRequirements?.map(
@@ -274,11 +274,11 @@ const ApplyModal = ({
                         <span>No Required qualification</span>
                       </div>
                     )}
-                  </div>
+                  </Col>
 
                   <div className="line-vr"></div>
 
-                  <div className="program-modal__list">
+                  <Col className="program-modal__list">
                     <div className="fw-600 mb-1">Student Qualification</div>
                     {applyEligibility?.studentQualifications?.length > 0 ? (
                       applyEligibility?.studentQualifications?.map(
@@ -309,8 +309,8 @@ const ApplyModal = ({
                         <span>No Required qualification</span>{" "}
                       </div>
                     )}
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               )}
             </div>
 
