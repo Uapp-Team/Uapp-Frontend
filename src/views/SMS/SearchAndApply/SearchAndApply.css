@@ -915,6 +915,15 @@ input[type="radio"] {
   accent-color: #045d5e; /* Modern browsers support this for styling radio buttons */
 }
 
+input[type="checkbox"]:checked {
+  background-color: #045d5e; /* Set the fill color */
+  border-color: #045d5e; /* Optional: Match the border color */
+}
+
+input[type="checkbox"] {
+  accent-color: #045d5e; /* Modern browsers support this for styling radio buttons */
+}
+
 /* apply modal end */
 
 /* Responsive */
