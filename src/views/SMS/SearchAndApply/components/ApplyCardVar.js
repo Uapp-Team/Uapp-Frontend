@@ -531,6 +531,7 @@ const ApplyCardVar = ({
         open={open}
         index={index}
         onClose={() => setOpen(false)}
+        applicationTypeSelected={applicationTypeSelected}
         quickViewData={quickViewData}
         eligibility={eligibility}
         handleFavourite={handleFavourite}

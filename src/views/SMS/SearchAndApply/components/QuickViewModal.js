@@ -39,6 +39,7 @@ const QuickViewModal = ({
   open,
   index,
   onClose,
+  applicationTypeSelected,
   quickViewData,
   eligibility,
   handleFavourite,
@@ -52,6 +53,16 @@ const QuickViewModal = ({
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
+
+  const checkHome = applicationTypeSelected?.filter(
+    (item) => item?.name === "Home/UK"
+  );
+  const checkEu = applicationTypeSelected?.filter(
+    (item) => item?.name === "EU/EEA"
+  );
+  const checkInt = applicationTypeSelected?.filter(
+    (item) => item?.name === "International"
+  );
 
   return (
     <>
@@ -357,27 +368,35 @@ const QuickViewModal = ({
                 <div>
                   <span className="info-title">Tuition Fees</span>
                   <div>
-                    <div className="d-flex justify-content-between">
-                      <span className="mr-3"> Home/UK: </span>
-                      <span>
-                        {currency(quickViewData.localTutionFeeCurrencyId)}
-                        {quickViewData?.localTutionFee}
-                      </span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span className="mr-3">EU/EEU: </span>
-                      <span>
-                        {currency(quickViewData.eU_TutionFeeCurrencyId)}
-                        {quickViewData?.eU_TutionFee}
-                      </span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span className="mr-3">International: </span>
-                      <span>
-                        {currency(quickViewData.internationalTutionCurrencyId)}
-                        {quickViewData?.internationalTutionFee}
-                      </span>
-                    </div>
+                    {checkHome?.length === 1 && (
+                      <Row>
+                        <Col xs={7}> Home/UK </Col>
+                        <Col xs={5}>
+                          {currency(quickViewData.localTutionFeeCurrencyId)}
+                          {quickViewData?.localTutionFee}
+                        </Col>
+                      </Row>
+                    )}
+                    {checkEu?.length === 1 && (
+                      <Row>
+                        <Col xs={7}> EU/EEU</Col>
+                        <Col xs={5}>
+                          {currency(quickViewData.eU_TutionFeeCurrencyId)}
+                          {quickViewData?.eU_TutionFee}
+                        </Col>
+                      </Row>
+                    )}
+                    {checkInt?.length === 1 && (
+                      <Row>
+                        <Col xs={7}> International </Col>
+                        <Col xs={5}>
+                          {currency(
+                            quickViewData.internationalTutionCurrencyId
+                          )}
+                          {quickViewData?.internationalTutionFee}
+                        </Col>
+                      </Row>
+                    )}
                   </div>
                 </div>
               </div>
