@@ -193,19 +193,25 @@ const ApplyModal = ({
               <div className="program-modal__info">
                 <div className="program-modal__deadline">
                   <strong>Application deadline </strong>
-                  {quickViewData?.applicationDeadLine}
+                  {selectedIntake !== "Select Intake"
+                    ? quickViewData?.applicationDeadLine
+                    : "Not Selected"}
                 </div>
+                <div className="line-vr"></div>
                 {quickViewData?.classStartDate && (
-                  <div className="program-modal__start">
-                    Course Start Date{" "}
-                    <strong>{quickViewData?.classStartDate}</strong>
-                  </div>
+                  <>
+                    <div className="program-modal__start">
+                      Course Start Date{" "}
+                      <strong>{quickViewData?.classStartDate}</strong>
+                    </div>
+                    <div className="line-vr"></div>
+                  </>
                 )}
                 <div className="program-modal__duration">
                   <span className="mr-2">
                     <TimerIcon />
                   </span>
-                  <span className="mr-2 fw-600">Duration </span>
+                  <span className="mr-2">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
@@ -309,10 +315,10 @@ const ApplyModal = ({
             {/* Dropdown & Selects */}
             <div className="program-modal__intake my-3">
               <div className="fs-14px d-flex">
-                <span className="mr-1">
+                <div className="mr-1">
                   <CalenderIcon />
-                </span>
-                <p>Intake</p>
+                </div>
+                <p>Select Intake</p>
               </div>
               <div className="d-flex flex-wrap justify-centent-between align-item-center">
                 {quickViewData?.intakes?.map((intake) => (
