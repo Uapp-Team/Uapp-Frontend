@@ -280,6 +280,7 @@ const ApplyCardVar = ({
                                       <Tooltip
                                         title={
                                           <div className="custom-tooltip-content">
+                                            {fullTimeDuration.name}
                                             {otherDurations.map(
                                               (method, index) => (
                                                 <div className="tooltip-method">
@@ -298,9 +299,12 @@ const ApplyCardVar = ({
                                         <MoreOutlined
                                           rotate={90}
                                           style={{
-                                            fontSize: "24px",
+                                            fontSize: "14px",
                                             color: "#5D5D5D",
                                             cursor: "pointer",
+                                            border: "1px solid gray",
+                                            borderRadius: "999px",
+                                            padding: "1px",
                                             marginLeft: "4px",
                                           }}
                                         />
@@ -349,6 +353,7 @@ const ApplyCardVar = ({
                                       <Tooltip
                                         title={
                                           <div className="custom-tooltip-content">
+                                            {fullTime.name}
                                             {others.map((method, index) => (
                                               <div className="tooltip-method">
                                                 <span key={index}>
@@ -365,9 +370,12 @@ const ApplyCardVar = ({
                                         <MoreOutlined
                                           rotate={90}
                                           style={{
-                                            fontSize: "24px",
+                                            fontSize: "14px",
                                             color: "#5D5D5D",
                                             cursor: "pointer",
+                                            border: "1px solid gray",
+                                            borderRadius: "999px",
+                                            padding: "1px",
                                             marginLeft: "4px",
                                           }}
                                         />

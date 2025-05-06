@@ -30,6 +30,7 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
             <Tooltip
               title={
                 <div className="custom-tooltip-content">
+                  {first.name}
                   {others.map((item) => (
                     <div className="tooltip-method">
                       <span key={item.id}>{item.name}</span>
@@ -44,9 +45,12 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
               <MoreOutlined
                 rotate={90}
                 style={{
-                  fontSize: "24px",
+                  fontSize: "14px",
                   color: "#5D5D5D",
                   cursor: "pointer",
+                  border: "1px solid gray",
+                  borderRadius: "999px",
+                  padding: "1px",
                 }}
               />
             </Tooltip>
@@ -69,6 +73,7 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
           <Tooltip
             title={
               <div className="custom-tooltip-content">
+                {first}
                 {others.map((val, idx) => (
                   <div className="tooltip-method">
                     <span key={idx}>{val}</span>
@@ -83,9 +88,12 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
             <MoreOutlined
               rotate={90}
               style={{
-                fontSize: "24px",
+                fontSize: "14px",
                 color: "#5D5D5D",
                 cursor: "pointer",
+                border: "1px solid gray",
+                borderRadius: "999px",
+                padding: "1px",
               }}
             />
           </Tooltip>
