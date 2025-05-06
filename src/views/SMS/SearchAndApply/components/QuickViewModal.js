@@ -82,6 +82,15 @@ const QuickViewModal = ({
     }
   }, [open]);
 
+  useEffect(() => {
+    if (open && quickViewData?.intakes?.length === 1) {
+      setSelectedIntakeId(quickViewData?.intakes[0]?.id);
+      setSelectedIntake(quickViewData?.intakes[0]?.name);
+      setSelectedIntakeDeadLine(quickViewData?.intakes[0]?.applicationDeadLine);
+      setSelectedClassStartDate(quickViewData?.intakes[0]?.classStartDate);
+    }
+  }, [open, quickViewData]);
+
   return (
     <>
       <Modal isOpen={open} toggle={onClose} className="modal-lg">
@@ -289,7 +298,7 @@ const QuickViewModal = ({
               <div className="quickview-left__deadline">
                 <span className="fs-14px">
                   Course Start Date{" "}
-                  {selectedClassStartDate ? (
+                  {selectedIntakeId ? (
                     <span className="fw-600">{selectedClassStartDate}</span>
                   ) : (
                     <strong>Please select intake first</strong>
