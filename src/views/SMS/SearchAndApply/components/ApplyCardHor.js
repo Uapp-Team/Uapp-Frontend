@@ -249,7 +249,7 @@ const ApplyCardHor = ({
                           <TimerIcon />
                           <span className="ml-1 fw-500">Duration</span>
                         </span>
-                        <span className="mt-2">
+                        <span>
                           {(() => {
                             const fullTimeDuration = item.durations.find(
                               (duration) => Number(duration.studyMode) === 2
@@ -273,13 +273,16 @@ const ApplyCardHor = ({
                                       title={
                                         <div className="custom-tooltip-content">
                                           <div className="tooltip-method">
-                                            {otherDurations.map(
-                                              (method, index) => (
-                                                <span key={index}>
-                                                  {method.name}
-                                                </span>
-                                              )
-                                            )}
+                                            <div>{fullTimeDuration.name}</div>
+                                            <div>
+                                              {otherDurations.map(
+                                                (method, index) => (
+                                                  <div key={index}>
+                                                    {method.name}
+                                                  </div>
+                                                )
+                                              )}
+                                            </div>
                                           </div>
                                         </div>
                                       }
@@ -290,9 +293,11 @@ const ApplyCardHor = ({
                                       <MoreOutlined
                                         rotate={90}
                                         style={{
-                                          fontSize: "24px",
+                                          fontSize: "14px",
                                           color: "#5D5D5D",
                                           cursor: "pointer",
+                                          border: "1px solid gray",
+                                          borderRadius: "999px",
                                           marginLeft: "4px",
                                         }}
                                       />
@@ -309,7 +314,7 @@ const ApplyCardHor = ({
                           <StudyModeIcon />
                           <span className="ml-1 fw-500">Study Mode</span>
                         </span>
-                        <span className="mt-1">
+                        <span>
                           {(() => {
                             const methods = item.durations
                               ?.map((duration) => {
@@ -342,6 +347,7 @@ const ApplyCardHor = ({
                                       title={
                                         <div className="custom-tooltip-content">
                                           <div className="tooltip-method">
+                                            {fullTime.name}
                                             {others.map((method, index) => (
                                               <div key={index}>
                                                 {method.name}
@@ -357,9 +363,11 @@ const ApplyCardHor = ({
                                       <MoreOutlined
                                         rotate={90}
                                         style={{
-                                          fontSize: "24px",
+                                          fontSize: "14px",
                                           color: "#5D5D5D",
                                           cursor: "pointer",
+                                          border: "1px solid gray",
+                                          borderRadius: "999px",
                                           marginLeft: "4px",
                                         }}
                                       />
