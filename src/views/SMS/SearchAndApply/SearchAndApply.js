@@ -77,7 +77,7 @@ function SearchAndApply() {
       applicationTypeIds.length > 0 && setApplicationTypeIds([]);
       loans.length > 0 && setLoans([]);
     });
-  }, [applicationTypeIds, loans, studentId]);
+  }, [studentId]);
 
   useEffect(() => {
     const listData =

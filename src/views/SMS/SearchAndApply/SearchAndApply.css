@@ -24,11 +24,11 @@
 .right-icon {
   position: fixed;
   top: 50%;
-  color: black;
   border-radius: 999px;
   border: 1px solid rgba(127, 127, 127, 0.08);
-  background: #fff;
-  padding: 8px;
+  background: #045d5e;
+  padding: 6px;
+  color: white;
 }
 
 /* search box */
@@ -396,7 +396,7 @@
 .quick-btn,
 .quick-btn-vertical,
 .apply-btn-vertical {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -429,7 +429,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  padding: 9px 16px;
+  padding: 9px;
 }
 .register-btn-vertical-top {
   display: grid;
@@ -715,7 +715,17 @@
   margin-right: 20px;
 }
 .apply-modal-details__title {
-  padding-right: 15px;
+  color: #515151;
+  font-family: Inter;
+  font-size: 18px;
+}
+
+.apply-modal-details__title_ans {
+  color: #515151;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
 }
 .apply-modal__title {
   font-size: 24px;
@@ -724,9 +734,9 @@
   text-align: center;
 }
 
-.program-modal__list {
+/* .program-modal__list {
   line-height: 2;
-}
+} */
 
 .apply-modal__label {
   font-size: 14px;
@@ -795,7 +805,6 @@
 .program-modal__requirements {
   margin-top: 16px;
   display: flex;
-  gap: 20px;
   flex-direction: column;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
@@ -876,7 +885,8 @@
 
 .program-modal__radio-group span {
   padding: 0 8px;
-  color: #a8a8a8;
+  font-size: 14px;
+  color: #5d5d5d;
 }
 .program-modal__confirmation {
   background-color: #f0fdf4;
