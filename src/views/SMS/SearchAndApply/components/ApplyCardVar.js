@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
@@ -23,6 +22,7 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import {
   ArrowLeftRightIcon,
+  BellIconDefault,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
@@ -112,7 +112,7 @@ const ApplyCardVar = ({
                 )}
                 <div className="card-header-vertical">
                   <span className="card-date">
-                    <img src={BellIcon} alt="" /> {item.maxApplicationDeadLine}
+                    <BellIconDefault /> {item.maxApplicationDeadLine}
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
