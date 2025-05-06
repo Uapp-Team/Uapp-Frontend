@@ -331,14 +331,11 @@ const ApplyCardHor = ({
                                   <Tooltip
                                     title={
                                       <div className="custom-tooltip-content">
-                                        <div className="tooltip-header">
-                                          Others
-                                        </div>
-                                        <ul className="tooltip-method">
+                                        <div className="tooltip-method">
                                           {others.map((method, index) => (
-                                            <li key={index}>{method.name}</li>
+                                            <div key={index}>{method.name}</div>
                                           ))}
-                                        </ul>
+                                        </div>
                                       </div>
                                     }
                                     placement="top"

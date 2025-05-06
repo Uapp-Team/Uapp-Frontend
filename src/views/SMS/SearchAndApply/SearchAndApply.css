@@ -227,6 +227,15 @@
   align-items: center;
   justify-content: center;
 }
+.tbc-quickview {
+  background-color: #c1c6c6;
+  color: #fff;
+  padding: 2px 8px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 999px;
+  margin-right: 4px;
+}
 .card-container-vertical {
   background: #ffffff;
   border: none;
@@ -505,6 +514,7 @@
 .tooltip-method {
   font-weight: 400;
   color: #5d5d5d;
+  line-height: 1.5;
 }
 
 /* quick view modal  */

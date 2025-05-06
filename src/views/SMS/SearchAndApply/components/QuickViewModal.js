@@ -3,7 +3,7 @@ import { Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaHeart } from "react-icons/fa";
-import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { LuArrowUpRight, LuHeart, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
@@ -28,6 +28,7 @@ import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
+  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -107,7 +108,7 @@ const QuickViewModal = ({
             >
               <div className="d-flex">
                 <div className="mr-2 icon-design">
-                  <LuSettings2 size={16} />
+                  <ArrowLeftRightIcon />
                 </div>
                 <div className="mr-2 icon-design">
                   <LuShare2 size={16} />
@@ -234,6 +235,30 @@ const QuickViewModal = ({
           <Row className="quickview-content">
             <Col xs={12} lg={7} className="quickview-left">
               <div className="tags my-3">
+                {quickViewData?.intakeStatusId === 3 && (
+                  <span className="tbc-quickview">
+                    TBC
+                    <Tooltip
+                      title={
+                        <div className="custom-tooltip-content">
+                          <span className="tooltip-method">To Be Confirm</span>
+                        </div>
+                      }
+                      placement="top"
+                      overlayClassName="custom-tooltip"
+                      color="white"
+                    >
+                      <InfoCircleOutlined
+                        style={{
+                          fontSize: "12px",
+                          color: "#fff",
+                          cursor: "pointer",
+                          marginLeft: "5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </span>
+                )}
                 {quickViewData?.isLoanAvailable && (
                   <span className="card-tag work-placement mr-1">
                     Loan Available
@@ -258,8 +283,7 @@ const QuickViewModal = ({
                   ) : (
                     <BellIconDefault />
                   )}
-                  Application Deadline{" "}
-                  <strong>{quickViewData?.maxApplicationDeadLine}</strong>
+                  Application Deadline <strong>{selectedIntakeDeadLine}</strong>
                 </span>
               </div>
               <div className="quickview-left__deadline">
@@ -497,69 +521,48 @@ const QuickViewModal = ({
                 </div>
               </div>
               {quickViewData?.isLoanAvailable && (
-                <div className="info-group">
-                  <img
-                    src={SaveMoney}
-                    alt=""
-                    className="h-24px w-24px mr-2 mt-1"
-                  />
-                  <div>
-                    <span className="info-title">Loan Available</span>
+                <>
+                  <div className="dashed-hr"></div>
+                  <div className="info-group">
+                    <img
+                      src={SaveMoney}
+                      alt=""
+                      className="h-24px w-24px mr-2 mt-1"
+                    />
                     <div>
-                      {subjectInfo?.isGovernmentLoan &&
-                        subjectInfo?.governmentLoanUrl && (
-                          <a
-                            href={`${subjectInfo.governmentLoanUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <span>Government Loan</span>
-                          </a>
-                        )}
-                    </div>
-                    <div>
-                      {subjectInfo?.isPrivateLoan &&
-                        subjectInfo?.privateLoanUrl && (
-                          <a
-                            href={subjectInfo.privateLoanUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Private Loan
-                          </a>
-                        )}
+                      <span className="info-title">Loan Available</span>
+                      <div>
+                        {subjectInfo?.isGovernmentLoan &&
+                          subjectInfo?.governmentLoanUrl && (
+                            <a
+                              href={`${subjectInfo.governmentLoanUrl}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <span>Government Loan</span>
+                            </a>
+                          )}
+                      </div>
+                      <div>
+                        {subjectInfo?.isPrivateLoan &&
+                          subjectInfo?.privateLoanUrl && (
+                            <a
+                              href={subjectInfo.privateLoanUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Private Loan
+                            </a>
+                          )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </Col>
           </Row>
 
           <Row className="quickview-footer">
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <DeliverPatternIcon />
-                </span>
-                <span>Delivery Pattern</span>
-              </div>
-              <div className="footer-tag__content">
-                <ul>
-                  {quickViewData?.deliveryMethods
-                    ?.split(",")
-                    .map((id) => {
-                      const method = deliveryMethods.find(
-                        (m) => m.id === parseInt(id.trim(), 10)
-                      );
-                      return method?.name;
-                    })
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                </ul>
-              </div>
-            </div>
             <div className="footer-tag">
               <div className="mb-2 fw-500">
                 <span className="mr-1">
@@ -584,6 +587,31 @@ const QuickViewModal = ({
                 </ul>
               </div>
             </div>
+            <div className="footer-tag">
+              <div className="mb-2 fw-500">
+                <span className="mr-1">
+                  <DeliverPatternIcon />
+                </span>
+                <span>Delivery Pattern</span>
+              </div>
+              <div className="footer-tag__content">
+                <ul>
+                  {quickViewData?.deliveryMethods
+                    ?.split(",")
+                    .map((id) => {
+                      const method = deliveryMethods.find(
+                        (m) => m.id === parseInt(id.trim(), 10)
+                      );
+                      return method?.name;
+                    })
+                    .filter(Boolean)
+                    .map((name, index) => (
+                      <li key={index}>{name}</li>
+                    ))}
+                </ul>
+              </div>
+            </div>
+
             <div className="footer-tag">
               <div className="mb-2 fw-500">
                 <span className="mr-1">
