@@ -30,6 +30,7 @@ import ButtonForFunction from "../../Components/ButtonForFunction";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
+import DMYPicker from "../../../../components/form/DMYPicker";
 
 const AddUniversitySubjectIntake = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -59,6 +60,8 @@ const AddUniversitySubjectIntake = () => {
 
   const [date, setDate] = useState();
   const [dateError, setDateError] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [startdateError, setstartDateError] = useState(false);
 
   useEffect(() => {
     get(`IntakeDD/Index`).then((res) => {
@@ -115,6 +118,14 @@ const AddUniversitySubjectIntake = () => {
     // handleSearch();
   };
 
+  const handleStartDate = (e) => {
+    if (e) {
+      setStartDate(e);
+      // } else {
+      //   setstartDateError("Class Start Date Required");
+    }
+  };
+
   const validateForm = () => {
     let isFormValid = true;
 
@@ -126,10 +137,14 @@ const AddUniversitySubjectIntake = () => {
       isFormValid = false;
       setStatusError(true);
     }
-    if (!date && statusValue === 1) {
+    if (!date && (statusValue === 1 || statusValue === 3)) {
       isFormValid = false;
       setDateError(true);
     }
+    // if (!startDate && statusValue === 1) {
+    //   isFormValid = false;
+    //   setstartDateError("Class Start Date Required");
+    // }
     if (checked?.length === 0) {
       isFormValid = false;
       setCheckedError(true);
@@ -141,9 +156,8 @@ const AddUniversitySubjectIntake = () => {
   const handleSubjectAssignInIntake = (e) => {
     e.preventDefault();
     const subdata = new FormData(e.target);
-    console.log(checked);
     subdata.append(`campusIds`, checked);
-    console.log(subdata);
+    startDate && subdata.append(`classStartDate`, startDate);
 
     // for (let value of subdata) {
     // }
@@ -162,9 +176,7 @@ const AddUniversitySubjectIntake = () => {
         subdata,
         config
       ).then((res) => {
-        // setButtonStatus5(false);
         setProgress5(false);
-        // setSubjectIds([]);
         setIntakeLabel("Select Intake");
         setIntakeValue(0);
         setStatusLabel("Select Status");
@@ -273,7 +285,7 @@ const AddUniversitySubjectIntake = () => {
                     />
                     <FormGroup>
                       <Row>
-                        <Col lg="4" md="4" sm="6" xs="12">
+                        <Col lg="4" md="4" sm="6" xs="12" className="mb-3">
                           <span>
                             <span className="text-danger">*</span> Intake
                           </span>
@@ -293,7 +305,7 @@ const AddUniversitySubjectIntake = () => {
                           ) : null}
                         </Col>
 
-                        <Col lg="4" md="4" sm="6" xs="12">
+                        <Col lg="4" md="4" sm="6" xs="12" className="mb-3">
                           <span>
                             <span className="text-danger">*</span> Status
                           </span>
@@ -313,9 +325,9 @@ const AddUniversitySubjectIntake = () => {
                             </span>
                           ) : null}
                         </Col>
-                        {statusValue === 1 && (
+                        {(statusValue === 1 || statusValue === 3) && (
                           <Col
-                            className="date-input"
+                            className="date-input mb-3"
                             lg="4"
                             md="4"
                             sm="6"
@@ -346,9 +358,19 @@ const AddUniversitySubjectIntake = () => {
                             ) : null}
                           </Col>
                         )}
+                        {statusValue === 1 && (
+                          <Col lg="4" md="4" sm="6" xs="12" className="mb-3">
+                            <DMYPicker
+                              label="Class Start Date"
+                              value={startDate}
+                              setValue={handleStartDate}
+                              error={startdateError}
+                              action={setstartDateError}
+                            />
+                          </Col>
+                        )}
                       </Row>
-                    </FormGroup>
-                    <FormGroup>
+
                       <Row>
                         <Col sm="12">
                           {subjectIds?.length > 1 && (
@@ -391,67 +413,6 @@ const AddUniversitySubjectIntake = () => {
                             </div>
                           </Col>
                         ))}
-
-                        {/* {subjectIds?.length > 1 ? (
-                          <>
-                            {subjectIds?.map((per) => (
-                              <Col
-                                xs="6"
-                                sm="4"
-                                md="3"
-                                lg="2"
-                                key={per.campusId}
-                              >
-                                <div className="form-check">
-                                  <input
-                                    className="form-check-input"
-                                    onChange={(e) => handleCheck(e)}
-                                    type="checkbox"
-                                    name=""
-                                    id={per?.campusId}
-                                    checked={
-                                      checked.includes(`${per?.campusId}`)
-                                        ? true
-                                        : false
-                                    }
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor=""
-                                  >
-                                    {per?.campusName}
-                                  </label>
-                                </div>
-                              </Col>
-                            ))}
-                          </>
-                        ) : (
-                          <Col
-                            xs="6"
-                            sm="4"
-                            md="3"
-                            lg="2"
-                            key={subjectIds[0]?.campusId}
-                          >
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                onChange={(e) => handleCheck(e)}
-                                type="checkbox"
-                                name=""
-                                id={subjectIds[0]?.campusId}
-                                checked={
-                                  checked.includes(`${subjectIds[0]?.campusId}`)
-                                    ? true
-                                    : false
-                                }
-                              />
-                              <label className="form-check-label" htmlFor="">
-                                {subjectIds[0]?.campusName}
-                              </label>
-                            </div>
-                          </Col>
-                        )} */}
                       </Row>
                       {subjectIds?.length > 0 ? (
                         <>
@@ -488,11 +449,12 @@ const AddUniversitySubjectIntake = () => {
                         <tr>
                           <th style={{ width: "20%" }}>Intake</th>
                           <th style={{ width: "20%" }}>Campus</th>
-                          <th style={{ width: "20%" }}>Status</th>
-                          <th style={{ width: "20%" }}>Deadline</th>
+                          <th style={{ width: "15%" }}>Status</th>
+                          <th style={{ width: "15%" }}>Deadline</th>
+                          <th style={{ width: "15%" }}>Class Start</th>
                           {permissions?.includes(
                             permissionList.Delete_Subjects
-                          ) && <th style={{ width: "20%" }}>Action</th>}
+                          ) && <th style={{ width: "15%" }}>Action</th>}
                         </tr>
                       </thead>
                     </Table>
@@ -505,7 +467,7 @@ const AddUniversitySubjectIntake = () => {
                             ) ? (
                               <td style={{ width: "20%" }}>{ls?.intakeName}</td>
                             ) : (
-                              <td style={{ width: "25%" }}>{ls?.intakeName}</td>
+                              <td style={{ width: "20%" }}>{ls?.intakeName}</td>
                             )}
                             <td>
                               <Table className="table-sm">
@@ -524,7 +486,7 @@ const AddUniversitySubjectIntake = () => {
                                         <td
                                           style={{
                                             border: "none",
-                                            width: "20%",
+                                            width: "15%",
                                           }}
                                         >
                                           {l?.intakeStatusName}
@@ -533,7 +495,7 @@ const AddUniversitySubjectIntake = () => {
                                         <td
                                           style={{
                                             border: "none",
-                                            width: "20%",
+                                            width: "15%",
                                           }}
                                         >
                                           {l?.intakeStatusName === "Open" && (
@@ -543,13 +505,24 @@ const AddUniversitySubjectIntake = () => {
                                           )}
                                         </td>
 
+                                        <td
+                                          style={{
+                                            border: "none",
+                                            width: "15%",
+                                          }}
+                                        >
+                                          {l?.intakeStatusName === "Open" && (
+                                            <span>{l?.classStartDate}</span>
+                                          )}
+                                        </td>
+
                                         {permissions?.includes(
                                           permissionList.Delete_Subjects
                                         ) && (
                                           <td
                                             style={{
                                               border: "none",
-                                              width: "20%",
+                                              width: "15%",
                                             }}
                                           >
                                             <ButtonForFunction

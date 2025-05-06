@@ -6,25 +6,56 @@ export const consultantTier = [
 ];
 
 export const studyMode = [
-  { id: 1, name: "Part Time" },
   { id: 2, name: "Full Time" },
+  { id: 1, name: "Part Time" },
   { id: 3, name: "Sandwich" },
 ];
 
+export const durationType = [
+  { id: 1, name: "Hour" },
+  { id: 2, name: "Day" },
+  { id: 3, name: "Week" },
+  { id: 4, name: "Month" },
+  { id: 5, name: "Year" },
+];
+
 export const deliveryMethods = [
-  { id: 1, name: "Online" },
   { id: 2, name: "On-Campus" },
+  { id: 1, name: "Online" },
   { id: 3, name: "Hybrid" },
 ];
 
 export const deliverySchedules = [
-  { id: 1, name: "Evening" },
-  { id: 2, name: "Evening Weekend" },
   { id: 3, name: "Standard" },
-  { id: 4, name: "Weekend" },
+  { id: 1, name: "Evening" },
   { id: 5, name: "Flexible" },
+  { id: 4, name: "Weekend" },
+  { id: 2, name: "Evening + Weekend" },
 ];
-export const loansAvailable = [
-  { id: 1, name: "Government Loan" },
-  { id: 2, name: "Private Loan" },
+
+export const countryList = [
+  { id: 1, name: "USA", currency: "$" },
+  { id: 2, name: "UK", currency: "£" },
+  { id: 3, name: "Canada", currency: "$" },
+  { id: 4, name: "Australia", currency: "$" },
+  { id: 5, name: "Germany", currency: "€" },
+  { id: 6, name: "UAE", currency: "AED" },
 ];
+
+export const durationInfo = (id) => {
+  const filter = durationType.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0] : null;
+  return result;
+};
+
+export const currency = (id) => {
+  const filter = countryList.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0].currency : "£";
+  return result;
+};
+
+export const countryInfo = (id) => {
+  const filter = countryList.filter((item) => item.id === id);
+  const result = filter.length > 0 ? filter[0] : null;
+  return result;
+};

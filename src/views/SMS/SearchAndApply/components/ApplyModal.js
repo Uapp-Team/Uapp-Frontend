@@ -1,10 +1,9 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { CiTimer } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
-import { SlCalender } from "react-icons/sl";
 import { Col, Modal, ModalBody, Row } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
@@ -14,12 +13,15 @@ import { Student } from "../../../../components/core/User";
 import Filter from "../../../../components/Dropdown/Filter";
 import { rootUrl } from "../../../../constants/constants";
 import {
+  currency,
   deliveryMethods,
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import CustomToolTip from "./CustomToolTip";
+import { ArrowRightIcon, CalenderIcon, TimerIcon } from "./icons";
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
   open,
@@ -30,7 +32,9 @@ const ApplyModal = ({
   handleSubmit,
 }) => {
   const current_user = JSON.parse(localStorage.getItem("current_user"));
-  const [programCard, setProgramCard] = useState(true);
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [programCard, setProgramCard] = useState(false);
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
     useState("Select Campus");
@@ -44,8 +48,11 @@ const ApplyModal = ({
     useState("");
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
+  const [selectedClassStartDate, setSelectedClassStartDate] = useState();
+  const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
 
   const isApplyDisabled = !(
+    isCheckboxChecked &&
     selectedIntakeId &&
     selectedCampusValue &&
     selectedDurationsValue &&
@@ -56,6 +63,27 @@ const ApplyModal = ({
 
   const handleHideProgramCard = () => {
     setProgramCard(!programCard);
+  };
+  const handleCheckboxChange = (e) => {
+    setIsCheckboxChecked(e.target.checked);
+  };
+
+  const handleApplyClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleSubmit(
+        selectedCampusValue,
+        selectedStudyModeId,
+        selectedDeliveryPatternId,
+        selectedDeliveryScheduleId,
+        selectedDurationsValue,
+        selectedIntakeId
+      );
+    } catch (error) {
+      console.error("Error during submission:", error);
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
 
   useEffect(() => {
@@ -103,23 +131,23 @@ const ApplyModal = ({
                 </div>
               </div>
               <div className="mt-4">
-                <Row className="apply-modal-details">
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Course
                   </Col>
                   <Col xs={8} md={10} className="fw-600">
                     {quickViewData?.subjectName}
                   </Col>
-                </Row>
-                <Row className="apply-modal-details">
+                </div>
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Student
                   </Col>
                   <Col xs={8} md={10}>
                     {Student() ? current_user?.displayName : studentName}
                   </Col>
-                </Row>
-                <Row className="apply-modal-details">
+                </div>
+                <div className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Intake{" "}
                     <InfoCircleOutlined
@@ -133,7 +161,7 @@ const ApplyModal = ({
                   <Col xs={8} md={10}>
                     {selectedIntake}
                   </Col>
-                </Row>
+                </div>
                 <div className="dashed-hr"></div>
               </div>
               <div className="apply-modal-study">
@@ -141,7 +169,8 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Tuition} alt="" />
                   <div className="fs-12px">Tution fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.localTutionFee}
+                    {currency(quickViewData.localTutionFeeCurrencyId)}
+                    {quickViewData?.localTutionFee}
                   </div>
                 </div>
                 {quickViewData?.scholarshipDetails && (
@@ -157,22 +186,41 @@ const ApplyModal = ({
                   <img className="h-24px w-24px " src={Application} alt="" />
                   <div className="fs-12px">Application fees</div>
                   <div className="fs-14px">
-                    £{quickViewData?.avarageApplicationFee}
+                    {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                    {quickViewData?.avarageApplicationFee}
                   </div>
                 </div>
               </div>
               <div className="dashed-hr"></div>
               <div className="program-modal__info">
                 <div className="program-modal__deadline">
-                  Application deadline{" "}
-                  <strong>{quickViewData?.applicationDeadLine}</strong>
+                  <div className="d-flex">
+                    <div className="mr-2">Application deadline </div>
+                    <div>
+                      {selectedIntakeDeadLine ? (
+                        <strong>{selectedIntakeDeadLine}</strong>
+                      ) : (
+                        <strong>Not Found</strong>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="program-modal__start">
-                  Course Start Date <strong>25 Mar 2025</strong>
-                </div>
+                <div className="line-vr"></div>
+                <div className="program-modal__start">Course Start Date </div>
+                {selectedClassStartDate ? (
+                  <>
+                    <strong>{selectedClassStartDate}</strong>
+                    <div className="line-vr"></div>
+                  </>
+                ) : (
+                  <strong>Not Yet Confirm</strong>
+                )}
+                <div className="line-vr"></div>
                 <div className="program-modal__duration">
-                  <CiTimer className="mr-2" />
-                  Duration{" "}
+                  <span className="mr-2">
+                    <TimerIcon />
+                  </span>
+                  <span className="mr-2">Duration </span>
                   <CustomToolTip
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
@@ -181,7 +229,7 @@ const ApplyModal = ({
               </div>
             </div>
 
-            <Row className="program-modal__requirements">
+            <div className="program-modal__requirements">
               <div className="px-4">
                 <div className="program-modal__eligibility">
                   <div className="program-modal__badge">You are eligible</div>
@@ -202,14 +250,50 @@ const ApplyModal = ({
                 </div>
               </div>
               {programCard && (
-                <div className="program-modal__card">
-                  <div className="program-modal__list">
-                    <h4>Admission Requirements</h4>
+                <Row className="program-modal__card">
+                  <Col className="program-modal__list">
+                    <div className="fw-600 mb-1">Admission Requirements</div>
                     {applyEligibility?.admissionRequirements?.length > 0 ? (
                       applyEligibility?.admissionRequirements?.map(
                         (item, index) => (
-                          <ul key={index}>
-                            <li>
+                          <div key={index}>
+                            <span>
+                              {item?.isEligible === true ? (
+                                <IoCheckmark
+                                  size={16}
+                                  fill="green"
+                                  color="green"
+                                  className="mr-2"
+                                />
+                              ) : (
+                                <RxCross1
+                                  size={16}
+                                  fill="red"
+                                  color="red"
+                                  className="mr-2"
+                                />
+                              )}
+                              {item?.details}
+                            </span>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <div>
+                        <span>No Required qualification</span>
+                      </div>
+                    )}
+                  </Col>
+
+                  <div className="line-vr"></div>
+
+                  <Col className="program-modal__list">
+                    <div className="fw-600 mb-1">Student Qualification</div>
+                    {applyEligibility?.studentQualifications?.length > 0 ? (
+                      applyEligibility?.studentQualifications?.map(
+                        (item, index) => (
+                          <div key={index}>
+                            <span>
                               {item?.isEligible === true ? (
                                 <IoCheckmark
                                   fill="green"
@@ -223,62 +307,31 @@ const ApplyModal = ({
                                   className="mr-2"
                                 />
                               )}
-                              {item?.details}
-                            </li>
-                          </ul>
+                              {item}
+                            </span>
+                          </div>
                         )
                       )
                     ) : (
-                      <ul>
-                        <li>No Required qualification</li>
-                      </ul>
+                      <div>
+                        {" "}
+                        <span>No Required qualification</span>{" "}
+                      </div>
                     )}
-                  </div>
-                  <div>
-                    <div>
-                      <h4>Student Qualification</h4>
-                      {applyEligibility?.studentQualifications?.length > 0 ? (
-                        applyEligibility?.studentQualifications?.map(
-                          (item, index) => (
-                            <ul key={index}>
-                              <li>
-                                {item?.isEligible === true ? (
-                                  <IoCheckmark
-                                    fill="green"
-                                    color="green"
-                                    className="mr-2"
-                                  />
-                                ) : (
-                                  <RxCross1
-                                    fill="red"
-                                    color="red"
-                                    className="mr-2"
-                                  />
-                                )}
-                                {item}
-                              </li>
-                            </ul>
-                          )
-                        )
-                      ) : (
-                        <ul>
-                          {" "}
-                          <li>No Required qualification</li>{" "}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               )}
-            </Row>
+            </div>
 
             {/* Dropdown & Selects */}
-            <Row className="program-modal__intake my-3">
+            <div className="program-modal__intake my-3">
               <div className="fs-14px d-flex">
-                <SlCalender className="mr-2 mt-1" />
-                <p>Intake</p>
+                <div className="mr-1">
+                  <CalenderIcon />
+                </div>
+                <p>Select Intake</p>
               </div>
-              <div className="d-flex flex-wrap">
+              <div className="d-flex flex-wrap justify-centent-between align-item-center">
                 {quickViewData?.intakes?.map((intake) => (
                   <span
                     key={intake.id}
@@ -288,17 +341,39 @@ const ApplyModal = ({
                         : ""
                     }`}
                     onClick={() => {
-                      setSelectedIntake(intake.name);
-                      setSelectedIntakeId(intake.id);
+                      if (selectedIntakeId === intake.id) {
+                        // Deselect the intake if it's already selected
+                        setSelectedIntake("Select Intake");
+                        setSelectedIntakeId("");
+                        setSelectedIntakeDeadLine("");
+                        setSelectedClassStartDate("");
+                      } else {
+                        // Select the intake
+                        setSelectedIntake(intake.name);
+                        setSelectedIntakeId(intake.id);
+                        setSelectedIntakeDeadLine(intake.applicationDeadLine);
+                        setSelectedClassStartDate(intake.classStartDate);
+                      }
                     }}
                   >
-                    {intake.name}
+                    <span>{intake.name}</span>
+                    <span>
+                      {selectedIntakeId === intake.id && (
+                        <RxCross1
+                          className="ml-2 pointer"
+                          onClick={() => {
+                            setSelectedIntake("Select Intake");
+                            setSelectedIntakeId("");
+                          }}
+                        />
+                      )}
+                    </span>
                   </span>
                 ))}
               </div>
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label htmlFor="campus">Campus City</label>
               <Filter
                 data={quickViewData?.campuses?.map((campus) => ({
@@ -314,54 +389,9 @@ const ApplyModal = ({
                   setSelectedCampusValue(value);
                 }}
               />
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
-              <label htmlFor="duration">Course Durations</label>
-              <Filter
-                data={quickViewData?.durations?.map((duration) => ({
-                  name: duration.name,
-                  id: duration.id,
-                }))}
-                label={selectedDurationsLabel}
-                setLabel={setSelectedDurationLabel}
-                value={selectedDurationsValue}
-                setValue={setSelectedDurationValue}
-                onChange={(label, value) => {
-                  setSelectedDurationLabel(label);
-                  setSelectedDurationValue(value);
-                }}
-              />
-            </Row>
-
-            <Row className="program-modal__form-group">
-              <label>Study Mode</label>
-              <div className="program-modal__radio-group">
-                {quickViewData?.studyModes
-                  ?.split(",")
-                  .map((id) => {
-                    const method = studyMode.find(
-                      (m) => m.id === parseInt(id.trim(), 10)
-                    );
-                    return method;
-                  })
-                  .filter(Boolean)
-                  .map((method, index) => (
-                    <label key={index}>
-                      <input
-                        type="radio"
-                        name="mode"
-                        value={method.id}
-                        checked={selectedStudyModeId === method.id.toString()}
-                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
-                      />
-                      <span>{method.name}</span>
-                    </label>
-                  ))}
-              </div>
-            </Row>
-
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
               <label>Delivery Pattern</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliveryMethods
@@ -390,9 +420,58 @@ const ApplyModal = ({
                     </label>
                   ))}
               </div>
-            </Row>
+            </div>
 
-            <Row className="program-modal__form-group">
+            <div className="program-modal__form-group">
+              <label>Study Mode</label>
+              <div className="program-modal__radio-group">
+                {Array.from(
+                  new Set(
+                    (quickViewData?.durations || []).map((duration) =>
+                      Number(duration.studyMode)
+                    )
+                  )
+                )
+                  .map((id) => studyMode.find((mode) => mode.id === id))
+                  .filter(Boolean)
+                  .map((method) => (
+                    <label key={method.id}>
+                      <input
+                        type="radio"
+                        name="mode"
+                        value={method.id}
+                        checked={selectedStudyModeId === method.id.toString()}
+                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
+                      />
+                      <span>{method.name}</span>
+                    </label>
+                  ))}
+              </div>
+            </div>
+
+            <div className="program-modal__form-group">
+              <label htmlFor="duration">Course Durations</label>
+              <Filter
+                data={(quickViewData?.durations || [])
+                  .filter(
+                    (duration) => duration.studyMode === selectedStudyModeId
+                  )
+                  .map((duration) => ({
+                    name: duration.name,
+                    id: duration.id,
+                  }))}
+                label={selectedDurationsLabel}
+                setLabel={setSelectedDurationLabel}
+                value={selectedDurationsValue}
+                setValue={setSelectedDurationValue}
+                onChange={(label, value) => {
+                  setSelectedDurationLabel(label);
+                  setSelectedDurationValue(value);
+                }}
+              />
+            </div>
+
+            <div className="program-modal__form-group">
               <label>Delivery Schedule</label>
               <div className="program-modal__radio-group">
                 {quickViewData?.deliverySchedules
@@ -421,42 +500,46 @@ const ApplyModal = ({
                     </label>
                   ))}
               </div>
-            </Row>
+            </div>
 
             {/* Footer */}
-            <Row className="program-modal__confirmation mb-3">
+            <div className="program-modal__confirmation mb-3">
               <label>
-                <input type="checkbox" className="mr-2" />
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={isCheckboxChecked}
+                  onChange={handleCheckboxChange}
+                />
                 Are you sure you want to apply this program?
               </label>
-            </Row>
-            <Row className="program-condition">
+            </div>
+            <div className="program-condition">
               <p className="pl-2">
                 You can apply maximum 3 applications at a time for free.
               </p>
-            </Row>
+            </div>
 
-            <Row className="program-modal__footer">
+            <div className="program-modal__footer">
               <button className="program-modal__cancel" onClick={onClose}>
                 Cancel
               </button>
               <button
-                onClick={() =>
-                  handleSubmit(
-                    selectedCampusValue,
-                    selectedStudyModeId,
-                    selectedDeliveryPatternId,
-                    selectedDeliveryScheduleId,
-                    selectedDurationsValue,
-                    selectedIntakeId
-                  )
-                }
-                className={`apply-btn ${isApplyDisabled ? "disabled" : ""}`}
-                disabled={isApplyDisabled}
+                onClick={handleApplyClick}
+                className={`apply-btn ${
+                  isApplyDisabled || isLoading ? "disabled" : ""
+                }`}
+                disabled={isApplyDisabled || isLoading}
               >
-                Apply →
+                {isLoading ? (
+                  <Spin indicator={antIcon} size="small" />
+                ) : (
+                  <span className="fw-600">
+                    Apply <ArrowRightIcon />
+                  </span>
+                )}
               </button>
-            </Row>
+            </div>
           </div>
         </ModalBody>
       </Modal>

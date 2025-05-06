@@ -54,6 +54,13 @@ const EligibilityForm = ({
   setCvFile,
   cvError,
   setCvError,
+  FileList7,
+  setFileList7,
+  bacFile,
+  setBacFile,
+  handleChange7,
+  bacError,
+  setBacError,
   progress,
   buttonStatus,
   visa,
@@ -308,6 +315,26 @@ const EligibilityForm = ({
                   setRemove={setCvFile}
                   error={cvError}
                   setError={setCvError}
+                />
+              </div>
+            </Col>
+          </FormGroup>
+          <FormGroup row className="has-icon-left position-relative">
+            <Col md="4" className="text-md-right">
+              {/* <span className="text-danger">*</span> */}
+              <span>BAC Certificate : </span>
+            </Col>
+
+            <Col md="8">
+              <div>
+                <UploadFile
+                  file={FileList7}
+                  id="bacCertificateFile"
+                  setFile={setFileList7}
+                  defaultValue={bacFile}
+                  setRemove={setBacFile}
+                  // error={bacError}
+                  // setError={setBacError}
                 />
               </div>
             </Col>

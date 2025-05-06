@@ -1,5 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineClose,
+  AiOutlineLeft,
+} from "react-icons/ai";
 import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
@@ -31,6 +35,8 @@ const SearchFilter = ({
   setTuitionFee,
   applicationTypeIds,
   setApplicationTypeIds,
+  loans,
+  setLoans,
   courseDurations,
   setCourseDurations,
   isScholarships,
@@ -53,7 +59,10 @@ const SearchFilter = ({
   setCountryName,
   cityName,
   setCityName,
+  applicationTypelist,
   applicationType,
+  setApplicationType,
+  applicationTypeSelected,
   intakeList,
   setIntakeList,
   studyLevelList,
@@ -63,29 +72,71 @@ const SearchFilter = ({
 }) => {
   const divRef = useRef(null);
 
-  useEffect(() => {
-    if (intakeList?.length > 0) {
-      const list = [];
-      intakeList.map((item) => list.push(item.value));
-      setIntakeId(list);
-    }
-  }, [setIntakeId, intakeList]);
+  const [loanList, setLoanList] = useState([]);
+  const isMobileDevice =
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
 
   useEffect(() => {
-    if (studyLevelList?.length > 0) {
-      const studyLevelListId = [];
-      studyLevelList.map((item) => studyLevelListId.push(item.value));
-      setStudyLevelId(studyLevelListId);
-    }
-  }, [setStudyLevelId, studyLevelList]);
+    const checkHome = applicationTypeSelected.filter(
+      (item) => item.name === "Home/UK"
+    );
+    const checkEu = applicationTypeSelected.filter(
+      (item) => item.name === "EU/EEA"
+    );
+    const checkInt = applicationTypeSelected.filter(
+      (item) => item.name === "International"
+    );
+    const checkLoan =
+      checkHome?.length === 1 || checkEu?.length === 1
+        ? [
+            { id: 1, name: "Government Loan" },
+            { id: 2, name: "Private Loan" },
+          ]
+        : checkHome?.length === 0 &&
+          checkEu?.length === 0 &&
+          checkInt?.length === 1
+        ? [{ id: 2, name: "Private Loan" }]
+        : null;
+
+    setLoanList(checkLoan);
+    loans.length > 0 && setLoans([]);
+    // loans.length > 0 && setLoans([]);
+    // loans.length !== loanList.length && setLoans([]);
+  }, [applicationTypeSelected]);
+
+  // useEffect(() => {
+  //   const filteredArray = loanList.filter((item) => loans.includes(item.id));
+  //   console.log(filteredArray);
+  //   filteredArray.length > 0 ? setLoans(filteredArray) : setLoans([]);
+  // }, [loanList, loans, setLoans]);
 
   useEffect(() => {
-    if (courseDurationsList?.length > 0) {
-      const list = [];
-      courseDurationsList.map((item) => list.push(item.value));
-      setCourseDurations(list);
-    }
-  }, [setCourseDurations, courseDurationsList]);
+    const list = [];
+    intakeList.map((item) => list.push(item.value));
+    isMobileDevice && intakeId.length !== list.length && setIntakeId(list);
+  }, [setIntakeId, intakeList, intakeId, isMobileDevice]);
+
+  useEffect(() => {
+    const list = [];
+    applicationType.map((item) => list.push(item.value));
+    applicationTypeIds.length !== list.length && setApplicationTypeIds(list);
+  }, [applicationType, applicationTypeIds, setApplicationTypeIds]);
+
+  useEffect(() => {
+    const list = [];
+    courseDurationsList.map((item) => list.push(item.value));
+    courseDurations.length !== list.length && setCourseDurations(list);
+  }, [setCourseDurations, courseDurationsList, courseDurations]);
+
+  useEffect(() => {
+    const list = [];
+    studyLevelList.map((item) => list.push(item.value));
+    isMobileDevice &&
+      studyLevelId.length !== list.length &&
+      setStudyLevelId(list);
+  }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
   useEffect(() => {
     const studyLevelListQuery = [];
@@ -97,24 +148,6 @@ const SearchFilter = ({
     const converted = noSpaces.replace(/,/g, "&");
     setStudyLevelQuery(converted);
   }, [setStudyLevelQuery, studyLevelId]);
-
-  const handleChange = (e) => {
-    let id = parseInt(e.target.value);
-    let val = e.target.checked;
-
-    if (applicationTypeIds) {
-      if (val === true) {
-        if (!applicationTypeIds.includes(id)) {
-          setApplicationTypeIds([...applicationTypeIds, id]);
-        }
-      } else {
-        const newD = id;
-        const res = applicationTypeIds.filter((c) => c !== newD);
-
-        setApplicationTypeIds(res);
-      }
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -136,9 +169,12 @@ const SearchFilter = ({
         ref={divRef}
         className="right-side-modal overflowY"
         style={{
-          width: isSearch ? "315px" : "30px",
+          width: isSearch ? "315px" : "32px",
           transition: "width 1s",
-          backgroundColor: isSearch ? "white" : "#B3B3B3",
+          background: isSearch
+            ? "white"
+            : "linear-gradient(90deg, rgba(242, 242, 242, 0.00) 0%, rgba(4, 93, 94, 0.20) 100%)",
+          padding: isSearch ? "16px" : "1px",
         }}
       >
         {isSearch ? (
@@ -154,7 +190,7 @@ const SearchFilter = ({
               />
             </div>
 
-            <div className="mb-3 d-block d-md-none">
+            <div className="mb-3">
               <p className="mb-1 fw-500">Country</p>
               <DefaultDropdown
                 label={countryName}
@@ -207,6 +243,8 @@ const SearchFilter = ({
                 setLabel={setCityName}
                 value={cityId}
                 setValue={setCityId}
+                selectAll={true}
+                all="All Campus"
                 url={`UniversityCityDD/Index/${countryId}`}
               />
             </div>
@@ -216,8 +254,11 @@ const SearchFilter = ({
                 <Col xs={5}>
                   <Input
                     type="number"
-                    onChange={(e) => setTuitionFee(e.target.value)}
+                    onChange={(e) =>
+                      setTuitionFee(e.target.value > 0 ? e.target.value : 0)
+                    }
                     value={tuitionFee}
+                    min={0}
                   />
                 </Col>
                 <Col xs={7}>
@@ -232,26 +273,28 @@ const SearchFilter = ({
                 </Col>
               </Row>
             </div>
-            <div className="border rounded p-16px mb-3 bg-white">
+            <div className="mb-3">
               <p className="mb-1 fw-500">Application Type </p>
 
-              {applicationType.map((item, i) => (
-                <p key={i} className="mb-0">
-                  <input
-                    id={`AppType-${i}`}
-                    value={item.id}
-                    type="checkbox"
-                    onClick={handleChange}
-                    checked={applicationTypeIds?.includes(item.id)}
-                  />
-                  <label
-                    htmlFor={`AppType-${i}`}
-                    className="fs-14px mx-2 pointer"
-                  >
-                    {item.name}
-                  </label>
-                </p>
-              ))}
+              <MultiSelect
+                placeholder="Select Application Type"
+                dataList={applicationTypelist}
+                value={applicationType}
+                setValue={setApplicationType}
+              />
+            </div>
+
+            <div className="border rounded p-16px mb-3 bg-white">
+              <p className="mb-1 fw-500">Loan available </p>
+
+              <CheckBoxByObj
+                register={() => {}}
+                name="loans"
+                list={loanList}
+                defaultValue={loans}
+                action={setLoans}
+                className="mb-0"
+              />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
               <p className="mb-1 fw-500">Course durations </p>
@@ -303,6 +346,7 @@ const SearchFilter = ({
                 defaultValue={studyModes}
                 action={setStudyModes}
                 className="mb-0"
+                colSize="col-6"
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -314,6 +358,7 @@ const SearchFilter = ({
                 defaultValue={deliveryPattern}
                 action={setDeliveryPattern}
                 className="mb-0"
+                colSize={["col-12", "col-6", "col-6"]}
               />
             </div>
             <div className="border rounded p-16px mb-3 bg-white">
@@ -325,13 +370,14 @@ const SearchFilter = ({
                 defaultValue={deliverySchedule}
                 action={setDeliverySchedule}
                 className="mb-0"
+                colSize={["col-6", "col-6", "col-6", "col-6", "col-12"]}
               />
             </div>
           </>
         ) : (
           <>
-            <div className="right-icon pointer">
-              <AiOutlineArrowLeft size={20} />
+            <div className="pointer h-100">
+              <AiOutlineLeft size={30} className="right-icon" />
             </div>
           </>
         )}

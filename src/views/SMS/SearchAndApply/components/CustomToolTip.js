@@ -24,24 +24,24 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
         className="delivery-methods-wrapper"
         style={{ display: "flex", alignItems: "center", gap: "4px" }}
       >
-        <span className="delivery-methods">{first.name}</span>
+        <span className="delivery-methods fw-600">{first.name}</span>
         {others.length > 0 && (
           <Tooltip
             title={
               <div className="custom-tooltip-content">
-                <div className="tooltip-header">{title}</div>
-                <ul className="tooltip-method">
-                  {others.map((item) => (
-                    <li key={item.id}>{item.name}</li>
-                  ))}
-                </ul>
+                {others.map((item) => (
+                  <div className="tooltip-method">
+                    <span key={item.id}>{item.name}</span>
+                  </div>
+                ))}
               </div>
             }
             placement="top"
             overlayClassName="custom-tooltip"
+            color="white"
           >
             <InfoCircleOutlined
-              style={{ fontSize: "14px", color: "#1890ff", cursor: "pointer" }}
+              style={{ fontSize: "14px", color: "#5D5D5D", cursor: "pointer" }}
             />
           </Tooltip>
         )}
@@ -56,25 +56,29 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
       className="delivery-methods-wrapper"
       style={{ display: "flex", alignItems: "center", gap: "4px" }}
     >
-      <span className="delivery-methods">{first}</span>
+      <span className="delivery-methods fw-600">{first}</span>
 
       {others.length > 0 && (
         <Tooltip
           title={
             <div className="custom-tooltip-content">
-              <div className="tooltip-header">{title}</div>
-              <ul className="tooltip-method">
-                {others.map((val, idx) => (
-                  <li key={idx}>{val}</li>
-                ))}
-              </ul>
+              {others.map((val, idx) => (
+                <div className="tooltip-method">
+                  <span key={idx}>{val}</span>
+                </div>
+              ))}
             </div>
           }
           placement="top"
           overlayClassName="custom-tooltip"
+          color="white"
         >
           <InfoCircleOutlined
-            style={{ fontSize: "14px", color: "#1890ff", cursor: "pointer" }}
+            style={{
+              fontSize: "14px",
+              color: "#5D5D5D",
+              cursor: "pointer",
+            }}
           />
         </Tooltip>
       )}

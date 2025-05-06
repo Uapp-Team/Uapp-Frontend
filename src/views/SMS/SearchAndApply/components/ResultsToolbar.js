@@ -1,9 +1,10 @@
 import React from "react";
 import { FaExchangeAlt, FaHeart, FaSlidersH } from "react-icons/fa";
-import courseIcon from "../../../../assets/icon/course.svg";
-import "../SearchAndApply.css";
 import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
+import courseIcon from "../../../../assets/icon/course.svg";
 import { Student } from "../../../../components/core/User";
+import "../SearchAndApply.css";
+import { ArrowLeftRightIcon } from "./icons";
 
 const ResultsToolbar = ({
   data,
@@ -17,9 +18,10 @@ const ResultsToolbar = ({
   return (
     <>
       <div className="d-none d-md-block">
-        <div className="d-flex justify-content-between align-items-center flex-wrap pt-2 px-2 pb-0">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between align-items-center flex-wrap mt-16px pb-0">
           {/* Left Section */}
-          <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2">
+          <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-16px">
             {/* <span className="tag mr-2">0 Result</span> */}
             <span className="tag tag-active mr-2">
               <img
@@ -40,7 +42,7 @@ const ResultsToolbar = ({
           </div>
 
           {/* Right Section */}
-          <div className="d-flex align-items-center flex-wrap mb-2">
+          <div className="d-flex align-items-center flex-wrap mb-16px">
             {Student() && (
               <button
                 className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
@@ -51,17 +53,19 @@ const ResultsToolbar = ({
               </button>
             )}
             <button className="action-btn mr-2">
-              <FaExchangeAlt className="mx-2" /> Compare{" "}
-              <span className="count">0</span>
+              <span className="mr-2">
+                <ArrowLeftRightIcon />
+              </span>{" "}
+              Compare <span className="count">0</span>
             </button>
             <button
               className="action-btn mr-2 d-none d-md-block"
               onClick={() => setMobileCard(!mobileCard)}
             >
               {mobileCard ? (
-                <TfiViewGrid className="my-1" />
-              ) : (
                 <TfiViewList className="my-1" />
+              ) : (
+                <TfiViewGrid className="my-1" />
               )}
             </button>
             <button
@@ -72,10 +76,11 @@ const ResultsToolbar = ({
             </button>
           </div>
         </div>
+        <hr className="margin0" />
       </div>
       <div className="d-block d-md-none">
-        <hr className="mt-0" />
-        <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap  mb-2 pl-25px pr-25px">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between gap-2 align-items-center flex-wrap mt-16px mb-16px">
           {/* <span className="tag mr-2">0 Result</span> */}
           <span className="tag tag-active mr-2">
             <img src={courseIcon} alt="course" className="w-20px h-20px mr-2" />{" "}
@@ -90,8 +95,8 @@ const ResultsToolbar = ({
             0 University
           </span> */}
         </div>
-        <hr />
-        <div className="d-flex justify-content-between pl-25px pr-25px">
+        <hr className="margin0" />
+        <div className="d-flex justify-content-between mt-16px mb-16px">
           {Student() && (
             <button
               className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
@@ -107,7 +112,7 @@ const ResultsToolbar = ({
             <span className="count">0</span>
           </button>
         </div>
-        <hr className="mb-0" />
+        <hr className="margin0" />
       </div>
     </>
   );
