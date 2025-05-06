@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Input } from "reactstrap";
-import "../SearchAndApply.css"; // custom CSS
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
+import "../SearchAndApply.css"; // custom CSS
 
 const SearchBox = ({
   name,
@@ -91,7 +91,7 @@ const SearchBox = ({
               value={countryId}
               setValue={setCountryId}
               selectAll={true}
-              all="All Country"
+              all="All Destination"
               url="UniversityCountry/Index"
             />
           </span>
