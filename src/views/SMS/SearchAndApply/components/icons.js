@@ -465,3 +465,65 @@ export function DeliveryScheduleIcon() {
     </svg>
   );
 }
+
+export function BellIconRed() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      fill="none"
+    >
+      <path
+        d="M6.99996 10.4951H13C12.5581 10.4951 12.243 10.3195 11.9306 10.0071C11.6181 9.69465 11.4426 9.2709 11.4426 8.82905V4.9417C11.4426 3.76343 10.9745 2.63342 10.1414 1.80025C9.30824 0.967091 8.17823 0.499023 6.99996 0.499023C5.82168 0.499023 4.69167 0.967091 3.85851 1.80025C2.65876 3 2.5 4.5 2.5 5"
+        stroke="#FF0000"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6 13.501H8"
+        stroke="#FF0000"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M2.5573 5.49902V8.82905C2.5573 9.2709 2.38178 9.69465 2.06934 10.0071C1.75691 10.3195 1.44185 10.4951 1 10.4951H7.5"
+        stroke="#FF0000"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function BellIconDefault() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <path
+        d="M6.99996 10.4951H13C12.5581 10.4951 12.243 10.3195 11.9306 10.0071C11.6181 9.69465 11.4426 9.2709 11.4426 8.82905V4.9417C11.4426 3.76343 10.9745 2.63342 10.1414 1.80025C9.30824 0.967091 8.17823 0.499023 6.99996 0.499023C5.82168 0.499023 4.69167 0.967091 3.85851 1.80025C2.65876 3 2.5 4.5 2.5 5"
+        stroke="black"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6 13.501H8"
+        stroke="black"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M2.5573 5.49902V8.82905C2.5573 9.2709 2.38178 9.69465 2.06934 10.0071C1.75691 10.3195 1.44185 10.4951 1 10.4951H7.5"
+        stroke="black"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}

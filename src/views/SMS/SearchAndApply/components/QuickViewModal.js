@@ -1,14 +1,14 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaHeart } from "react-icons/fa";
-import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
+import { LuArrowUpRight, LuHeart, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
@@ -24,9 +24,13 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
+  ArrowLeftRightIcon,
+  BellIconDefault,
+  BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DeliveryScheduleIcon,
@@ -50,6 +54,11 @@ const QuickViewModal = ({
 }) => {
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
+  const [selectedIntakeId, setSelectedIntakeId] = useState("");
+  const [selectedIntake, setSelectedIntake] = useState("Select Intake");
+  const [selectedClassStartDate, setSelectedClassStartDate] = useState();
+  const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
+  console.log(quickViewData, "quickviewData");
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
@@ -63,6 +72,15 @@ const QuickViewModal = ({
   const checkInt = applicationTypeSelected?.filter(
     (item) => item?.name === "International"
   );
+
+  useEffect(() => {
+    if (open) {
+      setSelectedIntake("Select Intake");
+      setSelectedIntakeId("");
+      setSelectedIntakeDeadLine("");
+      setSelectedClassStartDate();
+    }
+  }, [open]);
 
   return (
     <>
@@ -90,7 +108,7 @@ const QuickViewModal = ({
             >
               <div className="d-flex">
                 <div className="mr-2 icon-design">
-                  <LuSettings2 size={16} />
+                  <ArrowLeftRightIcon />
                 </div>
                 <div className="mr-2 icon-design">
                   <LuShare2 size={16} />
@@ -217,6 +235,30 @@ const QuickViewModal = ({
           <Row className="quickview-content">
             <Col xs={12} lg={7} className="quickview-left">
               <div className="tags my-3">
+                {quickViewData?.intakeStatusId === 3 && (
+                  <span className="tbc-quickview">
+                    TBC
+                    <Tooltip
+                      title={
+                        <div className="custom-tooltip-content">
+                          <span className="tooltip-method">To Be Confirm</span>
+                        </div>
+                      }
+                      placement="top"
+                      overlayClassName="custom-tooltip"
+                      color="white"
+                    >
+                      <InfoCircleOutlined
+                        style={{
+                          fontSize: "12px",
+                          color: "#fff",
+                          cursor: "pointer",
+                          marginLeft: "5px",
+                        }}
+                      />
+                    </Tooltip>
+                  </span>
+                )}
                 {quickViewData?.isLoanAvailable && (
                   <span className="card-tag work-placement mr-1">
                     Loan Available
@@ -235,53 +277,96 @@ const QuickViewModal = ({
               </div>
               <div className="quickview-left__deadline my-2">
                 <span className="mr-3">
-                  <img src={BellIcon} alt="" />{" "}
-                  {quickViewData?.applicationDeadLine}
+                  {quickViewData?.maxApplicationDeadLine &&
+                  isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
+                    <BellIconRed />
+                  ) : (
+                    <BellIconDefault />
+                  )}
+                  Application Deadline <strong>{selectedIntakeDeadLine}</strong>
                 </span>
-                {quickViewData?.classStartDate && (
-                  <p className="fs-14px">
-                    Course Start Date{" "}
-                    <span className="fw-600">
-                      {quickViewData?.classStartDate}
-                    </span>
-                  </p>
-                )}
               </div>
-              <div className="mt-3">
-                <div className="my-4 d-flex">
-                  <div className="fs-14px d-flex align-items-center">
-                    <span className="mr-2">
+              <div className="quickview-left__deadline">
+                <span className="fs-14px">
+                  Course Start Date{" "}
+                  {selectedClassStartDate ? (
+                    <span className="fw-600">{selectedClassStartDate}</span>
+                  ) : (
+                    <strong>Please select intake first</strong>
+                  )}
+                </span>
+              </div>
+              <div>
+                <div className="my-3 d-flex">
+                  <div className="fs-14px d-flex">
+                    <span className="mt-2">
                       <TimerIcon />
                     </span>
-                    <span className="mr-3">Duration</span>
+                    <span className="duration-label">Duration</span>
                   </div>
                   <div className="d-flex flex-wrap">
-                    {quickViewData?.durationNames
-                      ?.split(",")
-                      .map((duration, index) => (
-                        <span className="filter-button" key={index}>
-                          {duration}
-                        </span>
-                      ))}
+                    {quickViewData?.durations?.map((duration, index) => (
+                      <span className="quickview-duration" key={index}>
+                        {duration?.name} {"-"}{" "}
+                        {
+                          studyMode.find(
+                            (mode) => mode.id == duration?.studyMode
+                          )?.name
+                        }{" "}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
                 <div className="mt-2">
                   <div className="my-4 d-flex">
-                    <div className="fs-14px d-flex align-items-center">
-                      <span className="mr-2">
+                    <div className="fs-14px d-flex">
+                      <span className="mt-2">
                         <CalenderIcon />
                       </span>
-                      <span className="mr-3">Intake</span>
+                      <span className="duration-label mr-3">Intake</span>
                     </div>
                     <div className="d-flex flex-wrap">
-                      {quickViewData?.intakeNames
-                        ?.split(",")
-                        .map((intake, index) => (
-                          <span className="filter-button" key={index}>
-                            {intake}
+                      {quickViewData?.intakes?.map((intake) => (
+                        <span
+                          key={intake.id}
+                          className={`filter-button mr-2 mb-2 pointer ${
+                            selectedIntakeId === intake.id
+                              ? "filter-button-clicked"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            if (selectedIntakeId === intake.id) {
+                              // Deselect the intake if it's already selected
+                              setSelectedIntake("Select Intake");
+                              setSelectedIntakeId("");
+                              setSelectedIntakeDeadLine("");
+                              setSelectedClassStartDate();
+                            } else {
+                              // Select the intake
+                              setSelectedIntake(intake.name);
+                              setSelectedIntakeId(intake.id);
+                              setSelectedIntakeDeadLine(
+                                intake.applicationDeadLine
+                              );
+                              setSelectedClassStartDate(intake.classStartDate);
+                            }
+                          }}
+                        >
+                          <span>{intake.name}</span>
+                          <span>
+                            {selectedIntakeId === intake.id && (
+                              <RxCross1
+                                className="ml-2 pointer"
+                                onClick={() => {
+                                  setSelectedIntake("Select Intake");
+                                  setSelectedIntakeId("");
+                                }}
+                              />
+                            )}
                           </span>
-                        ))}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -320,7 +405,7 @@ const QuickViewModal = ({
             <Col xs={12} lg={5} className="quickview-right">
               <div className="d-flex align-items-center my-2">
                 <img
-                  className="h-48px w-48px mr-2"
+                  className="h-48px w-48px mr-2 rounded"
                   src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
@@ -436,69 +521,48 @@ const QuickViewModal = ({
                 </div>
               </div>
               {quickViewData?.isLoanAvailable && (
-                <div className="info-group">
-                  <img
-                    src={SaveMoney}
-                    alt=""
-                    className="h-24px w-24px mr-2 mt-1"
-                  />
-                  <div>
-                    <span className="info-title">Loan Available</span>
+                <>
+                  <div className="dashed-hr"></div>
+                  <div className="info-group">
+                    <img
+                      src={SaveMoney}
+                      alt=""
+                      className="h-24px w-24px mr-2 mt-1"
+                    />
                     <div>
-                      {subjectInfo?.isGovernmentLoan &&
-                        subjectInfo?.governmentLoanUrl && (
-                          <a
-                            href={`${subjectInfo.governmentLoanUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <span>Government Loan</span>
-                          </a>
-                        )}
-                    </div>
-                    <div>
-                      {subjectInfo?.isPrivateLoan &&
-                        subjectInfo?.privateLoanUrl && (
-                          <a
-                            href={subjectInfo.privateLoanUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Private Loan
-                          </a>
-                        )}
+                      <span className="info-title">Loan Available</span>
+                      <div>
+                        {subjectInfo?.isGovernmentLoan &&
+                          subjectInfo?.governmentLoanUrl && (
+                            <a
+                              href={`${subjectInfo.governmentLoanUrl}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <span>Government Loan</span>
+                            </a>
+                          )}
+                      </div>
+                      <div>
+                        {subjectInfo?.isPrivateLoan &&
+                          subjectInfo?.privateLoanUrl && (
+                            <a
+                              href={subjectInfo.privateLoanUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Private Loan
+                            </a>
+                          )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </Col>
           </Row>
 
           <Row className="quickview-footer">
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <DeliverPatternIcon />
-                </span>
-                <span>Delivery Pattern</span>
-              </div>
-              <div className="footer-tag__content">
-                <ul>
-                  {quickViewData?.deliveryMethods
-                    ?.split(",")
-                    .map((id) => {
-                      const method = deliveryMethods.find(
-                        (m) => m.id === parseInt(id.trim(), 10)
-                      );
-                      return method?.name;
-                    })
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                </ul>
-              </div>
-            </div>
             <div className="footer-tag">
               <div className="mb-2 fw-500">
                 <span className="mr-1">
@@ -523,6 +587,31 @@ const QuickViewModal = ({
                 </ul>
               </div>
             </div>
+            <div className="footer-tag">
+              <div className="mb-2 fw-500">
+                <span className="mr-1">
+                  <DeliverPatternIcon />
+                </span>
+                <span>Delivery Pattern</span>
+              </div>
+              <div className="footer-tag__content">
+                <ul>
+                  {quickViewData?.deliveryMethods
+                    ?.split(",")
+                    .map((id) => {
+                      const method = deliveryMethods.find(
+                        (m) => m.id === parseInt(id.trim(), 10)
+                      );
+                      return method?.name;
+                    })
+                    .filter(Boolean)
+                    .map((name, index) => (
+                      <li key={index}>{name}</li>
+                    ))}
+                </ul>
+              </div>
+            </div>
+
             <div className="footer-tag">
               <div className="mb-2 fw-500">
                 <span className="mr-1">

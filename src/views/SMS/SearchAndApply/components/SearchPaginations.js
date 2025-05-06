@@ -1,6 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Pagination, Row } from "react-bootstrap";
 import {
   MdKeyboardArrowLeft,
@@ -17,7 +15,7 @@ const SearchPaginations = ({
   totalData,
 }) => {
   let initialPage = Math.ceil(totalData / dataPerPage);
-  const list = [12, 24, 48, 72, 96, 240, 480];
+  const list = [12, 24, 48, 72, 96];
   const [pageList, setPageList] = useState(initialPage);
   const [first, setFirst] = useState(1);
   const [last, setLast] = useState(initialPage);
