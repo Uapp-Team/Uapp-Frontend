@@ -57,7 +57,7 @@ const SearchBox = ({
           value={value}
           id={name}
           placeholder={placeholder}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e)}
           onKeyDown={onKeyDown}
           onBlur={onBlur}
         />

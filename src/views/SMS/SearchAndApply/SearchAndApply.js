@@ -72,6 +72,46 @@ function SearchAndApply() {
   const [subjectId, setSubjectId] = useState(0);
 
   useEffect(() => {
+    get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
+      setApplicationTypelist(res);
+      applicationTypeIds.length > 0 && setApplicationTypeIds([]);
+      loans.length > 0 && setLoans([]);
+    });
+  }, [applicationTypeIds, loans, studentId]);
+
+  useEffect(() => {
+    const listData =
+      applicationType.length > 0
+        ? optionLabelToName(applicationType)
+        : applicationTypelist;
+    setApplicationTypeSelected(listData);
+  }, [applicationType, applicationTypelist]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0,
+      }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      if (sentinelRef.current) {
+        observer.unobserve(sentinelRef.current);
+      }
+    };
+  }, []);
+
+  console.log("isTyping", isTyping);
+  useEffect(() => {
     if (!isTyping) {
       const subdata = {
         page: currentPage,
@@ -131,45 +171,6 @@ function SearchAndApply() {
     studyModes,
     tuitionFee,
   ]);
-
-  useEffect(() => {
-    get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
-      setApplicationTypelist(res);
-      setApplicationTypeIds([]);
-      setLoans([]);
-    });
-  }, [studentId]);
-
-  useEffect(() => {
-    const listData =
-      applicationType.length > 0
-        ? optionLabelToName(applicationType)
-        : applicationTypelist;
-    setApplicationTypeSelected(listData);
-  }, [applicationType, applicationTypelist]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsSticky(!entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: "-80px 0px 0px 0px",
-        threshold: 0,
-      }
-    );
-
-    if (sentinelRef.current) {
-      observer.observe(sentinelRef.current);
-    }
-
-    return () => {
-      if (sentinelRef.current) {
-        observer.unobserve(sentinelRef.current);
-      }
-    };
-  }, []);
 
   const handleFavourite = (value, subjectId, i) => {
     post(
