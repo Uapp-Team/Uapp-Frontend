@@ -5,7 +5,6 @@ import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import {
@@ -26,6 +25,7 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import {
   ArrowLeftRightIcon,
+  BellIconDefault,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
@@ -113,7 +113,7 @@ const ApplyCardHor = ({
             <div className="card-headers">
               <span className="card-date">
                 {" "}
-                <img src={BellIcon} alt="" /> {item.maxApplicationDeadLine}
+                <BellIconDefault /> {item.maxApplicationDeadLine}
               </span>
               <div className="d-flex">
                 {/* <div className="tags">
