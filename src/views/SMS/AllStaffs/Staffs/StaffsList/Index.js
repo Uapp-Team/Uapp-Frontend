@@ -492,6 +492,8 @@ const Index = (props) => {
                     passData={passData}
                     submitModalForm={submitModalForm}
                     passValidate={passValidate}
+                    pass={pass}
+                    setPass={setPass}
                     setError={setError}
                     error={error}
                     verifyPass={verifyPass}

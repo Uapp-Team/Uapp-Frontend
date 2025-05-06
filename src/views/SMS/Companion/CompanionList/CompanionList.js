@@ -534,6 +534,8 @@ const CompanionList = () => {
                       setDeleteModal={setDeleteModal}
                       handleDeleteData={handleDeleteData}
                       buttonStatus={buttonStatus}
+                      pass={pass}
+                      cPass={cPass}
                     />
                   )}
                 </>

@@ -296,11 +296,11 @@ const QuickViewModal = ({
 
                 <div className="mt-2">
                   <div className="my-4 d-flex">
-                    <div className="fs-14px d-flex align-items-center">
-                      <span className="mr-2">
+                    <div className="fs-14px d-flex">
+                      <span className="mt-2">
                         <CalenderIcon />
                       </span>
-                      <span className="mr-3">Intake</span>
+                      <span className="duration-label mr-3">Intake</span>
                     </div>
                     <div className="d-flex flex-wrap">
                       {quickViewData?.intakes?.map((intake) => (
