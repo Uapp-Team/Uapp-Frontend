@@ -267,7 +267,7 @@ const ApplyModal = ({
                   <div className="d-flex">
                     <div className="mr-2">Course Start Date </div>
                     <div className="mr-3">
-                      {selectedClassStartDate ? (
+                      {selectedIntakeId ? (
                         <>
                           <strong>{selectedClassStartDate}</strong>
                           <div className="line-vr"></div>
@@ -276,10 +276,10 @@ const ApplyModal = ({
                         <strong>Please select intake first</strong>
                       )}
                     </div>
-                    <div className="line-vr"></div>
+                    {/* <div className="line-vr"></div> */}
                   </div>
                 </div>
-                <div className="program-modal__duration">
+                {/* <div className="program-modal__duration">
                   <span className="mr-2">
                     <TimerIcon />
                   </span>
@@ -288,7 +288,7 @@ const ApplyModal = ({
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
 
