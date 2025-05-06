@@ -16,6 +16,7 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
@@ -81,13 +82,6 @@ const ApplyCardVar = ({
     setOpenApplyModal(true);
   };
 
-  const isDateWithin7Days = (dateString) => {
-    const currentDate = new Date();
-    const targetDate = new Date(dateString);
-    const diffInTime = targetDate.getTime() - currentDate.getTime();
-    const diffInDays = diffInTime / (1000 * 3600 * 24);
-    return diffInDays <= 7; // Check if within 7 days
-  };
   return (
     <>
       <div className="mt-3 grid-columns">

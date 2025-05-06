@@ -9,7 +9,6 @@ import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
@@ -25,9 +24,12 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
+  BellIconDefault,
+  BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DeliveryScheduleIcon,
@@ -55,6 +57,7 @@ const QuickViewModal = ({
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
   const [selectedClassStartDate, setSelectedClassStartDate] = useState();
   const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
+  console.log(quickViewData, "quickviewData");
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
@@ -249,32 +252,45 @@ const QuickViewModal = ({
               </div>
               <div className="quickview-left__deadline my-2">
                 <span className="mr-3">
-                  <img src={BellIcon} alt="" />{" "}
-                  {quickViewData?.maxApplicationDeadLine}
+                  {quickViewData?.maxApplicationDeadLine &&
+                  isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
+                    <BellIconRed />
+                  ) : (
+                    <BellIconDefault />
+                  )}
+                  Application Deadline{" "}
+                  <strong>{quickViewData?.maxApplicationDeadLine}</strong>
                 </span>
-                {selectedClassStartDate && (
-                  <p className="fs-14px">
-                    Course Start Date{" "}
-                    <span className="fw-600">{selectedClassStartDate}</span>
-                  </p>
-                )}
               </div>
-              <div className="mt-3">
-                <div className="my-4 d-flex">
-                  <div className="fs-14px d-flex align-items-center">
-                    <span className="mr-2">
+              <div className="quickview-left__deadline">
+                <span className="fs-14px">
+                  Course Start Date{" "}
+                  {selectedClassStartDate ? (
+                    <span className="fw-600">{selectedClassStartDate}</span>
+                  ) : (
+                    <strong>Please select intake first</strong>
+                  )}
+                </span>
+              </div>
+              <div>
+                <div className="my-3 d-flex">
+                  <div className="fs-14px d-flex">
+                    <span className="mt-2">
                       <TimerIcon />
                     </span>
-                    <span className="mr-3">Duration</span>
+                    <span className="duration-label">Duration</span>
                   </div>
                   <div className="d-flex flex-wrap">
-                    {quickViewData?.durationNames
-                      ?.split(",")
-                      .map((duration, index) => (
-                        <span className="filter-button" key={index}>
-                          {duration}
-                        </span>
-                      ))}
+                    {quickViewData?.durations?.map((duration, index) => (
+                      <span className="quickview-duration" key={index}>
+                        {duration?.name} {"-"}{" "}
+                        {
+                          studyMode.find(
+                            (mode) => mode.id == duration?.studyMode
+                          )?.name
+                        }{" "}
+                      </span>
+                    ))}
                   </div>
                 </div>
 

@@ -20,6 +20,7 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
@@ -85,14 +86,6 @@ const ApplyCardHor = ({
 
     setQuickViewData(item);
     setOpenApplyModal(true);
-  };
-
-  const isDateWithin7Days = (dateString) => {
-    const currentDate = new Date();
-    const targetDate = new Date(dateString);
-    const diffInTime = targetDate.getTime() - currentDate.getTime();
-    const diffInDays = diffInTime / (1000 * 3600 * 24);
-    return diffInDays <= 7; // Check if within 7 days
   };
 
   return (
@@ -276,20 +269,18 @@ const ApplyCardHor = ({
                                   <Tooltip
                                     title={
                                       <div className="custom-tooltip-content">
-                                        <div className="tooltip-header">
-                                          Others
-                                        </div>
-                                        <ul className="tooltip-method">
+                                        <div className="tooltip-method">
                                           {otherDurations.map(
                                             (method, index) => (
                                               <li key={index}>{method.name}</li>
                                             )
                                           )}
-                                        </ul>
+                                        </div>
                                       </div>
                                     }
                                     placement="top"
                                     overlayClassName="custom-tooltip"
+                                    color="white"
                                   >
                                     <InfoCircleOutlined
                                       style={{
@@ -352,6 +343,7 @@ const ApplyCardHor = ({
                                     }
                                     placement="top"
                                     overlayClassName="custom-tooltip"
+                                    color="white"
                                   >
                                     <InfoCircleOutlined
                                       style={{
@@ -483,6 +475,7 @@ const ApplyCardHor = ({
                           placement="top"
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
+                          color="white"
                         >
                           <span className="inline-block">
                             <button
@@ -521,6 +514,7 @@ const ApplyCardHor = ({
                           placement="top"
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
+                          color="white"
                         >
                           <span className="inline-block">
                             <button
