@@ -113,7 +113,7 @@ const ApplyCardHor = ({
             <div className="card-headers">
               <span className="card-date">
                 {" "}
-                <img src={BellIcon} alt="" /> {item.applicationDeadLine}
+                <img src={BellIcon} alt="" /> {item.maxApplicationDeadLine}
               </span>
               <div className="d-flex">
                 {/* <div className="tags">

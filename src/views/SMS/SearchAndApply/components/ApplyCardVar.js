@@ -112,7 +112,7 @@ const ApplyCardVar = ({
                 )}
                 <div className="card-header-vertical">
                   <span className="card-date">
-                    <img src={BellIcon} alt="" /> {item.applicationDeadLine}
+                    <img src={BellIcon} alt="" /> {item.maxApplicationDeadLine}
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">

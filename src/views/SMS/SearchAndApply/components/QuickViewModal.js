@@ -250,7 +250,7 @@ const QuickViewModal = ({
               <div className="quickview-left__deadline my-2">
                 <span className="mr-3">
                   <img src={BellIcon} alt="" />{" "}
-                  {quickViewData?.applicationDeadLine}
+                  {quickViewData?.maxApplicationDeadLine}
                 </span>
                 {selectedClassStartDate && (
                   <p className="fs-14px">
