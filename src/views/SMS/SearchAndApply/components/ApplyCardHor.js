@@ -1,4 +1,4 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, MoreOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
@@ -216,7 +216,7 @@ const ApplyCardHor = ({
                 </h3>
                 <div className="d-flex align-items-center mb-3">
                   <img
-                    className="h-48px w-48px mr-2"
+                    className="h-48px w-48px mr-2 rounded"
                     src={rootUrl + item.universityLogoUrl}
                     alt=""
                   />
@@ -249,7 +249,7 @@ const ApplyCardHor = ({
                           <TimerIcon />
                           <span className="ml-1 fw-500">Duration</span>
                         </span>
-                        <span>
+                        <span className="mt-2">
                           {(() => {
                             const fullTimeDuration = item.durations.find(
                               (duration) => Number(duration.studyMode) === 2
@@ -259,40 +259,47 @@ const ApplyCardHor = ({
                             );
 
                             return (
-                              <>
-                                {fullTimeDuration && (
-                                  <span className="duration-tag">
-                                    {fullTimeDuration.name}
-                                  </span>
-                                )}
-                                {otherDurations.length > 0 && (
-                                  <Tooltip
-                                    title={
-                                      <div className="custom-tooltip-content">
-                                        <div className="tooltip-method">
-                                          {otherDurations.map(
-                                            (method, index) => (
-                                              <li key={index}>{method.name}</li>
-                                            )
-                                          )}
+                              <div className="d-flex">
+                                <span>
+                                  {fullTimeDuration && (
+                                    <span className="duration-tag">
+                                      {fullTimeDuration.name}
+                                    </span>
+                                  )}
+                                </span>
+                                <span>
+                                  {otherDurations.length > 0 && (
+                                    <Tooltip
+                                      title={
+                                        <div className="custom-tooltip-content">
+                                          <div className="tooltip-method">
+                                            {otherDurations.map(
+                                              (method, index) => (
+                                                <span key={index}>
+                                                  {method.name}
+                                                </span>
+                                              )
+                                            )}
+                                          </div>
                                         </div>
-                                      </div>
-                                    }
-                                    placement="top"
-                                    overlayClassName="custom-tooltip"
-                                    color="white"
-                                  >
-                                    <InfoCircleOutlined
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#5D5D5D",
-                                        cursor: "pointer",
-                                        marginLeft: "4px",
-                                      }}
-                                    />
-                                  </Tooltip>
-                                )}
-                              </>
+                                      }
+                                      placement="top"
+                                      overlayClassName="custom-tooltip"
+                                      color="white"
+                                    >
+                                      <MoreOutlined
+                                        rotate={90}
+                                        style={{
+                                          fontSize: "24px",
+                                          color: "#5D5D5D",
+                                          cursor: "pointer",
+                                          marginLeft: "4px",
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  )}
+                                </span>
+                              </div>
                             );
                           })()}
                         </span>
@@ -302,7 +309,7 @@ const ApplyCardHor = ({
                           <StudyModeIcon />
                           <span className="ml-1 fw-500">Study Mode</span>
                         </span>
-                        <span>
+                        <span className="mt-1">
                           {(() => {
                             const methods = item.durations
                               ?.map((duration) => {
@@ -321,38 +328,45 @@ const ApplyCardHor = ({
                             );
 
                             return (
-                              <>
-                                {fullTime && (
-                                  <span className="duration-tag">
-                                    {fullTime.name}
-                                  </span>
-                                )}
-                                {others.length > 0 && (
-                                  <Tooltip
-                                    title={
-                                      <div className="custom-tooltip-content">
-                                        <div className="tooltip-method">
-                                          {others.map((method, index) => (
-                                            <div key={index}>{method.name}</div>
-                                          ))}
+                              <div className="d-flex">
+                                <span>
+                                  {fullTime && (
+                                    <span className="duration-tag">
+                                      {fullTime.name}
+                                    </span>
+                                  )}
+                                </span>
+                                <span>
+                                  {others.length > 0 && (
+                                    <Tooltip
+                                      title={
+                                        <div className="custom-tooltip-content">
+                                          <div className="tooltip-method">
+                                            {others.map((method, index) => (
+                                              <div key={index}>
+                                                {method.name}
+                                              </div>
+                                            ))}
+                                          </div>
                                         </div>
-                                      </div>
-                                    }
-                                    placement="top"
-                                    overlayClassName="custom-tooltip"
-                                    color="white"
-                                  >
-                                    <InfoCircleOutlined
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#5D5D5D",
-                                        cursor: "pointer",
-                                        marginLeft: "4px",
-                                      }}
-                                    />
-                                  </Tooltip>
-                                )}
-                              </>
+                                      }
+                                      placement="top"
+                                      overlayClassName="custom-tooltip"
+                                      color="white"
+                                    >
+                                      <MoreOutlined
+                                        rotate={90}
+                                        style={{
+                                          fontSize: "24px",
+                                          color: "#5D5D5D",
+                                          cursor: "pointer",
+                                          marginLeft: "4px",
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  )}
+                                </span>
+                              </div>
                             );
                           })()}
                         </span>

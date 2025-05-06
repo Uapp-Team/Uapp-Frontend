@@ -405,7 +405,7 @@ const QuickViewModal = ({
             <Col xs={12} lg={5} className="quickview-right">
               <div className="d-flex align-items-center my-2">
                 <img
-                  className="h-48px w-48px mr-2"
+                  className="h-48px w-48px mr-2 rounded"
                   src={rootUrl + quickViewData?.universityLogoUrl}
                   alt=""
                 />
