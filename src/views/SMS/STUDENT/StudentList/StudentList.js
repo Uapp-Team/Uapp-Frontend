@@ -851,6 +851,8 @@ const StudentList = () => {
                           deleteModal={deleteModal}
                           setDeleteModal={setDeleteModal}
                           handleDeleteData={handleDeleteData}
+                          pass={pass}
+                          cPass={cPass}
                         ></StudentTable>
                       )}
                     </>
