@@ -64,7 +64,7 @@ const SearchBox = ({
       </div>
       <div className="d-none d-md-block">
         <div className="d-flex">
-          <span className="border-left border-right d-flex align-items-center px-1">
+          <span className="border-left border-right d-flex align-items-center px-2">
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
