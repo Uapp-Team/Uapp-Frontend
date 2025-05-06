@@ -267,7 +267,7 @@ const ApplyModal = ({
                   <div className="d-flex">
                     <div className="mr-2">Course Start Date </div>
                     <div className="mr-3">
-                      {selectedClassStartDate ? (
+                      {selectedIntakeId ? (
                         <>
                           <strong>{selectedClassStartDate}</strong>
                           <div className="line-vr"></div>
