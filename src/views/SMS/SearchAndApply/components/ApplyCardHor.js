@@ -24,7 +24,6 @@ import get from "../../../../helpers/get";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
-import QuickViewModal from "./QuickViewModal";
 import {
   ArrowLeftRightIcon,
   CalenderIcon,
@@ -37,6 +36,7 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import QuickViewModal from "./QuickViewModal";
 import TuitionFee from "./TuitionFee";
 
 const ApplyCardHor = ({
@@ -146,9 +146,8 @@ const ApplyCardHor = ({
                           Work Placement
                         </span>
                       ),
-                    ]
-                      .filter(Boolean) // Filter out any `false` values
-                      .slice(0, 2) // Show only the first two tags
+                    ].filter(Boolean) // Filter out any `false` values
+                    // .slice(0, 2)  Show only the first two tags
                   }
                 </div>
                 <div className="d-flex ml-2 align-items-center justify-content-center">

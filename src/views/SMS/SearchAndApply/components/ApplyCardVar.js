@@ -21,8 +21,6 @@ import "../SearchAndApply.css";
 import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
-import OverflowHeightText from "./OverflowHeightText";
-import QuickViewModal from "./QuickViewModal";
 import {
   ArrowLeftRightIcon,
   CalenderIcon,
@@ -35,6 +33,8 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import OverflowHeightText from "./OverflowHeightText";
+import QuickViewModal from "./QuickViewModal";
 import TuitionFee from "./TuitionFee";
 
 const ApplyCardVar = ({
@@ -399,14 +399,6 @@ const ApplyCardVar = ({
                               Loan Available
                             </span>
                           ),
-                          item?.isWorkPlacementAvailable && (
-                            <span
-                              className="card-tag work-placement mr-2"
-                              key="work-placement"
-                            >
-                              Work Placement
-                            </span>
-                          ),
                           item?.isScholarshipAvailable && (
                             <span
                               className="card-tag scholarship-available"
@@ -415,9 +407,16 @@ const ApplyCardVar = ({
                               Scholarship Available
                             </span>
                           ),
-                        ]
-                          .filter(Boolean) // Filter out any `false` values
-                          .slice(0, 2) // Show only the first two tags
+                          item?.isWorkPlacementAvailable && (
+                            <span
+                              className="card-tag work-placement mr-2"
+                              key="work-placement"
+                            >
+                              Work Placement
+                            </span>
+                          ),
+                        ].filter(Boolean) // Filter out any `false` values
+                        // .slice(0, 2)  Show only the first two tags
                       }
                     </div>
                   </div>
