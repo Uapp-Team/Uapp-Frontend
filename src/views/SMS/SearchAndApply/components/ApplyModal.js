@@ -276,10 +276,10 @@ const ApplyModal = ({
                         <strong>Please select intake first</strong>
                       )}
                     </div>
-                    <div className="line-vr"></div>
+                    {/* <div className="line-vr"></div> */}
                   </div>
                 </div>
-                <div className="program-modal__duration">
+                {/* <div className="program-modal__duration">
                   <span className="mr-2">
                     <TimerIcon />
                   </span>
@@ -288,7 +288,7 @@ const ApplyModal = ({
                     methodIds={quickViewData?.durationNames}
                     title="Duration"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -510,7 +510,11 @@ const ApplyModal = ({
                         name="mode"
                         value={method.id}
                         checked={selectedStudyModeId === method.id.toString()}
-                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedStudyModeId(e.target.value);
+                          setSelectedDurationLabel("Select Duration");
+                          setSelectedDurationValue("");
+                        }}
                       />
                       <span>{method.name}</span>
                     </label>
