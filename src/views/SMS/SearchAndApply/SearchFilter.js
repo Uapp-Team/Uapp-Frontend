@@ -102,15 +102,7 @@ const SearchFilter = ({
 
     setLoanList(checkLoan);
     loans.length > 0 && setLoans([]);
-    // loans.length > 0 && setLoans([]);
-    // loans.length !== loanList.length && setLoans([]);
   }, [applicationTypeSelected]);
-
-  // useEffect(() => {
-  //   const filteredArray = loanList.filter((item) => loans.includes(item.id));
-  //   console.log(filteredArray);
-  //   filteredArray.length > 0 ? setLoans(filteredArray) : setLoans([]);
-  // }, [loanList, loans, setLoans]);
 
   useEffect(() => {
     const list = [];
