@@ -1,10 +1,11 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaHeart } from "react-icons/fa";
 import { LuArrowUpRight, LuHeart, LuSettings2, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
@@ -50,6 +51,10 @@ const QuickViewModal = ({
 }) => {
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
+  const [selectedIntakeId, setSelectedIntakeId] = useState("");
+  const [selectedIntake, setSelectedIntake] = useState("Select Intake");
+  const [selectedClassStartDate, setSelectedClassStartDate] = useState();
+  const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
@@ -63,6 +68,15 @@ const QuickViewModal = ({
   const checkInt = applicationTypeSelected?.filter(
     (item) => item?.name === "International"
   );
+
+  useEffect(() => {
+    if (open) {
+      setSelectedIntake("Select Intake");
+      setSelectedIntakeId("");
+      setSelectedIntakeDeadLine("");
+      setSelectedClassStartDate();
+    }
+  }, [open]);
 
   return (
     <>
@@ -238,12 +252,10 @@ const QuickViewModal = ({
                   <img src={BellIcon} alt="" />{" "}
                   {quickViewData?.applicationDeadLine}
                 </span>
-                {quickViewData?.classStartDate && (
+                {selectedClassStartDate && (
                   <p className="fs-14px">
                     Course Start Date{" "}
-                    <span className="fw-600">
-                      {quickViewData?.classStartDate}
-                    </span>
+                    <span className="fw-600">{selectedClassStartDate}</span>
                   </p>
                 )}
               </div>
@@ -275,13 +287,46 @@ const QuickViewModal = ({
                       <span className="mr-3">Intake</span>
                     </div>
                     <div className="d-flex flex-wrap">
-                      {quickViewData?.intakeNames
-                        ?.split(",")
-                        .map((intake, index) => (
-                          <span className="filter-button" key={index}>
-                            {intake}
+                      {quickViewData?.intakes?.map((intake) => (
+                        <span
+                          key={intake.id}
+                          className={`filter-button mr-2 mb-2 pointer ${
+                            selectedIntakeId === intake.id
+                              ? "filter-button-clicked"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            if (selectedIntakeId === intake.id) {
+                              // Deselect the intake if it's already selected
+                              setSelectedIntake("Select Intake");
+                              setSelectedIntakeId("");
+                              setSelectedIntakeDeadLine("");
+                              setSelectedClassStartDate();
+                            } else {
+                              // Select the intake
+                              setSelectedIntake(intake.name);
+                              setSelectedIntakeId(intake.id);
+                              setSelectedIntakeDeadLine(
+                                intake.applicationDeadLine
+                              );
+                              setSelectedClassStartDate(intake.classStartDate);
+                            }
+                          }}
+                        >
+                          <span>{intake.name}</span>
+                          <span>
+                            {selectedIntakeId === intake.id && (
+                              <RxCross1
+                                className="ml-2 pointer"
+                                onClick={() => {
+                                  setSelectedIntake("Select Intake");
+                                  setSelectedIntakeId("");
+                                }}
+                              />
+                            )}
                           </span>
-                        ))}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>

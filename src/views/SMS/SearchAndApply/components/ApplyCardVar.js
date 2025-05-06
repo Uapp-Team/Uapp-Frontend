@@ -401,7 +401,7 @@ const ApplyCardVar = ({
                           ),
                           item?.isScholarshipAvailable && (
                             <span
-                              className="card-tag scholarship-available"
+                              className="card-tag scholarship-available mr-2"
                               key="scholarship"
                             >
                               Scholarship Available
