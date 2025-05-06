@@ -545,6 +545,8 @@ const Index = () => {
                       setDeleteModal={setDeleteModal}
                       handleDeleteData={handleDeleteData}
                       buttonStatus={buttonStatus}
+                      pass={pass}
+                      cPass={cPass}
                     ></ConsultantTable>
                   </>
                 )}
