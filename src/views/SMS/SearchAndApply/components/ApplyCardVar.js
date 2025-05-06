@@ -23,6 +23,7 @@ import CustomToolTip from "./CustomToolTip";
 import {
   ArrowLeftRightIcon,
   BellIconDefault,
+  BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
@@ -79,6 +80,14 @@ const ApplyCardVar = ({
     setQuickViewData(item);
     setOpenApplyModal(true);
   };
+
+  const isDateWithin7Days = (dateString) => {
+    const currentDate = new Date();
+    const targetDate = new Date(dateString);
+    const diffInTime = targetDate.getTime() - currentDate.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+    return diffInDays <= 7; // Check if within 7 days
+  };
   return (
     <>
       <div className="mt-3 grid-columns">
@@ -112,7 +121,12 @@ const ApplyCardVar = ({
                 )}
                 <div className="card-header-vertical">
                   <span className="card-date">
-                    <BellIconDefault /> {item.maxApplicationDeadLine}
+                    {isDateWithin7Days(item.maxApplicationDeadLine) ? (
+                      <BellIconRed />
+                    ) : (
+                      <BellIconDefault />
+                    )}{" "}
+                    {item.maxApplicationDeadLine}
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">

@@ -255,7 +255,7 @@
 }
 
 .card-tag {
-  background: #e7fae7;
+  background: #eefbef;
   padding: 3px 8px;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -272,7 +272,7 @@
 
 .card-tag.work-placement,
 .card-tag.scholarship-available {
-  background: #d4edda;
+  background: #eefbef;
 }
 
 .card-body {
