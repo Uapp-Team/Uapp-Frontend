@@ -110,7 +110,6 @@ function SearchAndApply() {
     };
   }, []);
 
-  console.log("isTyping", isTyping);
   useEffect(() => {
     if (!isTyping) {
       const subdata = {
