@@ -55,11 +55,11 @@ const GeneralInformationForm = ({
   setTitleError,
   titleValue,
   title,
-  // consSalesManagerMenu,
-  // selectSalesManagerCons,
-  // salesManagerValue,
-  // salesManagerLabel,
-  // salesManagerError,
+  consSalesManagerMenu,
+  selectSalesManagerCons,
+  salesManagerValue,
+  salesManagerLabel,
+  salesManagerError,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -234,7 +234,7 @@ const GeneralInformationForm = ({
                 </FormGroup>
               )}
             </>
-            {/* <>
+            <>
               {userTypeId === userTypes?.Consultant.toString() ? (
                 <FormGroup className="has-icon-left position-relative">
                   <span className="mr-2">Sales Manager :</span>
@@ -272,7 +272,7 @@ const GeneralInformationForm = ({
                   )}
                 </FormGroup>
               )}
-            </> */}
+            </>
             {/* )} */}
 
             <FormGroup>

@@ -100,7 +100,7 @@ const ConsultantProfileForAdministrator = () => {
 
         <div className="col-lg-4 col-sm-12">
           <ParentConsultant id={id} />
-          {/* <SalesManager id={id} /> */}
+          <SalesManager id={id} />
           <ConsultantAddress id={id} />
           <Consent id={id} />
           <ProfileRecruitingForFrom id={id} headData={headData} />
