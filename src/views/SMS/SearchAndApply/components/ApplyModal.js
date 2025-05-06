@@ -267,7 +267,7 @@ const ApplyModal = ({
                   <div className="d-flex">
                     <div className="mr-2">Course Start Date </div>
                     <div className="mr-3">
-                      {selectedIntakeId ? (
+                      {selectedClassStartDate ? (
                         <>
                           <strong>{selectedClassStartDate}</strong>
                           <div className="line-vr"></div>
@@ -510,7 +510,11 @@ const ApplyModal = ({
                         name="mode"
                         value={method.id}
                         checked={selectedStudyModeId === method.id.toString()}
-                        onChange={(e) => setSelectedStudyModeId(e.target.value)}
+                        onChange={(e) => {
+                          setSelectedStudyModeId(e.target.value);
+                          setSelectedDurationLabel("Select Duration");
+                          setSelectedDurationValue("");
+                        }}
                       />
                       <span>{method.name}</span>
                     </label>
