@@ -219,7 +219,7 @@ const ApplyModal = ({
               </div>
               <div className="apply-modal-study">
                 <div className="apply-modal-study__info">
-                  <div>
+                  <div className="image-background">
                     <img className="h-24px w-24px " src={Tuition} alt="" />
                   </div>
                   <div className="apply-modal-study__info--details">
@@ -232,7 +232,7 @@ const ApplyModal = ({
                 </div>
                 {quickViewData?.scholarshipDetails && (
                   <div className="apply-modal-study__info">
-                    <div>
+                    <div className="image-background">
                       <img className="h-24px w-24px" src={mortarboard} alt="" />
                     </div>
                     <div className="apply-modal-study__info--details">
@@ -244,7 +244,7 @@ const ApplyModal = ({
                   </div>
                 )}
                 <div className="apply-modal-study__info">
-                  <div>
+                  <div className="image-background">
                     <img className="h-24px w-24px " src={Application} alt="" />
                   </div>
                   <div className="apply-modal-study__info--details">

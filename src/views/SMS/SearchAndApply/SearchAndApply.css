@@ -520,6 +520,12 @@
   line-height: 1.5;
 }
 
+.image-background {
+  padding: 6px;
+  background: rgba(1, 132, 144, 0.1);
+  border-radius: 999px;
+}
+
 /* quick view modal  */
 
 .quickview-container {
@@ -741,7 +747,7 @@
 }
 
 .apply-modal-study {
-  width: 70%;
+  width: 75%;
   display: flex;
   justify-content: space-between;
 }
