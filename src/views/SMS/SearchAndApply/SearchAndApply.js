@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaSlidersH } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { Col, Row } from "reactstrap";
 import { Student } from "../../../components/core/User";
 import DropdownCircle from "../../../components/Dropdown/DropdownCircle";
 import Loader from "../../../components/Loader";
+import { optionLabelToName } from "../../../constants/hooks";
 import get from "../../../helpers/get";
 import post from "../../../helpers/post";
 import ApplyCardHor from "./components/ApplyCardHor";
@@ -16,7 +16,6 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
-import { optionLabelToName } from "../../../constants/hooks";
 
 function SearchAndApply() {
   const { addToast } = useToasts();
@@ -230,10 +229,13 @@ function SearchAndApply() {
           }`
         );
       } else {
-        addToast(res?.data?.message || "An error occurred", {
-          appearance: "error",
-          autoDismiss: true,
-        });
+        addToast(
+          res?.data?.errors[0] || res?.data?.message || "An error occurred",
+          {
+            appearance: "error",
+            autoDismiss: true,
+          }
+        );
       }
     } catch (error) {
       addToast("An unexpected error occurred. Please try again.", {
