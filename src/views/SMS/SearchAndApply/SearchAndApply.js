@@ -319,6 +319,7 @@ function SearchAndApply() {
                 state={intakeId}
                 setState={setIntakeId}
                 url="SearchFilter/Intakes"
+                slice={true}
               />
             </Col>
           </Row>
