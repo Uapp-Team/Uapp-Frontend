@@ -22,7 +22,6 @@ import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import {
-  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -107,6 +106,7 @@ const ApplyCardVar = ({
                           fontSize: "14px",
                           color: "#fff",
                           cursor: "pointer",
+                          marginLeft: "4px",
                         }}
                       />
                     </Tooltip>
@@ -123,9 +123,9 @@ const ApplyCardVar = ({
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                      <span className="mr-3 cursor-pointer">
+                      {/* <span className="mr-3 cursor-pointer">
                         <ArrowLeftRightIcon />
-                      </span>
+                      </span> */}
                       <span className="mr-3 cursor-pointer">
                         <ShareIcon />
                       </span>
@@ -140,6 +140,7 @@ const ApplyCardVar = ({
                               )
                             }
                             className="cursor-pointer"
+                            color="orange"
                           />
                         ) : (
                           <LuHeart
@@ -219,9 +220,7 @@ const ApplyCardVar = ({
                             <span className="ml-1 fw-500">
                               Tuition Fee{" "}
                               {item?.durationTypeId > 0 && (
-                                <>
-                                  ({durationInfo(item?.durationTypeId)?.name})
-                                </>
+                                <>({durationInfo(item?.durationTypeId)?.ly})</>
                               )}
                             </span>
                           </span>
@@ -280,7 +279,6 @@ const ApplyCardVar = ({
                                       <Tooltip
                                         title={
                                           <div className="custom-tooltip-content">
-                                            {fullTimeDuration.name}
                                             {otherDurations.map(
                                               (method, index) => (
                                                 <div className="tooltip-method">
@@ -353,7 +351,6 @@ const ApplyCardVar = ({
                                       <Tooltip
                                         title={
                                           <div className="custom-tooltip-content">
-                                            {fullTime.name}
                                             {others.map((method, index) => (
                                               <div className="tooltip-method">
                                                 <span key={index}>
@@ -417,10 +414,7 @@ const ApplyCardVar = ({
                       {
                         [
                           item?.isLoanAvailable && (
-                            <span
-                              className="card-tag work-placement mr-2"
-                              key="loan"
-                            >
+                            <span className="card-tag mr-2" key="loan">
                               Loan Available
                             </span>
                           ),
@@ -440,8 +434,9 @@ const ApplyCardVar = ({
                               Work Placement
                             </span>
                           ),
-                        ].filter(Boolean) // Filter out any `false` values
-                        // .slice(0, 2)  Show only the first two tags
+                        ]
+                          .filter(Boolean) // Filter out any `false` values
+                          .slice(0, 2) //Show only the first two tags
                       }
                     </div>
                   </div>

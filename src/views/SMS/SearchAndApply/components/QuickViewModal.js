@@ -292,7 +292,8 @@ const QuickViewModal = ({
                   ) : (
                     <BellIconDefault />
                   )}
-                  Application Deadline <strong>{selectedIntakeDeadLine}</strong>
+                  <span className="ml-1">Application Deadline</span>{" "}
+                  <strong>{selectedIntakeDeadLine}</strong>
                 </span>
               </div>
               <div className="quickview-left__deadline">

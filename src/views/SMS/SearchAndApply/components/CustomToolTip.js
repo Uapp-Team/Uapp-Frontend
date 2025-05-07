@@ -30,7 +30,6 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
             <Tooltip
               title={
                 <div className="custom-tooltip-content">
-                  {first.name}
                   {others.map((item) => (
                     <div className="tooltip-method">
                       <span key={item.id}>{item.name}</span>
@@ -73,7 +72,6 @@ const CustomToolTip = ({ methodIds, methods, title = "Others" }) => {
           <Tooltip
             title={
               <div className="custom-tooltip-content">
-                {first}
                 {others.map((val, idx) => (
                   <div className="tooltip-method">
                     <span key={idx}>{val}</span>

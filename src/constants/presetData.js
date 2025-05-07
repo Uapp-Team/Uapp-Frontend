@@ -12,11 +12,11 @@ export const studyMode = [
 ];
 
 export const durationType = [
-  { id: 1, name: "Hour" },
-  { id: 2, name: "Day" },
-  { id: 3, name: "Week" },
-  { id: 4, name: "Month" },
-  { id: 5, name: "Year" },
+  { id: 1, name: "Hour", ly: "Hourly" },
+  { id: 2, name: "Day", ly: "Daily" },
+  { id: 3, name: "Week", ly: "Weekly" },
+  { id: 4, name: "Month", ly: "Monthly" },
+  { id: 5, name: "Year", ly: "Yearly" },
 ];
 
 export const deliveryMethods = [
