@@ -57,6 +57,7 @@ const EducationLevelList = () => {
   const [LevelValu, setLevelValu] = useState("");
   const [LevelValuError, setLevelValuError] = useState("");
   const [durationDD, setDurationDD] = useState([]);
+  const [durationlist, setDurationList] = useState([]);
   const [durationLabel, setDurationLabel] = useState("Select Duration");
   const [durationValue, setDurationValue] = useState(0);
   const [durationError, setDurationError] = useState(false);
@@ -65,13 +66,23 @@ const EducationLevelList = () => {
   useEffect(() => {
     Uget("Duration/Index").then((res) => {
       setDurationDD(res?.data);
+      setDurationList(res?.data);
     });
   }, [success]);
 
-  const durationCategory = durationDD.map((duration) => ({
+  const durationCategory = durationlist.map((duration) => ({
     label: duration?.name,
     value: duration?.id,
   }));
+
+  const handleDurationChange = (e) => {
+    console.log(e);
+    const durationFormate = e[0]?.label.split(" ")[1]?.slice(0, -1);
+    const result = durationDD?.filter((item) =>
+      item?.name?.includes(durationFormate)
+    );
+    e?.length > 0 ? setDurationList(result) : setDurationList(durationDD);
+  };
 
   const selectDocumentDD = (label, value) => {
     setDurationLabel(label);
@@ -342,6 +353,7 @@ const EducationLevelList = () => {
                         if (e.length > 0) {
                           setDurationError(false);
                         }
+                        handleDurationChange(e);
                       }}
                       options={durationCategory}
                       value={multiDuration}
