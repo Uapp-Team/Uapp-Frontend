@@ -17,6 +17,7 @@ import {
   countryInfo,
   currency,
   deliveryMethods,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
@@ -25,7 +26,6 @@ import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import {
-  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -169,9 +169,9 @@ const ApplyCardHor = ({
                       </div>
                     )}
                   </div>
-                  <span className="mr-3 cursor-pointer">
+                  {/* <span className="mr-3 cursor-pointer">
                     <ArrowLeftRightIcon />
-                  </span>
+                  </span> */}
                   <span className="mr-3 cursor-pointer">
                     <ShareIcon />
                   </span>
@@ -186,6 +186,7 @@ const ApplyCardHor = ({
                           )
                         }
                         className="cursor-pointer"
+                        color="orange"
                       />
                     ) : (
                       <LuHeart
@@ -273,7 +274,6 @@ const ApplyCardHor = ({
                                       title={
                                         <div className="custom-tooltip-content">
                                           <div className="tooltip-method">
-                                            <div>{fullTimeDuration.name}</div>
                                             <div>
                                               {otherDurations.map(
                                                 (method, index) => (
@@ -347,7 +347,6 @@ const ApplyCardHor = ({
                                       title={
                                         <div className="custom-tooltip-content">
                                           <div className="tooltip-method">
-                                            {fullTime.name}
                                             {others.map((method, index) => (
                                               <div key={index}>
                                                 {method.name}
@@ -422,7 +421,10 @@ const ApplyCardHor = ({
                         <span className="mr-1">
                           <MoneyIcon />
                         </span>
-                        Tuition Fee
+                        Tuition Fee{" "}
+                        {item?.durationTypeId > 0 && (
+                          <>({durationInfo(item?.durationTypeId)?.ly})</>
+                        )}
                       </span>
                       <p className="card-price">
                         <span className="fw-600">
