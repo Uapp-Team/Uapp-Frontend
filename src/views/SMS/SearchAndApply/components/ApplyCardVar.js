@@ -441,7 +441,13 @@ const ApplyCardVar = ({
                     </div>
                   </div>
                   {Consultant() && (
-                    <div className="d-flex justify-content-between">
+                    <div
+                      className="d-flex justify-content-between"
+                      style={{
+                        visibility:
+                          item.commissionAmount > 0 ? "visible" : "hidden",
+                      }}
+                    >
                       <div className="gross-vertical my-2 rounded-2">
                         <p className="d-flex flex-column">
                           <span className="fs-12px">Gross Earning</span>{" "}

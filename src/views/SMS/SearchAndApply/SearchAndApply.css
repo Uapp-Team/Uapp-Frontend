@@ -388,9 +388,10 @@
 }
 .gross {
   background-color: #ddf6f8;
-  padding: 4px 8px;
+  padding: 6px 12px;
   height: 32px;
   margin-right: 2rem;
+  border-radius: 6px;
 }
 .gross-vertical {
   background-color: #ddf6f8;
