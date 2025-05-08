@@ -27,7 +27,9 @@ import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
 import {
   deliveryMethods,
   deliverySchedules,
+  durationInfo,
 } from "../../../../constants/presetData";
+import Uget from "../../../../helpers/Uget";
 
 const AddUniversitySubjectFee = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -36,10 +38,10 @@ const AddUniversitySubjectFee = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
 
+  const [feeType, setFeeType] = useState([]);
   const [CurrencyDD, setCurrencyDD] = useState([]);
   // const [deliverySchedule, setDeliverySchedule] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState([]);
-
   const [addLocalTutionFee, setAddLocalTutionFee] = useState(undefined);
   const [addIntTutionFee, setAddIntTutionFee] = useState(undefined);
   const [addEUTutionFee, setAddEUTutionFee] = useState(undefined);
@@ -77,7 +79,10 @@ const AddUniversitySubjectFee = () => {
     get(`CurrencyDD/Index`).then((res) => {
       setCurrencyDD(res);
     });
-  }, []);
+    Uget(`Duration/BySubjectId?subjectId=${subjId}`).then((res) => {
+      setFeeType(res?.data);
+    });
+  }, [subjId]);
 
   useEffect(() => {
     const initialStatus1 = CurrencyDD.filter((status) => {
@@ -275,7 +280,12 @@ const AddUniversitySubjectFee = () => {
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
-                        <span>Home Tution Fee</span>
+                        <span>
+                          Home Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
+                        </span>
                       </Col>
                       <Col className="col-5">
                         <InputGroup className="d-flex flex-nowrap">
@@ -312,7 +322,12 @@ const AddUniversitySubjectFee = () => {
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
-                        <span>Int. Tution Fee</span>
+                        <span>
+                          Int. Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
+                        </span>
                       </Col>
 
                       <Col className="col-5">
@@ -349,7 +364,10 @@ const AddUniversitySubjectFee = () => {
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
                         <span>
-                          EU Tution Fee
+                          EU Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
                           {/* <span className="text-danger">*</span>{" "} */}
                         </span>
                       </Col>
