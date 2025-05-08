@@ -1,11 +1,10 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, MoreOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import {
@@ -18,15 +17,17 @@ import {
   countryInfo,
   currency,
   deliveryMethods,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
-import QuickViewModal from "./QuickViewModal";
 import {
-  ArrowLeftRightIcon,
+  BellIconDefault,
+  BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
@@ -37,6 +38,7 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import QuickViewModal from "./QuickViewModal";
 import TuitionFee from "./TuitionFee";
 
 const ApplyCardHor = ({
@@ -113,7 +115,12 @@ const ApplyCardHor = ({
             <div className="card-headers">
               <span className="card-date">
                 {" "}
-                <img src={BellIcon} alt="" /> {item.applicationDeadLine}
+                {isDateWithin7Days(item.maxApplicationDeadLine) ? (
+                  <BellIconRed />
+                ) : (
+                  <BellIconDefault />
+                )}{" "}
+                {item.maxApplicationDeadLine}
               </span>
               <div className="d-flex">
                 {/* <div className="tags">
@@ -146,9 +153,8 @@ const ApplyCardHor = ({
                           Work Placement
                         </span>
                       ),
-                    ]
-                      .filter(Boolean) // Filter out any `false` values
-                      .slice(0, 2) // Show only the first two tags
+                    ].filter(Boolean) // Filter out any `false` values
+                    // .slice(0, 2)  Show only the first two tags
                   }
                 </div>
                 <div className="d-flex ml-2 align-items-center justify-content-center">
@@ -163,9 +169,9 @@ const ApplyCardHor = ({
                       </div>
                     )}
                   </div>
-                  <span className="mr-3 cursor-pointer">
+                  {/* <span className="mr-3 cursor-pointer">
                     <ArrowLeftRightIcon />
-                  </span>
+                  </span> */}
                   <span className="mr-3 cursor-pointer">
                     <ShareIcon />
                   </span>
@@ -180,6 +186,7 @@ const ApplyCardHor = ({
                           )
                         }
                         className="cursor-pointer"
+                        color="orange"
                       />
                     ) : (
                       <LuHeart
@@ -210,7 +217,7 @@ const ApplyCardHor = ({
                 </h3>
                 <div className="d-flex align-items-center mb-3">
                   <img
-                    className="h-48px w-48px mr-2"
+                    className="h-48px w-48px mr-2 rounded"
                     src={rootUrl + item.universityLogoUrl}
                     alt=""
                   />
@@ -253,42 +260,51 @@ const ApplyCardHor = ({
                             );
 
                             return (
-                              <>
-                                {fullTimeDuration && (
-                                  <span className="duration-tag">
-                                    {fullTimeDuration.name}
-                                  </span>
-                                )}
-                                {otherDurations.length > 0 && (
-                                  <Tooltip
-                                    title={
-                                      <div className="custom-tooltip-content">
-                                        <div className="tooltip-header">
-                                          Others
+                              <div className="d-flex">
+                                <span>
+                                  {fullTimeDuration && (
+                                    <span className="duration-tag">
+                                      {fullTimeDuration.name}
+                                    </span>
+                                  )}
+                                </span>
+                                <span>
+                                  {otherDurations.length > 0 && (
+                                    <Tooltip
+                                      title={
+                                        <div className="custom-tooltip-content">
+                                          <div className="tooltip-method">
+                                            <div>
+                                              {otherDurations.map(
+                                                (method, index) => (
+                                                  <div key={index}>
+                                                    {method.name}
+                                                  </div>
+                                                )
+                                              )}
+                                            </div>
+                                          </div>
                                         </div>
-                                        <ul className="tooltip-method">
-                                          {otherDurations.map(
-                                            (method, index) => (
-                                              <li key={index}>{method.name}</li>
-                                            )
-                                          )}
-                                        </ul>
-                                      </div>
-                                    }
-                                    placement="top"
-                                    overlayClassName="custom-tooltip"
-                                  >
-                                    <InfoCircleOutlined
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#5D5D5D",
-                                        cursor: "pointer",
-                                        marginLeft: "4px",
-                                      }}
-                                    />
-                                  </Tooltip>
-                                )}
-                              </>
+                                      }
+                                      placement="top"
+                                      overlayClassName="custom-tooltip"
+                                      color="white"
+                                    >
+                                      <MoreOutlined
+                                        rotate={90}
+                                        style={{
+                                          fontSize: "14px",
+                                          color: "#5D5D5D",
+                                          cursor: "pointer",
+                                          border: "1px solid gray",
+                                          borderRadius: "999px",
+                                          marginLeft: "4px",
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  )}
+                                </span>
+                              </div>
                             );
                           })()}
                         </span>
@@ -317,40 +333,47 @@ const ApplyCardHor = ({
                             );
 
                             return (
-                              <>
-                                {fullTime && (
-                                  <span className="duration-tag">
-                                    {fullTime.name}
-                                  </span>
-                                )}
-                                {others.length > 0 && (
-                                  <Tooltip
-                                    title={
-                                      <div className="custom-tooltip-content">
-                                        <div className="tooltip-header">
-                                          Others
+                              <div className="d-flex">
+                                <span>
+                                  {fullTime && (
+                                    <span className="duration-tag">
+                                      {fullTime.name}
+                                    </span>
+                                  )}
+                                </span>
+                                <span>
+                                  {others.length > 0 && (
+                                    <Tooltip
+                                      title={
+                                        <div className="custom-tooltip-content">
+                                          <div className="tooltip-method">
+                                            {others.map((method, index) => (
+                                              <div key={index}>
+                                                {method.name}
+                                              </div>
+                                            ))}
+                                          </div>
                                         </div>
-                                        <ul className="tooltip-method">
-                                          {others.map((method, index) => (
-                                            <li key={index}>{method.name}</li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                    }
-                                    placement="top"
-                                    overlayClassName="custom-tooltip"
-                                  >
-                                    <InfoCircleOutlined
-                                      style={{
-                                        fontSize: "14px",
-                                        color: "#5D5D5D",
-                                        cursor: "pointer",
-                                        marginLeft: "4px",
-                                      }}
-                                    />
-                                  </Tooltip>
-                                )}
-                              </>
+                                      }
+                                      placement="top"
+                                      overlayClassName="custom-tooltip"
+                                      color="white"
+                                    >
+                                      <MoreOutlined
+                                        rotate={90}
+                                        style={{
+                                          fontSize: "14px",
+                                          color: "#5D5D5D",
+                                          cursor: "pointer",
+                                          border: "1px solid gray",
+                                          borderRadius: "999px",
+                                          marginLeft: "4px",
+                                        }}
+                                      />
+                                    </Tooltip>
+                                  )}
+                                </span>
+                              </div>
                             );
                           })()}
                         </span>
@@ -398,7 +421,10 @@ const ApplyCardHor = ({
                         <span className="mr-1">
                           <MoneyIcon />
                         </span>
-                        Tuition Fee
+                        Tuition Fee{" "}
+                        {item?.durationTypeId > 0 && (
+                          <>({durationInfo(item?.durationTypeId)?.ly})</>
+                        )}
                       </span>
                       <p className="card-price">
                         <span className="fw-600">
@@ -440,13 +466,20 @@ const ApplyCardHor = ({
                   </div>
                   <div className="d-flex align-items-center">
                     {Consultant() && (
-                      <div className="gross">
-                        <p className="d-flex flex-row">
-                          <span className="fs-12px mr-2">Gross Earning </span>{" "}
-                          <span className="fw-500">
-                            £{item.commissionAmount}
-                          </span>
-                        </p>
+                      <div
+                        style={{
+                          visibility:
+                            item.commissionAmount > 0 ? "visible" : "hidden",
+                        }}
+                      >
+                        <div className="gross">
+                          <p className="d-flex flex-row">
+                            <span className="fs-12px mr-2">Gross Earning </span>{" "}
+                            <span className="fw-500">
+                              £{item.commissionAmount}
+                            </span>
+                          </p>
+                        </div>
                       </div>
                     )}
 
@@ -470,6 +503,7 @@ const ApplyCardHor = ({
                           placement="top"
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
+                          color="white"
                         >
                           <span className="inline-block">
                             <button
@@ -508,6 +542,7 @@ const ApplyCardHor = ({
                           placement="top"
                           overlayClassName="custom-tooltip"
                           disabled={item?.canApply}
+                          color="white"
                         >
                           <span className="inline-block">
                             <button

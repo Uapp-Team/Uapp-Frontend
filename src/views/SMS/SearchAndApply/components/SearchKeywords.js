@@ -39,7 +39,7 @@ const ChevronUp = () => (
   </svg>
 );
 
-const SearchKeywords = ({ state, setState, url }) => {
+const SearchKeywords = ({ state, setState, url, slice = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
 
@@ -79,7 +79,14 @@ const SearchKeywords = ({ state, setState, url }) => {
             } `}
             onClick={() => handleChange(item?.id)}
           >
-            {item?.name}
+            {slice ? (
+              <>
+                {item?.name.split(" ")[0]?.slice(0, 3)}{" "}
+                {item?.name.split(" ")[1]}
+              </>
+            ) : (
+              item?.name
+            )}
             {state?.includes(item.id) && (
               <AiOutlineClose
                 size={16}

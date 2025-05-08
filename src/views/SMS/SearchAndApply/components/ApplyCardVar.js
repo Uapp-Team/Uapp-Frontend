@@ -1,10 +1,9 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, MoreOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
-import BellIcon from "../../../../assets/icon/Bell.svg";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Consultant, Student } from "../../../../components/core/User";
@@ -17,14 +16,14 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import get from "../../../../helpers/get";
+import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
-import OverflowHeightText from "./OverflowHeightText";
-import QuickViewModal from "./QuickViewModal";
 import {
-  ArrowLeftRightIcon,
+  BellIconDefault,
+  BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
@@ -35,6 +34,8 @@ import {
   StudyModeIcon,
   TimerIcon,
 } from "./icons";
+import OverflowHeightText from "./OverflowHeightText";
+import QuickViewModal from "./QuickViewModal";
 import TuitionFee from "./TuitionFee";
 
 const ApplyCardVar = ({
@@ -79,6 +80,7 @@ const ApplyCardVar = ({
     setQuickViewData(item);
     setOpenApplyModal(true);
   };
+
   return (
     <>
       <div className="mt-3 grid-columns">
@@ -101,10 +103,10 @@ const ApplyCardVar = ({
                     >
                       <InfoCircleOutlined
                         style={{
-                          fontSize: "12px",
+                          fontSize: "14px",
                           color: "#fff",
                           cursor: "pointer",
-                          marginLeft: "5px",
+                          marginLeft: "4px",
                         }}
                       />
                     </Tooltip>
@@ -112,13 +114,18 @@ const ApplyCardVar = ({
                 )}
                 <div className="card-header-vertical">
                   <span className="card-date">
-                    <img src={BellIcon} alt="" /> {item.applicationDeadLine}
+                    {isDateWithin7Days(item.maxApplicationDeadLine) ? (
+                      <BellIconRed />
+                    ) : (
+                      <BellIconDefault />
+                    )}{" "}
+                    {item.maxApplicationDeadLine}
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                      <span className="mr-3 cursor-pointer">
+                      {/* <span className="mr-3 cursor-pointer">
                         <ArrowLeftRightIcon />
-                      </span>
+                      </span> */}
                       <span className="mr-3 cursor-pointer">
                         <ShareIcon />
                       </span>
@@ -133,6 +140,7 @@ const ApplyCardVar = ({
                               )
                             }
                             className="cursor-pointer"
+                            color="orange"
                           />
                         ) : (
                           <LuHeart
@@ -212,9 +220,7 @@ const ApplyCardVar = ({
                             <span className="ml-1 fw-500">
                               Tuition Fee{" "}
                               {item?.durationTypeId > 0 && (
-                                <>
-                                  ({durationInfo(item?.durationTypeId)?.name})
-                                </>
+                                <>({durationInfo(item?.durationTypeId)?.ly})</>
                               )}
                             </span>
                           </span>
@@ -260,42 +266,50 @@ const ApplyCardVar = ({
                               );
 
                               return (
-                                <>
-                                  {fullTimeDuration && (
-                                    <span className="duration-tag fw-600">
-                                      {fullTimeDuration.name}
-                                    </span>
-                                  )}
-                                  {otherDurations.length > 0 && (
-                                    <Tooltip
-                                      title={
-                                        <div className="custom-tooltip-content">
-                                          {otherDurations.map(
-                                            (method, index) => (
-                                              <div className="tooltip-method">
-                                                <span key={index}>
-                                                  {method.name}
-                                                </span>
-                                              </div>
-                                            )
-                                          )}
-                                        </div>
-                                      }
-                                      placement="top"
-                                      overlayClassName="custom-tooltip"
-                                      color="white"
-                                    >
-                                      <InfoCircleOutlined
-                                        style={{
-                                          fontSize: "14px",
-                                          color: "#5D5D5D",
-                                          cursor: "pointer",
-                                          marginLeft: "4px",
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                </>
+                                <div className="d-flex">
+                                  <span>
+                                    {fullTimeDuration && (
+                                      <span className="duration-tag fw-600">
+                                        {fullTimeDuration.name}
+                                      </span>
+                                    )}
+                                  </span>
+                                  <span>
+                                    {otherDurations.length > 0 && (
+                                      <Tooltip
+                                        title={
+                                          <div className="custom-tooltip-content">
+                                            {otherDurations.map(
+                                              (method, index) => (
+                                                <div className="tooltip-method">
+                                                  <span key={index}>
+                                                    {method.name}
+                                                  </span>
+                                                </div>
+                                              )
+                                            )}
+                                          </div>
+                                        }
+                                        placement="top"
+                                        overlayClassName="custom-tooltip"
+                                        color="white"
+                                      >
+                                        <MoreOutlined
+                                          rotate={90}
+                                          style={{
+                                            fontSize: "14px",
+                                            color: "#5D5D5D",
+                                            cursor: "pointer",
+                                            border: "1px solid gray",
+                                            borderRadius: "999px",
+                                            padding: "1px",
+                                            marginLeft: "4px",
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )}
+                                  </span>
+                                </div>
                               );
                             })()}
                           </span>
@@ -324,40 +338,48 @@ const ApplyCardVar = ({
                               );
 
                               return (
-                                <>
-                                  {fullTime && (
-                                    <span className="study-mode-tag fw-600">
-                                      {fullTime.name}
-                                    </span>
-                                  )}
-                                  {others.length > 0 && (
-                                    <Tooltip
-                                      title={
-                                        <div className="custom-tooltip-content">
-                                          {others.map((method, index) => (
-                                            <div className="tooltip-method">
-                                              <span key={index}>
-                                                {method.name}
-                                              </span>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      }
-                                      placement="top"
-                                      overlayClassName="custom-tooltip"
-                                      color="white"
-                                    >
-                                      <InfoCircleOutlined
-                                        style={{
-                                          fontSize: "14px",
-                                          color: "#5D5D5D",
-                                          cursor: "pointer",
-                                          marginLeft: "4px",
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                </>
+                                <div className="d-flex">
+                                  <span>
+                                    {fullTime && (
+                                      <span className="study-mode-tag fw-600">
+                                        {fullTime.name}
+                                      </span>
+                                    )}
+                                  </span>
+                                  <span>
+                                    {others.length > 0 && (
+                                      <Tooltip
+                                        title={
+                                          <div className="custom-tooltip-content">
+                                            {others.map((method, index) => (
+                                              <div className="tooltip-method">
+                                                <span key={index}>
+                                                  {method.name}
+                                                </span>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        }
+                                        placement="top"
+                                        overlayClassName="custom-tooltip"
+                                        color="white"
+                                      >
+                                        <MoreOutlined
+                                          rotate={90}
+                                          style={{
+                                            fontSize: "14px",
+                                            color: "#5D5D5D",
+                                            cursor: "pointer",
+                                            border: "1px solid gray",
+                                            borderRadius: "999px",
+                                            padding: "1px",
+                                            marginLeft: "4px",
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    )}
+                                  </span>
+                                </div>
                               );
                             })()}
                           </span>
@@ -392,11 +414,16 @@ const ApplyCardVar = ({
                       {
                         [
                           item?.isLoanAvailable && (
-                            <span
-                              className="card-tag work-placement mr-2"
-                              key="loan"
-                            >
+                            <span className="card-tag mr-2" key="loan">
                               Loan Available
+                            </span>
+                          ),
+                          item?.isScholarshipAvailable && (
+                            <span
+                              className="card-tag scholarship-available mr-2"
+                              key="scholarship"
+                            >
+                              Scholarship Available
                             </span>
                           ),
                           item?.isWorkPlacementAvailable && (
@@ -407,22 +434,20 @@ const ApplyCardVar = ({
                               Work Placement
                             </span>
                           ),
-                          item?.isScholarshipAvailable && (
-                            <span
-                              className="card-tag scholarship-available"
-                              key="scholarship"
-                            >
-                              Scholarship Available
-                            </span>
-                          ),
                         ]
                           .filter(Boolean) // Filter out any `false` values
-                          .slice(0, 2) // Show only the first two tags
+                          .slice(0, 2) //Show only the first two tags
                       }
                     </div>
                   </div>
                   {Consultant() && (
-                    <div className="d-flex justify-content-between">
+                    <div
+                      className="d-flex justify-content-between"
+                      style={{
+                        visibility:
+                          item.commissionAmount > 0 ? "visible" : "hidden",
+                      }}
+                    >
                       <div className="gross-vertical my-2 rounded-2">
                         <p className="d-flex flex-column">
                           <span className="fs-12px">Gross Earning</span>{" "}
@@ -468,7 +493,7 @@ const ApplyCardVar = ({
                               {!item?.canApply ? (
                                 <InfoCircleOutlined
                                   style={{
-                                    fontSize: "12px",
+                                    fontSize: "14px",
                                     color: "#fff",
                                     cursor: "pointer",
                                   }}
