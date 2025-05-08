@@ -22,6 +22,7 @@ import {
   currency,
   deliveryMethods,
   deliverySchedules,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
@@ -459,8 +460,13 @@ const QuickViewModal = ({
               <div className="dashed-hr"></div>
               <div className="info-group">
                 <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
-                <div>
-                  <span className="info-title">Tuition Fees</span>
+                <div className="w-100">
+                  <span className="info-title">
+                    Tuition Fees{" "}
+                    {quickViewData?.durationTypeId > 0 && (
+                      <>({durationInfo(quickViewData?.durationTypeId)?.ly})</>
+                    )}{" "}
+                  </span>
                   <div>
                     {checkHome?.length === 1 && (
                       <Row>
