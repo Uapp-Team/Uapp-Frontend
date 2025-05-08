@@ -1,21 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  AiOutlineArrowLeft,
-  AiOutlineClose,
-  AiOutlineLeft,
-} from "react-icons/ai";
-import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
-import { Input } from "reactstrap";
 import { Col, Row } from "react-bootstrap";
+import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
+import { Input } from "reactstrap";
+import DefaultDropdown from "../../../components/Dropdown/DefaultDropdown";
 import CheckBoxByObj from "../../../components/form/CheckBoxByObj";
-import MultiSelectU from "../../../components/form/MultiSelectU";
 import CheckSwitch from "../../../components/form/CheckSwitch";
+import MultiSelect from "../../../components/form/MultiSelect";
+import MultiSelectU from "../../../components/form/MultiSelectU";
 import {
   deliveryMethods,
   deliverySchedules,
   studyMode,
 } from "../../../constants/presetData";
-import MultiSelect from "../../../components/form/MultiSelect";
 
 const SearchFilter = ({
   closeModal,
@@ -69,6 +65,14 @@ const SearchFilter = ({
   setStudyLevelList,
   courseDurationsList,
   setCourseDurationsList,
+  departmentName,
+  setDepartmentName,
+  departmentId,
+  setDepartmentId,
+  subDepartmentName,
+  setSubDepartmentName,
+  subDepartmentId,
+  setSubDepartmentId,
 }) => {
   const divRef = useRef(null);
 
@@ -238,6 +242,33 @@ const SearchFilter = ({
                 selectAll={true}
                 all="All Campus"
                 url={`UniversityCityDD/Index/${countryId}`}
+              />
+            </div>
+
+            <div className="mb-3">
+              <p className="fw-500">Department</p>
+              <DefaultDropdown
+                label={departmentName}
+                setLabel={setDepartmentName}
+                value={departmentId}
+                setValue={setDepartmentId}
+                selectAll={true}
+                all="All Department"
+                url={`SearchFilter/Departments`}
+              />
+            </div>
+            <div className="mb-3">
+              <p className="fw-500">Sub Department</p>
+              <DefaultDropdown
+                label={subDepartmentName}
+                setLabel={setSubDepartmentName}
+                value={subDepartmentId}
+                setValue={setSubDepartmentId}
+                selectAll={true}
+                all="All Sub Department"
+                url={`SearchFilter/SubDepartments/${
+                  departmentId ? departmentId : 0
+                }`}
               />
             </div>
             <div className="mb-3">

@@ -49,6 +49,8 @@ function SearchAndApply() {
   const [intakeId, setIntakeId] = useState([]);
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
+  const [departmentId, setDepartmentId] = useState(0);
+  const [subDepartmentId, setSubDepartmentId] = useState(0);
   const [tuitionFee, setTuitionFee] = useState(0);
   const [applicationTypeIds, setApplicationTypeIds] = useState([]);
   const [loans, setLoans] = useState([]);
@@ -67,6 +69,10 @@ function SearchAndApply() {
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
+  const [departmentName, setDepartmentName] = useState("Select Department");
+  const [subDepartmentName, setSubDepartmentName] = useState(
+    "Select Sub Department"
+  );
   const referenceId = localStorage.getItem("referenceId");
   const [subjectId, setSubjectId] = useState(0);
 
@@ -138,6 +144,8 @@ function SearchAndApply() {
         deliverySchedules: deliverySchedule,
         searchText: search,
         isFavorite: isFavorite,
+        departmentId: departmentId,
+        subdepartmentId: subDepartmentId,
       };
       setLoading(true);
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
@@ -168,6 +176,8 @@ function SearchAndApply() {
     studyLevelId,
     studyModes,
     tuitionFee,
+    departmentId,
+    subDepartmentId,
   ]);
 
   const handleFavourite = (value, subjectId, i) => {
@@ -451,6 +461,14 @@ function SearchAndApply() {
           setStudyLevelList={setStudyLevelList}
           courseDurationsList={courseDurationsList}
           setCourseDurationsList={setCourseDurationsList}
+          departmentName={departmentName}
+          setDepartmentName={setDepartmentName}
+          departmentId={departmentId}
+          setDepartmentId={setDepartmentId}
+          subDepartmentName={subDepartmentName}
+          setSubDepartmentName={setSubDepartmentName}
+          subDepartmentId={subDepartmentId}
+          setSubDepartmentId={setSubDepartmentId}
         />
       )}
     </>
