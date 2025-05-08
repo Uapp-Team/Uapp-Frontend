@@ -65,6 +65,7 @@ const SearchFilter = ({
   setStudyLevelList,
   courseDurationsList,
   setCourseDurationsList,
+  departmentList,
   departmentName,
   setDepartmentName,
   departmentId,
@@ -253,8 +254,7 @@ const SearchFilter = ({
                 value={departmentId}
                 setValue={setDepartmentId}
                 selectAll={true}
-                all="All Department"
-                url={`SearchFilter/Departments`}
+                list={departmentList}
               />
             </div>
             <div className="mb-3">

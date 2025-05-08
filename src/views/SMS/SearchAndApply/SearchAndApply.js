@@ -50,7 +50,7 @@ function SearchAndApply() {
   const [intakeId, setIntakeId] = useState([]);
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
-  const [depId, setDepId] = useState(departmentId > 0 ? departmentId : 0);
+  const [depId, setDepId] = useState(0);
   const [subDepartmentId, setSubDepartmentId] = useState(0);
   const [tuitionFee, setTuitionFee] = useState(0);
   const [applicationTypeIds, setApplicationTypeIds] = useState([]);
@@ -77,6 +77,8 @@ function SearchAndApply() {
   const referenceId = localStorage.getItem("referenceId");
   const [subjectId, setSubjectId] = useState(0);
 
+  const [depList, setDepList] = useState([]);
+
   useEffect(() => {
     get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
       setApplicationTypelist(res);
@@ -84,6 +86,22 @@ function SearchAndApply() {
       loans.length > 0 && setLoans([]);
     });
   }, [studentId]);
+
+  useEffect(() => {
+    get("SearchFilter/Departments").then((res) => {
+      setDepList([{ id: 0, name: "all Departments" }, ...res]);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (departmentId > 0 && depList && depList?.length > 0) {
+      const filterData = depList?.filter((item) => {
+        return item.id.toString() === departmentId;
+      });
+      setDepId(filterData[0]?.id);
+      setDepartmentName(filterData[0]?.name);
+    }
+  }, [data, depList, departmentId]);
 
   useEffect(() => {
     const listData =
@@ -126,8 +144,8 @@ function SearchAndApply() {
         campusId: 0,
         countryId: countryId,
         cityId: cityId,
-        departmentId: 0,
-        subdepartmentId: 0,
+        departmentId: depId,
+        subdepartmentId: subDepartmentId,
         educationLevelIds: studyLevelId,
         intakeIds: intakeId,
         tuitionFeeRange: tuitionFee,
@@ -145,8 +163,6 @@ function SearchAndApply() {
         deliverySchedules: deliverySchedule,
         searchText: search,
         isFavorite: isFavorite,
-        departmentId: depId,
-        subdepartmentId: subDepartmentId,
       };
       setLoading(true);
       post(`ApplyFilter/FetchPagedData`, subdata).then((res) => {
@@ -462,6 +478,7 @@ function SearchAndApply() {
           setStudyLevelList={setStudyLevelList}
           courseDurationsList={courseDurationsList}
           setCourseDurationsList={setCourseDurationsList}
+          departmentList={depList}
           departmentName={departmentName}
           setDepartmentName={setDepartmentName}
           departmentId={depId}
