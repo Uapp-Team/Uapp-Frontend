@@ -527,3 +527,36 @@ export function BellIconDefault() {
     </svg>
   );
 }
+
+export function DurationIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M12.3359 7.84668V12.9759L15.6699 14.6429"
+        stroke="#019088"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M20.447 14.2585C19.5786 17.9345 16.2763 20.67 12.335 20.67C7.73171 20.67 4 16.9384 4 12.335C4 7.73171 7.73171 4 12.335 4C15.5507 4 18.3411 5.82102 19.7311 8.48808"
+        stroke="#019088"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <path
+        d="M20.6706 5.92383V9.1296H17.4648"
+        stroke="#019088"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
