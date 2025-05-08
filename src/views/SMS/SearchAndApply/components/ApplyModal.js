@@ -20,6 +20,7 @@ import {
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
 import { ArrowRightIcon, CalenderIcon } from "./icons";
+import Uget from "../../../../helpers/Uget";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -37,7 +38,7 @@ const ApplyModal = ({
   const [selectedStudyModeId, setSelectedStudyModeId] = useState();
   const [selectedCampusLabel, setSelectedCampusLabel] =
     useState("Select Campus");
-  const [selectedCampusValue, setSelectedCampusValue] = useState("");
+  const [selectedCampusValue, setSelectedCampusValue] = useState(0);
   const [selectedDurationsLabel, setSelectedDurationLabel] =
     useState("Select Duration");
   const [selectedDurationsValue, setSelectedDurationValue] = useState("");
@@ -85,6 +86,22 @@ const ApplyModal = ({
     }
   };
 
+  const [campusSchedules, setCampusSchedules] = useState([]);
+  useEffect(() => {
+    if (selectedCampusValue > 0) {
+      Uget(
+        `SubjectCampus/GetSubjectCampusDeliverySchedules?campusId=${selectedCampusValue}&subjectId=${quickViewData?.subjectId}`
+      ).then((res) => {
+        setCampusSchedules(res?.data);
+        console.log(res?.data);
+        // setData(res?.data);
+      });
+    }
+  }, [quickViewData, selectedCampusValue]);
+  //   {
+  //     "1": "Evening",
+  //     "4": "Weekend"
+  // }
   useEffect(() => {
     if (open) {
       setSelectedIntakeId("");
@@ -715,33 +732,39 @@ const ApplyModal = ({
                 </span>
                 <span> Delivery Schedule</span>
               </p>
-              <div className="program-modal__radio-group">
-                {quickViewData?.deliverySchedules
-                  ?.split(",")
-                  .map((id) => {
-                    const method = deliverySchedules.find(
-                      (m) => m.id === parseInt(id.trim(), 10)
-                    );
-                    return method;
-                  })
-                  .filter(Boolean)
-                  .map((method, index) => (
-                    <label key={index}>
-                      <input
-                        type="radio"
-                        name="deliverySchedule"
-                        value={method.id}
-                        checked={
-                          selectedDeliveryScheduleId === method.id.toString()
-                        }
-                        onChange={(e) =>
-                          setSelectedDeliveryScheduleId(e.target.value)
-                        }
-                      />
-                      <span>{method.name}</span>
-                    </label>
-                  ))}
-              </div>
+
+              {selectedCampusValue == 0 ? (
+                <p className="text-danger">Please select campus</p>
+              ) : campusSchedules?.length === 0 ? (
+                <p className="text-danger">No Delivery Schedules Found</p>
+              ) : (
+                <div className="program-modal__radio-group">
+                  {campusSchedules
+                    .map((id) => {
+                      const method = deliverySchedules.find(
+                        (m) => m.id === parseInt(id)
+                      );
+                      return method;
+                    })
+                    .filter(Boolean)
+                    .map((method, index) => (
+                      <label key={index}>
+                        <input
+                          type="radio"
+                          name="deliverySchedule"
+                          value={method.id}
+                          checked={
+                            selectedDeliveryScheduleId === method.id.toString()
+                          }
+                          onChange={(e) =>
+                            setSelectedDeliveryScheduleId(e.target.value)
+                          }
+                        />
+                        <span>{method.name}</span>
+                      </label>
+                    ))}
+                </div>
+              )}
             </div>
 
             {/* Footer */}
