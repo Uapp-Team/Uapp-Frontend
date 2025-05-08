@@ -733,6 +733,7 @@ const ApplyModal = ({
                 <span> Delivery Schedule</span>
               </p>
 
+              {/* double == is confirm  */}
               {selectedCampusValue == 0 ? (
                 <p className="text-danger">Please select campus</p>
               ) : campusSchedules?.length === 0 ? (
