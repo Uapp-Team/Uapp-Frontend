@@ -359,7 +359,13 @@ const QuickViewModal = ({
                   </div>
                 </div>
 
-                <div className="d-md-flex justify-content-between">
+                <div
+                  className="d-md-flex justify-content-between"
+                  style={{
+                    color: "#5d5d5d",
+                    fontWeight: 500,
+                  }}
+                >
                   <div className="">
                     <div className="mb-2 fw-500">
                       <span className="mr-1">
