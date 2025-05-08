@@ -283,18 +283,20 @@ const QuickViewModal = ({
                   </span>
                 )}
               </div>
-              <div className="quickview-left__deadline my-2">
-                <span className="mr-3">
-                  {quickViewData?.maxApplicationDeadLine &&
-                  isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
-                    <BellIconRed />
-                  ) : (
-                    <BellIconDefault />
-                  )}
-                  <span className="ml-1">Application Deadline</span>{" "}
-                  <strong>{selectedIntakeDeadLine}</strong>
-                </span>
-              </div>
+              {selectedIntakeId && (
+                <div className="quickview-left__deadline my-2">
+                  <span className="mr-3">
+                    {quickViewData?.maxApplicationDeadLine &&
+                    isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
+                      <BellIconRed />
+                    ) : (
+                      <BellIconDefault />
+                    )}
+                    <span className="ml-1">Application Deadline</span>{" "}
+                    <strong>{selectedIntakeDeadLine}</strong>
+                  </span>
+                </div>
+              )}
               <div className="quickview-left__deadline">
                 <span className="fs-14px">
                   Course Start Date{" "}
