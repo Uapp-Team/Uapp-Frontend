@@ -18,8 +18,52 @@ import post from "../../../../helpers/post";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
+import { deliverySchedules } from "../../../../constants/presetData";
 
 const AddUniversitySubjectAssignToCampus = () => {
+  // const campus = [
+  //   {
+  //     campusId: 56,
+  //     subjectId: 7598,
+  //     name: "Leeds",
+  //     isAcceptHome: true,
+  //     isAcceptInternational: false,
+  //     isAcceptEU_UK: true,
+  //     isAcceptHomeAvailable: true,
+  //     isAcceptInternationalAvailable: false,
+  //     isAcceptEU_UKAvailable: true,
+  //     isAssigned: true,
+  //     // deliverySchedule: [],
+  //   },
+  //   {
+  //     campusId: 57,
+  //     subjectId: 7598,
+  //     name: "Birmingham",
+  //     isAcceptHome: true,
+  //     isAcceptInternational: false,
+  //     isAcceptEU_UK: true,
+  //     isAcceptHomeAvailable: true,
+  //     isAcceptInternationalAvailable: false,
+  //     isAcceptEU_UKAvailable: true,
+  //     isAssigned: true,
+  //     deliverySchedule: [],
+  //   },
+  //   {
+  //     campusId: 58,
+  //     subjectId: 7598,
+  //     name: "London",
+  //     isAcceptHome: true,
+  //     isAcceptInternational: false,
+  //     isAcceptEU_UK: true,
+  //     isAcceptHomeAvailable: true,
+  //     isAcceptInternationalAvailable: false,
+  //     isAcceptEU_UKAvailable: true,
+  //     isAssigned: true,
+  //     deliverySchedule: [],
+  //   },
+  // ];
+
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const activetab = "5";
   const [campusList, setCampusList] = useState([]);
@@ -50,6 +94,14 @@ const AddUniversitySubjectAssignToCampus = () => {
     values[i].isAcceptInternational = e.target.checked;
     setCampusList(values);
   };
+
+  const setDeliverySchedule = (e, i) => {
+    const values = [...campusList];
+    values[i].deliverySchedule = e;
+    setCampusList(values);
+  };
+
+  console.log("campusList", campusList);
 
   const handlePrevious = () => {
     history.push(`/add-university-course-requirements/${id}/${subjId}`);
@@ -95,7 +147,7 @@ const AddUniversitySubjectAssignToCampus = () => {
               <p className="section-title">Course available in Campuses</p>
 
               <div
-                className="mt-1 mb-4 d-flex justify-between col-md-6"
+                className="mt-1 mb-4 d-flex justify-between col-md-8 col-xl-6"
                 style={{
                   border: "1px solid #ddd",
                   borderRadius: "10px",
@@ -123,68 +175,93 @@ const AddUniversitySubjectAssignToCampus = () => {
               <Form onSubmit={handleSubmit}>
                 <Table id="table-to-xls" className="table-bordered">
                   <thead className="tablehead">
-                    <td className="border-0">
+                    <td className="border-0 w-25">
                       <b>Campus</b>
                     </td>
-                    <td className="border-0 text-center">
-                      <b>Home</b>
+                    <td className="border-0 text-center w-25">
+                      <b>Application Types</b>
                     </td>
-                    <td className="border-0 text-center">
-                      <b>EU</b>
+                    <td className="border-0 text-center w-50">
+                      <b>Delivery Schedule</b>
                     </td>
-                    <td className="border-0 text-center">
+                    {/* <td className="border-0 text-center">
                       <b>International</b>
-                    </td>
+                    </td> */}
                   </thead>
                   <tbody>
                     {campusList?.length > 0 &&
                       campusList?.map((item, i) => (
                         <tr key={i}>
-                          <td>{item?.name}</td>
-                          <td className="text-center">
-                            {item?.isAcceptHomeAvailable && (
-                              <input
-                                type="checkbox"
-                                onChange={(e) => {
-                                  handleisAcceptHome(e, i);
-                                }}
-                                value={item?.isAcceptHome}
-                                defaultChecked={
-                                  item?.isAcceptHome === true ? true : false
-                                }
-                              />
-                            )}
-                          </td>
-                          <td className="text-center">
-                            {item?.isAcceptEU_UKAvailable && (
-                              <input
-                                type="checkbox"
-                                onChange={(e) => {
-                                  handleisAcceptEU_UK(e, i);
-                                }}
-                                value={item?.isAcceptEU_UK}
-                                defaultChecked={
-                                  item?.isAcceptEU_UK === true ? true : false
-                                }
-                              />
-                            )}
-                          </td>
-                          <td className="text-center">
+                          <td className="w-25">{item?.name}</td>
+                          <td className="w-25 fs-13px">
                             {item?.isAcceptInternationalAvailable && (
-                              <input
-                                type="checkbox"
-                                onChange={(e) => {
-                                  handleisAcceptInternational(e, i);
-                                }}
-                                value={item?.isAcceptInternational}
-                                defaultChecked={
-                                  item?.isAcceptInternational === true
-                                    ? true
-                                    : false
-                                }
-                              />
+                              <p className="d-flex align-items-center mb-1">
+                                <input
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    handleisAcceptInternational(e, i);
+                                  }}
+                                  value={item?.isAcceptInternational}
+                                  defaultChecked={
+                                    item?.isAcceptInternational === true
+                                      ? true
+                                      : false
+                                  }
+                                />
+                                <span className="ml-2"> International</span>
+                              </p>
+                            )}
+
+                            {item?.isAcceptHomeAvailable && (
+                              <p className="d-flex align-items-center mb-1">
+                                <input
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    handleisAcceptHome(e, i);
+                                  }}
+                                  value={item?.isAcceptHome}
+                                  defaultChecked={
+                                    item?.isAcceptHome === true ? true : false
+                                  }
+                                />
+                                <span className="ml-2">Home</span>
+                              </p>
+                            )}
+
+                            {item?.isAcceptEU_UKAvailable && (
+                              <p className="d-flex align-items-center mb-1">
+                                <input
+                                  type="checkbox"
+                                  onChange={(e) => {
+                                    handleisAcceptEU_UK(e, i);
+                                  }}
+                                  value={item?.isAcceptEU_UK}
+                                  defaultChecked={
+                                    item?.isAcceptEU_UK === true ? true : false
+                                  }
+                                />
+                                <span className="ml-2">EU</span>
+                              </p>
                             )}
                           </td>
+                          <td className="text-center w-50">
+                            <CheckBoxByObj
+                              register={() => {}}
+                              name={`${item?.deliverySchedule}-${i}`}
+                              list={deliverySchedules}
+                              defaultValue={item?.deliverySchedule}
+                              action={(e) => setDeliverySchedule(e, i)}
+                              className="mb-0"
+                              colSize={[
+                                "col-6",
+                                "col-6",
+                                "col-6",
+                                "col-6",
+                                "col-12",
+                              ]}
+                            />
+                          </td>
+                          {/* <td className="text-center"></td> */}
                         </tr>
                       ))}
                   </tbody>
