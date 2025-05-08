@@ -48,8 +48,13 @@ const ResultsToolbar = ({
                 className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
                 onClick={() => setIsFavorite(!isFavorite)}
               >
-                <LuHeart className="mx-2" color="orange" fill="orange" />{" "}
-                Favourites <span className="count">{favorites}</span>
+                <LuHeart
+                  className="mx-2"
+                  color={isFavorite ? "orange" : "black"}
+                  fill={isFavorite ? "orange" : "black"}
+                />{" "}
+                Favourites{" "}
+                <span className="count">{favorites ? favorites : "0"}</span>
               </button>
             )}
             {/* <button className="action-btn mr-2">

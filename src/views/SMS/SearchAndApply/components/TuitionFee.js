@@ -14,7 +14,34 @@ const TuitionFee = ({ applicationTypeSelected, item }) => {
 
   return (
     <>
-      {checkInt?.length === 1 ? (
+      {checkEu?.length === 1 &&
+      item?.eU_TutionFeeCurrencyId > 0 &&
+      item?.internationalTutionFee === 0 &&
+      item?.localTutionFee === 0 ? (
+        <>
+          {currency(item?.eU_TutionFeeCurrencyId)} {item?.eU_TutionFee}
+        </>
+      ) : checkHome?.length === 1 &&
+        item?.localTutionFeeCurrencyId > 0 &&
+        item?.internationalTutionFee === 0 ? (
+        <>
+          {currency(item?.localTutionFeeCurrencyId)} {item?.localTutionFee}
+        </>
+      ) : checkInt?.length === 1 ? (
+        <>
+          {currency(item?.internationalTutionCurrencyId)}{" "}
+          {item?.internationalTutionFee}
+        </>
+      ) : checkHome?.length === 1 ? (
+        <>
+          {currency(item?.localTutionFeeCurrencyId)} {item?.localTutionFee}
+        </>
+      ) : checkEu?.length === 1 ? (
+        <>
+          {currency(item?.eU_TutionFeeCurrencyId)} {item?.eU_TutionFee}
+        </>
+      ) : null}
+      {/* {checkInt?.length === 1 ? (
         <>
           {currency(item?.internationalTutionCurrencyId)}{" "}
           {item?.internationalTutionFee}
@@ -31,7 +58,7 @@ const TuitionFee = ({ applicationTypeSelected, item }) => {
         <>
           {currency(item?.localTutionFeeCurrencyId)} {item?.localTutionFee}
         </>
-      )}
+      )} */}
     </>
   );
 };

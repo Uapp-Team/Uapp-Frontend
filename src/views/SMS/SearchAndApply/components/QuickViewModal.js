@@ -28,7 +28,6 @@ import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
-  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -116,9 +115,9 @@ const QuickViewModal = ({
               className="d-flex align-items-center justify-content-between mb-3"
             >
               <div className="d-flex">
-                <div className="mr-2 icon-design">
+                {/* <div className="mr-2 icon-design">
                   <ArrowLeftRightIcon />
-                </div>
+                </div> */}
                 <div className="mr-2 icon-design">
                   <LuShare2 size={16} />
                 </div>

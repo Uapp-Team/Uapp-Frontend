@@ -19,8 +19,7 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import "../SearchAndApply.css";
-import CustomToolTip from "./CustomToolTip";
-import { ArrowRightIcon, CalenderIcon, TimerIcon } from "./icons";
+import { ArrowRightIcon, CalenderIcon } from "./icons";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -159,7 +158,7 @@ const ApplyModal = ({
                 </div>
               </div>
               <div className="mt-4">
-                <div className="apply-modal-details">
+                <Row className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Course
                   </Col>
@@ -170,8 +169,8 @@ const ApplyModal = ({
                   >
                     {quickViewData?.subjectName}
                   </Col>
-                </div>
-                <div className="apply-modal-details">
+                </Row>
+                <Row className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Student
                   </Col>
@@ -182,8 +181,8 @@ const ApplyModal = ({
                   >
                     {Student() ? current_user?.displayName : studentName}
                   </Col>
-                </div>
-                <div className="apply-modal-details">
+                </Row>
+                <Row className="apply-modal-details">
                   <Col xs={4} md={2} className="apply-modal-details__title">
                     Intake{" "}
                     {quickViewData?.intakes?.length > 1 && (
@@ -215,33 +214,45 @@ const ApplyModal = ({
                   >
                     {selectedIntake}
                   </Col>
-                </div>
+                </Row>
                 <div className="dashed-hr"></div>
               </div>
               <div className="apply-modal-study">
                 <div className="apply-modal-study__info">
-                  <img className="h-24px w-24px " src={Tuition} alt="" />
-                  <div className="fs-12px">Tution fees</div>
-                  <div className="fs-14px">
-                    {currency(quickViewData.localTutionFeeCurrencyId)}
-                    {quickViewData?.localTutionFee}
+                  <div className="image-background">
+                    <img className="h-24px w-24px " src={Tuition} alt="" />
+                  </div>
+                  <div className="apply-modal-study__info--details">
+                    <div className="fs-12px">Tution fees</div>
+                    <div className="fs-14px">
+                      {currency(quickViewData.localTutionFeeCurrencyId)}
+                      {quickViewData?.localTutionFee}
+                    </div>
                   </div>
                 </div>
                 {quickViewData?.scholarshipDetails && (
                   <div className="apply-modal-study__info">
-                    <img className="h-24px w-24px" src={mortarboard} alt="" />
-                    <div className="fs-12px">Scholarship</div>
-                    <div className="fs-14px">
-                      {quickViewData?.scholarshipDetails}
+                    <div className="image-background">
+                      <img className="h-24px w-24px" src={mortarboard} alt="" />
+                    </div>
+                    <div className="apply-modal-study__info--details">
+                      <div className="fs-12px">Scholarship</div>
+                      <div className="fs-14px">
+                        {quickViewData?.scholarshipDetails}
+                      </div>
                     </div>
                   </div>
                 )}
                 <div className="apply-modal-study__info">
-                  <img className="h-24px w-24px " src={Application} alt="" />
-                  <div className="fs-12px">Application fees</div>
-                  <div className="fs-14px">
-                    {currency(quickViewData.avarageApplicationFeeCurrencyId)}
-                    {quickViewData?.avarageApplicationFee}
+                  <div className="image-background">
+                    <img className="h-24px w-24px " src={Application} alt="" />
+                  </div>
+                  <div className="apply-modal-study__info--details">
+                    <div className="fs-12px">Application fees</div>
+                    <div className="fs-14px">
+                      {currency(quickViewData.avarageApplicationFeeCurrencyId)}
+                      {quickViewData?.avarageApplicationFee}
+                    </div>
                   </div>
                 </div>
               </div>

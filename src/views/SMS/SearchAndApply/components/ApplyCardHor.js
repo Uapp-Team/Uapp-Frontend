@@ -466,13 +466,20 @@ const ApplyCardHor = ({
                   </div>
                   <div className="d-flex align-items-center">
                     {Consultant() && (
-                      <div className="gross">
-                        <p className="d-flex flex-row">
-                          <span className="fs-12px mr-2">Gross Earning </span>{" "}
-                          <span className="fw-500">
-                            £{item.commissionAmount}
-                          </span>
-                        </p>
+                      <div
+                        style={{
+                          visibility:
+                            item.commissionAmount > 0 ? "visible" : "hidden",
+                        }}
+                      >
+                        <div className="gross">
+                          <p className="d-flex flex-row">
+                            <span className="fs-12px mr-2">Gross Earning </span>{" "}
+                            <span className="fw-500">
+                              £{item.commissionAmount}
+                            </span>
+                          </p>
+                        </div>
                       </div>
                     )}
 
