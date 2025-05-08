@@ -458,7 +458,7 @@ const AddUniversitySubjectRequirements = () => {
                     ) : null}
                   </Col>
                 </Row>
-                {isEducationRequired ? (
+                {/* {isEducationRequired ? (
                   <FormGroup row className="text-right">
                     <Col md="5">
                       {permissions?.includes(permissionList?.Edit_Subjects) && (
@@ -469,7 +469,17 @@ const AddUniversitySubjectRequirements = () => {
                       )}
                     </Col>
                   </FormGroup>
-                ) : null}
+                ) : null} */}
+                <FormGroup row className="text-left">
+                  <Col md="5">
+                    {permissions?.includes(permissionList?.Edit_Subjects) && (
+                      <SaveButton
+                        progress={progress}
+                        buttonStatus={buttonStatus}
+                      />
+                    )}
+                  </Col>
+                </FormGroup>
               </Form>
 
               <Form onSubmit={handleDocSubmit} className="mb-2">
