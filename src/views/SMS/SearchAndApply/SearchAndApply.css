@@ -535,6 +535,15 @@
   .ant-modal {
     width: 900px !important;
   }
+  .line-vr {
+    display: block;
+    border-right: 0.5px solid #ccc;
+  }
+
+  .line-hr {
+    display: block;
+    border-bottom: 0.5px solid #d7d9d9;
+  }
 
   .quickview-header {
     display: flex;
@@ -552,10 +561,7 @@
     border: 1px solid rgba(127, 127, 127, 0.08);
   }
   .quickview-duration {
-    padding: 8px 12px;
-    border: 1px solid rgba(127, 127, 127, 0.08);
-    margin-right: 8px;
-    margin-bottom: 4px;
+    padding: 2px 12px;
   }
   .duration-label {
     padding: 8px 12px;
@@ -689,20 +695,27 @@
 }
 
 .quickview-footer {
-  flex-wrap: wrap;
+  display: flex;
   margin-top: 24px;
-  padding: 16px 16px 0;
+  padding: 16px 16px;
   font-size: 14px;
-  background: #eef4f4;
   border-radius: 5px;
+  background-color: #f2f4f4;
+  background-image: url("../../../assets//img/shape.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .footer-tag {
-  background: #eef4f4;
   color: #5d5d5d;
   padding: 0 16px;
   border-radius: 6px;
   margin-bottom: 16px;
+}
+.footer-tag__inner {
+  padding: 2px 4px;
+  background: #fff;
+  margin-right: 4px;
 }
 .footer-tag__content ul {
   padding: 0 15px;

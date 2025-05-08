@@ -9,7 +9,6 @@ import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import Application from "../../../../assets/icon/Application Fee Icon.svg";
-import Campus from "../../../../assets/icon/Campus Location Icon Container.svg";
 import mortarboard from "../../../../assets/icon/mortarboard-02.svg";
 import ranking from "../../../../assets/icon/ranking.svg";
 import Tuition from "../../../../assets/icon/Tuition Fees Icon Container.svg";
@@ -22,6 +21,7 @@ import {
   currency,
   deliveryMethods,
   deliverySchedules,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
@@ -32,10 +32,10 @@ import {
   BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
-  DeliveryScheduleIcon,
   DepositIcon,
+  DurationIcon,
+  LocationIcon,
   StudyModeIcon,
-  TimerIcon,
 } from "./icons";
 
 const QuickViewModal = ({
@@ -283,18 +283,20 @@ const QuickViewModal = ({
                   </span>
                 )}
               </div>
-              <div className="quickview-left__deadline my-2">
-                <span className="mr-3">
-                  {quickViewData?.maxApplicationDeadLine &&
-                  isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
-                    <BellIconRed />
-                  ) : (
-                    <BellIconDefault />
-                  )}
-                  <span className="ml-1">Application Deadline</span>{" "}
-                  <strong>{selectedIntakeDeadLine}</strong>
-                </span>
-              </div>
+              {selectedIntakeId && (
+                <div className="quickview-left__deadline my-2">
+                  <span className="mr-3">
+                    {quickViewData?.maxApplicationDeadLine &&
+                    isDateWithin7Days(quickViewData?.maxApplicationDeadLine) ? (
+                      <BellIconRed />
+                    ) : (
+                      <BellIconDefault />
+                    )}
+                    <span className="ml-1">Application Deadline</span>{" "}
+                    <strong>{selectedIntakeDeadLine}</strong>
+                  </span>
+                </div>
+              )}
               <div className="quickview-left__deadline">
                 <span className="fs-14px">
                   Course Start Date{" "}
@@ -306,27 +308,6 @@ const QuickViewModal = ({
                 </span>
               </div>
               <div>
-                <div className="my-3 d-flex">
-                  <div className="fs-14px d-flex">
-                    <span className="mt-2">
-                      <TimerIcon />
-                    </span>
-                    <span className="duration-label">Duration</span>
-                  </div>
-                  <div className="d-flex flex-wrap">
-                    {quickViewData?.durations?.map((duration, index) => (
-                      <span className="quickview-duration" key={index}>
-                        {duration?.name} {"-"}{" "}
-                        {
-                          studyMode.find(
-                            (mode) => mode.id == duration?.studyMode
-                          )?.name
-                        }{" "}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="mt-2">
                   <div className="my-4 d-flex">
                     <div className="fs-14px d-flex">
@@ -376,6 +357,81 @@ const QuickViewModal = ({
                           </span>
                         </span>
                       ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="d-md-flex justify-content-between"
+                  style={{
+                    color: "#5d5d5d",
+                    fontWeight: 500,
+                  }}
+                >
+                  <div className="">
+                    <div className="mb-2 fw-500">
+                      <span className="mr-1">
+                        <StudyModeIcon />
+                      </span>
+                      Study Mode{" "}
+                    </div>
+                    <div className="footer-tag__content">
+                      <ul>
+                        {quickViewData?.studyModes
+                          ?.split(",")
+                          .map((id) => {
+                            const method = studyMode.find(
+                              (m) => m.id === parseInt(id.trim(), 10)
+                            );
+                            return method?.name;
+                          })
+                          .filter(Boolean)
+                          .map((name, index) => (
+                            <li key={index}>{name}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="line-vr"></div>
+                  <div className="">
+                    <div className="mb-2 fw-500">
+                      <span className="mr-1">
+                        <DeliverPatternIcon />
+                      </span>
+                      <span>Delivery Pattern</span>
+                    </div>
+                    <div className="footer-tag__content">
+                      <ul>
+                        {quickViewData?.deliveryMethods
+                          ?.split(",")
+                          .map((id) => {
+                            const method = deliveryMethods.find(
+                              (m) => m.id === parseInt(id.trim(), 10)
+                            );
+                            return method?.name;
+                          })
+                          .filter(Boolean)
+                          .map((name, index) => (
+                            <li key={index}>{name}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="line-vr"></div>
+                  <div className="">
+                    <div className="mb-2 fw-500">
+                      <span className="mr-1">
+                        <DepositIcon />
+                      </span>
+                      Deposit{" "}
+                    </div>
+                    <div className="footer-tag__content">
+                      <ul>
+                        <li>
+                          {currency(quickViewData.depositFeeCurrencyId)}
+                          {quickViewData?.depositFee}
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -439,28 +495,38 @@ const QuickViewModal = ({
                 </div>
               </div>
               <div className="dashed-hr"></div>
-              <div className="info-group">
-                <img src={Campus} alt="" className="h-24px w-24px mr-2 mt-1" />
-                <div>
-                  <span className="info-title">Campus Location</span>
-                  <ul>
-                    {quickViewData?.campusNames ? (
-                      quickViewData.campusNames
-                        ?.split(",")
-                        .map((campus, index) => (
-                          <li key={index}>{campus.trim()}</li>
-                        ))
-                    ) : (
-                      <li>No campus information available</li>
-                    )}
-                  </ul>
+              <div className="my-3">
+                <div className="fs-14px d-flex">
+                  <div>
+                    <DurationIcon />
+                  </div>
+                  <div>
+                    <span className="duration-label">Course Durations</span>
+                    {quickViewData?.durations?.map((duration, index) => (
+                      <div className="d-flex flex-col">
+                        <span className="quickview-duration" key={index}>
+                          {duration?.name} {"-"}{" "}
+                          {
+                            studyMode.find(
+                              (mode) => mode.id == duration?.studyMode
+                            )?.name
+                          }{" "}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="dashed-hr"></div>
               <div className="info-group">
                 <img src={Tuition} alt="" className="h-24px w-24px mr-2 mt-1" />
-                <div>
-                  <span className="info-title">Tuition Fees</span>
+                <div className="w-100">
+                  <span className="info-title">
+                    Tuition Fees{" "}
+                    {quickViewData?.durationTypeId > 0 && (
+                      <>({durationInfo(quickViewData?.durationTypeId)?.ly})</>
+                    )}{" "}
+                  </span>
                   <div>
                     {checkHome?.length === 1 && (
                       <Row>
@@ -572,93 +638,48 @@ const QuickViewModal = ({
           </Row>
 
           <Row className="quickview-footer">
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <StudyModeIcon />
-                </span>
-                Study Mode{" "}
+            <div className="info-group mr-2">
+              <div>
+                <LocationIcon />
               </div>
-              <div className="footer-tag__content">
-                <ul>
-                  {quickViewData?.studyModes
-                    ?.split(",")
-                    .map((id) => {
-                      const method = studyMode.find(
-                        (m) => m.id === parseInt(id.trim(), 10)
-                      );
-                      return method?.name;
-                    })
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                </ul>
-              </div>
-            </div>
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <DeliverPatternIcon />
-                </span>
-                <span>Delivery Pattern</span>
-              </div>
-              <div className="footer-tag__content">
-                <ul>
-                  {quickViewData?.deliveryMethods
-                    ?.split(",")
-                    .map((id) => {
-                      const method = deliveryMethods.find(
-                        (m) => m.id === parseInt(id.trim(), 10)
-                      );
-                      return method?.name;
-                    })
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                </ul>
+              <div className="ml-2">
+                <div className="fw-600 fs-14px mb-1">Campus Location</div>
+                <div className="line-hr"></div>
+                <div className="mt-1">
+                  {quickViewData?.campusNames ? (
+                    quickViewData.campusNames
+                      ?.split(",")
+                      .map((campus, index) => (
+                        <div key={index}>{campus.trim()}</div>
+                      ))
+                  ) : (
+                    <span>No campus information available</span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <DeliveryScheduleIcon />
-                </span>
-                Delivery Schedule{" "}
+            <div className="footer-tag w-75">
+              <div className="mb-1">
+                <span className="fw-600 fs-14px">Delivery Schedule </span>
               </div>
-              <div className="footer-tag__content">
-                <ul>
-                  {quickViewData?.deliverySchedules
-                    ?.split(",")
-                    .map((id) => {
-                      const method = deliverySchedules.find(
-                        (m) => m.id === parseInt(id.trim(), 10)
-                      );
-                      return method?.name;
-                    })
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                </ul>
-              </div>
-            </div>
-            <div className="footer-tag">
-              <div className="mb-2 fw-500">
-                <span className="mr-1">
-                  <DepositIcon />
-                </span>
-                Deposit{" "}
-              </div>
-              <div className="footer-tag__content">
-                <ul>
-                  <li>
-                    {currency(quickViewData.depositFeeCurrencyId)}
-                    {quickViewData?.depositFee}
-                  </li>
-                </ul>
+              <div className="line-hr"></div>
+
+              <div className="mt-2">
+                {quickViewData?.deliverySchedules
+                  ?.split(",")
+                  .map((id) => {
+                    const method = deliverySchedules.find(
+                      (m) => m.id === parseInt(id.trim(), 10)
+                    );
+                    return method?.name;
+                  })
+                  .filter(Boolean)
+                  .map((name, index) => (
+                    <span className="footer-tag__inner" key={index}>
+                      {name}
+                    </span>
+                  ))}
               </div>
             </div>
           </Row>

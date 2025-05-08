@@ -37,7 +37,7 @@ const AddUniversitySubjectFee = () => {
   const [progress, setProgress] = useState(false);
 
   const [CurrencyDD, setCurrencyDD] = useState([]);
-  const [deliverySchedule, setDeliverySchedule] = useState([]);
+  // const [deliverySchedule, setDeliverySchedule] = useState([]);
   const [deliveryMethod, setDeliveryMethod] = useState([]);
 
   const [addLocalTutionFee, setAddLocalTutionFee] = useState(undefined);
@@ -147,7 +147,7 @@ const AddUniversitySubjectFee = () => {
       setAverageFee(res?.averageapplicationfee);
       setFirstYearTuitionFee(res?.firstyeartutionfee);
       setDepositFee(res?.depositfee);
-      setDeliverySchedule(res?.deliverySchedules);
+      // setDeliverySchedule(res?.deliverySchedules);
       setDeliveryMethod(res?.deliveryMethods);
     });
   }, [subjId]);
@@ -197,11 +197,11 @@ const AddUniversitySubjectFee = () => {
       onCampus: deliveryMethod?.includes(2) ? true : false,
       hybrid: deliveryMethod?.includes(3) ? true : false,
 
-      evening: deliverySchedule?.includes(1) ? true : false,
-      eveningweekend: deliverySchedule?.includes(2) ? true : false,
-      standard: deliverySchedule?.includes(3) ? true : false,
-      weekend: deliverySchedule?.includes(4) ? true : false,
-      flexible: deliverySchedule?.includes(5) ? true : false,
+      // evening: deliverySchedule?.includes(1) ? true : false,
+      // eveningweekend: deliverySchedule?.includes(2) ? true : false,
+      // standard: deliverySchedule?.includes(3) ? true : false,
+      // weekend: deliverySchedule?.includes(4) ? true : false,
+      // flexible: deliverySchedule?.includes(5) ? true : false,
       subjectId: subjId,
       localfeecurrencyid: addLocalTutionFeeCurrencyId,
       localtutionfee: addLocalTutionFee,
@@ -508,7 +508,7 @@ const AddUniversitySubjectFee = () => {
                       action={setDeliveryMethod}
                       className="mb-0"
                     />
-                    <p className="section-title mt-3">Delivery Schedules</p>
+                    {/* <p className="section-title mt-3">Delivery Schedules</p>
                     <CheckBoxByObj
                       register={() => {}}
                       name="deliverySchedules"
@@ -516,7 +516,7 @@ const AddUniversitySubjectFee = () => {
                       defaultValue={deliverySchedule}
                       action={setDeliverySchedule}
                       className="mb-0"
-                    />
+                    /> */}
                   </Col>
                 </Row>
                 <Row className=" mt-4">
