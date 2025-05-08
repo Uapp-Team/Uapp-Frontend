@@ -10,9 +10,7 @@ import {
   TabPane,
   Form,
   FormGroup,
-  Col,
 } from "reactstrap";
-import get from "../../../../helpers/get";
 import SubjectNavbar from "./Components/SubjectNavbar";
 import post from "../../../../helpers/post";
 import SaveButton from "../../../../components/buttons/SaveButton";
@@ -20,6 +18,7 @@ import PreviousButton from "../../../../components/buttons/PreviousButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
 import { deliverySchedules } from "../../../../constants/presetData";
+import Uget from "../../../../helpers/Uget";
 
 const AddUniversitySubjectAssignToCampus = () => {
   // const campus = [
@@ -74,8 +73,8 @@ const AddUniversitySubjectAssignToCampus = () => {
   const [progress, setProgress] = useState(false);
 
   useEffect(() => {
-    get(`SubjectCampus/index?subjectid=${subjId}`).then((res) => {
-      setCampusList(res);
+    Uget(`SubjectCampus/index?subjectid=${subjId}`).then((res) => {
+      setCampusList(res?.data);
     });
   }, [subjId]);
 
@@ -83,22 +82,49 @@ const AddUniversitySubjectAssignToCampus = () => {
     const values = [...campusList];
     values[i].isAcceptHome = e.target.checked;
     setCampusList(values);
+    handleAccepts(i);
   };
   const handleisAcceptEU_UK = (e, i) => {
     const values = [...campusList];
     values[i].isAcceptEU_UK = e.target.checked;
     setCampusList(values);
+    handleAccepts(i);
   };
   const handleisAcceptInternational = (e, i) => {
     const values = [...campusList];
     values[i].isAcceptInternational = e.target.checked;
     setCampusList(values);
+    handleAccepts(i);
+  };
+
+  const handleAccepts = (i) => {
+    const values = [...campusList];
+    if (
+      values[i].isAcceptHome === false &&
+      values[i].isAcceptEU_UK === false &&
+      values[i].isAcceptInternational === false
+    ) {
+      values[i].deliverySchedules = [];
+    }
+    setCampusList(values);
   };
 
   const setDeliverySchedule = (e, i) => {
     const values = [...campusList];
-    values[i].deliverySchedule = e;
-    setCampusList(values);
+
+    if (
+      values[i].isAcceptHome === true ||
+      values[i].isAcceptEU_UK === true ||
+      values[i].isAcceptInternational === true
+    ) {
+      values[i].deliverySchedules = e;
+      setCampusList(values);
+    } else {
+      addToast("please select at least one application type", {
+        appearance: "warning",
+        autoDismiss: true,
+      });
+    }
   };
 
   console.log("campusList", campusList);
@@ -249,7 +275,7 @@ const AddUniversitySubjectAssignToCampus = () => {
                               register={() => {}}
                               name={`${item?.deliverySchedule}-${i}`}
                               list={deliverySchedules}
-                              defaultValue={item?.deliverySchedule}
+                              defaultValue={item?.deliverySchedules}
                               action={(e) => setDeliverySchedule(e, i)}
                               className="mb-0"
                               colSize={[
