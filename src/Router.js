@@ -5285,7 +5285,7 @@ class AppRouter extends React.Component {
                   />
                   <AppRoute
                     path="/searchBydepartment/:departmentId"
-                    component={Search}
+                    component={SearchAndApply}
                   />
 
                   {/* Seed Data path */}
