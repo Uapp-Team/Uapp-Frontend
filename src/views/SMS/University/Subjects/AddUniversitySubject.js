@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from "react";
 import Axios from "axios";
+import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router";
 import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  Col,
   Form,
   FormGroup,
   Input,
-  Col,
-  Row,
-  TabContent,
-  TabPane,
+  Label,
   Nav,
   NavItem,
   NavLink,
-  Label,
+  Row,
+  TabContent,
+  TabPane,
 } from "reactstrap";
-import { rootUrl } from "../../../../constants/constants";
-import get from "../../../../helpers/get";
-import { useToasts } from "react-toast-notifications";
-import put from "../../../../helpers/put";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { userTypes } from "../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../constants/constants";
+import { userTypes } from "../../../../constants/userTypeConstant";
+import get from "../../../../helpers/get";
+import put from "../../../../helpers/put";
 import Uget from "../../../../helpers/Uget";
-import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
-import { loansAvailable } from "../../../../constants/presetData";
 
 const AddUniversitySubject = () => {
   const userType = localStorage.getItem("userType");
@@ -950,7 +948,13 @@ const AddUniversitySubject = () => {
                         <Col>
                           <span>Full Time</span>
                           <Select
-                            options={fullTimeMenu}
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...fullTimeList?.map((fullTimeOptions) => ({
+                                label: fullTimeOptions.name,
+                                value: fullTimeOptions.id,
+                              })),
+                            ]}
                             value={{
                               label: fullTimeLabel,
                               value: fullTimeValue,
@@ -968,7 +972,13 @@ const AddUniversitySubject = () => {
                         <Col>
                           <span>Part Time</span>
                           <Select
-                            options={partTimeMenu}
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...partTimeList?.map((partTimeOptions) => ({
+                                label: partTimeOptions.name,
+                                value: partTimeOptions.id,
+                              })),
+                            ]}
                             value={{
                               label: partTimeLabel,
                               value: partTimeValue,
@@ -986,7 +996,13 @@ const AddUniversitySubject = () => {
                         <Col>
                           <span>Sandwich</span>
                           <Select
-                            options={sandwichMenu}
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...sandwichList?.map((sandwich) => ({
+                                label: sandwich.name,
+                                value: sandwich.id,
+                              })),
+                            ]}
                             value={{
                               label: sandwichLabel,
                               value: sandwichValue,
