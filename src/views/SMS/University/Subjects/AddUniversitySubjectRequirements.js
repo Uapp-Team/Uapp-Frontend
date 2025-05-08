@@ -80,11 +80,11 @@ const AddUniversitySubjectRequirements = () => {
       console.log(res);
       setIsEducationRequired(res?.isEducationRequired);
       setEduLabel(
-        res?.id !== undefined
+        res?.educationLevel !== null
           ? res?.educationLevel?.name
           : "Select Education Level"
       );
-      setEduValue(res?.id !== undefined ? res?.educationLevel?.id : 0);
+      setEduValue(res?.educationLevelId !== null ? res?.educationLevel?.id : 0);
       setRequiredId(res?.id);
       setResultInPercent(res?.requiredResultInPercent);
     });
