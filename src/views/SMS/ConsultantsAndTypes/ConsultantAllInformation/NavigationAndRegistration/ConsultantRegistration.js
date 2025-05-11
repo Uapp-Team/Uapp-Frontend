@@ -194,16 +194,16 @@ const ConsultantRegistration = () => {
         setParentError(false);
       }
     }
-    if (BranchAdmin() || BranchManager()) {
-      setSalesManagerError(false);
-    } else {
-      if (salesManagerValue === 0) {
-        isValid = false;
-        setSalesManagerError(true);
-      } else {
-        setSalesManagerError(false);
-      }
-    }
+    // if (BranchAdmin() || BranchManager()) {
+    //   setSalesManagerError(false);
+    // } else {
+    //   if (salesManagerValue === 0) {
+    //     isValid = false;
+    //     setSalesManagerError(true);
+    //   } else {
+    //     setSalesManagerError(false);
+    //   }
+    // }
     if (titleValue === 0) {
       isValid = false;
       setTitleError(true);
@@ -449,9 +449,9 @@ const ConsultantRegistration = () => {
                 </FormGroup>
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    {!BranchAdmin() && !BranchManager() && (
+                    {/* {!BranchAdmin() && !BranchManager() && (
                       <span className="text-danger">*</span>
-                    )}
+                    )} */}
                     Sales Manager
                   </span>
 
@@ -469,11 +469,11 @@ const ConsultantRegistration = () => {
                     id="salesManagerId"
                   />
 
-                  {salesManagerError && (
+                  {/* {salesManagerError && (
                     <span className="text-danger">
                       Sales Manager is required.
                     </span>
-                  )}
+                  )} */}
                 </FormGroup>
 
                 <FormGroup>

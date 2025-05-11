@@ -210,7 +210,7 @@ const SalesManager = () => {
         <DashboardReadyToApply
           url={`SalesManagerDashboard/ReadyToApplyApplications/${intakeRngValue}`}
         />
-        {/* <DashboardProgressChart /> */}
+        <DashboardProgressChart />
         {/* <DashboardComission id={intakeRngValue} /> */}
       </>
 
