@@ -405,6 +405,12 @@ tbody tr:hover {
 .fw-700 {
   font-weight: 700 !important;
 }
+.fw-800 {
+  font-weight: 800 !important;
+}
+.fw-900 {
+  font-weight: 900 !important;
+}
 
 .p-0 {
   padding: 0 !important;

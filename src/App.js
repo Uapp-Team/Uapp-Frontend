@@ -9,11 +9,14 @@ import "./components/core/rippleButton/RippleButton";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "prismjs/themes/prism-tomorrow.css";
+import { AppProvider } from "./layouts/context/AppContext";
 
 const App = (props) => {
   return (
     <>
-      <Router />
+      <AppProvider>
+        <Router />
+      </AppProvider>
     </>
   );
 };

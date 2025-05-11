@@ -1,10 +1,11 @@
-import React, { PureComponent } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import classnames from "classnames";
-import Customizer from "../components/core/customizer/Customizer";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import Sidebar from "./components/menu/vertical-menu/Sidebar";
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
-import { connect } from "react-redux";
+
 import {
   changeMode,
   collapseSidebar,
@@ -13,309 +14,223 @@ import {
   changeFooterType,
   changeMenuColor,
   hideScrollToTop,
-} from "../redux/actions/customizer/index";
+} from "../redux/actions/customizer";
+import { useContextData } from "./context/AppContext";
 
-class VerticalLayout extends PureComponent {
-  state = {
-    width: window.innerWidth,
-    sidebarState: this.props.app.customizer.sidebarCollapsed,
-    layout: this.props.app.customizer.theme,
-    collapsedContent: this.props.app.customizer.sidebarCollapsed,
-    sidebarHidden: false,
-    currentLang: "en",
-    appOverlay: false,
-    customizer: false,
-    currRoute: this.props.location.pathname,
-  };
-  collapsedPaths = [];
-  mounted = false;
-  updateWidth = () => {
-    if (this.mounted) {
-      this.setState((prevState) => ({
-        width: window.innerWidth,
-      }));
+const VerticalLayout = ({ children, permission }) => {
+  const value = useContextData();
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const match = useRouteMatch();
+  const { pathname } = location;
+
+  const {
+    theme,
+    direction,
+    sidebarCollapsed,
+    navbarColor,
+    navbarType,
+    footerType,
+    menuTheme,
+    hideScrollToTop: scrollToTop,
+  } = useSelector((state) => state.customizer);
+
+  const [width, setWidth] = useState(window.innerWidth);
+  // const [sidebarState, setSidebarState] = useState(sidebarCollapsed);
+  // const [collapsedContent, setCollapsedContent] = useState(sidebarCollapsed);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const [currentLang, setCurrentLang] = useState("en");
+  const [appOverlay, setAppOverlay] = useState(false);
+  const [customizerOpen, setCustomizerOpen] = useState(false);
+
+  const collapsedPaths = useRef([]);
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", updateWidth);
+    }
+
+    if (collapsedPaths.current.includes(pathname)) {
+      dispatch(collapseSidebar(false));
+    }
+
+    if (direction === "rtl") {
+      document.documentElement.setAttribute("dir", "rtl");
+    } else {
+      document.documentElement.setAttribute("dir", "ltr");
+    }
+
+    if (theme === "dark") {
+      document.body.classList.add("dark-layout");
+    } else if (theme === "semi-dark") {
+      document.body.classList.add("semi-dark-layout");
+    }
+
+    return () => {
+      mounted.current = false;
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mounted.current) return;
+
+    // Layout theme
+    if (theme === "dark") {
+      document.body.classList.remove("semi-dark-layout");
+      document.body.classList.add("dark-layout");
+    } else if (theme === "semi-dark") {
+      document.body.classList.remove("dark-layout");
+      document.body.classList.add("semi-dark-layout");
+    } else {
+      document.body.classList.remove("dark-layout", "semi-dark-layout");
+    }
+
+    // Sidebar collapse logic
+    if (value.sidebar === null) {
+      value.setSidebar(false);
+    }
+    // if (sidebarCollapsed !== collapsedContent) {
+    //   setCollapsedContent(sidebarCollapsed);
+    //   setSidebarState(sidebarCollapsed);
+    // }
+
+    if (collapsedPaths.current.includes(pathname)) {
+      dispatch(collapseSidebar(true));
+    } else {
+      dispatch(collapseSidebar(false));
+    }
+  }, [pathname, sidebarCollapsed, theme]);
+
+  const updateWidth = () => {
+    if (mounted.current) {
+      setWidth(window.innerWidth);
     }
   };
 
-  handleCustomizer = (bool) => {
-    this.setState({
-      customizer: bool,
-    });
+  const toggleSidebarMenu = () => {
+    // const newState = !sidebarState;
+    // setSidebarState(newState);
+    // setCollapsedContent(newState);
+    value.setSidebar(!value.sidebar);
   };
 
-  componentDidMount() {
-    this.mounted = true;
-    let {
-      location: { pathname },
-      app: {
-        customizer: { theme, direction },
-      },
-    } = this.props;
-
-    if (this.mounted) {
-      if (window !== "undefined") {
-        window.addEventListener("resize", this.updateWidth, false);
-      }
-      if (this.collapsedPaths.includes(pathname)) {
-        this.props.collapseSidebar(false);
-      }
-
-      let layout = theme;
-      let dir = direction;
-      if (dir === "rtl")
-        document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
-      else document.getElementsByTagName("html")[0].setAttribute("dir", "ltr");
-      return layout === "dark"
-        ? document.body.classList.add("dark-layout")
-        : layout === "semi-dark"
-        ? document.body.classList.add("semi-dark-layout")
-        : null;
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    let {
-      location: { pathname },
-      app: {
-        customizer: { theme, sidebarCollapsed },
-      },
-    } = this.props;
-
-    let layout = theme;
-    if (this.mounted) {
-      if (layout === "dark") {
-        document.body.classList.remove("semi-dark-layout");
-        document.body.classList.add("dark-layout");
-      }
-      if (layout === "semi-dark") {
-        document.body.classList.remove("dark-layout");
-        document.body.classList.add("semi-dark-layout");
-      }
-      if (layout !== "dark" && layout !== "semi-dark") {
-        document.body.classList.remove("dark-layout", "semi-dark-layout");
-      }
-
-      if (
-        prevProps.app.customizer.sidebarCollapsed !==
-        this.props.app.customizer.sidebarCollapsed
-      ) {
-        this.setState({
-          collapsedContent: sidebarCollapsed,
-          sidebarState: sidebarCollapsed,
-        });
-      }
-      if (
-        prevProps.app.customizer.sidebarCollapsed ===
-          this.props.app.customizer.sidebarCollapsed &&
-        pathname !== prevProps.location.pathname &&
-        this.collapsedPaths.includes(pathname)
-      ) {
-        this.props.collapseSidebar(true);
-      }
-      if (
-        prevProps.app.customizer.sidebarCollapsed ===
-          this.props.app.customizer.sidebarCollapsed &&
-        pathname !== prevProps.location.pathname &&
-        !this.collapsedPaths.includes(pathname)
-      ) {
-        this.props.collapseSidebar(false);
-      }
-    }
-  }
-
-  handleCollapsedMenuPaths = (item) => {
-    let collapsedPaths = this.collapsedPaths;
-    if (!collapsedPaths.includes(item)) {
-      collapsedPaths.push(item);
-      this.collapsedPaths = collapsedPaths;
-    }
+  const sidebarMenuHover = (val) => {
+    value.setSidebar(val);
   };
 
-  toggleSidebarMenu = (val) => {
-    this.setState({
-      sidebarState: !this.state.sidebarState,
-      collapsedContent: !this.state.collapsedContent,
-    });
-  };
-
-  sidebarMenuHover = (val) => {
-    this.setState({
-      sidebarState: val,
-    });
-  };
-
-  handleSidebarVisibility = () => {
-    if (this.mounted) {
-      if (window !== undefined) {
-        window.addEventListener("resize", () => {
-          if (this.state.sidebarHidden) {
-            this.setState({
-              sidebarHidden: !this.state.sidebarHidden,
-            });
-          }
-        });
-      }
-      this.setState({
-        sidebarHidden: !this.state.sidebarHidden,
+  const handleSidebarVisibility = () => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", () => {
+        if (sidebarHidden) {
+          setSidebarHidden(!sidebarHidden);
+        }
       });
     }
+    setSidebarHidden(!sidebarHidden);
   };
 
-  componentWillUnmount() {
-    this.mounted = false;
-  }
-
-  handleCurrentLanguage = (lang) => {
-    this.setState({
-      currentLang: lang,
-    });
-  };
-
-  handleAppOverlay = (value) => {
-    if (value.length > 0) {
-      this.setState({
-        appOverlay: true,
-      });
-    } else if (value.length < 0 || value === "") {
-      this.setState({
-        appOverlay: false,
-      });
+  const handleCollapsedMenuPaths = (item) => {
+    if (!collapsedPaths.current.includes(item)) {
+      collapsedPaths.current.push(item);
     }
   };
 
-  handleAppOverlayClick = () => {
-    this.setState({
-      appOverlay: false,
-    });
+  const handleAppOverlayInput = (value) => {
+    setAppOverlay(value.length > 0);
   };
 
-  render() {
-    let appProps = this.props.app.customizer;
-    let menuThemeArr = [
-      "primary",
-      "success",
-      "danger",
-      "info",
-      "warning",
-      "dark",
-    ];
-    let sidebarProps = {
-      toggleSidebarMenu: this.props.collapseSidebar,
-      toggle: this.toggleSidebarMenu,
-      sidebarState: this.state.sidebarState,
-      sidebarHover: this.sidebarMenuHover,
-      sidebarVisibility: this.handleSidebarVisibility,
-      visibilityState: this.state.sidebarHidden,
-      activePath: this.props.match.path,
-      collapsedMenuPaths: this.handleCollapsedMenuPaths,
-      currentLang: this.state.currentLang,
-      activeTheme: appProps.menuTheme,
-      collapsed: this.state.collapsedContent,
-      permission: this.props.permission,
-      deviceWidth: this.state.width,
-    };
-    let navbarProps = {
-      toggleSidebarMenu: this.toggleSidebarMenu,
-      sidebarState: this.state.sidebarState,
-      sidebarVisibility: this.handleSidebarVisibility,
-      currentLang: this.state.currentLang,
-      changeCurrentLang: this.handleCurrentLanguage,
-      handleAppOverlay: this.handleAppOverlay,
-      appOverlayState: this.state.appOverlay,
-      navbarColor: appProps.navbarColor,
-      navbarType: appProps.navbarType,
+  const handleAppOverlayClick = () => {
+    setAppOverlay(false);
+  };
 
-      // sidebar props
-      toggleSidebarMenu: this.props.collapseSidebar,
-      toggle: this.toggleSidebarMenu,
-      sidebarState: this.state.sidebarState,
-      sidebarHover: this.sidebarMenuHover,
-      sidebarVisibility: this.handleSidebarVisibility,
-      visibilityState: this.state.sidebarHidden,
-      activePath: this.props.match.path,
-      collapsedMenuPaths: this.handleCollapsedMenuPaths,
-      currentLang: this.state.currentLang,
-      activeTheme: appProps.menuTheme,
-      collapsed: this.state.collapsedContent,
-      permission: this.props.permission,
-      deviceWidth: this.state.width,
-    };
+  const sidebarProps = {
+    toggleSidebarMenu: () => dispatch(collapseSidebar(!sidebarCollapsed)),
+    toggle: toggleSidebarMenu,
+    sidebarState: value.sidebar,
+    sidebarHover: sidebarMenuHover,
+    sidebarVisibility: handleSidebarVisibility,
+    visibilityState: sidebarHidden,
+    activePath: match.path,
+    collapsedMenuPaths: handleCollapsedMenuPaths,
+    currentLang,
+    activeTheme: menuTheme,
+    collapsed: value.sidebar,
+    permission,
+    deviceWidth: width,
+  };
 
-    let footerProps = {
-      footerType: appProps.footerType,
-      hideScrollToTop: appProps.hideScrollToTop,
-    };
+  const navbarProps = {
+    ...sidebarProps,
+    currentLang,
+    changeCurrentLang: setCurrentLang,
+    handleAppOverlay: handleAppOverlayInput,
+    appOverlayState: appOverlay,
+    navbarColor,
+    navbarType,
+  };
 
-    let customizerProps = {
-      customizerState: this.state.customizer,
-      handleCustomizer: this.handleCustomizer,
-      changeMode: this.props.changeMode,
-      changeNavbar: this.props.changeNavbarColor,
-      changeNavbarType: this.props.changeNavbarType,
-      changeFooterType: this.props.changeFooterType,
-      changeMenuTheme: this.props.changeMenuColor,
-      collapseSidebar: this.props.collapseSidebar,
-      hideScrollToTop: this.props.hideScrollToTop,
-      activeMode: appProps.theme,
-      activeNavbar: appProps.navbarColor,
-      navbarType: appProps.navbarType,
-      footerType: appProps.footerType,
-      menuTheme: appProps.menuTheme,
-      scrollToTop: appProps.hideScrollToTop,
-      sidebarState: appProps.sidebarCollapsed,
-    };
-    return (
+  const footerProps = {
+    footerType,
+    hideScrollToTop: scrollToTop,
+  };
+
+  const customizerProps = {
+    customizerState: customizerOpen,
+    handleCustomizer: setCustomizerOpen,
+    changeMode: (val) => dispatch(changeMode(val)),
+    changeNavbar: (val) => dispatch(changeNavbarColor(val)),
+    changeNavbarType: (val) => dispatch(changeNavbarType(val)),
+    changeFooterType: (val) => dispatch(changeFooterType(val)),
+    changeMenuTheme: (val) => dispatch(changeMenuColor(val)),
+    collapseSidebar: (val) => dispatch(collapseSidebar(val)),
+    hideScrollToTop: (val) => dispatch(hideScrollToTop(val)),
+    activeMode: theme,
+    activeNavbar: navbarColor,
+    navbarType,
+    footerType,
+    menuTheme,
+    scrollToTop,
+    sidebarState: sidebarCollapsed,
+  };
+
+  const menuThemeArr = [
+    "primary",
+    "success",
+    "danger",
+    "info",
+    "warning",
+    "dark",
+  ];
+
+  return (
+    <div
+      className={classnames(`wrapper vertical-layout theme-${menuTheme}`, {
+        "menu-collapsed": value.sidebar && width >= 1200,
+        "fixed-footer": footerType === "sticky",
+        "navbar-static": navbarType === "static",
+        "navbar-sticky": navbarType === "sticky",
+        "navbar-floating": navbarType === "floating",
+        "navbar-hidden": navbarType === "hidden",
+        "theme-primary": !menuThemeArr.includes(menuTheme),
+      })}
+    >
+      <Sidebar {...sidebarProps} />
       <div
-        className={classnames(
-          `wrapper vertical-layout theme-${appProps.menuTheme}`,
-          {
-            "menu-collapsed":
-              this.state.collapsedContent === true && this.state.width >= 1200,
-            "fixed-footer": appProps.footerType === "sticky",
-            "navbar-static": appProps.navbarType === "static",
-            "navbar-sticky": appProps.navbarType === "sticky",
-            "navbar-floating": appProps.navbarType === "floating",
-            "navbar-hidden": appProps.navbarType === "hidden",
-            "theme-primary": !menuThemeArr.includes(appProps.menuTheme),
-          }
-        )}
+        className={classnames("app-content content custom-nav", {
+          "show-overlay": appOverlay,
+        })}
+        onClick={handleAppOverlayClick}
       >
-        <Sidebar {...sidebarProps} />
-        <div
-          className={classnames("app-content content custom-nav", {
-            "show-overlay": this.state.appOverlay === true,
-          })}
-          onClick={this.handleAppOverlayClick}
-        >
-          <Navbar {...navbarProps} />
-          <div className="content-wrapper coustom-wrapper">
-            {this.props.children}
-          </div>
-        </div>
-
-        <Footer {...footerProps} />
-        {appProps.disableCustomizer !== true ? (
-          <Customizer {...customizerProps} />
-        ) : null}
-        {/* <div
-          className="sidenav-overlay"
-          onClick={this.handleSidebarVisibility}
-        /> */}
+        <Navbar {...navbarProps} />
+        <div className="content-wrapper coustom-wrapper">{children}</div>
       </div>
-    );
-  }
-}
-const mapStateToProps = (state) => {
-  return {
-    app: state.customizer,
-  };
+      <Footer {...footerProps} />
+      {/* {!disableCustomizer && <Customizer {...customizerProps} />} */}
+    </div>
+  );
 };
-export default connect(mapStateToProps, {
-  changeMode,
-  collapseSidebar,
-  changeNavbarColor,
-  changeNavbarType,
-  changeFooterType,
-  changeMenuColor,
-  hideScrollToTop,
-})(VerticalLayout);
+
+export default VerticalLayout;
