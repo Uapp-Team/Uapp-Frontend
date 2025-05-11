@@ -76,7 +76,7 @@ const QuickViewModal = ({
   useEffect(() => {
     if (quickViewData?.subjectId && selectedIntakeId) {
       Uget(
-        `SubjectIntake/GetCampusBySubjectIntake?subjectId=${quickViewData.subjectId}&intakeId=${selectedIntakeId}`
+        `SubjectIntake/GetCampusBySubjectIntake?subjectId=${quickViewData?.subjectId}&intakeId=${selectedIntakeId}`
       ).then((res) => setSubjectIntake(res?.data));
     }
   }, [quickViewData?.subjectId, selectedIntakeId]);
