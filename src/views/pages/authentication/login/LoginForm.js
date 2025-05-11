@@ -11,8 +11,10 @@ import { Form, FormGroup, Input, InputGroup, InputGroupText } from "reactstrap";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import { androidAppUrl, rootUrl } from "../../../../constants/constants";
 import SetStorage from "../../../SMS/TableColumn/SetStorage";
+import { useContextData } from "../../../../layouts/context/AppContext";
 
 const LoginForm = () => {
+  const value = useContextData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, seterror] = useState("");
@@ -104,6 +106,7 @@ const LoginForm = () => {
           if (response?.status === 200) {
             if (response?.data?.isSuccess === true) {
               seterror("");
+              value.setSidebar(false);
               localStorage.removeItem("date");
               localStorage.setItem(
                 "token",

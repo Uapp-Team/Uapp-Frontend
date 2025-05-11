@@ -157,6 +157,7 @@ class SideMenuContent extends React.Component {
     const usertype = JSON.parse(localStorage.getItem("userType"));
     const usersType = localStorage.getItem("userType");
     const token = localStorage.getItem("token");
+    const sidebarStatus = localStorage.getItem("sidebarStatus");
     const navigationConfig = this.state.menu;
     // Loop over sidebar items
     // eslint-disable-next-line
@@ -353,14 +354,35 @@ class SideMenuContent extends React.Component {
               <>
                 {menuItems}
 
-                {(usersType !== userTypes?.Consultant &&
+                {(usersType === userTypes?.Consultant ||
+                  usersType === userTypes?.SystemAdmin ||
+                  usersType === userTypes?.Admin ||
+                  usersType === userTypes?.BranchAdmin) && (
+                  <li
+                    className={`nav-item uapp-nav-item`}
+                    onClick={handleLeadLogon}
+                  >
+                    <Link
+                      to=""
+                      className="d-flex justify-content-start sidemenu"
+                    >
+                      <div className="menu-text text-orange fw-900">
+                        <span className="menu-item menu-title">
+                          Login to Lead
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                )}
+
+                {/* {(usersType !== userTypes?.Consultant &&
                   usersType !== userTypes?.SystemAdmin &&
                   usersType !== userTypes?.Admin &&
                   usersType !== userTypes?.BranchAdmin) || (
                   <button className="login-to-lead" onClick={handleLeadLogon}>
                     Login To Lead
                   </button>
-                )}
+                )} */}
               </>
             )}
           </>
