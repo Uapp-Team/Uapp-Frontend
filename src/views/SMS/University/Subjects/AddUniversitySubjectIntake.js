@@ -498,7 +498,7 @@ const AddUniversitySubjectIntake = () => {
                                             width: "15%",
                                           }}
                                         >
-                                          {l?.intakeStatusName === "Open" && (
+                                          {l?.intakeStatusName !== "Closed" && (
                                             <span>
                                               {l?.applicationDeadLine}
                                             </span>
@@ -511,7 +511,8 @@ const AddUniversitySubjectIntake = () => {
                                             width: "15%",
                                           }}
                                         >
-                                          {l?.intakeStatusName === "Open" && (
+                                          {l?.classStartDate !==
+                                            "01/01/0001" && (
                                             <span>{l?.classStartDate}</span>
                                           )}
                                         </td>
