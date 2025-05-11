@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, MoreOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
@@ -21,6 +21,7 @@ import "../SearchAndApply.css";
 import "./../custombrackpoint.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
+import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
   BellIconDefault,
   BellIconRed,
@@ -256,133 +257,33 @@ const ApplyCardVar = ({
                             <TimerIcon />
                             <span className="ml-1 fw-500">Duration</span>
                           </span>
-                          <span>
-                            {(() => {
-                              const fullTimeDuration = item.durations.find(
-                                (duration) => Number(duration.studyMode) === 2
-                              );
-                              const otherDurations = item.durations.filter(
-                                (duration) => Number(duration.studyMode) !== 2
-                              );
-
-                              return (
-                                <div className="d-flex">
-                                  <span>
-                                    {fullTimeDuration && (
-                                      <span className="duration-tag fw-600">
-                                        {fullTimeDuration.name}
-                                      </span>
-                                    )}
-                                  </span>
-                                  <span>
-                                    {otherDurations.length > 0 && (
-                                      <Tooltip
-                                        title={
-                                          <div className="custom-tooltip-content">
-                                            {otherDurations.map(
-                                              (method, index) => (
-                                                <div className="tooltip-method">
-                                                  <span key={index}>
-                                                    {method.name}
-                                                  </span>
-                                                </div>
-                                              )
-                                            )}
-                                          </div>
-                                        }
-                                        placement="top"
-                                        overlayClassName="custom-tooltip"
-                                        color="white"
-                                      >
-                                        <MoreOutlined
-                                          rotate={90}
-                                          style={{
-                                            fontSize: "14px",
-                                            color: "#5D5D5D",
-                                            cursor: "pointer",
-                                            border: "1px solid gray",
-                                            borderRadius: "999px",
-                                            padding: "1px",
-                                            marginLeft: "4px",
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    )}
-                                  </span>
-                                </div>
-                              );
-                            })()}
-                          </span>
+                          <DisplayWithTooltip
+                            items={item?.durations}
+                            primaryCondition={(duration) =>
+                              Number(duration.studyMode) === 2
+                            }
+                            secondaryCondition={(duration) =>
+                              Number(duration.studyMode) !== 2
+                            }
+                          />
                         </li>
                         <li className="d-flex justify-content-between">
                           <span>
                             <StudyModeIcon />
                             <span className="ml-1 fw-500">Study Mode</span>
                           </span>
-                          <span>
-                            {(() => {
-                              const methods = item.durations
-                                ?.map((duration) => {
-                                  return studyMode.find(
-                                    (mode) =>
-                                      mode.id === Number(duration.studyMode)
-                                  );
-                                })
-                                .filter(Boolean);
-
-                              const fullTime = methods.find(
-                                (method) => method.id === 2
-                              );
-                              const others = methods.filter(
-                                (method) => method.id !== 2
-                              );
-
-                              return (
-                                <div className="d-flex">
-                                  <span>
-                                    {fullTime && (
-                                      <span className="study-mode-tag fw-600">
-                                        {fullTime.name}
-                                      </span>
-                                    )}
-                                  </span>
-                                  <span>
-                                    {others.length > 0 && (
-                                      <Tooltip
-                                        title={
-                                          <div className="custom-tooltip-content">
-                                            {others.map((method, index) => (
-                                              <div className="tooltip-method">
-                                                <span key={index}>
-                                                  {method.name}
-                                                </span>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        }
-                                        placement="top"
-                                        overlayClassName="custom-tooltip"
-                                        color="white"
-                                      >
-                                        <MoreOutlined
-                                          rotate={90}
-                                          style={{
-                                            fontSize: "14px",
-                                            color: "#5D5D5D",
-                                            cursor: "pointer",
-                                            border: "1px solid gray",
-                                            borderRadius: "999px",
-                                            padding: "1px",
-                                            marginLeft: "4px",
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    )}
-                                  </span>
-                                </div>
-                              );
-                            })()}
-                          </span>
+                          <DisplayWithTooltip
+                            items={item.durations
+                              .map((duration) =>
+                                studyMode.find(
+                                  (mode) =>
+                                    mode.id === Number(duration.studyMode)
+                                )
+                              )
+                              .filter(Boolean)}
+                            primaryCondition={(method) => method.id === 2}
+                            secondaryCondition={(method) => method.id !== 2}
+                          />
                         </li>
                         <li className="d-flex justify-content-between">
                           <span>
