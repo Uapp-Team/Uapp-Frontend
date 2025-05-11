@@ -14,7 +14,6 @@ import {
 } from "../../../../components/core/User";
 import { rootUrl } from "../../../../constants/constants";
 import {
-  countryInfo,
   currency,
   deliveryMethods,
   durationInfo,
@@ -227,9 +226,10 @@ const ApplyCardHor = ({
                       {item.universityName}
                     </span>
                     <span className="fw-400 fs-12px">
-                      {item.campusNames.split(",")[0].trim()}
+                      {/* {item.campusNames.split(",")[0].trim()}
                       {", "}
-                      {countryInfo(item?.universityCountryId)?.name}
+                      {countryInfo(item?.universityCountryId)?.name} */}
+                      {item?.universityLocation}
                     </span>
                   </div>
                 </div>
