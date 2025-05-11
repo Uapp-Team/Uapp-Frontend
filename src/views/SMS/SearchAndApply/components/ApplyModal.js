@@ -18,9 +18,9 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../../constants/presetData";
+import Uget from "../../../../helpers/Uget";
 import "../SearchAndApply.css";
 import { ArrowRightIcon, CalenderIcon } from "./icons";
-import Uget from "../../../../helpers/Uget";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
@@ -439,12 +439,16 @@ const ApplyModal = ({
                         setSelectedIntakeId("");
                         setSelectedIntakeDeadLine("");
                         setSelectedClassStartDate("");
+                        setSelectedCampusLabel("Select Campus");
+                        setSelectedCampusValue("");
                       } else {
                         // Select the intake
                         setSelectedIntake(intake.name);
                         setSelectedIntakeId(intake.id);
                         setSelectedIntakeDeadLine(intake.applicationDeadLine);
                         setSelectedClassStartDate(intake.classStartDate);
+                        setSelectedCampusLabel("Select Campus");
+                        setSelectedCampusValue(0);
                       }
                     }}
                   >
@@ -456,6 +460,8 @@ const ApplyModal = ({
                           onClick={() => {
                             setSelectedIntake("Select Intake");
                             setSelectedIntakeId("");
+                            setSelectedCampusLabel("Select Campus");
+                            setSelectedCampusValue(0);
                           }}
                         />
                       )}
@@ -780,11 +786,11 @@ const ApplyModal = ({
                 Are you sure you want to apply this program?
               </label>
             </div>
-            <div className="program-condition">
+            {/* <div className="program-condition">
               <p className="pl-2">
                 You can apply maximum 3 applications at a time for free.
               </p>
-            </div>
+            </div> */}
 
             <div className="program-modal__footer">
               <button className="program-modal__cancel" onClick={handleClose}>
