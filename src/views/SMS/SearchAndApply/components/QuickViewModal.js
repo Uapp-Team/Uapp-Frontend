@@ -25,6 +25,7 @@ import {
   studyMode,
 } from "../../../../constants/presetData";
 import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
+import Uget from "../../../../helpers/Uget";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
@@ -57,7 +58,7 @@ const QuickViewModal = ({
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
   const [selectedClassStartDate, setSelectedClassStartDate] = useState();
   const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
-  console.log(quickViewData, "quickviewData");
+  const [subjectIntake, setSubjectIntake] = useState([]);
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
   };
@@ -73,13 +74,29 @@ const QuickViewModal = ({
   );
 
   useEffect(() => {
-    if (open) {
-      setSelectedIntake("Select Intake");
-      setSelectedIntakeId("");
-      setSelectedIntakeDeadLine("");
-      setSelectedClassStartDate();
+    if (quickViewData?.subjectId && selectedIntakeId) {
+      Uget(
+        `SubjectIntake/GetCampusBySubjectIntake?subjectId=${quickViewData?.subjectId}&intakeId=${selectedIntakeId}`
+      ).then((res) => setSubjectIntake(res?.data));
     }
-  }, [open]);
+  }, [quickViewData, selectedIntakeId]);
+
+  // useEffect(() => {
+  //   if (open) {
+  //     setSelectedIntake("Select Intake");
+  //     setSelectedIntakeId("");
+  //     setSelectedIntakeDeadLine("");
+  //     setSelectedClassStartDate();
+  //   }
+  // }, [open]);
+
+  const demo = () => {
+    setSelectedIntake("Select Intake");
+    setSelectedIntakeId("");
+    setSelectedIntakeDeadLine("");
+    setSelectedClassStartDate();
+    onClose();
+  };
 
   useEffect(() => {
     if (open && quickViewData?.intakes?.length === 1) {
@@ -92,7 +109,7 @@ const QuickViewModal = ({
 
   return (
     <>
-      <Modal isOpen={open} toggle={onClose} className="modal-lg">
+      <Modal isOpen={open} toggle={demo} className="modal-lg">
         <div
           className="d-flex justify-content-between py-3 px-4"
           style={{
@@ -242,47 +259,45 @@ const QuickViewModal = ({
 
           <Row className="quickview-content">
             <Col xs={12} lg={7} className="quickview-left">
-              <div className="tags my-3">
-                {quickViewData?.intakeStatusId === 3 && (
-                  <span className="tbc-quickview">
-                    TBC
-                    <Tooltip
-                      title={
-                        <div className="custom-tooltip-content">
-                          <span className="tooltip-method">To Be Confirm</span>
-                        </div>
-                      }
-                      placement="top"
-                      overlayClassName="custom-tooltip"
-                      color="white"
-                    >
-                      <InfoCircleOutlined
-                        style={{
-                          fontSize: "12px",
-                          color: "#fff",
-                          cursor: "pointer",
-                          marginLeft: "5px",
-                        }}
-                      />
-                    </Tooltip>
-                  </span>
-                )}
-                {quickViewData?.isLoanAvailable && (
-                  <span className="card-tag work-placement mr-1">
-                    Loan Available
-                  </span>
-                )}
-                {quickViewData?.isWorkPlacementAvailable && (
-                  <span className="card-tag work-placement mr-1">
-                    Work Placement
-                  </span>
-                )}
-                {quickViewData?.isScholarshipAvailable && (
-                  <span className="card-tag scholarship-available">
-                    Scholarship Available
-                  </span>
-                )}
-              </div>
+              {quickViewData?.intakeStatusId === 3 && (
+                <span className="tbc-quickview">
+                  TBC
+                  <Tooltip
+                    title={
+                      <div className="custom-tooltip-content">
+                        <span className="tooltip-method">To Be Confirm</span>
+                      </div>
+                    }
+                    placement="top"
+                    overlayClassName="custom-tooltip"
+                    color="white"
+                  >
+                    <InfoCircleOutlined
+                      style={{
+                        fontSize: "12px",
+                        color: "#fff",
+                        cursor: "pointer",
+                        marginLeft: "5px",
+                      }}
+                    />
+                  </Tooltip>
+                </span>
+              )}
+              {quickViewData?.isLoanAvailable && (
+                <span className="card-tag work-placement mr-1">
+                  Loan Available
+                </span>
+              )}
+              {quickViewData?.isWorkPlacementAvailable && (
+                <span className="card-tag work-placement mr-1">
+                  Work Placement
+                </span>
+              )}
+              {quickViewData?.isScholarshipAvailable && (
+                <span className="card-tag scholarship-available">
+                  Scholarship Available
+                </span>
+              )}
               {selectedIntakeId && (
                 <div className="quickview-left__deadline my-2">
                   <span className="mr-3">
@@ -646,15 +661,9 @@ const QuickViewModal = ({
                 <div className="fw-600 fs-14px mb-1">Campus Location</div>
                 <div className="line-hr"></div>
                 <div className="mt-1">
-                  {quickViewData?.campusNames ? (
-                    quickViewData.campusNames
-                      ?.split(",")
-                      .map((campus, index) => (
-                        <div key={index}>{campus.trim()}</div>
-                      ))
-                  ) : (
-                    <span>No campus information available</span>
-                  )}
+                  {subjectIntake.flatMap((campus) => (
+                    <div key={index}>{campus.campusName}</div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -666,14 +675,16 @@ const QuickViewModal = ({
               <div className="line-hr"></div>
 
               <div className="mt-2">
-                {quickViewData?.deliverySchedules
-                  ?.split(",")
-                  .map((id) => {
-                    const method = deliverySchedules.find(
-                      (m) => m.id === parseInt(id.trim(), 10)
-                    );
-                    return method?.name;
-                  })
+                {subjectIntake
+                  .flatMap((scheduleObj) =>
+                    scheduleObj?.deliverySchedule?.map((id) => {
+                      const method = deliverySchedules.find(
+                        (deliverySchedule) =>
+                          deliverySchedule.id === parseInt(id, 10)
+                      );
+                      return method?.name;
+                    })
+                  )
                   .filter(Boolean)
                   .map((name, index) => (
                     <span className="footer-tag__inner" key={index}>

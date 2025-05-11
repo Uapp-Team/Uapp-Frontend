@@ -1,4 +1,4 @@
-import { InfoCircleOutlined, MoreOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaHeart } from "react-icons/fa";
@@ -14,7 +14,6 @@ import {
 } from "../../../../components/core/User";
 import { rootUrl } from "../../../../constants/constants";
 import {
-  countryInfo,
   currency,
   deliveryMethods,
   durationInfo,
@@ -25,6 +24,7 @@ import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
+import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
   BellIconDefault,
   BellIconRed,
@@ -226,9 +226,10 @@ const ApplyCardHor = ({
                       {item.universityName}
                     </span>
                     <span className="fw-400 fs-12px">
-                      {item.campusNames.split(",")[0].trim()}
+                      {/* {item.campusNames.split(",")[0].trim()}
                       {", "}
-                      {countryInfo(item?.universityCountryId)?.name}
+                      {countryInfo(item?.universityCountryId)?.name} */}
+                      {item?.universityLocation}
                     </span>
                   </div>
                 </div>
@@ -250,133 +251,32 @@ const ApplyCardHor = ({
                           <TimerIcon />
                           <span className="ml-1 fw-500">Duration</span>
                         </span>
-                        <span>
-                          {(() => {
-                            const fullTimeDuration = item.durations.find(
-                              (duration) => Number(duration.studyMode) === 2
-                            );
-                            const otherDurations = item.durations.filter(
-                              (duration) => Number(duration.studyMode) !== 2
-                            );
-
-                            return (
-                              <div className="d-flex">
-                                <span>
-                                  {fullTimeDuration && (
-                                    <span className="duration-tag">
-                                      {fullTimeDuration.name}
-                                    </span>
-                                  )}
-                                </span>
-                                <span>
-                                  {otherDurations.length > 0 && (
-                                    <Tooltip
-                                      title={
-                                        <div className="custom-tooltip-content">
-                                          <div className="tooltip-method">
-                                            <div>
-                                              {otherDurations.map(
-                                                (method, index) => (
-                                                  <div key={index}>
-                                                    {method.name}
-                                                  </div>
-                                                )
-                                              )}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      }
-                                      placement="top"
-                                      overlayClassName="custom-tooltip"
-                                      color="white"
-                                    >
-                                      <MoreOutlined
-                                        rotate={90}
-                                        style={{
-                                          fontSize: "14px",
-                                          color: "#5D5D5D",
-                                          cursor: "pointer",
-                                          border: "1px solid gray",
-                                          borderRadius: "999px",
-                                          marginLeft: "4px",
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                </span>
-                              </div>
-                            );
-                          })()}
-                        </span>
+                        <DisplayWithTooltip
+                          items={item?.durations}
+                          primaryCondition={(duration) =>
+                            Number(duration.studyMode) === 2
+                          }
+                          secondaryCondition={(duration) =>
+                            Number(duration.studyMode) !== 2
+                          }
+                        />
                       </span>
                       <span className="d-flex align-items-center mr-5">
                         <span className="mr-2 d-flex justify-content-center">
                           <StudyModeIcon />
                           <span className="ml-1 fw-500">Study Mode</span>
                         </span>
-                        <span>
-                          {(() => {
-                            const methods = item.durations
-                              ?.map((duration) => {
-                                return studyMode.find(
-                                  (mode) =>
-                                    mode.id === Number(duration.studyMode)
-                                );
-                              })
-                              .filter(Boolean);
-
-                            const fullTime = methods.find(
-                              (method) => method.id === 2
-                            );
-                            const others = methods.filter(
-                              (method) => method.id !== 2
-                            );
-
-                            return (
-                              <div className="d-flex">
-                                <span>
-                                  {fullTime && (
-                                    <span className="duration-tag">
-                                      {fullTime.name}
-                                    </span>
-                                  )}
-                                </span>
-                                <span>
-                                  {others.length > 0 && (
-                                    <Tooltip
-                                      title={
-                                        <div className="custom-tooltip-content">
-                                          <div className="tooltip-method">
-                                            {others.map((method, index) => (
-                                              <div key={index}>
-                                                {method.name}
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      }
-                                      placement="top"
-                                      overlayClassName="custom-tooltip"
-                                      color="white"
-                                    >
-                                      <MoreOutlined
-                                        rotate={90}
-                                        style={{
-                                          fontSize: "14px",
-                                          color: "#5D5D5D",
-                                          cursor: "pointer",
-                                          border: "1px solid gray",
-                                          borderRadius: "999px",
-                                          marginLeft: "4px",
-                                        }}
-                                      />
-                                    </Tooltip>
-                                  )}
-                                </span>
-                              </div>
-                            );
-                          })()}
-                        </span>
+                        <DisplayWithTooltip
+                          items={item.durations
+                            .map((duration) =>
+                              studyMode.find(
+                                (mode) => mode.id === Number(duration.studyMode)
+                              )
+                            )
+                            .filter(Boolean)}
+                          primaryCondition={(method) => method.id === 2}
+                          secondaryCondition={(method) => method.id !== 2}
+                        />
                       </span>
                       <span className="d-flex align-items-center mr-5">
                         <span className="mr-2 d-flex justify-content-center">

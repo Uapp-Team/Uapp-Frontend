@@ -94,7 +94,7 @@ function SearchAndApply() {
 
   useEffect(() => {
     get("SearchFilter/Departments").then((res) => {
-      setDepList([{ id: 0, name: "all Departments" }, ...res]);
+      setDepList([{ id: 0, name: "All Departments" }, ...res]);
     });
   }, []);
 
