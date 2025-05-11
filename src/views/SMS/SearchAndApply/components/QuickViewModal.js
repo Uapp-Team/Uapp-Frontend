@@ -79,16 +79,24 @@ const QuickViewModal = ({
         `SubjectIntake/GetCampusBySubjectIntake?subjectId=${quickViewData?.subjectId}&intakeId=${selectedIntakeId}`
       ).then((res) => setSubjectIntake(res?.data));
     }
-  }, [quickViewData?.subjectId, selectedIntakeId]);
+  }, [quickViewData, selectedIntakeId]);
 
-  useEffect(() => {
-    if (open) {
-      setSelectedIntake("Select Intake");
-      setSelectedIntakeId("");
-      setSelectedIntakeDeadLine("");
-      setSelectedClassStartDate();
-    }
-  }, [open]);
+  // useEffect(() => {
+  //   if (open) {
+  //     setSelectedIntake("Select Intake");
+  //     setSelectedIntakeId("");
+  //     setSelectedIntakeDeadLine("");
+  //     setSelectedClassStartDate();
+  //   }
+  // }, [open]);
+
+  const demo = () => {
+    setSelectedIntake("Select Intake");
+    setSelectedIntakeId("");
+    setSelectedIntakeDeadLine("");
+    setSelectedClassStartDate();
+    onClose();
+  };
 
   useEffect(() => {
     if (open && quickViewData?.intakes?.length === 1) {
@@ -101,7 +109,7 @@ const QuickViewModal = ({
 
   return (
     <>
-      <Modal isOpen={open} toggle={onClose} className="modal-lg">
+      <Modal isOpen={open} toggle={demo} className="modal-lg">
         <div
           className="d-flex justify-content-between py-3 px-4"
           style={{
@@ -669,7 +677,7 @@ const QuickViewModal = ({
               <div className="mt-2">
                 {subjectIntake
                   .flatMap((scheduleObj) =>
-                    scheduleObj?.deliverySchedules?.map((id) => {
+                    scheduleObj?.deliverySchedule?.map((id) => {
                       const method = deliverySchedules.find(
                         (deliverySchedule) =>
                           deliverySchedule.id === parseInt(id, 10)
