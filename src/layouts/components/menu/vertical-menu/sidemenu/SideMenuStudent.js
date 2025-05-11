@@ -5,8 +5,10 @@ import SideMenuItem from "./SideMenuItem";
 import { Modal } from "reactstrap";
 import StudentRegRefer from "../../../../../components/Refer/StudentRegRefer";
 import StudentJoinBanner from "../../../../../views/SMS/Affiliate/AffiliateComponents/StudentJoinBanner";
+import { useContextData } from "../../../../context/AppContext";
 
 const SideMenuStudent = () => {
+  const value = useContextData();
   // const currentUser = JSON?.parse(localStorage.getItem("current_user"));
   const referenceId = localStorage.getItem("referenceId");
   // const [canConsultant, setCanConsultant] = useState(false);
@@ -61,15 +63,28 @@ const SideMenuStudent = () => {
 
       {!isLead && (
         <>
-          <button
+          {/* <button
             onClick={() => {
               setModalShow(true);
             }}
             type="button"
-            class="login-to-lead"
+            className="login-to-lead"
           >
             Refer a friend
-          </button>
+          </button> */}
+
+          <li
+            className={`nav-item uapp-nav-item`}
+            onClick={() => {
+              setModalShow(true);
+            }}
+          >
+            <Link to="" className="d-flex justify-content-start sidemenu">
+              <div className="menu-text text-orange fw-900">
+                <span className="menu-item menu-title"> Refer a friend</span>
+              </div>
+            </Link>
+          </li>
 
           <Modal
             size="md"
@@ -86,7 +101,7 @@ const SideMenuStudent = () => {
         </>
       )}
 
-      <StudentJoinBanner />
+      {!value.sidebar && <StudentJoinBanner />}
     </>
   );
 };

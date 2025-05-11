@@ -16,8 +16,10 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import { useContextData } from "../../../layouts/context/AppContext";
 
 function SearchAndApply() {
+  const value = useContextData();
   const { departmentId } = useParams();
   const { addToast } = useToasts();
   const history = useHistory();
@@ -30,6 +32,9 @@ function SearchAndApply() {
   const [dataPerPage, setDataPerPage] = useState(12);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
+
+  const screenWidth = window.innerWidth;
+  console.log(screenWidth);
 
   // list
   const [applicationTypelist, setApplicationTypelist] = useState([]);
@@ -311,6 +316,7 @@ function SearchAndApply() {
               onClick={() => {
                 setFilterOpen(true);
                 setIsSearch(true);
+                value.setSidebar(true);
               }}
             >
               <svg
@@ -357,7 +363,13 @@ function SearchAndApply() {
 
         <div
           ref={toolbarRef}
-          className={`results-toolbar ${isSticky ? "sticky" : ""}`}
+          className={`results-toolbar ${isSticky ? "sticky" : ""} ${
+            isSticky && screenWidth > 1200
+              ? value.sidebar
+                ? "w-calc-100-70px"
+                : "w-calc-100-180px"
+              : "w-100"
+          }`}
         >
           <ResultsToolbar
             data={data}
@@ -369,6 +381,7 @@ function SearchAndApply() {
             setFilterOpen={() => {
               setFilterOpen(true);
               setIsSearch(true);
+              value.setSidebar(true);
             }}
           />
         </div>
@@ -427,7 +440,10 @@ function SearchAndApply() {
 
       {filterOpen && (
         <SearchFilter
-          closeModal={() => setFilterOpen(false)}
+          closeModal={() => {
+            setFilterOpen(false);
+            value.setSidebar(false);
+          }}
           isSearch={isSearch}
           setIsSearch={setIsSearch}
           institutionId={institutionId}
