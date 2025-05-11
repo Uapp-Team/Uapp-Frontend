@@ -247,7 +247,7 @@ const GeneralInformationForm = ({
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     {" "}
-                    <span className="text-danger">*</span>
+                    {/* <span className="text-danger">*</span> */}
                     Sales Manager
                   </span>
 
@@ -265,11 +265,11 @@ const GeneralInformationForm = ({
                     id="salesManagerId"
                   />
 
-                  {salesManagerError && (
+                  {/* {salesManagerError && (
                     <span className="text-danger">
                       Sales Manager is required.
                     </span>
-                  )}
+                  )} */}
                 </FormGroup>
               )}
             </>
