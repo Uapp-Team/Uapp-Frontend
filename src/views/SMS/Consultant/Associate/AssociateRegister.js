@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { useHistory, useParams } from "react-router-dom";
 import { useHistory, useParams } from "react-router";
 import { useToasts } from "react-toast-notifications";
+import Select from "react-select";
 import icon_info from "../../../../assets/img/icons/icon_info.png";
 
 import { Card, CardBody, Form, FormGroup, Col, Input, Row } from "reactstrap";
@@ -10,11 +11,17 @@ import post from "../../../../helpers/post";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import { userTypes } from "../../../../constants/userTypeConstant";
 
 const AssociateRegister = () => {
   const { id } = useParams();
   console.log(id, "consultant Id");
-  // const [consParent, setConsParent] = useState([]);
+  const userType = localStorage.getItem("userType");
+  const [consParent, setConsParent] = useState([]);
+  const [parentError, setParentError] = useState(false);
+  const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
+  const [parentValue, setParentValue] = useState(0);
+
   // const [consType, setConsType] = useState([]);
   const [buttonStatus, setButtonStatus] = useState(false);
   const history = useHistory();
@@ -39,20 +46,25 @@ const AssociateRegister = () => {
       setTitle(res);
     });
 
-    // get("ConsultantDD/ByUser").then((res) => {
-    //   setConsParent(res);
-    // });
+    get("ConsultantDD/ByUser").then((res) => {
+      setConsParent(res);
+    });
 
     // get("ConsultantTypeDD/index").then((res) => {
     //   setConsType(res);
     // });
   }, []);
 
-  //   const selectParentCons = (label, value) => {
-  //     setParentError(false);
-  //     setParentLabel(label);
-  //     setParentValue(value);
-  //   };
+  const consParentMenu = consParent?.map((consParentOptions) => ({
+    label: consParentOptions?.name,
+    value: consParentOptions?.id,
+  }));
+
+  const selectParentCons = (label, value) => {
+    setParentError(false);
+    setParentLabel(label);
+    setParentValue(value);
+  };
 
   const handleFirstName = (e) => {
     setFirstName(e.target.value);
@@ -99,6 +111,11 @@ const AssociateRegister = () => {
       isFormValid = false;
       setTitleError(true);
     }
+
+    if (parentValue === 0) {
+      setParentError(true);
+    }
+
     if (!firstName) {
       isFormValid = false;
       setFirstNameError("First name is required");
@@ -155,7 +172,7 @@ const AssociateRegister = () => {
 
       <Card>
         <CardBody>
-          <p className="section-title">Create A Associate </p>
+          <p className="section-title">Create A Associate naki</p>
 
           <div className="mt-1 mb-4 d-flex justify-between cardborder">
             <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
@@ -166,7 +183,7 @@ const AssociateRegister = () => {
             </div>
           </div>
           <Form onSubmit={handleSubmit}>
-            {id ? (
+            {/* {id ? (
               <input
                 type="hidden"
                 id="consultantId"
@@ -180,9 +197,39 @@ const AssociateRegister = () => {
                 name="consultantId"
                 value={userId}
               />
+            )} */}
+            {userType === userTypes?.SalesManager && (
+              <input
+                type="hidden"
+                id="consultantId"
+                name="consultantId"
+                value={parentValue}
+              />
             )}
+
             <Row>
               <Col md="6">
+                {userType === userTypes?.SalesManager && (
+                  <FormGroup className="has-icon-left position-relative">
+                    <span>
+                      Parent Consultant <span className="text-danger">*</span>{" "}
+                    </span>
+                    <Select
+                      options={consParentMenu}
+                      value={{ label: parentLabel, value: parentValue }}
+                      onChange={(opt) => selectParentCons(opt.label, opt.value)}
+                      // name="parentConsultantId"
+                      // id="parentConsultantId"
+                    />
+
+                    {parentError && (
+                      <span className="text-danger">
+                        Parent consultant is required
+                      </span>
+                    )}
+                  </FormGroup>
+                )}
+
                 <FormGroup>
                   <span>
                     <span className="text-danger">*</span> Title

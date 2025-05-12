@@ -98,32 +98,32 @@ const ConsultantByConsultant = () => {
 
   useEffect(() => {
     if (id === undefined) {
-      get(
-        `Associate/Index?page=${currentPage}&pageSize=${dataPerPage}&id=${referenceId}`
-      ).then((res) => {
-        console.log("Response", res);
-        setConsultantList(res?.models);
-        setEntity(res?.totalEntity);
+      get(`Associate/Index?page=${currentPage}&pageSize=${dataPerPage}`).then(
+        (res) => {
+          console.log("Response", res);
+          setConsultantList(res?.models);
+          setEntity(res?.totalEntity);
 
-        setLoading(false);
-        setPageLoad(false);
-      });
+          setLoading(false);
+          setPageLoad(false);
+        }
+      );
     } else {
-      get(
-        `Associate/Index?page=${currentPage}&pageSize=${dataPerPage}&id=${id}`
-      ).then((res) => {
-        console.log(res);
-        setConsultantList(res?.models);
-        setEntity(res?.totalEntity);
+      get(`Associate/Index?page=${currentPage}&pageSize=${dataPerPage}`).then(
+        (res) => {
+          console.log(res);
+          setConsultantList(res?.models);
+          setEntity(res?.totalEntity);
 
-        setLoading(false);
-        setPageLoad(false);
-      });
+          setLoading(false);
+          setPageLoad(false);
+        }
+      );
     }
-  }, [currentPage, dataPerPage, callApi, loading, success, id, referenceId]);
+  }, [currentPage, dataPerPage, callApi, loading, success, id]);
 
   useEffect(() => {
-    get(`LevelReport/Get/${id ? id : referenceId}`).then((action) => {
+    get(`LevelReport/Get`).then((action) => {
       setLevelReportList(action);
 
       console.log(action, "Level Report");
@@ -811,66 +811,57 @@ const ConsultantByConsultant = () => {
             </CardBody>
           </Card>
 
-          <Card>
-            <CardBody>
-              <h5>Level Report</h5>
+          {userType !== userTypes?.SalesManager && (
+            <Card>
+              <CardBody>
+                <h5>Level Report</h5>
 
-              <div className="table-responsive  mt-3">
-                <Table id="table-to-xls">
-                  <thead className="tablehead">
-                    <tr style={{ textAlign: "center" }}>
-                      <th>Designation</th>
-                      <th>Total Associates</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr style={{ textAlign: "center" }}>
-                      <td>Business Development Manager</td>
+                <div className="table-responsive  mt-3">
+                  <Table id="table-to-xls">
+                    <thead className="tablehead">
+                      <tr style={{ textAlign: "center" }}>
+                        <th>Designation</th>
+                        <th>Total Associates</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ textAlign: "center" }}>
+                        <td>Business Development Manager</td>
 
-                      <td>
-                        {LevelReportList?.result?.businessDevelopmentManager}
-                      </td>
-                    </tr>
-                    <tr style={{ textAlign: "center" }}>
-                      <td>Executive Director</td>
+                        <td>{LevelReportList?.businessDevelopmentManager}</td>
+                      </tr>
+                      <tr style={{ textAlign: "center" }}>
+                        <td>Executive Director</td>
 
-                      <td>{LevelReportList?.result?.executiveDirector}</td>
-                    </tr>
-                    <tr style={{ textAlign: "center" }}>
-                      <td>Senior Business Development Manager</td>
+                        <td>{LevelReportList?.executiveDirector}</td>
+                      </tr>
+                      <tr style={{ textAlign: "center" }}>
+                        <td>Senior Business Development Manager</td>
 
-                      <td>
-                        {
-                          LevelReportList?.result
-                            ?.seniorBusinessDevelopmentManager
-                        }
-                      </td>
-                    </tr>
-                    <tr style={{ textAlign: "center" }}>
-                      <td>Senior Executive Marketing Officer</td>
+                        <td>
+                          {LevelReportList?.seniorBusinessDevelopmentManager}
+                        </td>
+                      </tr>
+                      <tr style={{ textAlign: "center" }}>
+                        <td>Senior Executive Marketing Officer</td>
 
-                      <td>
-                        {
-                          LevelReportList?.result
-                            ?.seniorExecutiveMarketingOfficer
-                        }
-                      </td>
-                    </tr>
-                    <tr style={{ textAlign: "center" }}>
-                      <td>Student Advisor Marketing Officer</td>
+                        <td>
+                          {LevelReportList?.seniorExecutiveMarketingOfficer}
+                        </td>
+                      </tr>
+                      <tr style={{ textAlign: "center" }}>
+                        <td>Student Advisor Marketing Officer</td>
 
-                      <td>
-                        {
-                          LevelReportList?.result
-                            ?.studentAdvisorMarketingOfficer
-                        }
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </CardBody>
-          </Card>
+                        <td>
+                          {LevelReportList?.studentAdvisorMarketingOfficer}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </CardBody>
+            </Card>
+          )}
         </>
       )}
     </div>
