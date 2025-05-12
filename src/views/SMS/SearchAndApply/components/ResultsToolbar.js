@@ -29,7 +29,7 @@ const ResultsToolbar = ({
                 alt="course"
                 className="w-20px h-20px mr-2"
               />{" "}
-              {data?.favCount ? data?.favCount : data?.total} Courses
+              {data?.total} Courses
             </span>
             {/* <span className="tag">
               <img
