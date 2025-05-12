@@ -150,7 +150,7 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <FaHeart size={16} />
+                      <FaHeart size={16} color="orange" />
                     </div>
                   ) : (
                     <div

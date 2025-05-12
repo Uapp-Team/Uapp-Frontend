@@ -243,6 +243,10 @@
   border: none;
   border-radius: 12px;
 }
+.universityName:hover {
+  color: #045d5e;
+  text-decoration: underline;
+}
 .card-container-vertical:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);

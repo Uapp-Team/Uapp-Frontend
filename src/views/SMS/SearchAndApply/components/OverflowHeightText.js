@@ -19,7 +19,7 @@ const OverflowHeightText = ({ text, className, height, line = 1, link }) => {
         }}
         title={text}
       >
-        <span className="cursor-pointer">{text}</span>
+        <span className="cursor-pointer universityName">{text}</span>
       </Link>
     </>
   );
