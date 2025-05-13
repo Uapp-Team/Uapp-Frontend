@@ -383,6 +383,26 @@ export function ArrowRightIcon() {
   );
 }
 
+export function ArrowLeftIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        d="M13.1191 16.2373C13.1191 16.2373 6.88135 11.6433 6.88135 9.99951C6.88135 8.35565 13.1191 3.76172 13.1191 3.76172"
+        stroke="#5D5D5D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ShareIcon() {
   return (
     <svg

@@ -18,8 +18,8 @@ const ResultsToolbar = ({
   setFilterOpen,
 }) => {
   const router = useHistory();
-  const compareCount = JSON.parse(localStorage.getItem("comparedItems"));
-  console.log(compareCount.length, "compareCount");
+  const compareItem = localStorage.getItem("comparedItems");
+  const compareCount = JSON.parse(compareItem) || [];
   return (
     <>
       <div className="d-none d-md-block">
@@ -71,7 +71,7 @@ const ResultsToolbar = ({
               </span>{" "}
               Compare{" "}
               <span className="count">
-                {compareCount ? compareCount.length : "0"}
+                {compareCount !== null ? compareCount.length : "0"}
               </span>
             </button>
             <button
