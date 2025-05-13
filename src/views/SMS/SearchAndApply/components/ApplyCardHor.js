@@ -210,7 +210,7 @@ const ApplyCardHor = ({
                 <h3 className="card-title fw-700 fs-20px">
                   <span
                     onClick={() => handleCourseDetails(item.subjectId)}
-                    className="cursor-pointer"
+                    className="cursor-pointer universityName"
                   >
                     {item.subjectName}
                   </span>
