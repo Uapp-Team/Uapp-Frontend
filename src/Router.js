@@ -9,6 +9,7 @@ import { permissionList } from "./constants/AuthorizationConstant";
 import { history } from "./history";
 import { ContextLayout } from "./utility/context/Layout";
 import AssociateApplication from "./views/SMS/APPLICATION/Applications/Component/AssociateApplication.js";
+import Compare from "./views/SMS/SearchAndApply/Compare.js";
 // import CommissionSetting from "./views/SMS/Comission/CommisionSetting/CommissionSetting";
 
 // Authentication Checking
@@ -5279,6 +5280,7 @@ class AppRouter extends React.Component {
                   {/* <AppRoute path="/search" component={Search} /> */}
                   <AppRoute path="/search" component={SearchAndApply} />
                   <AppRoute path="/searchAndApply" component={Search} />
+                  <AppRoute path="/compare" component={Compare} />
                   <AppRoute
                     path="/searchByStudent/:student"
                     component={SearchAndApply}

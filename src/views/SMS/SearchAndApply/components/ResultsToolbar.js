@@ -2,6 +2,7 @@ import React from "react";
 import { FaExchangeAlt, FaHeart } from "react-icons/fa";
 import { LuHeart } from "react-icons/lu";
 import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
+import { useHistory } from "react-router-dom";
 import courseIcon from "../../../../assets/icon/course.svg";
 import { Student } from "../../../../components/core/User";
 import "../SearchAndApply.css";
@@ -16,6 +17,9 @@ const ResultsToolbar = ({
   setMobileCard,
   setFilterOpen,
 }) => {
+  const router = useHistory();
+  const compareCount = JSON.parse(localStorage.getItem("comparedItems"));
+  console.log(compareCount.length, "compareCount");
   return (
     <>
       <div className="d-none d-md-block">
@@ -58,11 +62,17 @@ const ResultsToolbar = ({
                 <span className="count">{favorites ? favorites : "0"}</span>
               </button>
             )}
-            <button className="action-btn mr-2">
+            <button
+              className="action-btn mr-2"
+              onClick={() => router.push("/compare")}
+            >
               <span className="mr-2">
                 <ArrowLeftRightIcon />
               </span>{" "}
-              Compare <span className="count">0</span>
+              Compare{" "}
+              <span className="count">
+                {compareCount ? compareCount.length : "0"}
+              </span>
             </button>
             <button
               className="action-btn mr-2 d-none d-md-block"
