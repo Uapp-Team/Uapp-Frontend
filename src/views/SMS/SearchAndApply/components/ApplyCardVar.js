@@ -22,6 +22,7 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
+  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -123,9 +124,9 @@ const ApplyCardVar = ({
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                      {/* <span className="mr-3 cursor-pointer">
+                      <span className="mr-3 cursor-pointer">
                         <ArrowLeftRightIcon />
-                      </span> */}
+                      </span>
                       <span className="mr-3 cursor-pointer">
                         <ShareIcon />
                       </span>
