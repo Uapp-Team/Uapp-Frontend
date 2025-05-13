@@ -79,7 +79,10 @@ function SearchAndApply() {
   );
   const referenceId = localStorage.getItem("referenceId");
   const [subjectId, setSubjectId] = useState(0);
-
+  const [comparedItems, setComparedItems] = useState(() => {
+    const savedItems = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return savedItems.map((item) => item.subjectId);
+  });
   const [depList, setDepList] = useState([]);
 
   useEffect(() => {
@@ -229,6 +232,34 @@ function SearchAndApply() {
           autoDismiss: true,
         });
       });
+  };
+
+  const handleAddToCompare = (item) => {
+    const existingArray =
+      JSON.parse(localStorage.getItem("comparedItems")) || [];
+
+    // Check if the item already exists in the array
+    const itemIndex = existingArray.findIndex(
+      (savedItem) => savedItem.subjectId === item.subjectId
+    );
+
+    let updatedArray;
+    if (itemIndex === -1) {
+      // If the item does not exist, add it to the array
+      updatedArray = [...existingArray, item];
+      setComparedItems((prev) => [...prev, item.subjectId]); // Add to state
+    } else {
+      // If the item exists, remove it from the array
+      updatedArray = existingArray.filter(
+        (savedItem) => savedItem.subjectId !== item.subjectId
+      );
+      setComparedItems(
+        (prev) => prev.filter((id) => id !== item.subjectId) // Remove from state
+      );
+    }
+
+    // Update local storage
+    localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
   };
 
   const handleSubmit = async (
@@ -403,6 +434,8 @@ function SearchAndApply() {
               handleSubmit={handleSubmit}
               handleFavourite={handleFavourite}
               setSubjectId={setSubjectId}
+              comparedItems={comparedItems}
+              handleAddToCompare={handleAddToCompare}
             />
           </div>
 
@@ -415,6 +448,8 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             ) : (
               <ApplyCardHor
@@ -424,6 +459,8 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             )}
           </div>

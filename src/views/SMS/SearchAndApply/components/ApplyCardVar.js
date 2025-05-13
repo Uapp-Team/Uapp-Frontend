@@ -46,6 +46,8 @@ const ApplyCardVar = ({
   setSubjectId,
   handleFavourite,
   handleSubmit,
+  comparedItems,
+  handleAddToCompare,
 }) => {
   const referenceId = localStorage.getItem("referenceId");
   const [open, setOpen] = useState(false);
@@ -124,7 +126,17 @@ const ApplyCardVar = ({
                   </span>
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
-                      <span className="mr-3 cursor-pointer">
+                      <span
+                        className="mr-3 cursor-pointer"
+                        onClick={() => handleAddToCompare(item)}
+                        style={{
+                          backgroundColor: comparedItems.includes(
+                            item.subjectId
+                          )
+                            ? "orange"
+                            : "gray",
+                        }}
+                      >
                         <ArrowLeftRightIcon />
                       </span>
                       <span className="mr-3 cursor-pointer">
