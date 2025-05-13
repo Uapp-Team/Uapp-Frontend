@@ -34,7 +34,6 @@ function SearchAndApply() {
   const [favorites, setFavorites] = useState(0);
 
   const screenWidth = window.innerWidth;
-  console.log(screenWidth);
 
   // list
   const [applicationTypelist, setApplicationTypelist] = useState([]);
@@ -68,7 +67,6 @@ function SearchAndApply() {
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-
   // level
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
@@ -142,7 +140,7 @@ function SearchAndApply() {
   useEffect(() => {
     if (!isTyping) {
       const subdata = {
-        page: currentPage,
+        page: isFavorite ? 1 : currentPage,
         pageSize: dataPerPage,
         studentId: studentId,
         universityId: institutionId,
