@@ -1121,3 +1121,62 @@ input[type="checkbox"] {
 span.visually-hidden {
   display: none;
 }
+
+/* course comparison start */
+
+.table-responsive-wrapper {
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.table-container {
+  min-width: 1000px;
+  position: relative;
+}
+
+.comparison-table {
+  table-layout: auto;
+  white-space: nowrap;
+}
+
+.fixed-col {
+  padding: 16px 24px !important;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.top-left {
+  z-index: 2; /* Ensure header stays above content */
+  background-color: #e9ecef;
+  font-weight: bold;
+  height: 120px;
+}
+
+.course-header-cell {
+  padding: 16px 24px !important;
+  min-width: 385px;
+  text-align: center;
+  background-color: #f1f3f5;
+}
+
+.course-header .course-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.course-header .course-title {
+  font-weight: bold;
+  margin: 4px 0;
+}
+
+.fast-track {
+  font-size: 0.75rem;
+  background-color: #ffcccb;
+  padding: 2px 6px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+/* course comparison End */
