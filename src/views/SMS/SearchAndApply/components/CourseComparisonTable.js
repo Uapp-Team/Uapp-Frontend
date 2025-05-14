@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import { AiOutlineRight } from "react-icons/ai";
 import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
 import { BellIconDefault, BellIconRed } from "./icons";
 
 const CourseComparisonTable = ({ courses }) => {
-  const fixedLabels = [
-    { label: "Start Date", key: "startDate" },
-    { label: "Duration", key: "durationOptions" },
-    { label: "Study Mode", key: "studyModes" },
-    { label: "Delivery Pattern", key: "deliveryPattern" },
-    { label: "Schedule", key: "schedule" },
-  ];
+  const [showOverview, setShowOverview] = useState(true);
+
+  const tableContainerRef = useRef(null);
+
+  const handleToogleOverview = () => {
+    setShowOverview((prev) => !prev);
+  };
+  const scrollTable = () => {
+    if (tableContainerRef.current) {
+      const scrollAmount = 200;
+      tableContainerRef.current.scrollLeft += scrollAmount;
+    }
+  };
 
   return (
     <div className="table-responsive-wrapper">
-      <div className="table-container">
+      <div className="table-container" ref={tableContainerRef}>
         <table bordered className="comparison-table">
           <thead>
             <tr>
@@ -36,35 +43,44 @@ const CourseComparisonTable = ({ courses }) => {
                   <div className="course-header">
                     <div className="course-date">{course.date}</div>
                     <div className="course-title">{course.subjectName}</div>
-                    <div className="fast-track">Fast Track</div>
                   </div>
                 </th>
               ))}
             </tr>
-            <tr>
-              <th className="fixed-col">Course Overview</th>
-              {courses.map((_, idx) => (
-                <td key={idx}></td>
-              ))}
+            <tr className="table-header" onClick={handleToogleOverview}>
+              <th className="fixed-col">
+                <span>Course Overview</span>
+              </th>
             </tr>
           </thead>
-          <tbody>
-            {fixedLabels.map((item, idx) => (
-              <tr key={idx}>
-                <th className="fixed-col">{item.label}</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx}>
-                    {Array.isArray(course[item.key])
-                      ? course[item.key].map((val, i) => (
-                          <div key={i}>• {val}</div>
-                        ))
-                      : course[item.key]}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          {showOverview && (
+            <tbody>
+              {[
+                {
+                  label: "Application Deadline",
+                  key: "maxApplicationDeadLine",
+                },
+                { label: "Start Date", key: "classStartDate" },
+                { label: "Duration", key: "duration" },
+                { label: "Study Mode", key: "studyMode" },
+                { label: "Delivery Pattern", key: "deliveryMethods" },
+                { label: "Schedule", key: "classStartDate" },
+              ].map((row, idx) => (
+                <tr key={idx}>
+                  <th className="fixed-col table-left">{row.label}</th>
+                  {courses.map((course, cidx) => (
+                    <td key={cidx} className="table-col">
+                      {course?.[row.key] || "N/A"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
+      </div>
+      <div className="scroll-arrow" onClick={scrollTable}>
+        <AiOutlineRight size={30} className="arrow-icon" />
       </div>
     </div>
   );

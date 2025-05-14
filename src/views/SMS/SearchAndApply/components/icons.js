@@ -403,6 +403,26 @@ export function ArrowLeftIcon() {
   );
 }
 
+export function ArrowDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="21"
+      viewBox="0 0 20 21"
+      fill="none"
+    >
+      <path
+        d="M16.2373 7.38091C16.2373 7.38091 11.6433 13.6187 9.99951 13.6187C8.35565 13.6187 3.76172 7.38086 3.76172 7.38086"
+        stroke="#5D5D5D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ShareIcon() {
   return (
     <svg
