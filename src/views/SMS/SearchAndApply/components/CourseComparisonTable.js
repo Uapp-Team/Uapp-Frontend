@@ -3,6 +3,7 @@ import { AiOutlineRight } from "react-icons/ai";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
 import "../SearchAndApply.css";
+import CoursesOverviewTable from "./CoursesOverviewTable";
 import { BellIconDefault, BellIconRed } from "./icons";
 
 const CourseComparisonTable = ({ courses }) => {
@@ -105,101 +106,23 @@ const CourseComparisonTable = ({ courses }) => {
                 </th>
               ))}
             </tr>
-            <tr className="table-header" onClick={handleToogleOverview}>
+            <tr
+              className="table-headers cursor-pointer"
+              onClick={handleToogleOverview}
+            >
               <th className="fixed-col">
                 <span>Course Overview</span>
               </th>
             </tr>
           </thead>
-          {showOverview && (
-            <tbody>
-              <tr>
-                <th className="fixed-col table-left">Application Deadline</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    {course?.maxApplicationDeadLine || "Not Set"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="fixed-col table-left">Start Date</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    {course?.classStartDate || "Not Set"}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="fixed-col table-left">Duration</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    <div className="table-course-title">Duration</div>
-                    <ul>
-                      {course?.durationNames
-                        ?.split(",")
-                        .map((name, index) => <li key={index}>{name}</li>) ||
-                        "Not Set"}
-                    </ul>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="fixed-col table-left">Study Mode</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    <div className="table-course-title">Study Mode</div>
-                    <ul>
-                      {course?.studyModes
-                        ?.split(",")
-                        .map((id) => {
-                          const method = studyMode.find(
-                            (m) => m.id === parseInt(id.trim(), 10)
-                          );
-                          return method?.name;
-                        })
-                        .filter(Boolean)
-                        .map((name, index) => <li key={index}>{name}</li>) ||
-                        "Not Set"}
-                    </ul>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="fixed-col table-left">Delivery Pattern</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    <div className="table-course-title">Delivery Pattern</div>
-                    <ul>
-                      {course?.deliveryMethods
-                        ?.split(",")
-                        .map((id) => {
-                          const method = deliveryMethods.find(
-                            (m) => m.id === parseInt(id.trim(), 10)
-                          );
-                          return method?.name;
-                        })
-                        .filter(Boolean)
-                        .map((name, index) => <li key={index}>{name}</li>) ||
-                        "Not Set"}
-                    </ul>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <th className="fixed-col table-left">Schedule</th>
-                {courses.map((course, cidx) => (
-                  <td key={cidx} className="table-col">
-                    {course?.classStartDate || "Not Set"}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          )}
+          {showOverview && <CoursesOverviewTable courses={courses} />}
         </table>
       </div>
-      <div className="scroll-arrow" onClick={scrollTable}>
-        <AiOutlineRight size={10} className="arrow-icon" />
-      </div>
+      {courses.length > 3 && (
+        <div className="scroll-arrow" onClick={scrollTable}>
+          <AiOutlineRight size={10} className="arrow-icon" />
+        </div>
+      )}
     </div>
   );
 };

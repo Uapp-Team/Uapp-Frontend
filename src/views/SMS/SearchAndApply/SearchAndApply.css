@@ -1127,6 +1127,7 @@ span.visually-hidden {
 .table-headers {
   padding: 16px 24px;
   z-index: 3;
+  cursor: pointer;
 }
 .table-col {
   background: #f7fafa;
