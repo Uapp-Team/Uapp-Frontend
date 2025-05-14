@@ -13,16 +13,13 @@ function Compare() {
       <section>
         <div>
           <h5>Course comparing</h5>
-          <div
-            className="d-flex align-items-center cursor-pointer"
-            onClick={() => router.goBack()}
-          >
+          <button className="back-button" onClick={() => router.goBack()}>
             {" "}
             <span className="mr-2">
               <ArrowLeftIcon />
             </span>{" "}
             <span className="fs-20px fw-500"> Back </span>
-          </div>
+          </button>
           <CourseComparisonTable courses={courses} />
         </div>
       </section>
