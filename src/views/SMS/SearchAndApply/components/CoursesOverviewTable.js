@@ -8,7 +8,7 @@ function CoursesOverviewTable({ courses, handleToggleOverview, isVisible }) {
         className="table-header cursor-pointer"
         onClick={handleToggleOverview}
       >
-        <th className="fixed-col" colSpan={courses.length + 1}>
+        <th className="fixed-col">
           <span>Course Overview</span>
         </th>
       </tr>

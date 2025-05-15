@@ -9,17 +9,21 @@ import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CoursesOverviewTable from "./CoursesOverviewTable";
 import { DeleteIcon, HeartIconFill, HeartIconStock } from "./icons";
+import UniversityInfoTable from "./UniversityInfoTable";
 
 const CourseComparisonTable = ({ courses: initialCourses }) => {
   const [courses, setCourses] = useState(initialCourses);
   const [showOverview, setShowOverview] = useState(true);
+  const [showUniInfo, setShowUniInfo] = useState(true);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const { addToast } = useToasts();
-
   const tableContainerRef = useRef(null);
 
   const handleToogleOverview = () => {
     setShowOverview((prev) => !prev);
+  };
+  const handleToogleUniInfo = () => {
+    setShowUniInfo((prev) => !prev);
   };
   const scrollTable = () => {
     if (tableContainerRef.current) {
@@ -31,11 +35,10 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
   const checkOverflow = () => {
     if (tableContainerRef.current) {
       const { scrollWidth, clientWidth } = tableContainerRef.current;
-      setIsOverflowing(scrollWidth > clientWidth); // Set true if content overflows
+      setIsOverflowing(scrollWidth > clientWidth);
     }
   };
 
-  // Run on mount and on window resize
   useEffect(() => {
     checkOverflow();
     window.addEventListener("resize", checkOverflow);
@@ -229,6 +232,11 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
             courses={courses}
             handleToggleOverview={handleToogleOverview}
             isVisible={showOverview}
+          />
+          <UniversityInfoTable
+            courses={courses}
+            handleToogleUniInfo={handleToogleUniInfo}
+            isVisible={showUniInfo}
           />
         </table>
       </div>
