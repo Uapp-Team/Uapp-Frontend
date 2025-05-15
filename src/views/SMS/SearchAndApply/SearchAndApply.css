@@ -1123,7 +1123,11 @@ span.visually-hidden {
 }
 
 /* course comparison start */
-
+.icon {
+  cursor: pointer;
+  padding: 4px;
+  border: 0.5px solid rgba(127, 127, 127, 0.08);
+}
 .table-headers {
   padding: 16px 24px;
   z-index: 3;

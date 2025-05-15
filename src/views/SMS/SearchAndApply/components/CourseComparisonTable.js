@@ -10,6 +10,7 @@ import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CoursesOverviewTable from "./CoursesOverviewTable";
+import { DeleteIcon } from "./icons";
 
 const CourseComparisonTable = ({ courses: initialCourses }) => {
   const [courses, setCourses] = useState(initialCourses);
@@ -62,6 +63,24 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
           autoDismiss: true,
         });
       });
+  };
+
+  const handleDelete = (subjectId) => {
+    const storedCourses =
+      JSON.parse(localStorage.getItem("comparedItems")) || [];
+
+    const updatedCourses = storedCourses.filter(
+      (course) => course.subjectId !== subjectId
+    );
+
+    localStorage.setItem("comparedItems", JSON.stringify(updatedCourses));
+
+    setCourses(updatedCourses);
+
+    addToast("Course removed from Compare successfully!", {
+      appearance: "success",
+      autoDismiss: true,
+    });
   };
 
   const courseOverviewConfig = [
@@ -132,12 +151,12 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
               {courses.map((course, index) => (
                 <th key={index} className="course-header-cell">
                   <div className="course-header">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mb-2">
                       <div className="tags">
-                        <span className="card-tag fast-track">Fast Track</span>
+                        {/* <span className="card-tag fast-track">Fast Track</span> */}
                       </div>
                       <div>
-                        <span>
+                        <span className="mr-1 icon">
                           {Student() ? (
                             course.isFavorite ? (
                               <FaHeart
@@ -172,6 +191,12 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                               )}
                             </div>
                           )}
+                        </span>
+                        <span
+                          className="icon"
+                          onClick={() => handleDelete(course.subjectId)}
+                        >
+                          <DeleteIcon />
                         </span>
                       </div>
                     </div>
