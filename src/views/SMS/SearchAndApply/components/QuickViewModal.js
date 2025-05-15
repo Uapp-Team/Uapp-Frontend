@@ -2,8 +2,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { FaHeart } from "react-icons/fa";
-import { LuArrowUpRight, LuHeart, LuShare2 } from "react-icons/lu";
+import { LuArrowUpRight, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
@@ -36,6 +35,8 @@ import {
   DeliverPatternIcon,
   DepositIcon,
   DurationIcon,
+  HeartIconFill,
+  HeartIconStock,
   LocationIcon,
   StudyModeIcon,
 } from "./icons";
@@ -151,7 +152,9 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <FaHeart size={16} color="orange" />
+                      <span>
+                        <HeartIconFill />
+                      </span>
                     </div>
                   ) : (
                     <div
@@ -164,7 +167,9 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <LuHeart size={16} />
+                      <span>
+                        <HeartIconStock />
+                      </span>
                     </div>
                   )
                 ) : null}

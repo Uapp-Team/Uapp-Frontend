@@ -1,7 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
-import { LuHeart } from "react-icons/lu";
 import { useToasts } from "react-toast-notifications";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -10,11 +8,12 @@ import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CoursesOverviewTable from "./CoursesOverviewTable";
-import { DeleteIcon } from "./icons";
+import { DeleteIcon, HeartIconFill, HeartIconStock } from "./icons";
 
 const CourseComparisonTable = ({ courses: initialCourses }) => {
   const [courses, setCourses] = useState(initialCourses);
   const [showOverview, setShowOverview] = useState(true);
+  const [isOverflowing, setIsOverflowing] = useState(false);
   const { addToast } = useToasts();
 
   const tableContainerRef = useRef(null);
@@ -28,6 +27,20 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
       tableContainerRef.current.scrollLeft += scrollAmount;
     }
   };
+
+  const checkOverflow = () => {
+    if (tableContainerRef.current) {
+      const { scrollWidth, clientWidth } = tableContainerRef.current;
+      setIsOverflowing(scrollWidth > clientWidth); // Set true if content overflows
+    }
+  };
+
+  // Run on mount and on window resize
+  useEffect(() => {
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, []);
 
   const handleFavourite = (value, subjectId, i) => {
     post(
@@ -159,7 +172,7 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                         <span className="mr-1 icon">
                           {Student() ? (
                             course.isFavorite ? (
-                              <FaHeart
+                              <span
                                 onClick={() =>
                                   handleFavourite(
                                     course.isFavorite,
@@ -168,10 +181,11 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                                   )
                                 }
                                 className="cursor-pointer"
-                                color="orange"
-                              />
+                              >
+                                <HeartIconFill />
+                              </span>
                             ) : (
-                              <LuHeart
+                              <span
                                 onClick={() =>
                                   handleFavourite(
                                     course.isFavorite,
@@ -180,7 +194,9 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                                   )
                                 }
                                 className="cursor-pointer"
-                              />
+                              >
+                                <HeartIconStock />
+                              </span>
                             )
                           ) : (
                             <div>
@@ -220,7 +236,7 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
           {showOverview && <CoursesOverviewTable courses={courses} />}
         </table>
       </div>
-      {courses.length > 3 && (
+      {isOverflowing && (
         <div className="scroll-arrow" onClick={scrollTable}>
           <AiOutlineRight size={10} className="arrow-icon" />
         </div>

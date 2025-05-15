@@ -238,27 +238,21 @@ function SearchAndApply() {
     const existingArray =
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
-    // Check if the item already exists in the array
     const itemIndex = existingArray.findIndex(
       (savedItem) => savedItem.subjectId === item.subjectId
     );
 
     let updatedArray;
     if (itemIndex === -1) {
-      // If the item does not exist, add it to the array
       updatedArray = [...existingArray, item];
-      setComparedItems((prev) => [...prev, item.subjectId]); // Add to state
+      setComparedItems((prev) => [...prev, item.subjectId]);
     } else {
-      // If the item exists, remove it from the array
       updatedArray = existingArray.filter(
         (savedItem) => savedItem.subjectId !== item.subjectId
       );
-      setComparedItems(
-        (prev) => prev.filter((id) => id !== item.subjectId) // Remove from state
-      );
+      setComparedItems((prev) => prev.filter((id) => id !== item.subjectId));
     }
 
-    // Update local storage
     localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
   };
 

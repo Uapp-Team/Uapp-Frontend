@@ -1,8 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useState } from "react";
-import { FaHeart } from "react-icons/fa";
-import { LuHeart } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -29,6 +27,8 @@ import {
   DeliverPatternIcon,
   DepositIcon,
   DonationIcon,
+  HeartIconFill,
+  HeartIconStock,
   LocationIcon,
   MoneyIcon,
   ShareIcon,
@@ -127,24 +127,24 @@ const ApplyCardVar = ({
                   <div className="d-flex">
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                       <span
-                        className="mr-3 cursor-pointer"
+                        className="mr-2 cursor-pointer icon"
                         onClick={() => handleAddToCompare(item)}
                         style={{
                           backgroundColor: comparedItems.includes(
                             item.subjectId
                           )
-                            ? "orange"
-                            : "gray",
+                            ? "#EFF2F2"
+                            : "#FFF",
                         }}
                       >
                         <ArrowLeftRightIcon />
                       </span>
-                      <span className="mr-3 cursor-pointer">
+                      <span className="mr-2 cursor-pointer icon">
                         <ShareIcon />
                       </span>
                       {Student() ? (
                         item.isFavorite ? (
-                          <FaHeart
+                          <span
                             onClick={() =>
                               handleFavourite(
                                 item.isFavorite,
@@ -152,11 +152,12 @@ const ApplyCardVar = ({
                                 index
                               )
                             }
-                            className="cursor-pointer"
-                            color="orange"
-                          />
+                            className="cursor-pointer icon"
+                          >
+                            <HeartIconFill />
+                          </span>
                         ) : (
-                          <LuHeart
+                          <span
                             onClick={() =>
                               handleFavourite(
                                 item.isFavorite,
@@ -164,8 +165,10 @@ const ApplyCardVar = ({
                                 index
                               )
                             }
-                            className="cursor-pointer"
-                          />
+                            className="cursor-pointer icon"
+                          >
+                            <HeartIconStock />
+                          </span>
                         )
                       ) : (
                         <div>
