@@ -34,6 +34,7 @@ import CancelButton from "../../../components/buttons/CancelButton.js";
 import SaveButton from "../../../components/buttons/SaveButton.js";
 import PopOverText from "../../../components/PopOverText.js";
 import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
+import { CurrentUserInfo } from "../../../components/core/User.js";
 
 const ConsultantByConsultant = () => {
   const associates = JSON.parse(sessionStorage.getItem("associates"));
@@ -41,7 +42,10 @@ const ConsultantByConsultant = () => {
   const [consultantList, setConsultantList] = useState([]);
   const [entity, setEntity] = useState(0);
   const [callApi, setCallApi] = useState(false);
-
+  const [consultant, setConsultant] = useState([]);
+  const [consultantLabel, setConsultantLabel] = useState("Select Consultant");
+  const [consultantValue, setConsultantValue] = useState(0);
+  const [consultantError, setConsultantError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pageLoad, setPageLoad] = useState(true);
   const [currentPage, setCurrentPage] = useState(
@@ -64,6 +68,8 @@ const ConsultantByConsultant = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [progress, setProgress] = useState(false);
   const referenceId = localStorage.getItem("referenceId");
+  const branchId = CurrentUserInfo?.tenantId;
+
   const userTypeId = localStorage.getItem("userType");
   const userType = localStorage.getItem("userType");
   const [modalOpen, setModalOpen] = useState(false);
@@ -129,6 +135,23 @@ const ConsultantByConsultant = () => {
       console.log(action, "Level Report");
     });
   }, [id, referenceId, success]);
+
+  useEffect(() => {
+    get(`ConsultantDD/ByUserNew/${branchId}`).then((res) => {
+      setConsultant(res);
+    });
+  }, [branchId]);
+
+  const consultantOption = consultant?.map((c) => ({
+    label: c?.name,
+    value: c?.id,
+  }));
+
+  const selectConsultant = (label, value) => {
+    setConsultantError(false);
+    setConsultantLabel(label);
+    setConsultantValue(value);
+  };
 
   // user select data per page
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
@@ -206,15 +229,39 @@ const ConsultantByConsultant = () => {
     // setTitle("");
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const subData = new FormData(event.target);
+  const validateRegisterForm = () => {
+    let isFormValid = true;
 
     if (!email) {
+      isFormValid = false;
       setEmailError("Email is required");
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+    }
+
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      isFormValid = false;
       setEmailError("Email is not Valid");
-    } else {
+    }
+
+    if (
+      (userType === userTypes?.SalesManager ||
+        userType === userTypes?.SystemAdmin) &&
+      consultantValue === 0
+    ) {
+      isFormValid = false;
+      setConsultantError(true);
+    }
+
+    return isFormValid;
+  };
+
+  const handleSubmit = (event) => {
+    console.log(consultantValue, "consultant value");
+
+    event.preventDefault();
+    const subData = new FormData(event.target);
+    var formIsValid = validateRegisterForm();
+
+    if (formIsValid === true) {
       setButtonStatus(true);
       setProgress(true);
       post(
@@ -452,15 +499,49 @@ const ConsultantByConsultant = () => {
                   toggle={closeModal}
                   className="uapp-modal2"
                 >
-                  <ModalHeader>Send an invitation to email</ModalHeader>
+                  <ModalHeader>Send an invitation to email </ModalHeader>
                   <ModalBody>
                     <Form onSubmit={handleSubmit}>
-                      <input
-                        type="hidden"
-                        name="consultantId"
-                        id="consultantId"
-                        value={referenceId}
-                      />
+                      {userType === userTypes?.Consultant && (
+                        <input
+                          type="hidden"
+                          name="consultantId"
+                          id="consultantId"
+                          value={referenceId}
+                        />
+                      )}
+
+                      {(userType === userTypes?.SalesManager ||
+                        userType === userTypes?.SystemAdmin) && (
+                        <FormGroup
+                          row
+                          className="has-icon-left position-relative"
+                        >
+                          <Col md="4">
+                            {" "}
+                            <span className="text-danger">*</span>Consultant
+                          </Col>
+                          <Col md="8">
+                            <Select
+                              options={consultantOption}
+                              value={{
+                                label: consultantLabel,
+                                value: consultantValue,
+                              }}
+                              onChange={(opt) =>
+                                selectConsultant(opt.label, opt.value)
+                              }
+                              name="consultantId"
+                              id="consultantId"
+                            />
+                            {consultantError && (
+                              <span className="text-danger">
+                                consultant is required
+                              </span>
+                            )}
+                          </Col>
+                        </FormGroup>
+                      )}
 
                       <FormGroup
                         row

@@ -35,10 +35,13 @@ import PopOverText from "../../../components/PopOverText.js";
 import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 import Uget from "../../../helpers/Uget.js";
 import { dateFormate } from "../../../components/date/calenderFormate.js";
+import { userTypes } from "../../../constants/userTypeConstant.js";
 
 const ConsultantByAffiliate = () => {
   const associates = JSON.parse(sessionStorage.getItem("associates"));
   const { id } = useParams();
+  const userType = localStorage.getItem("userType");
+
   const [affiliateList, setAffiliateList] = useState([]);
   const [affiliateEntity, setAffiliateEntity] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -96,9 +99,7 @@ const ConsultantByAffiliate = () => {
 
   useEffect(() => {
     Uget(
-      `Affiliate/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consulantid=${
-        id ? id : referenceId
-      }`
+      `Affiliate/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consulantid=${0}`
     ).then((res) => {
       console.log(res);
       setAffiliateList(res?.items);
@@ -107,7 +108,7 @@ const ConsultantByAffiliate = () => {
       setLoading(false);
       setPageLoad(false);
     });
-  }, [currentPage, dataPerPage, id, referenceId, success]);
+  }, [currentPage, dataPerPage, success]);
 
   useEffect(() => {
     get(`AffiliateTeamInvitation?consultantid=${referenceId}`).then(
@@ -226,29 +227,32 @@ const ConsultantByAffiliate = () => {
           <Card className="uapp-employee-search zindex-100">
             <CardBody>
               {/* new */}
+
               <Row className="mb-3 mt-3">
                 <Col lg="5" md="5" sm="12" xs="12">
-                  <div className="d-flex">
-                    <div>
-                      <ButtonForFunction
-                        func={handleAddAffiliate}
-                        className={"btn btn-uapp-add "}
-                        icon={<i className="fas fa-plus"></i>}
-                        name={" Add Affiliate"}
-                        permission={6}
-                      />
-                    </div>
+                  {userType !== userTypes?.SalesManager && (
+                    <div className="d-flex">
+                      <div>
+                        <ButtonForFunction
+                          func={handleAddAffiliate}
+                          className={"btn btn-uapp-add "}
+                          icon={<i className="fas fa-plus"></i>}
+                          name={" Add Affiliate"}
+                          permission={6}
+                        />
+                      </div>
 
-                    <div className="mx-3">
-                      <ButtonForFunction
-                        func={() => setModalOpenAffiliate(true)}
-                        className={"btn btn-uapp-add "}
-                        icon={<i className="fas fa-plus"></i>}
-                        name={"Invite Affiliate"}
-                        permission={6}
-                      />
+                      <div className="mx-3">
+                        <ButtonForFunction
+                          func={() => setModalOpenAffiliate(true)}
+                          className={"btn btn-uapp-add "}
+                          icon={<i className="fas fa-plus"></i>}
+                          name={"Invite Affiliate"}
+                          permission={6}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </Col>
 
                 <Col lg="7" md="7" sm="12" xs="12">

@@ -172,98 +172,101 @@ const LiveIntakeTable = ({
             </Col>
           </Row>
           <>
-            {/* {loading ? (
+            {loading ? (
               <Loader />
             ) : liveIntakeList.length === 0 ? (
               <h3 className="text-center">No Data Found</h3>
             ) : (
-            
-            )} */}
-            <div className="table-responsive fixedhead" ref={componentRef}>
-              <Table id="table-to-xls" className="table-sm table-bordered">
-                <thead className="tablehead">
-                  <tr style={{ textAlign: "center" }}>
-                    {tableData[0]?.isActive ? <th>University</th> : null}
-                    {tableData[1]?.isActive ? <th>Intake</th> : null}
-                    {tableData[2]?.isActive ? <th>Campus</th> : null}
-                    {tableData[3]?.isActive ? <th>Recruitment Type</th> : null}
-                    {tableData[4]?.isActive ? <th>Delivery Pattern</th> : null}
-                    {tableData[5]?.isActive ? <th>Course</th> : null}
-                    {tableData[6]?.isActive ? (
-                      <th style={{ width: "8%" }} className="text-center">
-                        Action
-                      </th>
-                    ) : null}
-                  </tr>
-                </thead>
-                <tbody>
-                  {liveIntakeList?.map((liveIntake, i) => (
-                    <tr key={i} style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? (
-                        <td>{liveIntake?.universityName}</td>
-                      ) : null}
-                      {tableData[1]?.isActive ? (
-                        <td>
-                          <MoreData
-                            data={liveIntake?.intakeNames}
-                            action={() => handleUpdate(liveIntake)}
-                          />
-                        </td>
-                      ) : null}
-                      {tableData[2]?.isActive ? (
-                        <td>
-                          <MoreData
-                            data={liveIntake?.campusNames}
-                            action={() => handleUpdate(liveIntake)}
-                          />
-                        </td>
-                      ) : null}
+              <div className="table-responsive fixedhead" ref={componentRef}>
+                <Table id="table-to-xls" className="table-sm table-bordered">
+                  <thead className="tablehead">
+                    <tr style={{ textAlign: "center" }}>
+                      {tableData[0]?.isActive ? <th>University</th> : null}
+                      {tableData[1]?.isActive ? <th>Intake</th> : null}
+                      {tableData[2]?.isActive ? <th>Campus</th> : null}
                       {tableData[3]?.isActive ? (
-                        <td>
-                          {liveIntake?.isAcceptHome === true ? (
-                            <span className="for-intake-table">Home/UK</span>
-                          ) : null}
-                          {liveIntake?.isAcceptEU_UK === true ? (
-                            <span className="for-intake-table">EU/EEU</span>
-                          ) : null}
-                          {liveIntake?.isAcceptInternational === true ? (
-                            <span className="for-intake-table">
-                              International
-                            </span>
-                          ) : null}
-                        </td>
+                        <th>Recruitment Type</th>
                       ) : null}
                       {tableData[4]?.isActive ? (
-                        <td>
-                          {" "}
-                          {/* <span className="for-intake-table">
-                               
-                             </span> */}
-                          {liveIntake?.deliveryPatternNames}
-                        </td>
+                        <th>Delivery Pattern</th>
                       ) : null}
-                      {tableData[5]?.isActive ? (
-                        <td>
-                          <span className="for-intake-table">
-                            {liveIntake?.courseCount}{" "}
-                          </span>
-                        </td>
-                      ) : null}
+                      {tableData[5]?.isActive ? <th>Course</th> : null}
                       {tableData[6]?.isActive ? (
-                        <td
-                          className="cursor-pointer"
-                          onClick={() => handleUpdate(liveIntake)}
-                        >
-                          {" "}
-                          More Info
-                          <i class="fa-solid fa-chevron-right ml-2"></i>
-                        </td>
+                        <th style={{ width: "8%" }} className="text-center">
+                          Action
+                        </th>
                       ) : null}
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {liveIntakeList?.map((liveIntake, i) => (
+                      <tr key={i} style={{ textAlign: "center" }}>
+                        {tableData[0]?.isActive ? (
+                          <td>{liveIntake?.universityName}</td>
+                        ) : null}
+                        {tableData[1]?.isActive ? (
+                          <td>
+                            <MoreData
+                              data={liveIntake?.intakeNames}
+                              action={() => handleUpdate(liveIntake)}
+                            />
+                          </td>
+                        ) : null}
+                        {tableData[2]?.isActive ? (
+                          <td>
+                            <MoreData
+                              data={liveIntake?.campusNames}
+                              action={() => handleUpdate(liveIntake)}
+                            />
+                          </td>
+                        ) : null}
+                        {tableData[3]?.isActive ? (
+                          <td>
+                            {liveIntake?.isAcceptHome === true ? (
+                              <span className="for-intake-table">Home/UK</span>
+                            ) : null}
+                            {liveIntake?.isAcceptEU_UK === true ? (
+                              <span className="for-intake-table">EU/EEU</span>
+                            ) : null}
+                            {liveIntake?.isAcceptInternational === true ? (
+                              <span className="for-intake-table">
+                                International
+                              </span>
+                            ) : null}
+                          </td>
+                        ) : null}
+                        {tableData[4]?.isActive ? (
+                          <td>
+                            {" "}
+                            {/* <span className="for-intake-table">
+                               
+                             </span> */}
+                            {liveIntake?.deliveryPatternNames}
+                          </td>
+                        ) : null}
+                        {tableData[5]?.isActive ? (
+                          <td>
+                            <span className="for-intake-table">
+                              {liveIntake?.courseCount}{" "}
+                            </span>
+                          </td>
+                        ) : null}
+                        {tableData[6]?.isActive ? (
+                          <td
+                            className="cursor-pointer"
+                            onClick={() => handleUpdate(liveIntake)}
+                          >
+                            {" "}
+                            More Info
+                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                          </td>
+                        ) : null}
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            )}
           </>
 
           <Pagination

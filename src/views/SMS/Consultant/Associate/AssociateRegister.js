@@ -113,6 +113,7 @@ const AssociateRegister = () => {
     }
 
     if (parentValue === 0) {
+      isFormValid = false;
       setParentError(true);
     }
 

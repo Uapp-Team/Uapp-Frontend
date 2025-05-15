@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
 import icon_info from "../../../../../../assets/img/icons/icon_info.png";
@@ -14,6 +14,9 @@ import { userTypes } from "../../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
 const AdmissionManagerRegister = () => {
+  const location = useLocation();
+  console.log(location, "location");
+
   const [provider, setProvider] = useState([]);
   const [providerLabel, setProviderLabel] = useState("Select Provider");
   const [providerValue, setProviderValue] = useState(0);
@@ -26,7 +29,9 @@ const AdmissionManagerRegister = () => {
   const [progress, setProgress] = useState(false);
   const [title, setTitle] = useState([]);
   const { providerId } = useParams();
+
   const { commonId } = useParams();
+
   const userType = localStorage.getItem("userType");
 
   const userId = localStorage.getItem("referenceId");
@@ -62,6 +67,17 @@ const AdmissionManagerRegister = () => {
       setProvider(res);
     });
   }, [branchValue]);
+
+  useEffect(() => {
+    const filterData = branch.filter((status) => {
+      return status.id === location?.branchId;
+    });
+
+    if (filterData?.length === 1) {
+      setBranchValue(filterData[0]?.id);
+      setBranchLabel(filterData[0]?.name);
+    }
+  }, [branch, location.branchId]);
 
   useEffect(() => {
     const filterData = provider.filter((status) => {
