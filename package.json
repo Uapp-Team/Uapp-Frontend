@@ -119,13 +119,14 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.0.1",
     "swiper": "^8.4.2",
+    "use-persisted-state": "^0.3.3",
     "usegeoip": "^0.1.5",
     "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "set NODE_OPTIONS=--max-old-space-size=4096 && react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
   },

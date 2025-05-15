@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
 import Axios from "axios";
+import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useHistory, useParams } from "react-router";
 import Select from "react-select";
+import { useToasts } from "react-toast-notifications";
 import {
   Card,
   CardBody,
+  Col,
   Form,
   FormGroup,
   Input,
-  Col,
-  Row,
-  TabContent,
-  TabPane,
+  Label,
   Nav,
   NavItem,
   NavLink,
+  Row,
+  TabContent,
+  TabPane,
 } from "reactstrap";
-import { rootUrl } from "../../../../constants/constants";
-import get from "../../../../helpers/get";
-import { useToasts } from "react-toast-notifications";
-import put from "../../../../helpers/put";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { userTypes } from "../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import { rootUrl } from "../../../../constants/constants";
+import { userTypes } from "../../../../constants/userTypeConstant";
+import get from "../../../../helpers/get";
+import put from "../../../../helpers/put";
+import Uget from "../../../../helpers/Uget";
 
 const AddUniversitySubject = () => {
   const userType = localStorage.getItem("userType");
@@ -50,7 +52,8 @@ const AddUniversitySubject = () => {
   const [subName, setSubName] = useState("");
   const [subNameError, setSubNameError] = useState("");
   const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("");
+  const [scholarshipDetails, setScholarshipDetails] = useState("");
+  const [scholarshipDetailsError, setScholarshipDetailsError] = useState("");
 
   const [progLvlError, setProgLvlError] = useState(false);
   const [deptDropError, setDeptDropError] = useState(false);
@@ -70,6 +73,36 @@ const AddUniversitySubject = () => {
   const referenceId = localStorage.getItem("referenceId");
 
   const history = useHistory();
+  const [loanAvailable, setLoanAvailable] = useState([]);
+  const [isWorkPlacement, setIsWorkPlacement] = useState(false);
+  const [isScholarshipAvailable, setIsScholarshipAvailable] = useState(false);
+  const [isLoanAvailable, setIsLoanAvailable] = useState(false);
+  const [fullTimeList, setFullTimeList] = useState([]);
+  const [fullTimeLabel, setFullTimeLabel] = useState("Full Time");
+  const [fullTimeValue, setFullTimeValue] = useState(0);
+
+  const [partTimeList, setPartTimeList] = useState([]);
+  const [partTimeLabel, setPartTimeLabel] = useState("Part Time");
+  const [partTimeValue, setPartTimeValue] = useState(0);
+
+  const [sandwichList, setSandwichTimeList] = useState([]);
+  const [sandwichLabel, setSandwichLabel] = useState("Sandwich");
+  const [sandwichValue, setSandwichValue] = useState(0);
+  const [govtLoan, setGovtLoan] = useState(false);
+  const [govtLoanLink, setGovtLoanLink] = useState("");
+  const [govtLoanLinkError, setGovtLoanLinkError] = useState("");
+
+  console.log(govtLoan, "govtloan");
+
+  const [privateLoan, setPrivateLoan] = useState(false);
+  const [privateLoanLink, setPrivateLoanLink] = useState("");
+  const [privateLoanLinkError, setPrivateLoanLinkError] = useState("");
+
+  const subjectStudyOptions = [
+    { StudyMode: 1, DurationId: partTimeValue },
+    { StudyMode: 2, DurationId: fullTimeValue },
+    { StudyMode: 3, DurationId: sandwichValue },
+  ];
 
   useEffect(() => {
     get(`ProviderHelper/GetProviderId/${userType}/${referenceId}`).then(
@@ -91,7 +124,6 @@ const AddUniversitySubject = () => {
         .catch();
     } else {
       get("SearchFilter/Universities/0/0/0").then((res) => {
-        console.log(res);
         setUniversityList(res);
       });
     }
@@ -119,7 +151,6 @@ const AddUniversitySubject = () => {
           setSubId(res?.id);
           setSubName(res?.name);
           setDescription(res?.description);
-          setDuration(res?.duration);
           setUniLabel(res?.university?.name);
           setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
@@ -128,6 +159,29 @@ const AddUniversitySubject = () => {
           setDepValue(res?.department?.id);
           setSubDepLabel(res?.subDepartment?.name);
           setSubDepValue(res?.subDepartment?.id);
+          setIsScholarshipAvailable(res?.isScholarshipAvailable);
+          setIsWorkPlacement(res?.isWorkPlacementAvailable);
+          setScholarshipDetails(res?.scholarshipDescription);
+          setIsLoanAvailable(res?.isLoanAvailable);
+          setGovtLoan(res?.isGovernmentLoan);
+          setGovtLoanLink(res?.governmentLoanUrl);
+          setPrivateLoan(res?.isPrivateLoan);
+          setPrivateLoanLink(res?.privateLoanUrl);
+
+          const studyModes = res?.subjectStudyModes || [];
+
+          studyModes.forEach((data) => {
+            if (data.studyMode === 1) {
+              setPartTimeValue(data.durationId);
+              setPartTimeLabel(data.durationName);
+            } else if (data.studyMode === 2) {
+              setFullTimeValue(data.durationId);
+              setFullTimeLabel(data.durationName);
+            } else if (data.studyMode === 3) {
+              setSandwichValue(data.durationId);
+              setSandwichLabel(data.durationName);
+            }
+          });
         })
         .catch();
     } else {
@@ -137,7 +191,6 @@ const AddUniversitySubject = () => {
           setSubId(res?.id);
           setSubName(res?.name);
           setDescription(res?.description);
-          setDuration(res?.duration);
           setUniLabel(res?.university?.name);
           setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
@@ -146,6 +199,29 @@ const AddUniversitySubject = () => {
           setDepValue(res?.department?.id);
           setSubDepLabel(res?.subDepartment?.name);
           setSubDepValue(res?.subDepartment?.id);
+          setIsScholarshipAvailable(res?.isScholarshipAvailable);
+          setIsWorkPlacement(res?.isWorkPlacementAvailable);
+          setScholarshipDetails(res?.scholarshipDescription);
+          setIsLoanAvailable(res?.isLoanAvailable);
+          setGovtLoan(res?.isGovernmentLoan);
+          setGovtLoanLink(res?.governmentLoanUrl);
+          setPrivateLoan(res?.isPrivateLoan);
+          setPrivateLoanLink(res?.privateLoanUrl);
+
+          const studyModes = res?.subjectStudyModes || [];
+
+          studyModes.forEach((data) => {
+            if (data.studyMode === 1) {
+              setPartTimeValue(data.durationId);
+              setPartTimeLabel(data.durationName);
+            } else if (data.studyMode === 2) {
+              setFullTimeValue(data.durationId);
+              setFullTimeLabel(data.durationName);
+            } else if (data.studyMode === 3) {
+              setSandwichValue(data.durationId);
+              setSandwichLabel(data.durationName);
+            }
+          });
         })
         .catch();
     }
@@ -162,6 +238,20 @@ const AddUniversitySubject = () => {
       })
       .catch();
   }, [subjId, subjectId, id]);
+
+  useEffect(() => {
+    Uget(`Duration/ByEducationLevel/${programValue}`).then((res) => {
+      setFullTimeList(res?.data);
+    });
+
+    Uget(`Duration/ByEducationLevel/${programValue}`).then((res) => {
+      setPartTimeList(res?.data);
+    });
+
+    Uget(`Duration/ByEducationLevel/${programValue}`).then((res) => {
+      setSandwichTimeList(res?.data);
+    });
+  }, [programValue]);
 
   const selectSubDepByDepartment = (depValue) => {
     get(`SubDepartmentDD/Index/${depValue}`).then((res) => {
@@ -196,6 +286,22 @@ const AddUniversitySubject = () => {
     setSubDepValue(value);
   };
 
+  const selectFullTime = (label, value) => {
+    // setSubDeptDropError(false);
+    setFullTimeLabel(label);
+    setFullTimeValue(value);
+  };
+  const selectPartTime = (label, value) => {
+    // setSubDeptDropError(false);
+    setPartTimeLabel(label);
+    setPartTimeValue(value);
+  };
+  const selectSandwichTime = (label, value) => {
+    // setSubDeptDropError(false);
+    setSandwichLabel(label);
+    setSandwichValue(value);
+  };
+
   const uniMenu = universityList?.map((universityOptions) => ({
     label: universityOptions.name,
     value: universityOptions.id,
@@ -214,6 +320,20 @@ const AddUniversitySubject = () => {
   const subDepMenu = subDepList.map((subDepOptions) => ({
     label: subDepOptions.name,
     value: subDepOptions.id,
+  }));
+  const fullTimeMenu = fullTimeList?.map((fullTimeOptions) => ({
+    label: fullTimeOptions.name,
+    value: fullTimeOptions.id,
+  }));
+
+  const partTimeMenu = partTimeList?.map((partTimeOptions) => ({
+    label: partTimeOptions.name,
+    value: partTimeOptions.id,
+  }));
+
+  const sandwichMenu = sandwichList?.map((sandwichOptions) => ({
+    label: sandwichOptions.name,
+    value: sandwichOptions.id,
   }));
 
   // tab toggle
@@ -270,6 +390,30 @@ const AddUniversitySubject = () => {
       setSubNameError("");
     }
   };
+  const handleScholarshipDetails = (e) => {
+    setScholarshipDetails(e.target.value);
+    if (e.target.value === "") {
+      setScholarshipDetailsError("Scholarship Details is required");
+    } else {
+      setScholarshipDetailsError("");
+    }
+  };
+  const handleGovtLoanLink = (e) => {
+    setGovtLoanLink(e.target.value);
+    if (e.target.value === "") {
+      setGovtLoanLinkError("Link is required");
+    } else {
+      setGovtLoanLinkError("");
+    }
+  };
+  const handlePrivateLoanLink = (e) => {
+    setPrivateLoanLink(e.target.value);
+    if (e.target.value === "") {
+      setPrivateLoanLinkError("Link is required");
+    } else {
+      setPrivateLoanLinkError("");
+    }
+  };
 
   const ValidateForm = () => {
     var isValid = true;
@@ -277,6 +421,12 @@ const AddUniversitySubject = () => {
       isValid = false;
       setSubNameError("Course Name is required");
     }
+
+    if (isScholarshipAvailable === true && !scholarshipDetails) {
+      isValid = false;
+      setScholarshipDetailsError("Scholarship Details is required");
+    }
+
     if (programValue === 0) {
       isValid = false;
       setProgLvlError(true);
@@ -297,14 +447,27 @@ const AddUniversitySubject = () => {
   };
 
   // on submit form
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("description", description);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    // if(uniValue === 0){
-    //   setUniDropError(true);
-    // }
+    const subdata = {
+      id: subId !== 0 ? subId : undefined,
+      universityId: uniValue,
+      name: subName,
+      description: description,
+      educationLevelId: programValue,
+      departmentId: depValue,
+      subDepartmentId: subDepValue,
+      isWorkPlacementAvailable: isWorkPlacement,
+      isScholarshipAvailable: isScholarshipAvailable,
+      scholarshipDescription: scholarshipDetails,
+      subjectStudyModes: subjectStudyOptions,
+      isLoanAvailable: isLoanAvailable,
+      isGovernmentLoan: govtLoan,
+      isPrivateLoan: privateLoan,
+      governmentLoanUrl: govtLoan === true ? govtLoanLink : "",
+      privateLoanUrl: privateLoan === true ? privateLoanLink : "",
+    };
 
     if (ValidateForm()) {
       if (subId !== 0) {
@@ -606,7 +769,7 @@ const AddUniversitySubject = () => {
                       /> */}
                     </FormGroup>
                   </Col>
-                  <Col md="4">
+                  <Col md="5">
                     <FormGroup>
                       <span>
                         <span className="text-danger">*</span>Education level
@@ -669,17 +832,294 @@ const AddUniversitySubject = () => {
                     </FormGroup>
 
                     <FormGroup>
-                      <span>Duration</span>
-
-                      <Input
-                        type="text"
-                        name="duration"
-                        id="duration"
-                        defaultValue={duration}
-                        placeholder="Enter Duration"
-                        // required
-                      />
+                      <span>Is Work Placement Available </span>
+                      <div>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isWorkPlacementAvailable"
+                            name="isWorkPlacementAvailable"
+                            value={true}
+                            onClick={() => setIsWorkPlacement(!isWorkPlacement)}
+                            checked={isWorkPlacement === true}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isWorkPlacementAvailable"
+                          >
+                            Yes
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isWorkPlacementAvailable"
+                            name="isWorkPlacementAvailable"
+                            value={false}
+                            onClick={() => setIsWorkPlacement(!isWorkPlacement)}
+                            checked={isWorkPlacement === false}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isWorkPlacementAvailable"
+                          >
+                            No
+                          </Label>
+                        </FormGroup>
+                      </div>
                     </FormGroup>
+                    <FormGroup>
+                      <span>Is Scholarship Available </span>
+                      <div>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isScholarshipAvailable"
+                            name="isScholarshipAvailable"
+                            value={true}
+                            onClick={() =>
+                              setIsScholarshipAvailable(!isScholarshipAvailable)
+                            }
+                            checked={isScholarshipAvailable === true}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isScholarshipAvailable"
+                          >
+                            Yes
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isScholarshipAvailable"
+                            name="isScholarshipAvailable"
+                            value={false}
+                            onClick={() =>
+                              setIsScholarshipAvailable(!isScholarshipAvailable)
+                            }
+                            checked={isScholarshipAvailable === false}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isScholarshipAvailable"
+                          >
+                            No
+                          </Label>
+                        </FormGroup>
+                      </div>
+                    </FormGroup>
+                    {isScholarshipAvailable === true && (
+                      <FormGroup>
+                        <span>
+                          <span className="text-danger">*</span>Scholarship
+                          Details{" "}
+                        </span>
+
+                        <Input
+                          type="text"
+                          name="scholarshipDescription"
+                          id="scholarshipDescription"
+                          value={scholarshipDetails}
+                          placeholder="Enter Scholarship Details "
+                          onChange={(e) => {
+                            handleScholarshipDetails(e);
+                          }}
+                        />
+                        <span className="text-danger">
+                          {scholarshipDetailsError}
+                        </span>
+                      </FormGroup>
+                    )}
+                    <FormGroup>
+                      <span>
+                        {/* <span className="text-danger">*</span> */}
+                        Study Modes and Durations
+                      </span>
+                      <Row className="mt-3">
+                        <Col>
+                          <span>Full Time</span>
+                          <Select
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...fullTimeList?.map((fullTimeOptions) => ({
+                                label: fullTimeOptions.name,
+                                value: fullTimeOptions.id,
+                              })),
+                            ]}
+                            value={{
+                              label: fullTimeLabel,
+                              value: fullTimeValue,
+                            }}
+                            onChange={(opt) =>
+                              selectFullTime(opt.label, opt.value)
+                            }
+                          />
+                          {/* {deptDropError && (
+                            <span className="text-danger">
+                              Department is required
+                            </span>
+                          )} */}
+                        </Col>
+                        <Col>
+                          <span>Part Time</span>
+                          <Select
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...partTimeList?.map((partTimeOptions) => ({
+                                label: partTimeOptions.name,
+                                value: partTimeOptions.id,
+                              })),
+                            ]}
+                            value={{
+                              label: partTimeLabel,
+                              value: partTimeValue,
+                            }}
+                            onChange={(opt) =>
+                              selectPartTime(opt.label, opt.value)
+                            }
+                          />
+                          {/* {deptDropError && (
+                            <span className="text-danger">
+                              Department is required
+                            </span>
+                          )} */}
+                        </Col>
+                        <Col>
+                          <span>Sandwich</span>
+                          <Select
+                            options={[
+                              { label: "Select", value: 0 },
+                              ...sandwichList?.map((sandwich) => ({
+                                label: sandwich.name,
+                                value: sandwich.id,
+                              })),
+                            ]}
+                            value={{
+                              label: sandwichLabel,
+                              value: sandwichValue,
+                            }}
+                            onChange={(opt) =>
+                              selectSandwichTime(opt.label, opt.value)
+                            }
+                          />
+                          {/* {deptDropError && (
+                            <span className="text-danger">
+                              Department is required
+                            </span>
+                          )} */}
+                        </Col>
+                      </Row>
+                    </FormGroup>
+
+                    <FormGroup>
+                      <span>Is Loan Available </span>
+                      <div>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isLoanAvailable"
+                            name="isLoanAvailable"
+                            value={true}
+                            onClick={() => setIsLoanAvailable(!isLoanAvailable)}
+                            checked={isLoanAvailable === true}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isLoanAvailable"
+                          >
+                            Yes
+                          </Label>
+                        </FormGroup>
+                        <FormGroup check inline>
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            id="isLoanAvailable"
+                            name="isLoanAvailable"
+                            value={false}
+                            onClick={() => setIsLoanAvailable(!isLoanAvailable)}
+                            checked={isLoanAvailable === false}
+                          />
+                          <Label
+                            className="form-check-label"
+                            check
+                            htmlFor="isLoanAvailable"
+                          >
+                            No
+                          </Label>
+                        </FormGroup>
+                      </div>
+                    </FormGroup>
+                    {isLoanAvailable === true && (
+                      <FormGroup className="has-icon-left position-relative">
+                        <span>Available Loan</span>
+
+                        <Row>
+                          <Col xs="12" className="mt-2">
+                            <FormGroup check>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setGovtLoan(e.target.checked);
+                                }}
+                                checked={govtLoan}
+                              />
+                              <span className="mr-2">Government Loan</span>
+                            </FormGroup>
+                            {govtLoan === true && (
+                              <FormGroup>
+                                <Input
+                                  type="text"
+                                  value={govtLoanLink}
+                                  placeholder="Enter Link here"
+                                  onChange={(e) => {
+                                    handleGovtLoanLink(e);
+                                  }}
+                                />
+                              </FormGroup>
+                            )}
+                          </Col>
+
+                          <Col xs="12" className="mt-2">
+                            <FormGroup check>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                onChange={(e) => {
+                                  setPrivateLoan(e.target.checked);
+                                }}
+                                checked={privateLoan}
+                              />
+                              <span className="mr-2">Private Loan</span>
+                            </FormGroup>
+                            {privateLoan === true && (
+                              <FormGroup>
+                                <Input
+                                  type="text"
+                                  value={privateLoanLink}
+                                  placeholder="Enter Link here"
+                                  onChange={(e) => {
+                                    handlePrivateLoanLink(e);
+                                  }}
+                                />
+                              </FormGroup>
+                            )}
+                          </Col>
+                        </Row>
+                      </FormGroup>
+                    )}
                   </Col>
                 </Row>
 

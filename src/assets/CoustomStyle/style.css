@@ -405,6 +405,12 @@ tbody tr:hover {
 .fw-700 {
   font-weight: 700 !important;
 }
+.fw-800 {
+  font-weight: 800 !important;
+}
+.fw-900 {
+  font-weight: 900 !important;
+}
 
 .p-0 {
   padding: 0 !important;
@@ -5877,4 +5883,28 @@ span.ant-upload-list-item-name {
 
 .students-active {
   color: #ffffff;
+}
+
+.right-side-modal {
+  background-color: #f9fbfb;
+  position: fixed;
+  bottom: 0;
+  z-index: 999;
+  right: 0;
+  width: 315px;
+  height: calc(100% - 75px);
+  box-shadow: -4px 0px 32px 0px rgba(81, 81, 81, 0.16),
+    -4px 0px 32px 0px rgba(81, 81, 81, 0.16);
+}
+
+.dropdown-circle {
+  border-radius: 50px;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 0px 10px;
+  background: rgb(255, 255, 255);
+}
+
+.dropdown-circle .css-b62m3t-container .css-13cymwt-control {
+  border: 0 !important;
+  border-radius: 50px !important;
 }

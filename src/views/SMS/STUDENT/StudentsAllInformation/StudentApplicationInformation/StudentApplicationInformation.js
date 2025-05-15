@@ -61,6 +61,10 @@ const StudentApplicationInformation = () => {
   const [loanYearsForEU, setLoanYearsForEU] = useState("");
   const [loanYearsForEUError, setLoanYearsForEUError] = useState("");
   const [isSettlementStatus, setIsSettlementStatus] = useState(null);
+  const [currentOtherStatus, setCurrentOtherStatus] = useState("");
+  const [currentOtherStatusError, setCurrentOtherStatusError] = useState("");
+  const [currentStatusUk, setCurrentStatusUk] = useState(null);
+  const [currentStatusUkError, setCurrentStatusUkError] = useState(null);
   const [shareCode, setShareCode] = useState("");
   const [shareCodeError, setShareCodeError] = useState("");
   const [isApplyingFromInside, setIsApplyingFromInside] = useState(null);
@@ -148,6 +152,7 @@ const StudentApplicationInformation = () => {
           );
           setStudentTypeValue(applicationInfoRes?.studentType?.id);
           setStatusInUK(applicationInfoRes?.currentResidencyStatusForEU);
+          setCurrentOtherStatus(applicationInfoRes?.otherCitizenshipStatus);
 
           const countryIndexRes = await get(`UniversityCountryDD/Index`);
           const result = countryIndexRes?.find(
@@ -289,6 +294,7 @@ const StudentApplicationInformation = () => {
       setResidencyStatusError("");
     }
   };
+
   const handleresidencyStatusUK = (e) => {
     let data = e.target.value.trimStart();
     setStatusInUK(data);
@@ -296,6 +302,15 @@ const StudentApplicationInformation = () => {
       setStatusInUKError("Residency Status required");
     } else {
       setStatusInUKError("");
+    }
+  };
+  const handleCurrentOtherStatusUK = (e) => {
+    let data = e.target.value.trimStart();
+    setCurrentOtherStatus(data);
+    if (data === "") {
+      setCurrentOtherStatusError("Other Status required");
+    } else {
+      setCurrentOtherStatusError("");
     }
   };
 
@@ -324,6 +339,9 @@ const StudentApplicationInformation = () => {
     }
     if (isSettlementStatus !== null) {
       setIsSettlementStatusError("");
+    }
+    if (currentStatusUk !== null) {
+      setCurrentStatusUkError("");
     }
     if (havingUnderGraduateCourseForEU !== null) {
       setHavingUnderGraduateCourseForEUError("");
@@ -364,6 +382,7 @@ const StudentApplicationInformation = () => {
     FileList,
     FileList2,
     isRefusedForUKVisa,
+    currentStatusUk,
   ]);
 
   const validateRegisterForm = () => {
@@ -375,12 +394,14 @@ const StudentApplicationInformation = () => {
     setdateError("");
     setLoanYearsForEUError("");
     setStatusInUKError("");
+    setCurrentOtherStatusError("");
     setShareCodeError("");
     setResidencyStatusError("");
     setVisaTypeError("");
     setdateError("");
     setLoansForEUError("");
     setIsSettlementStatusError("");
+    setCurrentStatusUkError("");
     setIsStayedInUkInLast3YearsError("");
     setHavingUnderGraduateCourseForEUError("");
     setIsRefusedForUKVisaError("");
@@ -436,6 +457,15 @@ const StudentApplicationInformation = () => {
     }
 
     if (
+      studentTypeLabel === "Home/UK" &&
+      currentStatusUk === false &&
+      !currentOtherStatus
+    ) {
+      isFormValid = false;
+      setCurrentOtherStatusError("Other Status is required");
+    }
+
+    if (
       studentTypeLabel === "EU/EEA" &&
       isSettlementStatus === true &&
       !shareCode
@@ -476,6 +506,10 @@ const StudentApplicationInformation = () => {
     if (studentTypeLabel === "EU/EEA" && isSettlementStatus === null) {
       isFormValid = false;
       setIsSettlementStatusError("Settlement Status is required");
+    }
+    if (studentTypeLabel === "Home/UK" && currentStatusUk === null) {
+      isFormValid = false;
+      setCurrentStatusUkError("Current Status is required");
     }
 
     if (
@@ -624,12 +658,14 @@ const StudentApplicationInformation = () => {
     setHomeResidencyStatusError("");
     setLoanYearsForEUError("");
     setStatusInUKError("");
+    setCurrentOtherStatusError("");
     setShareCodeError("");
     setResidencyStatusError("");
     setVisaTypeError("");
     setdateError("");
     setLoansForEUError("");
     setIsSettlementStatusError("");
+    setCurrentStatusUkError("");
     setIsStayedInUkInLast3YearsError("");
     setHavingUnderGraduateCourseForEUError("");
     setIsApplyingFromInsideError("");
@@ -978,6 +1014,23 @@ International students in the UK are those who apply from outside from UK or ins
                                 }
                                 showResidency={showResidency}
                                 setShowResidency={setShowResidency}
+                                currentOtherStatus={currentOtherStatus}
+                                setCurrentOtherStatus={setCurrentOtherStatus}
+                                currentStatusUk={currentStatusUk}
+                                setCurrentStatusUk={setCurrentStatusUk}
+                                currentStatusUkError={currentStatusUkError}
+                                setCurrentStatusUkError={
+                                  setCurrentStatusUkError
+                                }
+                                handleCurrentOtherStatusUK={
+                                  handleCurrentOtherStatusUK
+                                }
+                                currentOtherStatusError={
+                                  currentOtherStatusError
+                                }
+                                setCurrentOtherStatusError={
+                                  setCurrentOtherStatusError
+                                }
                               />
                             ) : null}
 

@@ -30,6 +30,8 @@ import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { number } from "prop-types";
+import Uget from "../../../../helpers/Uget";
+import Select from "react-select";
 
 const EducationLevelList = () => {
   const history = useHistory();
@@ -54,6 +56,39 @@ const EducationLevelList = () => {
   const [DescriptionError, setDescriptionError] = useState("");
   const [LevelValu, setLevelValu] = useState("");
   const [LevelValuError, setLevelValuError] = useState("");
+  const [durationDD, setDurationDD] = useState([]);
+  const [durationlist, setDurationList] = useState([]);
+  const [durationLabel, setDurationLabel] = useState("Select Duration");
+  const [durationValue, setDurationValue] = useState(0);
+  const [durationError, setDurationError] = useState(false);
+  const [multiDuration, setMultiDuration] = useState([]);
+
+  useEffect(() => {
+    Uget("Duration/Index").then((res) => {
+      setDurationDD(res?.data);
+      setDurationList(res?.data);
+    });
+  }, [success]);
+
+  const durationCategory = durationlist.map((duration) => ({
+    label: duration?.name,
+    value: duration?.id,
+  }));
+
+  const handleDurationChange = (e) => {
+    console.log(e);
+    const durationFormate = e[0]?.label.split(" ")[1]?.slice(0, -1);
+    const result = durationDD?.filter((item) =>
+      item?.name?.includes(durationFormate)
+    );
+    e?.length > 0 ? setDurationList(result) : setDurationList(durationDD);
+  };
+
+  const selectDocumentDD = (label, value) => {
+    setDurationLabel(label);
+    setDurationValue(value);
+    setDurationError(false);
+  };
 
   // Delete Modal
 
@@ -90,6 +125,8 @@ const EducationLevelList = () => {
     setLevelValuError("");
     setDescriptionError("");
     setNameError("");
+    setMultiDuration([]);
+    setDurationError(false);
   };
 
   const handleName = (e) => {
@@ -139,6 +176,16 @@ const EducationLevelList = () => {
       isFormValid = false;
       setNameError("Name is required");
     }
+
+    if (multiDuration?.length === 0) {
+      isFormValid = false;
+      setDurationError(true);
+    }
+    // if (durationValue === 0) {
+    //   isFormValid = false;
+    //   setDurationError(true);
+    // }
+
     if (!Description) {
       isFormValid = false;
       setDescriptionError("Description is required");
@@ -235,10 +282,15 @@ const EducationLevelList = () => {
 
   const redirectToUpdate = (data) => {
     setData(data);
+    setMultiDuration(data?.durationLists);
     setName(data?.name);
     setDescription(data?.description);
     setLevelValu(data?.levelValue);
     setModalOpen(true);
+  };
+
+  const handleDurationSubject = () => {
+    history.push(`/durationSubjectList`);
   };
 
   return (
@@ -274,6 +326,42 @@ const EducationLevelList = () => {
                       }}
                     />
                     <span className="text-danger">{NameError}</span>
+                  </Col>
+                </FormGroup>
+
+                <FormGroup row className="has-icon-left position-relative">
+                  <Col md="4">
+                    <span>
+                      Duration <span className="text-danger">*</span>{" "}
+                    </span>
+                  </Col>
+                  <Col md="8">
+                    {/* <Select
+                      options={durationCategory}
+                      value={{ label: durationLabel, value: durationValue }}
+                      onChange={(opt) => selectDocumentDD(opt.label, opt.value)}
+                      name="durations"
+                      id="durations"
+                    /> */}
+
+                    <Select
+                      isMulti
+                      name="durations"
+                      id="durations"
+                      onChange={(e) => {
+                        setMultiDuration(e);
+                        if (e.length > 0) {
+                          setDurationError(false);
+                        }
+                        handleDurationChange(e);
+                      }}
+                      options={durationCategory}
+                      value={multiDuration}
+                      className="mt-1"
+                    />
+                    {durationError ? (
+                      <span className="text-danger">Duration is required.</span>
+                    ) : null}
                   </Col>
                 </FormGroup>
 
@@ -344,16 +432,30 @@ const EducationLevelList = () => {
           <Card>
             <CardHeader>
               {/* <div className='mb-3'> */}
-              {permissions?.includes(
-                permissionList.Configure_Educationlevels
-              ) ? (
-                <ButtonForFunction
-                  className={"btn btn-uapp-add "}
-                  icon={<i className="fas fa-plus"></i>}
-                  func={handleAddEducationLevel}
-                  name={" Add Educational Levels"}
-                />
-              ) : null}
+              <div className="d-flex">
+                <div className="mr-3">
+                  {" "}
+                  {permissions?.includes(
+                    permissionList.Configure_Educationlevels
+                  ) ? (
+                    <ButtonForFunction
+                      className={"btn btn-uapp-add "}
+                      icon={<i className="fas fa-plus"></i>}
+                      func={handleAddEducationLevel}
+                      name={" Add Educational Levels"}
+                    />
+                  ) : null}
+                </div>
+                <div>
+                  {" "}
+                  <ButtonForFunction
+                    className={"btn btn-uapp-add "}
+                    icon={<i className="fas fa-plus"></i>}
+                    func={handleDurationSubject}
+                    name={"Add Duration"}
+                  />
+                </div>
+              </div>
 
               <div>
                 {" "}
@@ -378,6 +480,7 @@ const EducationLevelList = () => {
                       {/* <th>SL/NO</th> */}
                       <th>Name</th>
                       <th>Decription</th>
+                      <th>Duration</th>
                       <th>Level Value</th>
                       <th style={{ width: "8%" }} className="text-center">
                         Action
@@ -394,6 +497,16 @@ const EducationLevelList = () => {
                         <td>{educationInfo?.name}</td>
 
                         <td>{educationInfo?.description}</td>
+                        <td>
+                          {" "}
+                          {educationInfo?.durationLists.map((item, i) => (
+                            <>
+                              {item?.label}
+                              {educationInfo?.durationLists.length > i + 1 &&
+                                ", "}
+                            </>
+                          ))}
+                        </td>
 
                         <td>{educationInfo?.levelValue}</td>
 

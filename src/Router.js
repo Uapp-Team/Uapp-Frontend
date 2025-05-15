@@ -292,6 +292,7 @@ const CopyUniversitySubjectIntake = lazy(() =>
 
 // intake
 const Intake = lazy(() => import("./views/SMS/University/Intakes/Intake.js"));
+
 const AddNewIntakes = lazy(() =>
   import("./views/SMS/University/Intakes/Component/AddNewIntakes.jsx")
 );
@@ -1045,6 +1046,11 @@ const StudentDashboard = lazy(() =>
 const EducationLevelList = lazy(() =>
   import("./views/SMS/SETTINGS/EducationLevel/EducationLevelList")
 );
+
+const DurationSubjectList = lazy(() =>
+  import("./views/SMS/SETTINGS/DurationSubject/DurationSubjectList.js")
+);
+
 // const AddEducationLevel = lazy(() => import("./views/SMS/EducationLevel/AddEducationLevel"))
 
 // Degree
@@ -1089,6 +1095,9 @@ const CountryList = lazy(() =>
 // Search
 
 const Search = lazy(() => import("./views/SMS/Search/Search"));
+const SearchAndApply = lazy(() =>
+  import("./views/SMS/SearchAndApply/SearchAndApply")
+);
 
 // Comission
 const AccountIntake = lazy(() =>
@@ -4578,6 +4587,16 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  <AppRoute
+                    path="/durationSubjectList"
+                    component={
+                      permissions?.includes(
+                        permissionList?.Configure_Educationlevels
+                      )
+                        ? DurationSubjectList
+                        : NotAuthorized
+                    }
+                  />
                   {/* <AppRoute  path="/addEducationLevel/:name?/:description?/:levelValue?/:id?" component={permissions?.includes(permissionList?.Add_Education_Level)? AddEducationLevel : NotAuthorized} /> */}
 
                   {/* Degree Paths */}
@@ -5257,14 +5276,16 @@ class AppRouter extends React.Component {
                     component={Settings}
                   />
 
-                  <AppRoute path="/search" component={Search} />
+                  {/* <AppRoute path="/search" component={Search} /> */}
+                  <AppRoute path="/search" component={SearchAndApply} />
+                  <AppRoute path="/searchAndApply" component={Search} />
                   <AppRoute
                     path="/searchByStudent/:student"
-                    component={Search}
+                    component={SearchAndApply}
                   />
                   <AppRoute
                     path="/searchBydepartment/:departmentId"
-                    component={Search}
+                    component={SearchAndApply}
                   />
 
                   {/* Seed Data path */}

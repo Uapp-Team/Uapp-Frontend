@@ -89,7 +89,7 @@ const ApplicationNote = ({
 
         {permissions?.includes(permissionList.Add_ApplicationNote) ? (
           <div>
-            {applicationSubStatusId !== 13 && (
+            {applicationSubStatusId !== 38 && (
               <Form onSubmit={submitNotes}>
                 <Input
                   type="hidden"

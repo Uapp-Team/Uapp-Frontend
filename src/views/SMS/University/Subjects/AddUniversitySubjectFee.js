@@ -23,6 +23,13 @@ import SubjectNavbar from "./Components/SubjectNavbar";
 import PreviousButton from "../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import CheckBoxByObj from "../../../../components/form/CheckBoxByObj";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  durationInfo,
+} from "../../../../constants/presetData";
+import Uget from "../../../../helpers/Uget";
 
 const AddUniversitySubjectFee = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -31,12 +38,16 @@ const AddUniversitySubjectFee = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
 
+  const [feeType, setFeeType] = useState([]);
   const [CurrencyDD, setCurrencyDD] = useState([]);
-
+  // const [deliverySchedule, setDeliverySchedule] = useState([]);
+  const [deliveryMethod, setDeliveryMethod] = useState([]);
   const [addLocalTutionFee, setAddLocalTutionFee] = useState(undefined);
   const [addIntTutionFee, setAddIntTutionFee] = useState(undefined);
   const [addEUTutionFee, setAddEUTutionFee] = useState(undefined);
   const [averageFee, setAverageFee] = useState(undefined);
+  const [firstYearTuitionFee, setFirstYearTuitionFee] = useState(undefined);
+  const [depositFee, setDepositFee] = useState(undefined);
 
   const [addLocalTutionFeeCurrencyvalue, setAddLocalTutionFeeCurrencyvalue] =
     useState("@");
@@ -52,35 +63,26 @@ const AddUniversitySubjectFee = () => {
   const [averageFeeCurrencyId, setAverageFeeCurrencyId] = useState(0);
   const [averageFeeCurrencyValue, setAverageFeeCurrencyValue] = useState("@");
 
+  const [firstYearTuitionFeeId, setFirstYearTuitionFeeId] = useState(0);
+  const [
+    firstYearTuitionFeeCurrencyValue,
+    setFirstYearTuitionFeeCurrencyValue,
+  ] = useState("@");
+
+  const [depositFeeId, setDepositFeeId] = useState(0);
+  const [depositFeeCurrencyValue, setDepositFeeCurrencyValue] = useState("@");
+
   const { addToast } = useToasts();
   const { id, subjId } = useParams();
-
-  const [radioEvening, setRadioEvening] = useState(false);
-  const [radioEveningWeekend, setRadioEveningWeekend] = useState(false);
-  const [radioStandard, setRadioStandard] = useState(false);
-  const [radioWeekend, setRadioWeekend] = useState(false);
-
-  const onChangeEvening = (event) => {
-    console.log(event.target.checked);
-    setRadioEvening(event.target.checked);
-  };
-  const onChangeEveningWeekend = (event) => {
-    setRadioEveningWeekend(event.target.checked);
-  };
-
-  const onChangeStandard = (event) => {
-    setRadioStandard(event.target.checked);
-  };
-
-  const onChangeWeekend = (event) => {
-    setRadioWeekend(event.target.checked);
-  };
 
   useEffect(() => {
     get(`CurrencyDD/Index`).then((res) => {
       setCurrencyDD(res);
     });
-  }, []);
+    Uget(`Duration/BySubjectId?subjectId=${subjId}`).then((res) => {
+      setFeeType(res?.data);
+    });
+  }, [subjId]);
 
   useEffect(() => {
     const initialStatus1 = CurrencyDD.filter((status) => {
@@ -95,34 +97,63 @@ const AddUniversitySubjectFee = () => {
     const initialStatus4 = CurrencyDD.filter((status) => {
       return status.id === averageFeeCurrencyId;
     });
+    const initialStatus5 = CurrencyDD.filter((status) => {
+      return status.id === firstYearTuitionFeeId;
+    });
+    const initialStatus6 = CurrencyDD.filter((status) => {
+      return status.id === depositFeeId;
+    });
 
     setAddLocalTutionFeeCurrencyvalue(initialStatus1[0]?.name);
     setAddIntTutionFeeCurrencyValue(initialStatus2[0]?.name);
     setAddEUTutionFeeCurrencyValue(initialStatus3[0]?.name);
     setAverageFeeCurrencyValue(initialStatus4[0]?.name);
+    setFirstYearTuitionFeeCurrencyValue(initialStatus5[0]?.name);
+    setDepositFeeCurrencyValue(initialStatus6[0]?.name);
   }, [
     CurrencyDD,
     addLocalTutionFeeCurrencyId,
     addIntTutionFeeCurrencyId,
     addEUTutionFeeCurrencyId,
     averageFeeCurrencyId,
+    firstYearTuitionFeeId,
+    depositFeeId,
   ]);
 
   useEffect(() => {
     get(`SubjectFeeAndDeliveryPattern/Get/${subjId}`).then((res) => {
-      setAddLocalTutionFeeCurrencyId(res?.localfeecurrencyid);
-      setAddIntTutionFeeCurrencyId(res?.internationalfeecurrencyid);
-      setAddEUTutionFeeCurrencyId(res?.eututionfeecurrencyid);
-      setAverageFeeCurrencyId(res?.averageapplicationfeecurrencyid);
-
+      setAddLocalTutionFeeCurrencyId(
+        res?.localfeecurrencyid === 0 ? 2 : res?.localfeecurrencyid
+      );
+      setAddIntTutionFeeCurrencyId(
+        res?.internationalfeecurrencyid === 0
+          ? 2
+          : res?.internationalfeecurrencyid
+      );
+      setAddEUTutionFeeCurrencyId(
+        res?.eututionfeecurrencyid === 0 ? 2 : res?.eututionfeecurrencyid
+      );
+      setAverageFeeCurrencyId(
+        res?.averageapplicationfeecurrencyid === 0
+          ? 2
+          : res?.averageapplicationfeecurrencyid
+      );
+      setFirstYearTuitionFeeId(
+        res?.firstyeartutionfeecurrencyid === 0
+          ? 2
+          : res?.firstyeartutionfeecurrencyid
+      );
+      setDepositFeeId(
+        res?.depositfeecurrencyid === 0 ? 2 : res?.depositfeecurrencyid
+      );
       setAddLocalTutionFee(res?.localtutionfee);
       setAddIntTutionFee(res?.internationaltutionfee);
       setAddEUTutionFee(res?.eututionfee);
       setAverageFee(res?.averageapplicationfee);
-      setRadioEvening(res?.evening);
-      setRadioEveningWeekend(res?.eveningweekend);
-      setRadioStandard(res?.standard);
-      setRadioWeekend(res?.weekend);
+      setFirstYearTuitionFee(res?.firstyeartutionfee);
+      setDepositFee(res?.depositfee);
+      // setDeliverySchedule(res?.deliverySchedules);
+      setDeliveryMethod(res?.deliveryMethods);
     });
   }, [subjId]);
 
@@ -153,17 +184,44 @@ const AddUniversitySubjectFee = () => {
     setAverageFeeCurrencyId(value);
   };
 
+  const selectFirstYearTutionFeeCurrency = (label, value) => {
+    setFirstYearTuitionFeeCurrencyValue(label);
+    setFirstYearTuitionFeeId(value);
+  };
+  const selectDepositFeeCurrency = (label, value) => {
+    setDepositFeeCurrencyValue(label);
+    setDepositFeeId(value);
+  };
+
   // on submit form
   const handleSubmit = (event) => {
     event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("evening", radioEvening);
-    subdata.append("eveningweekend", radioEveningWeekend);
-    subdata.append("standard", radioStandard);
-    subdata.append("weekend", radioWeekend);
-    for (var value of subdata.values()) {
-      console.log("valuess", value);
-    }
+
+    const subdata = {
+      online: deliveryMethod?.includes(1) ? true : false,
+      onCampus: deliveryMethod?.includes(2) ? true : false,
+      hybrid: deliveryMethod?.includes(3) ? true : false,
+
+      // evening: deliverySchedule?.includes(1) ? true : false,
+      // eveningweekend: deliverySchedule?.includes(2) ? true : false,
+      // standard: deliverySchedule?.includes(3) ? true : false,
+      // weekend: deliverySchedule?.includes(4) ? true : false,
+      // flexible: deliverySchedule?.includes(5) ? true : false,
+      subjectId: subjId,
+      localfeecurrencyid: addLocalTutionFeeCurrencyId,
+      localtutionfee: addLocalTutionFee,
+      internationalfeecurrencyid: addIntTutionFeeCurrencyId,
+      internationaltutionfee: addIntTutionFee,
+      eututionfeecurrencyid: addEUTutionFeeCurrencyId,
+      eututionfee: addEUTutionFee,
+      averageapplicationfeecurrencyid: averageFeeCurrencyId,
+      averageapplicationfee: averageFee,
+      firstyeartutionfeecurrencyid: firstYearTuitionFeeId,
+      firstyeartutionfee: firstYearTuitionFee,
+      depositfeecurrencyid: depositFeeId,
+      depositfee: depositFee,
+    };
+
     setProgress(true);
     Axios.post(`${rootUrl}SubjectFeeAndDeliveryPattern/Save`, subdata, {
       headers: {
@@ -217,12 +275,17 @@ const AddUniversitySubjectFee = () => {
                   />
                 </FormGroup>
                 <Row>
-                  <Col md="7">
+                  <Col md={7}>
                     <p className="section-title">Course Fee</p>
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
-                        <span>Local Tution Fee</span>
+                        <span>
+                          Home Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
+                        </span>
                       </Col>
                       <Col className="col-5">
                         <InputGroup className="d-flex flex-nowrap">
@@ -250,7 +313,7 @@ const AddUniversitySubjectFee = () => {
                             defaultValue={addLocalTutionFee}
                             name="localtutionfee"
                             id="localtutionfee"
-                            placeholder="Enter Local Tution Fee"
+                            placeholder="Enter Home Tution Fee"
                             // required
                           />
                         </InputGroup>
@@ -259,7 +322,12 @@ const AddUniversitySubjectFee = () => {
 
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
-                        <span>Int. Tution Fee</span>
+                        <span>
+                          Int. Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
+                        </span>
                       </Col>
 
                       <Col className="col-5">
@@ -296,7 +364,10 @@ const AddUniversitySubjectFee = () => {
                     <FormGroup row className="has-icon-left position-relative">
                       <Col className="col-5">
                         <span>
-                          EU Tution Fee
+                          EU Tution Fee{" "}
+                          {feeType?.durationTypeId && (
+                            <>({durationInfo(feeType?.durationTypeId)?.ly})</>
+                          )}
                           {/* <span className="text-danger">*</span>{" "} */}
                         </span>
                       </Col>
@@ -368,78 +439,102 @@ const AddUniversitySubjectFee = () => {
                         </InputGroup>
                       </Col>
                     </FormGroup>
-                  </Col>
-                  <Col md={4}>
-                    <p className="section-title">Delivery Pattern</p>
+                    {/* <FormGroup row className="has-icon-left position-relative">
+                      <Col className="col-5">
+                        <span>
+                          First Year Tution Fee
+                        </span>
+                      </Col>
+                      <Col className="col-5">
+                        <InputGroup className="d-flex flex-nowrap">
+                          <span className="pr-2">:</span>
+                          <Select
+                            options={currencyList}
+                            value={{
+                              label: firstYearTuitionFeeCurrencyValue,
+                              value: firstYearTuitionFeeId,
+                            }}
+                            onChange={(opt) =>
+                              selectFirstYearTutionFeeCurrency(
+                                opt.label,
+                                opt.value
+                              )
+                            }
+                            name="firstyeartutionfeecurrencyid"
+                            id="firstyeartutionfeecurrencyid"
+                          />
 
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="evening"
-                        // name="evening"
-                        onChange={(e) => {
-                          onChangeEvening(e);
-                        }}
-                        value={radioEvening}
-                        checked={radioEvening === true ? true : false}
-                      />
-                      <span>Evening</span>
+                          <Input
+                            type="number"
+                            min="0"
+                            name="firstyeartutionfee"
+                            id="firstyeartutionfee"
+                            onChange={(e) =>
+                              setFirstYearTuitionFee(e.target.value)
+                            }
+                            defaultValue={firstYearTuitionFee}
+                            placeholder="Enter First Year Tution Fee "
+                          />
+                        </InputGroup>
+                      </Col>
+                    </FormGroup> */}
+                    <FormGroup row className="has-icon-left position-relative">
+                      <Col className="col-5">
+                        <span>
+                          Deposit Fee
+                          {/* <span className="text-danger">*</span>{" "} */}
+                        </span>
+                      </Col>
+                      <Col className="col-5">
+                        <InputGroup className="d-flex flex-nowrap">
+                          <span className="pr-2">:</span>
+                          <Select
+                            options={currencyList}
+                            value={{
+                              label: depositFeeCurrencyValue,
+                              value: depositFeeId,
+                            }}
+                            onChange={(opt) =>
+                              selectDepositFeeCurrency(opt.label, opt.value)
+                            }
+                            name="depositfeecurrencyid"
+                            id="depositfeecurrencyid"
+                          />
+
+                          <Input
+                            type="number"
+                            min="0"
+                            name="depositfee"
+                            id="depositfee"
+                            onChange={(e) => setDepositFee(e.target.value)}
+                            // defaultValue={euTutionFee}
+                            defaultValue={depositFee}
+                            placeholder="Enter Deposit Fee "
+                            // required
+                          />
+                        </InputGroup>
+                      </Col>
                     </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="eveningweekend"
-                        // name="eveningweekend"
-                        onChange={(e) => {
-                          onChangeEveningWeekend(e);
-                        }}
-                        value={radioEveningWeekend}
-                        checked={radioEveningWeekend === true ? true : false}
-                      />
-                      <span>Evening Weekend</span>
-                    </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="standard"
-                        // name="standard"
-                        onChange={(e) => {
-                          onChangeStandard(e);
-                        }}
-                        value={radioStandard}
-                        checked={radioStandard === true ? true : false}
-                      />
-                      <span>Standard</span>
-                    </FormGroup>
-                    <FormGroup
-                      row
-                      className="has-icon-left position-relative ml-4"
-                    >
-                      <Input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="weekend"
-                        // name="standard"
-                        onChange={(e) => {
-                          onChangeWeekend(e);
-                        }}
-                        value={radioWeekend}
-                        checked={radioWeekend === true ? true : false}
-                      />
-                      <span>Weekend</span>
-                    </FormGroup>
+                  </Col>
+                  <Col md={5}>
+                    <p className="section-title">Delivery Methods</p>
+                    <CheckBoxByObj
+                      register={() => {}}
+                      name="deliveryMethods"
+                      list={deliveryMethods}
+                      defaultValue={deliveryMethod}
+                      action={setDeliveryMethod}
+                      className="mb-0"
+                    />
+                    {/* <p className="section-title mt-3">Delivery Schedules</p>
+                    <CheckBoxByObj
+                      register={() => {}}
+                      name="deliverySchedules"
+                      list={deliverySchedules}
+                      defaultValue={deliverySchedule}
+                      action={setDeliverySchedule}
+                      className="mb-0"
+                    /> */}
                   </Col>
                 </Row>
                 <Row className=" mt-4">

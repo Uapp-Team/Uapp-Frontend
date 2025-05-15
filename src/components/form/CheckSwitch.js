@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ErrorText from "./ErrorText";
-import { Form } from "react-bootstrap";
 
 const CheckSwitch = ({
   label,
@@ -19,30 +18,32 @@ const CheckSwitch = ({
 
   return (
     <>
-      <Form.Check
+      {/* <Form.Check
         {...register(name)}
         type="checkbox"
         onChange={onChange}
         defaultChecked={defaultValue}
         id={label}
         value={defaultValue}
-      />
+      /> */}
 
-      {/* <label className="toggle-switch">
-        <input
-          {...register(name)}
-          type="checkbox"
-          defaultChecked={defaultValue}
-          onChange={onChange}
-        />
-        <span className="switch" />
-      </label> */}
-
-      {label && (
-        <label htmlFor={label} className="mx-2 pointer">
-          {label}
+      <div className="d-flex">
+        <label className="toggle-switch">
+          <input
+            {...register(name)}
+            type="checkbox"
+            defaultChecked={defaultValue}
+            onChange={onChange}
+          />
+          <span className="switch" />
         </label>
-      )}
+
+        {label && (
+          <label htmlFor={label} className="mx-2 fs-12px pointer">
+            {label}
+          </label>
+        )}
+      </div>
 
       <ErrorText error={error} />
     </>
