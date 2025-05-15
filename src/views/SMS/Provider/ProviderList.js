@@ -44,6 +44,7 @@ import Pagination from "../Pagination/Pagination.jsx";
 import ColumnProvider from "../TableColumn/ColumnProvider.js";
 import Typing from "../../../components/form/Typing.js";
 import Filter from "../../../components/Dropdown/Filter.js";
+import ChangePassword from "../../../components/password/ChangePassword.js";
 
 const ProviderList = () => {
   const ProviderPaging = JSON.parse(sessionStorage.getItem("provider"));
@@ -109,6 +110,8 @@ const ProviderList = () => {
   const [progress, setProgress] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+  const [PasswordEye, setPasswordEye] = useState(false);
 
   useEffect(() => {
     const tableColumnProvider = JSON.parse(
@@ -1153,49 +1156,22 @@ const ProviderList = () => {
           <h5>
             Change password for {passData?.nameTittle?.name} {passData?.name}
           </h5>
-          <form onSubmit={submitModalForm} className="mt-3">
-            <FormGroup row>
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    passValidate(e);
-                  }}
-                />
-                <span className="text-danger">{error}</span>
-              </Col>
-            </FormGroup>
-
-            <FormGroup row>
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Confirm Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    confirmPassword(e);
-                  }}
-                />
-
-                <span className="text-danger">{passError}</span>
-              </Col>
-            </FormGroup>
-            <FormGroup className="d-flex justify-content-between mt-3">
-              <CancelButton cancel={() => handleToggle(false)} />
-
-              <SaveButton
-                text="Submit"
-                progress={progress}
-                buttonStatus={resetButtonStatus}
-              />
-            </FormGroup>
-          </form>
+          <ChangePassword
+            submitModalForm={submitModalForm}
+            PasswordEye={PasswordEye}
+            setPasswordEye={setPasswordEye}
+            passValidation={passValidate}
+            password={pass}
+            passError={error}
+            ConPasswordEye={confirmPasswordEye}
+            setConPasswordEye={setConfirmPasswordEye}
+            ConPassValidation={confirmPassword}
+            conPassword={cPass}
+            conPassError={passError}
+            handleToggle={handleToggle}
+            progress={progress}
+            buttonStatus={buttonStatus}
+          />
         </ModalBody>
       </Modal>
     </div>

@@ -52,7 +52,7 @@ const CheckBox = ({
           </>
         )}
 
-        {list.map((item, i) => (
+        {list?.map((item, i) => (
           <span key={i} className="d-flex align-items-center mb-3">
             <input
               id={`${id}-${i}`}

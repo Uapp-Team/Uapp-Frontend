@@ -55,6 +55,11 @@ const GeneralInformationForm = ({
   setTitleError,
   titleValue,
   title,
+  consSalesManagerMenu,
+  selectSalesManagerCons,
+  salesManagerValue,
+  salesManagerLabel,
+  salesManagerError,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -226,6 +231,45 @@ const GeneralInformationForm = ({
                       Parent consultant is required
                     </span>
                   )}
+                </FormGroup>
+              )}
+            </>
+            <>
+              {userTypeId === userTypes?.Consultant.toString() ? (
+                <FormGroup className="has-icon-left position-relative">
+                  <span className="mr-2">Sales Manager :</span>
+                  <span className=" fw-500">
+                    {consData?.salesManager?.firstName}{" "}
+                    {consData?.salesManager?.lastName}
+                  </span>
+                </FormGroup>
+              ) : (
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
+                    {" "}
+                    {/* <span className="text-danger">*</span> */}
+                    Sales Manager
+                  </span>
+
+                  <Select
+                    className="form-mt"
+                    options={consSalesManagerMenu}
+                    value={{
+                      label: salesManagerLabel,
+                      value: salesManagerValue,
+                    }}
+                    onChange={(opt) =>
+                      selectSalesManagerCons(opt.label, opt.value)
+                    }
+                    name="salesManagerId"
+                    id="salesManagerId"
+                  />
+
+                  {/* {salesManagerError && (
+                    <span className="text-danger">
+                      Sales Manager is required.
+                    </span>
+                  )} */}
                 </FormGroup>
               )}
             </>

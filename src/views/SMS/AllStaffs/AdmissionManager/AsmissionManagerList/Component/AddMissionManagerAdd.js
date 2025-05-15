@@ -29,6 +29,7 @@ import put from "../../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import Loader from "../../../../Search/Loader/Loader";
+import ChangePassword from "../../../../../../components/password/ChangePassword";
 
 const AddMissionManagerAdd = ({
   permissions,
@@ -75,6 +76,8 @@ const AddMissionManagerAdd = ({
   const [error, setError] = useState("");
   const [resetButtonStatus, setResetButtonStatus] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+  const [PasswordEye, setPasswordEye] = useState(false);
 
   const handlePass = (data) => {
     setPassData(data);
@@ -791,49 +794,21 @@ const AddMissionManagerAdd = ({
             Change password for {passData?.nameTittle?.name}{" "}
             {passData?.firstName} {passData?.lastName}
           </h5>
-          <form onSubmit={submitModalForm} className="mt-3">
-            <FormGroup row>
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    passValidate(e);
-                  }}
-                />
-                <span className="text-danger">{error}</span>
-              </Col>
-            </FormGroup>
-
-            <FormGroup row>
-              <Col md="8">
-                <span>
-                  <span className="text-danger">*</span> Confirm Password{" "}
-                </span>
-
-                <Input
-                  type="password"
-                  onChange={(e) => {
-                    confirmPassword(e);
-                  }}
-                />
-
-                <span className="text-danger">{passError}</span>
-              </Col>
-            </FormGroup>
-            <FormGroup className="d-flex justify-content-between mt-3">
-              <CancelButton cancel={() => handleToggle(false)} />
-
-              <SaveButton
-                text="Submit"
-                progress={progress}
-                buttonStatus={resetButtonStatus}
-              />
-            </FormGroup>
-          </form>
+          <ChangePassword
+            submitModalForm={submitModalForm}
+            PasswordEye={PasswordEye}
+            setPasswordEye={setPasswordEye}
+            passValidation={passValidate}
+            password={pass}
+            passError={error}
+            ConPasswordEye={confirmPasswordEye}
+            setConPasswordEye={setConfirmPasswordEye}
+            ConPassValidation={confirmPassword}
+            conPassword={cPass}
+            conPassError={passError}
+            handleToggle={handleToggle}
+            progress={progress}
+          />
         </ModalBody>
       </Modal>
       <ConfirmModal

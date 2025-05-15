@@ -43,6 +43,9 @@ const EligibilityInformation = () => {
   const [FileList6, setFileList6] = useState(null);
   const [cvFile, setCvFile] = useState(null);
   const [cvError, setCvError] = useState("");
+  const [FileList7, setFileList7] = useState(null);
+  const [bacFile, setBacFile] = useState(null);
+  const [bacError, setBacError] = useState("");
   const [rightToWork, setRightToWork] = useState(null);
   const [eligibilityData, setEligibilityData] = useState({});
   const [navVisibility, setNavVisibility] = useState({});
@@ -81,6 +84,9 @@ const EligibilityInformation = () => {
       );
       setBrpFile(res?.brp?.fileUrl ? res?.brp?.fileUrl : null);
       setCvFile(res?.cv?.fileUrl ? res?.cv?.fileUrl : null);
+      setBacFile(
+        res?.bacCertificate?.fileUrl ? res?.bacCertificate?.fileUrl : null
+      );
       setUniCountryLabel(
         res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
@@ -294,6 +300,11 @@ const EligibilityInformation = () => {
   };
   // cv End
 
+  const handleChange7 = ({ fileList }) => {
+    setFileList7(fileList);
+    setBacError("");
+  };
+
   // on change radio button
   const onRadioValueChange = (event) => {
     setRightToWork(event.target.value);
@@ -368,6 +379,10 @@ const EligibilityInformation = () => {
       isValid = false;
       setCvError("File is required");
     }
+    // if (FileList7 === null && bacFile == null) {
+    //   isValid = false;
+    //   setBacError("File is required");
+    // }
     return isValid;
   };
 
@@ -379,6 +394,7 @@ const EligibilityInformation = () => {
     subData.append("proofOfAddressFile", FileList4);
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
+    subData.append("BacCertificateFile", FileList7);
 
     subData.append(
       "expireDate",
@@ -485,6 +501,13 @@ const EligibilityInformation = () => {
                 handleChange6={handleChange6}
                 cvError={cvError}
                 setCvError={setCvError}
+                FileList7={FileList7}
+                setFileList7={setFileList7}
+                bacFile={bacFile}
+                setBacFile={setBacFile}
+                handleChange7={handleChange7}
+                bacError={bacError}
+                setBacError={setBacError}
                 progress={progress}
                 buttonStatus={buttonStatus}
                 visa={visa}

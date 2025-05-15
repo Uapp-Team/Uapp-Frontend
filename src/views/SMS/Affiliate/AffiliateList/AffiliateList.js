@@ -522,6 +522,8 @@ const AffiliateList = () => {
                       setDeleteModal={setDeleteModal}
                       handleDeleteData={handleDeleteData}
                       buttonStatus={buttonStatus}
+                      pass={pass}
+                      cPass={cPass}
                     />
                   )}
                 </>

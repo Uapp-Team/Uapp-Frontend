@@ -20,13 +20,17 @@ import { rootUrl } from "../../../../constants/constants";
 import get from "../../../../helpers/get";
 import { useToasts } from "react-toast-notifications";
 import put from "../../../../helpers/put";
-import ButtonLoader from "../../Components/ButtonLoader";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { userTypes } from "../../../../constants/userTypeConstant";
+import { permissionList } from "../../../../constants/AuthorizationConstant";
 
 const AddUniversitySubject = () => {
+  const userType = localStorage.getItem("userType");
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [submitData, setSubmitData] = useState(false);
   const [activetab, setActivetab] = useState("1");
   const [programLevel, setProgramLevel] = useState([]);
@@ -35,13 +39,13 @@ const AddUniversitySubject = () => {
   // const [uniLabel, setUniLabel] = useState("Select University");
   // const [uniValue, setUniValue] = useState(0);
   const [programLabel, setProgramLabel] = useState("Select Education Level");
+
   const [programValue, setProgramValue] = useState(0);
+
   const [depLabel, setDepLabel] = useState("Select Department");
   const [depValue, setDepValue] = useState(0);
   const [subDepLabel, setSubDepLabel] = useState("Select Sub Department");
   const [subDepValue, setSubDepValue] = useState(0);
-
-  // const [subject, setSubject] = useState({});
   const [subId, setSubId] = useState(0);
   const [subName, setSubName] = useState("");
   const [subNameError, setSubNameError] = useState("");
@@ -52,16 +56,60 @@ const AddUniversitySubject = () => {
   const [deptDropError, setDeptDropError] = useState(false);
   const [subDeptDropError, setSubDeptDropError] = useState(false);
   const [subjectId, setSubjectId] = useState(undefined);
+  const [providerValue, setProviderValue] = useState(0);
+  const [universityList, setUniversityList] = useState([]);
+  const [uniLabel, setUniLabel] = useState("Select University");
+  const [uniValue, setUniValue] = useState(0);
+  const [uniError, setUniError] = useState(false);
 
   // const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
 
   const { addToast } = useToasts();
   const { id, subjId } = useParams();
-  console.log(subjId);
-  console.log(id);
+  const referenceId = localStorage.getItem("referenceId");
 
   const history = useHistory();
+
+  useEffect(() => {
+    get(`ProviderHelper/GetProviderId/${userType}/${referenceId}`).then(
+      (res) => {
+        setProviderValue(res !== 0 ? res : 0);
+        // if(res != 0){
+        //   localStorage.setItem("providerValue", res);
+        // }
+      }
+    );
+  }, [userType, referenceId]);
+
+  useEffect(() => {
+    if (userType === userTypes?.ProviderAdmin) {
+      get("UniversityDD/ProviderAdmin")
+        .then((res) => {
+          setUniversityList(res);
+        })
+        .catch();
+    } else {
+      get("SearchFilter/Universities/0/0/0").then((res) => {
+        console.log(res);
+        setUniversityList(res);
+      });
+    }
+
+    if (id != 0) {
+      setUniValue(id);
+    }
+  }, [id, userType]);
+
+  // useEffect(() => {
+  //   if (id != 0) {
+  //     const filterData = universityList.filter((status) => {
+  //       return status.id == id;
+  //     });
+  //     setUniLabel(filterData[0]?.name);
+  //     setUniValue(filterData[0]?.id);
+  //   }
+  // }, [universityList, id]);
 
   useEffect(() => {
     if (subjId !== undefined) {
@@ -72,8 +120,8 @@ const AddUniversitySubject = () => {
           setSubName(res?.name);
           setDescription(res?.description);
           setDuration(res?.duration);
-          // setUniLabel(res?.university?.name);
-          // setUniValue(res?.university?.id);
+          setUniLabel(res?.university?.name);
+          setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
           setProgramValue(res?.educationLevel?.id);
           setDepLabel(res?.department?.name);
@@ -90,8 +138,8 @@ const AddUniversitySubject = () => {
           setSubName(res?.name);
           setDescription(res?.description);
           setDuration(res?.duration);
-          // setUniLabel(res?.university?.name);
-          // setUniValue(res?.university?.id);
+          setUniLabel(res?.university?.name);
+          setUniValue(res?.university?.id);
           setProgramLabel(res?.educationLevel?.name);
           setProgramValue(res?.educationLevel?.id);
           setDepLabel(res?.department?.name);
@@ -113,7 +161,7 @@ const AddUniversitySubject = () => {
         setDepartmentList(res);
       })
       .catch();
-  }, [subjId, subjectId]);
+  }, [subjId, subjectId, id]);
 
   const selectSubDepByDepartment = (depValue) => {
     get(`SubDepartmentDD/Index/${depValue}`).then((res) => {
@@ -121,11 +169,11 @@ const AddUniversitySubject = () => {
     });
   };
 
-  //   const selectUniversity = (label, value) => {
-  //     setUniDropError(false);
-  //     setUniLabel(label);
-  //     setUniValue(value);
-  //   }
+  const selectUniversity = (label, value) => {
+    setUniError(false);
+    setUniLabel(label);
+    setUniValue(value);
+  };
 
   const selectProgramLevel = (label, value) => {
     setProgLvlError(false);
@@ -148,10 +196,10 @@ const AddUniversitySubject = () => {
     setSubDepValue(value);
   };
 
-  // const uniMenu = universityList.map((universityOptions) => ({
-  //   label: universityOptions.name,
-  //   value: universityOptions.id,
-  // }));
+  const uniMenu = universityList?.map((universityOptions) => ({
+    label: universityOptions.name,
+    value: universityOptions.id,
+  }));
 
   const programLevelMenu = programLevel.map((programOptions) => ({
     label: programOptions.name,
@@ -233,6 +281,10 @@ const AddUniversitySubject = () => {
       isValid = false;
       setProgLvlError(true);
     }
+    if (uniValue === 0) {
+      isValid = false;
+      setUniError(true);
+    }
     if (depValue === 0) {
       isValid = false;
       setDeptDropError(true);
@@ -248,6 +300,7 @@ const AddUniversitySubject = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const subdata = new FormData(event.target);
+    subdata.append("description", description);
 
     // if(uniValue === 0){
     //   setUniDropError(true);
@@ -315,12 +368,29 @@ const AddUniversitySubject = () => {
     history.push(`/university-courses/${id}`);
   };
 
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ size: [] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { list: "ordered" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image", "video"],
+    ],
+  };
+
   return (
     <div>
       <BreadCrumb
         title="Course Information"
-        backTo="Subject"
-        path={`/university-courses/${id}`}
+        backTo="Course"
+        path={id > 0 ? `/university-courses/${id}` : "/courses"}
       />
 
       <Nav tabs>
@@ -335,22 +405,22 @@ const AddUniversitySubject = () => {
             <NavItem>
               {submitData || subjId ? (
                 <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
-                  Course fee & delivery pattern
+                  Fees & Delivery pattern
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "2"}>
-                  Course fee & delivery pattern
+                  Fees & Delivery pattern
                 </NavLink>
               )}
             </NavItem>
             <NavItem>
               {submitData || subjId ? (
                 <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Test Score
+                  ELT Score
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "3"}>
-                  Test Score
+                  ELT Score
                 </NavLink>
               )}
             </NavItem>
@@ -393,11 +463,11 @@ const AddUniversitySubject = () => {
             <NavItem>
               {submitData || subjectId ? (
                 <NavLink active={activetab === "2"} onClick={() => toggle("2")}>
-                  Course fee & delivery pattern
+                  Fees & Delivery pattern
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "2"}>
-                  Course fee & delivery pattern
+                  Fees & Delivery pattern
                 </NavLink>
               )}
             </NavItem>
@@ -405,11 +475,11 @@ const AddUniversitySubject = () => {
             <NavItem>
               {submitData || subjectId ? (
                 <NavLink active={activetab === "3"} onClick={() => toggle("3")}>
-                  Test Score
+                  ELT Score
                 </NavLink>
               ) : (
                 <NavLink disabled active={activetab === "3"}>
-                  Test Score
+                  ELT Score
                 </NavLink>
               )}
             </NavItem>
@@ -459,14 +529,38 @@ const AddUniversitySubject = () => {
                 {subId !== 0 ? (
                   <input type="hidden" name="id" id="id" value={subId} />
                 ) : null}
-                <Input
-                  type="hidden"
-                  name="universityId"
-                  id="universityId"
-                  value={id}
-                />
+
                 <Row>
-                  <Col md="4">
+                  <Col md="6">
+                    {id != 0 ? (
+                      <input
+                        type="hidden"
+                        name="universityId"
+                        id="universityId"
+                        value={id}
+                      />
+                    ) : (
+                      <FormGroup>
+                        <span>
+                          <span className="text-danger">*</span>University Name
+                        </span>
+                        <Select
+                          options={uniMenu}
+                          value={{ label: uniLabel, value: uniValue }}
+                          onChange={(opt) =>
+                            selectUniversity(opt.label, opt.value)
+                          }
+                          name="universityId"
+                          id="universityId"
+                        />
+                        {uniError && (
+                          <span className="text-danger">
+                            University is required
+                          </span>
+                        )}
+                      </FormGroup>
+                    )}
+
                     <FormGroup>
                       <span>
                         <span className="text-danger">*</span>Course Name
@@ -484,10 +578,24 @@ const AddUniversitySubject = () => {
                       />
                       <span className="text-danger">{subNameError}</span>
                     </FormGroup>
+
                     <FormGroup>
                       <span>Description</span>
-
-                      <Input
+                      <div style={{ height: "370px" }}>
+                        <ReactQuill
+                          theme="snow"
+                          value={description}
+                          modules={modules}
+                          className="editor-input"
+                          name="description"
+                          id="description"
+                          onChange={setDescription}
+                          // onChange={(e) => {
+                          //   setDescription(e.target.value);
+                          // }}
+                        />
+                      </div>
+                      {/* <Input
                         type="textarea"
                         rows="4"
                         defaultValue={description}
@@ -495,19 +603,7 @@ const AddUniversitySubject = () => {
                         name="description"
                         id="description"
                         // required
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <span>Duration</span>
-
-                      <Input
-                        type="text"
-                        name="duration"
-                        id="duration"
-                        defaultValue={duration}
-                        placeholder="Enter Duration"
-                        // required
-                      />
+                      /> */}
                     </FormGroup>
                   </Col>
                   <Col md="4">
@@ -571,13 +667,28 @@ const AddUniversitySubject = () => {
                         </span>
                       )}
                     </FormGroup>
+
+                    <FormGroup>
+                      <span>Duration</span>
+
+                      <Input
+                        type="text"
+                        name="duration"
+                        id="duration"
+                        defaultValue={duration}
+                        placeholder="Enter Duration"
+                        // required
+                      />
+                    </FormGroup>
                   </Col>
                 </Row>
 
-                <FormGroup row className="text-right mt-4">
-                  <Col lg="6" md="4">
+                <FormGroup row>
+                  <Col className="d-flex justify-content-between mt-4">
                     <CancelButton cancel={handleCancelAdd} />
-                    <SaveButton text="Save and Next" progress={progress} />
+                    {permissions?.includes(permissionList?.Edit_Subjects) && (
+                      <SaveButton text="Save and Next" progress={progress} />
+                    )}
                   </Col>
                 </FormGroup>
               </Form>

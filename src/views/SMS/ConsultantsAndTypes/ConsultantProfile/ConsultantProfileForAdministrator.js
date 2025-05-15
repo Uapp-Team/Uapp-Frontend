@@ -39,6 +39,7 @@ import BankDetails from "./ProfileComponent/ConsultantDetails/BankDetails";
 import Recruitment from "./ProfileComponent/ConsultantDetails/Recruitment";
 import Note from "./ProfileComponent/Note";
 import ConvertBranchManager from "./ProfileComponent/ConvertBranchManager";
+import SalesManager from "./ProfileComponent/SalesManager";
 
 const ConsultantProfileForAdministrator = () => {
   const { id } = useParams();
@@ -99,6 +100,7 @@ const ConsultantProfileForAdministrator = () => {
 
         <div className="col-lg-4 col-sm-12">
           <ParentConsultant id={id} />
+          <SalesManager id={id} />
           <ConsultantAddress id={id} />
           <Consent id={id} />
           <ProfileRecruitingForFrom id={id} headData={headData} />

@@ -231,7 +231,7 @@ const AddUniProfileSubjectFee = () => {
                 <FormGroup row className="has-icon-left position-relative">
                   <Col md="2">
                     <span>
-                      Local Tution Fee
+                    Home Tution Fee
                       {/* <span className="text-danger">*</span>{" "} */}
                     </span>
                   </Col>
