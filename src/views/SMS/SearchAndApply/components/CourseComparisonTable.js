@@ -8,6 +8,7 @@ import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CoursesOverviewTable from "./CoursesOverviewTable";
+import FeesInfoTable from "./FeesInfoTable";
 import { DeleteIcon, HeartIconFill, HeartIconStock } from "./icons";
 import UniversityInfoTable from "./UniversityInfoTable";
 
@@ -15,6 +16,7 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
   const [courses, setCourses] = useState(initialCourses);
   const [showOverview, setShowOverview] = useState(true);
   const [showUniInfo, setShowUniInfo] = useState(true);
+  const [showFeesInfo, setShowFeesInfo] = useState(true);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const { addToast } = useToasts();
   const tableContainerRef = useRef(null);
@@ -24,6 +26,9 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
   };
   const handleToogleUniInfo = () => {
     setShowUniInfo((prev) => !prev);
+  };
+  const handleToogleFeesInfo = () => {
+    setShowFeesInfo((prev) => !prev);
   };
   const scrollTable = () => {
     if (tableContainerRef.current) {
@@ -237,6 +242,11 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
             courses={courses}
             handleToogleUniInfo={handleToogleUniInfo}
             isVisible={showUniInfo}
+          />
+          <FeesInfoTable
+            courses={courses}
+            handleToogleUniInfo={handleToogleFeesInfo}
+            isVisible={showFeesInfo}
           />
         </table>
       </div>
