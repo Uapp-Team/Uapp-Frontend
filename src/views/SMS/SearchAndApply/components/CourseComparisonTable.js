@@ -1,13 +1,20 @@
 import React, { useRef, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
+import { FaHeart } from "react-icons/fa";
+import { LuHeart } from "react-icons/lu";
+import { useToasts } from "react-toast-notifications";
+import offline from "../../../../assets/icon/offline.svg";
+import online from "../../../../assets/icon/online.svg";
+import { Student } from "../../../../components/core/User";
 import { deliveryMethods, studyMode } from "../../../../constants/presetData";
-import { isDateWithin7Days } from "../../../../helpers/IsDateWithin7Days";
+import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CoursesOverviewTable from "./CoursesOverviewTable";
-import { BellIconDefault, BellIconRed } from "./icons";
 
-const CourseComparisonTable = ({ courses }) => {
+const CourseComparisonTable = ({ courses: initialCourses }) => {
+  const [courses, setCourses] = useState(initialCourses);
   const [showOverview, setShowOverview] = useState(true);
+  const { addToast } = useToasts();
 
   const tableContainerRef = useRef(null);
 
@@ -20,6 +27,43 @@ const CourseComparisonTable = ({ courses }) => {
       tableContainerRef.current.scrollLeft += scrollAmount;
     }
   };
+
+  const handleFavourite = (value, subjectId, i) => {
+    post(
+      `FavoriteSubject/AddOrRemove?subjectId=${encodeURIComponent(subjectId)}`
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          const updatedCourses = courses.map((course) => {
+            if (course.subjectId === subjectId) {
+              return { ...course, isFavorite: !course.isFavorite };
+            }
+            return course;
+          });
+
+          setCourses(updatedCourses);
+
+          localStorage.setItem("courses", JSON.stringify(updatedCourses));
+
+          addToast("Favorite status updated successfully!", {
+            appearance: "success",
+            autoDismiss: true,
+          });
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      })
+      .catch((err) => {
+        addToast(err.message || "An error occurred", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      });
+  };
+
   const courseOverviewConfig = [
     { label: "Application Deadline", key: "maxApplicationDeadLine" },
     { label: "Start Date", key: "classStartDate" },
@@ -85,20 +129,53 @@ const CourseComparisonTable = ({ courses }) => {
               <th className="fixed-col top-left">
                 Course selected: {courses.length}
               </th>
-              {courses.map((course, idx) => (
-                <th key={idx} className="course-header-cell">
-                  <div>
-                    <span className="card-date">
-                      {isDateWithin7Days(course.maxApplicationDeadLine) ? (
-                        <BellIconRed />
-                      ) : (
-                        <BellIconDefault />
-                      )}{" "}
-                      {course.maxApplicationDeadLine}
-                    </span>
-                  </div>
+              {courses.map((course, index) => (
+                <th key={index} className="course-header-cell">
                   <div className="course-header">
-                    <div className="course-date">{course.date}</div>
+                    <div className="d-flex justify-content-between">
+                      <div className="tags">
+                        <span className="card-tag fast-track">Fast Track</span>
+                      </div>
+                      <div>
+                        <span>
+                          {Student() ? (
+                            course.isFavorite ? (
+                              <FaHeart
+                                onClick={() =>
+                                  handleFavourite(
+                                    course.isFavorite,
+                                    course.subjectId,
+                                    index
+                                  )
+                                }
+                                className="cursor-pointer"
+                                color="orange"
+                              />
+                            ) : (
+                              <LuHeart
+                                onClick={() =>
+                                  handleFavourite(
+                                    course.isFavorite,
+                                    course.subjectId,
+                                    index
+                                  )
+                                }
+                                className="cursor-pointer"
+                              />
+                            )
+                          ) : (
+                            <div>
+                              {course.intakeStatusId === 3 ? (
+                                <img src={offline} alt="" />
+                              ) : (
+                                <img src={online} alt="" />
+                              )}
+                            </div>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+
                     <div table-className="course-title">
                       {course.subjectName}
                     </div>

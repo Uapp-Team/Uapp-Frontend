@@ -8,7 +8,7 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Application Deadline</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            {course?.maxApplicationDeadLine || "Not Set"}
+            {course?.maxApplicationDeadLine || "-"}
           </td>
         ))}
       </tr>
@@ -16,7 +16,7 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Start Date</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            {course?.classStartDate || "Not Set"}
+            {course?.maxClassStartDate || "-"}
           </td>
         ))}
       </tr>
@@ -24,11 +24,19 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Duration</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            <div className="table-course-title">Duration</div>
+            {course?.durationNames ? (
+              <div className="table-course-title">Duration</div>
+            ) : (
+              "-"
+            )}
+
             <ul>
               {course?.durationNames
                 ?.split(",")
-                .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
+                .filter(Boolean)
+                .map((name, index) => (
+                  <li key={index}>{name}</li>
+                ))}
             </ul>
           </td>
         ))}
@@ -37,7 +45,11 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Study Mode</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            <div className="table-course-title">Study Mode</div>
+            {course?.studyModes ? (
+              <div className="table-course-title">Study Mode</div>
+            ) : (
+              "-"
+            )}
             <ul>
               {course?.studyModes
                 ?.split(",")
@@ -48,7 +60,7 @@ function CoursesOverviewTable({ courses }) {
                   return method?.name;
                 })
                 .filter(Boolean)
-                .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
+                .map((name, index) => <li key={index}>{name}</li>) || "-"}
             </ul>
           </td>
         ))}
@@ -57,7 +69,11 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Delivery Pattern</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            <div className="table-course-title">Delivery Pattern</div>
+            {course?.deliveryMethods ? (
+              <div className="table-course-title">Delivery Pattern</div>
+            ) : (
+              "-"
+            )}
             <ul>
               {course?.deliveryMethods
                 ?.split(",")
@@ -68,7 +84,9 @@ function CoursesOverviewTable({ courses }) {
                   return method?.name;
                 })
                 .filter(Boolean)
-                .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
+                .map((name, index) => (
+                  <li key={index}>{name}</li>
+                ))}
             </ul>
           </td>
         ))}
@@ -77,7 +95,7 @@ function CoursesOverviewTable({ courses }) {
         <th className="fixed-col table-left">Schedule</th>
         {courses.map((course, cidx) => (
           <td key={cidx} className="table-col">
-            {course?.classStartDate || "Not Set"}
+            {course?.classStartDate || "-"}
           </td>
         ))}
       </tr>
