@@ -224,16 +224,12 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                 </th>
               ))}
             </tr>
-            <tr
-              className="table-headers cursor-pointer"
-              onClick={handleToogleOverview}
-            >
-              <th className="fixed-col">
-                <span>Course Overview</span>
-              </th>
-            </tr>
           </thead>
-          {showOverview && <CoursesOverviewTable courses={courses} />}
+          <CoursesOverviewTable
+            courses={courses}
+            handleToggleOverview={handleToogleOverview}
+            isVisible={showOverview}
+          />
         </table>
       </div>
       {isOverflowing && (
