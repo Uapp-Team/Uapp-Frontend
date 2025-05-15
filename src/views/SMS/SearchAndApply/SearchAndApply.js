@@ -8,6 +8,7 @@ import Loader from "../../../components/Loader";
 import { optionLabelToName } from "../../../constants/hooks";
 import get from "../../../helpers/get";
 import post from "../../../helpers/post";
+import { useContextData } from "../../../layouts/context/AppContext";
 import ApplyCardHor from "./components/ApplyCardHor";
 import ApplyCardVar from "./components/ApplyCardVar";
 import ResultsToolbar from "./components/ResultsToolbar";
@@ -16,7 +17,6 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
-import { useContextData } from "../../../layouts/context/AppContext";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -34,7 +34,6 @@ function SearchAndApply() {
   const [favorites, setFavorites] = useState(0);
 
   const screenWidth = window.innerWidth;
-  console.log(screenWidth);
 
   // list
   const [applicationTypelist, setApplicationTypelist] = useState([]);
@@ -68,7 +67,6 @@ function SearchAndApply() {
   const [deliveryPattern, setDeliveryPattern] = useState([]);
   const [deliverySchedule, setDeliverySchedule] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-
   // level
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
@@ -142,7 +140,7 @@ function SearchAndApply() {
   useEffect(() => {
     if (!isTyping) {
       const subdata = {
-        page: currentPage,
+        page: isFavorite ? 1 : currentPage,
         pageSize: dataPerPage,
         studentId: studentId,
         universityId: institutionId,
@@ -209,7 +207,13 @@ function SearchAndApply() {
       .then((res) => {
         if (res.status === 200) {
           let modifyData = data;
-          modifyData.items[i].isFavorite = !modifyData.items[i].isFavorite;
+
+          if (isFavorite) {
+            modifyData.items.splice(i, 1);
+            modifyData.total -= 1;
+          } else {
+            modifyData.items[i].isFavorite = !modifyData.items[i].isFavorite;
+          }
           setData(modifyData);
           !value ? setFavorites(favorites + 1) : setFavorites(favorites - 1);
         } else {

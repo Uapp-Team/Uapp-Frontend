@@ -150,7 +150,7 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <FaHeart size={16} />
+                      <FaHeart size={16} color="orange" />
                     </div>
                   ) : (
                     <div
@@ -661,36 +661,41 @@ const QuickViewModal = ({
                 <div className="fw-600 fs-14px mb-1">Campus Location</div>
                 <div className="line-hr"></div>
                 <div className="mt-1">
-                  {subjectIntake.flatMap((campus) => (
-                    <div key={index}>{campus.campusName}</div>
-                  ))}
+                  {selectedIntakeId ? (
+                    subjectIntake.flatMap((campus) => (
+                      <div key={index}>{campus.campusName}</div>
+                    ))
+                  ) : (
+                    <span>Please Select Intake First</span>
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="footer-tag w-75">
+            <div className="footer-tag w-50">
               <div className="mb-1">
                 <span className="fw-600 fs-14px">Delivery Schedule </span>
               </div>
               <div className="line-hr"></div>
 
               <div className="mt-2">
-                {subjectIntake
-                  .flatMap((scheduleObj) =>
-                    scheduleObj?.deliverySchedule?.map((id) => {
-                      const method = deliverySchedules.find(
-                        (deliverySchedule) =>
-                          deliverySchedule.id === parseInt(id, 10)
-                      );
-                      return method?.name;
-                    })
-                  )
-                  .filter(Boolean)
-                  .map((name, index) => (
-                    <span className="footer-tag__inner" key={index}>
-                      {name}
-                    </span>
-                  ))}
+                {selectedIntakeId &&
+                  subjectIntake
+                    .flatMap((scheduleObj) =>
+                      scheduleObj?.deliverySchedule?.map((id) => {
+                        const method = deliverySchedules.find(
+                          (deliverySchedule) =>
+                            deliverySchedule.id === parseInt(id, 10)
+                        );
+                        return method?.name;
+                      })
+                    )
+                    .filter(Boolean)
+                    .map((name, index) => (
+                      <span className="footer-tag__inner" key={index}>
+                        {name}
+                      </span>
+                    ))}
               </div>
             </div>
           </Row>
