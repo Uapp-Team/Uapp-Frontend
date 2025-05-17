@@ -266,7 +266,7 @@ const SearchFilter = ({
 
             <div className="mb-3">
               <p className="fw-500">Department</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={departmentName}
                 setLabel={setDepartmentName}
                 value={departmentId}
