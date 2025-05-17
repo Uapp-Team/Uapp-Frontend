@@ -17,6 +17,8 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import Uget from "../../../helpers/Uget";
+import SearchKeywordsU from "./components/SearchKeywordsU";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -41,6 +43,7 @@ function SearchAndApply() {
   const [applicationTypeSelected, setApplicationTypeSelected] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
+  
   const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   // Filter Data State
@@ -81,6 +84,8 @@ function SearchAndApply() {
   const [subjectId, setSubjectId] = useState(0);
 
   const [depList, setDepList] = useState([]);
+  console.log(depList,'riad dipartments');
+  
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
@@ -91,10 +96,14 @@ function SearchAndApply() {
   }, [studentId]);
 
   useEffect(() => {
-    get("SearchFilter/Departments").then((res) => {
-      setDepList([{ id: 0, name: "All Departments" }, ...res]);
+    Uget(`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`).then((res) => {
+      
+      setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
     });
-  }, []);
+    // get("SearchFilter/Departments").then((res) => {
+    //   setDepList([{ id: 0, name: "All Departments" }, ...res]);
+    // });
+  }, [studentId,institutionId,countryId,cityId]);
 
   useEffect(() => {
     if (departmentId > 0 && depList && depList?.length > 0) {
@@ -313,6 +322,8 @@ function SearchAndApply() {
               setInstitutionName={setInstitutionName}
               countryName={countryName}
               setCountryName={setCountryName}
+               cityId={cityId}
+               studentId={studentId}
             />
 
             <button
@@ -347,18 +358,19 @@ function SearchAndApply() {
         <div className="filter-container d-none d-md-block">
           <Row className="mb-3">
             <Col md={9}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={studyLevelId}
                 setState={setStudyLevelId}
-                url="SearchFilter/EducationLevels"
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
+
               />
             </Col>
             <Col md={3}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={intakeId}
                 setState={setIntakeId}
-                url="SearchFilter/Intakes"
-                slice={true}
+              url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
+              slice={true}
               />
             </Col>
           </Row>
@@ -507,6 +519,7 @@ function SearchAndApply() {
           setSubDepartmentName={setSubDepartmentName}
           subDepartmentId={subDepartmentId}
           setSubDepartmentId={setSubDepartmentId}
+          studentId={studentId}
         />
       )}
     </>

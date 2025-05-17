@@ -12,13 +12,11 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../constants/presetData";
-import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 
 const SearchFilter = ({
   closeModal,
   isSearch,
   setIsSearch,
-  studentId,
   institutionId,
   setInstitutionId,
   studyLevelId,
@@ -138,30 +136,15 @@ const SearchFilter = ({
   }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
   useEffect(() => {
-   
-
-      const studyLevelListQuery = studyLevelId.map((id) => `educationLevelIds=${id}`).join("&");
-
+    const studyLevelListQuery = [];
+    studyLevelId.map((item) =>
+      studyLevelListQuery.push(`educationlevels=${item}`)
+    );
     const converttostring = studyLevelListQuery.toString();
     const noSpaces = converttostring.replace(/ /g, "");
     const converted = noSpaces.replace(/,/g, "&");
     setStudyLevelQuery(converted);
   }, [setStudyLevelQuery, studyLevelId]);
-
-
-  // useEffect(() => {
-  //   const studyLevelListQuery = [];
-  //   studyLevelId.map((item) =>
-  //     studyLevelListQuery.push(`educationlevels=${item}`)
-  //   );
-  //   const converttostring = studyLevelListQuery.toString();
-  //   const noSpaces = converttostring.replace(/ /g, "");
-  //   const converted = noSpaces.replace(/,/g, "&");
-  //   setStudyLevelQuery(converted);
-  // }, [setStudyLevelQuery, studyLevelId]);
-
-
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -206,35 +189,35 @@ const SearchFilter = ({
 
             <div className="mb-3">
               <p className="fw-500">Country</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={countryName}
                 setLabel={setCountryName}
                 value={countryId}
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}`}
+                url="UniversityCountry/Index"
               />
             </div>
 
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Institution</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={institutionName}
                 setLabel={setInstitutionName}
                 value={institutionId}
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}`}
+                url="UniversityDD/Index"
               />
             </div>
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Study Level</p>
 
-              <MultiSelectU
+              <MultiSelect
                 placeholder="Select Study Level"
-                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
+                url="SearchFilter/EducationLevels"
                 value={studyLevelList}
                 setValue={setStudyLevelList}
               />
@@ -242,9 +225,10 @@ const SearchFilter = ({
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Intake</p>
 
-              <MultiSelectU
+              <MultiSelect
                 placeholder="Select Intake"
-                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
+                
+                url="SearchFilter/Intakes"
                 value={intakeList}
                 setValue={setIntakeList}
               />
@@ -252,21 +236,20 @@ const SearchFilter = ({
 
             <div className="mb-3">
               <p className="fw-500">Campus City</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={cityName}
                 setLabel={setCityName}
                 value={cityId}
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}`}
-                
+                url={`UniversityCityDD/Index/${countryId}`}
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Department</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={departmentName}
                 setLabel={setDepartmentName}
                 value={departmentId}
@@ -277,16 +260,16 @@ const SearchFilter = ({
             </div>
             <div className="mb-3">
               <p className="fw-500">Sub Department</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={subDepartmentName}
                 setLabel={setSubDepartmentName}
                 value={subDepartmentId}
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}`}
-
-              
+                url={`SearchFilter/SubDepartments/${
+                  departmentId ? departmentId : 0
+                }`}
               />
             </div>
             <div className="mb-3">
@@ -374,13 +357,11 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Course Durations"
-                 url={`SearchFilter/FetchDurations?studentId=${studentId}&${studyLevelQuery || "educationLevelIds=0"}`}
-                //  url={`SearchFilter/FetchDurations?studentId=${studentId}&educationLevelIds=${studyLevelQuery}`}
-                // url={
-                //   studyLevelId?.length > 0
-                //     ? `Duration/ByEducationLevels?${studyLevelQuery}`
-                //     : "Duration/Index"
-                // }
+                url={
+                  studyLevelId?.length > 0
+                    ? `Duration/ByEducationLevels?${studyLevelQuery}`
+                    : "Duration/Index"
+                }
                 value={courseDurationsList}
                 setValue={setCourseDurationsList}
               />
