@@ -76,6 +76,7 @@ const SearchFilter = ({
   setSubDepartmentName,
   subDepartmentId,
   setSubDepartmentId,
+  setIntakeListQuery,intakeListQuery
 }) => {
   const divRef = useRef(null);
 
@@ -148,6 +149,17 @@ const SearchFilter = ({
     setStudyLevelQuery(converted);
   }, [setStudyLevelQuery, studyLevelId]);
 
+     useEffect(() => {
+       
+    
+          const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
+    
+        const converttostring = intakeListQuery.toString();
+        const noSpaces = converttostring.replace(/ /g, "");
+        const converted = noSpaces.replace(/,/g, "&");
+        setIntakeListQuery(converted);
+      }, [setIntakeListQuery, intakeId]);
+
 
   // useEffect(() => {
   //   const studyLevelListQuery = [];
@@ -213,7 +225,7 @@ const SearchFilter = ({
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}`}
+                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
               />
             </div>
 
@@ -226,7 +238,7 @@ const SearchFilter = ({
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}`}
+                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
               />
             </div>
             <div className="mb-3 d-block d-md-none">
@@ -234,7 +246,7 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Study Level"
-                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
                 value={studyLevelList}
                 setValue={setStudyLevelList}
               />
@@ -244,9 +256,9 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Intake"
-                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`}
                 value={intakeList}
                 setValue={setIntakeList}
+                 url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery || "educationLevelIds=0"}`}
               />
             </div>
 
@@ -259,20 +271,22 @@ const SearchFilter = ({
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}`}
+                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
                 
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Department</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={departmentName}
                 setLabel={setDepartmentName}
                 value={departmentId}
                 setValue={setDepartmentId}
                 selectAll={true}
-                list={departmentList}
+                all="All Department"
+                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                
               />
             </div>
             <div className="mb-3">
@@ -284,7 +298,7 @@ const SearchFilter = ({
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}`}
+                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&${intakeListQuery || "intakeIds=0"}`}
 
               
               />
@@ -374,7 +388,7 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Course Durations"
-                 url={`SearchFilter/FetchDurations?studentId=${studentId}&${studyLevelQuery || "educationLevelIds=0"}`}
+                 url={`SearchFilter/FetchDurations?studentId=${studentId}&${intakeListQuery || "intakeIds=0"}&${studyLevelQuery || "educationLevelIds=0"}`}
                 //  url={`SearchFilter/FetchDurations?studentId=${studentId}&educationLevelIds=${studyLevelQuery}`}
                 // url={
                 //   studyLevelId?.length > 0
