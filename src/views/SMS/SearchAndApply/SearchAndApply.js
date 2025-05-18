@@ -83,6 +83,10 @@ function SearchAndApply() {
     const savedItems = JSON.parse(localStorage.getItem("comparedItems")) || [];
     return savedItems.map((item) => item.subjectId);
   });
+  const [compareCount, setCompareCount] = useState(() => {
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return items.length;
+  });
   const [depList, setDepList] = useState([]);
 
   useEffect(() => {
@@ -234,7 +238,9 @@ function SearchAndApply() {
       });
   };
 
-  const handleAddToCompare = (item) => {
+  const handleAddToCompare = async (item) => {
+    let subjectInfo;
+    let updatedArray;
     const existingArray =
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
@@ -242,11 +248,15 @@ function SearchAndApply() {
       (savedItem) => savedItem.subjectId === item.subjectId
     );
 
-    let updatedArray;
+    if (item.isLoanAvailable) {
+      subjectInfo = await get(`Subject/Get/${item.subjectId}`);
+    }
+
     if (itemIndex === -1) {
       const extendItems = {
         ...item,
         studentType: applicationTypelist,
+        subjectInfo,
       };
       updatedArray = [...existingArray, extendItems];
       setComparedItems((prev) => [...prev, item.subjectId]);
@@ -258,6 +268,7 @@ function SearchAndApply() {
     }
 
     localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
+    setCompareCount(updatedArray.length);
   };
 
   const handleSubmit = async (
@@ -416,6 +427,7 @@ function SearchAndApply() {
               setIsSearch(true);
               value.setSidebar(true);
             }}
+            compareCount={compareCount}
           />
         </div>
       </div>

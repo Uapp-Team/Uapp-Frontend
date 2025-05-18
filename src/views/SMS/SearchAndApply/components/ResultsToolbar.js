@@ -15,10 +15,9 @@ const ResultsToolbar = ({
   mobileCard,
   setMobileCard,
   setFilterOpen,
+  compareCount,
 }) => {
   const router = useHistory();
-  const compareItem = localStorage.getItem("comparedItems");
-  const compareCount = JSON.parse(compareItem) || [];
   return (
     <>
       <div className="d-none d-md-block">
@@ -64,10 +63,7 @@ const ResultsToolbar = ({
               <span className="mr-2">
                 <ArrowLeftRightIcon />
               </span>{" "}
-              Compare{" "}
-              <span className="count">
-                {compareCount !== null ? compareCount.length : "0"}
-              </span>
+              Compare <span className="count">{compareCount}</span>
             </button>
             <button
               className="action-btn mr-2 d-none d-md-block"

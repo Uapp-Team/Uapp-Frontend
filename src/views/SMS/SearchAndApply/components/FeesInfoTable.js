@@ -121,18 +121,17 @@ function FeesInfoTable({ courses, handleToogleFeesInfo, isVisible }) {
             <th className="fixed-col table-left">Loan Available</th>
             {courses.map((course, cidx) => (
               <td key={cidx} className="table-col">
-                {course?.campusNames ? (
+                {course?.subjectInfo?.isGovernmentLoan ||
+                course?.subjectInfo?.isPrivateLoan ? (
                   <div className="table-course-title">Loan Available</div>
                 ) : (
                   "-"
                 )}
                 <ul>
-                  {course?.campusNames
-                    ?.split(",")
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
+                  {course?.subjectInfo?.isGovernmentLoan && (
+                    <li>Government Loan</li>
+                  )}
+                  {course?.subjectInfo?.isPrivateLoan && <li>Private Loan</li>}
                 </ul>
               </td>
             ))}
