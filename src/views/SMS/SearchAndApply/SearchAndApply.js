@@ -349,8 +349,11 @@ function SearchAndApply() {
               setInstitutionName={setInstitutionName}
               countryName={countryName}
               setCountryName={setCountryName}
-               cityId={cityId}
-               studentId={studentId}
+              cityId={cityId}
+              studentId={studentId}
+              departmentId={depId}
+              intakeListQuery={intakeListQuery}
+              subDepartmentId={subDepartmentId}
             />
 
             <button
@@ -396,7 +399,9 @@ function SearchAndApply() {
               <SearchKeywordsU
                 state={intakeId}
                 setState={setIntakeId}
-              url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery || "educationLevelIds=0"}`}
+              // url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+              url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+
               slice={true}
               />
             </Col>

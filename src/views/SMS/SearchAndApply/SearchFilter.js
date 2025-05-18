@@ -225,7 +225,7 @@ const SearchFilter = ({
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
               />
             </div>
 
@@ -238,7 +238,7 @@ const SearchFilter = ({
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
               />
             </div>
             <div className="mb-3 d-block d-md-none">
@@ -246,7 +246,7 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Study Level"
-                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
                 value={studyLevelList}
                 setValue={setStudyLevelList}
               />
@@ -258,7 +258,8 @@ const SearchFilter = ({
                 placeholder="Select Intake"
                 value={intakeList}
                 setValue={setIntakeList}
-                 url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery || "educationLevelIds=0"}`}
+                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+
               />
             </div>
 
@@ -271,7 +272,7 @@ const SearchFilter = ({
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
                 
               />
             </div>
@@ -285,7 +286,7 @@ const SearchFilter = ({
                 setValue={setDepartmentId}
                 selectAll={true}
                 all="All Department"
-                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}&${intakeListQuery || "intakeIds=0"}`}
+                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
                 
               />
             </div>
@@ -298,7 +299,7 @@ const SearchFilter = ({
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&${intakeListQuery || "intakeIds=0"}`}
+                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
 
               
               />
@@ -388,13 +389,8 @@ const SearchFilter = ({
 
               <MultiSelectU
                 placeholder="Select Course Durations"
-                 url={`SearchFilter/FetchDurations?studentId=${studentId}&${intakeListQuery || "intakeIds=0"}&${studyLevelQuery || "educationLevelIds=0"}`}
-                //  url={`SearchFilter/FetchDurations?studentId=${studentId}&educationLevelIds=${studyLevelQuery}`}
-                // url={
-                //   studyLevelId?.length > 0
-                //     ? `Duration/ByEducationLevels?${studyLevelQuery}`
-                //     : "Duration/Index"
-                // }
+                 url={`SearchFilter/FetchDurations?studentId=${studentId}${intakeListQuery ? `&${intakeListQuery}` : ''}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+              
                 value={courseDurationsList}
                 setValue={setCourseDurationsList}
               />
