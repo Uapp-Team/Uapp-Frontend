@@ -25,7 +25,9 @@ const SearchBox = ({
   subDepartmentId,
   departmentId,
    cityId,
-    setIntakeListQuery,intakeListQuery
+  setIntakeListQuery,
+  intakeListQuery,
+    studyLevelQuery
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
 
@@ -98,7 +100,7 @@ const SearchBox = ({
               setValue={setCountryId}
               selectAll={true}
               all="All Destination"
-              url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+              url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
             />
           </span>
           <DefaultDropdownU
@@ -108,7 +110,7 @@ const SearchBox = ({
             setValue={setInstitutionId}
             selectAll={true}
             all="All Institution"
-            url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+            url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
 
           />
         </div>
