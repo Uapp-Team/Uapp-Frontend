@@ -186,7 +186,7 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
                       <div className="tags">
                         {/* <span className="card-tag fast-track">Fast Track</span> */}
                       </div>
-                      <div>
+                      <div className="d-flex align-items-center">
                         <span className="mr-1 icon">
                           {Student() ? (
                             course.isFavorite ? (

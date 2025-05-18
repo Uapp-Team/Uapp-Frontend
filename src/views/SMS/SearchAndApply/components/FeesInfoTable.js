@@ -1,4 +1,5 @@
 import React from "react";
+import { Col, Row } from "reactstrap";
 import { currency, durationInfo } from "../../../../constants/presetData";
 
 function FeesInfoTable({ courses, handleToogleFeesInfo, isVisible }) {
@@ -23,40 +24,53 @@ function FeesInfoTable({ courses, handleToogleFeesInfo, isVisible }) {
                     <div className="table-course-title">
                       Tuition fee ({durationInfo(course?.durationTypeId)?.ly})
                     </div>
-                    {/* <ul>
-                {checkHome?.length === 1 && (
-                    <li>
-
-                      <Row>
-                        <Col xs={7}> Home/UK </Col>
-                        <Col xs={5}>
-                          {currency(quickViewData.localTutionFeeCurrencyId)}
-                          {course?.localTutionFee}
-                        </Col>
-                      </Row>
-                    </li>
-                    )}
-                    {checkEu?.length === 1 && (
-                      <Row>
-                        <Col xs={7}> EU/EEU</Col>
-                        <Col xs={5}>
-                          {currency(quickViewData.eU_TutionFeeCurrencyId)}
-                          {quickViewData?.eU_TutionFee}
-                        </Col>
-                      </Row>
-                    )}
-                    {checkInt?.length === 1 && (
-                      <Row>
-                        <Col xs={7}> International </Col>
-                        <Col xs={5}>
-                          {currency(
-                            quickViewData.internationalTutionCurrencyId
-                          )}
-                          {quickViewData?.internationalTutionFee}
-                        </Col>
-                      </Row>
-                    )}
-                </ul> */}
+                    <ul>
+                      {course.studentType?.some((type) =>
+                        typeof type === "string"
+                          ? type === "Home/UK"
+                          : type?.name === "Home/UK"
+                      ) && (
+                        <li>
+                          <Row>
+                            <Col xs={7}>Home/UK</Col>
+                            <Col xs={5}>
+                              {currency(course.localTutionFeeCurrencyId)}
+                              {course?.localTutionFee}
+                            </Col>
+                          </Row>
+                        </li>
+                      )}
+                      {course.studentType?.some((type) =>
+                        typeof type === "string"
+                          ? type === "EU/EEA"
+                          : type?.name === "EU/EEA"
+                      ) && (
+                        <li>
+                          <Row>
+                            <Col xs={7}>EU/EEA</Col>
+                            <Col xs={5}>
+                              {currency(course.eU_TutionFeeCurrencyId)}
+                              {course?.eU_TutionFee}
+                            </Col>
+                          </Row>
+                        </li>
+                      )}
+                      {course.studentType?.some((type) =>
+                        typeof type === "string"
+                          ? type === "International"
+                          : type?.name === "International"
+                      ) && (
+                        <li>
+                          <Row>
+                            <Col xs={7}>International</Col>
+                            <Col xs={5}>
+                              {currency(course.internationalTutionCurrencyId)}
+                              {course?.internationalTutionFee}
+                            </Col>
+                          </Row>
+                        </li>
+                      )}
+                    </ul>
                   </>
                 ) : (
                   "-"

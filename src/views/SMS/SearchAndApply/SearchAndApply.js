@@ -244,7 +244,11 @@ function SearchAndApply() {
 
     let updatedArray;
     if (itemIndex === -1) {
-      updatedArray = [...existingArray, item];
+      const extendItems = {
+        ...item,
+        studentType: applicationTypelist,
+      };
+      updatedArray = [...existingArray, extendItems];
       setComparedItems((prev) => [...prev, item.subjectId]);
     } else {
       updatedArray = existingArray.filter(
