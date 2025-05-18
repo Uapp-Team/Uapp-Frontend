@@ -14,7 +14,10 @@ import { DeleteIcon, HeartIconFill, HeartIconStock } from "./icons";
 import RequirementInfoTable from "./RequirementInfoTable";
 import UniversityInfoTable from "./UniversityInfoTable";
 
-const CourseComparisonTable = ({ courses: initialCourses }) => {
+const CourseComparisonTable = ({
+  courses: initialCourses,
+  onCoursesUpdate,
+}) => {
   const [courses, setCourses] = useState(initialCourses);
   const [showOverview, setShowOverview] = useState(true);
   const [showUniInfo, setShowUniInfo] = useState(true);
@@ -107,6 +110,10 @@ const CourseComparisonTable = ({ courses: initialCourses }) => {
     localStorage.setItem("comparedItems", JSON.stringify(updatedCourses));
 
     setCourses(updatedCourses);
+
+    if (onCoursesUpdate) {
+      onCoursesUpdate(updatedCourses);
+    }
 
     addToast("Course removed from Compare successfully!", {
       appearance: "success",

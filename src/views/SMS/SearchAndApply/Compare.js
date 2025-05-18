@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import NoDataImage from "../../../assets/img/no-data.svg";
 import CourseComparisonTable from "./components/CourseComparisonTable";
@@ -7,7 +7,13 @@ import { ArrowLeftIcon } from "./components/icons";
 function Compare() {
   const router = useHistory();
   const items = localStorage.getItem("comparedItems");
-  const courses = JSON.parse(items) || [];
+  const [courses, setCourses] = useState(
+    JSON.parse(localStorage.getItem("comparedItems")) || []
+  );
+
+  const handleCoursesUpdate = (updatedCourses) => {
+    setCourses(updatedCourses);
+  };
 
   return (
     <>
@@ -22,7 +28,10 @@ function Compare() {
             <span className="fs-20px fw-500"> Back </span>
           </button>
           {courses.length > 0 ? (
-            <CourseComparisonTable courses={courses} />
+            <CourseComparisonTable
+              courses={courses}
+              onCoursesUpdate={handleCoursesUpdate}
+            />
           ) : (
             <div
               className="d-flex justify-content-center align-items-center"
