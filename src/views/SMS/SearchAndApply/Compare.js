@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import NoDataImage from "../../../assets/img/no-data.svg";
 import CourseComparisonTable from "./components/CourseComparisonTable";
 import { ArrowLeftIcon } from "./components/icons";
 
@@ -20,7 +21,16 @@ function Compare() {
             </span>{" "}
             <span className="fs-20px fw-500"> Back </span>
           </button>
-          <CourseComparisonTable courses={courses} />
+          {courses.length > 0 ? (
+            <CourseComparisonTable courses={courses} />
+          ) : (
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{ minHeight: "60vh" }}
+            >
+              <img src={NoDataImage} alt="" />
+            </div>
+          )}
         </div>
       </section>
     </>

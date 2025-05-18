@@ -241,6 +241,9 @@ function SearchAndApply() {
   const handleAddToCompare = async (item) => {
     let subjectInfo;
     let updatedArray;
+    const eligibility = await get(
+      `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
+    );
     const existingArray =
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
@@ -257,6 +260,7 @@ function SearchAndApply() {
         ...item,
         studentType: applicationTypelist,
         subjectInfo,
+        eligibility,
       };
       updatedArray = [...existingArray, extendItems];
       setComparedItems((prev) => [...prev, item.subjectId]);
