@@ -90,20 +90,12 @@ function FeesInfoTable({ courses, handleToggleFees, isVisible }) {
             <th className="fixed-col table-left">Scholarships</th>
             {courses.map((course, cidx) => (
               <td key={cidx} className="table-col">
-                {course?.isLoanAvailable && (
-                  <span className="card-tag mr-2" key="loan">
-                    Loan Available
-                  </span>
-                )}
-                {course?.isScholarshipAvailable && (
+                {course?.isScholarshipAvailable ? (
                   <span className="card-tag mr-2" key="loan">
                     Scholarship Available
                   </span>
-                )}
-                {course?.isWorkPlacementAvailable && (
-                  <span className="card-tag mr-2" key="loan">
-                    Work Placement
-                  </span>
+                ) : (
+                  "-"
                 )}
               </td>
             ))}
