@@ -141,27 +141,7 @@ const SearchFilter = ({
       setStudyLevelId(list);
   }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
-  useEffect(() => {
-   
-
-      const studyLevelListQuery = studyLevelId.map((id) => `educationLevelIds=${id}`).join("&");
-
-    const converttostring = studyLevelListQuery.toString();
-    const noSpaces = converttostring.replace(/ /g, "");
-    const converted = noSpaces.replace(/,/g, "&");
-    setStudyLevelQuery(converted);
-  }, [setStudyLevelQuery, studyLevelId]);
-
-     useEffect(() => {
-       
-    
-          const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
-    
-        const converttostring = intakeListQuery.toString();
-        const noSpaces = converttostring.replace(/ /g, "");
-        const converted = noSpaces.replace(/,/g, "&");
-        setIntakeListQuery(converted);
-      }, [setIntakeListQuery, intakeId]);
+ 
 
 
 
@@ -252,7 +232,7 @@ useEffect(() => {
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
               />
             </div>
 
@@ -265,7 +245,7 @@ useEffect(() => {
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
               />
             </div>
             <div className="mb-3 d-block d-md-none">
@@ -299,7 +279,7 @@ useEffect(() => {
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
                 
               />
             </div>
@@ -313,7 +293,7 @@ useEffect(() => {
                 setValue={setDepartmentId}
                 selectAll={true}
                 all="All Department"
-                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
                 
               />
             </div>
@@ -326,7 +306,7 @@ useEffect(() => {
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
 
               
               />
