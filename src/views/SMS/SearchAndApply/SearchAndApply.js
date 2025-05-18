@@ -34,7 +34,7 @@ function SearchAndApply() {
   const [dataPerPage, setDataPerPage] = useState(12);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
-
+  const referenceId = localStorage.getItem("referenceId");
   const screenWidth = window.innerWidth;
 
   // list
@@ -43,7 +43,7 @@ function SearchAndApply() {
   const [applicationTypeSelected, setApplicationTypeSelected] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
-  
+
   const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   // Filter Data State
@@ -55,8 +55,7 @@ function SearchAndApply() {
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState([]);
   const [intakeId, setIntakeId] = useState([]);
- 
-  
+
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
   const [depId, setDepId] = useState(0);
@@ -83,11 +82,9 @@ function SearchAndApply() {
   const [subDepartmentName, setSubDepartmentName] = useState(
     "Select Sub Department"
   );
-  const referenceId = localStorage.getItem("referenceId");
   const [subjectId, setSubjectId] = useState(0);
 
   const [depList, setDepList] = useState([]);
-  
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
@@ -97,15 +94,27 @@ function SearchAndApply() {
     });
   }, [studentId]);
 
-  // useEffect(() => {
-  //   Uget(`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`).then((res) => {
-      
-  //     setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
-  //   });
-  //   // get("SearchFilter/Departments").then((res) => {
-  //   //   setDepList([{ id: 0, name: "All Departments" }, ...res]);
-  //   // });
-  // }, [studentId,institutionId,countryId,cityId]);
+  useEffect(() => {
+    console.log("subDepartmentId", subDepartmentId);
+    Uget(
+      `SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
+        studyLevelQuery ? `&${studyLevelQuery}` : ""
+      }${intakeListQuery ? `&${intakeListQuery}` : ""}`
+    ).then((res) => {
+      setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
+      console.log(res?.data[0]);
+      subDepartmentId > 0 && setDepId(res?.data[0].id);
+      subDepartmentId > 0 && setDepartmentName(res?.data[0].name);
+    });
+  }, [
+    cityId,
+    countryId,
+    institutionId,
+    intakeListQuery,
+    studentId,
+    studyLevelQuery,
+    subDepartmentId,
+  ]);
 
   useEffect(() => {
     if (departmentId > 0 && depList && depList?.length > 0) {
@@ -125,30 +134,25 @@ function SearchAndApply() {
     setApplicationTypeSelected(listData);
   }, [applicationType, applicationTypelist]);
 
+  useEffect(() => {
+    const studyLevelListQuery = studyLevelId
+      .map((id) => `educationLevelIds=${id}`)
+      .join("&");
 
-    useEffect(() => {
-     
-  
-        const studyLevelListQuery = studyLevelId.map((id) => `educationLevelIds=${id}`).join("&");
-  
-      const converttostring = studyLevelListQuery.toString();
-      const noSpaces = converttostring.replace(/ /g, "");
-      const converted = noSpaces.replace(/,/g, "&");
-      setStudyLevelQuery(converted);
-    }, [setStudyLevelQuery, studyLevelId]);
+    const converttostring = studyLevelListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setStudyLevelQuery(converted);
+  }, [setStudyLevelQuery, studyLevelId]);
 
-    useEffect(() => {
-     
-  
-        const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
-  
-      const converttostring = intakeListQuery.toString();
-      const noSpaces = converttostring.replace(/ /g, "");
-      const converted = noSpaces.replace(/,/g, "&");
-      setIntakeListQuery(converted);
-    }, [setIntakeListQuery, intakeId]);
+  useEffect(() => {
+    const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
 
-
+    const converttostring = intakeListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setIntakeListQuery(converted);
+  }, [setIntakeListQuery, intakeId]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -316,6 +320,38 @@ function SearchAndApply() {
       });
     }
   };
+
+  const closeFilter = () => {
+    setFilterOpen(false);
+    value.setSidebar(false);
+
+    setApplicationType([]);
+    setCourseDurationsList([]);
+    setCountryId(0);
+    setCityId(0);
+    setDepId(0);
+    setSubDepartmentId(0);
+    setTuitionFee(0);
+    setApplicationTypeIds([]);
+    setLoans([]);
+    setCourseDurations([]);
+    setIsScholarships(false);
+    setIsAvailableCourses(false);
+    setIsWorkPlacement(false);
+    setStudyModes([]);
+    setDeliveryPattern([]);
+    setDeliverySchedule([]);
+    setIsFavorite(false);
+    setStudentName("Select Student");
+    setStudyLevelQuery("");
+    setIntakeListQuery("");
+    setInstitutionName("Select Institution");
+    setCountryName("Select your destination");
+    setCityName("Select City");
+    setDepartmentName("Select Department");
+    setSubDepartmentName("Select Sub Department");
+    setSubjectId(0);
+  };
   return (
     <>
       <div className="search-header">
@@ -355,7 +391,6 @@ function SearchAndApply() {
               intakeListQuery={intakeListQuery}
               subDepartmentId={subDepartmentId}
               studyLevelQuery={studyLevelQuery}
-              
             />
 
             <button
@@ -393,18 +428,20 @@ function SearchAndApply() {
               <SearchKeywordsU
                 state={studyLevelId}
                 setState={setStudyLevelId}
-                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
-
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${
+                  intakeListQuery ? `&${intakeListQuery}` : ""
+                }`}
               />
             </Col>
             <Col md={3}>
               <SearchKeywordsU
                 state={intakeId}
                 setState={setIntakeId}
-              // url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
-              url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
-
-              slice={true}
+                // url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }`}
+                slice={true}
               />
             </Col>
           </Row>
@@ -490,10 +527,7 @@ function SearchAndApply() {
 
       {filterOpen && (
         <SearchFilter
-          closeModal={() => {
-            setFilterOpen(false);
-            value.setSidebar(false);
-          }}
+          closeModal={closeFilter}
           isSearch={isSearch}
           setIsSearch={setIsSearch}
           institutionId={institutionId}
