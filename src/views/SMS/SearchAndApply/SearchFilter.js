@@ -292,7 +292,10 @@ const SearchFilter = ({
                 value={departmentId}
                 setValue={setDepartmentId}
                 selectAll={true}
-                list={departmentList}
+                // list={departmentList}
+                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
             <div className="mb-3">

@@ -94,27 +94,27 @@ function SearchAndApply() {
     });
   }, [studentId]);
 
-  useEffect(() => {
-    console.log("subDepartmentId", subDepartmentId);
-    Uget(
-      `SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
-        studyLevelQuery ? `&${studyLevelQuery}` : ""
-      }${intakeListQuery ? `&${intakeListQuery}` : ""}`
-    ).then((res) => {
-      setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
-      console.log(res?.data[0]);
-      subDepartmentId > 0 && setDepId(res?.data[0].id);
-      subDepartmentId > 0 && setDepartmentName(res?.data[0].name);
-    });
-  }, [
-    cityId,
-    countryId,
-    institutionId,
-    intakeListQuery,
-    studentId,
-    studyLevelQuery,
-    subDepartmentId,
-  ]);
+  // useEffect(() => {
+  //   console.log("subDepartmentId", cityId);
+  //   Uget(
+  //     `SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
+  //       studyLevelQuery ? `&${studyLevelQuery}` : ""
+  //     }${intakeListQuery ? `&${intakeListQuery}` : ""}`
+  //   ).then((res) => {
+  //     setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
+  //     console.log(res?.data);
+  //     subDepartmentId > 0 && setDepId(res?.data[0].id);
+  //     subDepartmentId > 0 && setDepartmentName(res?.data[0].name);
+  //   });
+  // }, [
+  //   cityId,
+  //   countryId,
+  //   institutionId,
+  //   intakeListQuery,
+  //   studentId,
+  //   studyLevelQuery,
+  //   subDepartmentId,
+  // ]);
 
   useEffect(() => {
     if (departmentId > 0 && depList && depList?.length > 0) {
