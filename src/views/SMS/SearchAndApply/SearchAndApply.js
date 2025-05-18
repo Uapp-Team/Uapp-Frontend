@@ -345,7 +345,6 @@ function SearchAndApply() {
     setStudentName("Select Student");
     setStudyLevelQuery("");
     setIntakeListQuery("");
-    setInstitutionName("Select Institution");
     setCountryName("Select your destination");
     setCityName("Select City");
     setDepartmentName("Select Department");
