@@ -4,8 +4,11 @@ import { rootUrl } from "../../../../constants/constants";
 function UniversityInfoTable({ courses, handleToogleUniInfo, isVisible }) {
   return (
     <>
-      <tr className="table-header cursor-pointer" onClick={handleToogleUniInfo}>
-        <th className="fixed-col">
+      <tr
+        className="table-headers cursor-pointer"
+        onClick={handleToogleUniInfo}
+      >
+        <th className="fixed-col" colSpan={courses.length + 1}>
           <span>University Info</span>
         </th>
       </tr>

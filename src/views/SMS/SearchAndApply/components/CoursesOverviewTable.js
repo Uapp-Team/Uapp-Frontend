@@ -5,10 +5,10 @@ function CoursesOverviewTable({ courses, handleToggleOverview, isVisible }) {
   return (
     <>
       <tr
-        className="table-header cursor-pointer"
+        className="table-headers cursor-pointer"
         onClick={handleToggleOverview}
       >
-        <th className="fixed-col">
+        <th className="fixed-col" colSpan={courses.length + 1}>
           <span>Course Overview</span>
         </th>
       </tr>

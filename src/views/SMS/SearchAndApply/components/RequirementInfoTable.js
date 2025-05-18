@@ -8,10 +8,10 @@ function RequirementInfoTable({
   return (
     <>
       <tr
-        className="table-header cursor-pointer"
+        className="table-headers cursor-pointer"
         onClick={handleToogleRequirementInfo}
       >
-        <th className="fixed-col">
+        <th className="fixed-col" colSpan={courses.length + 1}>
           <span>Requirements</span>
         </th>
       </tr>

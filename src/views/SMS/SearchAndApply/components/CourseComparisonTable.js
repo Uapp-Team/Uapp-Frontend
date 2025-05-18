@@ -131,7 +131,7 @@ const CourseComparisonTable = ({
               </th>
               {courses.map((course, index) => (
                 <th key={index} className="course-header-cell">
-                  <div className="course-header">
+                  <td className="course-header">
                     <div className="d-flex justify-content-between mb-2">
                       <div className="tags">
                         {/* <span className="card-tag fast-track">Fast Track</span> */}
@@ -188,7 +188,7 @@ const CourseComparisonTable = ({
                     <div table-className="course-title">
                       {course.subjectName}
                     </div>
-                  </div>
+                  </td>
                 </th>
               ))}
             </tr>

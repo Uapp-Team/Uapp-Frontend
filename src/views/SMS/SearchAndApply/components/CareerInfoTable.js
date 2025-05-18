@@ -4,10 +4,10 @@ function CareerInfoTable({ courses, handleToogleCareerInfo, isVisible }) {
   return (
     <>
       <tr
-        className="table-header cursor-pointer"
+        className="table-headers cursor-pointer"
         onClick={handleToogleCareerInfo}
       >
-        <th className="fixed-col">
+        <th className="fixed-col" colSpan={courses.length + 1}>
           <span>Career & Work Opportunities</span>
         </th>
       </tr>

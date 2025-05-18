@@ -6,10 +6,10 @@ function FeesInfoTable({ courses, handleToogleFeesInfo, isVisible }) {
   return (
     <>
       <tr
-        className="table-header cursor-pointer"
+        className="table-headers cursor-pointer"
         onClick={handleToogleFeesInfo}
       >
-        <th className="fixed-col">
+        <th className="fixed-col" colSpan={courses.length + 1}>
           <span>Fees, Funding, & Scholarships</span>
         </th>
       </tr>
