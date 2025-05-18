@@ -17,6 +17,8 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import Uget from "../../../helpers/Uget";
+import SearchKeywordsU from "./components/SearchKeywordsU";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -41,6 +43,7 @@ function SearchAndApply() {
   const [applicationTypeSelected, setApplicationTypeSelected] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
+  
   const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   // Filter Data State
@@ -52,6 +55,8 @@ function SearchAndApply() {
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState([]);
   const [intakeId, setIntakeId] = useState([]);
+ 
+  
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
   const [depId, setDepId] = useState(0);
@@ -70,6 +75,7 @@ function SearchAndApply() {
   // level
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
+  const [intakeListQuery, setIntakeListQuery] = useState("");
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
@@ -81,6 +87,7 @@ function SearchAndApply() {
   const [subjectId, setSubjectId] = useState(0);
 
   const [depList, setDepList] = useState([]);
+  
 
   useEffect(() => {
     get(`SearchFilter/StudentTypes/${studentId}`).then((res) => {
@@ -90,11 +97,15 @@ function SearchAndApply() {
     });
   }, [studentId]);
 
-  useEffect(() => {
-    get("SearchFilter/Departments").then((res) => {
-      setDepList([{ id: 0, name: "All Departments" }, ...res]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Uget(`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}`).then((res) => {
+      
+  //     setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
+  //   });
+  //   // get("SearchFilter/Departments").then((res) => {
+  //   //   setDepList([{ id: 0, name: "All Departments" }, ...res]);
+  //   // });
+  // }, [studentId,institutionId,countryId,cityId]);
 
   useEffect(() => {
     if (departmentId > 0 && depList && depList?.length > 0) {
@@ -113,6 +124,31 @@ function SearchAndApply() {
         : applicationTypelist;
     setApplicationTypeSelected(listData);
   }, [applicationType, applicationTypelist]);
+
+
+    useEffect(() => {
+     
+  
+        const studyLevelListQuery = studyLevelId.map((id) => `educationLevelIds=${id}`).join("&");
+  
+      const converttostring = studyLevelListQuery.toString();
+      const noSpaces = converttostring.replace(/ /g, "");
+      const converted = noSpaces.replace(/,/g, "&");
+      setStudyLevelQuery(converted);
+    }, [setStudyLevelQuery, studyLevelId]);
+
+    useEffect(() => {
+     
+  
+        const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
+  
+      const converttostring = intakeListQuery.toString();
+      const noSpaces = converttostring.replace(/ /g, "");
+      const converted = noSpaces.replace(/,/g, "&");
+      setIntakeListQuery(converted);
+    }, [setIntakeListQuery, intakeId]);
+
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -313,6 +349,13 @@ function SearchAndApply() {
               setInstitutionName={setInstitutionName}
               countryName={countryName}
               setCountryName={setCountryName}
+              cityId={cityId}
+              studentId={studentId}
+              departmentId={depId}
+              intakeListQuery={intakeListQuery}
+              subDepartmentId={subDepartmentId}
+              studyLevelQuery={studyLevelQuery}
+              
             />
 
             <button
@@ -347,18 +390,21 @@ function SearchAndApply() {
         <div className="filter-container d-none d-md-block">
           <Row className="mb-3">
             <Col md={9}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={studyLevelId}
                 setState={setStudyLevelId}
-                url="SearchFilter/EducationLevels"
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+
               />
             </Col>
             <Col md={3}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={intakeId}
                 setState={setIntakeId}
-                url="SearchFilter/Intakes"
-                slice={true}
+              // url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+              url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+
+              slice={true}
               />
             </Col>
           </Row>
@@ -507,6 +553,9 @@ function SearchAndApply() {
           setSubDepartmentName={setSubDepartmentName}
           subDepartmentId={subDepartmentId}
           setSubDepartmentId={setSubDepartmentId}
+          studentId={studentId}
+          setIntakeListQuery={setIntakeListQuery}
+          intakeListQuery={intakeListQuery}
         />
       )}
     </>

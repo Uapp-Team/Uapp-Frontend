@@ -12,13 +12,11 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../constants/presetData";
-import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 
 const SearchFilter = ({
   closeModal,
   isSearch,
   setIsSearch,
-  studentId,
   institutionId,
   setInstitutionId,
   studyLevelId,
@@ -76,11 +74,7 @@ const SearchFilter = ({
   setSubDepartmentName,
   subDepartmentId,
   setSubDepartmentId,
-  setIntakeListQuery,intakeListQuery
 }) => {
-  console.log(countryId,'countryId');
-  console.log(cityId,'cityId');
-  
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
@@ -141,46 +135,16 @@ const SearchFilter = ({
       setStudyLevelId(list);
   }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
- 
-
-
-
-useEffect(() => {
-  setCityId(0);
-  setCityName("Select City");
-  setDepartmentId(0);
-  setDepartmentName("Select Department")
-  setSubDepartmentId(0);
-  setSubDepartmentName("Select Sub Department");
-}, [countryId]);
-
-useEffect(() => {
-
-  setDepartmentId(0);
-  setDepartmentName("Select Department")
-  setSubDepartmentId(0);
-  setSubDepartmentName("Select Sub Department");
-}, [cityId]);
-
-useEffect(() => {
-  setSubDepartmentId(0);
-  setSubDepartmentName("Select Sub Department");
-}, [departmentId]);
-
-
-  // useEffect(() => {
-  //   const studyLevelListQuery = [];
-  //   studyLevelId.map((item) =>
-  //     studyLevelListQuery.push(`educationlevels=${item}`)
-  //   );
-  //   const converttostring = studyLevelListQuery.toString();
-  //   const noSpaces = converttostring.replace(/ /g, "");
-  //   const converted = noSpaces.replace(/,/g, "&");
-  //   setStudyLevelQuery(converted);
-  // }, [setStudyLevelQuery, studyLevelId]);
-
-
-
+  useEffect(() => {
+    const studyLevelListQuery = [];
+    studyLevelId.map((item) =>
+      studyLevelListQuery.push(`educationlevels=${item}`)
+    );
+    const converttostring = studyLevelListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setStudyLevelQuery(converted);
+  }, [setStudyLevelQuery, studyLevelId]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -225,35 +189,35 @@ useEffect(() => {
 
             <div className="mb-3">
               <p className="fw-500">Country</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={countryName}
                 setLabel={setCountryName}
                 value={countryId}
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url="UniversityCountry/Index"
               />
             </div>
 
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Institution</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={institutionName}
                 setLabel={setInstitutionName}
                 value={institutionId}
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url="UniversityDD/Index"
               />
             </div>
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Study Level</p>
 
-              <MultiSelectU
+              <MultiSelect
                 placeholder="Select Study Level"
-                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+                url="SearchFilter/EducationLevels"
                 value={studyLevelList}
                 setValue={setStudyLevelList}
               />
@@ -261,54 +225,51 @@ useEffect(() => {
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Intake</p>
 
-              <MultiSelectU
+              <MultiSelect
                 placeholder="Select Intake"
+                
+                url="SearchFilter/Intakes"
                 value={intakeList}
                 setValue={setIntakeList}
-                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
-
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Campus City</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={cityName}
                 setLabel={setCityName}
                 value={cityId}
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                 url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
-                
+                url={`UniversityCityDD/Index/${countryId}`}
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Department</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={departmentName}
                 setLabel={setDepartmentName}
                 value={departmentId}
                 setValue={setDepartmentId}
                 selectAll={true}
-                all="All Department"
-                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
-                
+                list={departmentList}
               />
             </div>
             <div className="mb-3">
               <p className="fw-500">Sub Department</p>
-              <DefaultDropdownU
+              <DefaultDropdown
                 label={subDepartmentName}
                 setLabel={setSubDepartmentName}
                 value={subDepartmentId}
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
-
-              
+                url={`SearchFilter/SubDepartments/${
+                  departmentId ? departmentId : 0
+                }`}
               />
             </div>
             <div className="mb-3">
@@ -396,8 +357,11 @@ useEffect(() => {
 
               <MultiSelectU
                 placeholder="Select Course Durations"
-                 url={`SearchFilter/FetchDurations?studentId=${studentId}${intakeListQuery ? `&${intakeListQuery}` : ''}${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
-              
+                url={
+                  studyLevelId?.length > 0
+                    ? `Duration/ByEducationLevels?${studyLevelQuery}`
+                    : "Duration/Index"
+                }
                 value={courseDurationsList}
                 setValue={setCourseDurationsList}
               />
