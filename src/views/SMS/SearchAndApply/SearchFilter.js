@@ -78,6 +78,9 @@ const SearchFilter = ({
   setSubDepartmentId,
   setIntakeListQuery,intakeListQuery
 }) => {
+  console.log(countryId,'countryId');
+  console.log(cityId,'cityId');
+  
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
@@ -159,6 +162,30 @@ const SearchFilter = ({
         const converted = noSpaces.replace(/,/g, "&");
         setIntakeListQuery(converted);
       }, [setIntakeListQuery, intakeId]);
+
+
+
+useEffect(() => {
+  setCityId(0);
+  setCityName("Select City");
+  setDepartmentId(0);
+  setDepartmentName("Select Department")
+  setSubDepartmentId(0);
+  setSubDepartmentName("Select Sub Department");
+}, [countryId]);
+
+useEffect(() => {
+
+  setDepartmentId(0);
+  setDepartmentName("Select Department")
+  setSubDepartmentId(0);
+  setSubDepartmentName("Select Sub Department");
+}, [cityId]);
+
+useEffect(() => {
+  setSubDepartmentId(0);
+  setSubDepartmentName("Select Sub Department");
+}, [departmentId]);
 
 
   // useEffect(() => {
