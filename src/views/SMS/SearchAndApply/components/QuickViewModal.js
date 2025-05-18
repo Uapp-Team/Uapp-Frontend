@@ -669,7 +669,9 @@ const QuickViewModal = ({
                 <div className="mt-1">
                   {selectedIntakeId ? (
                     subjectIntake.flatMap((campus) => (
-                      <div key={index}>{campus.campusName}</div>
+                      <div className="mb-1" key={index}>
+                        {campus.campusName}
+                      </div>
                     ))
                   ) : (
                     <span>Please Select Intake First</span>
@@ -686,22 +688,29 @@ const QuickViewModal = ({
 
               <div className="mt-2">
                 {selectedIntakeId &&
-                  subjectIntake
-                    .flatMap((scheduleObj) =>
-                      scheduleObj?.deliverySchedule?.map((id) => {
+                  subjectIntake.map((scheduleObj, idx) => {
+                    const names = scheduleObj?.deliverySchedule
+                      ?.map((id) => {
                         const method = deliverySchedules.find(
                           (deliverySchedule) =>
                             deliverySchedule.id === parseInt(id, 10)
                         );
                         return method?.name;
                       })
-                    )
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <span className="footer-tag__inner" key={index}>
-                        {name}
-                      </span>
-                    ))}
+                      .filter(Boolean);
+
+                    if (!names?.length) return null;
+
+                    return (
+                      <div key={idx} className="mb-1">
+                        {names.map((name, index) => (
+                          <span className="footer-tag__inner mr-1" key={index}>
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </Row>
