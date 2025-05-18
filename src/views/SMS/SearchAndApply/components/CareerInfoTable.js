@@ -1,9 +1,12 @@
 import React from "react";
 
-function CareerInfoTable({ courses, handleToogleUniInfo, isVisible }) {
+function CareerInfoTable({ courses, handleToogleCareerInfo, isVisible }) {
   return (
     <>
-      <tr className="table-header cursor-pointer" onClick={handleToogleUniInfo}>
+      <tr
+        className="table-header cursor-pointer"
+        onClick={handleToogleCareerInfo}
+      >
         <th className="fixed-col">
           <span>Career & Work Opportunities</span>
         </th>

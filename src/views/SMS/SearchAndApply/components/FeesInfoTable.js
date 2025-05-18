@@ -1,10 +1,13 @@
 import React from "react";
 import { currency, durationInfo } from "../../../../constants/presetData";
 
-function FeesInfoTable({ courses, handleToggleFees, isVisible }) {
+function FeesInfoTable({ courses, handleToogleFeesInfo, isVisible }) {
   return (
     <>
-      <tr className="table-header cursor-pointer" onClick={handleToggleFees}>
+      <tr
+        className="table-header cursor-pointer"
+        onClick={handleToogleFeesInfo}
+      >
         <th className="fixed-col">
           <span>Fees, Funding, & Scholarships</span>
         </th>
