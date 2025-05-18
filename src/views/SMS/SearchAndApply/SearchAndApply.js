@@ -341,15 +341,12 @@ function SearchAndApply() {
     setStudyModes([]);
     setDeliveryPattern([]);
     setDeliverySchedule([]);
-    setIsFavorite(false);
-    setStudentName("Select Student");
     setStudyLevelQuery("");
     setIntakeListQuery("");
     setCountryName("Select your destination");
     setCityName("Select City");
     setDepartmentName("Select Department");
     setSubDepartmentName("Select Sub Department");
-    setSubjectId(0);
   };
   return (
     <>
