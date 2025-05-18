@@ -1,5 +1,5 @@
 import React from "react";
-import { durationInfo } from "../../../../constants/presetData";
+import { currency, durationInfo } from "../../../../constants/presetData";
 
 function FeesInfoTable({ courses, handleToggleFees, isVisible }) {
   return (
@@ -58,6 +58,73 @@ function FeesInfoTable({ courses, handleToggleFees, isVisible }) {
                 ) : (
                   "-"
                 )}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th className="fixed-col table-left">Deposit Required</th>
+            {courses.map((course, cidx) => (
+              <td key={cidx} className="table-col">
+                {course?.depositFee && (
+                  <span className="fw-600">
+                    {currency(course.depositFeeCurrencyId)} {course.depositFee}
+                  </span>
+                )}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th className="fixed-col table-left">Application Fee</th>
+            {courses.map((course, cidx) => (
+              <td key={cidx} className="table-col">
+                {course?.avarageApplicationFee && (
+                  <span className="fw-600">
+                    {currency(course.avarageApplicationFeeCurrencyId)}{" "}
+                    {course.avarageApplicationFee}
+                  </span>
+                )}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th className="fixed-col table-left">Scholarships</th>
+            {courses.map((course, cidx) => (
+              <td key={cidx} className="table-col">
+                {course?.isLoanAvailable && (
+                  <span className="card-tag mr-2" key="loan">
+                    Loan Available
+                  </span>
+                )}
+                {course?.isScholarshipAvailable && (
+                  <span className="card-tag mr-2" key="loan">
+                    Scholarship Available
+                  </span>
+                )}
+                {course?.isWorkPlacementAvailable && (
+                  <span className="card-tag mr-2" key="loan">
+                    Work Placement
+                  </span>
+                )}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th className="fixed-col table-left">Loan Available</th>
+            {courses.map((course, cidx) => (
+              <td key={cidx} className="table-col">
+                {course?.campusNames ? (
+                  <div className="table-course-title">Loan Available</div>
+                ) : (
+                  "-"
+                )}
+                <ul>
+                  {course?.campusNames
+                    ?.split(",")
+                    .filter(Boolean)
+                    .map((name, index) => (
+                      <li key={index}>{name}</li>
+                    ))}
+                </ul>
               </td>
             ))}
           </tr>
