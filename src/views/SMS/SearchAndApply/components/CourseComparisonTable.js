@@ -4,7 +4,6 @@ import { useToasts } from "react-toast-notifications";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
 import { Student } from "../../../../components/core/User";
-import { deliveryMethods, studyMode } from "../../../../constants/presetData";
 import post from "../../../../helpers/post";
 import "../SearchAndApply.css";
 import CareerInfoTable from "./CareerInfoTable";
@@ -120,62 +119,6 @@ const CourseComparisonTable = ({
       autoDismiss: true,
     });
   };
-
-  const courseOverviewConfig = [
-    { label: "Application Deadline", key: "maxApplicationDeadLine" },
-    { label: "Start Date", key: "classStartDate" },
-    {
-      label: "Duration",
-      key: "durationNames",
-      subTitle: "Duration Details",
-      render: (value) => (
-        <ul>
-          {value
-            ?.split(",")
-            .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
-        </ul>
-      ),
-    },
-    {
-      label: "Study Mode",
-      key: "studyModes",
-      subTitle: "Available Study Modes",
-      render: (value) => (
-        <ul>
-          {value
-            ?.split(",")
-            .map((id) => {
-              const method = studyMode.find(
-                (m) => m.id === parseInt(id.trim(), 10)
-              );
-              return method?.name;
-            })
-            .filter(Boolean)
-            .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
-        </ul>
-      ),
-    },
-    {
-      label: "Delivery Pattern",
-      key: "deliveryMethods",
-      subTitle: "Delivery Options",
-      render: (value) => (
-        <ul>
-          {value
-            ?.split(",")
-            .map((id) => {
-              const method = deliveryMethods.find(
-                (m) => m.id === parseInt(id.trim(), 10)
-              );
-              return method?.name;
-            })
-            .filter(Boolean)
-            .map((name, index) => <li key={index}>{name}</li>) || "Not Set"}
-        </ul>
-      ),
-    },
-    { label: "Schedule", key: "classStartDate" },
-  ];
 
   return (
     <div className="table-responsive-wrapper">
