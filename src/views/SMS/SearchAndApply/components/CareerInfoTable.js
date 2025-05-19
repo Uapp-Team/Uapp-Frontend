@@ -15,12 +15,12 @@ function CareerInfoTable({ courses, handleToogleCareerInfo, isVisible }) {
       {isVisible && (
         <tbody>
           <tr>
-            <th className="fixed-col table-left">Work Placement Included</th>
+            <th className="fixed-col table-left">Work Placement</th>
             {courses.map((course, cidx) => (
               <td key={cidx} className="table-col">
                 {course?.isWorkPlacementAvailable ? (
                   <span className="card-tag mr-2" key="loan">
-                    Work Placement
+                    Work Placement Available
                   </span>
                 ) : (
                   "-"

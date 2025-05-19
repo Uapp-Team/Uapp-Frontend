@@ -256,36 +256,34 @@ const CourseComparisonTable = ({
             handleToogleFeesInfo={handleToogleFeesInfo}
             isVisible={showFeesInfo}
           />
-
           <CareerInfoTable
             courses={courses}
             handleToogleCareerInfo={handleToogleCareerInfo}
             isVisible={showCareerInfo}
           />
-
           <RequirementInfoTable
             courses={courses}
             handleToogleRequirementInfo={handleToogleRequirementInfo}
             isVisible={showRequirementInfo}
           />
+          {canScrollLeft && (
+            <div
+              className="scroll-arrow scroll-left hover-only"
+              onClick={scrollTableLeft}
+            >
+              <AiOutlineLeft size={10} className="arrow-icon" />
+            </div>
+          )}
+          {isOverflowing && (
+            <div
+              className="scroll-arrow scroll-right hover-only"
+              onClick={scrollTableRight}
+            >
+              <AiOutlineRight size={10} className="arrow-icon" />
+            </div>
+          )}
         </table>
       </div>
-      {canScrollLeft && (
-        <div
-          className="scroll-arrow scroll-left hover-only"
-          onClick={scrollTableLeft}
-        >
-          <AiOutlineLeft size={10} className="arrow-icon" />
-        </div>
-      )}
-      {isOverflowing && (
-        <div
-          className="scroll-arrow scroll-right hover-only"
-          onClick={scrollTableRight}
-        >
-          <AiOutlineRight size={10} className="arrow-icon" />
-        </div>
-      )}
     </div>
   );
 };
