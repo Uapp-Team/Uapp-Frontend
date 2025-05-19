@@ -25,7 +25,9 @@ const CourseComparisonTable = ({
   const [showRequirementInfo, setShowRequirementInfo] = useState(true);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [leftArrowPosition, setLeftArrowPosition] = useState(250);
   const { addToast } = useToasts();
+  const fixedColumnRef = useRef(null);
   const tableContainerRef = useRef(null);
 
   const handleToogleOverview = () => {
@@ -87,20 +89,34 @@ const CourseComparisonTable = ({
     }
   };
 
+  // Calculate the position of the left arrow based on the fixed column width
+  const calculateLeftArrowPosition = () => {
+    if (fixedColumnRef.current) {
+      const fixedColumnWidth = fixedColumnRef.current.offsetWidth;
+      // Add a small offset (e.g., 20px) to position it slightly to the right of the fixed column
+      setLeftArrowPosition(fixedColumnWidth + 20);
+    }
+  };
+
   useEffect(() => {
-    // Initial check
+    // Initial calculations
+    calculateLeftArrowPosition();
     checkScrollPosition();
 
-    // Add event listeners
-    window.addEventListener("resize", checkScrollPosition);
+    // Recalculate on window resize
+    window.addEventListener("resize", () => {
+      calculateLeftArrowPosition();
+      checkScrollPosition();
+    });
 
+    // Add scroll event listener
     const tableContainer = tableContainerRef.current;
     if (tableContainer) {
       tableContainer.addEventListener("scroll", checkScrollPosition);
     }
 
     return () => {
-      window.removeEventListener("resize", checkScrollPosition);
+      window.removeEventListener("resize", calculateLeftArrowPosition);
       if (tableContainer) {
         tableContainer.removeEventListener("scroll", checkScrollPosition);
       }
@@ -174,7 +190,7 @@ const CourseComparisonTable = ({
         <table bordered className="comparison-table">
           <thead className="fixed-header">
             <tr>
-              <th className="fixed-col top-left">
+              <th className="fixed-col top-left" ref={fixedColumnRef}>
                 Course selected: {courses.length}
               </th>
               {courses.map((course, index) => (
@@ -270,6 +286,7 @@ const CourseComparisonTable = ({
             <div
               className="scroll-arrow scroll-left hover-only"
               onClick={scrollTableLeft}
+              style={{ left: `${leftArrowPosition}px` }}
             >
               <AiOutlineLeft size={10} className="arrow-icon" />
             </div>
