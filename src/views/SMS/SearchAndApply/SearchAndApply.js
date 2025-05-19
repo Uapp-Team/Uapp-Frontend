@@ -279,29 +279,15 @@ function SearchAndApply() {
   };
 
   const handleAddToCompare = async (item) => {
-    let subjectInfo;
-    let updatedArray;
+    let subjectInfo = null;
+    let eligibility = null;
+    let campusDeliverySchedule = [];
+
     const intakeIds = item.intakeIds
       ?.split(",")
       .map((id) => parseInt(id.trim()))
       .filter((id) => !isNaN(id));
 
-    let campusDeliverySchedule;
-    if (intakeIds?.length > 0) {
-      const query = new URLSearchParams({
-        subjectId: item.subjectId.toString(),
-      });
-      intakeIds.forEach((id) => query.append("intakeIds", id.toString()));
-
-      await Uget(
-        `SubjectIntake/GetCampusDeliveryScheduleBySubjectIntakes?${query.toString()}`
-      ).then((res) => {
-        campusDeliverySchedule = res?.data?.deliverySchedules;
-      });
-    }
-    const eligibility = await get(
-      `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
-    );
     const existingArray =
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
@@ -309,8 +295,40 @@ function SearchAndApply() {
       (savedItem) => savedItem.subjectId === item.subjectId
     );
 
-    if (item.isLoanAvailable) {
-      subjectInfo = await get(`Subject/Get/${item.subjectId}`);
+    let updatedArray = [];
+
+    if (itemIndex === -1) {
+      setComparedItems((prev) => [...prev, item.subjectId]);
+      setCompareCount(existingArray.length + 1);
+    } else {
+      setComparedItems((prev) => prev.filter((id) => id !== item.subjectId));
+      setCompareCount(existingArray.length - 1);
+    }
+
+    try {
+      if (intakeIds.length > 0) {
+        const query = new URLSearchParams({
+          subjectId: item.subjectId.toString(),
+        });
+        intakeIds.forEach((id) => query.append("intakeIds", id.toString()));
+
+        const result = await Uget(
+          `SubjectIntake/GetCampusDeliveryScheduleBySubjectIntakes?${query.toString()}`
+        );
+        campusDeliverySchedule = result?.data?.deliverySchedules || [];
+      }
+
+      const eligibilityRes = await get(
+        `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
+      );
+      eligibility = eligibilityRes?.data || null;
+
+      if (item.isLoanAvailable) {
+        const subjectInfoRes = await get(`Subject/Get/${item.subjectId}`);
+        subjectInfo = subjectInfoRes?.data || null;
+      }
+    } catch (error) {
+      console.error("API error during compare add", error);
     }
 
     if (itemIndex === -1) {
@@ -322,16 +340,13 @@ function SearchAndApply() {
         campusDeliverySchedule,
       };
       updatedArray = [...existingArray, extendItems];
-      setComparedItems((prev) => [...prev, item.subjectId]);
     } else {
       updatedArray = existingArray.filter(
         (savedItem) => savedItem.subjectId !== item.subjectId
       );
-      setComparedItems((prev) => prev.filter((id) => id !== item.subjectId));
     }
 
     localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
-    setCompareCount(updatedArray.length);
   };
 
   const handleSubmit = async (
