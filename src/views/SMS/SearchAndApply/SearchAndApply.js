@@ -278,6 +278,13 @@ function SearchAndApply() {
       });
   };
 
+  useEffect(() => {
+    // Update compare count from localStorage
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    setCompareCount(items.length);
+    setComparedItems(items.map((item) => item.subjectId));
+  }, [studentId]); // This will run whenever studentId changes
+
   const handleAddToCompare = async (item) => {
     let subjectInfo = null;
     let eligibility = null;
@@ -347,6 +354,9 @@ function SearchAndApply() {
     }
 
     localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
+
+    // Update the compare count directly after modifying localStorage
+    setCompareCount(updatedArray.length);
   };
 
   const handleSubmit = async (
@@ -441,6 +451,7 @@ function SearchAndApply() {
                 selectAll={true}
                 all="All Student"
                 url="SearchFilter/Students"
+                name="studentId"
               />
             </Col>
           )}
