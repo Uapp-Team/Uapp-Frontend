@@ -33,7 +33,7 @@ const AddUniversitySubjectRequirements = () => {
   const [eduValue, setEduValue] = useState(0);
   const [eduError, setEduError] = useState(false);
   const [isEducationRequired, setIsEducationRequired] = useState(false);
-  const [requiredId, setRequiredId] = useState(0);
+  const [requiredId, setRequiredId] = useState();
 
   const [applicationTypeDD, setApplicationTypeDD] = useState([]);
   const [appliLabel, setAppliLabel] = useState("Select Application type");
@@ -77,7 +77,6 @@ const AddUniversitySubjectRequirements = () => {
     });
 
     get(`SubjectRequirement/GetBySubject/${subjId}`).then((res) => {
-      console.log(res);
       setIsEducationRequired(res?.isEducationRequired);
       setEduLabel(
         res?.educationLevel !== null
@@ -194,10 +193,28 @@ const AddUniversitySubjectRequirements = () => {
     var formIsValid = validateRegisterForm();
 
     if (formIsValid) {
-      if (requiredId !== undefined) {
+      if (isEducationRequired === true && requiredId !== undefined) {
         setButtonStatus(true);
         setProgress(true);
         Axios.put(`${rootUrl}SubjectRequirement/Update`, subdata, {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: AuthStr,
+          },
+        }).then((res) => {
+          setButtonStatus(false);
+          setProgress(false);
+          if (res.status === 200 && res.data.isSuccess === true) {
+            addToast(res?.data?.message, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+          }
+        });
+      } else if (isEducationRequired === false && requiredId !== undefined) {
+        setButtonStatus(true);
+        setProgress(true);
+        Axios.delete(`${rootUrl}SubjectRequirement/Delete/${requiredId}`, {
           headers: {
             "Content-Type": "application/json",
             authorization: AuthStr,
