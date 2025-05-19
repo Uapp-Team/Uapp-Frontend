@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineRight } from "react-icons/ai";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { useToasts } from "react-toast-notifications";
 import offline from "../../../../assets/icon/offline.svg";
 import online from "../../../../assets/icon/online.svg";
@@ -24,6 +24,7 @@ const CourseComparisonTable = ({
   const [showCareerInfo, setShowCareerInfo] = useState(true);
   const [showRequirementInfo, setShowRequirementInfo] = useState(true);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
   const { addToast } = useToasts();
   const tableContainerRef = useRef(null);
 
@@ -42,24 +43,68 @@ const CourseComparisonTable = ({
   const handleToogleRequirementInfo = () => {
     setShowRequirementInfo((prev) => !prev);
   };
-  const scrollTable = () => {
+  const scrollTableRight = () => {
     if (tableContainerRef.current) {
       const scrollAmount = 200;
       tableContainerRef.current.scrollLeft += scrollAmount;
+
+      // Force immediate check of scroll position after scrolling
+      setTimeout(() => {
+        checkScrollPosition();
+      }, 10);
     }
   };
 
-  const checkOverflow = () => {
+  const scrollTableLeft = () => {
     if (tableContainerRef.current) {
-      const { scrollWidth, clientWidth } = tableContainerRef.current;
-      setIsOverflowing(scrollWidth > clientWidth);
+      const scrollAmount = 200;
+      tableContainerRef.current.scrollLeft -= scrollAmount;
+
+      // Force immediate check of scroll position after scrolling
+      setTimeout(() => {
+        checkScrollPosition();
+      }, 10);
+    }
+  };
+
+  const checkScrollPosition = () => {
+    if (tableContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        tableContainerRef.current;
+
+      // Check if can scroll left (scrolled right at least a bit)
+      setCanScrollLeft(scrollLeft > 0);
+
+      // Check if can scroll right (not at the end)
+      const canScrollRight = scrollLeft + clientWidth < scrollWidth;
+      setIsOverflowing(canScrollRight);
+
+      console.log("Scroll position:", {
+        scrollLeft,
+        canScrollLeft: scrollLeft > 0,
+        canScrollRight,
+      });
     }
   };
 
   useEffect(() => {
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
+    // Initial check
+    checkScrollPosition();
+
+    // Add event listeners
+    window.addEventListener("resize", checkScrollPosition);
+
+    const tableContainer = tableContainerRef.current;
+    if (tableContainer) {
+      tableContainer.addEventListener("scroll", checkScrollPosition);
+    }
+
+    return () => {
+      window.removeEventListener("resize", checkScrollPosition);
+      if (tableContainer) {
+        tableContainer.removeEventListener("scroll", checkScrollPosition);
+      }
+    };
   }, []);
 
   const handleFavourite = (value, subjectId, i) => {
@@ -223,13 +268,24 @@ const CourseComparisonTable = ({
             handleToogleRequirementInfo={handleToogleRequirementInfo}
             isVisible={showRequirementInfo}
           />
-          {isOverflowing && (
-            <div className="scroll-arrow hover-only" onClick={scrollTable}>
-              <AiOutlineRight size={10} className="arrow-icon" />
-            </div>
-          )}
         </table>
       </div>
+      {canScrollLeft && (
+        <div
+          className="scroll-arrow scroll-left hover-only"
+          onClick={scrollTableLeft}
+        >
+          <AiOutlineLeft size={10} className="arrow-icon" />
+        </div>
+      )}
+      {isOverflowing && (
+        <div
+          className="scroll-arrow scroll-right hover-only"
+          onClick={scrollTableRight}
+        >
+          <AiOutlineRight size={10} className="arrow-icon" />
+        </div>
+      )}
     </div>
   );
 };
