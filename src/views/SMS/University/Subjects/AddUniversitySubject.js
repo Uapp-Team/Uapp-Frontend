@@ -1107,6 +1107,9 @@ const AddUniversitySubject = () => {
                                     handleGovtLoanLink(e);
                                   }}
                                 />
+                                <span className="text-danger">
+                                  {govtLoanLinkError}
+                                </span>
                               </FormGroup>
                             )}
                           </Col>
@@ -1133,6 +1136,9 @@ const AddUniversitySubject = () => {
                                     handlePrivateLoanLink(e);
                                   }}
                                 />
+                                <span className="text-danger">
+                                  {privateLoanLinkError}
+                                </span>
                               </FormGroup>
                             )}
                           </Col>
