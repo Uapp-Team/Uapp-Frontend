@@ -3,6 +3,9 @@ import Select from "react-select";
 import Uget from "../../helpers/Uget";
 
 const DefaultDropdownU = ({
+   selectAll = false,
+  all = "All",
+  list = [],
   label,
   setLabel,
   value,
@@ -15,13 +18,15 @@ const DefaultDropdownU = ({
   action,
   className,
 }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(list);
 
   useEffect(() => {
     Uget(url).then((res) => {
-      setData(res?.data);
+            selectAll ? setData([{ id: 0, name: all }, ...res?.data]) : setData(res?.data);
+
+      
     });
-  }, [url]);
+  }, [all,selectAll,url]);
 
   const options = data?.map((std) => ({
     label: std?.name,
