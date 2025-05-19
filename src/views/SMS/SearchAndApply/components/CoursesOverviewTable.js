@@ -1,5 +1,9 @@
 import React from "react";
-import { deliveryMethods, studyMode } from "../../../../constants/presetData";
+import {
+  deliveryMethods,
+  deliverySchedules,
+  studyMode,
+} from "../../../../constants/presetData";
 
 function CoursesOverviewTable({ courses, handleToggleOverview, isVisible }) {
   return (
@@ -103,9 +107,25 @@ function CoursesOverviewTable({ courses, handleToggleOverview, isVisible }) {
           </tr>
           <tr>
             <th className="fixed-col table-left">Schedule</th>
-            {courses.map((course, cidx) => (
+            {courses?.map((course, cidx) => (
               <td key={cidx} className="table-col">
-                {course?.classStartDate || "-"}
+                {course?.campusDeliverySchedule.length > 0 ? (
+                  <div className="table-course-title">Delivery Schedule</div>
+                ) : (
+                  "-"
+                )}
+                <ul>
+                  {course?.campusDeliverySchedule?.map((id) => {
+                    const matched = deliverySchedules.find(
+                      (ds) => ds.id === id
+                    );
+                    return (
+                      <li key={id}>
+                        {matched ? matched.name : `Unknown (${id})`}
+                      </li>
+                    );
+                  })}
+                </ul>
               </td>
             ))}
           </tr>

@@ -281,6 +281,24 @@ function SearchAndApply() {
   const handleAddToCompare = async (item) => {
     let subjectInfo;
     let updatedArray;
+    const intakeIds = item.intakeIds
+      ?.split(",")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    let campusDeliverySchedule;
+    if (intakeIds?.length > 0) {
+      const query = new URLSearchParams({
+        subjectId: item.subjectId.toString(),
+      });
+      intakeIds.forEach((id) => query.append("intakeIds", id.toString()));
+
+      await Uget(
+        `SubjectIntake/GetCampusDeliveryScheduleBySubjectIntakes?${query.toString()}`
+      ).then((res) => {
+        campusDeliverySchedule = res?.data?.deliverySchedules;
+      });
+    }
     const eligibility = await get(
       `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
     );
@@ -301,6 +319,7 @@ function SearchAndApply() {
         studentType: applicationTypelist,
         subjectInfo,
         eligibility,
+        campusDeliverySchedule,
       };
       updatedArray = [...existingArray, extendItems];
       setComparedItems((prev) => [...prev, item.subjectId]);

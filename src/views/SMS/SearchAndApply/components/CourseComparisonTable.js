@@ -50,7 +50,6 @@ const CourseComparisonTable = ({
       const scrollAmount = 200;
       tableContainerRef.current.scrollLeft += scrollAmount;
 
-      // Force immediate check of scroll position after scrolling
       setTimeout(() => {
         checkScrollPosition();
       }, 10);
@@ -62,7 +61,6 @@ const CourseComparisonTable = ({
       const scrollAmount = 200;
       tableContainerRef.current.scrollLeft -= scrollAmount;
 
-      // Force immediate check of scroll position after scrolling
       setTimeout(() => {
         checkScrollPosition();
       }, 10);
@@ -74,42 +72,29 @@ const CourseComparisonTable = ({
       const { scrollLeft, scrollWidth, clientWidth } =
         tableContainerRef.current;
 
-      // Check if can scroll left (scrolled right at least a bit)
       setCanScrollLeft(scrollLeft > 0);
 
-      // Check if can scroll right (not at the end)
       const canScrollRight = scrollLeft + clientWidth < scrollWidth;
       setIsOverflowing(canScrollRight);
-
-      console.log("Scroll position:", {
-        scrollLeft,
-        canScrollLeft: scrollLeft > 0,
-        canScrollRight,
-      });
     }
   };
 
-  // Calculate the position of the left arrow based on the fixed column width
   const calculateLeftArrowPosition = () => {
     if (fixedColumnRef.current) {
       const fixedColumnWidth = fixedColumnRef.current.offsetWidth;
-      // Add a small offset (e.g., 20px) to position it slightly to the right of the fixed column
       setLeftArrowPosition(fixedColumnWidth + 20);
     }
   };
 
   useEffect(() => {
-    // Initial calculations
     calculateLeftArrowPosition();
     checkScrollPosition();
 
-    // Recalculate on window resize
     window.addEventListener("resize", () => {
       calculateLeftArrowPosition();
       checkScrollPosition();
     });
 
-    // Add scroll event listener
     const tableContainer = tableContainerRef.current;
     if (tableContainer) {
       tableContainer.addEventListener("scroll", checkScrollPosition);
