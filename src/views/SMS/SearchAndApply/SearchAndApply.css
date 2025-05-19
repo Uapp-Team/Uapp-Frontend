@@ -1145,6 +1145,20 @@ span.visually-hidden {
   position: relative;
   overflow: auto;
   white-space: nowrap;
+  max-height: 80vh;
+}
+
+.fixed-header-table .fixed-header {
+  position: sticky;
+  top: -10px;
+  z-index: 2;
+}
+
+.comparision-table th {
+  position: sticky;
+  top: 0;
+  background-color: #f1f3f5;
+  z-index: 2;
 }
 
 .table-course-title {
@@ -1159,7 +1173,7 @@ span.visually-hidden {
   padding: 8px 0px;
 }
 .scroll-arrow {
-  position: absolute;
+  position: fixed;
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
@@ -1170,14 +1184,20 @@ span.visually-hidden {
   cursor: pointer;
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+.scroll-arrow.hover-only {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-.scroll-arrow:hover {
-  opacity: 1;
-}
-.table-container:hover + .scroll-arrow {
+
+.table-responsive-wrapper:hover .scroll-arrow.hover-only {
   opacity: 0.9;
+}
+
+.scroll-arrow:hover {
+  opacity: 1 !important;
 }
 
 .arrow-icon {
@@ -1212,7 +1232,7 @@ span.visually-hidden {
   height: 120px;
 }
 .table-left {
-  z-index: 2;
+  z-index: 1;
   background-color: #e9ecef;
   font-weight: 400;
 }

@@ -122,9 +122,12 @@ const CourseComparisonTable = ({
 
   return (
     <div className="table-responsive-wrapper">
-      <div className="table-container" ref={tableContainerRef}>
+      <div
+        className="table-container fixed-header-table"
+        ref={tableContainerRef}
+      >
         <table bordered className="comparison-table">
-          <thead>
+          <thead className="fixed-header">
             <tr>
               <th className="fixed-col top-left">
                 Course selected: {courses.length}
@@ -220,13 +223,13 @@ const CourseComparisonTable = ({
             handleToogleRequirementInfo={handleToogleRequirementInfo}
             isVisible={showRequirementInfo}
           />
+          {isOverflowing && (
+            <div className="scroll-arrow hover-only" onClick={scrollTable}>
+              <AiOutlineRight size={10} className="arrow-icon" />
+            </div>
+          )}
         </table>
       </div>
-      {isOverflowing && (
-        <div className="scroll-arrow" onClick={scrollTable}>
-          <AiOutlineRight size={10} className="arrow-icon" />
-        </div>
-      )}
     </div>
   );
 };
