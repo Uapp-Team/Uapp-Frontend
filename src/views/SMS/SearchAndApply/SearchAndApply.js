@@ -328,11 +328,11 @@ function SearchAndApply() {
       const eligibilityRes = await get(
         `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
       );
-      eligibility = eligibilityRes?.data || null;
+      eligibility = eligibilityRes || null;
 
       if (item.isLoanAvailable) {
         const subjectInfoRes = await get(`Subject/Get/${item.subjectId}`);
-        subjectInfo = subjectInfoRes?.data || null;
+        subjectInfo = subjectInfoRes || null;
       }
     } catch (error) {
       console.error("API error during compare add", error);

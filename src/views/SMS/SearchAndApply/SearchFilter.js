@@ -79,9 +79,6 @@ const SearchFilter = ({
   setIntakeListQuery,
   intakeListQuery,
 }) => {
-  console.log(countryId, "countryId");
-  console.log(cityId, "cityId");
-
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
