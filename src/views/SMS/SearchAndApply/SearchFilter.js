@@ -346,7 +346,7 @@ const SearchFilter = ({
             </div>
 
             <div className="border rounded p-16px mb-3 bg-white">
-              <p className="fw-500">Loan available </p>
+              <p className="fw-500">Loan Available </p>
 
               <CheckBoxByObj
                 register={() => {}}
@@ -389,7 +389,7 @@ const SearchFilter = ({
                     />
                   </svg>
                 </span>
-                <span> Course durations</span>
+                <span> Course Durations</span>
               </p>
 
               <MultiSelectU
