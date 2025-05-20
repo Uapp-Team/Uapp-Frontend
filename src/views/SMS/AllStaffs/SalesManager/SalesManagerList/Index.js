@@ -26,6 +26,7 @@ const Index = (props) => {
   const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
   const userType = localStorage.getItem("userType");
   const { type, branchId } = useParams();
+
   const location = useLocation();
   const history = useHistory();
   const [employeeList, setEmployeeList] = useState([]);
@@ -55,6 +56,7 @@ const Index = (props) => {
     StaffPaging?.empValue ? StaffPaging?.empValue : 0
   );
   const [data, setData] = useState({});
+  console.log(data, "data naki");
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column
@@ -178,10 +180,10 @@ const Index = (props) => {
     setPassModal(true);
   };
 
-  const handleDeleteStaff = () => {
+  const handleDeleteStaff = (data) => {
     setButtonStatus(true);
     setProgress(true);
-    remove(`Employee/Delete/${data?.id}`).then((res) => {
+    remove(`Employee/Delete/${data?.employeeId}`).then((res) => {
       setProgress(false);
       addToast(res, {
         appearance: "error",
@@ -294,6 +296,12 @@ const Index = (props) => {
 
   const redirectToStaffProfile = (empId) => {
     history.push(`/salesManagerProfile/${empId}`);
+  };
+
+  const redirectToAssignPage = (salesManagerId, branchId) => {
+    history.push({
+      pathname: `/salesManagerAssignConsultant/${salesManagerId}/${branchId}`,
+    });
   };
 
   // for hide/unhide column
@@ -461,6 +469,7 @@ const Index = (props) => {
                     redirectToStaffProfile={redirectToStaffProfile}
                     redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
                     handleDeleteStaff={handleDeleteStaff}
+                    redirectToAssignPage={redirectToAssignPage}
                   />
                 )}
               </>

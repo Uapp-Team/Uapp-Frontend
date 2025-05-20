@@ -19,7 +19,7 @@ import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
-const EmployeeProfile = ({ userId }) => {
+const SalesManagerProfile = ({ userId }) => {
   const { id } = useParams();
   console.log(userId, id);
   const history = useHistory();
@@ -289,9 +289,9 @@ const EmployeeProfile = ({ userId }) => {
       ) : (
         <div ref={componentRef}>
           <BreadCrumb
-            title="Staff Profile"
-            backTo={id && "Staff"}
-            path="/staffList"
+            title="Sales Manager Profile"
+            backTo={id && "Sales Manager"}
+            path="/salesManagerList"
           />
 
           <div className="uapp-employee-profile">
@@ -466,4 +466,4 @@ const EmployeeProfile = ({ userId }) => {
   );
 };
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps)(EmployeeProfile);
+export default connect(mapStateToProps)(SalesManagerProfile);

@@ -50,11 +50,12 @@ const SalesManagerTable = ({
   handleDeleteStaff,
   pass,
   cPass,
+  redirectToAssignPage,
 }) => {
   const [popoverOpen, setPopoverOpen] = useState("");
   const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
   const [PasswordEye, setPasswordEye] = useState(false);
-  console.log(employeeList);
+
   return (
     <div className="table-responsive" ref={componentRef}>
       <Table id="table-to-xls" className="table-sm table-bordered">
@@ -94,12 +95,9 @@ const SalesManagerTable = ({
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
-                      // onClick={() =>
-                      //   redirectToAssignPage(
-                      //     manager?.provider?.id,
-                      //     manager?.id
-                      //   )
-                      // }
+                      onClick={() =>
+                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                      }
                       className="Count-fifth"
                     >
                       View({emp?.consultantCount})
@@ -165,7 +163,7 @@ const SalesManagerTable = ({
                       permissionList.View_Employee_Details
                     ) ? (
                       <ButtonForFunction
-                        func={() => redirectToStaffProfile(emp?.id)}
+                        func={() => redirectToStaffProfile(emp?.employeeId)}
                         color={"primary"}
                         className={"mx-1 btn-sm"}
                         icon={<i className="fas fa-eye"></i>}
@@ -182,7 +180,9 @@ const SalesManagerTable = ({
                           permissionList?.Update_Employee
                         ) ? (
                           <ButtonForFunction
-                            func={() => redirecttoStaffGeneralInfo(emp?.id)}
+                            func={() =>
+                              redirecttoStaffGeneralInfo(emp?.employeeId)
+                            }
                             color={"warning"}
                             className={"mx-1 btn-sm"}
                             icon={<i className="fas fa-edit"></i>}
@@ -213,7 +213,7 @@ const SalesManagerTable = ({
         text=" Are You Sure to Delete this Staff ? Once Deleted it can't be Undone!"
         isOpen={deleteModal}
         toggle={closeDeleteModal}
-        confirm={() => handleDeleteStaff(data?.id)}
+        confirm={() => handleDeleteStaff(data)}
         cancel={closeDeleteModal}
         buttonStatus={buttonStatus}
         progress={progress}
