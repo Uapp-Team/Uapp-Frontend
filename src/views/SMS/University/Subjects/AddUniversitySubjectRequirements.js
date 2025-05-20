@@ -33,7 +33,7 @@ const AddUniversitySubjectRequirements = () => {
   const [eduValue, setEduValue] = useState(0);
   const [eduError, setEduError] = useState(false);
   const [isEducationRequired, setIsEducationRequired] = useState(false);
-  const [requiredId, setRequiredId] = useState();
+  const [requiredId, setRequiredId] = useState(0);
 
   const [applicationTypeDD, setApplicationTypeDD] = useState([]);
   const [appliLabel, setAppliLabel] = useState("Select Application type");
@@ -62,12 +62,10 @@ const AddUniversitySubjectRequirements = () => {
   const [intAccept, setIntAccept] = useState(false);
   const [acceptError, setAcceptError] = useState(false);
   const [DocumentRequirement, setDocumentRequirement] = useState([]);
-  console.log(checked);
 
   useEffect(() => {
     get(`SubjectDocumentRequirement/BySubject/${subjId}`).then((res) => {
       setDocumentRequirement(res);
-      console.log(res, "document requirements");
     });
   }, [subjId]);
 
@@ -78,12 +76,15 @@ const AddUniversitySubjectRequirements = () => {
 
     get(`SubjectRequirement/GetBySubject/${subjId}`).then((res) => {
       setIsEducationRequired(res?.isEducationRequired);
-      setEduLabel(
-        res?.educationLevel !== null
-          ? res?.educationLevel?.name
-          : "Select Education Level"
-      );
-      setEduValue(res?.educationLevelId !== null ? res?.educationLevel?.id : 0);
+
+      if (res?.educationLevel) {
+        setEduLabel(res.educationLevel.name);
+        setEduValue(res.educationLevel.id);
+      } else {
+        setEduLabel("Select Education Level");
+        setEduValue(0);
+      }
+
       setRequiredId(res?.id);
       setResultInPercent(res?.requiredResultInPercent);
     });
@@ -193,10 +194,10 @@ const AddUniversitySubjectRequirements = () => {
     var formIsValid = validateRegisterForm();
 
     if (formIsValid) {
-      if (isEducationRequired === true && requiredId !== undefined) {
+      if (isEducationRequired === true && requiredId === undefined) {
         setButtonStatus(true);
         setProgress(true);
-        Axios.put(`${rootUrl}SubjectRequirement/Update`, subdata, {
+        Axios.post(`${rootUrl}SubjectRequirement/Create`, subdata, {
           headers: {
             "Content-Type": "application/json",
             authorization: AuthStr,
@@ -229,10 +230,10 @@ const AddUniversitySubjectRequirements = () => {
             });
           }
         });
-      } else {
+      } else if (isEducationRequired === true && requiredId !== 0) {
         setButtonStatus(true);
         setProgress(true);
-        Axios.post(`${rootUrl}SubjectRequirement/Create`, subdata, {
+        Axios.put(`${rootUrl}SubjectRequirement/Update`, subdata, {
           headers: {
             "Content-Type": "application/json",
             authorization: AuthStr,
@@ -293,7 +294,6 @@ const AddUniversitySubjectRequirements = () => {
   //   subdata.append("documents", checked);
 
   //   for (var x of subdata.values()) {
-  //     console.log(x);
   //   }
 
   //   var formIsValid = validateRegisterForm3(subdata);
@@ -347,7 +347,6 @@ const AddUniversitySubjectRequirements = () => {
   };
 
   const handleDeleteDocuRequired2 = () => {
-    console.log(delData);
     setButtonStatus(true);
     setProgress3(true);
     remove(`AdditionalDocumentRequirement/Delete/${delData?.id}`).then(
@@ -442,7 +441,6 @@ const AddUniversitySubjectRequirements = () => {
                             }
                             name="educationLevelId"
                             id="educationLevelId"
-                            placeholder="Select Education Level"
                           />
 
                           {eduError && (
