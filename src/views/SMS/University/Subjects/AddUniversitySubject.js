@@ -1076,6 +1076,7 @@ const AddUniversitySubject = () => {
                           </Label>
                         </FormGroup>
                       </div>
+                      <span className="text-danger">{loanAvailableError}</span>
                     </FormGroup>
                     {isLoanAvailable === true && (
                       <FormGroup className="has-icon-left position-relative">
@@ -1092,6 +1093,7 @@ const AddUniversitySubject = () => {
                                 type="checkbox"
                                 onChange={(e) => {
                                   setGovtLoan(e.target.checked);
+                                  setLoanAvailableError("");
                                 }}
                                 checked={govtLoan}
                               />
@@ -1121,6 +1123,7 @@ const AddUniversitySubject = () => {
                                 type="checkbox"
                                 onChange={(e) => {
                                   setPrivateLoan(e.target.checked);
+                                  setLoanAvailableError("");
                                 }}
                                 checked={privateLoan}
                               />
