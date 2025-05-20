@@ -20,6 +20,7 @@ import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
+import DMYPicker from "../../../../components/form/DMYPicker";
 
 const ManageIntakes = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -49,6 +50,12 @@ const ManageIntakes = () => {
   const [subjectIds, setSubjectIds] = useState([]);
   const [expandIds, setExpandIds] = useState([]);
   const [agree, setAgree] = useState(false);
+  const [deadline, setDeadline] = useState("");
+
+  const handleDeadlineDate = (value) => {
+    setDate(value);
+    setDateError(false);
+  };
 
   const handleCollapsId = (i) => {
     const res = expandIds.filter((c) => c !== i);
@@ -183,6 +190,19 @@ const ManageIntakes = () => {
     const subdata = new FormData(e.target);
     console.log(checkIds);
     subdata.append(`subjects`, checkSubIds);
+
+    if (date && (statusValue === 1 || statusValue === 3)) {
+      if (subdata.has("deadline")) {
+        subdata.delete("deadline");
+      }
+
+      const formattedDate = moment(new Date(date)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      subdata.append("deadline", formattedDate);
+
+      console.log("Formatted date being sent:", formattedDate);
+    }
 
     if (validateForm()) {
       setButtonStatus(true);
@@ -547,32 +567,19 @@ const ManageIntakes = () => {
                           </span>
                         ) : null}
                       </div>
-                      {statusValue === 1 && (
-                        <div className="date-input mt-3">
-                          <span>
-                            <span className="text-danger">*</span> Application
-                            Deadline
-                          </span>
-                          <Input
-                            type="date"
+                      {(statusValue === 1 || statusValue === 3) && (
+                        <FormGroup className="has-icon-left position-relative mt-3">
+                          <DMYPicker
+                            label="Application Deadline"
+                            value={date}
+                            setValue={handleDeadlineDate}
+                            error={dateError}
+                            action={setDateError}
+                            required={true}
                             name="deadline"
                             id="deadline"
-                            value={date}
-                            onChange={(e) => {
-                              setDate(
-                                moment(new Date(e.target.value)).format(
-                                  "YYYY-MM-DD"
-                                )
-                              );
-                              setDateError(false);
-                            }}
                           />
-                          {dateError ? (
-                            <span className="text-danger">
-                              Date is required
-                            </span>
-                          ) : null}
-                        </div>
+                        </FormGroup>
                       )}
 
                       {checkSubIds.length > 0 && (
