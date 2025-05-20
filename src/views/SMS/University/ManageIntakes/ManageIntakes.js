@@ -46,6 +46,7 @@ const ManageIntakes = () => {
   const [progress5, setProgress5] = useState(false);
   const { addToast } = useToasts();
   const [date, setDate] = useState();
+  const [startDate, setStartDate] = useState();
   const [dateError, setDateError] = useState(false);
   const [subjectIds, setSubjectIds] = useState([]);
   const [expandIds, setExpandIds] = useState([]);
@@ -139,7 +140,7 @@ const ManageIntakes = () => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
-    setDate(getLastDateOfMonth(label));
+    // setDate(getLastDateOfMonth(label));
   };
 
   const selectStatusType = (label, value) => {
@@ -195,13 +196,20 @@ const ManageIntakes = () => {
       if (subdata.has("deadline")) {
         subdata.delete("deadline");
       }
-
       const formattedDate = moment(new Date(date)).format(
         "YYYY-MM-DD HH:mm:ss"
       );
       subdata.append("deadline", formattedDate);
+    }
 
-      console.log("Formatted date being sent:", formattedDate);
+    if (startDate && statusValue === 1) {
+      if (subdata.has("classStart")) {
+        subdata.delete("classStart");
+      }
+      const formattedDate = moment(new Date(startDate)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      subdata.append("classStart", formattedDate);
     }
 
     if (validateForm()) {
@@ -502,6 +510,7 @@ const ManageIntakes = () => {
                                         <thead>
                                           <th>Intake</th>
                                           <th>Status</th>
+                                          <th>Class Start Date</th>
                                           <th>Deadline</th>
                                         </thead>
                                         <tbody>
@@ -509,6 +518,7 @@ const ManageIntakes = () => {
                                             <tr key={k}>
                                               <td>{intake?.name}</td>
                                               <td>{intake?.status}</td>
+                                              <td>{intake?.classStart}</td>
                                               <td>{intake?.deadline}</td>
                                             </tr>
                                           ))}
@@ -578,6 +588,20 @@ const ManageIntakes = () => {
                             required={true}
                             name="deadline"
                             id="deadline"
+                          />
+                        </FormGroup>
+                      )}
+
+                      {statusValue === 1 && (
+                        <FormGroup className="has-icon-left position-relative mt-3">
+                          <DMYPicker
+                            label="Class Start Date"
+                            value={startDate}
+                            setValue={setStartDate}
+                            required={false}
+                            name="classStart"
+                            id="classStart"
+                            clear={true}
                           />
                         </FormGroup>
                       )}
