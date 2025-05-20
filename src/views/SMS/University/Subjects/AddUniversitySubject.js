@@ -93,8 +93,6 @@ const AddUniversitySubject = () => {
   const [govtLoanLinkError, setGovtLoanLinkError] = useState("");
   const [loanAvailableError, setLoanAvailableError] = useState("");
 
-  console.log(govtLoan, "govtloan");
-
   const [privateLoan, setPrivateLoan] = useState(false);
   const [privateLoanLink, setPrivateLoanLink] = useState("");
   const [privateLoanLinkError, setPrivateLoanLinkError] = useState("");

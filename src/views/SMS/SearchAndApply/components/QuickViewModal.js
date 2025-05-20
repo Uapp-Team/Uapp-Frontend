@@ -628,28 +628,34 @@ const QuickViewModal = ({
                     <div>
                       <span className="info-title">Loan Available</span>
                       <div>
-                        {subjectInfo?.isGovernmentLoan &&
-                          subjectInfo?.governmentLoanUrl && (
-                            <a
-                              href={`${subjectInfo.governmentLoanUrl}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <span>Government Loan</span>
-                            </a>
-                          )}
+                        {subjectInfo?.isGovernmentLoan && (
+                          <a
+                            href={
+                              subjectInfo.governmentLoanUrl
+                                ? subjectInfo.governmentLoanUrl
+                                : `#`
+                            }
+                            target={subjectInfo.governmentLoanUrl && "_blank"}
+                            rel="noopener noreferrer"
+                          >
+                            <span>Government Loan</span>
+                          </a>
+                        )}
                       </div>
                       <div>
-                        {subjectInfo?.isPrivateLoan &&
-                          subjectInfo?.privateLoanUrl && (
-                            <a
-                              href={subjectInfo.privateLoanUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Private Loan
-                            </a>
-                          )}
+                        {subjectInfo?.isPrivateLoan && (
+                          <a
+                            href={
+                              subjectInfo.privateLoanUrl
+                                ? subjectInfo.privateLoanUrl
+                                : `#`
+                            }
+                            target={subjectInfo.privateLoanUrl && "_blank"}
+                            rel="noopener noreferrer"
+                          >
+                            Private Loan
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
