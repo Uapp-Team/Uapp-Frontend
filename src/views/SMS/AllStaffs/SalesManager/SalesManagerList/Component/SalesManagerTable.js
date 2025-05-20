@@ -123,7 +123,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/staffProfile/${emp?.id}`}
+                    to={`/salesManagerProfile/${emp?.employeeId}`}
                   >
                     {emp?.fullName}
                   </Link>

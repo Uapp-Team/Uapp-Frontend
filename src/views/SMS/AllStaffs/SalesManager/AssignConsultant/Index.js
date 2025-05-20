@@ -119,6 +119,7 @@ const Index = () => {
                         <tr style={{ textAlign: "center" }}>
                           {/* <th>SL/NO</th> */}
                           <th>Name</th>
+                          <th>Email</th>
                           <th>Is Assigned</th>
                         </tr>
                       </thead>
@@ -130,6 +131,7 @@ const Index = () => {
                           >
                             {/* <th scope="row">{i + 1}</th> */}
                             <td>{con.consultantName}</td>
+                            <td>{con.consultantEmail}</td>
                             <td>
                               <input
                                 // className="form-check-input"
