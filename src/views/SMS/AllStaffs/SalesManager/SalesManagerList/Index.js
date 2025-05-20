@@ -56,7 +56,6 @@ const Index = (props) => {
     StaffPaging?.empValue ? StaffPaging?.empValue : 0
   );
   const [data, setData] = useState({});
-  console.log(data, "data naki");
   const [loading, setLoading] = useState(true);
 
   // for hide/unhide table column

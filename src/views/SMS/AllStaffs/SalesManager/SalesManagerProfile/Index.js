@@ -21,7 +21,6 @@ import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
 
 const SalesManagerProfile = ({ userId }) => {
   const { id } = useParams();
-  console.log(userId, id);
   const history = useHistory();
   const { addToast } = useToasts();
   const [employeeDetails, setemployeeDetails] = useState({});
