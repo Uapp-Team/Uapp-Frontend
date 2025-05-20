@@ -19,6 +19,7 @@ import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 import Uget from "../../../helpers/Uget";
 import SearchKeywordsU from "./components/SearchKeywordsU";
+import NoDataImage from "../../../assets/img/no-data-image.svg";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -604,7 +605,12 @@ function SearchAndApply() {
           </div>
         </>
       ) : (
-        <h3 className="text-center my-5 py-5">No data Found</h3>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
+          <img src={NoDataImage} alt="" />
+        </div>
       )}
 
       {loading ? null : (
