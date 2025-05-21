@@ -104,6 +104,7 @@ const LiveIntake = () => {
         }&searchText=${searchStr}`
       ).then((res) => {
         setLiveIntakeList(res?.items);
+        setLoading(false);
         setEntity(res?.total);
       });
     }

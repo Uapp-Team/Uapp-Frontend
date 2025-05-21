@@ -126,6 +126,54 @@ const StaffEligibility = lazy(() =>
   )
 );
 
+const SalesManagerRegistration = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/NavigationAndRegister/SalesManagerRegister"
+  )
+);
+
+const SalesManagerGeneralInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/GeneralInformation/Index"
+  )
+);
+
+const SalesManagerPersonalInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/PersonalInformation/Index"
+  )
+);
+
+const SalesManagerContactInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/ContactInformation/Index"
+  )
+);
+
+const SalesManagerEmergencyInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/EmergencyInformation/Index"
+  )
+);
+
+const SalesManagerEligibility = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/EligibilityInformation/Index.js"
+  )
+);
+
+const SalesManagerAssignConsultant = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesManager/AssignConsultant/Index.js")
+);
+
+const SalesManagerList = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesManager/SalesManagerList/Index.js")
+);
+
+const SalesManagerProfile = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesManager/SalesManagerProfile/Index.js")
+);
+
 const EmployeeList = lazy(() =>
   import("./views/SMS/AllStaffs/Staffs/StaffsList/Index.js")
 );
@@ -2682,6 +2730,84 @@ class AppRouter extends React.Component {
                     }
                   />
 
+                  {/* sales Manager paths */}
+
+                  <AppRoute
+                    exact
+                    path="/salesManagerList"
+                    component={
+                      permissions?.includes(permissionList?.View_Employee_list)
+                        ? SalesManagerList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    exact
+                    path="/salesManagerAssignConsultant/:salesManagerId/:branchId"
+                    component={
+                      permissions?.includes(permissionList?.View_Employee_list)
+                        ? SalesManagerAssignConsultant
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerRegistration"
+                    component={
+                      permissions.includes(permissionList?.Add_Employee)
+                        ? SalesManagerRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerGeneralInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_Employee)
+                        ? SalesManagerGeneralInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerContactInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_Employee)
+                        ? SalesManagerContactInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerEmergencyInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_Employee)
+                        ? SalesManagerEmergencyInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerPersonalInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_Employee)
+                        ? SalesManagerPersonalInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerEligibility/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_Employee)
+                        ? SalesManagerEligibility
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* sales Manager paths */}
+
                   {/* staff paths */}
 
                   <AppRoute
@@ -2781,6 +2907,7 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+
                   <AppRoute
                     path="/staffProfile/:id"
                     component={
@@ -2788,6 +2915,16 @@ class AppRouter extends React.Component {
                         permissionList?.View_Employee_Details
                       )
                         ? EmployeeProfile
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/salesManagerProfile/:id"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Employee_Details
+                      )
+                        ? SalesManagerProfile
                         : NotAuthorized
                     }
                   />
