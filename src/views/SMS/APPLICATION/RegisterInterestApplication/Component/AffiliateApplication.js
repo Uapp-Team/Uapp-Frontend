@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardBody,
@@ -19,16 +19,14 @@ import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
 import ColumnApplicationStudent from "../../../TableColumn/ColumnApplicationStudent.js";
 import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
 
-const CompanionApplication = ({ currentUser }) => {
+const AffiliateApplication = ({ currentUser }) => {
+  const componentRef = useRef();
   const referenceId = localStorage.getItem("referenceId");
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
-  const [enrollDD, setEnrollDD] = useState([]);
-  const [enrollLabel, setEnrollLabel] = useState("Enrolment Status");
-  const [enrollValue, setEnrollValue] = useState(0);
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -53,41 +51,27 @@ const CompanionApplication = ({ currentUser }) => {
   }, []);
 
   useEffect(() => {
-    get("EnrollmentStatusDD/Index").then((res) => {
-      setEnrollDD(res);
-    });
-  }, []);
-
-  useEffect(() => {
     if (currentUser != undefined) {
       get(
-        `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${referenceId}&enrollmentStatus=${false}`
+        `AffiliateApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&affiliateid=${referenceId}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
-        console.log("dsdsdsd", res);
         // setEntity(res?.totalEntity);
         // setSerialNumber(res?.firstSerialNumber);
       });
     }
-  }, [currentPage, currentUser, dataPerPage, referenceId, enrollValue]);
+  }, [currentPage, currentUser, dataPerPage, referenceId]);
 
   // toggle1 dropdown
   const toggle1 = () => {
     setDropdownOpen1((prev) => !prev);
   };
 
-  const selectEnrollDD = (label, value) => {
-    setEnrollLabel(label);
-    setEnrollValue(value);
-  };
-
   // toggle dropdown
   const toggle = () => {
     setDropdownOpen((prev) => !prev);
   };
-
-  const componentRef = useRef();
 
   // for hide/unhide column
 
@@ -100,7 +84,7 @@ const CompanionApplication = ({ currentUser }) => {
 
   return (
     <div>
-      <BreadCrumb title="Applications" backTo="" path="" />
+      <BreadCrumb title="Register Interest Applications" backTo="" path="" />
 
       <Card className="uapp-employee-search">
         <CardBody>
@@ -219,7 +203,15 @@ const CompanionApplication = ({ currentUser }) => {
                                 APP ID
                               </th>
                             ) : null}
-
+                            {/* {checkId ? (
+                      <th style={{ verticalAlign: "middle" }}>UAPP ID</th>
+                    ) : null} */}
+                            {/* {checkApplic ? (
+                      <th style={{ verticalAlign: "middle" }}>Applicant</th>
+                    ) : null} */}
+                            {/* {checkContact ? (
+                      <th style={{ verticalAlign: "middle" }}>Contact</th>
+                    ) : null} */}
                             {tableData[1]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 University
@@ -263,24 +255,7 @@ const CompanionApplication = ({ currentUser }) => {
                             <tr key={i}>
                               {tableData[0]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  <span>{app?.applicationViewId}</span>
-                                  <br />
-                                  <span>
-                                    {app?.isTBC === true && (
-                                      <span
-                                        style={{
-                                          borderRadius: "999px",
-                                          background: "#C1C6C6",
-                                          color: "#fff",
-                                          padding: "4px 10px",
-                                          fontSize: "12px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        TBC
-                                      </span>
-                                    )}
-                                  </span>
+                                  {app?.applicationViewId}
                                 </td>
                               ) : null}
 
@@ -349,4 +324,4 @@ const CompanionApplication = ({ currentUser }) => {
   );
 };
 
-export default CompanionApplication;
+export default AffiliateApplication;

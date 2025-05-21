@@ -65,7 +65,6 @@ const CompanionApplication = ({ currentUser }) => {
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
-        console.log("dsdsdsd", res);
         // setEntity(res?.totalEntity);
         // setSerialNumber(res?.firstSerialNumber);
       });
@@ -100,7 +99,7 @@ const CompanionApplication = ({ currentUser }) => {
 
   return (
     <div>
-      <BreadCrumb title="Applications" backTo="" path="" />
+      <BreadCrumb title="Register Interest Applications" backTo="" path="" />
 
       <Card className="uapp-employee-search">
         <CardBody>
@@ -263,24 +262,7 @@ const CompanionApplication = ({ currentUser }) => {
                             <tr key={i}>
                               {tableData[0]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  <span>{app?.applicationViewId}</span>
-                                  <br />
-                                  <span>
-                                    {app?.isTBC === true && (
-                                      <span
-                                        style={{
-                                          borderRadius: "999px",
-                                          background: "#C1C6C6",
-                                          color: "#fff",
-                                          padding: "4px 10px",
-                                          fontSize: "12px",
-                                          fontWeight: "500",
-                                        }}
-                                      >
-                                        TBC
-                                      </span>
-                                    )}
-                                  </span>
+                                  {app?.applicationViewId}
                                 </td>
                               ) : null}
 

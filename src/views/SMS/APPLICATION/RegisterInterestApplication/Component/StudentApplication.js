@@ -98,6 +98,7 @@ const StudentApplication = ({ currentUser }) => {
 
   const [chatOpen, setChatOpen] = useState(false);
   const [chatapp, setchatapp] = useState(null);
+  const [TBC, setTBC] = useState(true);
 
   const isChatOpen = () => {
     setChatOpen(!chatOpen);
@@ -357,7 +358,7 @@ const StudentApplication = ({ currentUser }) => {
   return (
     <div>
       <BreadCrumb
-        title="Applications"
+        title="Register Interest Applications"
         backTo={
           location.universityIdFromUniList != undefined
             ? "University"

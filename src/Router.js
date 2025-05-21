@@ -10,6 +10,7 @@ import { history } from "./history";
 import { ContextLayout } from "./utility/context/Layout";
 import AssociateApplication from "./views/SMS/APPLICATION/Applications/Component/AssociateApplication.js";
 import Compare from "./views/SMS/SearchAndApply/Compare.js";
+import RegisterInterestApplication from "./views/SMS/APPLICATION/RegisterInterestApplication/RegisterInterestApplication.js";
 // import CommissionSetting from "./views/SMS/Comission/CommisionSetting/CommissionSetting";
 
 // Authentication Checking
@@ -3821,6 +3822,17 @@ class AppRouter extends React.Component {
                         permissionList?.View_Application_List
                       )
                         ? Applications
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/register-interest-applications"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? RegisterInterestApplication
                         : NotAuthorized
                     }
                   />
