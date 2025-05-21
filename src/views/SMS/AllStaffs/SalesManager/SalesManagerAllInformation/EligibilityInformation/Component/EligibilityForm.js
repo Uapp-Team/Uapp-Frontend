@@ -297,7 +297,7 @@ const EligibilityForm = ({
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />
-            {permissions?.includes(permissionList?.Update_Employee) && (
+            {permissions?.includes(permissionList?.Update_SalesManager) && (
               <SaveButton
                 text="Save"
                 progress={progress}

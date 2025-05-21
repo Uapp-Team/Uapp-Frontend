@@ -344,7 +344,7 @@ const PersonalInformationForm = ({
         <Col lg="6" md="8">
           <FormGroup className="mt-4 d-flex justify-content-between">
             <PreviousButton action={goPrevious} />
-            {permissions?.includes(permissionList?.Update_Employee) && (
+            {permissions?.includes(permissionList?.Update_SalesManager) && (
               <SaveButton
                 text="Save and Next"
                 progress={progress}

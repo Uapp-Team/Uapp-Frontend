@@ -91,20 +91,27 @@ const SalesManagerTable = ({
                   </Link>
                 </td>
               ) : null}
-              {tableData[1]?.isActive ? (
-                <td>
-                  <div style={{ marginTop: "5px" }}>
-                    <span
-                      onClick={() =>
-                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
-                      }
-                      className="Count-fifth"
-                    >
-                      View({emp?.consultantCount})
-                    </span>
-                  </div>
-                </td>
-              ) : null}
+              {permissions?.includes(permissionList.Staff_Password_Change) ? (
+                <>
+                  {tableData[1]?.isActive ? (
+                    <td>
+                      <div style={{ marginTop: "5px" }}>
+                        <span
+                          onClick={() =>
+                            redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                          }
+                          className="Count-fifth"
+                        >
+                          View({emp?.consultantCount})
+                        </span>
+                      </div>
+                    </td>
+                  ) : null}
+                </>
+              ) : (
+                <td>{emp?.consultantCount}</td>
+              )}
+
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>
                   {tableData[2]?.isActive ? (
@@ -160,7 +167,7 @@ const SalesManagerTable = ({
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(
-                      permissionList.View_Employee_Details
+                      permissionList.View_SalesManager_Details
                     ) ? (
                       <ButtonForFunction
                         func={() => redirectToStaffProfile(emp?.employeeId)}
@@ -177,7 +184,7 @@ const SalesManagerTable = ({
                     emp?.email === "finance@uapp.uk" ? null : (
                       <>
                         {permissions.includes(
-                          permissionList?.Update_Employee
+                          permissionList?.Update_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() =>
@@ -190,7 +197,7 @@ const SalesManagerTable = ({
                         ) : null}
 
                         {permissions?.includes(
-                          permissionList.Delete_Employee
+                          permissionList.Delete_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() => toggleDanger(emp)}

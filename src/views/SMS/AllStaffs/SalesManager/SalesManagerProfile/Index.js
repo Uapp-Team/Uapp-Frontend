@@ -104,7 +104,7 @@ const SalesManagerProfile = ({ userId }) => {
   }, [id, userId]);
 
   const redirect = () => {
-    history.push(`/staffGeneralInfo/${id ? id : userId}`);
+    history.push(`/salesManagerGeneralInformation/${id ? id : userId}`);
   };
 
   // redirect to dashboard
@@ -394,10 +394,10 @@ const SalesManagerProfile = ({ userId }) => {
                                 >
                                   <div className="mr-1">
                                     {permissions?.includes(
-                                      permissionList.Update_Employee
+                                      permissionList.Update_SalesManager
                                     ) ? (
                                       <Link
-                                        to={`/staffGeneralInformation/${
+                                        to={`/salesManagerGeneralInformation/${
                                           id ? id : userId
                                         }`}
                                       >

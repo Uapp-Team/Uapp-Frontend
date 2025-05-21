@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
 
-const StuffColumnHide = ({
+const SalesManagerColumnHide = ({
   dropdownOpen1,
   toggle1,
   tableData,
@@ -88,4 +88,4 @@ const StuffColumnHide = ({
   );
 };
 
-export default StuffColumnHide;
+export default SalesManagerColumnHide;

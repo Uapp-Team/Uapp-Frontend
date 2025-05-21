@@ -337,7 +337,7 @@ const SalesManagerRegister = () => {
 
                 <FormGroup className="text-right">
                   <CancelButton cancel={ToBack} />
-                  {permissions?.includes(permissionList?.Add_Employee) && (
+                  {permissions?.includes(permissionList?.Add_SalesManager) && (
                     <SaveButton
                       text="Create Sales Manager"
                       progress={progress}

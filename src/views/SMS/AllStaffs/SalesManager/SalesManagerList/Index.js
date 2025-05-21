@@ -15,7 +15,7 @@ import put from "../../../../../helpers/put.js";
 import { tableIdList } from "../../../../../constants/TableIdConstant.js";
 import DropDownNumber from "./Component/DropDownNumber.js";
 import SelectAndClear from "./Component/SelectAndClear.js";
-import StuffColumnHide from "./Component/StuffColumnHide.js";
+import SalesManagerColumnHide from "./Component/SalesManagerColumnHide.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
 import ColumnStaff from "../../../TableColumn/ColumnStaff.js";
 import Loader from "../../../Search/Loader/Loader.js";
@@ -383,7 +383,7 @@ const Index = (props) => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_Employee) ? (
+                {permissions?.includes(permissionList?.Add_SalesManager) ? (
                   <ButtonForFunction
                     func={handleAddStaff}
                     className={"btn btn-uapp-add "}
@@ -418,20 +418,20 @@ const Index = (props) => {
 
                   {/* column hide unhide starts here */}
 
-                  <StuffColumnHide
+                  <SalesManagerColumnHide
                     dropdownOpen1={dropdownOpen1}
                     toggle1={toggle1}
                     tableData={tableData}
                     setTableData={setTableData}
                     handleChecked={handleChecked}
-                  ></StuffColumnHide>
+                  ></SalesManagerColumnHide>
 
                   {/* column hide unhide ends here */}
                 </div>
               </Col>
             </Row>
 
-            {permissions?.includes(permissionList?.View_Employee_list) && (
+            {permissions?.includes(permissionList?.View_SalesManager_list) && (
               <>
                 {loading ? (
                   <Loader />
