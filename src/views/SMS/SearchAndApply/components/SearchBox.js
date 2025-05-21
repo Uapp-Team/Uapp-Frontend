@@ -24,10 +24,11 @@ const SearchBox = ({
   studentId,
   subDepartmentId,
   departmentId,
-   cityId,
+  cityId,
   setIntakeListQuery,
   intakeListQuery,
-    studyLevelQuery
+  studyLevelQuery,
+  setCurrentPage,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
 
@@ -97,21 +98,34 @@ const SearchBox = ({
               label={countryName}
               setLabel={setCountryName}
               value={countryId}
-              setValue={setCountryId}
+              setValue={(newValue) => {
+                setCountryId(newValue);
+                if (typeof setCurrentPage === "function") {
+                  setCurrentPage(1);
+                }
+              }}
               selectAll={true}
               all="All Destination"
-              url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
+              url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                studyLevelQuery ? `&${studyLevelQuery}` : ""
+              }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
             />
           </span>
           <DefaultDropdownU
             label={institutionName}
             setLabel={setInstitutionName}
             value={institutionId}
-            setValue={setInstitutionId}
+            setValue={(newValue) => {
+              setInstitutionId(newValue);
+              if (typeof setCurrentPage === "function") {
+                setCurrentPage(1);
+              }
+            }}
             selectAll={true}
             all="All Institution"
-            url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${studyLevelQuery ? `&${studyLevelQuery}` : ''}${intakeListQuery ? `&${intakeListQuery}` : ''}`}
-
+            url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+              studyLevelQuery ? `&${studyLevelQuery}` : ""
+            }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
           />
         </div>
       </div>

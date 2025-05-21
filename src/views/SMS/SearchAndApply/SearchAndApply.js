@@ -477,6 +477,7 @@ function SearchAndApply() {
               intakeListQuery={intakeListQuery}
               subDepartmentId={subDepartmentId}
               studyLevelQuery={studyLevelQuery}
+              setCurrentPage={setCurrentPage}
             />
 
             <button
