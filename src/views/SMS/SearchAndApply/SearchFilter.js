@@ -315,10 +315,16 @@ const SearchFilter = ({
                 <Col xs={5}>
                   <Input
                     type="number"
-                    onChange={(e) =>
-                      setTuitionFee(e.target.value > 0 ? e.target.value : 0)
-                    }
-                    value={tuitionFee}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      if (inputValue === "" || isNaN(parseFloat(inputValue))) {
+                        setTuitionFee(0);
+                      } else {
+                        const numValue = parseFloat(inputValue);
+                        setTuitionFee(numValue >= 0 ? numValue : 0);
+                      }
+                    }}
+                    value={tuitionFee === 0 ? "" : tuitionFee}
                     min={0}
                   />
                 </Col>
