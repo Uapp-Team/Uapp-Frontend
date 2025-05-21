@@ -76,6 +76,7 @@ const ProviderDetails = () => {
             content={
               <ProviderStaffList
                 id={providerInfo?.providerId}
+                branchId={providerInfo?.branchId}
                 accountStatusId={providerInfo?.accountStatusId}
               />
             }

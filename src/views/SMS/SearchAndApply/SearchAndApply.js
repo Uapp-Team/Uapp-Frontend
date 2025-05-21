@@ -19,6 +19,7 @@ import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
 import Uget from "../../../helpers/Uget";
 import SearchKeywordsU from "./components/SearchKeywordsU";
+import NoDataImage from "../../../assets/img/no-data-image.svg";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -83,7 +84,14 @@ function SearchAndApply() {
     "Select Sub Department"
   );
   const [subjectId, setSubjectId] = useState(0);
-
+  const [comparedItems, setComparedItems] = useState(() => {
+    const savedItems = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return savedItems.map((item) => item.subjectId);
+  });
+  const [compareCount, setCompareCount] = useState(() => {
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return items.length;
+  });
   const [depList, setDepList] = useState([]);
 
   useEffect(() => {
@@ -271,6 +279,87 @@ function SearchAndApply() {
       });
   };
 
+  useEffect(() => {
+    // Update compare count from localStorage
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    setCompareCount(items.length);
+    setComparedItems(items.map((item) => item.subjectId));
+  }, [studentId]); // This will run whenever studentId changes
+
+  const handleAddToCompare = async (item) => {
+    let subjectInfo = null;
+    let eligibility = null;
+    let campusDeliverySchedule = [];
+
+    const intakeIds = item.intakeIds
+      ?.split(",")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    const existingArray =
+      JSON.parse(localStorage.getItem("comparedItems")) || [];
+
+    const itemIndex = existingArray.findIndex(
+      (savedItem) => savedItem.subjectId === item.subjectId
+    );
+
+    let updatedArray = [];
+
+    if (itemIndex === -1) {
+      setComparedItems((prev) => [...prev, item.subjectId]);
+      setCompareCount(existingArray.length + 1);
+    } else {
+      setComparedItems((prev) => prev.filter((id) => id !== item.subjectId));
+      setCompareCount(existingArray.length - 1);
+    }
+
+    try {
+      if (intakeIds.length > 0) {
+        const query = new URLSearchParams({
+          subjectId: item.subjectId.toString(),
+        });
+        intakeIds.forEach((id) => query.append("intakeIds", id.toString()));
+
+        const result = await Uget(
+          `SubjectIntake/GetCampusDeliveryScheduleBySubjectIntakes?${query.toString()}`
+        );
+        campusDeliverySchedule = result?.data?.deliverySchedules || [];
+      }
+
+      const eligibilityRes = await get(
+        `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
+      );
+      eligibility = eligibilityRes || null;
+
+      if (item.isLoanAvailable) {
+        const subjectInfoRes = await get(`Subject/Get/${item.subjectId}`);
+        subjectInfo = subjectInfoRes || null;
+      }
+    } catch (error) {
+      console.error("API error during compare add", error);
+    }
+
+    if (itemIndex === -1) {
+      const extendItems = {
+        ...item,
+        studentType: applicationTypelist,
+        subjectInfo,
+        eligibility,
+        campusDeliverySchedule,
+      };
+      updatedArray = [...existingArray, extendItems];
+    } else {
+      updatedArray = existingArray.filter(
+        (savedItem) => savedItem.subjectId !== item.subjectId
+      );
+    }
+
+    localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
+
+    // Update the compare count directly after modifying localStorage
+    setCompareCount(updatedArray.length);
+  };
+
   const handleSubmit = async (
     selectedCampusValue,
     selectedStudyModeId,
@@ -363,6 +452,7 @@ function SearchAndApply() {
                 selectAll={true}
                 all="All Student"
                 url="SearchFilter/Students"
+                name="studentId"
               />
             </Col>
           )}
@@ -387,6 +477,7 @@ function SearchAndApply() {
               intakeListQuery={intakeListQuery}
               subDepartmentId={subDepartmentId}
               studyLevelQuery={studyLevelQuery}
+              setCurrentPage={setCurrentPage}
             />
 
             <button
@@ -466,6 +557,7 @@ function SearchAndApply() {
               setIsSearch(true);
               value.setSidebar(true);
             }}
+            compareCount={compareCount}
           />
         </div>
       </div>
@@ -482,6 +574,8 @@ function SearchAndApply() {
               handleSubmit={handleSubmit}
               handleFavourite={handleFavourite}
               setSubjectId={setSubjectId}
+              comparedItems={comparedItems}
+              handleAddToCompare={handleAddToCompare}
             />
           </div>
 
@@ -494,6 +588,8 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             ) : (
               <ApplyCardHor
@@ -503,12 +599,19 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             )}
           </div>
         </>
       ) : (
-        <h3 className="text-center my-5 py-5">No data Found</h3>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
+          <img src={NoDataImage} alt="" />
+        </div>
       )}
 
       {loading ? null : (

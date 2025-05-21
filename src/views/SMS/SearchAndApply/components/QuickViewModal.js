@@ -2,8 +2,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { FaHeart } from "react-icons/fa";
-import { LuArrowUpRight, LuHeart, LuShare2 } from "react-icons/lu";
+import { LuArrowUpRight, LuShare2 } from "react-icons/lu";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { RxCross1 } from "react-icons/rx";
 import { useHistory } from "react-router-dom";
@@ -29,12 +28,15 @@ import Uget from "../../../../helpers/Uget";
 import "../SearchAndApply.css";
 import ApplyModal from "./ApplyModal";
 import {
+  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
   DurationIcon,
+  HeartIconFill,
+  HeartIconStock,
   LocationIcon,
   StudyModeIcon,
 } from "./icons";
@@ -132,9 +134,9 @@ const QuickViewModal = ({
               className="d-flex align-items-center justify-content-between mb-3"
             >
               <div className="d-flex">
-                {/* <div className="mr-2 icon-design">
+                <div className="mr-2 icon-design">
                   <ArrowLeftRightIcon />
-                </div> */}
+                </div>
                 <div className="mr-2 icon-design">
                   <LuShare2 size={16} />
                 </div>
@@ -150,7 +152,9 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <FaHeart size={16} color="orange" />
+                      <span>
+                        <HeartIconFill />
+                      </span>
                     </div>
                   ) : (
                     <div
@@ -163,7 +167,9 @@ const QuickViewModal = ({
                         )
                       }
                     >
-                      <LuHeart size={16} />
+                      <span>
+                        <HeartIconStock />
+                      </span>
                     </div>
                   )
                 ) : null}
@@ -622,28 +628,34 @@ const QuickViewModal = ({
                     <div>
                       <span className="info-title">Loan Available</span>
                       <div>
-                        {subjectInfo?.isGovernmentLoan &&
-                          subjectInfo?.governmentLoanUrl && (
-                            <a
-                              href={`${subjectInfo.governmentLoanUrl}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <span>Government Loan</span>
-                            </a>
-                          )}
+                        {subjectInfo?.isGovernmentLoan && (
+                          <a
+                            href={
+                              subjectInfo.governmentLoanUrl
+                                ? subjectInfo.governmentLoanUrl
+                                : `#`
+                            }
+                            target={subjectInfo.governmentLoanUrl && "_blank"}
+                            rel="noopener noreferrer"
+                          >
+                            <span>Government Loan</span>
+                          </a>
+                        )}
                       </div>
                       <div>
-                        {subjectInfo?.isPrivateLoan &&
-                          subjectInfo?.privateLoanUrl && (
-                            <a
-                              href={subjectInfo.privateLoanUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Private Loan
-                            </a>
-                          )}
+                        {subjectInfo?.isPrivateLoan && (
+                          <a
+                            href={
+                              subjectInfo.privateLoanUrl
+                                ? subjectInfo.privateLoanUrl
+                                : `#`
+                            }
+                            target={subjectInfo.privateLoanUrl && "_blank"}
+                            rel="noopener noreferrer"
+                          >
+                            Private Loan
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -663,7 +675,9 @@ const QuickViewModal = ({
                 <div className="mt-1">
                   {selectedIntakeId ? (
                     subjectIntake.flatMap((campus) => (
-                      <div key={index}>{campus.campusName}</div>
+                      <div className="mb-1" key={index}>
+                        {campus.campusName}
+                      </div>
                     ))
                   ) : (
                     <span>Please Select Intake First</span>
@@ -680,22 +694,29 @@ const QuickViewModal = ({
 
               <div className="mt-2">
                 {selectedIntakeId &&
-                  subjectIntake
-                    .flatMap((scheduleObj) =>
-                      scheduleObj?.deliverySchedule?.map((id) => {
+                  subjectIntake.map((scheduleObj, idx) => {
+                    const names = scheduleObj?.deliverySchedule
+                      ?.map((id) => {
                         const method = deliverySchedules.find(
                           (deliverySchedule) =>
                             deliverySchedule.id === parseInt(id, 10)
                         );
                         return method?.name;
                       })
-                    )
-                    .filter(Boolean)
-                    .map((name, index) => (
-                      <span className="footer-tag__inner" key={index}>
-                        {name}
-                      </span>
-                    ))}
+                      .filter(Boolean);
+
+                    if (!names?.length) return null;
+
+                    return (
+                      <div key={idx} className="mb-1">
+                        {names.map((name, index) => (
+                          <span className="footer-tag__inner mr-1" key={index}>
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </Row>

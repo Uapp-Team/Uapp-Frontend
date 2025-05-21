@@ -75,7 +75,7 @@ const StudentParentConsultant = ({ id }) => {
                   {consultantData?.parentConsultant}{" "}
                 </p>
               )} */}
-              <p> Consultant</p>
+              <p> Consultant </p>
             </div>
           </div>
 

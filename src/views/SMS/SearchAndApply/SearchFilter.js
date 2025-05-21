@@ -79,9 +79,6 @@ const SearchFilter = ({
   setIntakeListQuery,
   intakeListQuery,
 }) => {
-  console.log(countryId, "countryId");
-  console.log(cityId, "cityId");
-
   const divRef = useRef(null);
 
   const [loanList, setLoanList] = useState([]);
@@ -318,10 +315,16 @@ const SearchFilter = ({
                 <Col xs={5}>
                   <Input
                     type="number"
-                    onChange={(e) =>
-                      setTuitionFee(e.target.value > 0 ? e.target.value : 0)
-                    }
-                    value={tuitionFee}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      if (inputValue === "" || isNaN(parseFloat(inputValue))) {
+                        setTuitionFee(0);
+                      } else {
+                        const numValue = parseFloat(inputValue);
+                        setTuitionFee(numValue >= 0 ? numValue : 0);
+                      }
+                    }}
+                    value={tuitionFee === 0 ? "" : tuitionFee}
                     min={0}
                   />
                 </Col>
@@ -349,7 +352,7 @@ const SearchFilter = ({
             </div>
 
             <div className="border rounded p-16px mb-3 bg-white">
-              <p className="fw-500">Loan available </p>
+              <p className="fw-500">Loan Available </p>
 
               <CheckBoxByObj
                 register={() => {}}
@@ -392,7 +395,7 @@ const SearchFilter = ({
                     />
                   </svg>
                 </span>
-                <span> Course durations</span>
+                <span> Course Durations</span>
               </p>
 
               <MultiSelectU

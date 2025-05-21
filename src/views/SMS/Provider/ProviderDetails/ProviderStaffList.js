@@ -8,13 +8,15 @@ import AddButton from "../../../../components/buttons/AddButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 // import Popover from "react-popover";
 import { Popover } from "react-tiny-popover";
+import { useHistory } from "react-router";
 
-const ProviderStaffList = ({ id, accountStatusId }) => {
+const ProviderStaffList = ({ id, accountStatusId, branchId }) => {
   const [data, setData] = useState([]);
   const [designated, setDesignated] = useState({});
   const [loading, setLoading] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [popoverOpen, setPopoverOpen] = useState("");
+  const history = useHistory();
 
   // const togglePopover = () => {
   //   setIsOpen(!isOpen);
@@ -24,7 +26,6 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
     get(`ProviderProfile/Staffs/${id}`).then((action) => {
       setData(action);
       setLoading(false);
-      console.log(action);
     });
   }, [id]);
 
@@ -34,6 +35,13 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
       setLoading(false);
     });
   }, [id]);
+
+  const redirectToAssignPage = (id) => {
+    history.push({
+      pathname: `/addAdmissionManager/${id}`,
+      branchId: branchId,
+    });
+  };
 
   return (
     <>
@@ -79,12 +87,24 @@ const ProviderStaffList = ({ id, accountStatusId }) => {
                   {permissions?.includes(
                     permissionList.Add_AdmissionManager
                   ) ? (
+                    <span onClick={() => redirectToAssignPage(id)}>
+                      <AddButton />
+                    </span>
+                  ) : null}
+                </>
+              )}
+              {/* {accountStatusId === 1 ? null : (
+                <>
+                  {" "}
+                  {permissions?.includes(
+                    permissionList.Add_AdmissionManager
+                  ) ? (
                     <Link to={`/addAdmissionManager/${id}`}>
                       <AddButton />
                     </Link>
                   ) : null}
                 </>
-              )}
+              )} */}
             </div>
             {data?.admissionManagers?.length === 0 ? (
               <p>No Admission Manager Found</p>

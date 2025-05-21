@@ -33,6 +33,12 @@ const DropdownCircle = ({
     setLabel(label);
     setValue(value);
     setError && setError(false);
+
+    // Clear comparedItems in localStorage when a new value is selected
+    if (name === "studentId" || name === "student") {
+      localStorage.setItem("comparedItems", JSON.stringify([]));
+    }
+
     action && action(label, value);
   };
 

@@ -35,10 +35,13 @@ import PopOverText from "../../../components/PopOverText";
 import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 import Uget from "../../../helpers/Uget.js";
 import { dateFormate } from "../../../components/date/calenderFormate.js";
+import { userTypes } from "../../../constants/userTypeConstant.js";
 
 const ConsultantByCompanion = () => {
   const associates = JSON.parse(sessionStorage.getItem("associates"));
   const { id } = useParams();
+  const userType = localStorage.getItem("userType");
+
   const [companionList, setCompanionList] = useState([]);
   const [companionEntity, setCompanionEntity] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -90,9 +93,7 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
-        id ? id : referenceId
-      }`
+      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${0}`
     ).then((res) => {
       console.log(res);
       setCompanionList(res?.items);
@@ -223,17 +224,18 @@ const ConsultantByCompanion = () => {
           <CardBody>
             <Row className="mb-3">
               <Col lg="5" md="5" sm="12" xs="12">
-                <div className="d-flex">
-                  <div>
-                    <ButtonForFunction
-                      func={handleAddCompanion}
-                      className={"btn btn-uapp-add "}
-                      icon={<i className="fas fa-plus"></i>}
-                      name={" Add Companion"}
-                      permission={6}
-                    />
-                  </div>
-                  {/* <div className="mx-3">
+                {userType !== userTypes?.SalesManager && (
+                  <div className="d-flex">
+                    <div>
+                      <ButtonForFunction
+                        func={handleAddCompanion}
+                        className={"btn btn-uapp-add "}
+                        icon={<i className="fas fa-plus"></i>}
+                        name={" Add Companion"}
+                        permission={6}
+                      />
+                    </div>
+                    {/* <div className="mx-3">
                       <ButtonForFunction
                         func={() => setModalOpenCompanion(true)}
                         className={"btn btn-uapp-add "}
@@ -242,7 +244,8 @@ const ConsultantByCompanion = () => {
                         permission={6}
                       />
                     </div> */}
-                </div>
+                  </div>
+                )}
               </Col>
 
               <Col lg="7" md="7" sm="12" xs="12">

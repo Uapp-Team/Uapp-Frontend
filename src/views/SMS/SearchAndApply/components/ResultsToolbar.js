@@ -1,10 +1,11 @@
 import React from "react";
 import { FaExchangeAlt, FaHeart } from "react-icons/fa";
-import { LuHeart } from "react-icons/lu";
 import { TfiViewGrid, TfiViewList } from "react-icons/tfi";
+import { useHistory } from "react-router-dom";
 import courseIcon from "../../../../assets/icon/course.svg";
 import { Student } from "../../../../components/core/User";
 import "../SearchAndApply.css";
+import { ArrowLeftRightIcon, HeartIconFill, HeartIconStock } from "./icons";
 
 const ResultsToolbar = ({
   data,
@@ -14,7 +15,9 @@ const ResultsToolbar = ({
   mobileCard,
   setMobileCard,
   setFilterOpen,
+  compareCount,
 }) => {
+  const router = useHistory();
   return (
     <>
       <div className="d-none d-md-block">
@@ -48,21 +51,20 @@ const ResultsToolbar = ({
                 className={`action-btn mr-2 ${isFavorite && "tag-active"}`}
                 onClick={() => setIsFavorite(!isFavorite)}
               >
-                <LuHeart
-                  className="mx-2"
-                  color={isFavorite ? "orange" : "black"}
-                  fill={isFavorite ? "orange" : "black"}
-                />{" "}
-                Favourites{" "}
+                {isFavorite ? <HeartIconFill /> : <HeartIconStock />}
+                <span className="pl-2"> Favourites</span>
                 <span className="count">{favorites ? favorites : "0"}</span>
               </button>
             )}
-            {/* <button className="action-btn mr-2">
+            <button
+              className="action-btn mr-2"
+              onClick={() => router.push("/compare")}
+            >
               <span className="mr-2">
                 <ArrowLeftRightIcon />
               </span>{" "}
-              Compare <span className="count">0</span>
-            </button> */}
+              Compare <span className="count">{compareCount}</span>
+            </button>
             <button
               className="action-btn mr-2 d-none d-md-block"
               onClick={() => setMobileCard(!mobileCard)}

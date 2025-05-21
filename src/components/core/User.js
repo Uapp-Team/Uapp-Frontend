@@ -4,6 +4,8 @@ const userType = localStorage.getItem("userType");
 
 export const referenceId = localStorage.getItem("referenceId");
 
+export const CurrentUserInfo = JSON.parse(localStorage.getItem("current_user"));
+
 export const SystemAdmin = () => {
   const result = userType === userTypes?.SystemAdmin;
   return result;

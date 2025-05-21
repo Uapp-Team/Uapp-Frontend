@@ -26,12 +26,15 @@ import ApplyModal from "./ApplyModal";
 import CustomToolTip from "./CustomToolTip";
 import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
+  ArrowLeftRightIcon,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
   DeliverPatternIcon,
   DepositIcon,
   DonationIcon,
+  HeartIconFill,
+  HeartIconStock,
   LocationIcon,
   MoneyIcon,
   ShareIcon,
@@ -48,6 +51,8 @@ const ApplyCardHor = ({
   setSubjectId,
   handleFavourite,
   handleSubmit,
+  comparedItems,
+  handleAddToCompare,
 }) => {
   const [open, setOpen] = useState(false);
   const [openApplyModal, setOpenApplyModal] = useState(false);
@@ -169,15 +174,23 @@ const ApplyCardHor = ({
                       </div>
                     )}
                   </div>
-                  {/* <span className="mr-3 cursor-pointer">
+                  <span
+                    className="mr-2 cursor-pointer icon"
+                    onClick={() => handleAddToCompare(item)}
+                    style={{
+                      backgroundColor: comparedItems.includes(item.subjectId)
+                        ? "#EFF2F2"
+                        : "#FFF",
+                    }}
+                  >
                     <ArrowLeftRightIcon />
-                  </span> */}
-                  <span className="mr-3 cursor-pointer">
+                  </span>
+                  <span className="mr-3 cursor-pointer icon">
                     <ShareIcon />
                   </span>
                   {Student() ? (
                     item.isFavorite ? (
-                      <FaHeart
+                      <span
                         onClick={() =>
                           handleFavourite(
                             item.isFavorite,
@@ -185,11 +198,12 @@ const ApplyCardHor = ({
                             index
                           )
                         }
-                        className="cursor-pointer"
-                        color="orange"
-                      />
+                        className="cursor-pointer icon"
+                      >
+                        <HeartIconFill />
+                      </span>
                     ) : (
-                      <LuHeart
+                      <span
                         onClick={() =>
                           handleFavourite(
                             item.isFavorite,
@@ -197,8 +211,10 @@ const ApplyCardHor = ({
                             index
                           )
                         }
-                        className="cursor-pointer"
-                      />
+                        className="cursor-pointer icon"
+                      >
+                        <HeartIconStock />
+                      </span>
                     )
                   ) : null}
                 </div>

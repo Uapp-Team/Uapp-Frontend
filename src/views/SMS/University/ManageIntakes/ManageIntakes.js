@@ -20,6 +20,7 @@ import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
+import DMYPicker from "../../../../components/form/DMYPicker";
 
 const ManageIntakes = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -45,10 +46,17 @@ const ManageIntakes = () => {
   const [progress5, setProgress5] = useState(false);
   const { addToast } = useToasts();
   const [date, setDate] = useState();
+  const [startDate, setStartDate] = useState();
   const [dateError, setDateError] = useState(false);
   const [subjectIds, setSubjectIds] = useState([]);
   const [expandIds, setExpandIds] = useState([]);
   const [agree, setAgree] = useState(false);
+  const [deadline, setDeadline] = useState("");
+
+  const handleDeadlineDate = (value) => {
+    setDate(value);
+    setDateError(false);
+  };
 
   const handleCollapsId = (i) => {
     const res = expandIds.filter((c) => c !== i);
@@ -132,7 +140,7 @@ const ManageIntakes = () => {
     setIntakeError(false);
     setIntakeLabel(label);
     setIntakeValue(value);
-    setDate(getLastDateOfMonth(label));
+    // setDate(getLastDateOfMonth(label));
   };
 
   const selectStatusType = (label, value) => {
@@ -183,6 +191,26 @@ const ManageIntakes = () => {
     const subdata = new FormData(e.target);
     console.log(checkIds);
     subdata.append(`subjects`, checkSubIds);
+
+    if (date && (statusValue === 1 || statusValue === 3)) {
+      if (subdata.has("deadline")) {
+        subdata.delete("deadline");
+      }
+      const formattedDate = moment(new Date(date)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      subdata.append("deadline", formattedDate);
+    }
+
+    if (startDate && statusValue === 1) {
+      if (subdata.has("classStart")) {
+        subdata.delete("classStart");
+      }
+      const formattedDate = moment(new Date(startDate)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
+      subdata.append("classStart", formattedDate);
+    }
 
     if (validateForm()) {
       setButtonStatus(true);
@@ -482,6 +510,7 @@ const ManageIntakes = () => {
                                         <thead>
                                           <th>Intake</th>
                                           <th>Status</th>
+                                          <th>Class Start Date</th>
                                           <th>Deadline</th>
                                         </thead>
                                         <tbody>
@@ -489,6 +518,7 @@ const ManageIntakes = () => {
                                             <tr key={k}>
                                               <td>{intake?.name}</td>
                                               <td>{intake?.status}</td>
+                                              <td>{intake?.classStart}</td>
                                               <td>{intake?.deadline}</td>
                                             </tr>
                                           ))}
@@ -547,32 +577,33 @@ const ManageIntakes = () => {
                           </span>
                         ) : null}
                       </div>
-                      {statusValue === 1 && (
-                        <div className="date-input mt-3">
-                          <span>
-                            <span className="text-danger">*</span> Application
-                            Deadline
-                          </span>
-                          <Input
-                            type="date"
+                      {(statusValue === 1 || statusValue === 3) && (
+                        <FormGroup className="has-icon-left position-relative mt-3">
+                          <DMYPicker
+                            label="Application Deadline"
+                            value={date}
+                            setValue={handleDeadlineDate}
+                            error={dateError}
+                            action={setDateError}
+                            required={true}
                             name="deadline"
                             id="deadline"
-                            value={date}
-                            onChange={(e) => {
-                              setDate(
-                                moment(new Date(e.target.value)).format(
-                                  "YYYY-MM-DD"
-                                )
-                              );
-                              setDateError(false);
-                            }}
                           />
-                          {dateError ? (
-                            <span className="text-danger">
-                              Date is required
-                            </span>
-                          ) : null}
-                        </div>
+                        </FormGroup>
+                      )}
+
+                      {statusValue === 1 && (
+                        <FormGroup className="has-icon-left position-relative mt-3">
+                          <DMYPicker
+                            label="Class Start Date"
+                            value={startDate}
+                            setValue={setStartDate}
+                            required={false}
+                            name="classStart"
+                            id="classStart"
+                            clear={true}
+                          />
+                        </FormGroup>
                       )}
 
                       {checkSubIds.length > 0 && (
