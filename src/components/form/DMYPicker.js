@@ -12,12 +12,17 @@ const DMYPicker = ({
   action,
   required = false,
   width = "100%",
+  clear = false,
 }) => {
   const handleDate = (date) => {
     if (date) {
       // Use Moment.js to format the date consistently
       const formattedDate = date.format("YYYY-MM-DD");
       setValue(formattedDate);
+      action && action();
+    } else {
+      // This handles the case when the clear button is clicked
+      setValue("");
       action && action();
     }
   };
@@ -37,6 +42,7 @@ const DMYPicker = ({
         placeholder="dd/mm/yyyy"
         name={name}
         id={id}
+        allowClear={clear}
       />
       <span className="text-danger">{error}</span>
     </>

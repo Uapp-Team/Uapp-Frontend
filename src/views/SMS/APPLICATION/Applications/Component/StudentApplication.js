@@ -276,7 +276,6 @@ const StudentApplication = ({ currentUser }) => {
       get(`Application/GetByStudent`).then((res) => {
         setLoading(false);
         setApplicationList(res);
-        console.log("dsdsdsd", res);
         // setEntity(res?.totalEntity);
         // setSerialNumber(res?.firstSerialNumber);
       });
@@ -557,17 +556,32 @@ const StudentApplication = ({ currentUser }) => {
                           {applicationList?.map((app, i) => (
                             <tr key={i}>
                               {tableData[0]?.isActive ? (
-                                <td
-                                  style={{ verticalAlign: "middle" }}
-                                  className="cursor-pointer hyperlink-hover"
-                                >
-                                  <Link
-                                    className="text-id hover"
-                                    to={`/applicationDetails/${app?.id}/${app?.studentId}`}
-                                  >
-                                    {app?.applicationViewId}
-                                  </Link>
-                                </td>
+                                <>
+                                  <td style={{ verticalAlign: "middle" }}>
+                                    <div className="cursor-pointer hyperlink-hover mb-2">
+                                      <Link
+                                        className="text-id hover"
+                                        to={`/applicationDetails/${app?.id}/${app?.studentId}`}
+                                      >
+                                        {app?.applicationViewId}
+                                      </Link>
+                                    </div>
+                                    {app?.isTBC === true && (
+                                      <span
+                                        style={{
+                                          borderRadius: "999px",
+                                          background: "#C1C6C6",
+                                          color: "#fff",
+                                          padding: "4px 10px",
+                                          fontSize: "12px",
+                                          fontWeight: "500",
+                                        }}
+                                      >
+                                        TBC
+                                      </span>
+                                    )}
+                                  </td>
+                                </>
                               ) : null}
 
                               {/* {checkId ? (

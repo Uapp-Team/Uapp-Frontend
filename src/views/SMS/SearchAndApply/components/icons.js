@@ -356,6 +356,47 @@ export function ArrowLeftRightIcon() {
   );
 }
 
+export function ArrowLeftRightIconGreen() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="16"
+      viewBox="0 0 17 16"
+      fill="none"
+    >
+      <path
+        d="M13.6666 11.333H3"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M11.668 9.33301C11.668 9.33301 13.668 10.806 13.668 11.333C13.668 11.8601 11.668 13.333 11.668 13.333"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M3.66797 4.66699H13.6679"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M4.99998 2.66699C4.99998 2.66699 3 4.13997 3 4.66701C2.99999 5.19405 5 6.66699 5 6.66699"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon() {
   return (
     <svg
@@ -375,6 +416,46 @@ export function ArrowRightIcon() {
       <path
         d="M15.0001 17C15.0001 17 20 13.3176 20 12C20 10.6824 15 7 15 7"
         stroke="white"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        d="M13.1191 16.2373C13.1191 16.2373 6.88135 11.6433 6.88135 9.99951C6.88135 8.35565 13.1191 3.76172 13.1191 3.76172"
+        stroke="#5D5D5D"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ArrowDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="21"
+      viewBox="0 0 20 21"
+      fill="none"
+    >
+      <path
+        d="M16.2373 7.38091C16.2373 7.38091 11.6433 13.6187 9.99951 13.6187C8.35565 13.6187 3.76172 7.38086 3.76172 7.38086"
+        stroke="#5D5D5D"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -556,6 +637,63 @@ export function DurationIcon() {
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function DeleteIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 17 17"
+      fill="none"
+    >
+      <path
+        d="M12.334 4.5L4.33398 12.5M4.33398 4.5L12.334 12.5"
+        stroke="#494949"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function HeartIconFill() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="16"
+      viewBox="0 0 19 16"
+      fill="none"
+    >
+      <path
+        d="M9.66808 16L8.40377 14.8665C6.93601 13.5441 5.72257 12.4033 4.76344 11.4441C3.80432 10.485 3.04137 9.62398 2.47462 8.86104C1.90786 8.09809 1.51185 7.39691 1.28661 6.75749C1.06136 6.11807 0.94873 5.46412 0.94873 4.79564C0.94873 3.42961 1.4065 2.28883 2.32203 1.3733C3.23756 0.457766 4.37834 0 5.74437 0C6.50005 0 7.21939 0.159855 7.90241 0.479564C8.58542 0.799273 9.17398 1.24977 9.66808 1.83106C10.1622 1.24977 10.7507 0.799273 11.4337 0.479564C12.1168 0.159855 12.8361 0 13.5918 0C14.9578 0 16.0986 0.457766 17.0141 1.3733C17.9297 2.28883 18.3874 3.42961 18.3874 4.79564C18.3874 5.46412 18.2748 6.11807 18.0495 6.75749C17.8243 7.39691 17.4283 8.09809 16.8615 8.86104C16.2948 9.62398 15.5318 10.485 14.5727 11.4441C13.6136 12.4033 12.4001 13.5441 10.9324 14.8665L9.66808 16Z"
+        fill="#FC7300"
+      />
+    </svg>
+  );
+}
+
+export function HeartIconStock() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="16"
+      viewBox="0 0 19 16"
+      fill="none"
+    >
+      <path
+        d="M13.5913 0.75C14.6971 0.75 15.5985 1.09031 16.3384 1.76465L16.4839 1.90332C17.2504 2.66982 17.6372 3.61661 17.6372 4.7959C17.6372 5.37804 17.5396 5.94753 17.3423 6.50781C17.1739 6.98595 16.8834 7.53194 16.4526 8.14648L16.2593 8.41406C15.8559 8.95705 15.3415 9.56156 14.7114 10.2275L14.0425 10.9141C13.0961 11.8605 11.8933 12.9911 10.4321 14.3076L9.66748 14.9922L8.90479 14.3076H8.90381C7.44266 12.9911 6.23987 11.8605 5.29346 10.9141C4.46818 10.0888 3.8017 9.34778 3.2876 8.69043L3.07666 8.41406C2.60564 7.78 2.27737 7.21502 2.07373 6.71777L1.99365 6.50781C1.79635 5.94755 1.69876 5.37801 1.69873 4.7959C1.69873 3.69034 2.03929 2.78965 2.71338 2.0498L2.85205 1.90332C3.61855 1.13682 4.56534 0.75 5.74463 0.75C6.30986 0.750032 6.84829 0.853591 7.36475 1.0625L7.58447 1.15918C8.16869 1.43267 8.67102 1.81633 9.09619 2.31641L9.66846 2.98926L10.2397 2.31641C10.6119 1.87871 11.0431 1.53017 11.5366 1.2666L11.7515 1.15918C12.3346 0.886221 12.9455 0.750066 13.5913 0.75Z"
+        fill="#FC7300"
+        fill-opacity="0.05"
+        stroke="#FC7300"
+        stroke-width="1.5"
       />
     </svg>
   );

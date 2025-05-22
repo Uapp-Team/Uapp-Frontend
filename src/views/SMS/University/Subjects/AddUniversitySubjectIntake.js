@@ -58,7 +58,7 @@ const AddUniversitySubjectIntake = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [progress, setProgress] = useState(false);
 
-  const [date, setDate] = useState();
+  const [date, setDate] = useState("");
   const [dateError, setDateError] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [startdateError, setstartDateError] = useState(false);
@@ -126,6 +126,9 @@ const AddUniversitySubjectIntake = () => {
     }
   };
 
+  // console.log(!(new Date(date) > new Date()));
+  // console.log(new Date(date), new Date());
+
   const validateForm = () => {
     let isFormValid = true;
 
@@ -137,7 +140,10 @@ const AddUniversitySubjectIntake = () => {
       isFormValid = false;
       setStatusError(true);
     }
-    if (!date && (statusValue === 1 || statusValue === 3)) {
+    if (
+      !(new Date(date) > new Date()) &&
+      (statusValue === 1 || statusValue === 3)
+    ) {
       isFormValid = false;
       setDateError(true);
     }

@@ -17,6 +17,9 @@ import SearchKeywords from "./components/SearchKeywords";
 import SearchPaginations from "./components/SearchPaginations";
 import "./SearchAndApply.css";
 import SearchFilter from "./SearchFilter";
+import Uget from "../../../helpers/Uget";
+import SearchKeywordsU from "./components/SearchKeywordsU";
+import NoDataImage from "../../../assets/img/no-data-image.svg";
 
 function SearchAndApply() {
   const value = useContextData();
@@ -32,7 +35,7 @@ function SearchAndApply() {
   const [dataPerPage, setDataPerPage] = useState(12);
   const [data, setData] = useState({});
   const [favorites, setFavorites] = useState(0);
-
+  const referenceId = localStorage.getItem("referenceId");
   const screenWidth = window.innerWidth;
 
   // list
@@ -41,6 +44,7 @@ function SearchAndApply() {
   const [applicationTypeSelected, setApplicationTypeSelected] = useState([]);
   const [intakeList, setIntakeList] = useState([]);
   const [studyLevelList, setStudyLevelList] = useState([]);
+
   const [courseDurationsList, setCourseDurationsList] = useState([]);
 
   // Filter Data State
@@ -52,6 +56,7 @@ function SearchAndApply() {
   const [institutionId, setInstitutionId] = useState(0);
   const [studyLevelId, setStudyLevelId] = useState([]);
   const [intakeId, setIntakeId] = useState([]);
+
   const [countryId, setCountryId] = useState(0);
   const [cityId, setCityId] = useState(0);
   const [depId, setDepId] = useState(0);
@@ -70,6 +75,7 @@ function SearchAndApply() {
   // level
   const [studentName, setStudentName] = useState("Select Student");
   const [studyLevelQuery, setStudyLevelQuery] = useState("");
+  const [intakeListQuery, setIntakeListQuery] = useState("");
   const [institutionName, setInstitutionName] = useState("Select Institution");
   const [countryName, setCountryName] = useState("Select your destination");
   const [cityName, setCityName] = useState("Select City");
@@ -77,9 +83,15 @@ function SearchAndApply() {
   const [subDepartmentName, setSubDepartmentName] = useState(
     "Select Sub Department"
   );
-  const referenceId = localStorage.getItem("referenceId");
   const [subjectId, setSubjectId] = useState(0);
-
+  const [comparedItems, setComparedItems] = useState(() => {
+    const savedItems = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return savedItems.map((item) => item.subjectId);
+  });
+  const [compareCount, setCompareCount] = useState(() => {
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    return items.length;
+  });
   const [depList, setDepList] = useState([]);
 
   useEffect(() => {
@@ -90,11 +102,27 @@ function SearchAndApply() {
     });
   }, [studentId]);
 
-  useEffect(() => {
-    get("SearchFilter/Departments").then((res) => {
-      setDepList([{ id: 0, name: "All Departments" }, ...res]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   console.log("subDepartmentId", cityId);
+  //   Uget(
+  //     `SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
+  //       studyLevelQuery ? `&${studyLevelQuery}` : ""
+  //     }${intakeListQuery ? `&${intakeListQuery}` : ""}`
+  //   ).then((res) => {
+  //     setDepList([{ id: 0, name: "All Departments" }, ...res.data]);
+  //     console.log(res?.data);
+  //     subDepartmentId > 0 && setDepId(res?.data[0].id);
+  //     subDepartmentId > 0 && setDepartmentName(res?.data[0].name);
+  //   });
+  // }, [
+  //   cityId,
+  //   countryId,
+  //   institutionId,
+  //   intakeListQuery,
+  //   studentId,
+  //   studyLevelQuery,
+  //   subDepartmentId,
+  // ]);
 
   useEffect(() => {
     if (departmentId > 0 && depList && depList?.length > 0) {
@@ -113,6 +141,26 @@ function SearchAndApply() {
         : applicationTypelist;
     setApplicationTypeSelected(listData);
   }, [applicationType, applicationTypelist]);
+
+  useEffect(() => {
+    const studyLevelListQuery = studyLevelId
+      .map((id) => `educationLevelIds=${id}`)
+      .join("&");
+
+    const converttostring = studyLevelListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setStudyLevelQuery(converted);
+  }, [setStudyLevelQuery, studyLevelId]);
+
+  useEffect(() => {
+    const intakeListQuery = intakeId.map((id) => `intakeIds=${id}`).join("&");
+
+    const converttostring = intakeListQuery.toString();
+    const noSpaces = converttostring.replace(/ /g, "");
+    const converted = noSpaces.replace(/,/g, "&");
+    setIntakeListQuery(converted);
+  }, [setIntakeListQuery, intakeId]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -231,6 +279,97 @@ function SearchAndApply() {
       });
   };
 
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
+    setCompareCount(items.length);
+    const identifiers = items.map(
+      (item) => `${item.subjectId}-${item.originalIndex}`
+    );
+    setComparedItems(identifiers);
+  }, [studentId]);
+
+  const handleAddToCompare = async (item, index) => {
+    let subjectInfo = null;
+    let eligibility = null;
+    let campusDeliverySchedule = [];
+
+    const intakeIds = item.intakeIds
+      ?.split(",")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    const existingArray =
+      JSON.parse(localStorage.getItem("comparedItems")) || [];
+
+    const itemIndex = existingArray.findIndex(
+      (savedItem) =>
+        savedItem.subjectId === item.subjectId &&
+        savedItem.originalIndex === index
+    );
+
+    let updatedArray = [];
+
+    if (itemIndex === -1) {
+      setComparedItems((prev) => [...prev, `${item.subjectId}-${index}`]);
+      setCompareCount(existingArray.length + 1);
+    } else {
+      setComparedItems((prev) =>
+        prev.filter((id) => id !== `${item.subjectId}-${index}`)
+      );
+      setCompareCount(existingArray.length - 1);
+    }
+
+    try {
+      if (intakeIds.length > 0) {
+        const query = new URLSearchParams({
+          subjectId: item.subjectId.toString(),
+        });
+        intakeIds.forEach((id) => query.append("intakeIds", id.toString()));
+
+        const result = await Uget(
+          `SubjectIntake/GetCampusDeliveryScheduleBySubjectIntakes?${query.toString()}`
+        );
+        campusDeliverySchedule = result?.data?.deliverySchedules || [];
+      }
+
+      const eligibilityRes = await get(
+        `Eligibility/ShowEligibility/${item.universityId}/${item.subjectId}`
+      );
+      eligibility = eligibilityRes || null;
+
+      if (item.isLoanAvailable) {
+        const subjectInfoRes = await get(`Subject/Get/${item.subjectId}`);
+        subjectInfo = subjectInfoRes || null;
+      }
+    } catch (error) {
+      console.error("API error during compare add", error);
+    }
+
+    if (itemIndex === -1) {
+      const extendedItem = {
+        ...item,
+        studentType: applicationTypelist,
+        subjectInfo,
+        eligibility,
+        campusDeliverySchedule,
+        originalIndex: index,
+      };
+      updatedArray = [...existingArray, extendedItem];
+    } else {
+      updatedArray = existingArray.filter(
+        (savedItem) =>
+          !(
+            savedItem.subjectId === item.subjectId &&
+            savedItem.originalIndex === index
+          )
+      );
+    }
+
+    localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
+
+    setCompareCount(updatedArray.length);
+  };
+
   const handleSubmit = async (
     selectedCampusValue,
     selectedStudyModeId,
@@ -280,6 +419,34 @@ function SearchAndApply() {
       });
     }
   };
+
+  const closeFilter = () => {
+    setFilterOpen(false);
+    value.setSidebar(false);
+
+    setApplicationType([]);
+    setCourseDurationsList([]);
+    setCountryId(0);
+    setCityId(0);
+    setDepId(0);
+    setSubDepartmentId(0);
+    setTuitionFee(0);
+    setApplicationTypeIds([]);
+    setLoans([]);
+    setCourseDurations([]);
+    setIsScholarships(false);
+    setIsAvailableCourses(false);
+    setIsWorkPlacement(false);
+    setStudyModes([]);
+    setDeliveryPattern([]);
+    setDeliverySchedule([]);
+    setStudyLevelQuery("");
+    setIntakeListQuery("");
+    setCountryName("Select your destination");
+    setCityName("Select City");
+    setDepartmentName("Select Department");
+    setSubDepartmentName("Select Sub Department");
+  };
   return (
     <>
       <div className="search-header">
@@ -295,6 +462,7 @@ function SearchAndApply() {
                 selectAll={true}
                 all="All Student"
                 url="SearchFilter/Students"
+                name="studentId"
               />
             </Col>
           )}
@@ -313,6 +481,13 @@ function SearchAndApply() {
               setInstitutionName={setInstitutionName}
               countryName={countryName}
               setCountryName={setCountryName}
+              cityId={cityId}
+              studentId={studentId}
+              departmentId={depId}
+              intakeListQuery={intakeListQuery}
+              subDepartmentId={subDepartmentId}
+              studyLevelQuery={studyLevelQuery}
+              setCurrentPage={setCurrentPage}
             />
 
             <button
@@ -347,17 +522,22 @@ function SearchAndApply() {
         <div className="filter-container d-none d-md-block">
           <Row className="mb-3">
             <Col md={9}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={studyLevelId}
                 setState={setStudyLevelId}
-                url="SearchFilter/EducationLevels"
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${
+                  intakeListQuery ? `&${intakeListQuery}` : ""
+                }`}
               />
             </Col>
             <Col md={3}>
-              <SearchKeywords
+              <SearchKeywordsU
                 state={intakeId}
                 setState={setIntakeId}
-                url="SearchFilter/Intakes"
+                // url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}&${studyLevelQuery ? `&${studyLevelQuery}` : ''}`}
+                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${depId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }`}
                 slice={true}
               />
             </Col>
@@ -387,6 +567,7 @@ function SearchAndApply() {
               setIsSearch(true);
               value.setSidebar(true);
             }}
+            compareCount={compareCount}
           />
         </div>
       </div>
@@ -403,6 +584,8 @@ function SearchAndApply() {
               handleSubmit={handleSubmit}
               handleFavourite={handleFavourite}
               setSubjectId={setSubjectId}
+              comparedItems={comparedItems}
+              handleAddToCompare={handleAddToCompare}
             />
           </div>
 
@@ -415,6 +598,8 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             ) : (
               <ApplyCardHor
@@ -424,12 +609,19 @@ function SearchAndApply() {
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
                 setSubjectId={setSubjectId}
+                comparedItems={comparedItems}
+                handleAddToCompare={handleAddToCompare}
               />
             )}
           </div>
         </>
       ) : (
-        <h3 className="text-center my-5 py-5">No data Found</h3>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ minHeight: "60vh" }}
+        >
+          <img src={NoDataImage} alt="" />
+        </div>
       )}
 
       {loading ? null : (
@@ -444,10 +636,7 @@ function SearchAndApply() {
 
       {filterOpen && (
         <SearchFilter
-          closeModal={() => {
-            setFilterOpen(false);
-            value.setSidebar(false);
-          }}
+          closeModal={closeFilter}
           isSearch={isSearch}
           setIsSearch={setIsSearch}
           institutionId={institutionId}
@@ -507,6 +696,9 @@ function SearchAndApply() {
           setSubDepartmentName={setSubDepartmentName}
           subDepartmentId={subDepartmentId}
           setSubDepartmentId={setSubDepartmentId}
+          studentId={studentId}
+          setIntakeListQuery={setIntakeListQuery}
+          intakeListQuery={intakeListQuery}
         />
       )}
     </>

@@ -263,7 +263,24 @@ const CompanionApplication = ({ currentUser }) => {
                             <tr key={i}>
                               {tableData[0]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.applicationViewId}
+                                  <span>{app?.applicationViewId}</span>
+                                  <br />
+                                  <span>
+                                    {app?.isTBC === true && (
+                                      <span
+                                        style={{
+                                          borderRadius: "999px",
+                                          background: "#C1C6C6",
+                                          color: "#fff",
+                                          padding: "4px 10px",
+                                          fontSize: "12px",
+                                          fontWeight: "500",
+                                        }}
+                                      >
+                                        TBC
+                                      </span>
+                                    )}
+                                  </span>
                                 </td>
                               ) : null}
 

@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { Input } from "reactstrap";
 import DefaultDropdown from "../../../../components/Dropdown/DefaultDropdown";
 import "../SearchAndApply.css"; // custom CSS
+import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 
 const SearchBox = ({
   name,
@@ -20,6 +21,14 @@ const SearchBox = ({
   setInstitutionName,
   countryName,
   setCountryName,
+  studentId,
+  subDepartmentId,
+  departmentId,
+  cityId,
+  setIntakeListQuery,
+  intakeListQuery,
+  studyLevelQuery,
+  setCurrentPage,
 }) => {
   const [typingTimeout, setTypingTimeout] = useState(null);
 
@@ -85,24 +94,38 @@ const SearchBox = ({
                 />
               </svg>
             </span>
-            <DefaultDropdown
+            <DefaultDropdownU
               label={countryName}
               setLabel={setCountryName}
               value={countryId}
-              setValue={setCountryId}
+              setValue={(newValue) => {
+                setCountryId(newValue);
+                if (typeof setCurrentPage === "function") {
+                  setCurrentPage(1);
+                }
+              }}
               selectAll={true}
               all="All Destination"
-              url="UniversityCountry/Index"
+              url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                studyLevelQuery ? `&${studyLevelQuery}` : ""
+              }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
             />
           </span>
-          <DefaultDropdown
+          <DefaultDropdownU
             label={institutionName}
             setLabel={setInstitutionName}
             value={institutionId}
-            setValue={setInstitutionId}
+            setValue={(newValue) => {
+              setInstitutionId(newValue);
+              if (typeof setCurrentPage === "function") {
+                setCurrentPage(1);
+              }
+            }}
             selectAll={true}
             all="All Institution"
-            url="UniversityDD/Index"
+            url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+              studyLevelQuery ? `&${studyLevelQuery}` : ""
+            }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
           />
         </div>
       </div>

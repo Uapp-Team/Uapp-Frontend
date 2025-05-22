@@ -12,11 +12,13 @@ import {
   deliverySchedules,
   studyMode,
 } from "../../../constants/presetData";
+import DefaultDropdownU from "../../../components/Dropdown/DefaultDropdownU";
 
 const SearchFilter = ({
   closeModal,
   isSearch,
   setIsSearch,
+  studentId,
   institutionId,
   setInstitutionId,
   studyLevelId,
@@ -74,6 +76,8 @@ const SearchFilter = ({
   setSubDepartmentName,
   subDepartmentId,
   setSubDepartmentId,
+  setIntakeListQuery,
+  intakeListQuery,
 }) => {
   const divRef = useRef(null);
 
@@ -136,15 +140,36 @@ const SearchFilter = ({
   }, [isMobileDevice, setStudyLevelId, studyLevelId, studyLevelList]);
 
   useEffect(() => {
-    const studyLevelListQuery = [];
-    studyLevelId.map((item) =>
-      studyLevelListQuery.push(`educationlevels=${item}`)
-    );
-    const converttostring = studyLevelListQuery.toString();
-    const noSpaces = converttostring.replace(/ /g, "");
-    const converted = noSpaces.replace(/,/g, "&");
-    setStudyLevelQuery(converted);
-  }, [setStudyLevelQuery, studyLevelId]);
+    setCityId(0);
+    setCityName("Select City");
+    setDepartmentId(0);
+    setDepartmentName("Select Department");
+    setSubDepartmentId(0);
+    setSubDepartmentName("Select Sub Department");
+  }, [countryId]);
+
+  useEffect(() => {
+    setDepartmentId(0);
+    setDepartmentName("Select Department");
+    setSubDepartmentId(0);
+    setSubDepartmentName("Select Sub Department");
+  }, [cityId]);
+
+  useEffect(() => {
+    setSubDepartmentId(0);
+    setSubDepartmentName("Select Sub Department");
+  }, [departmentId]);
+
+  // useEffect(() => {
+  //   const studyLevelListQuery = [];
+  //   studyLevelId.map((item) =>
+  //     studyLevelListQuery.push(`educationlevels=${item}`)
+  //   );
+  //   const converttostring = studyLevelListQuery.toString();
+  //   const noSpaces = converttostring.replace(/ /g, "");
+  //   const converted = noSpaces.replace(/,/g, "&");
+  //   setStudyLevelQuery(converted);
+  // }, [setStudyLevelQuery, studyLevelId]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -189,35 +214,41 @@ const SearchFilter = ({
 
             <div className="mb-3">
               <p className="fw-500">Country</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={countryName}
                 setLabel={setCountryName}
                 value={countryId}
                 setValue={setCountryId}
                 selectAll={true}
                 all="All Country"
-                url="UniversityCountry/Index"
+                url={`SearchFilter/FetchCountries?studentId=${studentId}&universityId=${institutionId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
 
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Institution</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={institutionName}
                 setLabel={setInstitutionName}
                 value={institutionId}
                 setValue={setInstitutionId}
                 selectAll={true}
                 all="All Institution"
-                url="UniversityDD/Index"
+                url={`SearchFilter/FetchInstitutes?studentId=${studentId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Study Level</p>
 
-              <MultiSelect
+              <MultiSelectU
                 placeholder="Select Study Level"
-                url="SearchFilter/EducationLevels"
+                url={`SearchFilter/FetchEducationLevels?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                  intakeListQuery ? `&${intakeListQuery}` : ""
+                }`}
                 value={studyLevelList}
                 setValue={setStudyLevelList}
               />
@@ -225,50 +256,57 @@ const SearchFilter = ({
             <div className="mb-3 d-block d-md-none">
               <p className="fw-500">Intake</p>
 
-              <MultiSelect
+              <MultiSelectU
                 placeholder="Select Intake"
-                url="SearchFilter/Intakes"
                 value={intakeList}
                 setValue={setIntakeList}
+                url={`SearchFilter/FetchIntakes?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }`}
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Campus City</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={cityName}
                 setLabel={setCityName}
                 value={cityId}
                 setValue={setCityId}
                 selectAll={true}
                 all="All Campus"
-                url={`UniversityCityDD/Index/${countryId}`}
+                url={`SearchFilter/FetchCities?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&departmentId=${departmentId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
 
             <div className="mb-3">
               <p className="fw-500">Department</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={departmentName}
                 setLabel={setDepartmentName}
                 value={departmentId}
                 setValue={setDepartmentId}
                 selectAll={true}
-                list={departmentList}
+                // list={departmentList}
+                url={`SearchFilter/FetchDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&subDepartmentId=${subDepartmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
             <div className="mb-3">
               <p className="fw-500">Sub Department</p>
-              <DefaultDropdown
+              <DefaultDropdownU
                 label={subDepartmentName}
                 setLabel={setSubDepartmentName}
                 value={subDepartmentId}
                 setValue={setSubDepartmentId}
                 selectAll={true}
                 all="All Sub Department"
-                url={`SearchFilter/SubDepartments/${
-                  departmentId ? departmentId : 0
-                }`}
+                url={`SearchFilter/FetchSubDepartments?studentId=${studentId}&universityId=${institutionId}&countryId=${countryId}&cityId=${cityId}&departmentId=${departmentId}${
+                  studyLevelQuery ? `&${studyLevelQuery}` : ""
+                }${intakeListQuery ? `&${intakeListQuery}` : ""}`}
               />
             </div>
             <div className="mb-3">
@@ -277,10 +315,16 @@ const SearchFilter = ({
                 <Col xs={5}>
                   <Input
                     type="number"
-                    onChange={(e) =>
-                      setTuitionFee(e.target.value > 0 ? e.target.value : 0)
-                    }
-                    value={tuitionFee}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      if (inputValue === "" || isNaN(parseFloat(inputValue))) {
+                        setTuitionFee(0);
+                      } else {
+                        const numValue = parseFloat(inputValue);
+                        setTuitionFee(numValue >= 0 ? numValue : 0);
+                      }
+                    }}
+                    value={tuitionFee === 0 ? "" : tuitionFee}
                     min={0}
                   />
                 </Col>
@@ -308,7 +352,7 @@ const SearchFilter = ({
             </div>
 
             <div className="border rounded p-16px mb-3 bg-white">
-              <p className="fw-500">Loan available </p>
+              <p className="fw-500">Loan Available </p>
 
               <CheckBoxByObj
                 register={() => {}}
@@ -351,16 +395,14 @@ const SearchFilter = ({
                     />
                   </svg>
                 </span>
-                <span> Course durations</span>
+                <span> Course Durations</span>
               </p>
 
               <MultiSelectU
                 placeholder="Select Course Durations"
-                url={
-                  studyLevelId?.length > 0
-                    ? `Duration/ByEducationLevels?${studyLevelQuery}`
-                    : "Duration/Index"
-                }
+                url={`SearchFilter/FetchDurations?studentId=${studentId}${
+                  intakeListQuery ? `&${intakeListQuery}` : ""
+                }${studyLevelQuery ? `&${studyLevelQuery}` : ""}`}
                 value={courseDurationsList}
                 setValue={setCourseDurationsList}
               />

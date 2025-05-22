@@ -91,8 +91,7 @@ const AddUniversitySubject = () => {
   const [govtLoan, setGovtLoan] = useState(false);
   const [govtLoanLink, setGovtLoanLink] = useState("");
   const [govtLoanLinkError, setGovtLoanLinkError] = useState("");
-
-  console.log(govtLoan, "govtloan");
+  const [loanAvailableError, setLoanAvailableError] = useState("");
 
   const [privateLoan, setPrivateLoan] = useState(false);
   const [privateLoanLink, setPrivateLoanLink] = useState("");
@@ -425,6 +424,21 @@ const AddUniversitySubject = () => {
     if (isScholarshipAvailable === true && !scholarshipDetails) {
       isValid = false;
       setScholarshipDetailsError("Scholarship Details is required");
+    }
+
+    if (isLoanAvailable === true && !govtLoan && !privateLoan) {
+      isValid = false;
+      setLoanAvailableError("Please select at least one loan option");
+    }
+
+    if (isLoanAvailable === true && govtLoan === true && !govtLoanLink) {
+      isValid = false;
+      setGovtLoanLinkError("Link is required");
+    }
+
+    if (isLoanAvailable === true && privateLoan === true && !privateLoanLink) {
+      isValid = false;
+      setPrivateLoanLinkError("Link is required");
     }
 
     if (programValue === 0) {
@@ -1021,7 +1035,7 @@ const AddUniversitySubject = () => {
                     </FormGroup>
 
                     <FormGroup>
-                      <span>Is Loan Available </span>
+                      <span>Is Loan Available</span>
                       <div>
                         <FormGroup check inline>
                           <input
@@ -1060,10 +1074,14 @@ const AddUniversitySubject = () => {
                           </Label>
                         </FormGroup>
                       </div>
+                      <span className="text-danger">{loanAvailableError}</span>
                     </FormGroup>
                     {isLoanAvailable === true && (
                       <FormGroup className="has-icon-left position-relative">
-                        <span>Available Loan</span>
+                        <span>
+                          {" "}
+                          <span className="text-danger">*</span> Available Loan
+                        </span>
 
                         <Row>
                           <Col xs="12" className="mt-2">
@@ -1073,6 +1091,7 @@ const AddUniversitySubject = () => {
                                 type="checkbox"
                                 onChange={(e) => {
                                   setGovtLoan(e.target.checked);
+                                  setLoanAvailableError("");
                                 }}
                                 checked={govtLoan}
                               />
@@ -1088,6 +1107,9 @@ const AddUniversitySubject = () => {
                                     handleGovtLoanLink(e);
                                   }}
                                 />
+                                <span className="text-danger">
+                                  {govtLoanLinkError}
+                                </span>
                               </FormGroup>
                             )}
                           </Col>
@@ -1099,6 +1121,7 @@ const AddUniversitySubject = () => {
                                 type="checkbox"
                                 onChange={(e) => {
                                   setPrivateLoan(e.target.checked);
+                                  setLoanAvailableError("");
                                 }}
                                 checked={privateLoan}
                               />
@@ -1114,6 +1137,9 @@ const AddUniversitySubject = () => {
                                     handlePrivateLoanLink(e);
                                   }}
                                 />
+                                <span className="text-danger">
+                                  {privateLoanLinkError}
+                                </span>
                               </FormGroup>
                             )}
                           </Col>
