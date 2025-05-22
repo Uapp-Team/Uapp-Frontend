@@ -316,7 +316,7 @@ const Index = (props) => {
 
     const subData = new FormData(event.target);
 
-    subData.append("id", passData?.id);
+    subData.append("id", passData?.employeeId);
     subData.append("password", pass);
     if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/.test(pass)) {
       setError(
