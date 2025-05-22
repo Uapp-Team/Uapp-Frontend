@@ -528,6 +528,7 @@
   padding: 6px;
   background: rgba(1, 132, 144, 0.1);
   border-radius: 999px;
+  height: 42px;
 }
 
 /* quick view modal  */
