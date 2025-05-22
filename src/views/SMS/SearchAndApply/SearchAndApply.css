@@ -300,7 +300,7 @@
   background: #eefbef;
 }
 
-.card-body {
+.card-body-horizontal {
   background: #fff;
   flex: 1;
   flex-direction: row;
@@ -316,7 +316,7 @@
   border-radius: 0 0 10px 10px;
 }
 
-.card-container.vertical .card-body {
+.card-container.vertical .card-body-horizontal {
   flex-direction: column;
 }
 
