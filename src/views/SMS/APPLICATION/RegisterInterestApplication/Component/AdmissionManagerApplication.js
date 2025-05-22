@@ -711,7 +711,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     // for admission manager
     if (currentUser !== undefined) {
-      get(`CommonApplicationFilterDD/UappId`).then((res) => {
+      get(`CommonApplicationFilterDD/InterestUappId`).then((res) => {
         setManagerUappIdDD(res);
       });
       get(`CommonApplicationFilterDD/Student`).then((res) => {
