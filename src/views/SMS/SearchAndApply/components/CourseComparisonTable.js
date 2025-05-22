@@ -144,12 +144,16 @@ const CourseComparisonTable = ({
       });
   };
 
-  const handleDelete = (subjectId) => {
+  const handleDelete = (subjectId, originalIndex) => {
     const storedCourses =
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
     const updatedCourses = storedCourses.filter(
-      (course) => course.subjectId !== subjectId
+      (course) =>
+        !(
+          course.subjectId === subjectId &&
+          course.originalIndex === originalIndex
+        )
     );
 
     localStorage.setItem("comparedItems", JSON.stringify(updatedCourses));
@@ -227,7 +231,9 @@ const CourseComparisonTable = ({
                         </span>
                         <span
                           className="icon"
-                          onClick={() => handleDelete(course.subjectId)}
+                          onClick={() =>
+                            handleDelete(course.subjectId, course.originalIndex)
+                          }
                         >
                           <DeleteIcon />
                         </span>

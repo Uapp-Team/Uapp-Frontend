@@ -27,6 +27,7 @@ import CustomToolTip from "./CustomToolTip";
 import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
   ArrowLeftRightIcon,
+  ArrowLeftRightIconGreen,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -176,14 +177,20 @@ const ApplyCardHor = ({
                   </div>
                   <span
                     className="mr-2 cursor-pointer icon"
-                    onClick={() => handleAddToCompare(item)}
+                    onClick={() => handleAddToCompare(item, index)}
                     style={{
-                      backgroundColor: comparedItems.includes(item.subjectId)
-                        ? "#EFF2F2"
+                      backgroundColor: comparedItems.includes(
+                        `${item.subjectId}-${index}`
+                      )
+                        ? "#EEFBEF"
                         : "#FFF",
                     }}
                   >
-                    <ArrowLeftRightIcon />
+                    {comparedItems.includes(`${item.subjectId}-${index}`) ? (
+                      <ArrowLeftRightIconGreen />
+                    ) : (
+                      <ArrowLeftRightIcon />
+                    )}
                   </span>
                   <span className="mr-3 cursor-pointer icon">
                     <ShareIcon />

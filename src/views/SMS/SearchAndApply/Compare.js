@@ -19,7 +19,7 @@ function Compare() {
     <>
       <section>
         <div>
-          <h5>Course comparing</h5>
+          <h5>Course comparison</h5>
           <button className="back-button" onClick={() => router.goBack()}>
             {" "}
             <span className="mr-2">
