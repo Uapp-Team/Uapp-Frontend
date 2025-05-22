@@ -280,13 +280,15 @@ function SearchAndApply() {
   };
 
   useEffect(() => {
-    // Update compare count from localStorage
     const items = JSON.parse(localStorage.getItem("comparedItems")) || [];
     setCompareCount(items.length);
-    setComparedItems(items.map((item) => item.subjectId));
-  }, [studentId]); // This will run whenever studentId changes
+    const identifiers = items.map(
+      (item) => `${item.subjectId}-${item.originalIndex}`
+    );
+    setComparedItems(identifiers);
+  }, [studentId]);
 
-  const handleAddToCompare = async (item) => {
+  const handleAddToCompare = async (item, index) => {
     let subjectInfo = null;
     let eligibility = null;
     let campusDeliverySchedule = [];
@@ -300,16 +302,20 @@ function SearchAndApply() {
       JSON.parse(localStorage.getItem("comparedItems")) || [];
 
     const itemIndex = existingArray.findIndex(
-      (savedItem) => savedItem.subjectId === item.subjectId
+      (savedItem) =>
+        savedItem.subjectId === item.subjectId &&
+        savedItem.originalIndex === index
     );
 
     let updatedArray = [];
 
     if (itemIndex === -1) {
-      setComparedItems((prev) => [...prev, item.subjectId]);
+      setComparedItems((prev) => [...prev, `${item.subjectId}-${index}`]);
       setCompareCount(existingArray.length + 1);
     } else {
-      setComparedItems((prev) => prev.filter((id) => id !== item.subjectId));
+      setComparedItems((prev) =>
+        prev.filter((id) => id !== `${item.subjectId}-${index}`)
+      );
       setCompareCount(existingArray.length - 1);
     }
 
@@ -340,23 +346,27 @@ function SearchAndApply() {
     }
 
     if (itemIndex === -1) {
-      const extendItems = {
+      const extendedItem = {
         ...item,
         studentType: applicationTypelist,
         subjectInfo,
         eligibility,
         campusDeliverySchedule,
+        originalIndex: index,
       };
-      updatedArray = [...existingArray, extendItems];
+      updatedArray = [...existingArray, extendedItem];
     } else {
       updatedArray = existingArray.filter(
-        (savedItem) => savedItem.subjectId !== item.subjectId
+        (savedItem) =>
+          !(
+            savedItem.subjectId === item.subjectId &&
+            savedItem.originalIndex === index
+          )
       );
     }
 
     localStorage.setItem("comparedItems", JSON.stringify(updatedArray));
 
-    // Update the compare count directly after modifying localStorage
     setCompareCount(updatedArray.length);
   };
 

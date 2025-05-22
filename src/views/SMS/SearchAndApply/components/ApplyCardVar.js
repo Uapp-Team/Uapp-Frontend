@@ -128,10 +128,10 @@ const ApplyCardVar = ({
                     <div className="d-flex ml-4 align-items-center justify-content-center mx-2">
                       <span
                         className="mr-2 cursor-pointer icon"
-                        onClick={() => handleAddToCompare(item)}
+                        onClick={() => handleAddToCompare(item, index)}
                         style={{
                           backgroundColor: comparedItems.includes(
-                            item.subjectId
+                            `${item.subjectId}-${index}`
                           )
                             ? "#EFF2F2"
                             : "#FFF",

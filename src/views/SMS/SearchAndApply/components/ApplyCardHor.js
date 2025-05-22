@@ -176,9 +176,11 @@ const ApplyCardHor = ({
                   </div>
                   <span
                     className="mr-2 cursor-pointer icon"
-                    onClick={() => handleAddToCompare(item)}
+                    onClick={() => handleAddToCompare(item, index)}
                     style={{
-                      backgroundColor: comparedItems.includes(item.subjectId)
+                      backgroundColor: comparedItems.includes(
+                        `${item.subjectId}-${index}`
+                      )
                         ? "#EFF2F2"
                         : "#FFF",
                     }}
