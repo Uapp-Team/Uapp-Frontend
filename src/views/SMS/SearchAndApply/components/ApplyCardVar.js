@@ -21,6 +21,7 @@ import CustomToolTip from "./CustomToolTip";
 import DisplayWithTooltip from "./DisplayWithToolTip";
 import {
   ArrowLeftRightIcon,
+  ArrowLeftRightIconGreen,
   BellIconDefault,
   BellIconRed,
   CalenderIcon,
@@ -133,11 +134,17 @@ const ApplyCardVar = ({
                           backgroundColor: comparedItems.includes(
                             `${item.subjectId}-${index}`
                           )
-                            ? "#EFF2F2"
+                            ? "#EEFBEF"
                             : "#FFF",
                         }}
                       >
-                        <ArrowLeftRightIcon />
+                        {comparedItems.includes(
+                          `${item.subjectId}-${index}`
+                        ) ? (
+                          <ArrowLeftRightIconGreen />
+                        ) : (
+                          <ArrowLeftRightIcon />
+                        )}
                       </span>
                       <span className="mr-2 cursor-pointer icon">
                         <ShareIcon />

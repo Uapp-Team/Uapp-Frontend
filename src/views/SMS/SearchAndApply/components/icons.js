@@ -356,6 +356,47 @@ export function ArrowLeftRightIcon() {
   );
 }
 
+export function ArrowLeftRightIconGreen() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="16"
+      viewBox="0 0 17 16"
+      fill="none"
+    >
+      <path
+        d="M13.6666 11.333H3"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M11.668 9.33301C11.668 9.33301 13.668 10.806 13.668 11.333C13.668 11.8601 11.668 13.333 11.668 13.333"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M3.66797 4.66699H13.6679"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M4.99998 2.66699C4.99998 2.66699 3 4.13997 3 4.66701C2.99999 5.19405 5 6.66699 5 6.66699"
+        stroke="#045D5E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon() {
   return (
     <svg
