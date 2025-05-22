@@ -228,7 +228,7 @@ const ApplyCardHor = ({
               </div>
             </div>
 
-            <div className="card-body">
+            <div className="card-body-horizontal">
               <div className="card-content">
                 <h3 className="card-title fw-700 fs-20px">
                   <span
