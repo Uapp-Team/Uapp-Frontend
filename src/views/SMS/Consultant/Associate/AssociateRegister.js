@@ -111,11 +111,22 @@ const AssociateRegister = () => {
       isFormValid = false;
       setTitleError(true);
     }
+    
 
-    if (parentValue === 0) {
-      isFormValid = false;
-      setParentError(true);
-    }
+   if (userType === userTypes?.SystemAdmin && parentValue === 0) {
+  isFormValid = false;
+  setParentError(true);
+}
+
+if (userType === userTypes?.SalesManager && parentValue === 0) {
+  isFormValid = false;
+  setParentError(true);
+}
+
+    // if (parentValue === 0) {
+    //   isFormValid = false;
+    //   setParentError(true);
+    // }
 
     if (!firstName) {
       isFormValid = false;
@@ -173,7 +184,7 @@ const AssociateRegister = () => {
 
       <Card>
         <CardBody>
-          <p className="section-title">Create A Associate naki</p>
+          <p className="section-title">Create A Associate</p>
 
           <div className="mt-1 mb-4 d-flex justify-between cardborder">
             <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
@@ -223,11 +234,11 @@ const AssociateRegister = () => {
                       // id="parentConsultantId"
                     />
 
-                    {parentError && (
+                    {/* {parentError && (
                       <span className="text-danger">
                         Parent consultant is required
                       </span>
-                    )}
+                    )} */}
                   </FormGroup>
                 )}
 
