@@ -567,7 +567,7 @@ const ConsultantApplication = ({ currentUser }) => {
 
     // for consultant
     if (currentUser !== undefined) {
-      get(`CommonApplicationFilterDD/UappId`).then((res) => {
+      get(`CommonApplicationFilterDD/InterestUappId`).then((res) => {
         setConsultantUappIdDD(res);
       });
       get(`CommonApplicationFilterDD/Student`).then((res) => {

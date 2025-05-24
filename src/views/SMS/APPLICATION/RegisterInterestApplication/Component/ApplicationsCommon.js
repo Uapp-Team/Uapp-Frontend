@@ -779,7 +779,7 @@ const ApplicationsCommon = () => {
       setFinanceDD(res);
     });
     // for common
-    get("CommonApplicationFilterDD/UappId").then((res) => {
+    get("CommonApplicationFilterDD/InterestUappId").then((res) => {
       setCommonUappIdDD(res);
     });
     get("CommonApplicationFilterDD/University").then((res) => {
