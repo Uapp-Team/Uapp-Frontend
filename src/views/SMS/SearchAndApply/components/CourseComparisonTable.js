@@ -275,7 +275,7 @@ const CourseComparisonTable = ({
           />
           {canScrollLeft && (
             <div
-              className="scroll-arrow scroll-left hover-only"
+              className="scroll-arrow-compare scroll-left-compare hover-only-compare"
               onClick={scrollTableLeft}
               style={{ left: `${leftArrowPosition}px` }}
             >
@@ -284,7 +284,7 @@ const CourseComparisonTable = ({
           )}
           {isOverflowing && (
             <div
-              className="scroll-arrow scroll-right hover-only"
+              className="scroll-arrow-compare scroll-right-compare hover-only-compare"
               onClick={scrollTableRight}
             >
               <AiOutlineRight size={10} className="arrow-icon" />
