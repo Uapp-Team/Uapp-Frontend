@@ -422,6 +422,13 @@
   background-color: #045d5e;
   color: white;
   width: 131px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.apply-btn:hover:not(.disabled) {
+  background-color: #034445;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .apply-btn.disabled {
@@ -437,6 +444,13 @@
   cursor: pointer;
   min-width: 160px;
   padding: 9px 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.register-btn:hover:not(.disabled) {
+  background-color: #e56700;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .register-btn-vertical {
@@ -446,7 +460,15 @@
   border-radius: 8px;
   cursor: pointer;
   padding: 9px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
+.register-btn-vertical:hover:not(.disabled) {
+  background-color: #e56700;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .register-btn-vertical-top {
   display: grid;
   width: 50%;
@@ -460,6 +482,13 @@
 .apply-btn-vertical {
   background-color: #045d5e;
   color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.apply-btn-vertical:hover:not(.disabled) {
+  background-color: #034445;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .apply-btn-vertical.disabled {
@@ -475,17 +504,28 @@
 
 .quick-btn {
   background-color: white;
-  border: 1px solid #045d5e;
+  border: 0.5px solid #045d5e;
   color: #045d5e;
   width: 115px;
   margin-right: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.quick-btn:hover {
+  background-color: #045d5e;
+  color: white;
 }
 .quick-btn-vertical {
   background-color: white;
-  border: 1px solid #045d5e;
+  border: 0.5px solid #045d5e;
   color: #045d5e;
   margin-right: 5px;
   width: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.quick-btn-vertical:hover {
+  background-color: #045d5e;
+  color: white;
 }
 .dashed-hr {
   border-top: 1px dashed #ccc;
