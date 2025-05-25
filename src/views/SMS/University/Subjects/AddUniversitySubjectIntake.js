@@ -31,6 +31,7 @@ import SaveButton from "../../../../components/buttons/SaveButton";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ConfirmModal from "../../../../components/modal/ConfirmModal";
 import DMYPicker from "../../../../components/form/DMYPicker";
+import post from "../../../../helpers/post";
 
 const AddUniversitySubjectIntake = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -177,11 +178,7 @@ const AddUniversitySubjectIntake = () => {
     // setButtonStatus5(true);
     if (validateForm()) {
       setProgress5(true);
-      Axios.post(
-        `${rootUrl}SubjectIntake/AssignToCampus`,
-        subdata,
-        config
-      ).then((res) => {
+      post(`SubjectIntake/AssignToCampus`, subdata, config).then((res) => {
         setProgress5(false);
         setIntakeLabel("Select Intake");
         setIntakeValue(0);
@@ -190,10 +187,18 @@ const AddUniversitySubjectIntake = () => {
         setSuccess(!success);
         setChecked([]);
         setDate("");
-        addToast(res.data.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
+
+        if (res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
       });
     }
   };
