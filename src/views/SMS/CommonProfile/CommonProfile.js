@@ -10,6 +10,7 @@ import AdmissionOfficerProfile from "../AllStaffs/AdmissionOfficer/AdmissionOffi
 import StudentProfileView from "../STUDENT/StudentProfile/StudentProfileView";
 import ProviderDetails from "../Provider/ProviderDetails/ProviderDetails";
 import EmployeeProfile from "../AllStaffs/Staffs/StaffProfile/Index";
+import SalesManagerProfile from "../AllStaffs/SalesManager/SalesManagerProfile/Index";
 import ProviderComplianceProfile from "../AllStaffs/ProviderCompliance/StaffProfile/Index";
 import AffiliateProfile from "../Affiliate/AffiliateProfile/AffiliateProfile";
 import CompanionProfile from "../Companion/CompanionProfile/CompanionProfile";
@@ -42,10 +43,13 @@ const CommonProfile = () => {
         currentUser === userTypes?.ComplianceManager.toString() ||
         currentUser === userTypes?.ConsultantCompliance.toString() ||
         currentUser === userTypes?.AdmissionCompliance.toString() ||
-        currentUser === userTypes?.SalesManager.toString() ||
         currentUser === userTypes?.FinanceManager.toString()) && (
         <EmployeeProfile userId={userId} />
         // <EmployeeNewProfile />
+      )}
+      {currentUser === userTypes?.SalesManager.toString() && (
+        <SalesManagerProfile userId={userId} />
+        // <ProviderAdminOwnProfile userId={userId} />
       )}
       {currentUser === userTypes?.ProviderAdmin.toString() && (
         <ProviderDetails />
