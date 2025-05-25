@@ -16,16 +16,19 @@ import {
   currency,
   deliveryMethods,
   deliverySchedules,
+  durationInfo,
   studyMode,
 } from "../../../../constants/presetData";
 import Uget from "../../../../helpers/Uget";
 import "../SearchAndApply.css";
 import { ArrowRightIcon, CalenderIcon } from "./icons";
+import TuitionFee from "./TuitionFee";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const ApplyModal = ({
   open,
   onClose,
+  applicationTypeSelected,
   studentName,
   applyEligibility,
   quickViewData,
@@ -240,10 +243,17 @@ const ApplyModal = ({
                     <img className="h-24px w-24px " src={Tuition} alt="" />
                   </div>
                   <div className="apply-modal-study__info--details">
-                    <div className="fs-12px">Tution fees</div>
+                    <div className="fs-12px">
+                      Tution fees{" "}
+                      {quickViewData?.durationTypeId > 0 && (
+                        <>({durationInfo(quickViewData?.durationTypeId)?.ly})</>
+                      )}
+                    </div>
                     <div className="fs-14px">
-                      {currency(quickViewData.localTutionFeeCurrencyId)}
-                      {quickViewData?.localTutionFee}
+                      <TuitionFee
+                        applicationTypeSelected={applicationTypeSelected}
+                        item={quickViewData}
+                      />
                     </div>
                   </div>
                 </div>

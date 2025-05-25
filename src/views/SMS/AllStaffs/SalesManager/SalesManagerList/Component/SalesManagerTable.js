@@ -91,26 +91,20 @@ const SalesManagerTable = ({
                   </Link>
                 </td>
               ) : null}
-              {permissions?.includes(permissionList.Staff_Password_Change) ? (
-                <>
-                  {tableData[1]?.isActive ? (
-                    <td>
-                      <div style={{ marginTop: "5px" }}>
-                        <span
-                          onClick={() =>
-                            redirectToAssignPage(emp?.employeeId, emp?.branchId)
-                          }
-                          className="Count-fifth"
-                        >
-                          View({emp?.consultantCount})
-                        </span>
-                      </div>
-                    </td>
-                  ) : null}
-                </>
-              ) : (
-                <td>{emp?.consultantCount}</td>
-              )}
+              {tableData[1]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      onClick={() =>
+                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                      }
+                      className="Count-fifth"
+                    >
+                      View({emp?.consultantCount})
+                    </span>
+                  </div>
+                </td>
+              ) : null}
 
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>

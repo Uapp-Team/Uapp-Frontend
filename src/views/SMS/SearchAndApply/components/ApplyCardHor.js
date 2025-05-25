@@ -516,6 +516,7 @@ const ApplyCardHor = ({
       <ApplyModal
         open={openApplyModal}
         onClose={() => setOpenApplyModal(false)}
+        applicationTypeSelected={applicationTypeSelected}
         studentName={studentName}
         applyEligibility={applyEligibility}
         quickViewData={quickViewData}

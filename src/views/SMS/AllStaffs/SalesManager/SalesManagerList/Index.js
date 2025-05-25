@@ -21,9 +21,10 @@ import ColumnStaff from "../../../TableColumn/ColumnStaff.js";
 import Loader from "../../../Search/Loader/Loader.js";
 import Uget from "../../../../../helpers/Uget.js";
 import SalesManagerTable from "./Component/SalesManagerTable.js";
+import ColumnSalesManager from "../../../TableColumn/ColumnSalesManager.js";
 
 const Index = (props) => {
-  const StaffPaging = JSON.parse(sessionStorage.getItem("staff"));
+  const SaleManagerPaging = JSON.parse(sessionStorage.getItem("sales manager"));
   const userType = localStorage.getItem("userType");
   const { type, branchId } = useParams();
 
@@ -31,13 +32,13 @@ const Index = (props) => {
   const history = useHistory();
   const [employeeList, setEmployeeList] = useState([]);
   const [currentPage, setCurrentPage] = useState(
-    StaffPaging?.currentPage ? StaffPaging?.currentPage : 1
+    SaleManagerPaging?.currentPage ? SaleManagerPaging?.currentPage : 1
   );
   const [searchStr, setSearchStr] = useState(
-    StaffPaging?.searchStr ? StaffPaging?.searchStr : ""
+    SaleManagerPaging?.searchStr ? SaleManagerPaging?.searchStr : ""
   );
   const [dataPerPage, setDataPerPage] = useState(
-    StaffPaging?.dataPerPage ? StaffPaging?.dataPerPage : 15
+    SaleManagerPaging?.dataPerPage ? SaleManagerPaging?.dataPerPage : 15
   );
   const [entity, setEntity] = useState(0);
   const [callApi, setCallApi] = useState(false);
@@ -48,13 +49,7 @@ const Index = (props) => {
   const { addToast } = useToasts();
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [empList, setEmpList] = useState([]);
-  const [empLabel, setEmpLabel] = useState(
-    StaffPaging?.empLabel ? StaffPaging?.empLabel : "Select Staff Type"
-  );
-  const [empValue, setEmpValue] = useState(
-    StaffPaging?.empValue ? StaffPaging?.empValue : 0
-  );
+
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -76,13 +71,15 @@ const Index = (props) => {
   const [branchValue, setBranchValue] = useState(
     branchId
       ? branchId
-      : StaffPaging?.branchValue
-      ? StaffPaging?.branchValue
+      : SaleManagerPaging?.branchValue
+      ? SaleManagerPaging?.branchValue
       : 0
   );
 
   const [branchLabel, setBranchLabel] = useState(
-    StaffPaging?.branchLabel ? StaffPaging?.branchLabel : "Select branch"
+    SaleManagerPaging?.branchLabel
+      ? SaleManagerPaging?.branchLabel
+      : "Select branch"
   );
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -91,35 +88,30 @@ const Index = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   useEffect(() => {
-    const tableColumnStaff = JSON.parse(localStorage.getItem("ColumnStaff"));
-    tableColumnStaff && setTableData(tableColumnStaff);
-    !tableColumnStaff &&
-      localStorage.setItem("ColumnStaff", JSON.stringify(ColumnStaff));
-    !tableColumnStaff && setTableData(ColumnStaff);
+    const tableColumnSalesManager = JSON.parse(
+      localStorage.getItem("ColumnSalesManager")
+    );
+    tableColumnSalesManager && setTableData(tableColumnSalesManager);
+    !tableColumnSalesManager &&
+      localStorage.setItem(
+        "ColumnSalesManager",
+        JSON.stringify(ColumnSalesManager)
+      );
+    !tableColumnSalesManager && setTableData(ColumnSalesManager);
   }, []);
 
   useEffect(() => {
     sessionStorage.setItem(
-      "staff",
+      "sales manager",
       JSON.stringify({
         currentPage: currentPage && currentPage,
-        empLabel: empLabel && empLabel,
-        empValue: empValue && empValue,
         branchLabel: branchLabel && branchLabel,
         branchValue: branchValue && branchValue,
         searchStr: searchStr && searchStr,
         dataPerPage: dataPerPage && dataPerPage,
       })
     );
-  }, [
-    currentPage,
-    empLabel,
-    empValue,
-    branchLabel,
-    branchValue,
-    searchStr,
-    dataPerPage,
-  ]);
+  }, [currentPage, branchLabel, branchValue, searchStr, dataPerPage]);
 
   const selectDataSize = (value) => {
     setCurrentPage(1);
@@ -242,8 +234,6 @@ const Index = (props) => {
   const handleReset = () => {
     setBranchLabel("Select branch");
     setBranchValue(0);
-    setEmpLabel("Select Staff Type");
-    setEmpValue(0);
     setSearchStr("");
     setCurrentPage(1);
     setCallApi((prev) => !prev);
@@ -365,8 +355,6 @@ const Index = (props) => {
           setSearchStr={setSearchStr}
           setBranchLabel={setBranchLabel}
           setBranchValue={setBranchValue}
-          setEmpLabel={setEmpLabel}
-          setEmpValue={setEmpValue}
           handleKeyDown={handleKeyDown}
           handleReset={handleReset}
           setIsTyping={setIsTyping}
@@ -433,43 +421,50 @@ const Index = (props) => {
 
             {permissions?.includes(permissionList?.View_SalesManager_list) && (
               <>
-                {loading ? (
-                  <Loader />
+                {employeeList?.length === 0 ? (
+                  <h4 className="text-center">No Data Found</h4>
                 ) : (
-                  <SalesManagerTable
-                    componentRef={componentRef}
-                    tableData={tableData}
-                    permissions={permissions}
-                    permissionList={permissionList}
-                    data={data}
-                    toggleDanger={toggleDanger}
-                    deleteModal={deleteModal}
-                    closeDeleteModal={closeDeleteModal}
-                    buttonStatus={buttonStatus}
-                    progress={progress}
-                    userTypeId={userTypeId}
-                    employeeList={employeeList}
-                    handleEmpClick={handleEmpClick}
-                    handlePass={handlePass}
-                    serialNum={serialNum}
-                    passModal={passModal}
-                    handleToggle={handleToggle}
-                    passData={passData}
-                    submitModalForm={submitModalForm}
-                    passValidate={passValidate}
-                    pass={pass}
-                    setPass={setPass}
-                    setError={setError}
-                    error={error}
-                    verifyPass={verifyPass}
-                    confirmPassword={confirmPassword}
-                    passError={passError}
-                    setPassModal={setPassModal}
-                    redirectToStaffProfile={redirectToStaffProfile}
-                    redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
-                    handleDeleteStaff={handleDeleteStaff}
-                    redirectToAssignPage={redirectToAssignPage}
-                  />
+                  <>
+                    {" "}
+                    {loading ? (
+                      <Loader />
+                    ) : (
+                      <SalesManagerTable
+                        componentRef={componentRef}
+                        tableData={tableData}
+                        permissions={permissions}
+                        permissionList={permissionList}
+                        data={data}
+                        toggleDanger={toggleDanger}
+                        deleteModal={deleteModal}
+                        closeDeleteModal={closeDeleteModal}
+                        buttonStatus={buttonStatus}
+                        progress={progress}
+                        userTypeId={userTypeId}
+                        employeeList={employeeList}
+                        handleEmpClick={handleEmpClick}
+                        handlePass={handlePass}
+                        serialNum={serialNum}
+                        passModal={passModal}
+                        handleToggle={handleToggle}
+                        passData={passData}
+                        submitModalForm={submitModalForm}
+                        passValidate={passValidate}
+                        pass={pass}
+                        setPass={setPass}
+                        setError={setError}
+                        error={error}
+                        verifyPass={verifyPass}
+                        confirmPassword={confirmPassword}
+                        passError={passError}
+                        setPassModal={setPassModal}
+                        redirectToStaffProfile={redirectToStaffProfile}
+                        redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
+                        handleDeleteStaff={handleDeleteStaff}
+                        redirectToAssignPage={redirectToAssignPage}
+                      />
+                    )}
+                  </>
                 )}
               </>
             )}
