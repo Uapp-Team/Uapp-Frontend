@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import Pagination from "../../SMS/Pagination/Pagination.jsx";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import get from "../../../helpers/get.js";
 import { useState } from "react";
@@ -78,6 +78,7 @@ const ConsultantByConsultant = () => {
   const [LevelReportList, setLevelReportList] = useState({});
   const [emailError, setEmailError] = useState("");
   const [popoverOpen, setPopoverOpen] = useState("");
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const tableColumnAssociates = JSON.parse(
@@ -115,16 +116,16 @@ const ConsultantByConsultant = () => {
         }
       );
     } else {
-      get(`Associate/Index?page=${currentPage}&pageSize=${dataPerPage}`).then(
-        (res) => {
-          console.log(res);
-          setConsultantList(res?.models);
-          setEntity(res?.totalEntity);
+      get(
+        `Associate/Index?page=${currentPage}&pageSize=${dataPerPage}&id=${id}`
+      ).then((res) => {
+        console.log(res);
+        setConsultantList(res?.models);
+        setEntity(res?.totalEntity);
 
-          setLoading(false);
-          setPageLoad(false);
-        }
-      );
+        setLoading(false);
+        setPageLoad(false);
+      });
     }
   }, [currentPage, dataPerPage, callApi, loading, success, id]);
 
