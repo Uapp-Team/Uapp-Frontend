@@ -47,7 +47,7 @@ const CommonProfile = () => {
         <EmployeeProfile userId={userId} />
         // <EmployeeNewProfile />
       )}
-      {currentUser === userTypes?.SalesManager.toString() && (
+      {currentUser === userTypes?.SalesTeamLeader.toString() && (
         <SalesManagerProfile userId={userId} />
         // <ProviderAdminOwnProfile userId={userId} />
       )}

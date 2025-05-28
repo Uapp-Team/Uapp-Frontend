@@ -104,7 +104,7 @@ const SalesManagerProfile = ({ userId }) => {
   }, [id, userId]);
 
   const redirect = () => {
-    history.push(`/salesManagerGeneralInformation/${id ? id : userId}`);
+    history.push(`/salesTeamLeaderGeneralInformation/${id ? id : userId}`);
   };
 
   // redirect to dashboard
@@ -288,9 +288,9 @@ const SalesManagerProfile = ({ userId }) => {
       ) : (
         <div ref={componentRef}>
           <BreadCrumb
-            title="Sales Manager Profile"
-            backTo={id && "Sales Manager"}
-            path="/salesManagerList"
+            title="Sales Team Leader Profile"
+            backTo={id && "Sales Team Leader"}
+            path="/salesTeamLeaderList"
           />
 
           <div className="uapp-employee-profile">
@@ -394,10 +394,10 @@ const SalesManagerProfile = ({ userId }) => {
                                 >
                                   <div className="mr-1">
                                     {permissions?.includes(
-                                      permissionList.Update_SalesManager
+                                      permissionList.Update_SalesTeamLeader
                                     ) ? (
                                       <Link
-                                        to={`/salesManagerGeneralInformation/${
+                                        to={`/salesTeamLeaderGeneralInformation/${
                                           id ? id : userId
                                         }`}
                                       >

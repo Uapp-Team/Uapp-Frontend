@@ -20,14 +20,14 @@ const ConsultantRegistration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { branchId } = useParams();
   const [consParent, setConsParent] = useState([]);
-  const [consSalesManager, setConsSalesManager] = useState([]);
+  const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
   const [consType, setConsType] = useState([]);
   const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
   const [parentValue, setParentValue] = useState(0);
-  const [salesManagerLabel, setSalesManagerLabel] = useState(
-    "Select Sales Manager"
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
   );
-  const [salesManagerValue, setSalesManagerValue] = useState(0);
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
   const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
   const [typeValue, setTypeValue] = useState(0);
   const [email, setEmail] = useState("");
@@ -42,7 +42,7 @@ const ConsultantRegistration = () => {
   const [branchError, setBranchError] = useState(false);
   const [consultantError, setConsultantError] = useState(false);
   const [parentError, setParentError] = useState(false);
-  const [salesManagerError, setSalesManagerError] = useState(false);
+  const [SalesTeamLeaderError, setSalesTeamLeaderError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [title, setTitle] = useState([]);
   const [titleValue, setTitleValue] = useState(0);
@@ -73,8 +73,8 @@ const ConsultantRegistration = () => {
       setConsParent(res);
     });
 
-    get(`SalesManagerDD/Index/${branchValue}`).then((res) => {
-      setConsSalesManager(res);
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setConsSalesTeamLeader(res);
     });
 
     get("ConsultantTypeDD/index").then((res) => {
@@ -87,10 +87,10 @@ const ConsultantRegistration = () => {
     value: consParentOptions?.id,
   }));
 
-  const consSalesManagerMenu = consSalesManager?.map(
-    (consSalesManagerOptions) => ({
-      label: consSalesManagerOptions?.name,
-      value: consSalesManagerOptions?.id,
+  const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
     })
   );
 
@@ -105,10 +105,10 @@ const ConsultantRegistration = () => {
     setParentValue(value);
   };
 
-  const selectSalesManagerCons = (label, value) => {
-    setSalesManagerError(false);
-    setSalesManagerLabel(label);
-    setSalesManagerValue(value);
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderError(false);
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
   };
 
   const selectConsType = (label, value) => {
@@ -195,13 +195,13 @@ const ConsultantRegistration = () => {
       }
     }
     // if (BranchAdmin() || BranchManager()) {
-    //   setSalesManagerError(false);
+    //   setSalesTeamLeaderError(false);
     // } else {
-    //   if (salesManagerValue === 0) {
+    //   if (SalesTeamLeaderValue === 0) {
     //     isValid = false;
-    //     setSalesManagerError(true);
+    //     setSalesTeamLeaderError(true);
     //   } else {
-    //     setSalesManagerError(false);
+    //     setSalesTeamLeaderError(false);
     //   }
     // }
     if (titleValue === 0) {
@@ -452,26 +452,26 @@ const ConsultantRegistration = () => {
                     {/* {!BranchAdmin() && !BranchManager() && (
                       <span className="text-danger">*</span>
                     )} */}
-                    Sales Manager
+                    Sales Team Leader
                   </span>
 
                   <Select
                     className="form-mt"
-                    options={consSalesManagerMenu}
+                    options={consSalesTeamLeaderMenu}
                     value={{
-                      label: salesManagerLabel,
-                      value: salesManagerValue,
+                      label: SalesTeamLeaderLabel,
+                      value: SalesTeamLeaderValue,
                     }}
                     onChange={(opt) =>
-                      selectSalesManagerCons(opt.label, opt.value)
+                      selectSalesTeamLeaderCons(opt.label, opt.value)
                     }
-                    name="salesManagerId"
-                    id="salesManagerId"
+                    name="salesTeamLeaderId"
+                    id="salesTeamLeaderId"
                   />
 
-                  {/* {salesManagerError && (
+                  {/* {SalesTeamLeaderError && (
                     <span className="text-danger">
-                      Sales Manager is required.
+                      Sales Team Leader is required.
                     </span>
                   )} */}
                 </FormGroup>

@@ -118,14 +118,14 @@ export const permissionList = {
 
   Manage_Core_Data: 256,
 
-  ///sales manager////
-  Add_SalesManager: 501,
-  Update_SalesManager: 502,
-  View_SalesManager_Details: 503,
-  Delete_SalesManager: 504,
-  View_SalesManager_list: 505,
+  ///Sales Team Leader////
+  Add_SalesTeamLeader: 501,
+  Update_SalesTeamLeader: 502,
+  View_SalesTeamLeader_Details: 503,
+  Delete_SalesTeamLeader: 504,
+  View_SalesTeamLeader_list: 505,
   Assign_Consultants: 506,
-  ///sales manager////
+  ///Sales Team Leader////
 
   ///////
   Add_Employee: 1,

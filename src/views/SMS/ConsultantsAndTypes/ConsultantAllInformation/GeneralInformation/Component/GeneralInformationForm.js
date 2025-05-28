@@ -55,11 +55,11 @@ const GeneralInformationForm = ({
   setTitleError,
   titleValue,
   title,
-  consSalesManagerMenu,
-  selectSalesManagerCons,
-  salesManagerValue,
-  salesManagerLabel,
-  salesManagerError,
+  consSalesTeamLeaderMenu,
+  selectSalesTeamLeaderCons,
+  SalesTeamLeaderValue,
+  SalesTeamLeaderLabel,
+  SalesTeamLeaderError,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -237,10 +237,10 @@ const GeneralInformationForm = ({
             <>
               {userTypeId === userTypes?.Consultant.toString() ? (
                 <FormGroup className="has-icon-left position-relative">
-                  <span className="mr-2">Sales Manager :</span>
+                  <span className="mr-2">Sales Team Leader :</span>
                   <span className=" fw-500">
-                    {consData?.salesManager?.firstName}{" "}
-                    {consData?.salesManager?.lastName}
+                    {consData?.SalesTeamLeader?.firstName}{" "}
+                    {consData?.SalesTeamLeader?.lastName}
                   </span>
                 </FormGroup>
               ) : (
@@ -248,26 +248,26 @@ const GeneralInformationForm = ({
                   <span>
                     {" "}
                     {/* <span className="text-danger">*</span> */}
-                    Sales Manager
+                    Sales Team Leader
                   </span>
 
                   <Select
                     className="form-mt"
-                    options={consSalesManagerMenu}
+                    options={consSalesTeamLeaderMenu}
                     value={{
-                      label: salesManagerLabel,
-                      value: salesManagerValue,
+                      label: SalesTeamLeaderLabel,
+                      value: SalesTeamLeaderValue,
                     }}
                     onChange={(opt) =>
-                      selectSalesManagerCons(opt.label, opt.value)
+                      selectSalesTeamLeaderCons(opt.label, opt.value)
                     }
-                    name="salesManagerId"
-                    id="salesManagerId"
+                    name="salesTeamLeaderId"
+                    id="salesTeamLeaderId"
                   />
 
                   {/* {salesManagerError && (
                     <span className="text-danger">
-                      Sales Manager is required.
+                      Sales Team Leader is required.
                     </span>
                   )} */}
                 </FormGroup>

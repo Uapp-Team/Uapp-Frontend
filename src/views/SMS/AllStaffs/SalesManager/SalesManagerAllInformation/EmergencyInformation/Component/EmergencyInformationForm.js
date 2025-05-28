@@ -226,7 +226,7 @@ const EmergencyInformationForm = ({
 
         <FormGroup className="mt-4 d-flex justify-content-between">
           <PreviousButton action={handlePrevious} />
-          {permissions?.includes(permissionList?.Update_SalesManager) && (
+          {permissions?.includes(permissionList?.Update_SalesTeamLeader) && (
             <SaveButton
               text="Save and Next"
               progress={progress}

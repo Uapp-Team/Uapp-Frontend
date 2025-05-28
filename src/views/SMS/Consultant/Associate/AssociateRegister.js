@@ -111,17 +111,16 @@ const AssociateRegister = () => {
       isFormValid = false;
       setTitleError(true);
     }
-    
 
-   if (userType === userTypes?.SystemAdmin && parentValue === 0) {
-  isFormValid = false;
-  setParentError(true);
-}
+    if (userType === userTypes?.SystemAdmin && parentValue === 0) {
+      isFormValid = false;
+      setParentError(true);
+    }
 
-if (userType === userTypes?.SalesManager && parentValue === 0) {
-  isFormValid = false;
-  setParentError(true);
-}
+    if (userType === userTypes?.SalesTeamLeader && parentValue === 0) {
+      isFormValid = false;
+      setParentError(true);
+    }
 
     // if (parentValue === 0) {
     //   isFormValid = false;
@@ -210,7 +209,7 @@ if (userType === userTypes?.SalesManager && parentValue === 0) {
                 value={userId}
               />
             )} */}
-            {userType === userTypes?.SalesManager && (
+            {userType === userTypes?.SalesTeamLeader && (
               <input
                 type="hidden"
                 id="consultantId"
@@ -221,7 +220,7 @@ if (userType === userTypes?.SalesManager && parentValue === 0) {
 
             <Row>
               <Col md="6">
-                {userType === userTypes?.SalesManager && (
+                {userType === userTypes?.SalesTeamLeader && (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       Parent Consultant <span className="text-danger">*</span>{" "}
