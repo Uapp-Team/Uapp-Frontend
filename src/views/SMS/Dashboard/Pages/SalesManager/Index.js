@@ -96,7 +96,7 @@ const SalesTeamLeader = () => {
               isDisabled={false}
             />
           </div>
-          <div
+          {/* <div
             style={{ cursor: "pointer" }}
             onClick={() => {
               history.push(`/addStudentRegister`);
@@ -112,7 +112,7 @@ const SalesTeamLeader = () => {
               />
               <span className="std-dashboard-style3">Add Student</span>
             </div>
-          </div>
+          </div> */}
 
           <UserNotices />
         </div>
