@@ -21,11 +21,11 @@ const GeneralInformation = () => {
   const [nameValue, setNameValue] = useState(0);
   const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
   const [parentValue, setParentValue] = useState(0);
-  const [consSalesManager, setConsSalesManager] = useState([]);
-  const [salesManagerLabel, setSalesManagerLabel] = useState(
-    "Select Sales Manager"
+  const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
   );
-  const [salesManagerValue, setSalesManagerValue] = useState(0);
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
   const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
   const [typeValue, setTypeValue] = useState(0);
   const [homeAccept, setHomeAccept] = useState(false);
@@ -38,7 +38,7 @@ const GeneralInformation = () => {
   const [branchError, setBranchError] = useState(false);
   const [consultantError, setConsultantError] = useState(false);
   const [parentError, setParentError] = useState(false);
-  const [salesManagerError, setSalesManagerError] = useState(false);
+  const [SalesTeamLeaderError, setSalesTeamLeaderError] = useState(false);
 
   const [buttonStatus, setButtonStatus] = useState(false);
   const { addToast } = useToasts();
@@ -81,8 +81,8 @@ const GeneralInformation = () => {
     get(`ParentConsultantDD/Index/${consultantRegisterId}`).then((res) => {
       setConsParent(res);
     });
-    get(`SalesManagerDD/Index/${branchValue}`).then((res) => {
-      setConsSalesManager(res);
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setConsSalesTeamLeader(res);
     });
   }, [consultantRegisterId, branchValue]);
 
@@ -94,6 +94,8 @@ const GeneralInformation = () => {
     get(`Consultant/GetGeneralInformation/${consultantRegisterId}`).then(
       (res) => {
         setConsData(res);
+        console.log(res, "plz check");
+
         // setSubmitData(true);
         setTypeValue(res?.consultantType?.id);
         setTypeLabel(res?.consultantType?.name);
@@ -107,11 +109,15 @@ const GeneralInformation = () => {
                 res?.parentConsultant?.lastName
             : "Select Parent Consultant"
         );
-        setSalesManagerValue(res?.salesManagerId ? res?.salesManagerId : 0);
-        setSalesManagerLabel(
-          res?.salesManager?.firstName
-            ? res?.salesManager?.firstName + " " + res?.salesManager?.lastName
-            : "Select Sales Manager"
+        setSalesTeamLeaderValue(
+          res?.salesTeamLeader?.id ? res?.salesTeamLeader?.id : 0
+        );
+        setSalesTeamLeaderLabel(
+          res?.salesTeamLeader?.firstName
+            ? res?.salesTeamLeader?.firstName +
+                " " +
+                res?.salesTeamLeader?.lastName
+            : "Select Sales Team Leader"
         );
         setBranchValue(res?.branch?.id);
         setBranchLabel(res?.branch?.name);
@@ -137,10 +143,10 @@ const GeneralInformation = () => {
     value: consParentOptions?.id,
   }));
 
-  const consSalesManagerMenu = consSalesManager?.map(
-    (consSalesManagerOptions) => ({
-      label: consSalesManagerOptions?.name,
-      value: consSalesManagerOptions?.id,
+  const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
     })
   );
   const consTypeMenu = consType?.map((consTypeOptions) => ({
@@ -160,10 +166,10 @@ const GeneralInformation = () => {
     setParentValue(value);
   };
 
-  const selectSalesManagerCons = (label, value) => {
-    setSalesManagerError(false);
-    setSalesManagerLabel(label);
-    setSalesManagerValue(value);
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderError(false);
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
   };
 
   const selectConsType = (label, value) => {
@@ -378,11 +384,11 @@ const GeneralInformation = () => {
                 setTitleValue={setTitleValue}
                 titleValue={titleValue}
                 title={title}
-                consSalesManagerMenu={consSalesManagerMenu}
-                selectSalesManagerCons={selectSalesManagerCons}
-                salesManagerValue={salesManagerValue}
-                salesManagerLabel={salesManagerLabel}
-                salesManagerError={salesManagerError}
+                consSalesTeamLeaderMenu={consSalesTeamLeaderMenu}
+                selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
+                SalesTeamLeaderValue={SalesTeamLeaderValue}
+                SalesTeamLeaderLabel={SalesTeamLeaderLabel}
+                SalesTeamLeaderError={SalesTeamLeaderError}
               ></GeneralInformationForm>
             </TabPane>
           </TabContent>

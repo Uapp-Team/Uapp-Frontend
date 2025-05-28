@@ -230,7 +230,7 @@ const ConsultantByAffiliate = () => {
 
               <Row className="mb-3 mt-3">
                 <Col lg="5" md="5" sm="12" xs="12">
-                  {userType !== userTypes?.SalesManager && (
+                  {userType !== userTypes?.SalesTeamLeader && (
                     <div className="d-flex">
                       <div>
                         <ButtonForFunction

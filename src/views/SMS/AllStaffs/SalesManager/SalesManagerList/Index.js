@@ -24,7 +24,9 @@ import SalesManagerTable from "./Component/SalesManagerTable.js";
 import ColumnSalesManager from "../../../TableColumn/ColumnSalesManager.js";
 
 const Index = (props) => {
-  const SaleManagerPaging = JSON.parse(sessionStorage.getItem("sales manager"));
+  const SaleManagerPaging = JSON.parse(
+    sessionStorage.getItem("Sales Team Leader")
+  );
   const userType = localStorage.getItem("userType");
   const { type, branchId } = useParams();
 
@@ -102,7 +104,7 @@ const Index = (props) => {
 
   useEffect(() => {
     sessionStorage.setItem(
-      "sales manager",
+      "Sales Team Leader",
       JSON.stringify({
         currentPage: currentPage && currentPage,
         branchLabel: branchLabel && branchLabel,
@@ -130,7 +132,7 @@ const Index = (props) => {
     });
     if (!isTyping) {
       Uget(
-        `SalesManager/FetchPagedData?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&searchText=${searchStr}`
+        `SalesTeamLeader/FetchPagedData?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&searchText=${searchStr}`
       ).then((action) => {
         setEmployeeList(action?.items);
 
@@ -251,7 +253,7 @@ const Index = (props) => {
 
   // add staff handler
   const handleAddStaff = () => {
-    history.push("/salesManagerRegistration");
+    history.push("/salesTeamLeaderRegistration");
   };
 
   // toggle dropdown
@@ -273,23 +275,23 @@ const Index = (props) => {
   // employee click handler
   const handleEmpClick = (id) => {
     history.push({
-      pathname: `/salesManagerProfile/${id}`,
+      pathname: `/salesTeamLeaderProfile/${id}`,
     });
   };
 
   const componentRef = useRef(employeeList);
 
   const redirecttoStaffGeneralInfo = (empId) => {
-    history.push(`/salesManagerGeneralInformation/${empId}`);
+    history.push(`/salesTeamLeaderGeneralInformation/${empId}`);
   };
 
   const redirectToStaffProfile = (empId) => {
-    history.push(`/salesManagerProfile/${empId}`);
+    history.push(`/salesTeamLeaderProfile/${empId}`);
   };
 
-  const redirectToAssignPage = (salesManagerId, branchId) => {
+  const redirectToAssignPage = (salesTeamLeaderId, branchId) => {
     history.push({
-      pathname: `/salesManagerAssignConsultant/${salesManagerId}/${branchId}`,
+      pathname: `/salesTeamLeaderAssignConsultant/${salesTeamLeaderId}/${branchId}`,
     });
   };
 
@@ -341,7 +343,7 @@ const Index = (props) => {
 
   return (
     <div>
-      <BreadCrumb title="Sales Manager List" backTo="" path="/" />
+      <BreadCrumb title="Sales Team Leader List" backTo="" path="/" />
       <div>
         <SelectAndClear
           userType={userType}
@@ -371,12 +373,12 @@ const Index = (props) => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_SalesManager) ? (
+                {permissions?.includes(permissionList?.Add_SalesTeamLeader) ? (
                   <ButtonForFunction
                     func={handleAddStaff}
                     className={"btn btn-uapp-add "}
                     icon={<i className="fas fa-plus"></i>}
-                    name={"Add Sales Manager"}
+                    name={"Add Sales Team Leader"}
                   />
                 ) : null}
               </Col>
@@ -419,7 +421,9 @@ const Index = (props) => {
               </Col>
             </Row>
 
-            {permissions?.includes(permissionList?.View_SalesManager_list) && (
+            {permissions?.includes(
+              permissionList?.View_SalesTeamLeader_list
+            ) && (
               <>
                 {employeeList?.length === 0 ? (
                   <h4 className="text-center">No Data Found</h4>

@@ -37,7 +37,7 @@ const AnalyticsDashboard = () => {
       {currentUser.userTypeId.toString() === userTypes?.SystemAdmin ||
       currentUser.userTypeId.toString() === userTypes?.Admin ? (
         <SuperAdmin />
-      ) : currentUser.userTypeId.toString() === userTypes?.SalesManager ? (
+      ) : currentUser.userTypeId.toString() === userTypes?.SalesTeamLeader ? (
         <SalesManager />
       ) : currentUser.userTypeId.toString() === userTypes?.AdmissionManager ? (
         <AdmissionManager />

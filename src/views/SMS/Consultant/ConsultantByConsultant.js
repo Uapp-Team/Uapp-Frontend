@@ -244,7 +244,7 @@ const ConsultantByConsultant = () => {
     }
 
     if (
-      (userType === userTypes?.SalesManager ||
+      (userType === userTypes?.SalesTeamLeader ||
         userType === userTypes?.SystemAdmin) &&
       consultantValue === 0
     ) {
@@ -512,7 +512,7 @@ const ConsultantByConsultant = () => {
                         />
                       )}
 
-                      {(userType === userTypes?.SalesManager ||
+                      {(userType === userTypes?.SalesTeamLeader ||
                         userType === userTypes?.SystemAdmin) && (
                         <FormGroup
                           row
@@ -893,7 +893,7 @@ const ConsultantByConsultant = () => {
             </CardBody>
           </Card>
 
-          {userType !== userTypes?.SalesManager && (
+          {userType !== userTypes?.SalesTeamLeader && (
             <Card>
               <CardBody>
                 <h5>Level Report</h5>

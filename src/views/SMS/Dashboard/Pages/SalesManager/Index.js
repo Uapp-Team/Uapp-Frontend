@@ -22,7 +22,7 @@ import Filter from "../../../../../components/Dropdown/Filter";
 import DashboardProgressChart from "../../../../../components/ui/DashboardProgressChart";
 import DashboardComission from "../../Component/DashboardComission";
 
-const SalesManager = () => {
+const SalesTeamLeader = () => {
   const [open, setOpen] = useState(false);
 
   const [count, setCount] = useState({});
@@ -44,7 +44,7 @@ const SalesManager = () => {
       setIntake(res);
     });
 
-    get(`SalesManagerDashboard/GetTransactions`).then((res) => {
+    get(`SalesTeamLeaderDashboard/GetTransactions`).then((res) => {
       setConsultants(res);
     });
   }, []);
@@ -59,7 +59,7 @@ const SalesManager = () => {
   }, [intakeRngDD, intake]);
 
   useEffect(() => {
-    get(`SalesManagerDashboard/cards/${intakeRngValue}`).then((res) => {
+    get(`SalesTeamLeaderDashboard/cards/${intakeRngValue}`).then((res) => {
       setCount(res);
       console.log(res);
     });
@@ -205,10 +205,10 @@ const SalesManager = () => {
 
       <>
         <DashboardApplication
-          url={`SalesManagerDashboard/NewApplications/${intakeRngValue}`}
+          url={`SalesTeamLeaderDashboard/NewApplications/${intakeRngValue}`}
         />
         <DashboardReadyToApply
-          url={`SalesManagerDashboard/ReadyToApplyApplications/${intakeRngValue}`}
+          url={`SalesTeamLeaderDashboard/ReadyToApplyApplications/${intakeRngValue}`}
         />
         <DashboardProgressChart />
         {/* <DashboardComission id={intakeRngValue} /> */}
@@ -277,4 +277,4 @@ const SalesManager = () => {
   );
 };
 
-export default SalesManager;
+export default SalesTeamLeader;
