@@ -77,10 +77,10 @@ const CampusInformation = () => {
 
 
   useEffect(() => {
-    get(`UniversityCityDD/Index/${uniCountryValue}`).then((res) => {
+    get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
       setCity(res);
     });
-  }, [uniCountryValue])
+  }, [uniCountryValue,unistateValue])
 
 
   useEffect(() => {
