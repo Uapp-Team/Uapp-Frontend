@@ -24,6 +24,7 @@ import { rootUrl } from "../../../../constants/constants";
 import containsDigit from "../../../../helpers/nameContainDigit";
 
 const StudentRegisterForm = () => {
+
   const { invitationcode, email } = useParams();
   const [checked, setChecked] = useState(null);
   const [preferredCountries, setPreferredCountries] = useState([]);
@@ -186,7 +187,7 @@ console.log(localNumber);
   setCountryCode(`+${dialCode}`); 
   setLocalNumber(nationalNumber.trim());  
 
-  
+
     setphoneNumber(value);
     if (value === "") {
       setphoneNUmberError("Phone number is required");

@@ -533,14 +533,29 @@ const AddUniversity = (props) => {
     setUniTypeValue(value);
   };
 
-  const searchStateByCountry = (countryValue) => {
-    get(`UniversityStateDD/Index/${countryValue}`).then((res) => {
+   useEffect(() => {
+     get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
       setUniversityStates(res);
     });
-    get(`UniversityCityDD/Index/${countryValue}`).then((res) => {
+  
+    }, [uniCountryValue]);
+
+
+   useEffect(() => {
+    get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
       setCity(res);
     });
-  };
+  
+    }, [uniCountryValue,unistateValue]);
+
+  // const searchStateByCountry = (countryValue,unistateValue) => {
+  //   get(`UniversityStateDD/Index/${countryValue}`).then((res) => {
+  //     setUniversityStates(res);
+  //   });
+  //   get(`UniversityCityDD/Index/${countryValue}/${unistateValue}`).then((res) => {
+  //     setCity(res);
+  //   });
+  // };
 
   // select University Country
   const selectUniCountry = (label, value) => {
@@ -551,7 +566,7 @@ const AddUniversity = (props) => {
     setUniStateValue(0);
     setCityLabel("Select University City");
     setCityValue(0);
-    searchStateByCountry(value);
+    // searchStateByCountry(value,unistateValue);
   };
 
   // select University State
