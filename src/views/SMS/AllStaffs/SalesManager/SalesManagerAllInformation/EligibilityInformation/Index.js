@@ -420,7 +420,13 @@ const StaffEligibility = () => {
           setFileList4(null);
           setFileList5(null);
           setFileList6(null);
-          history.push("/salesTeamLeaderList");
+              userType !== userTypes?.SalesTeamLeader
+                      ? history.push(
+                          "/salesTeamLeaderList"
+                        )
+                      : history.push(
+                          "/profile"
+                        );
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
