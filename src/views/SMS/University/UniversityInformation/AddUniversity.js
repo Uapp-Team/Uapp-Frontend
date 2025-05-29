@@ -542,9 +542,12 @@ const AddUniversity = (props) => {
 
 
    useEffect(() => {
-    get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
+    if (unistateValue !==0) {
+        get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
       setCity(res);
     });
+    }
+  
   
     }, [uniCountryValue,unistateValue]);
 
