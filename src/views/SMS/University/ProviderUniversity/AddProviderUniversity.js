@@ -446,14 +446,34 @@ const AddProviderUniversity = () => {
     setUniTypeValue(value);
   };
 
-  const searchStateByCountry = (countryValue) => {
-    get(`UniversityStateDD/Index/${countryValue}`).then((res) => {
-      setUniversityStates(res);
-    });
-    get(`UniversityCityDD/Index/${countryValue}`).then((res) => {
-      setCity(res);
-    });
-  };
+
+    useEffect(() => {
+       get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
+        setUniversityStates(res);
+      });
+    
+      }, [uniCountryValue]);
+  
+  
+     useEffect(() => {
+      if (unistateValue !==0) {
+          get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
+        setCity(res);
+      });
+      }
+    
+    
+      }, [uniCountryValue,unistateValue]);
+
+
+  // const searchStateByCountry = (countryValue) => {
+  //   get(`UniversityStateDD/Index/${countryValue}`).then((res) => {
+  //     setUniversityStates(res);
+  //   });
+  //   get(`UniversityCityDD/Index/${countryValue}`).then((res) => {
+  //     setCity(res);
+  //   });
+  // };
 
   // select University Country
   const selectUniCountry = (label, value) => {
@@ -462,9 +482,10 @@ const AddProviderUniversity = () => {
     setUniCountryValue(value);
     setUniStateLabel("Select University State");
     setUniStateValue(0);
+    setCity([]);
     setCityLabel("Select University City");
     setCityValue(0);
-    searchStateByCountry(value);
+    // searchStateByCountry(value);
   };
 
   // select University State

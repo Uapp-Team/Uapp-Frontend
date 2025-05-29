@@ -69,6 +69,7 @@ const CampusInformation = () => {
       setUniverSityCountries(res);
     });
   }, []);
+  
   useEffect(() => {
     get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
       setUniversityStates(res);
