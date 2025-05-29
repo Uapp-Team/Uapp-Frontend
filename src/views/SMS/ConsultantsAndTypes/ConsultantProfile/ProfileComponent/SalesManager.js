@@ -13,7 +13,7 @@ const SalesManager = ({ id }) => {
   const history = useHistory();
 
   useEffect(() => {
-    get(`ConsultantProfile/SalesManager/${id}`).then((res) => {
+    get(`ConsultantProfile/salesTeamLeader/${id}`).then((res) => {
       setConsultantData(res);
     });
   }, [id]);
@@ -31,7 +31,7 @@ const SalesManager = ({ id }) => {
         <Card className="p-4">
           <div className="d-flex justify-between-start">
             <div className="pr-3">
-              {consultantData?.consultantProfileImageMedia == null ? (
+              {consultantData?.salesTeamLeaderImage == null ? (
                 <img
                   src={profileImage}
                   alt="profile_img"
@@ -43,10 +43,7 @@ const SalesManager = ({ id }) => {
                 />
               ) : (
                 <img
-                  src={
-                    rootUrl +
-                    consultantData?.consultantProfileImageMedia?.fileUrl
-                  }
+                  src={rootUrl + consultantData?.salesTeamLeaderImage?.fileUrl}
                   alt="profile_img"
                   style={{
                     width: "50px",
@@ -71,7 +68,7 @@ const SalesManager = ({ id }) => {
                   {consultantData?.parentConsultant}{" "}
                 </p>
               )} */}
-              <p> Sales Manager</p>
+              <p> Sales Team Leader</p>
             </div>
           </div>
 

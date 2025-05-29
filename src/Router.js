@@ -2730,13 +2730,15 @@ class AppRouter extends React.Component {
                     }
                   />
 
-                  {/* sales Manager paths */}
+                  {/* Sales Team Leader paths */}
 
                   <AppRoute
                     exact
-                    path="/salesManagerList"
+                    path="/salesTeamLeaderList"
                     component={
-                      permissions?.includes(permissionList?.View_Employee_list)
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
                         ? SalesManagerList
                         : NotAuthorized
                     }
@@ -2744,69 +2746,92 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     exact
-                    path="/salesManagerAssignConsultant/:salesManagerId/:branchId"
+                    path="/salesTeamLeaderAssignConsultant/:salesTeamLeaderId/:branchId"
                     component={
-                      permissions?.includes(permissionList?.View_Employee_list)
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
                         ? SalesManagerAssignConsultant
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerRegistration"
+                    path="/salesTeamLeaderRegistration"
                     component={
-                      permissions.includes(permissionList?.Add_Employee)
+                      permissions.includes(permissionList?.Add_SalesTeamLeader)
                         ? SalesManagerRegistration
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerGeneralInformation/:salesManagerId"
+                    path="/salesTeamLeaderGeneralInformation/:salesTeamLeaderId"
                     component={
-                      permissions.includes(permissionList?.Update_Employee)
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
                         ? SalesManagerGeneralInformation
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerContactInformation/:salesManagerId"
+                    path="/salesTeamLeaderContactInformation/:salesTeamLeaderId"
                     component={
-                      permissions.includes(permissionList?.Update_Employee)
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
                         ? SalesManagerContactInformation
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerEmergencyInformation/:salesManagerId"
+                    path="/salesTeamLeaderEmergencyInformation/:salesTeamLeaderId"
                     component={
-                      permissions.includes(permissionList?.Update_Employee)
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
                         ? SalesManagerEmergencyInformation
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerPersonalInformation/:salesManagerId"
+                    path="/salesTeamLeaderPersonalInformation/:salesTeamLeaderId"
                     component={
-                      permissions.includes(permissionList?.Update_Employee)
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
                         ? SalesManagerPersonalInformation
                         : NotAuthorized
                     }
                   />
 
                   <AppRoute
-                    path="/salesManagerEligibility/:salesManagerId"
+                    path="/salesTeamLeaderEligibility/:salesTeamLeaderId"
                     component={
-                      permissions.includes(permissionList?.Update_Employee)
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
                         ? SalesManagerEligibility
                         : NotAuthorized
                     }
                   />
 
-                  {/* sales Manager paths */}
+                  <AppRoute
+                    path="/salesTeamLeaderProfile/:id"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Employee_Details
+                      )
+                        ? SalesManagerProfile
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* Sales Team Leader paths */}
 
                   {/* staff paths */}
 
@@ -2915,16 +2940,6 @@ class AppRouter extends React.Component {
                         permissionList?.View_Employee_Details
                       )
                         ? EmployeeProfile
-                        : NotAuthorized
-                    }
-                  />
-                  <AppRoute
-                    path="/salesManagerProfile/:id"
-                    component={
-                      permissions?.includes(
-                        permissionList?.View_Employee_Details
-                      )
-                        ? SalesManagerProfile
                         : NotAuthorized
                     }
                   />

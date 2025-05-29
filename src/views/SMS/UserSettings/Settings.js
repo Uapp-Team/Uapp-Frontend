@@ -168,6 +168,8 @@ const Settings = () => {
                         ? `/consultantInformation/${current_user?.referenceId}`
                         : userTypeId === userTypes.Student.toString()
                         ? `/addStudentInformation/${current_user?.referenceId}/1`
+                        : userTypeId === userTypes.SalesTeamLeader.toString()
+                        ? `/salesTeamLeaderGeneralInformation/${current_user?.referenceId}`
                         : `/staffGeneralInformation/${current_user?.referenceId}`
                     }
                   >

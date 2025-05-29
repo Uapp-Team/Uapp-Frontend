@@ -9,7 +9,7 @@ import { permissionList } from "../../../../../../../constants/AuthorizationCons
 
 const EligibilityForm = ({
   handleSubmit,
-  salesManagerId,
+  salesTeamLeaderId,
   eligibilityData,
   countryDD,
   uniCountryLabel,
@@ -73,7 +73,7 @@ const EligibilityForm = ({
         type="hidden"
         name="employeeId"
         id="employeeId"
-        value={salesManagerId}
+        value={salesTeamLeaderId}
       />
 
       <input
@@ -297,7 +297,7 @@ const EligibilityForm = ({
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={goBackward} />
-            {permissions?.includes(permissionList?.Update_SalesManager) && (
+            {permissions?.includes(permissionList?.Update_SalesTeamLeader) && (
               <SaveButton
                 text="Save"
                 progress={progress}

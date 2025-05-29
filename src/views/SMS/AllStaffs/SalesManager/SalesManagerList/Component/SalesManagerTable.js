@@ -91,33 +91,27 @@ const SalesManagerTable = ({
                   </Link>
                 </td>
               ) : null}
-              {permissions?.includes(permissionList.Staff_Password_Change) ? (
-                <>
-                  {tableData[1]?.isActive ? (
-                    <td>
-                      <div style={{ marginTop: "5px" }}>
-                        <span
-                          onClick={() =>
-                            redirectToAssignPage(emp?.employeeId, emp?.branchId)
-                          }
-                          className="Count-fifth"
-                        >
-                          View({emp?.consultantCount})
-                        </span>
-                      </div>
-                    </td>
-                  ) : null}
-                </>
-              ) : (
-                <td>{emp?.consultantCount}</td>
-              )}
+              {tableData[1]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      onClick={() =>
+                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                      }
+                      className="Count-fifth"
+                    >
+                      View({emp?.consultantCount})
+                    </span>
+                  </div>
+                </td>
+              ) : null}
 
               {permissions?.includes(permissionList.Staff_Password_Change) ? (
                 <>
                   {tableData[2]?.isActive ? (
                     <td>
                       <Link
-                        to="/salesManagerList"
+                        to="/salesTeamLeaderList"
                         onClick={() => handlePass(emp)}
                       >
                         Change
@@ -130,7 +124,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/salesManagerProfile/${emp?.employeeId}`}
+                    to={`/salesTeamLeaderProfile/${emp?.employeeId}`}
                   >
                     {emp?.fullName}
                   </Link>
@@ -167,7 +161,7 @@ const SalesManagerTable = ({
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(
-                      permissionList.View_SalesManager_Details
+                      permissionList.View_SalesTeamLeader_Details
                     ) ? (
                       <ButtonForFunction
                         func={() => redirectToStaffProfile(emp?.employeeId)}
@@ -184,7 +178,7 @@ const SalesManagerTable = ({
                     emp?.email === "finance@uapp.uk" ? null : (
                       <>
                         {permissions.includes(
-                          permissionList?.Update_SalesManager
+                          permissionList?.Update_SalesTeamLeader
                         ) ? (
                           <ButtonForFunction
                             func={() =>
@@ -197,7 +191,7 @@ const SalesManagerTable = ({
                         ) : null}
 
                         {permissions?.includes(
-                          permissionList.Delete_SalesManager
+                          permissionList.Delete_SalesTeamLeader
                         ) ? (
                           <ButtonForFunction
                             func={() => toggleDanger(emp)}

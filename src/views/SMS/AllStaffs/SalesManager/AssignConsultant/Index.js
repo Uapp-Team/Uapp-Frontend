@@ -25,7 +25,7 @@ import Typing from "../../../../../components/form/Typing";
 
 const Index = () => {
   const [navItem, setNavItem] = useState("");
-  const { salesManagerId, branchId } = useParams();
+  const { salesTeamLeaderId, branchId } = useParams();
   const { addToast } = useToasts();
   const history = useHistory();
   const activetab = "6";
@@ -40,13 +40,13 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `SalesManager/FetchConsultants?employeeId=${salesManagerId}&searchText=${searchStr}`
+        `SalesTeamLeader/FetchConsultants?employeeId=${salesTeamLeaderId}&searchText=${searchStr}`
       ).then((res) => {
         setAssignedConsultants(res?.data);
         setLoading(false);
       });
     }
-  }, [salesManagerId, searchStr, isTyping, callApi]);
+  }, [salesTeamLeaderId, searchStr, isTyping, callApi]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -62,10 +62,10 @@ const Index = () => {
       .map((c) => c.consultantId);
 
     const subdata = {
-      employeeId: salesManagerId,
+      employeeId: salesTeamLeaderId,
       ConsultantIds: consultantIds,
     };
-    post(`SalesManager/AssignConsultants`, subdata).then((res) => {
+    post(`SalesTeamLeader/AssignConsultants`, subdata).then((res) => {
       addToast(res?.data?.message, {
         appearance: "success",
         autoDismiss: true,
@@ -84,8 +84,10 @@ const Index = () => {
     <div>
       <BreadCrumb
         title="Assigned Consultant"
-        backTo={userType === userTypes?.SalesManager ? null : "Sales Manager"}
-        path={`/salesManagerList`}
+        backTo={
+          userType === userTypes?.SalesTeamLeader ? null : "Sales Team Leader"
+        }
+        path={`/salesTeamLeaderList`}
       />
 
       <Card>

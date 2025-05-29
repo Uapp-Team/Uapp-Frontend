@@ -112,10 +112,20 @@ const AssociateRegister = () => {
       setTitleError(true);
     }
 
-    if (parentValue === 0) {
+    if (userType === userTypes?.SystemAdmin && parentValue === 0) {
       isFormValid = false;
       setParentError(true);
     }
+
+    if (userType === userTypes?.SalesTeamLeader && parentValue === 0) {
+      isFormValid = false;
+      setParentError(true);
+    }
+
+    // if (parentValue === 0) {
+    //   isFormValid = false;
+    //   setParentError(true);
+    // }
 
     if (!firstName) {
       isFormValid = false;
@@ -173,7 +183,7 @@ const AssociateRegister = () => {
 
       <Card>
         <CardBody>
-          <p className="section-title">Create A Associate naki</p>
+          <p className="section-title">Create A Associate</p>
 
           <div className="mt-1 mb-4 d-flex justify-between cardborder">
             <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
@@ -199,7 +209,7 @@ const AssociateRegister = () => {
                 value={userId}
               />
             )} */}
-            {userType === userTypes?.SalesManager && (
+            {userType === userTypes?.SalesTeamLeader && (
               <input
                 type="hidden"
                 id="consultantId"
@@ -210,7 +220,7 @@ const AssociateRegister = () => {
 
             <Row>
               <Col md="6">
-                {userType === userTypes?.SalesManager && (
+                {userType === userTypes?.SalesTeamLeader && (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       Parent Consultant <span className="text-danger">*</span>{" "}
@@ -223,11 +233,11 @@ const AssociateRegister = () => {
                       // id="parentConsultantId"
                     />
 
-                    {parentError && (
+                    {/* {parentError && (
                       <span className="text-danger">
                         Parent consultant is required
                       </span>
-                    )}
+                    )} */}
                   </FormGroup>
                 )}
 

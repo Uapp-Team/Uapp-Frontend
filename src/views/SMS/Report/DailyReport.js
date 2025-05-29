@@ -4,10 +4,11 @@ import get from "../../../helpers/get";
 import BreadCrumb from "../../../components/breadCrumb/BreadCrumb";
 import Chart from "react-apexcharts";
 import Calender from "../../../components/date/Calender";
+import { currentDate } from "../../../components/date/calenderFormate";
 
 const DailyReport = () => {
   const [chartData, setChartData] = useState([]);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(currentDate);
 
   useEffect(() => {
     get(`DailyReport/Report?dateTime=${date}`).then((res) => {

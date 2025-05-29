@@ -39,7 +39,7 @@ const SalesManagerRegister = () => {
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [salesManagerId, setSalesManagerId] = useState();
+  const [salesTeamLeaderId, setsalesTeamLeaderId] = useState();
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -170,7 +170,7 @@ const SalesManagerRegister = () => {
         setButtonStatus(false);
 
         if (res.status === 200 && res.data.isSuccess === true) {
-          setSalesManagerId(res?.data?.result?.id);
+          setsalesTeamLeaderId(res?.data?.result?.id);
           setIsModalOpen(true);
           setBranchLabel("Select Branch");
           setBranchValue(0);
@@ -191,19 +191,19 @@ const SalesManagerRegister = () => {
   };
 
   const goToProfile = () => {
-    history.push(`/salesManagerPersonalInformation/${salesManagerId}`);
+    history.push(`/salesTeamLeaderPersonalInformation/${salesTeamLeaderId}`);
   };
 
   const ToBack = () => {
-    history.push("/salesManagerList");
+    history.push("/salesTeamLeaderList");
   };
 
   return (
     <div>
       <BreadCrumb
-        title="Sales Manager General Information"
-        backTo="Sales Manager"
-        path="/salesManagerList"
+        title="Sales Team Leader General Information"
+        backTo="Sales Team Leader"
+        path="/salesTeamLeaderList"
       />
 
       <Card>
@@ -337,9 +337,11 @@ const SalesManagerRegister = () => {
 
                 <FormGroup className="text-right">
                   <CancelButton cancel={ToBack} />
-                  {permissions?.includes(permissionList?.Add_SalesManager) && (
+                  {permissions?.includes(
+                    permissionList?.Add_SalesTeamLeader
+                  ) && (
                     <SaveButton
-                      text="Create Sales Manager"
+                      text="Create Sales Team Leader"
                       progress={progress}
                       buttonStatus={buttonStatus}
                     />
@@ -351,8 +353,8 @@ const SalesManagerRegister = () => {
         </CardBody>
       </Card>
       <ConfirmModal
-        text="Sales Manager added successfully"
-        text2="An email is sent to the Sales Manager email with login credentials"
+        text="Sales Team Leader added successfully"
+        text2="An email is sent to the Sales Team Leader email with login credentials"
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(!isModalOpen)}
         buttonStatus={buttonStatus}
