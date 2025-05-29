@@ -106,6 +106,21 @@ const AddProviderUniversityCampus = (props) => {
     });
   }, []);
 
+   useEffect(() => {
+    get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
+      setUniversityStates(res);
+    });
+  }, [uniCountryValue])
+
+
+  useEffect(() => {
+      if (unistateValue !==0) {
+        get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
+      setCity(res);
+    });
+    }
+  }, [uniCountryValue,unistateValue])
+
   useEffect(() => {
     setuniversityId(uniId);
 
@@ -174,14 +189,9 @@ const AddProviderUniversityCampus = (props) => {
     setUniCountryError(false);
     setUniCountryLabel(label);
     setUniCountryValue(value);
-    get(`UniversityStateDD/Index/${value}`).then((res) => {
-      setUniversityStates(res);
-    });
     setUniStateLabel("Select Campus State");
     setUniStateValue(0);
-    get(`UniversityCityDD/Index/${value}`).then((res) => {
-      setCity(res);
-    });
+  setCity([]);
     setCityLabel("Select Campus City");
     setCityValue(0);
   };

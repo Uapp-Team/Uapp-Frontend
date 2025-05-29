@@ -24,7 +24,6 @@ import { rootUrl } from "../../../../constants/constants";
 import containsDigit from "../../../../helpers/nameContainDigit";
 
 const StudentRegisterForm = () => {
-
   const { invitationcode, email } = useParams();
   const [checked, setChecked] = useState(null);
   const [preferredCountries, setPreferredCountries] = useState([]);
@@ -56,10 +55,6 @@ const StudentRegisterForm = () => {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
   const [progress, setProgress] = useState(false);
-  const [countryCode, setCountryCode] = useState("");
-const [localNumber, setLocalNumber] = useState("");
-console.log(countryCode);
-console.log(localNumber);
 
   useEffect(() => {
     email && setuserEmail(email);
@@ -176,18 +171,7 @@ console.log(localNumber);
     return phoneNumberPattern.test(phoneNumber);
   };
 
-  const handlePhoneNumber = (value,data) => {
- const dialCode = data?.dialCode || ""; 
-  const cleanedValue = value.replace(/^\+/, ""); 
-  
-  const nationalNumber = cleanedValue.startsWith(dialCode)
-    ? cleanedValue.slice(dialCode.length)
-    : cleanedValue;
-
-  setCountryCode(`+${dialCode}`); 
-  setLocalNumber(nationalNumber.trim());  
-
-
+  const handlePhoneNumber = (value) => {
     setphoneNumber(value);
     if (value === "") {
       setphoneNUmberError("Phone number is required");
@@ -380,8 +364,7 @@ console.log(localNumber);
       FirstName: firstName,
       LastName: lastName,
       Email: userEmail,
-       CountryCode: countryCode,
-       PhoneNumber: localNumber,
+      PhoneNumber: phoneNumber,
       Password: password,
       InvitationCode: referCode,
     };
