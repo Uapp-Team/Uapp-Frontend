@@ -567,6 +567,7 @@ const AddUniversity = (props) => {
     setUniCountryValue(value);
     setUniStateLabel("Select University State");
     setUniStateValue(0);
+    setCity([]);
     setCityLabel("Select University City");
     setCityValue(0);
     // searchStateByCountry(value,unistateValue);

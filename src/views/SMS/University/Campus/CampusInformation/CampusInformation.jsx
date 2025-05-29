@@ -77,9 +77,11 @@ const CampusInformation = () => {
 
 
   useEffect(() => {
-    get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
+      if (unistateValue !==0) {
+        get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
       setCity(res);
     });
+    }
   }, [uniCountryValue,unistateValue])
 
 
@@ -119,7 +121,7 @@ const CampusInformation = () => {
 
     setUniStateLabel("Select Campus State");
     setUniStateValue(0);
-
+    setCity([]);
     setCityLabel("Select Campus City");
     setCityValue(0);
   };
