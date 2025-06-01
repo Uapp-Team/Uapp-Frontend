@@ -9,6 +9,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import {
   Col,
   Form,
@@ -54,6 +56,12 @@ const ConsultantRegisterForm = () => {
   const [progress, setProgress] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+  const [countryCode, setCountryCode] = useState("");
+  const [localNumber, setLocalNumber] = useState("");
+  const [phoneNUmberError, setphoneNUmberError] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [valid, setValid] = useState(true);
+
   useEffect(() => {
     setParameter(invitationcode);
   }, [invitationcode]);
@@ -124,6 +132,36 @@ const ConsultantRegisterForm = () => {
       setEmailError("");
     }
   };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+
+    return phoneNumberPattern.test(phoneNumber);
+  };
+
+  const handlePhoneNumber = (value, data) => {
+    const dialCode = data?.dialCode || "";
+    const cleanedValue = value.replace(/^\+/, "");
+
+    const nationalNumber = cleanedValue.startsWith(dialCode)
+      ? cleanedValue.slice(dialCode.length)
+      : cleanedValue;
+
+    setCountryCode(`+${dialCode}`);
+    setLocalNumber(nationalNumber.trim());
+
+    setphoneNumber(value);
+    if (value === "") {
+      setphoneNUmberError("Phone number is required");
+    } else if (value?.length < 9) {
+      setphoneNUmberError("Phone number required minimum 9 digit");
+    } else {
+      setphoneNUmberError("");
+    }
+    // setphoneNumber(value);
+    setValid(validatePhoneNumber(value));
+  };
+
   const handlePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
@@ -206,6 +244,17 @@ const ConsultantRegisterForm = () => {
       isFormValid = false;
       setLinkedFacebookError("LinkedIn or Facebook is required");
     }
+
+    if (!phoneNumber) {
+      isFormValid = false;
+      setphoneNUmberError("Phone number is required");
+    }
+
+    if (phoneNumber?.length < 9) {
+      isFormValid = false;
+      setphoneNUmberError("Phone number required minimum 9 digit");
+    }
+
     if (email === "") {
       isFormValid = false;
       setEmailError("Email is required");
@@ -246,6 +295,8 @@ const ConsultantRegisterForm = () => {
     subData.append("cvfile", cvFile);
     subData.append("password", password);
     subData.append("linkTypeId", loansForEu);
+    subData.append("countryCode", countryCode);
+    subData.append("PhoneNumber", localNumber);
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
@@ -425,6 +476,27 @@ const ConsultantRegisterForm = () => {
         ) : null}
 
         <div className="mb-3">
+          <FormGroup style={{ marginBottom: "-6px" }}>
+            <span>Phone Number</span>
+            <PhoneInput
+              type="string"
+              name="phoneNumber"
+              id="phoneNumber"
+              country={"gb"}
+              countryCodeEditable={false}
+              enableLongNumbers={true}
+              onChange={handlePhoneNumber}
+              value={phoneNumber ? phoneNumber : ""}
+              inputProps={{
+                required: true,
+              }}
+            />
+
+            <span className="text-danger">{phoneNUmberError}</span>
+          </FormGroup>
+        </div>
+
+        <div className="mb-3">
           <FormGroup
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
@@ -439,6 +511,7 @@ const ConsultantRegisterForm = () => {
             <span className="text-danger">{emailError}</span>
           </FormGroup>
         </div>
+
         <div className="mb-3">
           <img
             src={notify}
