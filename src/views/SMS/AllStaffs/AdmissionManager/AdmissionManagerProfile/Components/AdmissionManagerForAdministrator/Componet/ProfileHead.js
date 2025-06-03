@@ -30,7 +30,6 @@ import ImageUploadCrop from "../../../../../../../../components/ImageUpload/Imag
 
 const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
   const [success, setSuccess] = useState(false);
-
   const userId = localStorage.getItem("referenceId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userTypeId = localStorage.getItem("userType");
@@ -721,7 +720,6 @@ const ProfileHead = ({ admissionManagerId, setHeadData, headData }) => {
                     userTypeId === userTypes?.ProviderAdmin.toString() ? (
                       <div className="d-flex justify-content-md-end mb-2">
                         <Select
-                          className=" w-50"
                           options={statusTypeMenu}
                           value={{ label: statusLabel, value: statusValue }}
                           onChange={(opt) =>
