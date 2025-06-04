@@ -48,10 +48,7 @@ const ColumnApplicationProvider = [
     title: "Assessment",
     isActive: true,
   },
-  {
-    title: "Offer",
-    isActive: true,
-  },
+
   {
     title: "Interview",
     isActive: true,
@@ -60,10 +57,7 @@ const ColumnApplicationProvider = [
     title: "ELPT",
     isActive: true,
   },
-  {
-    title: "Enrolment Status",
-    isActive: true,
-  },
+
   {
     title: "SLCs",
     isActive: true,
