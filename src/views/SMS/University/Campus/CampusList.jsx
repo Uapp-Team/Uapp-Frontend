@@ -265,7 +265,7 @@ const CampusList = (props) => {
                             icon={<i className="fas fa-file-excel"></i>}
                           />
                         </div>
-                        <div className="cursor-pointer">
+                        {/* <div className="cursor-pointer">
                           <ReactToPrint
                             trigger={() => (
                               <p>
@@ -274,7 +274,7 @@ const CampusList = (props) => {
                             )}
                             content={() => componentRef.current}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </DropdownMenu>
                   </Dropdown>

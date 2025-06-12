@@ -107,7 +107,7 @@ const SubjectIntake = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
-    startDate && subData.append(`classStartDate`, startDate);
+    startDate && subData.append(`classStart`, startDate);
 
     if (validateForm()) {
       setButtonStatus(true);
