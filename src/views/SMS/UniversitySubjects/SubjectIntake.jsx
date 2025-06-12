@@ -40,6 +40,8 @@ const SubjectIntake = () => {
 
   const [date, setDate] = useState();
   const [dateError, setDateError] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [startdateError, setstartDateError] = useState(false);
 
   const { addToast } = useToasts();
 
@@ -105,6 +107,7 @@ const SubjectIntake = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
+    startDate && subData.append(`classStartDate`, startDate);
 
     if (validateForm()) {
       setButtonStatus(true);
@@ -172,6 +175,14 @@ const SubjectIntake = () => {
     setDate("");
   };
 
+    const handleStartDate = (e) => {
+    if (e) {
+      setStartDate(e);
+      // } else {
+      //   setstartDateError("Class Start Date Required");
+    }
+  };
+
   const handleDate = (e) => {
     var datee = e;
     var utcDate = new Date(datee);
@@ -212,6 +223,10 @@ const SubjectIntake = () => {
                 handleReset={handleReset}
                 progress1={progress1}
                 buttonStatus={buttonStatus}
+                setstartDateError={setstartDateError}
+                startdateError={startdateError}
+                handleStartDate={handleStartDate}
+                startDate={startDate}
               />
             </Col>
             <Col md="8">

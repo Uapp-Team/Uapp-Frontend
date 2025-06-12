@@ -30,6 +30,7 @@ const SubjectIntakeListComponent = ({
               <th>Name</th>
               <th>Status</th>
               <th>Deadline</th>
+              <th>Class Start</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -40,6 +41,10 @@ const SubjectIntakeListComponent = ({
                 <td>{int?.intake?.name}</td>
                 <td>{int?.intakeStatus?.name}</td>
                 <td>{handleDate(int?.applicationDeadLine)}</td>
+                <td> {int?.classStartDate !==
+                 "01/01/0001" && (
+                <span>{int?.classStartDate}</span>
+                 )}</td>
                 <td style={{ width: "8%" }} className="text-center">
                   {permissions?.includes(permissionList.Edit_Subjects) ? (
                     <ButtonForFunction
