@@ -51,10 +51,10 @@ const ColumnApplicationCommon = [
     title: "Assessment",
     isActive: true,
   },
-  {
-    title: "Offer",
-    isActive: true,
-  },
+  // {
+  //   title: "Offer",
+  //   isActive: true,
+  // },
   {
     title: "Interview",
     isActive: true,
@@ -63,10 +63,10 @@ const ColumnApplicationCommon = [
     title: "Manager",
     isActive: true,
   },
-  {
-    title: "Enrolment Status",
-    isActive: true,
-  },
+  // {
+  //   title: "Enrolment Status",
+  //   isActive: true,
+  // },
   {
     title: "SLCs",
     isActive: true,
