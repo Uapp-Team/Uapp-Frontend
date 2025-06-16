@@ -5,7 +5,8 @@ const OverflowHeightText = ({ text, className, height, line = 1, link }) => {
   return (
     <>
       <Link
-        to={`/subjectProfile/${link}`}
+        to={`/pageNotFound/${link}`}
+        // to={`/subjectProfile/${link}`}
         className={className}
         style={{
           height: height,
