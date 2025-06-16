@@ -35,22 +35,22 @@ const UserViewUniversity = () => {
   const [answerData, setAnswerData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    Uget(`University/get-dd`).then((res) => {
-      setUniversity(res?.data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Uget(`University/get-dd`).then((res) => {
+  //     setUniversity(res?.data);
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    const filterData = university.filter((uni) => {
-      console.log(uni, universityId);
+  // useEffect(() => {
+  //   const filterData = university.filter((uni) => {
+  //     console.log(uni, universityId);
 
-      return uni.id.toString() === universityId;
-    });
+  //     return uni.id.toString() === universityId;
+  //   });
 
-    setUniValue(filterData[0]?.id);
-    setUniLable(filterData[0]?.name);
-  }, [university, universityId]);
+  //   setUniValue(filterData[0]?.id);
+  //   setUniLable(filterData[0]?.name);
+  // }, [university, universityId]);
 
   useEffect(() => {
     setLoading(true);
@@ -108,8 +108,8 @@ const UserViewUniversity = () => {
                 setLabel={setUniLable}
                 value={uniValue}
                 setValue={setUniValue}
-                // url="University/get-dd"
-                list={university}
+                url="University/get-dd"
+                // list={university}
                 className="mb-3"
               />
             </Col>

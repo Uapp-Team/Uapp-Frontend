@@ -3708,10 +3708,6 @@ class AppRouter extends React.Component {
                   <AppRoute path="/informationView" component={ISMUserView} />
 
                   <AppRoute
-                    path="/informationViewUniversity/:universityId"
-                    component={UserViewUniversity}
-                  />
-                  <AppRoute
                     path="/informationViewUniversity"
                     component={UserViewUniversity}
                   />

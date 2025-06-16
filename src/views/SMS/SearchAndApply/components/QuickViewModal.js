@@ -58,6 +58,7 @@ const QuickViewModal = ({
   console.log(quickViewData);
 
   let router = useHistory();
+  const history = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
   const [selectedIntake, setSelectedIntake] = useState("Select Intake");
@@ -66,11 +67,14 @@ const QuickViewModal = ({
   const [subjectIntake, setSubjectIntake] = useState([]);
 
   const handleCourseDetails = (subjectId) => {
-    router.push(`subjectProfile/${subjectId}`);
+    router.push(`pageNotFound/${subjectId}`);
+    // router.push(`subjectProfile/${subjectId}`);
   };
 
-  const handleISM = (universityId) => {
-    router.push(`/informationViewUniversity/${universityId}`);
+  const handleISM = (universityId, universityName) => {
+    history.push(`/informationViewUniversity`, {
+      state: { name: universityName, id: universityId },
+    });
   };
 
   const checkHome = applicationTypeSelected?.filter(
@@ -144,7 +148,12 @@ const QuickViewModal = ({
               <div className="d-flex">
                 <div
                   className="mr-2 icon-design"
-                  onClick={() => handleISM(quickViewData?.universityId)}
+                  onClick={() =>
+                    handleISM(
+                      quickViewData?.universityId,
+                      quickViewData?.universityName
+                    )
+                  }
                 >
                   <HelpIcon />
                 </div>
