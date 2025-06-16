@@ -48,11 +48,6 @@ const ColumnApplicationManager = [
     title: "Assessment",
     isActive: true,
   },
-
-  {
-    title: "Offer",
-    isActive: true,
-  },
   {
     title: "Interview",
     isActive: true,
@@ -61,10 +56,7 @@ const ColumnApplicationManager = [
     title: "ELPT",
     isActive: true,
   },
-  {
-    title: "Enrolment Status",
-    isActive: true,
-  },
+
   {
     title: "SLCs",
     isActive: true,

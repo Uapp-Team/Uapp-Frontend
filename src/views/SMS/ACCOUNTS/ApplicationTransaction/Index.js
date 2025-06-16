@@ -603,7 +603,7 @@ const Index = () => {
                               icon={<i className="fas fa-file-excel"></i>}
                             />
                           </div>
-                          <div className="cursor-pointer">
+                          {/* <div className="cursor-pointer">
                             <ReactToPrint
                               trigger={() => (
                                 <p>
@@ -612,7 +612,7 @@ const Index = () => {
                               )}
                               content={() => componentRef.current}
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </DropdownMenu>
                     </Dropdown>

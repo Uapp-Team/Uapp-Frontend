@@ -1672,7 +1672,7 @@ const ApplicationsCommon = () => {
                             icon={<i className="fas fa-file-excel"></i>}
                           />
                         </div>
-                        <div className="cursor-pointer">
+                        {/* <div className="cursor-pointer">
                           <ReactToPrint
                             trigger={() => (
                               <p>
@@ -1681,7 +1681,7 @@ const ApplicationsCommon = () => {
                             )}
                             content={() => componentRef.current}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </DropdownMenu>
                   </Dropdown>
@@ -1829,38 +1829,30 @@ const ApplicationsCommon = () => {
                                     Assessment
                                   </th>
                                 ) : null}
-                                {/* {tableData[13]?.isActive ? (
-                                  <th style={{ verticalAlign: "middle" }}>
-                                    Offer
-                                  </th>
-                                ) : null} */}
-                                {tableData[14]?.isActive ? (
+
+                                {tableData[13]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Interview
                                   </th>
                                 ) : null}
-                                {tableData[15]?.isActive ? (
+                                {tableData[14]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Manager
                                   </th>
                                 ) : null}
-                                {/* {tableData[16]?.isActive ? (
-                                  <th style={{ verticalAlign: "middle" }}>
-                                    Enrolment Status
-                                  </th>
-                                ) : null} */}
-                                {tableData[17]?.isActive ? (
+
+                                {tableData[15]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     SLCs
                                   </th>
                                 ) : null}
 
-                                {tableData[18]?.isActive ? (
+                                {tableData[16]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Consultant
                                   </th>
                                 ) : null}
-                                {tableData[19]?.isActive ? (
+                                {tableData[17]?.isActive ? (
                                   <th
                                     style={{ verticalAlign: "middle" }}
                                     className="text-center"
@@ -1985,43 +1977,31 @@ const ApplicationsCommon = () => {
                                     </td>
                                   ) : null}
 
-                                  {/* {tableData[13]?.isActive ? (
-                                    <td style={{ verticalAlign: "middle" }}>
-                                      {app?.offerStatusName}
-                                    </td>
-                                  ) : null} */}
-
-                                  {tableData[14]?.isActive ? (
+                                  {tableData[13]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.interviewStatusName}
                                     </td>
                                   ) : null}
 
-                                  {tableData[15]?.isActive ? (
+                                  {tableData[14]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.managerName}
                                     </td>
                                   ) : null}
 
-                                  {/* {tableData[16]?.isActive ? (
-                                    <td style={{ verticalAlign: "middle" }}>
-                                      {app?.enrollmentStatusName}
-                                    </td>
-                                  ) : null} */}
-
-                                  {tableData[17]?.isActive ? (
+                                  {tableData[15]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.studentFinanceName}
                                     </td>
                                   ) : null}
 
-                                  {tableData[18]?.isActive ? (
+                                  {tableData[16]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.consultantName}
                                     </td>
                                   ) : null}
 
-                                  {tableData[19]?.isActive ? (
+                                  {tableData[17]?.isActive ? (
                                     <td
                                       style={{ width: "8%" }}
                                       className="text-center my-auto"

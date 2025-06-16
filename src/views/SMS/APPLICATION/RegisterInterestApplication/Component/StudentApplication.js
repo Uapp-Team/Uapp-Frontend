@@ -407,7 +407,7 @@ const StudentApplication = ({ currentUser }) => {
                             icon={<i className="fas fa-file-excel"></i>}
                           />
                         </div>
-                        <div className="cursor-pointer">
+                        {/* <div className="cursor-pointer">
                           <ReactToPrint
                             trigger={() => (
                               <p>
@@ -416,7 +416,7 @@ const StudentApplication = ({ currentUser }) => {
                             )}
                             content={() => componentRef.current}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </DropdownMenu>
                   </Dropdown>

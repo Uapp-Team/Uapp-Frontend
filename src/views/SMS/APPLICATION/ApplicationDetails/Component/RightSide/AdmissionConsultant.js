@@ -16,11 +16,11 @@ const AdmissionConsultant = ({ applicationInfo }) => {
                   <img
                     src={profileImage}
                     alt="profile_img"
-                    // style={{
-                    //   width: "150px",
-                    //   height: "150px",
-                    //   borderRadius: "7px",
-                    // }}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50px",
+                    }}
                   />
                 ) : (
                   <img
@@ -30,11 +30,11 @@ const AdmissionConsultant = ({ applicationInfo }) => {
                         ?.thumbnailUrl
                     }
                     alt="profile_img"
-                    // style={{
-                    //   width: "150px",
-                    //   height: "150px",
-                    //   borderRadius: "7px",
-                    // }}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50px",
+                    }}
                   />
                 )}
               </div>

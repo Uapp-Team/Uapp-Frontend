@@ -1,4 +1,4 @@
-const ColumnApplicationStudent = [
+const ColumnApplicationCompanion = [
   {
     title: "APP ID",
     isActive: true,
@@ -8,7 +8,7 @@ const ColumnApplicationStudent = [
     isActive: true,
   },
   {
-    title: "Campus",
+    title: "Student",
     isActive: true,
   },
   {
@@ -27,23 +27,5 @@ const ColumnApplicationStudent = [
     title: "Status",
     isActive: true,
   },
-
-  {
-    title: "Interview",
-    isActive: true,
-  },
-  {
-    title: "ELPT",
-    isActive: true,
-  },
-
-  {
-    title: "SLCs",
-    isActive: true,
-  },
-  {
-    title: "Action",
-    isActive: true,
-  },
 ];
-export default ColumnApplicationStudent;
+export default ColumnApplicationCompanion;

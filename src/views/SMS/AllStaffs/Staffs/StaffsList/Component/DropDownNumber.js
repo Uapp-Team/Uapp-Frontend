@@ -26,7 +26,7 @@ const DropDownNumber = ({ dropdownOpen, toggle, componentRef }) => {
                 icon={<i className="fas fa-file-excel"></i>}
               />
             </div>
-            <div className="cursor-pointer">
+            {/* <div className="cursor-pointer">
               <ReactToPrint
                 trigger={() => (
                   <p>
@@ -35,7 +35,7 @@ const DropDownNumber = ({ dropdownOpen, toggle, componentRef }) => {
                 )}
                 content={() => componentRef.current}
               />
-            </div>
+            </div> */}
           </div>
         </DropdownMenu>
       </Dropdown>

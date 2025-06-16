@@ -39,6 +39,7 @@ import {
   HeartIconStock,
   LocationIcon,
   StudyModeIcon,
+  HelpIcon,
 } from "./icons";
 
 const QuickViewModal = ({
@@ -54,6 +55,8 @@ const QuickViewModal = ({
   applyEligibility,
   subjectInfo,
 }) => {
+  console.log(quickViewData);
+
   let router = useHistory();
   const [openApplyModal, setOpenApplyModal] = useState(false);
   const [selectedIntakeId, setSelectedIntakeId] = useState("");
@@ -61,8 +64,13 @@ const QuickViewModal = ({
   const [selectedClassStartDate, setSelectedClassStartDate] = useState();
   const [selectedIntakeDeadLine, setSelectedIntakeDeadLine] = useState();
   const [subjectIntake, setSubjectIntake] = useState([]);
+
   const handleCourseDetails = (subjectId) => {
     router.push(`subjectProfile/${subjectId}`);
+  };
+
+  const handleISM = (universityId) => {
+    router.push(`/informationViewUniversity/${universityId}`);
   };
 
   const checkHome = applicationTypeSelected?.filter(
@@ -134,6 +142,12 @@ const QuickViewModal = ({
               className="d-flex align-items-center justify-content-between mb-3"
             >
               <div className="d-flex">
+                <div
+                  className="mr-2 icon-design"
+                  onClick={() => handleISM(quickViewData?.universityId)}
+                >
+                  <HelpIcon />
+                </div>
                 <div className="mr-2 icon-design">
                   <ArrowLeftRightIcon />
                 </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ismhero from "../../../../assets/img/ismhero.png";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
@@ -14,6 +14,7 @@ import Loader from "../../Search/Loader/Loader";
 import Pagination from "../../Pagination/Pagination";
 
 const UserViewUniversity = () => {
+  const { universityId } = useParams();
   const history = useHistory();
   const data = history?.location?.state?.state;
   const [isDocTyping, setIsDocTyping] = useState(false);
@@ -22,6 +23,7 @@ const UserViewUniversity = () => {
   const [loading, setLoading] = useState(false);
   const [uniLable, setUniLable] = useState(data?.name);
   const [uniValue, setUniValue] = useState(data?.id);
+  const [university, setUniversity] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [keyword, setKeyword] = useState("");
   // const [category, setCategory] = useState([]);
@@ -32,6 +34,23 @@ const UserViewUniversity = () => {
   const [res, setRes] = useState({});
   const [answerData, setAnswerData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    Uget(`University/get-dd`).then((res) => {
+      setUniversity(res?.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const filterData = university.filter((uni) => {
+      console.log(uni, universityId);
+
+      return uni.id.toString() === universityId;
+    });
+
+    setUniValue(filterData[0]?.id);
+    setUniLable(filterData[0]?.name);
+  }, [university, universityId]);
 
   useEffect(() => {
     setLoading(true);
@@ -89,7 +108,8 @@ const UserViewUniversity = () => {
                 setLabel={setUniLable}
                 value={uniValue}
                 setValue={setUniValue}
-                url="University/get-dd"
+                // url="University/get-dd"
+                list={university}
                 className="mb-3"
               />
             </Col>

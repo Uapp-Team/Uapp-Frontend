@@ -10,7 +10,15 @@ const CompanionLink = ({ companionId, companionProfileData }) => {
         </div>
         {companionProfileData?.data?.companionLinks.map((details) => (
           <>
-            <a href={details?.link} target="blank">
+            <a
+              href={
+                details?.link?.startsWith("http://") ||
+                details?.link?.startsWith("https://")
+                  ? details.link
+                  : `https://${details.link}`
+              }
+              target="blank"
+            >
               <h5 className="font-theme-second fw-500">
                 <i class="fa-solid fa-arrow-up-right-from-square theme-text-primary mr-2"></i>
                 {details?.title}

@@ -107,8 +107,10 @@ const PersonalForm = ({
   };
 
   const addLink = (data) => {
+    // const urlRegex =
+    //   /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(:\d+)?(\/[\w-]*)*\/?$/;
     const urlRegex =
-      /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,4}(:\d+)?(\/[\w-]*)*\/?$/;
+      /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-@.%=+~#?&]*)*\/?$/;
 
     if (data.title === "" || data.link === "") {
       data.title === "" && setlinkTitleError("Title Required");

@@ -406,7 +406,7 @@ const StudentApplication = ({ currentUser }) => {
                             icon={<i className="fas fa-file-excel"></i>}
                           />
                         </div>
-                        <div className="cursor-pointer">
+                        {/* <div className="cursor-pointer">
                           <ReactToPrint
                             trigger={() => (
                               <p>
@@ -415,7 +415,7 @@ const StudentApplication = ({ currentUser }) => {
                             )}
                             content={() => componentRef.current}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </DropdownMenu>
                   </Dropdown>
@@ -522,27 +522,21 @@ const StudentApplication = ({ currentUser }) => {
                                 Status
                               </th>
                             ) : null}
-                            {/* {tableData[7]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>Offer</th>
-                            ) : null} */}
-                            {tableData[8]?.isActive ? (
+
+                            {tableData[7]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
                               </th>
                             ) : null}
-                            {tableData[9]?.isActive ? (
+                            {tableData[8]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
-                            {/* {tableData[10]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Enrolment Status
-                              </th>
-                            ) : null} */}
-                            {tableData[11]?.isActive ? (
+
+                            {tableData[9]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
 
-                            {tableData[12]?.isActive ? (
+                            {tableData[10]?.isActive ? (
                               <th
                                 style={{ verticalAlign: "middle" }}
                                 className="text-center"
@@ -661,43 +655,25 @@ const StudentApplication = ({ currentUser }) => {
                                 </td>
                               ) : null}
 
-                              {/* {tableData[7]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.offerStatusName}
-                                </td>
-                              ) : null} */}
-
-                              {tableData[8]?.isActive ? (
+                              {tableData[7]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.interviewStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[9]?.isActive ? (
+                              {tableData[8]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.elptStatusName}
                                 </td>
                               ) : null}
 
-                              {/* {tableData[10]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.enrollmentStatusName}
-                                </td>
-                              ) : null} */}
-
-                              {tableData[11]?.isActive ? (
+                              {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.studentFinanceName}
                                 </td>
                               ) : null}
 
-                              {/* {checkCons ? (
-                        <td style={{ verticalAlign: "middle" }}>
-                          {app?.consultantName}
-                        </td>
-                      ) : null} */}
-
-                              {tableData[12]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td
                                   style={{ width: "8%" }}
                                   className="text-center"

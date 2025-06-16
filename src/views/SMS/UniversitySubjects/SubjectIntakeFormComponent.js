@@ -5,6 +5,7 @@ import moment from "moment";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 import CancelButton from "../../../components/buttons/CancelButton";
 import SaveButton from "../../../components/buttons/SaveButton";
+import DMYPicker from "../../../components/form/DMYPicker";
 
 const SubjectIntakeFormComponent = ({
   camId,
@@ -25,7 +26,7 @@ const SubjectIntakeFormComponent = ({
   dateError,
   handleReset,
   progress1,
-  buttonStatus,
+  buttonStatus,setstartDateError,startdateError,handleStartDate,startDate
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
@@ -78,6 +79,8 @@ const SubjectIntakeFormComponent = ({
             )}
           </FormGroup>
 
+            {(statusValue === 1 || statusValue === 3) && (
+                            
           <FormGroup>
             <span>
               <span className="text-danger">*</span>
@@ -97,6 +100,23 @@ const SubjectIntakeFormComponent = ({
               <span className="text-danger">Date is required</span>
             ) : null}
           </FormGroup>
+           )}
+
+          {statusValue === 1 && (
+
+          <FormGroup>
+             <DMYPicker
+                    label="Class Start Date"
+                    value={startDate}
+                    setValue={handleStartDate}
+                    error={startdateError}
+                    action={setstartDateError}
+                    />
+      
+          </FormGroup>
+          
+       )}
+
 
           <FormGroup>
             <CancelButton text="Clear" cancel={handleReset} />

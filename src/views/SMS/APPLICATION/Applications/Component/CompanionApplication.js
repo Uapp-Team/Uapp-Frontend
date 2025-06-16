@@ -16,8 +16,8 @@ import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConv
 import ReactToPrint from "react-to-print";
 import { permissionList } from "../../../../../constants/AuthorizationConstant.js";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb.js";
-import ColumnApplicationStudent from "../../../TableColumn/ColumnApplicationStudent.js";
 import PaginationOnly from "../../../Pagination/PaginationOnly.jsx";
+import ColumnApplicationCompanion from "../../../TableColumn/ColumnApplicationCompanion.js";
 
 const CompanionApplication = ({ currentUser }) => {
   const referenceId = localStorage.getItem("referenceId");
@@ -39,17 +39,18 @@ const CompanionApplication = ({ currentUser }) => {
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    const tableColumnApplicationStudent = JSON.parse(
-      localStorage.getItem("ColumnApplicationStudent")
+    const tableColumnApplicationCompanion = JSON.parse(
+      localStorage.getItem("ColumnApplicationCompanion")
     );
-    tableColumnApplicationStudent &&
-      setTableData(tableColumnApplicationStudent);
-    !tableColumnApplicationStudent &&
+    tableColumnApplicationCompanion &&
+      setTableData(tableColumnApplicationCompanion);
+    !tableColumnApplicationCompanion &&
       localStorage.setItem(
-        "ColumnApplicationStudent",
-        JSON.stringify(ColumnApplicationStudent)
+        "ColumnApplicationCompanion",
+        JSON.stringify(ColumnApplicationCompanion)
       );
-    !tableColumnApplicationStudent && setTableData(ColumnApplicationStudent);
+    !tableColumnApplicationCompanion &&
+      setTableData(ColumnApplicationCompanion);
   }, []);
 
   useEffect(() => {
@@ -95,7 +96,7 @@ const CompanionApplication = ({ currentUser }) => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnApplicationStudent", JSON.stringify(values));
+    localStorage.setItem("ColumnApplicationCompanion", JSON.stringify(values));
   };
 
   return (
@@ -134,7 +135,7 @@ const CompanionApplication = ({ currentUser }) => {
                             icon={<i className="fas fa-file-excel"></i>}
                           />
                         </div>
-                        <div className="cursor-pointer">
+                        {/* <div className="cursor-pointer">
                           <ReactToPrint
                             trigger={() => (
                               <p>
@@ -143,7 +144,7 @@ const CompanionApplication = ({ currentUser }) => {
                             )}
                             content={() => componentRef.current}
                           />
-                        </div>
+                        </div> */}
                       </div>
                     </DropdownMenu>
                   </Dropdown>
@@ -250,12 +251,6 @@ const CompanionApplication = ({ currentUser }) => {
                                 Status
                               </th>
                             ) : null}
-
-                            {/* {tableData[10]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Enrolment Status
-                              </th>
-                            ) : null} */}
                           </tr>
                         </thead>
                         <tbody>
