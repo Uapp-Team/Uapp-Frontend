@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import ismhero from "../../../../assets/img/ismhero.png";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
@@ -10,6 +10,7 @@ import Uget from "../../../../helpers/Uget";
 import DefaultDropdownU from "../../../../components/Dropdown/DefaultDropdownU";
 
 const UserView = () => {
+  const { universityId } = useParams();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [noFilter, setNoFilter] = useState(true);

@@ -1145,6 +1145,7 @@ const CountryList = lazy(() =>
 // Search
 
 const Search = lazy(() => import("./views/SMS/Search/Search"));
+
 const SearchAndApply = lazy(() =>
   import("./views/SMS/SearchAndApply/SearchAndApply")
 );
@@ -3699,7 +3700,17 @@ class AppRouter extends React.Component {
                     component={AnswersByQue}
                   />
 
+                  {/* <AppRoute
+                    path="/informationView/:universityId"
+                    component={ISMUserView}
+                  /> */}
+
                   <AppRoute path="/informationView" component={ISMUserView} />
+
+                  <AppRoute
+                    path="/informationViewUniversity/:universityId"
+                    component={UserViewUniversity}
+                  />
                   <AppRoute
                     path="/informationViewUniversity"
                     component={UserViewUniversity}
