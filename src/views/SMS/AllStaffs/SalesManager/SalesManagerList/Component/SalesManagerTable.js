@@ -85,7 +85,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/staffProfile/${emp.id}`}
+                    to={`/salesManagerProfile/${emp.employeeId}`}
                   >
                     {emp?.uappId}
                   </Link>
@@ -111,7 +111,7 @@ const SalesManagerTable = ({
                   {tableData[2]?.isActive ? (
                     <td>
                       <Link
-                        to="/salesTeamLeaderList"
+                        to="/salesManagerList"
                         onClick={() => handlePass(emp)}
                       >
                         Change
@@ -124,7 +124,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/salesTeamLeaderProfile/${emp?.employeeId}`}
+                    to={`/salesManagerProfile/${emp?.employeeId}`}
                   >
                     {emp?.fullName}
                   </Link>

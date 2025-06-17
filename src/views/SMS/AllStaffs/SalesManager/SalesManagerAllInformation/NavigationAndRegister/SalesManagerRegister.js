@@ -39,7 +39,7 @@ const SalesManagerRegister = () => {
   const [emailError, setEmailError] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [salesTeamLeaderId, setsalesTeamLeaderId] = useState();
+  const [salesManagerId, setSalesManagerId] = useState();
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -170,7 +170,7 @@ const SalesManagerRegister = () => {
         setButtonStatus(false);
 
         if (res.status === 200 && res.data.isSuccess === true) {
-          setsalesTeamLeaderId(res?.data?.result?.id);
+          setSalesManagerId(res?.data?.result?.id);
           setIsModalOpen(true);
           setBranchLabel("Select Branch");
           setBranchValue(0);
@@ -191,24 +191,24 @@ const SalesManagerRegister = () => {
   };
 
   const goToProfile = () => {
-    history.push(`/salesTeamLeaderPersonalInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerPersonalInformation/${salesManagerId}`);
   };
 
   const ToBack = () => {
-    history.push("/salesTeamLeaderList");
+    history.push("/salesManagerList");
   };
 
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader General Information"
-        backTo="Sales Team Leader"
-        path="/salesTeamLeaderList"
+        title="Sales Manager General Information"
+        backTo="Sales Manager"
+        path="/salesManagerList"
       />
 
       <Card>
         <CardBody>
-          <p className="section-title">Create A New Staff</p>
+          <p className="section-title">Create A New Sales Manager</p>
 
           <Form onSubmit={handleSubmit}>
             <Row>
@@ -244,7 +244,7 @@ const SalesManagerRegister = () => {
                   type="hidden"
                   name="employeeTypeId"
                   id="employeeTypeId"
-                  value={13}
+                  value={14}
                 />
 
                 <FormGroup>
@@ -353,8 +353,8 @@ const SalesManagerRegister = () => {
         </CardBody>
       </Card>
       <ConfirmModal
-        text="Sales Team Leader added successfully"
-        text2="An email is sent to the Sales Team Leader email with login credentials"
+        text="Sales Manager added successfully"
+        text2="An email is sent to the Sales Manager email with login credentials"
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(!isModalOpen)}
         buttonStatus={buttonStatus}

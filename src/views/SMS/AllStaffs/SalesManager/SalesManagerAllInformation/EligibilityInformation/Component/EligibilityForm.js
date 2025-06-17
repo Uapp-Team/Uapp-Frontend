@@ -9,7 +9,7 @@ import { permissionList } from "../../../../../../../constants/AuthorizationCons
 
 const EligibilityForm = ({
   handleSubmit,
-  salesTeamLeaderId,
+  salesManagerId,
   eligibilityData,
   countryDD,
   uniCountryLabel,
@@ -73,7 +73,7 @@ const EligibilityForm = ({
         type="hidden"
         name="employeeId"
         id="employeeId"
-        value={salesTeamLeaderId}
+        value={salesManagerId}
       />
 
       <input

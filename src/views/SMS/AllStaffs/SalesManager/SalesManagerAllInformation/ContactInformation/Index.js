@@ -10,7 +10,7 @@ import ContactInformationForm from "./Component/ContactInformationForm";
 import SalesManagerNavigation from "../NavigationAndRegister/SalesManagerNavigation";
 
 const SalesManagerContactInformation = () => {
-  const { salesTeamLeaderId } = useParams();
+  const { salesManagerId } = useParams();
   const userType = localStorage.getItem("userType");
   const activetab = "3";
   const history = useHistory();
@@ -39,7 +39,7 @@ const SalesManagerContactInformation = () => {
       setCountry(res);
     });
 
-    get(`EmployeeContactInformation/GetByEmployeeId/${salesTeamLeaderId}`).then(
+    get(`EmployeeContactInformation/GetByEmployeeId/${salesManagerId}`).then(
       (res) => {
         console.log("address", res);
         setAddressData(res);
@@ -57,7 +57,7 @@ const SalesManagerContactInformation = () => {
         setZipCode(res?.zipCode !== null ? res?.zipCode : null);
       }
     );
-  }, [success, salesTeamLeaderId]);
+  }, [success, salesManagerId]);
 
   const countryName = country?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -136,7 +136,7 @@ const SalesManagerContactInformation = () => {
     subData.append("city", cityN);
     subData.append("zipCode", zipCode);
     subData.append("countryId", countryValue);
-    subData.append("employeeId", salesTeamLeaderId);
+    subData.append("employeeId", salesManagerId);
     subData.append("id", addressData === null ? 0 : addressData?.id);
 
     if (ValidForm()) {
@@ -150,21 +150,19 @@ const SalesManagerContactInformation = () => {
           autoDismiss: true,
         });
         setButtonStatus(false);
-        history.push(
-          `/salesTeamLeaderEmergencyInformation/${salesTeamLeaderId}`
-        );
+        history.push(`/salesManagerEmergencyInformation/${salesManagerId}`);
       });
     }
   };
 
   const handlePrevious = () => {
-    history.push(`/salesTeamLeaderPersonalInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerPersonalInformation/${salesManagerId}`);
   };
 
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader Contact Information"
+        title="Sales Manager Contact Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
@@ -173,14 +171,14 @@ const SalesManagerContactInformation = () => {
           userType === userTypes?.FinanceManager ||
           userType === userTypes?.Editor
             ? null
-            : "Sales Team Leader"
+            : "Sales Manager"
         }
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <SalesManagerNavigation
         activetab={activetab}
-        salesTeamLeaderId={salesTeamLeaderId}
+        salesManagerId={salesManagerId}
         success={success}
         action={setAction}
       />
@@ -201,7 +199,7 @@ const SalesManagerContactInformation = () => {
                   // addressLineError={addressLineError}
                   handleZipCode={handleZipCode}
                   zipCodeError={zipCodeError}
-                  salesTeamLeaderId={salesTeamLeaderId}
+                  salesManagerId={salesManagerId}
                   countryLabel={countryLabel}
                   countryValue={countryValue}
                   success={success}

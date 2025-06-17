@@ -67,7 +67,7 @@ const StaffEligibility = () => {
   const [cvError, setCvError] = useState("");
   const [rightToWork, setRightToWork] = useState("false");
   const [eligibilityData, setEligibilityData] = useState({});
-  const { salesTeamLeaderId } = useParams();
+  const { salesManagerId } = useParams();
   const history = useHistory();
   const { addToast } = useToasts();
   const [visa, setVisa] = useState("");
@@ -85,7 +85,7 @@ const StaffEligibility = () => {
       setResidency(res);
     });
 
-    get(`EmployeeEligibility/GetEmployeeEligibility/${salesTeamLeaderId}`).then(
+    get(`EmployeeEligibility/GetEmployeeEligibility/${salesManagerId}`).then(
       (res) => {
         setEligibilityData(res);
         setIdPassportAttachment(
@@ -122,7 +122,7 @@ const StaffEligibility = () => {
         setVisa(res?.visaType);
       }
     );
-  }, [success, salesTeamLeaderId]);
+  }, [success, salesManagerId]);
 
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
@@ -420,13 +420,9 @@ const StaffEligibility = () => {
           setFileList4(null);
           setFileList5(null);
           setFileList6(null);
-              userType !== userTypes?.SalesTeamLeader
-                      ? history.push(
-                          "/salesTeamLeaderList"
-                        )
-                      : history.push(
-                          "/profile"
-                        );
+          userType !== userTypes?.SalesTeamLeader
+            ? history.push("/salesManagerList")
+            : history.push("/profile");
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -438,13 +434,13 @@ const StaffEligibility = () => {
   };
 
   const goBackward = () => {
-    history.push(`/salesTeamLeaderEmergencyInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerEmergencyInformation/${salesManagerId}`);
   };
 
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader Eligibility Information"
+        title="Sales Manager Eligibility Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
@@ -453,14 +449,14 @@ const StaffEligibility = () => {
           userType === userTypes?.FinanceManager ||
           userType === userTypes?.Editor
             ? null
-            : "Sales Team Leader"
+            : "Sales Manager"
         }
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <SalesManagerNavigation
         activetab={activetab}
-        salesTeamLeaderId={salesTeamLeaderId}
+        salesManagerId={salesManagerId}
         success={success}
         action={setAction}
       />
@@ -472,7 +468,7 @@ const StaffEligibility = () => {
               {/* Form Start */}
               <EligibilityForm
                 handleSubmit={handleSubmit}
-                salesTeamLeaderId={salesTeamLeaderId}
+                salesManagerId={salesManagerId}
                 eligibilityData={eligibilityData}
                 countryDD={countryDD}
                 uniCountryLabel={uniCountryLabel}

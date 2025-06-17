@@ -126,6 +126,62 @@ const StaffEligibility = lazy(() =>
   )
 );
 
+//sales team leader
+
+const SalesTeamLeaderRegistration = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/NavigationAndRegister/SalesTeamLeaderRegister.js"
+  )
+);
+
+const SalesTeamLeaderGeneralInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/GeneralInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderPersonalInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/PersonalInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderContactInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/ContactInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderEmergencyInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/EmergencyInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderEligibility = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/EligibilityInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderAssignConsultant = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesTeamLeader/AssignConsultant/Index.js")
+);
+
+const SalesTeamLeaderList = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderList/Index.js")
+);
+
+const SalesTeamLeaderProfile = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderProfile/Index.js"
+  )
+);
+
+//sales team leader
+
+//sales Manager
+
 const SalesManagerRegistration = lazy(() =>
   import(
     "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/NavigationAndRegister/SalesManagerRegister"
@@ -173,6 +229,8 @@ const SalesManagerList = lazy(() =>
 const SalesManagerProfile = lazy(() =>
   import("./views/SMS/AllStaffs/SalesManager/SalesManagerProfile/Index.js")
 );
+
+//sales Manager
 
 const EmployeeList = lazy(() =>
   import("./views/SMS/AllStaffs/Staffs/StaffsList/Index.js")
@@ -2731,11 +2789,11 @@ class AppRouter extends React.Component {
                     }
                   />
 
-                  {/* Sales Team Leader paths */}
+                  {/* Sales Manager paths */}
 
                   <AppRoute
                     exact
-                    path="/salesTeamLeaderList"
+                    path="/salesManagerList"
                     component={
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
@@ -2747,7 +2805,7 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     exact
-                    path="/salesTeamLeaderAssignConsultant/:salesTeamLeaderId/:branchId"
+                    path="/salesManagerAssignSalesTeam/:salesManagerId/:branchId"
                     component={
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
@@ -2758,7 +2816,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderRegistration"
+                    path="/salesManagerRegistration"
                     component={
                       permissions.includes(permissionList?.Add_SalesTeamLeader)
                         ? SalesManagerRegistration
@@ -2767,7 +2825,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderGeneralInformation/:salesTeamLeaderId"
+                    path="/salesManagerGeneralInformation/:salesManagerId"
                     component={
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
@@ -2778,7 +2836,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderContactInformation/:salesTeamLeaderId"
+                    path="/salesManagerContactInformation/:salesManagerId"
                     component={
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
@@ -2789,7 +2847,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderEmergencyInformation/:salesTeamLeaderId"
+                    path="/salesManagerEmergencyInformation/:salesManagerId"
                     component={
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
@@ -2800,7 +2858,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderPersonalInformation/:salesTeamLeaderId"
+                    path="/salesManagerPersonalInformation/:salesManagerId"
                     component={
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
@@ -2811,7 +2869,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/salesTeamLeaderEligibility/:salesTeamLeaderId"
+                    path="/salesManagerEligibility/:salesManagerId"
                     component={
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
@@ -2822,12 +2880,115 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
+                    path="/salesManagerProfile/:id"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_Details
+                      )
+                        ? SalesManagerProfile
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* Sales Manager paths */}
+
+                  {/* Sales Team Leader paths */}
+
+                  <AppRoute
+                    exact
+                    path="/salesTeamLeaderList"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesTeamLeaderList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    exact
+                    path="/salesTeamLeaderAssignConsultant/:salesTeamLeaderId/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesTeamLeaderAssignConsultant
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderRegistration"
+                    component={
+                      permissions.includes(permissionList?.Add_SalesTeamLeader)
+                        ? SalesTeamLeaderRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderGeneralInformation/:salesTeamLeaderId"
+                    component={
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
+                        ? SalesTeamLeaderGeneralInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderContactInformation/:salesTeamLeaderId"
+                    component={
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
+                        ? SalesTeamLeaderContactInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderEmergencyInformation/:salesTeamLeaderId"
+                    component={
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
+                        ? SalesTeamLeaderEmergencyInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderPersonalInformation/:salesTeamLeaderId"
+                    component={
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
+                        ? SalesTeamLeaderPersonalInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesTeamLeaderEligibility/:salesTeamLeaderId"
+                    component={
+                      permissions.includes(
+                        permissionList?.Update_SalesTeamLeader
+                      )
+                        ? SalesTeamLeaderEligibility
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
                     path="/salesTeamLeaderProfile/:id"
                     component={
                       permissions?.includes(
                         permissionList?.View_Employee_Details
                       )
-                        ? SalesManagerProfile
+                        ? SalesTeamLeaderProfile
                         : NotAuthorized
                     }
                   />

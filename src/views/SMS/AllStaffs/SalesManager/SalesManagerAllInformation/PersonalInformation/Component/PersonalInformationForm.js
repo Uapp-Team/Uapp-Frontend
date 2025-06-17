@@ -13,7 +13,7 @@ import { userTypes } from "../../../../../../../constants/userTypeConstant";
 
 const PersonalInformationForm = ({
   handleSubmit,
-  salesTeamLeaderId,
+  salesManagerId,
   Dates,
   setPassport,
   passport,
@@ -62,7 +62,7 @@ const PersonalInformationForm = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <input type="hidden" name="id" id="id" value={salesTeamLeaderId} />
+      <input type="hidden" name="id" id="id" value={salesManagerId} />
 
       <FormGroup row>
         <Col lg="6" md="8">

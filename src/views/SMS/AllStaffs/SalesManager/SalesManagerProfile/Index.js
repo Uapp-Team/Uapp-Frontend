@@ -288,9 +288,9 @@ const SalesManagerProfile = ({ userId }) => {
       ) : (
         <div ref={componentRef}>
           <BreadCrumb
-            title="Sales Team Leader Profile"
-            backTo={id && "Sales Team Leader"}
-            path="/salesTeamLeaderList"
+            title="Sales Manager Profile"
+            backTo={id && "Sales Manager"}
+            path="/salesManagerList"
           />
 
           <div className="uapp-employee-profile">
