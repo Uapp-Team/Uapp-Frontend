@@ -62,7 +62,7 @@ const SalesManagerTable = ({
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
             {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
-            {tableData[1]?.isActive ? <th>Assign Consultant</th> : null}
+            {tableData[1]?.isActive ? <th>Assign Sales Team Leader</th> : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
               <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
             ) : null}
@@ -100,7 +100,7 @@ const SalesManagerTable = ({
                       }
                       className="Count-fifth"
                     >
-                      View({emp?.consultantCount})
+                      View({emp?.salesTeamLeaderCount})
                     </span>
                   </div>
                 </td>

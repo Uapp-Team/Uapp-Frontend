@@ -25,7 +25,7 @@ import Typing from "../../../../../components/form/Typing";
 
 const Index = () => {
   const [navItem, setNavItem] = useState("");
-  const { salesTeamLeaderId, branchId } = useParams();
+  const { salesManagerId, branchId } = useParams();
   const { addToast } = useToasts();
   const history = useHistory();
   const activetab = "6";
@@ -40,13 +40,13 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `SalesTeamLeader/FetchConsultants?employeeId=${salesTeamLeaderId}&searchText=${searchStr}`
+        `SalesManager/FetchSalesTeamLeaders?employeeId=${salesManagerId}&searchText=${searchStr}`
       ).then((res) => {
         setAssignedConsultants(res?.data);
         setLoading(false);
       });
     }
-  }, [salesTeamLeaderId, searchStr, isTyping, callApi]);
+  }, [salesManagerId, searchStr, isTyping, callApi]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -57,15 +57,15 @@ const Index = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const consultantIds = assignedConsultants
+    const salesTeamLeaderIds = assignedConsultants
       .filter((c) => c.isAssign)
-      .map((c) => c.consultantId);
+      .map((c) => c.salesTeamLeaderId);
 
     const subdata = {
-      employeeId: salesTeamLeaderId,
-      ConsultantIds: consultantIds,
+      employeeId: salesManagerId,
+      salesTeamLeaderIds: salesTeamLeaderIds,
     };
-    post(`SalesTeamLeader/AssignConsultants`, subdata).then((res) => {
+    post(`SalesManager/AssignSalesTeamLeaders`, subdata).then((res) => {
       addToast(res?.data?.message, {
         appearance: "success",
         autoDismiss: true,
@@ -83,11 +83,11 @@ const Index = () => {
   return (
     <div>
       <BreadCrumb
-        title="Assigned Consultant"
+        title="Assigned Sales Team Leader"
         backTo={
-          userType === userTypes?.SalesTeamLeader ? null : "Sales Team Leader"
+          userType === userTypes?.SalesTeamLeader ? null : "Sales Manager"
         }
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <Card>
@@ -101,12 +101,12 @@ const Index = () => {
                   <Row>
                     <Col md="8" sm="12">
                       {" "}
-                      <p className="section-title">Consultants</p>
+                      <p className="section-title">Sales Team Leader</p>
                     </Col>
                     <Col md="4" sm="12">
                       <Typing
                         name="search"
-                        placeholder="Consultant Name"
+                        placeholder="Sales Team Leader Name"
                         value={searchStr}
                         setValue={setSearchStr}
                         setIsTyping={setIsTyping}
@@ -128,12 +128,12 @@ const Index = () => {
                       <tbody>
                         {assignedConsultants?.map((con, i) => (
                           <tr
-                            key={con.consultantId}
+                            key={con.salesTeamLeaderId}
                             style={{ textAlign: "center" }}
                           >
                             {/* <th scope="row">{i + 1}</th> */}
-                            <td>{con.consultantName}</td>
-                            <td>{con.consultantEmail}</td>
+                            <td>{con.salesTeamLeaderName}</td>
+                            <td>{con.salesTeamLeaderEmail}</td>
                             <td>
                               <input
                                 // className="form-check-input"

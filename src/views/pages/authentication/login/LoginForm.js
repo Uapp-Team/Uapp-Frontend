@@ -275,11 +275,11 @@ const LoginForm = () => {
         </div>
       </div>
 
-      <div className="Download-app-section">
+      {/* <div className="Download-app-section">
         <h4 className="mb-3">Download for mobile</h4>
 
         <div className="d-flex">
-          {/* <a href={androidAppUrl}>
+          <a href={androidAppUrl}>
             {" "}
             <div className="apple-download mr-2 d-flex justify-content-center align-items-center">
               <i class="fab fa-app-store-ios"></i>
@@ -292,7 +292,7 @@ const LoginForm = () => {
                 </p>
               </div>
             </div>
-          </a> */}
+          </a>
 
           <a href={androidAppUrl}>
             <div className="android-download d-flex justify-content-center align-items-center">
@@ -307,7 +307,7 @@ const LoginForm = () => {
             </div>
           </a>
         </div>
-      </div>
+      </div> */}
 
       <ConfirmModal
         text="Your account has been deleted."

@@ -21,4 +21,5 @@ export const userTypes = {
   BranchManager: "22",
   ConsultantCompliance: "101",
   SalesTeamLeader: "102",
+  SalesManager: "103",
 };
