@@ -265,22 +265,21 @@ const ConsultantByConsultant = () => {
     if (formIsValid === true) {
       setButtonStatus(true);
       setProgress(true);
-      post(
-        `Invitation/Send?${referenceId}=1& ${email}=asdfs@mial.com`,
-        subData
-      ).then((action) => {
-        setButtonStatus(false);
-        setProgress(false);
-        setSuccess(!success);
-        setModalOpen(false);
-        setEmail("");
-        addToast(action?.data?.message, {
-          appearance: "success",
-          autoDismiss: true,
-        });
+      post(`Invitation/Send?${referenceId}=1&${email}`, subData).then(
+        (action) => {
+          setButtonStatus(false);
+          setProgress(false);
+          setSuccess(!success);
+          setModalOpen(false);
+          setEmail("");
+          addToast(action?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
 
-        // setTitle("");
-      });
+          // setTitle("");
+        }
+      );
     }
   };
 
