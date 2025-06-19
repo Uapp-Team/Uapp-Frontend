@@ -30,7 +30,7 @@ const Index = () => {
   const history = useHistory();
   const activetab = "6";
   const [loading, setLoading] = useState(true);
-  const [assignedConsultants, setAssignedConsultants] = useState([]);
+  const [assignedSalesLeader, setAssignedSalesLeader] = useState([]);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const userType = localStorage.getItem("userType");
   const [searchStr, setSearchStr] = useState("");
@@ -42,7 +42,7 @@ const Index = () => {
       Uget(
         `SalesManager/FetchSalesTeamLeaders?employeeId=${salesManagerId}&searchText=${searchStr}`
       ).then((res) => {
-        setAssignedConsultants(res?.data);
+        setAssignedSalesLeader(res?.data);
         setLoading(false);
       });
     }
@@ -57,7 +57,7 @@ const Index = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const salesTeamLeaderIds = assignedConsultants
+    const salesTeamLeaderIds = assignedSalesLeader
       .filter((c) => c.isAssign)
       .map((c) => c.salesTeamLeaderId);
 
@@ -74,10 +74,12 @@ const Index = () => {
   };
 
   const HandleAddOrRemove = (e, id) => {
-    const values = [...assignedConsultants];
+    const values = [...assignedSalesLeader];
     values[id].isAssign = e.target.checked;
-    setAssignedConsultants(values);
-    console.log("pki poki", assignedConsultants);
+    console.log(values, "values of assign");
+
+    setAssignedSalesLeader(values);
+    console.log("pki poki", assignedSalesLeader);
   };
 
   return (
@@ -126,7 +128,7 @@ const Index = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {assignedConsultants?.map((con, i) => (
+                        {assignedSalesLeader?.map((con, i) => (
                           <tr
                             key={con.salesTeamLeaderId}
                             style={{ textAlign: "center" }}

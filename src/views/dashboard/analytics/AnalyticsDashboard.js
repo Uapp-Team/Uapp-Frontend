@@ -22,6 +22,7 @@ import Companion from "../../SMS/Dashboard/Pages/Companion/Index";
 // import StudentDashboard from "../../SMS/Dashboard/Pages/StudentNew/StudentDashboard";
 import ForOtherUser from "../../SMS/Dashboard/Pages/ForOtherUser/ForOtherUser";
 import SalesManager from "../../SMS/Dashboard/Pages/SalesManager/Index";
+import SalesTeamLeader from "../../SMS/Dashboard/Pages/SalesTeamLeader/Index";
 
 const AnalyticsDashboard = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -37,8 +38,10 @@ const AnalyticsDashboard = () => {
       {currentUser.userTypeId.toString() === userTypes?.SystemAdmin ||
       currentUser.userTypeId.toString() === userTypes?.Admin ? (
         <SuperAdmin />
-      ) : currentUser.userTypeId.toString() === userTypes?.SalesTeamLeader ? (
+      ) : currentUser.userTypeId.toString() === userTypes?.SalesManager ? (
         <SalesManager />
+      ) : currentUser.userTypeId.toString() === userTypes?.SalesTeamLeader ? (
+        <SalesTeamLeader />
       ) : currentUser.userTypeId.toString() === userTypes?.AdmissionManager ? (
         <AdmissionManager />
       ) : currentUser.userTypeId.toString() === userTypes?.Provider ? (
