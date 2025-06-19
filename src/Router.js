@@ -218,8 +218,12 @@ const SalesManagerEligibility = lazy(() =>
   )
 );
 
-const SalesManagerAssignConsultant = lazy(() =>
-  import("./views/SMS/AllStaffs/SalesManager/AssignConsultant/Index.js")
+// const SalesManagerAssignConsultant = lazy(() =>
+//   import("./views/SMS/AllStaffs/SalesManager/AssignConsultant/Index.js")
+// );
+
+const SalesManagerAssignSalesLeader = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesManager/AssignSalesLeader/Index.js")
 );
 
 const SalesManagerList = lazy(() =>
@@ -2810,10 +2814,21 @@ class AppRouter extends React.Component {
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
                       )
-                        ? SalesManagerAssignConsultant
+                        ? SalesManagerAssignSalesLeader
                         : NotAuthorized
                     }
                   />
+                  {/* <AppRoute
+                    exact
+                    path="/salesManagerAssignSalesTeam/:salesManagerId/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesManagerAssignConsultant
+                        : NotAuthorized
+                    }
+                  /> */}
 
                   <AppRoute
                     path="/salesManagerRegistration"
