@@ -24,7 +24,7 @@ const SalesManagerTable = ({ employeeList }) => {
               <td className="cursor-pointer hyperlink-hover">
                 <Link
                   className="text-id hover"
-                  to={`/salesManagerProfile/${emp.employeeId}`}
+                  to={`/salesTeamLeaderProfile/${emp.employeeId}`}
                 >
                   {emp?.uappId}
                 </Link>

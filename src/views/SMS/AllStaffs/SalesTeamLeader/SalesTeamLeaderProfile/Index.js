@@ -17,6 +17,8 @@ import GeneralForm from "./Component/GeneralForm";
 import PersonalForm from "./Component/PersonalForm";
 import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
+import Uget from "../../../../../helpers/Uget";
+import AssignedSalesManager from "./Component/AssignedSalesManager";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
 const SalesManagerProfile = ({ userId }) => {
@@ -52,6 +54,7 @@ const SalesManagerProfile = ({ userId }) => {
   const [eligibilityInfo, setEligibilityInfo] = useState({});
   const [emergencyInfo, setEmergencyInfo] = useState({});
   const [croppedImage, setCroppedImage] = useState(null);
+  const [assignedSalesManager, setAssignedSalesManager] = useState({});
 
   useEffect(() => {
     get(`EmployeeProfile/ProfileHead/${id ? id : userId}`).then((action) => {
@@ -71,6 +74,14 @@ const SalesManagerProfile = ({ userId }) => {
       }
     );
   }, [id, userId]);
+
+  useEffect(() => {
+    Uget(
+      `SalesTeamLeader/FetchSalesTeamLeaderSalesManager?salesTeamLeaderId=${id}`
+    ).then((action) => {
+      setAssignedSalesManager(action?.data);
+    });
+  }, [id]);
 
   useEffect(() => {
     get(`Employee/GetPersonalInformation/${id ? id : userId}`).then(
@@ -446,6 +457,9 @@ const SalesManagerProfile = ({ userId }) => {
                     </CardBody>
                   </Card>
 
+                  <AssignedSalesManager
+                    assignedSalesManager={assignedSalesManager}
+                  ></AssignedSalesManager>
                   <GeneralForm generalInfo={generalInfo}></GeneralForm>
                   <PersonalForm personalInfo={personalInfo}></PersonalForm>
                   <ContactForm contactInfo={contactInfo}></ContactForm>
