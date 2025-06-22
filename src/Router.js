@@ -229,6 +229,11 @@ const SalesManagerAssignSalesLeader = lazy(() =>
 const SalesManagerList = lazy(() =>
   import("./views/SMS/AllStaffs/SalesManager/SalesManagerList/Index.js")
 );
+const SalesManagersTeamLeaders = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/AssignSalesLeader/SalesLeaderList/Index.js"
+  )
+);
 
 const SalesManagerProfile = lazy(() =>
   import("./views/SMS/AllStaffs/SalesManager/SalesManagerProfile/Index.js")
@@ -2803,6 +2808,17 @@ class AppRouter extends React.Component {
                         permissionList?.View_SalesTeamLeader_list
                       )
                         ? SalesManagerList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    exact
+                    path="/salesManagersTeamLeaders"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesManagersTeamLeaders
                         : NotAuthorized
                     }
                   />
