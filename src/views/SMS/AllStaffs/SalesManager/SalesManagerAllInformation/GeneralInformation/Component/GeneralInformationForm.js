@@ -120,7 +120,17 @@ const GeneralInformationForm = ({
                 onChange={(opt) => selectConsType(opt.label, opt.value)}
                 name="employeeTypeId"
                 id="employeeTypeId"
+                isDisabled={salesManagerId ? true : false}
               />
+
+              {salesManagerId && (
+                <input
+                  type="hidden"
+                  value={typeValue}
+                  name="employeeTypeId"
+                  id="employeeTypeId"
+                />
+              )}
 
               {consultantError && (
                 <span className="text-danger">Staff type is required</span>

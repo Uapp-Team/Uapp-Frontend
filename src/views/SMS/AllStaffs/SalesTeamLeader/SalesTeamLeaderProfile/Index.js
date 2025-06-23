@@ -23,6 +23,9 @@ import AssignedSalesManager from "./Component/AssignedSalesManager";
 
 const SalesManagerProfile = ({ userId }) => {
   const { id } = useParams();
+  const referenceId = localStorage.getItem("referenceId");
+  console.log(referenceId, "referenceId");
+
   const history = useHistory();
   const { addToast } = useToasts();
   const [employeeDetails, setemployeeDetails] = useState({});
@@ -77,11 +80,13 @@ const SalesManagerProfile = ({ userId }) => {
 
   useEffect(() => {
     Uget(
-      `SalesTeamLeader/FetchSalesTeamLeaderSalesManager?salesTeamLeaderId=${id}`
+      `SalesTeamLeader/FetchSalesTeamLeaderSalesManager?salesTeamLeaderId=${
+        id ? id : referenceId
+      }`
     ).then((action) => {
       setAssignedSalesManager(action?.data);
     });
-  }, [id]);
+  }, [id, referenceId]);
 
   useEffect(() => {
     get(`Employee/GetPersonalInformation/${id ? id : userId}`).then(

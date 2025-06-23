@@ -48,6 +48,7 @@ const DefaultDropdown = ({
         onChange={(opt) => select(opt.label, opt.value)}
         name={name}
         id={name}
+        className="mw-120px"
       />
       {error === true ? <span className="text-danger">{errorText}</span> : null}
     </>

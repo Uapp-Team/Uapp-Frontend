@@ -20,3 +20,5 @@ export const leadUrl = `https://leadapi.uapp.uk/`;
 export const leadApi = `${leadUrl}api/v1/`;
 
 export const androidAppUrl = `https://download.uapp.uk/downloadfile/base.apk`;
+
+export const domain = window.location.origin;

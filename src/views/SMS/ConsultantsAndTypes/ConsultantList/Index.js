@@ -28,6 +28,11 @@ import PrintFile from "./Component/PrintFile.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import { useParams } from "react-router";
 import ConsultantStatus from "./Component/ConsultantStatus.js";
+import ButtonForFunction from "../../Components/ButtonForFunction.js";
+import CopyButton from "../../../../components/Refer/CopyButton.js";
+import SocialShare from "../../../../components/Refer/SocialShare.js";
+import Uget from "../../../../helpers/Uget.js";
+import { domain } from "../../../../constants/constants.js";
 
 const Index = () => {
   const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
@@ -99,6 +104,9 @@ const Index = () => {
   const [tierLabel, setTierLabel] = useState("Select Tier");
   const [tierValue, setTierValue] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [referID, setReferId] = useState(null);
+  console.log(referID);
 
   useEffect(() => {
     sessionStorage.setItem(
@@ -140,6 +148,18 @@ const Index = () => {
       setStatusType(res);
     });
   }, []);
+
+  // for link
+
+  useEffect(() => {
+    Uget("SalesTeamLeader/FetchUappId").then((res) => {
+      setReferId(res?.data?.uappId);
+    });
+  }, []);
+
+  const url = `${domain}/consultantRegister/${referID}`;
+
+  // for link
 
   const searchValue = (e) => {
     setSearchStr(e.target.value);
@@ -457,15 +477,63 @@ const Index = () => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_Consultant) ? (
-                  <LinkButton
-                    url={"/addConsultant"}
-                    className={"btn btn-uapp-add "}
-                    name={"Add Consultant"}
-                    icon={<i className="fas fa-plus"></i>}
-                  />
-                ) : null}
+                <div className="d-flex">
+                  <div>
+                    {permissions?.includes(permissionList?.Add_Consultant) ? (
+                      <LinkButton
+                        url={"/addConsultant"}
+                        className={"btn btn-uapp-add "}
+                        name={"Add Consultant"}
+                        icon={<i className="fas fa-plus"></i>}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className="mx-3">
+                    {userTypeId === userTypes?.SalesTeamLeader ? (
+                      <ButtonForFunction
+                        func={() => setModalShow(true)}
+                        className={"btn btn-uapp-add "}
+                        icon={<i className="fas fa-plus"></i>}
+                        name={" Invite"}
+                      />
+                    ) : null}
+                  </div>
+                </div>
               </Col>
+
+              <Modal
+                size="md"
+                aria-labelledby="contained-modal-title-vcenter"
+                isOpen={modalShow}
+                toggle={() => setModalShow(false)}
+                centered
+              >
+                <div>
+                  <h5 className="d-flex justify-content-between px-4 mt-4">
+                    <span>Refer Code</span>
+                    <i
+                      class="fas fa-times cursor-pointer"
+                      onClick={() => setModalShow(false)}
+                    ></i>
+                  </h5>
+                  <hr />
+                </div>
+
+                <div className="text-center mx-auto mb-4">
+                  <p style={{ color: "#7C7C7C" }}>
+                    Share link with your friends
+                  </p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center copy-text mx-auto w-75">
+                  <p className="mb-0 text-ellipsis mr-1">{url}</p>
+                  <CopyButton text={url} />
+                </div>
+                <SocialShare
+                  description={"this is a basic share page"}
+                  url={url}
+                ></SocialShare>
+              </Modal>
 
               <Col lg="7" md="7" sm="12" xs="12">
                 <div className="d-flex justify-content-end">
