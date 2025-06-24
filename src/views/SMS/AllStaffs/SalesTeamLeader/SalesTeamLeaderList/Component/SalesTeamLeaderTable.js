@@ -69,8 +69,9 @@ const SalesTeamLeaderTable = ({
             {tableData[3]?.isActive ? <th>Full Name</th> : null}
             {tableData[4]?.isActive ? <th>Branch</th> : null}
             {tableData[5]?.isActive ? <th>Contact</th> : null}
+            {tableData[6]?.isActive ? <th>Sales Manager</th> : null}
 
-            {tableData[6]?.isActive ? (
+            {tableData[7]?.isActive ? (
               <th className="text-center">Action</th>
             ) : null}
           </tr>
@@ -156,8 +157,9 @@ const SalesTeamLeaderTable = ({
                   </div>
                 </td>
               ) : null}
+              {tableData[6]?.isActive ? <td>{emp.salesManagerName}</td> : null}
 
-              {tableData[6]?.isActive ? (
+              {tableData[7]?.isActive ? (
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(

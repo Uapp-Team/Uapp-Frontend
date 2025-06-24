@@ -176,7 +176,7 @@ const UpdateProfilePhoto = ({
         </Col>
 
         <Col>
-          {permissions?.includes(permissionList?.Update_SalesTeamLeader) ? (
+          {permissions?.includes(permissionList?.Update_Staff) ? (
             <EditDivButton
               className={"uapp-employee-profile-Edit"}
               func={() => redirect(id)}

@@ -17,6 +17,7 @@ import GeneralForm from "./Component/GeneralForm";
 import PersonalForm from "./Component/PersonalForm";
 import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
+import BranchInformation from "./Component/BranchInformation";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
 const SalesManagerProfile = ({ userId }) => {
@@ -445,7 +446,9 @@ const SalesManagerProfile = ({ userId }) => {
                       </div>
                     </CardBody>
                   </Card>
-
+                  <BranchInformation
+                    generalInfo={generalInfo}
+                  ></BranchInformation>
                   <GeneralForm generalInfo={generalInfo}></GeneralForm>
                   <PersonalForm personalInfo={personalInfo}></PersonalForm>
                   <ContactForm contactInfo={contactInfo}></ContactForm>

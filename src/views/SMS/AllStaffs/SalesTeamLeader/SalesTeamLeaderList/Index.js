@@ -21,7 +21,7 @@ import ColumnStaff from "../../../TableColumn/ColumnStaff.js";
 import Loader from "../../../Search/Loader/Loader.js";
 import Uget from "../../../../../helpers/Uget.js";
 import SalesTeamLeaderTable from "./Component/SalesTeamLeaderTable.js";
-import ColumnSalesManager from "../../../TableColumn/ColumnSalesManager.js";
+import ColumnSalesTeamLeader from "../../../TableColumn/ColumnSalesTeamLeader.js";
 
 const Index = (props) => {
   const SaleManagerPaging = JSON.parse(
@@ -90,16 +90,16 @@ const Index = (props) => {
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
   useEffect(() => {
-    const tableColumnSalesManager = JSON.parse(
-      localStorage.getItem("ColumnSalesManager")
+    const tableColumnSalesTeamLeader = JSON.parse(
+      localStorage.getItem("ColumnSalesTeamLeader")
     );
-    tableColumnSalesManager && setTableData(tableColumnSalesManager);
-    !tableColumnSalesManager &&
+    tableColumnSalesTeamLeader && setTableData(tableColumnSalesTeamLeader);
+    !tableColumnSalesTeamLeader &&
       localStorage.setItem(
-        "ColumnSalesManager",
-        JSON.stringify(ColumnSalesManager)
+        "ColumnSalesTeamLeader",
+        JSON.stringify(ColumnSalesTeamLeader)
       );
-    !tableColumnSalesManager && setTableData(ColumnSalesManager);
+    !tableColumnSalesTeamLeader && setTableData(ColumnSalesTeamLeader);
   }, []);
 
   useEffect(() => {

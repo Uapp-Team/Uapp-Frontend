@@ -15,7 +15,7 @@ const SalesManagerTable = ({ employeeList }) => {
             <th>Email</th>
             <th>Phone Number</th>
             <th>Branch</th>
-            <th>Consultant Count</th>
+            <th>Number Of Consultant</th>
           </tr>
         </thead>
         <tbody>

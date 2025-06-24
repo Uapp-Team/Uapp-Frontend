@@ -19,6 +19,7 @@ import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
 import Uget from "../../../../../helpers/Uget";
 import AssignedSalesManager from "./Component/AssignedSalesManager";
+import BranchInformation from "./Component/BranchInformation";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
 const SalesManagerProfile = ({ userId }) => {
@@ -462,6 +463,9 @@ const SalesManagerProfile = ({ userId }) => {
                     </CardBody>
                   </Card>
 
+                  <BranchInformation
+                    generalInfo={generalInfo}
+                  ></BranchInformation>
                   <AssignedSalesManager
                     assignedSalesManager={assignedSalesManager}
                   ></AssignedSalesManager>
