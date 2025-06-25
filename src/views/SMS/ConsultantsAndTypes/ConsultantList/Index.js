@@ -157,7 +157,8 @@ const Index = () => {
     });
   }, []);
 
-  const url = `${domain}/consultantRegister/${referID}`;
+  // const url = `${domain}/consultantRegister/${referID}`;
+  const url = `${domain}/consultantRegister/${referID}?source=salesTeamLeader`;
 
   // for link
 

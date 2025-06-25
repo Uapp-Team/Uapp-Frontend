@@ -7,7 +7,7 @@ import { Spin } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams, useLocation } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -27,8 +27,15 @@ import containsDigit from "../../../../helpers/nameContainDigit";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 
 const ConsultantRegisterForm = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const source = queryParams.get("source");
+  console.log(source, "source");
+
   const [parameter, setParameter] = useState("");
   const { invitationcode } = useParams();
+  console.log(invitationcode, "invitationCode");
+
   const [title, setTitle] = useState(1);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -46,6 +53,7 @@ const ConsultantRegisterForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [referCode, setReferCode] = useState("");
+  console.log(referCode, "referCode");
   const [linkedFacebook, setLinkedFacebook] = useState("");
   const [linkedFacebookError, setLinkedFacebookError] = useState("");
   const [checked, setChecked] = useState(null);
@@ -63,7 +71,7 @@ const ConsultantRegisterForm = () => {
   const [valid, setValid] = useState(true);
 
   useEffect(() => {
-    setParameter(invitationcode);
+    setReferCode(invitationcode);
   }, [invitationcode]);
 
   useEffect(() => {
@@ -290,7 +298,10 @@ const ConsultantRegisterForm = () => {
     subData.append("firstName", firstName);
     subData.append("lastName", lastName);
     subData.append("email", email);
-    subData.append("invitationCode", referCode);
+    subData.append(
+      source ? "SalesTeamLeaderInvitationCode" : "invitationCode",
+      referCode
+    );
     subData.append("linkedIn_Facebook", linkedFacebook);
     subData.append("cvfile", cvFile);
     subData.append("password", password);
