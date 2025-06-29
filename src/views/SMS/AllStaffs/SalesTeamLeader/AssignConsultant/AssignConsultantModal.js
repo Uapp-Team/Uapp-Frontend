@@ -7,7 +7,7 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 import post from "../../../../../helpers/post";
 import Uget from "../../../../../helpers/Uget";
 const AssignSalesLeaderModal = ({
-  salesManagerId,
+  salesTeamLeaderId,
   setModalOpen,
   success,
   setSuccess,
@@ -16,14 +16,18 @@ const AssignSalesLeaderModal = ({
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const [unAssignSalesTeam, setUnAssignSalesTeam] = useState([]);
+  const [searchStr, setSearchStr] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [callApi, setCallApi] = useState(false);
+  const [dataPerPage, setDataPerPage] = useState(15);
 
   useEffect(() => {
     Uget(
-      `SalesManager/FetchUnassignedSalesTeamLeaders?employeeId=${salesManagerId}`
+      `SalesTeamLeader/FetchUnassignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
     ).then((res) => {
       setUnAssignSalesTeam(res?.data);
     });
-  }, [salesManagerId, success]);
+  }, [salesTeamLeaderId, success, currentPage, dataPerPage, searchStr]);
 
   // on Close Modal
   const closeModal = () => {
@@ -38,10 +42,10 @@ const AssignSalesLeaderModal = ({
       .map((c) => c.salesTeamLeaderId);
 
     const subdata = {
-      EmployeeId: salesManagerId,
+      EmployeeId: salesTeamLeaderId,
       SalesTeamLeaderIds: salesTeamLeaderIds,
     };
-    post(`SalesManager/AssignSalesTeamLeaders`, subdata).then((res) => {
+    post(`SalesTeamLeader/FetchAssignedConsultants`, subdata).then((res) => {
       addToast(res?.data?.message, {
         appearance: "success",
         autoDismiss: true,
@@ -85,13 +89,41 @@ const AssignSalesLeaderModal = ({
     console.log("pki poki", unAssignSalesTeam);
   };
 
+  const handleSearch = () => {
+    setCurrentPage(1);
+    setCallApi((prev) => !prev);
+  };
+
+  const searchValue = (e) => {
+    setSearchStr(e.target.value);
+    handleSearch();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setCurrentPage(1);
+      setCallApi((prev) => !prev);
+    }
+  };
+
   return (
     <>
+      <Input
+        className="mb-2"
+        style={{ height: "2.7rem" }}
+        type="text"
+        // name="search"
+        value={searchStr}
+        // id="search"
+        placeholder="Search By Email"
+        onChange={searchValue}
+        onKeyDown={handleKeyDown}
+      />
       <Form onSubmit={handleSubmit}>
         <Table>
           <thead className="tablehead">
             <td className="border-0">
-              <b>Sales Team Leader</b>
+              <b>Consultant</b>
             </td>
             <td className="border-0">
               <b>Email</b>
@@ -103,9 +135,9 @@ const AssignSalesLeaderModal = ({
           <tbody style={{ borderBottom: "1px solid #dee2e6" }}>
             {unAssignSalesTeam.length > 0 &&
               unAssignSalesTeam?.map((item, i) => (
-                <tr key={item?.salesTeamLeaderId}>
-                  <td>{item?.salesTeamLeaderName}</td>
-                  <td>{item?.salesTeamLeaderEmail}</td>
+                <tr key={item?.consultantId}>
+                  <td>{item?.consultantName}</td>
+                  <td>{item?.consultantEmail}</td>
                   <td>
                     <input
                       // className="form-check-input"

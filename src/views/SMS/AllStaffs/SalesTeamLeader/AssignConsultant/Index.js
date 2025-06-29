@@ -1,83 +1,141 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  Button,
+  ButtonGroup,
   Card,
   CardBody,
-  Form,
-  TabContent,
-  TabPane,
-  Table,
+  Col,
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
   Input,
   Row,
-  Col,
+  Table,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormGroup,
 } from "reactstrap";
+import ReactTableConvertToXl from "../../../ReactTableConvertToXl/ReactTableConvertToXl";
+import ReactToPrint from "react-to-print";
 import { useToasts } from "react-toast-notifications";
-// import Loader from "../../../../Search/Loader/Loader";
-import post from "../../../../../helpers/post";
-import Loader from "../../../Search/Loader/Loader";
+import { useLocation, useParams, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom/cjs/react-router-dom";
+import get from "../../../../../helpers/get";
+import remove from "../../../../../helpers/remove";
 import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import { userTypes } from "../../../../../constants/userTypeConstant";
 import { permissionList } from "../../../../../constants/AuthorizationConstant";
+import ButtonForFunction from "../../../Components/ButtonForFunction";
+import { userTypes } from "../../../../../constants/userTypeConstant";
+import AssignConsultantModal from "./AssignConsultantModal";
+import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import Uget from "../../../../../helpers/Uget";
+import Select from "react-select";
+import Pagination from "../../../Pagination/Pagination";
 import Typing from "../../../../../components/form/Typing";
 
 const Index = () => {
-  const [navItem, setNavItem] = useState("");
+  // const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [assignSalesTeam, setAssignSalesTeam] = useState([]);
+  const [success, setSuccess] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [salesLeaderName, setSalesLeaderName] = useState("");
+  const [salesLeaderId, setSalesLeaderId] = useState(0);
+
+  const [buttonStatus1, setButtonStatus1] = useState(false);
+  const [progress1, setProgress1] = useState(false);
   const { salesTeamLeaderId, branchId } = useParams();
   const { addToast } = useToasts();
-  const history = useHistory();
-  const activetab = "6";
-  const [loading, setLoading] = useState(true);
-  const [assignedConsultants, setAssignedConsultants] = useState([]);
+  const location = useLocation();
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [data, setData] = useState({});
+  const componentRef = useRef();
   const userType = localStorage.getItem("userType");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataPerPage, setDataPerPage] = useState(15);
   const [searchStr, setSearchStr] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [entity, setEntity] = useState(0);
+  const [serialNum, setSerialNum] = useState(1);
   const [callApi, setCallApi] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    if (!isTyping) {
-      Uget(
-        `SalesTeamLeader/FetchConsultants?employeeId=${salesTeamLeaderId}&searchText=${searchStr}`
-      ).then((res) => {
-        setAssignedConsultants(res?.data);
-        setLoading(false);
-      });
-    }
-  }, [salesTeamLeaderId, searchStr, isTyping, callApi]);
+  const dataSizeArr = [15, 20, 30, 50, 100, 1000];
+  const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
 
+  const selectDataSize = (value) => {
+    setCurrentPage(1);
+    setLoading(true);
+    setDataPerPage(value);
+    setCallApi((prev) => !prev);
+  };
+
+  //  change page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setCallApi((prev) => !prev);
+  };
+
+  // on enter press
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
+      setCurrentPage(1);
       setCallApi((prev) => !prev);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const consultantIds = assignedConsultants
-      .filter((c) => c.isAssign)
-      .map((c) => c.consultantId);
-
-    const subdata = {
-      employeeId: salesTeamLeaderId,
-      ConsultantIds: consultantIds,
-    };
-    post(`SalesTeamLeader/AssignConsultants`, subdata).then((res) => {
-      addToast(res?.data?.message, {
-        appearance: "success",
-        autoDismiss: true,
+  useEffect(() => {
+    if (!isTyping) {
+      Uget(
+        `SalesTeamLeader/FetchAssignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
+      ).then((res) => {
+        setAssignSalesTeam(res?.data);
+        setEntity(res?.totalEntity);
+        setSerialNum(res?.firstSerialNumber);
+        setLoading(false);
       });
-    });
+    }
+  }, [
+    salesTeamLeaderId,
+    currentPage,
+    dataPerPage,
+    searchStr,
+    success,
+    isTyping,
+  ]);
+
+  // on Close Modal
+  const closeModal = () => {
+    setModalOpen(false);
   };
 
-  const HandleAddOrRemove = (e, id) => {
-    const values = [...assignedConsultants];
-    values[id].isAssign = e.target.checked;
-    setAssignedConsultants(values);
-    console.log("pki poki", assignedConsultants);
+  const toggleDanger = (p) => {
+    setSalesLeaderId(p?.salesTeamLeaderId);
+    setSalesLeaderName(p?.salesTeamLeaderName);
+    setDeleteModal(true);
+  };
+
+  const handleDeletePermission = (salesLeaderId) => {
+    setButtonStatus1(true);
+    setProgress1(true);
+
+    remove(
+      `SalesTeamLeader/FetchUnassignedConsultants?salesTeamLeaderId=${salesTeamLeaderId}&salesteamleaderId=${salesLeaderId}`
+    ).then((action) => {
+      setButtonStatus1(false);
+      setProgress1(false);
+      setDeleteModal(false);
+      setSuccess(!success);
+      addToast(action, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setSalesLeaderId(0);
+      setSalesLeaderName("");
+    });
   };
 
   return (
@@ -90,89 +148,135 @@ const Index = () => {
         path={`/salesTeamLeaderList`}
       />
 
-      <Card>
+      <Card className="uapp-employee-search">
         <CardBody>
-          <TabContent activeTab={activetab}>
-            <TabPane tabId="6">
-              {loading ? (
-                <Loader />
-              ) : (
-                <>
-                  <Row>
-                    <Col md="8" sm="12">
+          <Row className="mb-3">
+            <Col lg="5" md="5" sm="12" xs="12">
+              <div className="d-sm-flex">
+                <ButtonForFunction
+                  func={() => setModalOpen(true)}
+                  className={"btn btn-uapp-add mr-2 "}
+                  icon={<i className="fas fa-plus"></i>}
+                  name={" Assign Consultant"}
+                  permission={6}
+                />
+              </div>
+            </Col>
+            <Col lg="7" md="7" sm="12" xs="12" className="mt-md-0 mt-sm-3">
+              <div className="d-flex justify-content-md-end justify-content-sm-start">
+                <div className="mr-3">
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">
                       {" "}
-                      <p className="section-title">Consultants</p>
-                    </Col>
-                    <Col md="4" sm="12">
                       <Typing
                         name="search"
-                        placeholder="Consultant Name"
+                        id="search"
+                        placeholder="Name, Email"
                         value={searchStr}
                         setValue={setSearchStr}
                         setIsTyping={setIsTyping}
                         onKeyDown={handleKeyDown}
                       />
-                    </Col>
-                  </Row>
-
-                  <div className="table-responsive mt-4">
-                    <Table className="table-sm table-bordered">
-                      <thead className="tablehead">
-                        <tr style={{ textAlign: "center" }}>
-                          {/* <th>SL/NO</th> */}
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Is Assigned</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {assignedConsultants?.map((con, i) => (
-                          <tr
-                            key={con.consultantId}
-                            style={{ textAlign: "center" }}
-                          >
-                            {/* <th scope="row">{i + 1}</th> */}
-                            <td>{con.consultantName}</td>
-                            <td>{con.consultantEmail}</td>
-                            <td>
-                              <input
-                                // className="form-check-input"
-                                type="checkbox"
-                                onChange={(e) => {
-                                  HandleAddOrRemove(e, i);
-                                }}
-                                value={con?.isAssign}
-                                defaultChecked={
-                                  con?.isAssign === true ? true : false
-                                }
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
+                    </div>
+                    <div className="mr-2">Showing :</div>
+                    <div className="ddzindex">
+                      <Select
+                        options={dataSizeName}
+                        value={{ label: dataPerPage, value: dataPerPage }}
+                        onChange={(opt) => selectDataSize(opt.value)}
+                      />
+                    </div>
                   </div>
-                  <Row>
-                    <Col md="12">
-                      <div className="text-center">
-                        <SaveButton
-                          text="Save"
-                          action={handleSubmit}
-                          // text={
-                          //   navItem?.terms === true ? "Save and Next" : "Save"
-                          // }
-                          // progress={progress}
-                          // buttonStatus={buttonStatus}
+                </div>
+              </div>
+            </Col>
+          </Row>
+
+          <div>
+            <Modal
+              isOpen={modalOpen}
+              toggle={closeModal}
+              className="uapp-modal2"
+              size="lg"
+            >
+              <ModalHeader>
+                <span>Unassign Consultant</span>
+              </ModalHeader>
+              <ModalBody>
+                <AssignConsultantModal
+                  salesTeamLeaderId={salesTeamLeaderId}
+                  setModalOpen={setModalOpen}
+                  success={success}
+                  setSuccess={setSuccess}
+                />
+              </ModalBody>
+            </Modal>
+          </div>
+
+          {/* {loading ? (
+            <h2 className="text-center">Loading...</h2>
+          ) : ( */}
+          <div className="table-responsive fixedhead" ref={componentRef}>
+            <Table id="table-to-xls" className="table-sm table-bordered">
+              <thead className="thead-uapp-bg">
+                <tr style={{ textAlign: "center" }}>
+                  <th>SL/NO</th>
+                  <th>Consultant</th>
+                  <th>Email</th>
+                  <th style={{ width: "8%" }} className="text-center">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {assignSalesTeam?.map((salesTeam, i) => (
+                  <tr
+                    key={salesTeam?.consultantId}
+                    style={{ textAlign: "center" }}
+                  >
+                    <td>{i + 1}</td>
+
+                    <td>{salesTeam?.consultantName}</td>
+                    <td>{salesTeam?.consultantEmail}</td>
+
+                    <td style={{ width: "8%" }} className="text-center">
+                      <ButtonGroup variant="text">
+                        <ButtonForFunction
+                          color={"danger"}
+                          func={() => toggleDanger(salesTeam)}
+                          className={"mx-1 btn-sm"}
+                          icon={<i className="fas fa-trash-alt"></i>}
+                          permission={6}
                         />
-                      </div>
-                    </Col>
-                  </Row>
-                </>
-              )}
-            </TabPane>
-          </TabContent>
+                      </ButtonGroup>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+          <Pagination
+            dataPerPage={dataPerPage}
+            totalData={entity}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </CardBody>
       </Card>
+
+      <ConfirmModal
+        text={`Do You Want To Delete This ${salesLeaderName} Information ?`}
+        isOpen={deleteModal}
+        toggle={closeModal}
+        confirm={() => handleDeletePermission(salesLeaderId)}
+        cancel={() => {
+          setDeleteModal(false);
+          setSalesLeaderId(0);
+          setSalesLeaderName("");
+        }}
+        buttonStatus={buttonStatus1}
+        progress={progress1}
+      />
     </div>
   );
 };
