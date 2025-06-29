@@ -39,7 +39,7 @@ const Index = () => {
   // const [loading, setLoading] = useState(false);
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
-  const [assignSalesTeam, setAssignSalesTeam] = useState([]);
+  const [assignCons, setAssignCons] = useState([]);
   const [success, setSuccess] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [salesLeaderName, setSalesLeaderName] = useState("");
@@ -92,9 +92,11 @@ const Index = () => {
       Uget(
         `SalesTeamLeader/FetchAssignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
       ).then((res) => {
-        setAssignSalesTeam(res?.data);
-        setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
+        console.log(res);
+
+        setAssignCons(res?.items);
+        setEntity(res?.totalFiltered);
+        setSerialNum(res?.from);
         setLoading(false);
       });
     }
@@ -229,7 +231,7 @@ const Index = () => {
                 </tr>
               </thead>
               <tbody>
-                {assignSalesTeam?.map((salesTeam, i) => (
+                {assignCons?.map((salesTeam, i) => (
                   <tr
                     key={salesTeam?.consultantId}
                     style={{ textAlign: "center" }}
