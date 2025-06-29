@@ -38,7 +38,7 @@ const AssignSalesLeaderModal = ({
 
   useEffect(() => {
     Uget(
-      `SalesManager/FetchUnassignedSalesTeamLeaders?employeeId=${salesManagerId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
+      `SalesManager/FetchUnassignedSalesTeamLeaders?employeeId=${salesManagerId}&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}`
     ).then((res) => {
       setUnAssignSalesTeam(res?.items);
       setEntity(res?.totalFiltered);

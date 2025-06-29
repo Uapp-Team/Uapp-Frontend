@@ -39,7 +39,7 @@ const AssignSalesLeaderModal = ({
 
   useEffect(() => {
     Uget(
-      `SalesTeamLeader/FetchUnassignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
+      `SalesTeamLeader/FetchUnassignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}`
     ).then((res) => {
       setUnAssignCons(res?.items);
       setEntity(res?.totalFiltered);
@@ -71,31 +71,6 @@ const AssignSalesLeaderModal = ({
       setSuccess(!success);
     });
   };
-
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     setButtonStatus(true);
-  //     setProgress(true);
-  //     post(`AdmissionManagerUniversity/AssignUniversities`, assign).then(
-  //       (res) => {
-  //         setButtonStatus(false);
-  //         setProgress(false);
-  //         if (res?.status === 200 && res?.data?.isSuccess === true) {
-  //           addToast(res?.data?.message, {
-  //             appearance: "success",
-  //             autoDismiss: true,
-  //           });
-  //           setModalOpen(false);
-  //           setSuccess(!success);
-  //         } else {
-  //           addToast(res?.data?.message, {
-  //             appearance: "error",
-  //             autoDismiss: true,
-  //           });
-  //         }
-  //       }
-  //     );
-  //   };
 
   const HandleAddOrRemove = (e, id) => {
     const values = [...unAssignCons];

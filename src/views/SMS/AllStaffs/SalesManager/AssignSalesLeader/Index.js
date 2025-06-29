@@ -89,7 +89,7 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `SalesManager/FetchAssignedSalesTeamLeaders?employeeId=${salesManagerId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
+        `SalesManager/FetchAssignedSalesTeamLeaders?employeeId=${salesManagerId}&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}`
       ).then((res) => {
         console.log(res);
 
