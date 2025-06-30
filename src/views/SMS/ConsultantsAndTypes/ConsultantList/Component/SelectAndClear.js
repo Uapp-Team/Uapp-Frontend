@@ -114,7 +114,7 @@ const SelectAndClear = ({
             <Filter
               data={[
                 {
-                  id: 0,
+                  id: null,
                   name: "All Tier",
                 },
                 ...consultantTier,
