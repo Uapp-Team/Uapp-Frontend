@@ -61,7 +61,7 @@ const AssignSalesLeaderModal = ({
       EmployeeId: salesManagerId,
       SalesTeamLeaderIds: salesTeamLeaderIds,
     };
-    post(`SalesManager/AssignSalesTeamLeaders`, subdata).then((res) => {
+    post(`SalesManager/AssignSalesTeamLeadersByQuery`, subdata).then((res) => {
       addToast(res?.data?.message, {
         appearance: "success",
         autoDismiss: true,

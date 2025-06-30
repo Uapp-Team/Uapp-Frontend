@@ -341,7 +341,7 @@ const SalesManagerRegister = () => {
                     permissionList?.Add_SalesTeamLeader
                   ) && (
                     <SaveButton
-                      text="Create Sales Team Leader"
+                      text="Create Sales Manager"
                       progress={progress}
                       buttonStatus={buttonStatus}
                     />
