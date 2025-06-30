@@ -20,6 +20,10 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
+    title: "Sales Team Leader",
+    isActive: true,
+  },
+  {
     title: "Parent",
     isActive: true,
   },

@@ -87,29 +87,30 @@ const ConsultantTable = ({
               <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
             ) : null}
             {tableData[4]?.isActive ? <th>Branch</th> : null}
-            {tableData[5]?.isActive ? <th>Parent</th> : null}
-            {tableData[6]?.isActive ? <th>Type</th> : null}
-            {tableData[7]?.isActive ? <th>Started</th> : null}
-            {tableData[8]?.isActive ? <th>Student</th> : null}
-            {tableData[9]?.isActive ? <th>Applications</th> : null}
-            {tableData[10]?.isActive ? <th>Associates</th> : null}
-            {tableData[11]?.isActive ? <th>Affiliates</th> : null}
-            {tableData[12]?.isActive ? <th>Companions</th> : null}
+            {tableData[5]?.isActive ? <th>Sales Leader</th> : null}
+            {tableData[6]?.isActive ? <th>Parent</th> : null}
+            {tableData[7]?.isActive ? <th>Type</th> : null}
+            {tableData[8]?.isActive ? <th>Started</th> : null}
+            {tableData[9]?.isActive ? <th>Student</th> : null}
+            {tableData[10]?.isActive ? <th>Applications</th> : null}
+            {tableData[11]?.isActive ? <th>Associates</th> : null}
+            {tableData[12]?.isActive ? <th>Affiliates</th> : null}
+            {tableData[13]?.isActive ? <th>Companions</th> : null}
 
             {/* {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
               <>{tableData[13]?.isActive ? <th>Status</th> : null}</>
             ) : null} */}
-            {tableData[13]?.isActive ? <th>Status</th> : null}
-            {tableData[14]?.isActive ? <th>Tier</th> : null}
+            {tableData[14]?.isActive ? <th>Status</th> : null}
+            {tableData[15]?.isActive ? <th>Tier</th> : null}
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[15]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[16]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[16]?.isActive ? (
+            {tableData[17]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -205,18 +206,21 @@ const ConsultantTable = ({
                 <td>{consultant?.branch?.name}</td>
               ) : null}
               {tableData[5]?.isActive ? (
-                <td>{consultant?.parentConsultantName}</td>
+                <td>{consultant?.salesTeamLeaderName}</td>
               ) : null}
               {tableData[6]?.isActive ? (
-                <td>{consultant?.consultantType?.name}</td>
+                <td>{consultant?.parentConsultantName}</td>
               ) : null}
               {tableData[7]?.isActive ? (
+                <td>{consultant?.consultantType?.name}</td>
+              ) : null}
+              {tableData[8]?.isActive ? (
                 <td>{dateFormate(consultant?.createdOn)}</td>
               ) : null}
 
               {permissions?.includes(permissionList.View_Consultant_Student) ? (
                 <>
-                  {tableData[8]?.isActive ? (
+                  {tableData[9]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -235,7 +239,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[8]?.isActive ? (
+                  {tableData[9]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-first">
@@ -251,7 +255,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Application
               ) ? (
                 <>
-                  {tableData[9]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -266,7 +270,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[9]?.isActive ? (
+                  {tableData[10]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-second">
@@ -282,7 +286,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Associate
               ) ? (
                 <>
-                  {tableData[10]?.isActive ? (
+                  {tableData[11]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -299,7 +303,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[10]?.isActive ? (
+                  {tableData[11]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-third">
@@ -310,7 +314,7 @@ const ConsultantTable = ({
                   ) : null}
                 </>
               )}
-              {tableData[11]?.isActive ? (
+              {tableData[12]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -327,7 +331,7 @@ const ConsultantTable = ({
                 </td>
               ) : null}
 
-              {tableData[12]?.isActive ? (
+              {tableData[13]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -343,10 +347,10 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[13]?.isActive ? (
+              {tableData[14]?.isActive ? (
                 <td>{consultant?.accountStatus?.statusName}</td>
               ) : null}
-              {tableData[14]?.isActive ? (
+              {tableData[15]?.isActive ? (
                 <td>{consultant?.tier !== "No Tier" && consultant?.tier}</td>
               ) : null}
 
@@ -354,7 +358,7 @@ const ConsultantTable = ({
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[15]?.isActive ? (
+                  {tableData[16]?.isActive ? (
                     <td>
                       <ConsultantActive
                         id={consultant?.id}
@@ -365,7 +369,7 @@ const ConsultantTable = ({
                 </>
               ) : null}
 
-              {tableData[16]?.isActive ? (
+              {tableData[17]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Consultant) ? (

@@ -39,6 +39,11 @@ const SelectAndClear = ({
   tierValue,
   setTierValue,
   setIsTyping,
+  userTypeId,
+  consSalesTeamLeaderMenu,
+  SalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  selectSalesTeamLeaderCons,
 }) => {
   const userType = localStorage.getItem("userType");
   return (
@@ -57,6 +62,27 @@ const SelectAndClear = ({
               />
             </Col>
           )}
+          {userTypeId === userTypes?.SystemAdmin ||
+          userTypeId === userTypes?.Admin ||
+          userTypeId === userTypes?.BranchAdmin ||
+          userTypeId === userTypes?.BranchManager ||
+          userTypeId === userTypes?.SalesManager ? (
+            <Col className="uapp-mb mb-2" md="4" sm="12">
+              <Select
+                className="form-mt"
+                options={consSalesTeamLeaderMenu}
+                value={{
+                  label: SalesTeamLeaderLabel,
+                  value: SalesTeamLeaderValue,
+                }}
+                onChange={(opt) =>
+                  selectSalesTeamLeaderCons(opt.label, opt.value)
+                }
+                name="salesTeamLeaderId"
+                id="salesTeamLeaderId"
+              />
+            </Col>
+          ) : null}
           <Col className="uapp-mb mb-2" md="4" sm="12">
             <Select
               options={empOptiopns}
