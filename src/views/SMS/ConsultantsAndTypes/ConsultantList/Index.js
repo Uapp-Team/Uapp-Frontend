@@ -441,6 +441,8 @@ const Index = () => {
   };
 
   const handleReset = () => {
+    setSalesTeamLeaderLabel("Select Sales Team Leader");
+    setSalesTeamLeaderValue(0);
     setBranchLabel("Select Branch");
     setBranchValue(0);
     setEmpLabel("Select Consultant Type");
@@ -493,6 +495,8 @@ const Index = () => {
           SalesTeamLeaderLabel={SalesTeamLeaderLabel}
           SalesTeamLeaderValue={SalesTeamLeaderValue}
           selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
+          setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
+          setSalesTeamLeaderValue={setSalesTeamLeaderValue}
         ></SelectAndClear>
         {/* filter starts here */}
 

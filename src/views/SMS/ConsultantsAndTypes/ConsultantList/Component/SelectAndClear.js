@@ -44,6 +44,8 @@ const SelectAndClear = ({
   SalesTeamLeaderLabel,
   SalesTeamLeaderValue,
   selectSalesTeamLeaderCons,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
 }) => {
   const userType = localStorage.getItem("userType");
   return (
@@ -166,9 +168,28 @@ const SelectAndClear = ({
               }}
             >
               <div className="mt-1 mx-1" style={{ display: "flex" }}>
-                {empValue !== 0 || branchValue !== 0 || statusValue !== 0
+                {SalesTeamLeaderValue !== 0 ||
+                empValue !== 0 ||
+                branchValue !== 0 ||
+                statusValue !== 0
                   ? ""
                   : ""}
+                {SalesTeamLeaderValue !== 0 ? (
+                  <TagButton
+                    label={SalesTeamLeaderLabel}
+                    setValue={() => setSalesTeamLeaderValue(0)}
+                    setLabel={() =>
+                      setSalesTeamLeaderLabel("Select Sales Team Leader")
+                    }
+                  ></TagButton>
+                ) : (
+                  ""
+                )}
+                {SalesTeamLeaderValue !== 0 &&
+                  (empValue !== 0 || branchValue !== 0 || statusValue !== 0
+                    ? ""
+                    : "")}
+
                 {empValue !== 0 ? (
                   <TagButton
                     label={empLabel}
@@ -205,7 +226,10 @@ const SelectAndClear = ({
               </div>
 
               <div className="mt-1 mx-0 d-flex btn-clear">
-                {empValue !== 0 || branchValue !== 0 || statusValue !== 0 ? (
+                {SalesTeamLeaderValue !== 0 ||
+                empValue !== 0 ||
+                branchValue !== 0 ||
+                statusValue !== 0 ? (
                   <button className="tag-clear" onClick={handleReset}>
                     Clear All
                   </button>

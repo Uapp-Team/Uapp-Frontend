@@ -1,5 +1,9 @@
 const ColumnLiveIntake = [
   {
+    title: "Admission Manager",
+    isActive: true,
+  },
+  {
     title: "University",
     isActive: true,
   },

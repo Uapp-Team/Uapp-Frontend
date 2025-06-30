@@ -181,17 +181,20 @@ const LiveIntakeTable = ({
                 <Table id="table-to-xls" className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? <th>University</th> : null}
-                      {tableData[1]?.isActive ? <th>Intake</th> : null}
-                      {tableData[2]?.isActive ? <th>Campus</th> : null}
-                      {tableData[3]?.isActive ? (
+                      {tableData[0]?.isActive ? (
+                        <th>Admission Manager</th>
+                      ) : null}
+                      {tableData[1]?.isActive ? <th>University</th> : null}
+                      {tableData[2]?.isActive ? <th>Intake</th> : null}
+                      {tableData[3]?.isActive ? <th>Campus</th> : null}
+                      {tableData[4]?.isActive ? (
                         <th>Recruitment Type</th>
                       ) : null}
-                      {tableData[4]?.isActive ? (
+                      {tableData[5]?.isActive ? (
                         <th>Delivery Pattern</th>
                       ) : null}
-                      {tableData[5]?.isActive ? <th>Course</th> : null}
-                      {tableData[6]?.isActive ? (
+                      {tableData[6]?.isActive ? <th>Course</th> : null}
+                      {tableData[7]?.isActive ? (
                         <th style={{ width: "8%" }} className="text-center">
                           Action
                         </th>
@@ -202,9 +205,12 @@ const LiveIntakeTable = ({
                     {liveIntakeList?.map((liveIntake, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
                         {tableData[0]?.isActive ? (
-                          <td>{liveIntake?.universityName}</td>
+                          <td>{liveIntake?.admissionManagerName}</td>
                         ) : null}
                         {tableData[1]?.isActive ? (
+                          <td>{liveIntake?.universityName}</td>
+                        ) : null}
+                        {tableData[2]?.isActive ? (
                           <td>
                             <MoreData
                               data={liveIntake?.intakeNames}
@@ -212,7 +218,7 @@ const LiveIntakeTable = ({
                             />
                           </td>
                         ) : null}
-                        {tableData[2]?.isActive ? (
+                        {tableData[3]?.isActive ? (
                           <td>
                             <MoreData
                               data={liveIntake?.campusNames}
@@ -220,7 +226,7 @@ const LiveIntakeTable = ({
                             />
                           </td>
                         ) : null}
-                        {tableData[3]?.isActive ? (
+                        {tableData[4]?.isActive ? (
                           <td>
                             {liveIntake?.isAcceptHome === true ? (
                               <span className="for-intake-table">Home/UK</span>
@@ -235,7 +241,7 @@ const LiveIntakeTable = ({
                             ) : null}
                           </td>
                         ) : null}
-                        {tableData[4]?.isActive ? (
+                        {tableData[5]?.isActive ? (
                           <td>
                             {" "}
                             {/* <span className="for-intake-table">
@@ -244,14 +250,14 @@ const LiveIntakeTable = ({
                             {liveIntake?.deliveryPatternNames}
                           </td>
                         ) : null}
-                        {tableData[5]?.isActive ? (
+                        {tableData[6]?.isActive ? (
                           <td>
                             <span className="for-intake-table">
                               {liveIntake?.courseCount}{" "}
                             </span>
                           </td>
                         ) : null}
-                        {tableData[6]?.isActive ? (
+                        {tableData[7]?.isActive ? (
                           <td
                             className="cursor-pointer"
                             onClick={() => handleUpdate(liveIntake)}
