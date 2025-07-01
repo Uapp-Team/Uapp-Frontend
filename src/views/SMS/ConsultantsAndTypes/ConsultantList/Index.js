@@ -102,7 +102,7 @@ const Index = () => {
   const history = useHistory();
   const [check, setCheck] = useState(false);
   const [tierLabel, setTierLabel] = useState("Select Tier");
-  const [tierValue, setTierValue] = useState(0);
+  const [tierValue, setTierValue] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [referID, setReferId] = useState(null);
