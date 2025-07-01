@@ -228,9 +228,15 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       setLoading(true);
-      get(
-        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
-      ).then((res) => {
+
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
+
+      // ✅ Append tier only if it's not null
+      if (tierValue !== null) {
+        url += `&tier=${tierValue}`;
+      }
+
+      get(url).then((res) => {
         console.log(res?.models);
         setConsultantList(res?.models);
         setSerialNum(res?.firstSerialNumber);
@@ -252,6 +258,35 @@ const Index = () => {
     tierValue,
     SalesTeamLeaderValue,
   ]);
+
+  // useEffect(() => {
+  //   if (!isTyping) {
+  //     setLoading(true);
+
+  //     get(
+  //       `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+  //     ).then((res) => {
+  //       console.log(res?.models);
+  //       setConsultantList(res?.models);
+  //       setSerialNum(res?.firstSerialNumber);
+  //       setEntity(res?.totalEntity);
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [
+  //   currentPage,
+  //   dataPerPage,
+  //   callApi,
+  //   searchStr,
+  //   branchValue,
+  //   empValue,
+  //   statusValue,
+  //   success,
+  //   check,
+  //   isTyping,
+  //   tierValue,
+  //   SalesTeamLeaderValue,
+  // ]);
 
   const handleDate = (e) => {
     var datee = e;
