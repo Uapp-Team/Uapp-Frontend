@@ -416,7 +416,7 @@ const SalesManagerProfile = ({ userId }) => {
                           </Col>
 
                           <Col md="5" className="mt-4">
-                            <div className="text-md-right">
+                            {/* <div className="text-md-right">
                               <span
                                 style={{
                                   color: "#6B6B6B",
@@ -440,7 +440,7 @@ const SalesManagerProfile = ({ userId }) => {
                               >
                                 {employeeDetails?.uappRegistrationDate}
                               </span>
-                            </div>
+                            </div> */}
                           </Col>
                         </Row>
                       </div>
