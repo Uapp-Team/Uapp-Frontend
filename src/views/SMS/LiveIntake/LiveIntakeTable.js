@@ -181,10 +181,10 @@ const LiveIntakeTable = ({
                 <Table id="table-to-xls" className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? (
+                      {tableData[0]?.isActive ? <th>University</th> : null}
+                      {tableData[1]?.isActive ? (
                         <th>Admission Manager</th>
                       ) : null}
-                      {tableData[1]?.isActive ? <th>University</th> : null}
                       {tableData[2]?.isActive ? <th>Intake</th> : null}
                       {tableData[3]?.isActive ? <th>Campus</th> : null}
                       {tableData[4]?.isActive ? (
@@ -205,13 +205,13 @@ const LiveIntakeTable = ({
                     {liveIntakeList?.map((liveIntake, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
                         {tableData[0]?.isActive ? (
+                          <td>{liveIntake?.universityName}</td>
+                        ) : null}
+                        {tableData[1]?.isActive ? (
                           <td>
                             {liveIntake?.admissionManagerName} <br></br>{" "}
                             {liveIntake?.admissionManagerEmail}
                           </td>
-                        ) : null}
-                        {tableData[1]?.isActive ? (
-                          <td>{liveIntake?.universityName}</td>
                         ) : null}
                         {tableData[2]?.isActive ? (
                           <td>
