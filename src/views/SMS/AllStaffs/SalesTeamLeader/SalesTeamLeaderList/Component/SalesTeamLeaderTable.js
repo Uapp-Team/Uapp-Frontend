@@ -62,16 +62,20 @@ const SalesTeamLeaderTable = ({
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
             {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
-            {tableData[1]?.isActive ? <th>Assign Consultant</th> : null}
+            {tableData[1]?.isActive ? <th>Full Name</th> : null}
+            {tableData[2]?.isActive ? <th>Contact</th> : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
-              <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
+              <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
             ) : null}
-            {tableData[3]?.isActive ? <th>Full Name</th> : null}
-            {tableData[4]?.isActive ? <th>Branch</th> : null}
-            {tableData[5]?.isActive ? <th>Contact</th> : null}
-            {tableData[6]?.isActive ? <th>Sales Manager</th> : null}
+            {tableData[4]?.isActive ? <th>Sales Manager</th> : null}
+            {tableData[5]?.isActive ? <th>Branch</th> : null}
+            {tableData[6]?.isActive ? <th>Started</th> : null}
+            {tableData[7]?.isActive ? <th>Assign Consultant</th> : null}
+            {tableData[8]?.isActive ? <th>Student</th> : null}
+            {tableData[9]?.isActive ? <th>Companions</th> : null}
+            {tableData[10]?.isActive ? <th>Applications</th> : null}
 
-            {tableData[7]?.isActive ? (
+            {tableData[11]?.isActive ? (
               <th className="text-center">Action</th>
             ) : null}
           </tr>
@@ -93,35 +97,6 @@ const SalesTeamLeaderTable = ({
                 </td>
               ) : null}
               {tableData[1]?.isActive ? (
-                <td>
-                  <div style={{ marginTop: "5px" }}>
-                    <span
-                      onClick={() =>
-                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
-                      }
-                      className="Count-fifth"
-                    >
-                      View({emp?.consultantCount})
-                    </span>
-                  </div>
-                </td>
-              ) : null}
-
-              {permissions?.includes(permissionList.Staff_Password_Change) ? (
-                <>
-                  {tableData[2]?.isActive ? (
-                    <td>
-                      <Link
-                        to="/salesTeamLeaderList"
-                        onClick={() => handlePass(emp)}
-                      >
-                        Change
-                      </Link>
-                    </td>
-                  ) : null}
-                </>
-              ) : null}
-              {tableData[3]?.isActive ? (
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
@@ -132,8 +107,7 @@ const SalesTeamLeaderTable = ({
                   <span></span>
                 </td>
               ) : null}
-              {tableData[4]?.isActive ? <td>{emp.branch}</td> : null}
-              {tableData[5]?.isActive ? (
+              {tableData[2]?.isActive ? (
                 <td>
                   <div className="d-flex justify-content-center">
                     <PopOverText
@@ -157,9 +131,67 @@ const SalesTeamLeaderTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[6]?.isActive ? <td>{emp.salesManagerName}</td> : null}
-
+              {permissions?.includes(permissionList.Staff_Password_Change) ? (
+                <>
+                  {tableData[3]?.isActive ? (
+                    <td>
+                      <Link
+                        to="/salesTeamLeaderList"
+                        onClick={() => handlePass(emp)}
+                      >
+                        Change
+                      </Link>
+                    </td>
+                  ) : null}
+                </>
+              ) : null}
+              {tableData[4]?.isActive ? <td>{emp.salesManagerName}</td> : null}
+              {tableData[5]?.isActive ? <td>{emp.branch}</td> : null}
+              {tableData[6]?.isActive ? <td>{emp.startedDate}</td> : null}
               {tableData[7]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span
+                      onClick={() =>
+                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                      }
+                      className="Count-fifth"
+                    >
+                      View({emp?.consultantCount})
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[8]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span className="Count-first-no-pointer">
+                      {emp?.studentCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[9]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span className="Count-fourth-no-pointer">
+                      {emp?.companionCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+              {tableData[10]?.isActive ? (
+                <td>
+                  <div style={{ marginTop: "5px" }}>
+                    <span className="Count-second-no-pointer">
+                      {emp?.applicationCount}
+                    </span>
+                  </div>
+                </td>
+              ) : null}
+
+              {tableData[11]?.isActive ? (
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(

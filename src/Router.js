@@ -2818,7 +2818,7 @@ class AppRouter extends React.Component {
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
                       )
-                        ? SalesManagersTeamLeaders
+                        ? SalesTeamLeaderList
                         : NotAuthorized
                     }
                   />
