@@ -398,7 +398,7 @@ const SalesManagerProfile = ({ userId }) => {
                                       permissionList.Update_SalesTeamLeader
                                     ) ? (
                                       <Link
-                                        to={`/salesTeamLeaderGeneralInformation/${
+                                        to={`/salesManagerGeneralInformation/${
                                           id ? id : userId
                                         }`}
                                       >

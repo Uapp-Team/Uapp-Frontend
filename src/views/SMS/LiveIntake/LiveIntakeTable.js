@@ -205,7 +205,10 @@ const LiveIntakeTable = ({
                     {liveIntakeList?.map((liveIntake, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
                         {tableData[0]?.isActive ? (
-                          <td>{liveIntake?.admissionManagerName}</td>
+                          <td>
+                            {liveIntake?.admissionManagerName} <br></br>{" "}
+                            {liveIntake?.admissionManagerEmail}
+                          </td>
                         ) : null}
                         {tableData[1]?.isActive ? (
                           <td>{liveIntake?.universityName}</td>
