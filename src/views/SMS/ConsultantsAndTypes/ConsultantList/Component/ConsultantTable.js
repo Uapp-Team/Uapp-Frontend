@@ -87,8 +87,8 @@ const ConsultantTable = ({
               <>{tableData[3]?.isActive ? <th>Password</th> : null}</>
             ) : null}
             {tableData[4]?.isActive ? <th>Branch</th> : null}
-            {tableData[5]?.isActive ? <th>Sales Leader</th> : null}
-            {tableData[6]?.isActive ? <th>Parent</th> : null}
+            {tableData[5]?.isActive ? <th>Sales Team Leader</th> : null}
+            {tableData[6]?.isActive ? <th>Parent Consultant</th> : null}
             {tableData[7]?.isActive ? <th>Type</th> : null}
             {tableData[8]?.isActive ? <th>Started</th> : null}
             {tableData[9]?.isActive ? <th>Student</th> : null}
