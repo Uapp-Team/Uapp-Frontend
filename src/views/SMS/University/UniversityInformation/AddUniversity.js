@@ -533,23 +533,21 @@ const AddUniversity = (props) => {
     setUniTypeValue(value);
   };
 
-   useEffect(() => {
-     get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
+  useEffect(() => {
+    get(`UniversityStateDD/Index/${uniCountryValue}`).then((res) => {
       setUniversityStates(res);
     });
-  
-    }, [uniCountryValue]);
+  }, [uniCountryValue]);
 
-
-   useEffect(() => {
-    if (unistateValue !==0) {
-        get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then((res) => {
-      setCity(res);
-    });
+  useEffect(() => {
+    if (unistateValue !== 0) {
+      get(`UniversityCityDD/Index/${uniCountryValue}/${unistateValue}`).then(
+        (res) => {
+          setCity(res);
+        }
+      );
     }
-  
-  
-    }, [uniCountryValue,unistateValue]);
+  }, [uniCountryValue, unistateValue]);
 
   // const searchStateByCountry = (countryValue,unistateValue) => {
   //   get(`UniversityStateDD/Index/${countryValue}`).then((res) => {
@@ -1127,7 +1125,11 @@ const AddUniversity = (props) => {
                     <Row>
                       <Col md="4">
                         <FormGroup>
-                          <span>Home/EU Commission Currency </span>
+                          <span>
+                            {" "}
+                            <span className="text-danger">*</span>Home/EU
+                            Commission Currency{" "}
+                          </span>
 
                           <Currency
                             currencyId={homeCurrencyId}
@@ -1140,7 +1142,11 @@ const AddUniversity = (props) => {
                       </Col>
                       <Col md="4">
                         <FormGroup>
-                          <span>International Commission Currency</span>
+                          <span>
+                            {" "}
+                            <span className="text-danger">*</span>International
+                            Commission Currency
+                          </span>
 
                           <Currency
                             currencyId={internationalCurrencyId}
