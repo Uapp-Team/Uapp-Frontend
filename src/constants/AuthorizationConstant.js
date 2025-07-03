@@ -127,6 +127,15 @@ export const permissionList = {
   Assign_Consultants: 506,
   ///Sales Team Leader////
 
+  ///Sales Manager////
+  Add_SalesManager: 601,
+  Update_SalesManager: 602,
+  View_SalesManager_Details: 603,
+  Delete_SalesManager: 604,
+  View_SalesManager_list: 605,
+  Assign_SalesTeamLeaders: 606,
+  ///Sales Manager////
+
   ///////
   Add_Employee: 1,
   Update_Employee: 2,

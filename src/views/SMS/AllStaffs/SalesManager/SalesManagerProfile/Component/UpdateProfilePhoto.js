@@ -57,9 +57,7 @@ const UpdateProfilePhoto = ({
                     alt="profile_img"
                   />
                 )}
-                {permissions?.includes(
-                  permissionList.Update_SalesTeamLeader
-                ) ? (
+                {permissions?.includes(permissionList.Update_SalesManager) ? (
                   <div class="edit">
                     <span onClick={updateProfilePic}>
                       <i

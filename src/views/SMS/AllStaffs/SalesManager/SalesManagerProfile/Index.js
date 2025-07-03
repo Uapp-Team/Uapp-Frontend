@@ -395,7 +395,7 @@ const SalesManagerProfile = ({ userId }) => {
                                 >
                                   <div className="mr-1">
                                     {permissions?.includes(
-                                      permissionList.Update_SalesTeamLeader
+                                      permissionList.Update_SalesManager
                                     ) ? (
                                       <Link
                                         to={`/salesManagerGeneralInformation/${

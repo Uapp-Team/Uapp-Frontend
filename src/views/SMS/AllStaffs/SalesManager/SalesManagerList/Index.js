@@ -373,7 +373,7 @@ const Index = (props) => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_SalesTeamLeader) ? (
+                {permissions?.includes(permissionList?.Add_SalesManager) ? (
                   <ButtonForFunction
                     func={handleAddStaff}
                     className={"btn btn-uapp-add "}
@@ -421,9 +421,7 @@ const Index = (props) => {
               </Col>
             </Row>
 
-            {permissions?.includes(
-              permissionList?.View_SalesTeamLeader_list
-            ) && (
+            {permissions?.includes(permissionList?.View_SalesManager_list) && (
               <>
                 {employeeList?.length === 0 ? (
                   <h4 className="text-center">No Data Found</h4>

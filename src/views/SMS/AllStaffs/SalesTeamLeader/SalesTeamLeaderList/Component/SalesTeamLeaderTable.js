@@ -150,16 +150,24 @@ const SalesTeamLeaderTable = ({
               {tableData[6]?.isActive ? <td>{emp.startedDate}</td> : null}
               {tableData[7]?.isActive ? (
                 <td>
-                  <div style={{ marginTop: "5px" }}>
-                    <span
-                      onClick={() =>
-                        redirectToAssignPage(emp?.employeeId, emp?.branchId)
-                      }
-                      className="Count-fifth"
-                    >
-                      View({emp?.consultantCount})
-                    </span>
-                  </div>
+                  {permissions?.includes(permissionList.Assign_Consultants) ? (
+                    <div style={{ marginTop: "5px" }}>
+                      <span
+                        onClick={() =>
+                          redirectToAssignPage(emp?.employeeId, emp?.branchId)
+                        }
+                        className="Count-fifth"
+                      >
+                        View({emp?.consultantCount})
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ marginTop: "5px" }}>
+                      <span className="Count-fifth-no-pointer">
+                        View({emp?.consultantCount})
+                      </span>
+                    </div>
+                  )}
                 </td>
               ) : null}
               {tableData[8]?.isActive ? (

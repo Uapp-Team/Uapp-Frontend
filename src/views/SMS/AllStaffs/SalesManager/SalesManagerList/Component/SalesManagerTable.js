@@ -161,7 +161,7 @@ const SalesManagerTable = ({
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(
-                      permissionList.View_SalesTeamLeader_Details
+                      permissionList.View_SalesManager_Details
                     ) ? (
                       <ButtonForFunction
                         func={() => redirectToStaffProfile(emp?.employeeId)}
@@ -178,7 +178,7 @@ const SalesManagerTable = ({
                     emp?.email === "finance@uapp.uk" ? null : (
                       <>
                         {permissions.includes(
-                          permissionList?.Update_SalesTeamLeader
+                          permissionList?.Update_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() =>
@@ -191,7 +191,7 @@ const SalesManagerTable = ({
                         ) : null}
 
                         {permissions?.includes(
-                          permissionList.Delete_SalesTeamLeader
+                          permissionList.Delete_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() => toggleDanger(emp)}

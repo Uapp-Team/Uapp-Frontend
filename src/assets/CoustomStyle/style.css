@@ -1432,7 +1432,7 @@ a.sidemenu:hover {
 }
 
 .uapp-sidbar.main-menu.menu-light .navigation > li ul li.active {
-  background: none !important;
+  background: #fc7300;
   box-shadow: none !important;
 }
 
