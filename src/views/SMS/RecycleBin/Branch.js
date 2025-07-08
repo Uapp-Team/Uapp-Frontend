@@ -9,7 +9,7 @@ import DeleteButton from "../../../components/buttons/DeleteButton";
 import RecoveryButton from "../../../components/buttons/RecoveryButton";
 import Uget from "../../../helpers/Uget";
 
-const BranchManager = () => {
+const Branch = () => {
   const [success, setSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
@@ -21,7 +21,7 @@ const BranchManager = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `BranchManagerBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
+        `BranchBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
       ).then((res) => {
         setDataList(res?.items);
         setEntity(res?.totalFiltered);
@@ -31,7 +31,7 @@ const BranchManager = () => {
 
   return (
     <>
-      <BreadCrumb title="Branch Manager" backTo="Recycle Bin" path="/recycle" />
+      <BreadCrumb title="Branch" backTo="Recycle Bin" path="/recycle" />
       <Card className="zindex-100">
         <CardBody>
           <Typing
@@ -75,7 +75,7 @@ const BranchManager = () => {
                     <td> {dateFormate(item?.deletedOn)} </td>
                     <td>
                       <RecoveryButton
-                        url={`BranchManagerBin/Restore?branchManagerId=${item?.id}`}
+                        url={`BranchBin/Restore?branchId=${item?.id}`}
                         success={success}
                         setSuccess={setSuccess}
                       />
@@ -97,4 +97,4 @@ const BranchManager = () => {
   );
 };
 
-export default BranchManager;
+export default Branch;

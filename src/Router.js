@@ -1826,6 +1826,7 @@ const RecycleAdmissionOfficer = lazy(() =>
   import("./views/SMS/RecycleBin/AdmissionOfficer.js")
 );
 
+const RecycleBranch = lazy(() => import("./views/SMS/RecycleBin/Branch.js"));
 const RecycleBranchManager = lazy(() =>
   import("./views/SMS/RecycleBin/BranchManager.js")
 );
@@ -5587,6 +5588,8 @@ class AppRouter extends React.Component {
                     path="/recycle/branchManager"
                     component={RecycleBranchManager}
                   />
+                  <AppRoute path="/recycle/branch" component={RecycleBranch} />
+
                   <AppRoute
                     path="/recycle/complianceManager"
                     component={RecycleComplianceManager}
