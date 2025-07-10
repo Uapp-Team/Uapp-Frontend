@@ -34,7 +34,7 @@ const Subjects = () => {
   return (
     <>
       <BreadCrumb title="Subjects" backTo="Recycle Bin" path="/recycle" />
-      {permissions?.includes(permissionList?.DashRestore_Subjectboard) ? (
+      {permissions?.includes(permissionList?.Restore_Subject) ? (
         <>
           {" "}
           <Card className="zindex-100">

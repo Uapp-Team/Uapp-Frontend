@@ -70,7 +70,7 @@ const SalesTeamLeaderTable = ({
             {tableData[4]?.isActive ? <th>Sales Manager</th> : null}
             {tableData[5]?.isActive ? <th>Branch</th> : null}
             {tableData[6]?.isActive ? <th>Started</th> : null}
-            {tableData[7]?.isActive ? <th>Assign Consultant</th> : null}
+            {tableData[7]?.isActive ? <th>Assigned Consultant</th> : null}
             {tableData[8]?.isActive ? <th>Student</th> : null}
             {tableData[9]?.isActive ? <th>Companions</th> : null}
             {tableData[10]?.isActive ? <th>Applications</th> : null}

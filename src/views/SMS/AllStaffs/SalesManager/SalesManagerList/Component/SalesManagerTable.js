@@ -62,7 +62,9 @@ const SalesManagerTable = ({
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
             {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
-            {tableData[1]?.isActive ? <th>Assign Sales Team Leader</th> : null}
+            {tableData[1]?.isActive ? (
+              <th>Assigned Sales Team Leader</th>
+            ) : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
               <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
             ) : null}
