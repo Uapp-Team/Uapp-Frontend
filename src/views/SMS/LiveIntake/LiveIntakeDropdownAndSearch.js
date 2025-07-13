@@ -46,7 +46,7 @@ const LiveIntakeDropdownAndSearch = ({
         <CardBody>
           {/* new */}
           <Row className="mb-3">
-            <Col lg="3" md="3" sm="12" xs="12" style={{ marginBottom: "10px" }}>
+            <Col lg="3" md="3" sm="2" xs="12" className="mb-2">
               <Typing
                 name="search"
                 id="search"
@@ -61,9 +61,9 @@ const LiveIntakeDropdownAndSearch = ({
             <Col
               lg="9"
               md="9"
-              sm="12"
+              sm="2"
               xs="12"
-              className="mt-md-0 mt-sm-3 d-flex justify-content-md-end justify-content-sm-start"
+              className="mt-md-0 mt-sm-3 mt-4 d-flex justify-content-md-end justify-content-sm-start"
             >
               <div
                 className=" mr-4 mb-1 d-flex align-items-center"

@@ -109,7 +109,7 @@ const ProfilePreview = ({
 
   return (
     <>
-      <Card className="p-4">
+      <Card className="p-4 table-responsive">
         <div className="d-flex justify-content-between mb-4">
           <div className="d-flex justify-content-start">
             <h3>Profile Preview</h3>
