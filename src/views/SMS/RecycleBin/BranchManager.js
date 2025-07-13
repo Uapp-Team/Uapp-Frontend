@@ -8,6 +8,7 @@ import Pagination from "../Pagination/Pagination";
 import DeleteButton from "../../../components/buttons/DeleteButton";
 import RecoveryButton from "../../../components/buttons/RecoveryButton";
 import Uget from "../../../helpers/Uget";
+import { permissionList } from "../../../constants/AuthorizationConstant";
 
 const BranchManager = () => {
   const [success, setSuccess] = useState(false);
@@ -17,11 +18,12 @@ const BranchManager = () => {
   const [searchStr, setSearchStr] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [dataList, setDataList] = useState([]);
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `BranchBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
+        `BranchManagerBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
       ).then((res) => {
         setDataList(res?.items);
         setEntity(res?.totalFiltered);
@@ -31,68 +33,72 @@ const BranchManager = () => {
 
   return (
     <>
-      <BreadCrumb title="Branch" backTo="Recycle Bin" path="/recycle" />
-      <Card className="zindex-100">
-        <CardBody>
-          <Typing
-            name="search"
-            placeholder="Name"
-            value={searchStr}
-            setValue={setSearchStr}
-            setIsTyping={setIsTyping}
-          />
-        </CardBody>
-      </Card>
-
-      <div className="custom-card-border p-4 mb-30px">
-        <div className="d-flex justify-content-end">
-          <DataShow
-            dataPerPage={dataPerPage}
-            setDataPerPage={setDataPerPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
-        <div className="table-responsive fixedhead mb-3">
-          <Table className="table-bordered">
-            <thead className="tablehead">
-              <tr>
-                <th>UAPP ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Deleted By</th>
-                <th>Date</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataList?.length > 0 &&
-                dataList?.map((item, i) => (
-                  <tr key={i} className="border-buttom">
-                    <td>{item?.uAppId}</td>
-                    <td>{item?.name}</td>
-                    <td>{item?.email}</td>
-                    <td>{item?.deletedBy}</td>
-                    <td> {dateFormate(item?.deletedOn)} </td>
-                    <td>
-                      <RecoveryButton
-                        url={`BranchBin/Restore?branchId=${item?.id}`}
-                        success={success}
-                        setSuccess={setSuccess}
-                      />
-                    </td>
+      <BreadCrumb title="Branch Manager" backTo="Recycle Bin" path="/recycle" />
+      {permissions?.includes(permissionList?.Restore_BranchManager) ? (
+        <>
+          {" "}
+          <Card className="zindex-100">
+            <CardBody>
+              <Typing
+                name="search"
+                placeholder="Name"
+                value={searchStr}
+                setValue={setSearchStr}
+                setIsTyping={setIsTyping}
+              />
+            </CardBody>
+          </Card>
+          <div className="custom-card-border p-4 mb-30px">
+            <div className="d-flex justify-content-end">
+              <DataShow
+                dataPerPage={dataPerPage}
+                setDataPerPage={setDataPerPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+            <div className="table-responsive fixedhead mb-3">
+              <Table className="table-bordered">
+                <thead className="tablehead">
+                  <tr>
+                    <th>UAPP ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Deleted By</th>
+                    <th>Date</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-            </tbody>
-          </Table>
-        </div>
+                </thead>
+                <tbody>
+                  {dataList?.length > 0 &&
+                    dataList?.map((item, i) => (
+                      <tr key={i} className="border-buttom">
+                        <td>{item?.uAppId}</td>
+                        <td>{item?.name}</td>
+                        <td>{item?.email}</td>
+                        <td>{item?.deletedBy}</td>
+                        <td> {dateFormate(item?.deletedOn)} </td>
+                        <td>
+                          <RecoveryButton
+                            url={`BranchManagerBin/Restore?branchManagerId=${item?.id}`}
+                            success={success}
+                            setSuccess={setSuccess}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </div>
 
-        <Pagination
-          dataPerPage={dataPerPage}
-          totalData={entity}
-          paginate={setCurrentPage}
-          currentPage={currentPage}
-        />
-      </div>
+            <Pagination
+              dataPerPage={dataPerPage}
+              totalData={entity}
+              paginate={setCurrentPage}
+              currentPage={currentPage}
+            />
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

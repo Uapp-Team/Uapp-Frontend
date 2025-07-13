@@ -93,7 +93,9 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${0}`
+      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
+        id ? id : 0
+      }`
     ).then((res) => {
       console.log(res);
       setCompanionList(res?.items);

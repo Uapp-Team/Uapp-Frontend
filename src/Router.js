@@ -1826,6 +1826,7 @@ const RecycleAdmissionOfficer = lazy(() =>
   import("./views/SMS/RecycleBin/AdmissionOfficer.js")
 );
 
+const RecycleBranch = lazy(() => import("./views/SMS/RecycleBin/Branch.js"));
 const RecycleBranchManager = lazy(() =>
   import("./views/SMS/RecycleBin/BranchManager.js")
 );
@@ -2805,7 +2806,7 @@ class AppRouter extends React.Component {
                     path="/salesManagerList"
                     component={
                       permissions?.includes(
-                        permissionList?.View_SalesTeamLeader_list
+                        permissionList?.View_SalesManager_list
                       )
                         ? SalesManagerList
                         : NotAuthorized
@@ -2818,7 +2819,7 @@ class AppRouter extends React.Component {
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
                       )
-                        ? SalesManagersTeamLeaders
+                        ? SalesTeamLeaderList
                         : NotAuthorized
                     }
                   />
@@ -2828,7 +2829,7 @@ class AppRouter extends React.Component {
                     path="/salesManagerAssignSalesTeam/:salesManagerId/:branchId"
                     component={
                       permissions?.includes(
-                        permissionList?.View_SalesTeamLeader_list
+                        permissionList?.Assign_SalesTeamLeaders
                       )
                         ? SalesManagerAssignSalesLeader
                         : NotAuthorized
@@ -2849,7 +2850,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerRegistration"
                     component={
-                      permissions.includes(permissionList?.Add_SalesTeamLeader)
+                      permissions.includes(permissionList?.Add_SalesManager)
                         ? SalesManagerRegistration
                         : NotAuthorized
                     }
@@ -2858,9 +2859,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerGeneralInformation/:salesManagerId"
                     component={
-                      permissions.includes(
-                        permissionList?.Update_SalesTeamLeader
-                      )
+                      permissions.includes(permissionList?.Update_SalesManager)
                         ? SalesManagerGeneralInformation
                         : NotAuthorized
                     }
@@ -2869,9 +2868,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerContactInformation/:salesManagerId"
                     component={
-                      permissions.includes(
-                        permissionList?.Update_SalesTeamLeader
-                      )
+                      permissions.includes(permissionList?.Update_SalesManager)
                         ? SalesManagerContactInformation
                         : NotAuthorized
                     }
@@ -2880,9 +2877,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerEmergencyInformation/:salesManagerId"
                     component={
-                      permissions.includes(
-                        permissionList?.Update_SalesTeamLeader
-                      )
+                      permissions.includes(permissionList?.Update_SalesManager)
                         ? SalesManagerEmergencyInformation
                         : NotAuthorized
                     }
@@ -2891,9 +2886,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerPersonalInformation/:salesManagerId"
                     component={
-                      permissions.includes(
-                        permissionList?.Update_SalesTeamLeader
-                      )
+                      permissions.includes(permissionList?.Update_SalesManager)
                         ? SalesManagerPersonalInformation
                         : NotAuthorized
                     }
@@ -2902,9 +2895,7 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/salesManagerEligibility/:salesManagerId"
                     component={
-                      permissions.includes(
-                        permissionList?.Update_SalesTeamLeader
-                      )
+                      permissions.includes(permissionList?.Update_SalesManager)
                         ? SalesManagerEligibility
                         : NotAuthorized
                     }
@@ -2914,7 +2905,7 @@ class AppRouter extends React.Component {
                     path="/salesManagerProfile/:id"
                     component={
                       permissions?.includes(
-                        permissionList?.View_SalesTeamLeader_Details
+                        permissionList?.View_SalesManager_Details
                       )
                         ? SalesManagerProfile
                         : NotAuthorized
@@ -2941,9 +2932,7 @@ class AppRouter extends React.Component {
                     exact
                     path="/salesTeamLeaderAssignConsultant/:salesTeamLeaderId/:branchId"
                     component={
-                      permissions?.includes(
-                        permissionList?.View_SalesTeamLeader_list
-                      )
+                      permissions?.includes(permissionList?.Assign_Consultants)
                         ? SalesTeamLeaderAssignConsultant
                         : NotAuthorized
                     }
@@ -5599,6 +5588,8 @@ class AppRouter extends React.Component {
                     path="/recycle/branchManager"
                     component={RecycleBranchManager}
                   />
+                  <AppRoute path="/recycle/branch" component={RecycleBranch} />
+
                   <AppRoute
                     path="/recycle/complianceManager"
                     component={RecycleComplianceManager}

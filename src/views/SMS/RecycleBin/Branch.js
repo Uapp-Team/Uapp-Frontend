@@ -10,7 +10,7 @@ import RecoveryButton from "../../../components/buttons/RecoveryButton";
 import Uget from "../../../helpers/Uget";
 import { permissionList } from "../../../constants/AuthorizationConstant";
 
-const Affiliate = () => {
+const Branch = () => {
   const [success, setSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage, setDataPerPage] = useState(15);
@@ -23,7 +23,7 @@ const Affiliate = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `AffiliateBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
+        `BranchBin?index=${currentPage}&size=${dataPerPage}&query=${searchStr}`
       ).then((res) => {
         setDataList(res?.items);
         setEntity(res?.totalFiltered);
@@ -33,8 +33,8 @@ const Affiliate = () => {
 
   return (
     <>
-      <BreadCrumb title="Affiliate" backTo="Recycle Bin" path="/recycle" />
-      {permissions?.includes(permissionList?.Restore_Affiliate) ? (
+      <BreadCrumb title="Branch" backTo="Recycle Bin" path="/recycle" />
+      {permissions?.includes(permissionList?.Restore_Branch) ? (
         <>
           {" "}
           <Card className="zindex-100">
@@ -79,7 +79,7 @@ const Affiliate = () => {
                         <td> {dateFormate(item?.deletedOn)} </td>
                         <td>
                           <RecoveryButton
-                            url={`AffiliateBin/Restore?affiliateId=${item?.id}`}
+                            url={`BranchBin/Restore?branchId=${item?.id}`}
                             success={success}
                             setSuccess={setSuccess}
                           />
@@ -103,4 +103,4 @@ const Affiliate = () => {
   );
 };
 
-export default Affiliate;
+export default Branch;

@@ -225,7 +225,7 @@ const GeneralInformationForm = ({
             <Input type="email" name="email" id="email" value={email} />
           </FormGroup>
           <FormGroup className="mt-4 text-right">
-            {permissions?.includes(permissionList?.Update_SalesTeamLeader) && (
+            {permissions?.includes(permissionList?.Update_SalesManager) && (
               <SaveButton
                 text="Save and Next"
                 progress={progress}

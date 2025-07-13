@@ -31,6 +31,9 @@ import { userTypes } from "../../../../../constants/userTypeConstant";
 import AssignSalesLeaderModal from "./AssignSalesLeaderModal";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import Uget from "../../../../../helpers/Uget";
+import Pagination from "../../../Pagination/Pagination";
+import Typing from "../../../../../components/form/Typing";
+import Select from "react-select";
 
 const Index = () => {
   // const [loading, setLoading] = useState(false);
@@ -51,14 +54,52 @@ const Index = () => {
   const [data, setData] = useState({});
   const componentRef = useRef();
   const userType = localStorage.getItem("userType");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataPerPage, setDataPerPage] = useState(15);
+  const [searchStr, setSearchStr] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [entity, setEntity] = useState(0);
+  const [serialNum, setSerialNum] = useState(1);
+  const [callApi, setCallApi] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const dataSizeArr = [15, 20, 30, 50, 100, 1000];
+  const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
+
+  const selectDataSize = (value) => {
+    setCurrentPage(1);
+    setLoading(true);
+    setDataPerPage(value);
+    setCallApi((prev) => !prev);
+  };
+
+  //  change page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setCallApi((prev) => !prev);
+  };
+
+  // on enter press
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      setCurrentPage(1);
+      setCallApi((prev) => !prev);
+    }
+  };
 
   useEffect(() => {
-    Uget(
-      `SalesManager/FetchAssignedSalesTeamLeaders?employeeId=${salesManagerId}`
-    ).then((res) => {
-      setAssignSalesTeam(res?.data);
-    });
-  }, [salesManagerId, success]);
+    if (!isTyping) {
+      Uget(
+        `SalesManager/FetchAssignedSalesTeamLeaders?employeeId=${salesManagerId}&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}`
+      ).then((res) => {
+        console.log(res);
+
+        setAssignSalesTeam(res?.items);
+        setEntity(res?.totalFiltered);
+        setSerialNum(res?.from);
+        setLoading(false);
+      });
+    }
+  }, [salesManagerId, currentPage, dataPerPage, searchStr, success, isTyping]);
 
   // on Close Modal
   const closeModal = () => {
@@ -104,7 +145,7 @@ const Index = () => {
       <Card className="uapp-employee-search">
         <CardBody>
           <Row className="mb-3">
-            <Col lg="6" md="6" sm="12" xs="12">
+            <Col lg="5" md="5" sm="12" xs="12">
               <div className="d-sm-flex">
                 <ButtonForFunction
                   func={() => setModalOpen(true)}
@@ -113,6 +154,34 @@ const Index = () => {
                   name={" Assign Sales Team Leader"}
                   permission={6}
                 />
+              </div>
+            </Col>
+            <Col lg="7" md="7" sm="12" xs="12" className="mt-md-0 mt-sm-3">
+              <div className="d-flex justify-content-md-end justify-content-sm-start">
+                <div className="mr-3">
+                  <div className="d-flex align-items-center">
+                    <div className="mr-2">
+                      {" "}
+                      <Typing
+                        name="search"
+                        id="search"
+                        placeholder="Name, Email"
+                        value={searchStr}
+                        setValue={setSearchStr}
+                        setIsTyping={setIsTyping}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
+                    <div className="mr-2">Showing :</div>
+                    <div className="ddzindex">
+                      <Select
+                        options={dataSizeName}
+                        value={{ label: dataPerPage, value: dataPerPage }}
+                        onChange={(opt) => selectDataSize(opt.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </Col>
           </Row>
@@ -180,7 +249,12 @@ const Index = () => {
               </tbody>
             </Table>
           </div>
-          {/* )} */}
+          <Pagination
+            dataPerPage={dataPerPage}
+            totalData={entity}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
         </CardBody>
       </Card>
 

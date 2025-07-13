@@ -102,11 +102,15 @@ const Index = () => {
   const history = useHistory();
   const [check, setCheck] = useState(false);
   const [tierLabel, setTierLabel] = useState("Select Tier");
-  const [tierValue, setTierValue] = useState(0);
+  const [tierValue, setTierValue] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [referID, setReferId] = useState(null);
-  console.log(referID);
+  const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
+  );
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
   useEffect(() => {
     sessionStorage.setItem(
@@ -149,13 +153,21 @@ const Index = () => {
     });
   }, []);
 
+  useEffect(() => {
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setConsSalesTeamLeader(res);
+    });
+  }, [branchValue]);
+
   // for link
 
   useEffect(() => {
-    Uget("SalesTeamLeader/FetchUappId").then((res) => {
-      setReferId(res?.data?.uappId);
-    });
-  }, []);
+    if (userTypeId === userTypes?.SalesTeamLeader) {
+      Uget("SalesTeamLeader/FetchUappId").then((res) => {
+        setReferId(res?.data?.uappId);
+      });
+    }
+  }, [userTypeId]);
 
   // const url = `${domain}/consultantRegister/${referID}`;
   const url = `${domain}/consultantRegister/${referID}?source=salesTeamLeader`;
@@ -216,9 +228,15 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       setLoading(true);
-      get(
-        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}`
-      ).then((res) => {
+
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
+
+      // ✅ Append tier only if it's not null
+      if (tierValue !== null) {
+        url += `&tier=${tierValue}`;
+      }
+
+      get(url).then((res) => {
         console.log(res?.models);
         setConsultantList(res?.models);
         setSerialNum(res?.firstSerialNumber);
@@ -238,7 +256,37 @@ const Index = () => {
     check,
     isTyping,
     tierValue,
+    SalesTeamLeaderValue,
   ]);
+
+  // useEffect(() => {
+  //   if (!isTyping) {
+  //     setLoading(true);
+
+  //     get(
+  //       `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+  //     ).then((res) => {
+  //       console.log(res?.models);
+  //       setConsultantList(res?.models);
+  //       setSerialNum(res?.firstSerialNumber);
+  //       setEntity(res?.totalEntity);
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [
+  //   currentPage,
+  //   dataPerPage,
+  //   callApi,
+  //   searchStr,
+  //   branchValue,
+  //   empValue,
+  //   statusValue,
+  //   success,
+  //   check,
+  //   isTyping,
+  //   tierValue,
+  //   SalesTeamLeaderValue,
+  // ]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -405,6 +453,17 @@ const Index = () => {
     // handleSearch();
   };
 
+  const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
+    })
+  );
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
+  };
+
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
     value: statusTypeOptions?.id,
@@ -417,6 +476,8 @@ const Index = () => {
   };
 
   const handleReset = () => {
+    setSalesTeamLeaderLabel("Select Sales Team Leader");
+    setSalesTeamLeaderValue(0);
     setBranchLabel("Select Branch");
     setBranchValue(0);
     setEmpLabel("Select Consultant Type");
@@ -464,6 +525,13 @@ const Index = () => {
           tierValue={tierValue}
           setTierValue={setTierValue}
           setIsTyping={setIsTyping}
+          userTypeId={userTypeId}
+          consSalesTeamLeaderMenu={consSalesTeamLeaderMenu}
+          SalesTeamLeaderLabel={SalesTeamLeaderLabel}
+          SalesTeamLeaderValue={SalesTeamLeaderValue}
+          selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
+          setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
+          setSalesTeamLeaderValue={setSalesTeamLeaderValue}
         ></SelectAndClear>
         {/* filter starts here */}
 

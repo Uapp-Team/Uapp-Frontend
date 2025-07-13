@@ -532,7 +532,7 @@ const SalesManagerContactInformation = () => {
                     <FormGroup className="d-flex justify-content-between mt-4">
                       <PreviousButton action={handlePrevious} />
                       {permissions?.includes(
-                        permissionList?.Update_SalesTeamLeader
+                        permissionList?.Update_SalesManager
                       ) ? (
                         <SaveButton
                           text="Save and Next"

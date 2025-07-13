@@ -39,11 +39,11 @@ const Index = () => {
   // const [loading, setLoading] = useState(false);
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
-  const [assignSalesTeam, setAssignSalesTeam] = useState([]);
+  const [assignCons, setAssignCons] = useState([]);
   const [success, setSuccess] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [salesLeaderName, setSalesLeaderName] = useState("");
-  const [salesLeaderId, setSalesLeaderId] = useState(0);
+  const [consultantName, setConsultantName] = useState("");
+  const [consultantId, setConsultantId] = useState(0);
 
   const [buttonStatus1, setButtonStatus1] = useState(false);
   const [progress1, setProgress1] = useState(false);
@@ -90,11 +90,13 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `SalesTeamLeader/FetchAssignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&search=${searchStr}`
+        `SalesTeamLeader/FetchAssignedConsultants?employeeId=${salesTeamLeaderId}&page=${currentPage}&pageSize=${dataPerPage}&searchText=${searchStr}`
       ).then((res) => {
-        setAssignSalesTeam(res?.data);
-        setEntity(res?.totalEntity);
-        setSerialNum(res?.firstSerialNumber);
+        console.log(res);
+
+        setAssignCons(res?.items);
+        setEntity(res?.totalFiltered);
+        setSerialNum(res?.from);
         setLoading(false);
       });
     }
@@ -113,17 +115,17 @@ const Index = () => {
   };
 
   const toggleDanger = (p) => {
-    setSalesLeaderId(p?.salesTeamLeaderId);
-    setSalesLeaderName(p?.salesTeamLeaderName);
+    setConsultantId(p?.consultantId);
+    setConsultantName(p?.consultantName);
     setDeleteModal(true);
   };
 
-  const handleDeletePermission = (salesLeaderId) => {
+  const handleDeletePermission = (consultantId) => {
     setButtonStatus1(true);
     setProgress1(true);
 
     remove(
-      `SalesTeamLeader/FetchUnassignedConsultants?salesTeamLeaderId=${salesTeamLeaderId}&salesteamleaderId=${salesLeaderId}`
+      `SalesTeamLeader/UnassignConsultantsToLeader?salesTeamLeaderId=${salesTeamLeaderId}&consultantId=${consultantId}`
     ).then((action) => {
       setButtonStatus1(false);
       setProgress1(false);
@@ -133,8 +135,8 @@ const Index = () => {
         appearance: "error",
         autoDismiss: true,
       });
-      setSalesLeaderId(0);
-      setSalesLeaderName("");
+      setConsultantId(0);
+      setConsultantName("");
     });
   };
 
@@ -229,7 +231,7 @@ const Index = () => {
                 </tr>
               </thead>
               <tbody>
-                {assignSalesTeam?.map((salesTeam, i) => (
+                {assignCons?.map((salesTeam, i) => (
                   <tr
                     key={salesTeam?.consultantId}
                     style={{ textAlign: "center" }}
@@ -265,14 +267,14 @@ const Index = () => {
       </Card>
 
       <ConfirmModal
-        text={`Do You Want To Delete This ${salesLeaderName} Information ?`}
+        text={`Do You Want To Delete This ${consultantName} Information ?`}
         isOpen={deleteModal}
         toggle={closeModal}
-        confirm={() => handleDeletePermission(salesLeaderId)}
+        confirm={() => handleDeletePermission(consultantId)}
         cancel={() => {
           setDeleteModal(false);
-          setSalesLeaderId(0);
-          setSalesLeaderName("");
+          setConsultantId(0);
+          setConsultantName("");
         }}
         buttonStatus={buttonStatus1}
         progress={progress1}

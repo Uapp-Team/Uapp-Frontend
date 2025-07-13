@@ -16,7 +16,6 @@ const Question = ({ defaultData, refetch }) => {
       <div className="px-4 mt-3 mb-4">
         <div className="d-flex align-items-start justify-content-between ">
           <p className="ism-question-title">{defaultData?.title}</p>
-
           <p className="text-right">
             {permissions?.includes(permissionList?.Update_Question) &&
               defaultData?.isEdit && (

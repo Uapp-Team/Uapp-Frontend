@@ -420,7 +420,7 @@ const StaffEligibility = () => {
           setFileList4(null);
           setFileList5(null);
           setFileList6(null);
-          userType !== userTypes?.SalesTeamLeader
+          userType !== userTypes?.SalesManager
             ? history.push("/salesManagerList")
             : history.push("/profile");
         } else {
@@ -440,7 +440,7 @@ const StaffEligibility = () => {
   return (
     <div>
       <BreadCrumb
-        title="Sales Manager Eligibility Information"
+        title="Sales Manager Eligibility Information naki"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
