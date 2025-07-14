@@ -98,13 +98,15 @@ const LiveIntake = () => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
           recruitmentValue ? recruitmentValue : 0
         }&searchText=${searchStr}`
       ).then((res) => {
-        setLiveIntakeList(res?.items);
         setLoading(false);
+        setLiveIntakeList(res?.items);
+
         setEntity(res?.total);
       });
     }

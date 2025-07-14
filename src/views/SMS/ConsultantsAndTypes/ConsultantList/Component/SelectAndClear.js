@@ -39,6 +39,13 @@ const SelectAndClear = ({
   tierValue,
   setTierValue,
   setIsTyping,
+  userTypeId,
+  consSalesTeamLeaderMenu,
+  SalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  selectSalesTeamLeaderCons,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
 }) => {
   const userType = localStorage.getItem("userType");
   return (
@@ -57,6 +64,27 @@ const SelectAndClear = ({
               />
             </Col>
           )}
+          {userTypeId === userTypes?.SystemAdmin ||
+          userTypeId === userTypes?.Admin ||
+          userTypeId === userTypes?.BranchAdmin ||
+          userTypeId === userTypes?.BranchManager ||
+          userTypeId === userTypes?.SalesManager ? (
+            <Col className="uapp-mb mb-2" md="4" sm="12">
+              <Select
+                className="form-mt"
+                options={consSalesTeamLeaderMenu}
+                value={{
+                  label: SalesTeamLeaderLabel,
+                  value: SalesTeamLeaderValue,
+                }}
+                onChange={(opt) =>
+                  selectSalesTeamLeaderCons(opt.label, opt.value)
+                }
+                name="salesTeamLeaderId"
+                id="salesTeamLeaderId"
+              />
+            </Col>
+          ) : null}
           <Col className="uapp-mb mb-2" md="4" sm="12">
             <Select
               options={empOptiopns}
@@ -86,7 +114,7 @@ const SelectAndClear = ({
             <Filter
               data={[
                 {
-                  id: 0,
+                  id: null,
                   name: "All Tier",
                 },
                 ...consultantTier,
@@ -140,9 +168,28 @@ const SelectAndClear = ({
               }}
             >
               <div className="mt-1 mx-1" style={{ display: "flex" }}>
-                {empValue !== 0 || branchValue !== 0 || statusValue !== 0
+                {SalesTeamLeaderValue !== 0 ||
+                empValue !== 0 ||
+                branchValue !== 0 ||
+                statusValue !== 0
                   ? ""
                   : ""}
+                {SalesTeamLeaderValue !== 0 ? (
+                  <TagButton
+                    label={SalesTeamLeaderLabel}
+                    setValue={() => setSalesTeamLeaderValue(0)}
+                    setLabel={() =>
+                      setSalesTeamLeaderLabel("Select Sales Team Leader")
+                    }
+                  ></TagButton>
+                ) : (
+                  ""
+                )}
+                {SalesTeamLeaderValue !== 0 &&
+                  (empValue !== 0 || branchValue !== 0 || statusValue !== 0
+                    ? ""
+                    : "")}
+
                 {empValue !== 0 ? (
                   <TagButton
                     label={empLabel}
@@ -179,7 +226,10 @@ const SelectAndClear = ({
               </div>
 
               <div className="mt-1 mx-0 d-flex btn-clear">
-                {empValue !== 0 || branchValue !== 0 || statusValue !== 0 ? (
+                {SalesTeamLeaderValue !== 0 ||
+                empValue !== 0 ||
+                branchValue !== 0 ||
+                statusValue !== 0 ? (
                   <button className="tag-clear" onClick={handleReset}>
                     Clear All
                   </button>

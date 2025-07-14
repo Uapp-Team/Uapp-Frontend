@@ -6,7 +6,7 @@ import { permissionList } from "../../../../../../../constants/AuthorizationCons
 
 const GeneralInformationForm = ({
   handleSubmit,
-  salesTeamLeaderId,
+  salesManagerId,
   consData,
   branchOptions,
   branchLabel,
@@ -47,7 +47,7 @@ const GeneralInformationForm = ({
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   return (
     <Form onSubmit={handleSubmit}>
-      <input type="hidden" name="id" value={salesTeamLeaderId} />
+      <input type="hidden" name="id" value={salesManagerId} />
       <input type="hidden" name="email" value={consData?.email} />
 
       <Row>
@@ -66,9 +66,9 @@ const GeneralInformationForm = ({
                 onChange={(opt) => selectBranch(opt.label, opt.value)}
                 name="BranchId"
                 id="BranchId"
-                isDisabled={salesTeamLeaderId ? true : false}
+                isDisabled={salesManagerId ? true : false}
               />
-              {salesTeamLeaderId && (
+              {salesManagerId && (
                 <input
                   type="hidden"
                   value={branchValue}
@@ -120,7 +120,17 @@ const GeneralInformationForm = ({
                 onChange={(opt) => selectConsType(opt.label, opt.value)}
                 name="employeeTypeId"
                 id="employeeTypeId"
+                isDisabled={salesManagerId ? true : false}
               />
+
+              {salesManagerId && (
+                <input
+                  type="hidden"
+                  value={typeValue}
+                  name="employeeTypeId"
+                  id="employeeTypeId"
+                />
+              )}
 
               {consultantError && (
                 <span className="text-danger">Staff type is required</span>
@@ -215,7 +225,7 @@ const GeneralInformationForm = ({
             <Input type="email" name="email" id="email" value={email} />
           </FormGroup>
           <FormGroup className="mt-4 text-right">
-            {permissions?.includes(permissionList?.Update_SalesTeamLeader) && (
+            {permissions?.includes(permissionList?.Update_SalesManager) && (
               <SaveButton
                 text="Save and Next"
                 progress={progress}

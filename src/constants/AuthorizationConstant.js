@@ -118,6 +118,30 @@ export const permissionList = {
 
   Manage_Core_Data: 256,
 
+  ///Recycle Bin////
+
+  Dashboard: 1100,
+  Restore_Accounts_Manager: 1000,
+  Restore_Accounts_Officer: 1001,
+  Restore_Admin: 1002,
+  Restore_Admission_Manager: 1003,
+  Restore_Admission_Officer: 1004,
+  Restore_Affiliate: 1005,
+  Restore_Ambassador: 1006,
+  Restore_Application: 1007,
+  Restore_Branch: 1008,
+  Restore_BranchManager: 1009,
+  Restore_ComplianceManager: 1010,
+  Restore_ComplianceOfficer: 1011,
+  Restore_Consultant: 1012,
+  Restore_Editor: 1013,
+  Restore_FinanceManager: 1014,
+  Restore_ProviderAdmin: 1015,
+  Restore_Student: 1016,
+  Restore_Subject: 1017,
+  Restore_University: 1018,
+  ///Recycle Bin////
+
   ///Sales Team Leader////
   Add_SalesTeamLeader: 501,
   Update_SalesTeamLeader: 502,
@@ -126,6 +150,15 @@ export const permissionList = {
   View_SalesTeamLeader_list: 505,
   Assign_Consultants: 506,
   ///Sales Team Leader////
+
+  ///Sales Manager////
+  Add_SalesManager: 601,
+  Update_SalesManager: 602,
+  View_SalesManager_Details: 603,
+  Delete_SalesManager: 604,
+  View_SalesManager_list: 605,
+  Assign_SalesTeamLeaders: 606,
+  ///Sales Manager////
 
   ///////
   Add_Employee: 1,

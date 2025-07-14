@@ -28,6 +28,11 @@ import PrintFile from "./Component/PrintFile.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import { useParams } from "react-router";
 import ConsultantStatus from "./Component/ConsultantStatus.js";
+import ButtonForFunction from "../../Components/ButtonForFunction.js";
+import CopyButton from "../../../../components/Refer/CopyButton.js";
+import SocialShare from "../../../../components/Refer/SocialShare.js";
+import Uget from "../../../../helpers/Uget.js";
+import { domain } from "../../../../constants/constants.js";
 
 const Index = () => {
   const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
@@ -97,8 +102,15 @@ const Index = () => {
   const history = useHistory();
   const [check, setCheck] = useState(false);
   const [tierLabel, setTierLabel] = useState("Select Tier");
-  const [tierValue, setTierValue] = useState(0);
+  const [tierValue, setTierValue] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [referID, setReferId] = useState(null);
+  const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
+  );
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
   useEffect(() => {
     sessionStorage.setItem(
@@ -140,6 +152,27 @@ const Index = () => {
       setStatusType(res);
     });
   }, []);
+
+  useEffect(() => {
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setConsSalesTeamLeader(res);
+    });
+  }, [branchValue]);
+
+  // for link
+
+  useEffect(() => {
+    if (userTypeId === userTypes?.SalesTeamLeader) {
+      Uget("SalesTeamLeader/FetchUappId").then((res) => {
+        setReferId(res?.data?.uappId);
+      });
+    }
+  }, [userTypeId]);
+
+  // const url = `${domain}/consultantRegister/${referID}`;
+  const url = `${domain}/consultantRegister/${referID}?source=salesTeamLeader`;
+
+  // for link
 
   const searchValue = (e) => {
     setSearchStr(e.target.value);
@@ -195,9 +228,15 @@ const Index = () => {
   useEffect(() => {
     if (!isTyping) {
       setLoading(true);
-      get(
-        `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}`
-      ).then((res) => {
+
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
+
+      // ✅ Append tier only if it's not null
+      if (tierValue !== null) {
+        url += `&tier=${tierValue}`;
+      }
+
+      get(url).then((res) => {
         console.log(res?.models);
         setConsultantList(res?.models);
         setSerialNum(res?.firstSerialNumber);
@@ -217,7 +256,37 @@ const Index = () => {
     check,
     isTyping,
     tierValue,
+    SalesTeamLeaderValue,
   ]);
+
+  // useEffect(() => {
+  //   if (!isTyping) {
+  //     setLoading(true);
+
+  //     get(
+  //       `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&tier=${tierValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+  //     ).then((res) => {
+  //       console.log(res?.models);
+  //       setConsultantList(res?.models);
+  //       setSerialNum(res?.firstSerialNumber);
+  //       setEntity(res?.totalEntity);
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [
+  //   currentPage,
+  //   dataPerPage,
+  //   callApi,
+  //   searchStr,
+  //   branchValue,
+  //   empValue,
+  //   statusValue,
+  //   success,
+  //   check,
+  //   isTyping,
+  //   tierValue,
+  //   SalesTeamLeaderValue,
+  // ]);
 
   const handleDate = (e) => {
     var datee = e;
@@ -384,6 +453,17 @@ const Index = () => {
     // handleSearch();
   };
 
+  const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
+    })
+  );
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
+  };
+
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
     value: statusTypeOptions?.id,
@@ -396,6 +476,8 @@ const Index = () => {
   };
 
   const handleReset = () => {
+    setSalesTeamLeaderLabel("Select Sales Team Leader");
+    setSalesTeamLeaderValue(0);
     setBranchLabel("Select Branch");
     setBranchValue(0);
     setEmpLabel("Select Consultant Type");
@@ -443,6 +525,13 @@ const Index = () => {
           tierValue={tierValue}
           setTierValue={setTierValue}
           setIsTyping={setIsTyping}
+          userTypeId={userTypeId}
+          consSalesTeamLeaderMenu={consSalesTeamLeaderMenu}
+          SalesTeamLeaderLabel={SalesTeamLeaderLabel}
+          SalesTeamLeaderValue={SalesTeamLeaderValue}
+          selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
+          setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
+          setSalesTeamLeaderValue={setSalesTeamLeaderValue}
         ></SelectAndClear>
         {/* filter starts here */}
 
@@ -457,15 +546,63 @@ const Index = () => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_Consultant) ? (
-                  <LinkButton
-                    url={"/addConsultant"}
-                    className={"btn btn-uapp-add "}
-                    name={"Add Consultant"}
-                    icon={<i className="fas fa-plus"></i>}
-                  />
-                ) : null}
+                <div className="d-flex">
+                  <div>
+                    {permissions?.includes(permissionList?.Add_Consultant) ? (
+                      <LinkButton
+                        url={"/addConsultant"}
+                        className={"btn btn-uapp-add "}
+                        name={"Add Consultant"}
+                        icon={<i className="fas fa-plus"></i>}
+                      />
+                    ) : null}
+                  </div>
+
+                  <div className="mx-3">
+                    {userTypeId === userTypes?.SalesTeamLeader ? (
+                      <ButtonForFunction
+                        func={() => setModalShow(true)}
+                        className={"btn btn-uapp-add "}
+                        icon={<i className="fas fa-plus"></i>}
+                        name={" Invite"}
+                      />
+                    ) : null}
+                  </div>
+                </div>
               </Col>
+
+              <Modal
+                size="md"
+                aria-labelledby="contained-modal-title-vcenter"
+                isOpen={modalShow}
+                toggle={() => setModalShow(false)}
+                centered
+              >
+                <div>
+                  <h5 className="d-flex justify-content-between px-4 mt-4">
+                    <span>Refer Code</span>
+                    <i
+                      class="fas fa-times cursor-pointer"
+                      onClick={() => setModalShow(false)}
+                    ></i>
+                  </h5>
+                  <hr />
+                </div>
+
+                <div className="text-center mx-auto mb-4">
+                  <p style={{ color: "#7C7C7C" }}>
+                    Share link with your friends
+                  </p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center copy-text mx-auto w-75">
+                  <p className="mb-0 text-ellipsis mr-1">{url}</p>
+                  <CopyButton text={url} />
+                </div>
+                <SocialShare
+                  description={"this is a basic share page"}
+                  url={url}
+                ></SocialShare>
+              </Modal>
 
               <Col lg="7" md="7" sm="12" xs="12">
                 <div className="d-flex justify-content-end">

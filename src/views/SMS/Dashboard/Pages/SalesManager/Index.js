@@ -44,7 +44,7 @@ const SalesTeamLeader = () => {
       setIntake(res);
     });
 
-    get(`SalesTeamLeaderDashboard/GetTransactions`).then((res) => {
+    get(`SalesManagerDashboard/GetTransactions`).then((res) => {
       setConsultants(res);
     });
   }, []);
@@ -59,7 +59,7 @@ const SalesTeamLeader = () => {
   }, [intakeRngDD, intake]);
 
   useEffect(() => {
-    get(`SalesTeamLeaderDashboard/cards/${intakeRngValue}`).then((res) => {
+    get(`SalesManagerDashboard/cards/${intakeRngValue}`).then((res) => {
       setCount(res);
       console.log(res);
     });
@@ -205,10 +205,10 @@ const SalesTeamLeader = () => {
 
       <>
         <DashboardApplication
-          url={`SalesTeamLeaderDashboard/NewApplications/${intakeRngValue}`}
+          url={`SalesManagerDashboard/NewApplications/${intakeRngValue}`}
         />
         <DashboardReadyToApply
-          url={`SalesTeamLeaderDashboard/ReadyToApplyApplications/${intakeRngValue}`}
+          url={`SalesManagerDashboard/ReadyToApplyApplications/${intakeRngValue}`}
         />
         <DashboardProgressChart />
         {/* <DashboardComission id={intakeRngValue} /> */}

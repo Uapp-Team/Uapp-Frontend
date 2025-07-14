@@ -42,7 +42,7 @@ const SalesManagerPersonalInformation = () => {
   const [consPersonalInfo, setConsPersonalInfo] = useState({});
   const [passport, setPassport] = useState("");
   const [passportError, setPassportError] = useState(false);
-  const { salesTeamLeaderId } = useParams();
+  const { salesManagerId } = useParams();
   const history = useHistory();
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");
@@ -57,7 +57,7 @@ const SalesManagerPersonalInformation = () => {
       setGender(res);
     });
 
-    get(`Employee/GetPersonalInformation/${salesTeamLeaderId}`).then((res) => {
+    get(`Employee/GetPersonalInformation/${salesManagerId}`).then((res) => {
       console.log("personalInfo", res);
       setConsPersonalInfo(res);
       setPassport(res?.passportId);
@@ -72,18 +72,18 @@ const SalesManagerPersonalInformation = () => {
       setPhone(res?.phoneNumber);
       // SetDate(res?.dateOfBirth);
     });
-  }, [success, salesTeamLeaderId]);
+  }, [success, salesManagerId]);
 
   const handleCancel1 = () => {
     setPreviewVisible1(false);
   };
 
   const goNext = () => {
-    history.push(`/salesTeamLeaderContactInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerContactInformation/${salesManagerId}`);
   };
 
   const goPrevious = () => {
-    history.push(`/salesTeamLeaderGeneralInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerGeneralInformation/${salesManagerId}`);
   };
 
   const handlePreview1 = async (file) => {
@@ -274,19 +274,19 @@ const SalesManagerPersonalInformation = () => {
           setFileList2([]);
         }
         setButtonStatus(false);
-        history.push(`/salesTeamLeaderContactInformation/${salesTeamLeaderId}`);
+        history.push(`/salesManagerContactInformation/${salesManagerId}`);
       });
     }
   };
 
   const onGoUniProfile = () => {
-    history.push(`/salesTeamLeaderProfile/${salesTeamLeaderId}`);
+    history.push(`/salesManagerProfile/${salesManagerId}`);
   };
 
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader Personal Information"
+        title="Sales Manager Personal Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
@@ -295,13 +295,13 @@ const SalesManagerPersonalInformation = () => {
           userType === userTypes?.FinanceManager ||
           userType === userTypes?.Editor
             ? null
-            : "Sales Team Leader"
+            : "Sales Manager"
         }
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <SalesManagerNavigation
-        salesTeamLeaderId={salesTeamLeaderId}
+        salesManagerId={salesManagerId}
         activetab={activetab}
         success={success}
         action={setAction}
@@ -314,7 +314,7 @@ const SalesManagerPersonalInformation = () => {
               {/* Form Start */}
               <PersonalInformationForm
                 handleSubmit={handleSubmit}
-                salesTeamLeaderId={salesTeamLeaderId}
+                salesManagerId={salesManagerId}
                 Dates={Dates}
                 SetDate={SetDate}
                 DatesError={DatesError}

@@ -5,7 +5,7 @@ import get from "../../../../../../helpers/get";
 
 const SalesManagerNavigation = ({
   activetab,
-  salesTeamLeaderId,
+  salesManagerId,
   success,
   action,
 }) => {
@@ -18,10 +18,10 @@ const SalesManagerNavigation = ({
   }, [activetab]);
 
   useEffect(() => {
-    get(`EmployeeNavbar/GetNavbar/${salesTeamLeaderId}`).then((res) => {
+    get(`EmployeeNavbar/GetNavbar/${salesManagerId}`).then((res) => {
       setActivity(res);
     });
-  }, [salesTeamLeaderId, success]);
+  }, [salesManagerId, success]);
 
   useEffect(() => {
     action(activity);
@@ -31,23 +31,23 @@ const SalesManagerNavigation = ({
     setcurrentTab(tab);
 
     if (tab === "1") {
-      history.push(`/salesTeamLeaderGeneralInformation/${salesTeamLeaderId}`);
+      history.push(`/salesManagerGeneralInformation/${salesManagerId}`);
     }
 
     if (tab === "2") {
-      history.push(`/salesTeamLeaderPersonalInformation/${salesTeamLeaderId}`);
+      history.push(`/salesManagerPersonalInformation/${salesManagerId}`);
     }
 
     if (tab === "3") {
-      history.push(`/salesTeamLeaderContactInformation/${salesTeamLeaderId}`);
+      history.push(`/salesManagerContactInformation/${salesManagerId}`);
     }
 
     if (tab === "4") {
-      history.push(`/salesTeamLeaderEmergencyInformation/${salesTeamLeaderId}`);
+      history.push(`/salesManagerEmergencyInformation/${salesManagerId}`);
     }
 
     if (tab === "5") {
-      history.push(`/salesTeamLeaderEligibility/${salesTeamLeaderId}`);
+      history.push(`/salesManagerEligibility/${salesManagerId}`);
     }
   };
   return (

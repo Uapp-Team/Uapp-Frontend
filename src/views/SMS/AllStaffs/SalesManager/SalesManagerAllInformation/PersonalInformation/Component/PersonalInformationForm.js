@@ -13,7 +13,7 @@ import { userTypes } from "../../../../../../../constants/userTypeConstant";
 
 const PersonalInformationForm = ({
   handleSubmit,
-  salesTeamLeaderId,
+  salesManagerId,
   Dates,
   setPassport,
   passport,
@@ -62,7 +62,7 @@ const PersonalInformationForm = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <input type="hidden" name="id" id="id" value={salesTeamLeaderId} />
+      <input type="hidden" name="id" id="id" value={salesManagerId} />
 
       <FormGroup row>
         <Col lg="6" md="8">
@@ -344,7 +344,7 @@ const PersonalInformationForm = ({
         <Col lg="6" md="8">
           <FormGroup className="mt-4 d-flex justify-content-between">
             <PreviousButton action={goPrevious} />
-            {permissions?.includes(permissionList?.Update_SalesTeamLeader) && (
+            {permissions?.includes(permissionList?.Update_SalesManager) && (
               <SaveButton
                 text="Save and Next"
                 progress={progress}

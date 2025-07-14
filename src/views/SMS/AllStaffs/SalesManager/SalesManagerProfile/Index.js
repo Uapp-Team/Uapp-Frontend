@@ -17,6 +17,7 @@ import GeneralForm from "./Component/GeneralForm";
 import PersonalForm from "./Component/PersonalForm";
 import UpdateCoverPhoto from "./Component/UpdateCoverPhoto";
 import UpdateProfilePhoto from "./Component/UpdateProfilePhoto";
+import BranchInformation from "./Component/BranchInformation";
 // import editbtn from "../../../../../../../../assets/img/editbtn.png";
 
 const SalesManagerProfile = ({ userId }) => {
@@ -288,9 +289,9 @@ const SalesManagerProfile = ({ userId }) => {
       ) : (
         <div ref={componentRef}>
           <BreadCrumb
-            title="Sales Team Leader Profile"
-            backTo={id && "Sales Team Leader"}
-            path="/salesTeamLeaderList"
+            title="Sales Manager Profile"
+            backTo={id && "Sales Manager"}
+            path="/salesManagerList"
           />
 
           <div className="uapp-employee-profile">
@@ -394,10 +395,10 @@ const SalesManagerProfile = ({ userId }) => {
                                 >
                                   <div className="mr-1">
                                     {permissions?.includes(
-                                      permissionList.Update_SalesTeamLeader
+                                      permissionList.Update_SalesManager
                                     ) ? (
                                       <Link
-                                        to={`/salesTeamLeaderGeneralInformation/${
+                                        to={`/salesManagerGeneralInformation/${
                                           id ? id : userId
                                         }`}
                                       >
@@ -415,7 +416,7 @@ const SalesManagerProfile = ({ userId }) => {
                           </Col>
 
                           <Col md="5" className="mt-4">
-                            <div className="text-md-right">
+                            {/* <div className="text-md-right">
                               <span
                                 style={{
                                   color: "#6B6B6B",
@@ -439,13 +440,15 @@ const SalesManagerProfile = ({ userId }) => {
                               >
                                 {employeeDetails?.uappRegistrationDate}
                               </span>
-                            </div>
+                            </div> */}
                           </Col>
                         </Row>
                       </div>
                     </CardBody>
                   </Card>
-
+                  <BranchInformation
+                    generalInfo={generalInfo}
+                  ></BranchInformation>
                   <GeneralForm generalInfo={generalInfo}></GeneralForm>
                   <PersonalForm personalInfo={personalInfo}></PersonalForm>
                   <ContactForm contactInfo={contactInfo}></ContactForm>

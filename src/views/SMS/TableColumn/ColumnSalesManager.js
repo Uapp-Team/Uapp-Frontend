@@ -1,4 +1,4 @@
-const ColumnSalesTeamLeader = [
+const ColumnSalesManager = [
   {
     title: "UAPP ID",
     isActive: true,
@@ -28,4 +28,4 @@ const ColumnSalesTeamLeader = [
     isActive: true,
   },
 ];
-export default ColumnSalesTeamLeader;
+export default ColumnSalesManager;

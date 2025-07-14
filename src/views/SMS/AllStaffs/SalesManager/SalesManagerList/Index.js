@@ -132,7 +132,7 @@ const Index = (props) => {
     });
     if (!isTyping) {
       Uget(
-        `SalesTeamLeader/FetchPagedData?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&searchText=${searchStr}`
+        `SalesManager/FetchPagedData?page=${currentPage}&pagesize=${dataPerPage}&branchId=${branchValue}&searchText=${searchStr}`
       ).then((action) => {
         setEmployeeList(action?.items);
 
@@ -253,7 +253,7 @@ const Index = (props) => {
 
   // add staff handler
   const handleAddStaff = () => {
-    history.push("/salesTeamLeaderRegistration");
+    history.push("/salesManagerRegistration");
   };
 
   // toggle dropdown
@@ -282,16 +282,16 @@ const Index = (props) => {
   const componentRef = useRef(employeeList);
 
   const redirecttoStaffGeneralInfo = (empId) => {
-    history.push(`/salesTeamLeaderGeneralInformation/${empId}`);
+    history.push(`/salesManagerGeneralInformation/${empId}`);
   };
 
   const redirectToStaffProfile = (empId) => {
-    history.push(`/salesTeamLeaderProfile/${empId}`);
+    history.push(`/salesManagerProfile/${empId}`);
   };
 
   const redirectToAssignPage = (salesTeamLeaderId, branchId) => {
     history.push({
-      pathname: `/salesTeamLeaderAssignConsultant/${salesTeamLeaderId}/${branchId}`,
+      pathname: `/salesManagerAssignSalesTeam/${salesTeamLeaderId}/${branchId}`,
     });
   };
 
@@ -343,7 +343,7 @@ const Index = (props) => {
 
   return (
     <div>
-      <BreadCrumb title="Sales Team Leader List" backTo="" path="/" />
+      <BreadCrumb title="Sales Manager List" backTo="" path="/" />
       <div>
         <SelectAndClear
           userType={userType}
@@ -373,12 +373,12 @@ const Index = (props) => {
                 xs="12"
                 style={{ marginBottom: "10px" }}
               >
-                {permissions?.includes(permissionList?.Add_SalesTeamLeader) ? (
+                {permissions?.includes(permissionList?.Add_SalesManager) ? (
                   <ButtonForFunction
                     func={handleAddStaff}
                     className={"btn btn-uapp-add "}
                     icon={<i className="fas fa-plus"></i>}
-                    name={"Add Sales Team Leader"}
+                    name={"Add Sales Manager"}
                   />
                 ) : null}
               </Col>
@@ -421,9 +421,7 @@ const Index = (props) => {
               </Col>
             </Row>
 
-            {permissions?.includes(
-              permissionList?.View_SalesTeamLeader_list
-            ) && (
+            {permissions?.includes(permissionList?.View_SalesManager_list) && (
               <>
                 {employeeList?.length === 0 ? (
                   <h4 className="text-center">No Data Found</h4>

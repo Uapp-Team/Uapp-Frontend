@@ -34,7 +34,7 @@ const StaffGeneralInformation = () => {
   const [consData, setConsData] = useState({});
   const [success, setSuccess] = useState(false);
   const [activetab, setActivetab] = useState("1");
-  const { salesTeamLeaderId } = useParams();
+  const { salesManagerId } = useParams();
   const [firstName, setFirstName] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastName, setLastName] = useState("");
@@ -58,7 +58,7 @@ const StaffGeneralInformation = () => {
       setBranch(res);
     });
 
-    get(`Employee/GetGeneralInformation/${salesTeamLeaderId}`).then((res) => {
+    get(`Employee/GetGeneralInformation/${salesManagerId}`).then((res) => {
       console.log("cons", res);
       setConsData(res);
       setSubmitData(true);
@@ -76,7 +76,7 @@ const StaffGeneralInformation = () => {
       setLastName(res?.lastName);
       setEmail(res?.email);
     });
-  }, [success, salesTeamLeaderId]);
+  }, [success, salesManagerId]);
 
   const nameTitleMenu = title?.map((titleOptions) => ({
     label: titleOptions?.name,
@@ -180,9 +180,7 @@ const StaffGeneralInformation = () => {
         setButtonStatus(false);
         setSuccess(!success);
         res?.data?.isSuccess == true &&
-          history.push(
-            `/salesTeamLeaderPersonalInformation/${salesTeamLeaderId}`
-          );
+          history.push(`/salesManagerPersonalInformation/${salesManagerId}`);
       });
     }
   };
@@ -190,7 +188,7 @@ const StaffGeneralInformation = () => {
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader General Information"
+        title="Sales Manager General Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
@@ -199,15 +197,15 @@ const StaffGeneralInformation = () => {
           userType === userTypes?.FinanceManager ||
           userType === userTypes?.Editor
             ? null
-            : "Sales Team Leader"
+            : "Sales Manager"
         }
         // backTo="Staff"
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <SalesManagerNavigation
         activetab={activetab}
-        salesTeamLeaderId={salesTeamLeaderId}
+        salesManagerId={salesManagerId}
         success={success}
         action={setAction}
       />
@@ -222,7 +220,7 @@ const StaffGeneralInformation = () => {
 
               <GeneralInformationForm
                 handleSubmit={handleSubmit}
-                salesTeamLeaderId={salesTeamLeaderId}
+                salesManagerId={salesManagerId}
                 consData={consData}
                 branchOptions={branchOptions}
                 branchLabel={branchLabel}

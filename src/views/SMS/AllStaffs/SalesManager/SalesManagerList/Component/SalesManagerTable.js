@@ -62,7 +62,9 @@ const SalesManagerTable = ({
         <thead className="tablehead">
           <tr style={{ textAlign: "center" }}>
             {tableData[0]?.isActive ? <th>UAPP Id</th> : null}
-            {tableData[1]?.isActive ? <th>Assign Consultant</th> : null}
+            {tableData[1]?.isActive ? (
+              <th>Assigned Sales Team Leader</th>
+            ) : null}
             {permissions?.includes(permissionList.Staff_Password_Change) ? (
               <>{tableData[2]?.isActive ? <th>Password</th> : null}</>
             ) : null}
@@ -85,7 +87,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/staffProfile/${emp.id}`}
+                    to={`/salesManagerProfile/${emp.employeeId}`}
                   >
                     {emp?.uappId}
                   </Link>
@@ -100,7 +102,7 @@ const SalesManagerTable = ({
                       }
                       className="Count-fifth"
                     >
-                      View({emp?.consultantCount})
+                      View({emp?.salesTeamLeaderCount})
                     </span>
                   </div>
                 </td>
@@ -111,7 +113,7 @@ const SalesManagerTable = ({
                   {tableData[2]?.isActive ? (
                     <td>
                       <Link
-                        to="/salesTeamLeaderList"
+                        to="/salesManagerList"
                         onClick={() => handlePass(emp)}
                       >
                         Change
@@ -124,7 +126,7 @@ const SalesManagerTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/salesTeamLeaderProfile/${emp?.employeeId}`}
+                    to={`/salesManagerProfile/${emp?.employeeId}`}
                   >
                     {emp?.fullName}
                   </Link>
@@ -161,7 +163,7 @@ const SalesManagerTable = ({
                 <td className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(
-                      permissionList.View_SalesTeamLeader_Details
+                      permissionList.View_SalesManager_Details
                     ) ? (
                       <ButtonForFunction
                         func={() => redirectToStaffProfile(emp?.employeeId)}
@@ -178,7 +180,7 @@ const SalesManagerTable = ({
                     emp?.email === "finance@uapp.uk" ? null : (
                       <>
                         {permissions.includes(
-                          permissionList?.Update_SalesTeamLeader
+                          permissionList?.Update_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() =>
@@ -191,7 +193,7 @@ const SalesManagerTable = ({
                         ) : null}
 
                         {permissions?.includes(
-                          permissionList.Delete_SalesTeamLeader
+                          permissionList.Delete_SalesManager
                         ) ? (
                           <ButtonForFunction
                             func={() => toggleDanger(emp)}

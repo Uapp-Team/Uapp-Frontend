@@ -126,6 +126,62 @@ const StaffEligibility = lazy(() =>
   )
 );
 
+//sales team leader
+
+const SalesTeamLeaderRegistration = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/NavigationAndRegister/SalesTeamLeaderRegister.js"
+  )
+);
+
+const SalesTeamLeaderGeneralInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/GeneralInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderPersonalInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/PersonalInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderContactInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/ContactInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderEmergencyInformation = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/EmergencyInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderEligibility = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderAllInformation/EligibilityInformation/Index.js"
+  )
+);
+
+const SalesTeamLeaderAssignConsultant = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesTeamLeader/AssignConsultant/Index.js")
+);
+
+const SalesTeamLeaderList = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderList/Index.js")
+);
+
+const SalesTeamLeaderProfile = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesTeamLeader/SalesTeamLeaderProfile/Index.js"
+  )
+);
+
+//sales team leader
+
+//sales Manager
+
 const SalesManagerRegistration = lazy(() =>
   import(
     "./views/SMS/AllStaffs/SalesManager/SalesManagerAllInformation/NavigationAndRegister/SalesManagerRegister"
@@ -162,17 +218,28 @@ const SalesManagerEligibility = lazy(() =>
   )
 );
 
-const SalesManagerAssignConsultant = lazy(() =>
-  import("./views/SMS/AllStaffs/SalesManager/AssignConsultant/Index.js")
+// const SalesManagerAssignConsultant = lazy(() =>
+//   import("./views/SMS/AllStaffs/SalesManager/AssignConsultant/Index.js")
+// );
+
+const SalesManagerAssignSalesLeader = lazy(() =>
+  import("./views/SMS/AllStaffs/SalesManager/AssignSalesLeader/Index.js")
 );
 
 const SalesManagerList = lazy(() =>
   import("./views/SMS/AllStaffs/SalesManager/SalesManagerList/Index.js")
 );
+const SalesManagersTeamLeaders = lazy(() =>
+  import(
+    "./views/SMS/AllStaffs/SalesManager/AssignSalesLeader/SalesLeaderList/Index.js"
+  )
+);
 
 const SalesManagerProfile = lazy(() =>
   import("./views/SMS/AllStaffs/SalesManager/SalesManagerProfile/Index.js")
 );
+
+//sales Manager
 
 const EmployeeList = lazy(() =>
   import("./views/SMS/AllStaffs/Staffs/StaffsList/Index.js")
@@ -1759,6 +1826,7 @@ const RecycleAdmissionOfficer = lazy(() =>
   import("./views/SMS/RecycleBin/AdmissionOfficer.js")
 );
 
+const RecycleBranch = lazy(() => import("./views/SMS/RecycleBin/Branch.js"));
 const RecycleBranchManager = lazy(() =>
   import("./views/SMS/RecycleBin/BranchManager.js")
 );
@@ -2731,6 +2799,121 @@ class AppRouter extends React.Component {
                     }
                   />
 
+                  {/* Sales Manager paths */}
+
+                  <AppRoute
+                    exact
+                    path="/salesManagerList"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesManager_list
+                      )
+                        ? SalesManagerList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    exact
+                    path="/salesManagersTeamLeaders"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesTeamLeaderList
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    exact
+                    path="/salesManagerAssignSalesTeam/:salesManagerId/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.Assign_SalesTeamLeaders
+                      )
+                        ? SalesManagerAssignSalesLeader
+                        : NotAuthorized
+                    }
+                  />
+                  {/* <AppRoute
+                    exact
+                    path="/salesManagerAssignSalesTeam/:salesManagerId/:branchId"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesTeamLeader_list
+                      )
+                        ? SalesManagerAssignConsultant
+                        : NotAuthorized
+                    }
+                  /> */}
+
+                  <AppRoute
+                    path="/salesManagerRegistration"
+                    component={
+                      permissions.includes(permissionList?.Add_SalesManager)
+                        ? SalesManagerRegistration
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerGeneralInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_SalesManager)
+                        ? SalesManagerGeneralInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerContactInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_SalesManager)
+                        ? SalesManagerContactInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerEmergencyInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_SalesManager)
+                        ? SalesManagerEmergencyInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerPersonalInformation/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_SalesManager)
+                        ? SalesManagerPersonalInformation
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerEligibility/:salesManagerId"
+                    component={
+                      permissions.includes(permissionList?.Update_SalesManager)
+                        ? SalesManagerEligibility
+                        : NotAuthorized
+                    }
+                  />
+
+                  <AppRoute
+                    path="/salesManagerProfile/:id"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_SalesManager_Details
+                      )
+                        ? SalesManagerProfile
+                        : NotAuthorized
+                    }
+                  />
+
+                  {/* Sales Manager paths */}
+
                   {/* Sales Team Leader paths */}
 
                   <AppRoute
@@ -2740,7 +2923,7 @@ class AppRouter extends React.Component {
                       permissions?.includes(
                         permissionList?.View_SalesTeamLeader_list
                       )
-                        ? SalesManagerList
+                        ? SalesTeamLeaderList
                         : NotAuthorized
                     }
                   />
@@ -2749,10 +2932,8 @@ class AppRouter extends React.Component {
                     exact
                     path="/salesTeamLeaderAssignConsultant/:salesTeamLeaderId/:branchId"
                     component={
-                      permissions?.includes(
-                        permissionList?.View_SalesTeamLeader_list
-                      )
-                        ? SalesManagerAssignConsultant
+                      permissions?.includes(permissionList?.Assign_Consultants)
+                        ? SalesTeamLeaderAssignConsultant
                         : NotAuthorized
                     }
                   />
@@ -2761,7 +2942,7 @@ class AppRouter extends React.Component {
                     path="/salesTeamLeaderRegistration"
                     component={
                       permissions.includes(permissionList?.Add_SalesTeamLeader)
-                        ? SalesManagerRegistration
+                        ? SalesTeamLeaderRegistration
                         : NotAuthorized
                     }
                   />
@@ -2772,7 +2953,7 @@ class AppRouter extends React.Component {
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
                       )
-                        ? SalesManagerGeneralInformation
+                        ? SalesTeamLeaderGeneralInformation
                         : NotAuthorized
                     }
                   />
@@ -2783,7 +2964,7 @@ class AppRouter extends React.Component {
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
                       )
-                        ? SalesManagerContactInformation
+                        ? SalesTeamLeaderContactInformation
                         : NotAuthorized
                     }
                   />
@@ -2794,7 +2975,7 @@ class AppRouter extends React.Component {
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
                       )
-                        ? SalesManagerEmergencyInformation
+                        ? SalesTeamLeaderEmergencyInformation
                         : NotAuthorized
                     }
                   />
@@ -2805,7 +2986,7 @@ class AppRouter extends React.Component {
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
                       )
-                        ? SalesManagerPersonalInformation
+                        ? SalesTeamLeaderPersonalInformation
                         : NotAuthorized
                     }
                   />
@@ -2816,7 +2997,7 @@ class AppRouter extends React.Component {
                       permissions.includes(
                         permissionList?.Update_SalesTeamLeader
                       )
-                        ? SalesManagerEligibility
+                        ? SalesTeamLeaderEligibility
                         : NotAuthorized
                     }
                   />
@@ -2827,7 +3008,7 @@ class AppRouter extends React.Component {
                       permissions?.includes(
                         permissionList?.View_Employee_Details
                       )
-                        ? SalesManagerProfile
+                        ? SalesTeamLeaderProfile
                         : NotAuthorized
                     }
                   />
@@ -5407,6 +5588,8 @@ class AppRouter extends React.Component {
                     path="/recycle/branchManager"
                     component={RecycleBranchManager}
                   />
+                  <AppRoute path="/recycle/branch" component={RecycleBranch} />
+
                   <AppRoute
                     path="/recycle/complianceManager"
                     component={RecycleComplianceManager}

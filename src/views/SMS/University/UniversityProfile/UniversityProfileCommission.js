@@ -39,7 +39,13 @@ const UniversityProfileCommission = ({
           <div className="recruit-Type mt-4">
             <div className="recruit-div">
               <div className="d-flex justify-content-around mt-3">
-                <p style={{ fontSize: "15px", fontWeight: "400" }}>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    marginRight: "4px",
+                  }}
+                >
                   Accept Home/UK
                 </p>{" "}
                 <img
@@ -51,7 +57,13 @@ const UniversityProfileCommission = ({
             </div>
             <div className="recruit-div">
               <div className="d-flex justify-content-around mt-3">
-                <p style={{ fontSize: "15px", fontWeight: "400" }}>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    marginRight: "4px",
+                  }}
+                >
                   Accept EU/EEU
                 </p>{" "}
                 <img
@@ -63,7 +75,13 @@ const UniversityProfileCommission = ({
             </div>
             <div className="recruit-div">
               <div className="d-flex justify-content-around mt-3">
-                <p style={{ fontSize: "15px", fontWeight: "400" }}>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    marginRight: "4px",
+                  }}
+                >
                   Accept Int.
                 </p>{" "}
                 <img

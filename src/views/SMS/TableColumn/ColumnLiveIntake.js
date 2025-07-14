@@ -4,6 +4,10 @@ const ColumnLiveIntake = [
     isActive: true,
   },
   {
+    title: "Admission Manager",
+    isActive: true,
+  },
+  {
     title: "Intake",
     isActive: true,
   },

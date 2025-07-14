@@ -1432,7 +1432,7 @@ a.sidemenu:hover {
 }
 
 .uapp-sidbar.main-menu.menu-light .navigation > li ul li.active {
-  background: none !important;
+  background: #fc7300;
   box-shadow: none !important;
 }
 
@@ -3885,15 +3885,15 @@ target-app-styless {
 }
 
 .recruit-div {
-  width: 140px;
-  height: 50px;
-  /* default/shade/white */
-
+  margin: 0 16px 10px 0;
+  padding: 6px 10px;
   background: #ffffff;
-  /* Shadow / large */
-
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 /* "SubjectProfile */
@@ -5067,7 +5067,6 @@ label.ant-radio-button-wrapper {
 }
 
 .Count-fourth-no-pointer {
-  cursor: pointer;
   background-color: #ed5ab3;
   color: white;
   padding: 2px 21px;

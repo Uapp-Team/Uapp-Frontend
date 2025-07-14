@@ -149,6 +149,7 @@ const GeneralInformation = () => {
       value: consSalesTeamLeaderOptions?.id,
     })
   );
+
   const consTypeMenu = consType?.map((consTypeOptions) => ({
     label: consTypeOptions?.name,
     value: consTypeOptions?.id,

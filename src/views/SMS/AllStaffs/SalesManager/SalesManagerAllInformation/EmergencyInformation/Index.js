@@ -25,7 +25,7 @@ import post from "../../../../../../helpers/post";
 import SalesManagerNavigation from "../NavigationAndRegister/SalesManagerNavigation";
 
 const SalesManagerContactInformation = () => {
-  const { salesTeamLeaderId } = useParams();
+  const { salesManagerId } = useParams();
   const activetab = "4";
   const userType = localStorage.getItem("userType");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -74,21 +74,21 @@ const SalesManagerContactInformation = () => {
   }, [country, countryValue]);
 
   useEffect(() => {
-    get(
-      `EmployeeEmergencyInformation/GetByEmployeeId/${salesTeamLeaderId}`
-    ).then((res) => {
-      setOneData(res);
-      setCountryValue(res?.countryId ? res?.countryId : 0);
-      setReferenceName(res?.personName);
-      setRelationship(res?.relationship);
-      setPhoneNumber(res?.phoneNumber);
-      setEmail(res?.emailAddress);
-      setAddressLine(res?.addressLine);
-      setCity(res?.city);
-      setZipCode(res?.zipCode);
-      setState(res?.state);
-    });
-  }, [success, salesTeamLeaderId]);
+    get(`EmployeeEmergencyInformation/GetByEmployeeId/${salesManagerId}`).then(
+      (res) => {
+        setOneData(res);
+        setCountryValue(res?.countryId ? res?.countryId : 0);
+        setReferenceName(res?.personName);
+        setRelationship(res?.relationship);
+        setPhoneNumber(res?.phoneNumber);
+        setEmail(res?.emailAddress);
+        setAddressLine(res?.addressLine);
+        setCity(res?.city);
+        setZipCode(res?.zipCode);
+        setState(res?.state);
+      }
+    );
+  }, [success, salesManagerId]);
 
   const countryName = country?.map((branchCountry) => ({
     label: branchCountry.name,
@@ -239,13 +239,13 @@ const SalesManagerContactInformation = () => {
           autoDismiss: true,
         });
         setButtonStatus(false);
-        history.push(`/salesTeamLeaderEligibility/${salesTeamLeaderId}`);
+        history.push(`/salesManagerEligibility/${salesManagerId}`);
       });
     }
   };
 
   const handlePrevious = () => {
-    history.push(`/salesTeamLeaderContactInformation/${salesTeamLeaderId}`);
+    history.push(`/salesManagerContactInformation/${salesManagerId}`);
   };
 
   let addressField = document.querySelector("#addressLine");
@@ -314,7 +314,7 @@ const SalesManagerContactInformation = () => {
   return (
     <div>
       <BreadCrumb
-        title="Sales Team Leader Emergency Information"
+        title="Sales Manager Emergency Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||
@@ -323,14 +323,14 @@ const SalesManagerContactInformation = () => {
           userType === userTypes?.FinanceManager ||
           userType === userTypes?.Editor
             ? null
-            : "Sales Team Leader"
+            : "Sales Manager"
         }
-        path={`/salesTeamLeaderList`}
+        path={`/salesManagerList`}
       />
 
       <SalesManagerNavigation
         activetab={activetab}
-        salesTeamLeaderId={salesTeamLeaderId}
+        salesManagerId={salesManagerId}
         success={success}
         action={setAction}
       />
@@ -347,7 +347,7 @@ const SalesManagerContactInformation = () => {
                   type="hidden"
                   name="employeeId"
                   id="employeeId"
-                  value={salesTeamLeaderId}
+                  value={salesManagerId}
                 />
 
                 <FormGroup row>
@@ -532,7 +532,7 @@ const SalesManagerContactInformation = () => {
                     <FormGroup className="d-flex justify-content-between mt-4">
                       <PreviousButton action={handlePrevious} />
                       {permissions?.includes(
-                        permissionList?.Update_SalesTeamLeader
+                        permissionList?.Update_SalesManager
                       ) ? (
                         <SaveButton
                           text="Save and Next"

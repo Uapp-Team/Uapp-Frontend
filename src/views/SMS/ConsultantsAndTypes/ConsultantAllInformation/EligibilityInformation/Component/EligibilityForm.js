@@ -322,7 +322,7 @@ const EligibilityForm = ({
           <FormGroup row className="has-icon-left position-relative">
             <Col md="4" className="text-md-right">
               {/* <span className="text-danger">*</span> */}
-              <span>BAC Certificate : </span>
+              <span>British Accreditation Council Certificate : </span>
             </Col>
 
             <Col md="8">
