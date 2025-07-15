@@ -131,6 +131,11 @@ const EligibilityInformation = () => {
           : null
       );
       setVisa(res?.visaType);
+      setIsIdPassportApproved(res?.isIdOrPasswordApproved);
+      setIsProofOfAddressApproved(res?.isProofOfAddressApproved);
+      setIsBrpApproved(res?.isBRPApproved);
+      setIsCvApproved(res?.isCvApproved);
+      setIsBacApproved(res?.isBacCertificateApproved);
     });
   }, [success, consultantRegisterId, setRightToWork]);
 

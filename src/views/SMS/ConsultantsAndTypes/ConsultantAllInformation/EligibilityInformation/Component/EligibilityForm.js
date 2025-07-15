@@ -86,9 +86,9 @@ const EligibilityForm = ({
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
 
-  const handleApprove = (e, param) => {
+  const handleApprove = (newValue, param) => {
     post(
-      `ConsultantEligibility/ApproveEligibility?id=${consultantRegisterId}&${param}=${e.target.value}`
+      `ConsultantEligibility/ApproveEligibility?id=${consultantRegisterId}&${param}=${newValue}`
     ).then((res) => {
       if (res?.status === 200 && res?.data?.isSuccess === true) {
         addToast(res?.data?.message, {
@@ -121,7 +121,7 @@ const EligibilityForm = ({
       />
 
       <Row>
-        <Col lg="6" md="8">
+        <Col lg="9" md="9">
           <FormGroup className="has-icon-left position-relative">
             <span>
               <span className="text-danger">*</span>
@@ -265,7 +265,7 @@ const EligibilityForm = ({
         </Col>{" "}
       </Row>
       <Row>
-        <Col lg="6" md="8">
+        <Col lg="9" md="9">
           <FormGroup row className="has-icon-left position-relative">
             <Col md="3" className="text-md-right">
               <span className="text-danger">* </span>
@@ -289,13 +289,12 @@ const EligibilityForm = ({
               {/* After the download button, add approve button */}
               <button
                 type="button"
-                value={isIdPassportApproved}
                 className={`btn ${
                   isIdPassportApproved ? "btn-success" : "btn-danger"
                 } ml-2`}
                 style={{ width: "120px" }}
-                onClick={(e) => {
-                  handleApprove(e, "isApproveIdOrPassport");
+                onClick={() => {
+                  handleApprove(!isIdPassportApproved, "isApproveIdOrPassport");
                   setIsIdPassportApproved(!isIdPassportApproved);
                 }}
               >
@@ -327,13 +326,15 @@ const EligibilityForm = ({
               {/* After the download button, add approve button */}
               <button
                 type="button"
-                value={isProofOfAddressApproved}
                 className={`btn ${
                   isProofOfAddressApproved ? "btn-success" : "btn-danger"
                 } ml-2`}
                 style={{ width: "120px" }}
-                onClick={(e) => {
-                  handleApprove(e, "isApproveProofOfAddress");
+                onClick={() => {
+                  handleApprove(
+                    !isProofOfAddressApproved,
+                    "isApproveProofOfAddress"
+                  );
                   setIsProofOfAddressApproved(!isProofOfAddressApproved);
                 }}
               >
@@ -366,13 +367,12 @@ const EligibilityForm = ({
                 {/* After the download button, add approve button */}
                 <button
                   type="button"
-                  value={isBrpApproved}
                   className={`btn ${
                     isBrpApproved ? "btn-success" : "btn-danger"
                   } ml-2`}
                   style={{ width: "120px" }}
-                  onClick={(e) => {
-                    handleApprove(e, "isApproveBRP ");
+                  onClick={() => {
+                    handleApprove(!isBrpApproved, "isApproveBRP");
                     setIsBrpApproved(!isBrpApproved);
                   }}
                 >
@@ -404,13 +404,12 @@ const EligibilityForm = ({
               {/* After the download button, add approve button */}
               <button
                 type="button"
-                value={isCvApproved}
                 className={`btn ${
                   isCvApproved ? "btn-success" : "btn-danger"
                 } ml-2`}
                 style={{ width: "120px" }}
-                onClick={(e) => {
-                  handleApprove(e, "isApproveCv");
+                onClick={() => {
+                  handleApprove(!isCvApproved, "isApproveCv");
                   setIsCvApproved(!isCvApproved);
                 }}
               >
@@ -437,23 +436,24 @@ const EligibilityForm = ({
                 />
               </div>
             </Col>
-            <Col md="3">
-              {/* After the download button, add approve button */}
-              <button
-                type="button"
-                value={isBacApproved}
-                className={`btn ${
-                  isBacApproved ? "btn-success" : "btn-danger"
-                } ml-2`}
-                style={{ width: "120px" }}
-                onClick={(e) => {
-                  handleApprove(e, "isApproveBacCertificate");
-                  setIsBacApproved(!isBacApproved);
-                }}
-              >
-                {isBacApproved ? "Approve" : "Not Approved"}
-              </button>
-            </Col>
+            {bacFile !== null ? (
+              <Col md="3">
+                {/* After the download button, add approve button */}
+                <button
+                  type="button"
+                  className={`btn ${
+                    isBacApproved ? "btn-success" : "btn-danger"
+                  } ml-2`}
+                  style={{ width: "120px" }}
+                  onClick={() => {
+                    handleApprove(!isBacApproved, "isApproveBacCertificate");
+                    setIsBacApproved(!isBacApproved);
+                  }}
+                >
+                  {isBacApproved ? "Approve" : "Not Approved"}
+                </button>
+              </Col>
+            ) : null}
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />
