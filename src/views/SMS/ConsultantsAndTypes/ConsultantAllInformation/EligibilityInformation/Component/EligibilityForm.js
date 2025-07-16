@@ -285,22 +285,34 @@ const EligibilityForm = ({
                 />
               </div>
             </Col>
-            <Col md="3">
-              {/* After the download button, add approve button */}
-              <button
-                type="button"
-                className={`btn ${
-                  isIdPassportApproved ? "btn-success" : "btn-danger"
-                } ml-2`}
-                style={{ width: "120px" }}
-                onClick={() => {
-                  handleApprove(!isIdPassportApproved, "isApproveIdOrPassport");
-                  setIsIdPassportApproved(!isIdPassportApproved);
-                }}
-              >
-                {isIdPassportApproved ? "Approve" : "Not Approved"}
-              </button>
-            </Col>
+            {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {" "}
+                {idPassportFile !== null ? (
+                  <Col md="3">
+                    {/* After the download button, add approve button */}
+                    <button
+                      type="button"
+                      className={`btn ${
+                        isIdPassportApproved ? "btn-success" : "btn-danger"
+                      } ml-2`}
+                      style={{ width: "120px" }}
+                      onClick={() => {
+                        handleApprove(
+                          !isIdPassportApproved,
+                          "isApproveIdOrPassport"
+                        );
+                        setIsIdPassportApproved(!isIdPassportApproved);
+                      }}
+                    >
+                      {isIdPassportApproved ? "Approve" : "Not Approved"}
+                    </button>
+                  </Col>
+                ) : null}
+              </>
+            ) : null}
           </FormGroup>
 
           <FormGroup row className="has-icon-left position-relative">
@@ -322,25 +334,33 @@ const EligibilityForm = ({
                 />
               </div>
             </Col>
-            <Col md="3">
-              {/* After the download button, add approve button */}
-              <button
-                type="button"
-                className={`btn ${
-                  isProofOfAddressApproved ? "btn-success" : "btn-danger"
-                } ml-2`}
-                style={{ width: "120px" }}
-                onClick={() => {
-                  handleApprove(
-                    !isProofOfAddressApproved,
-                    "isApproveProofOfAddress"
-                  );
-                  setIsProofOfAddressApproved(!isProofOfAddressApproved);
-                }}
-              >
-                {isProofOfAddressApproved ? "Approve" : "Not Approved"}
-              </button>
-            </Col>
+            {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {proofOfAddressFile !== null ? (
+                  <Col md="3">
+                    {/* After the download button, add approve button */}
+                    <button
+                      type="button"
+                      className={`btn ${
+                        isProofOfAddressApproved ? "btn-success" : "btn-danger"
+                      } ml-2`}
+                      style={{ width: "120px" }}
+                      onClick={() => {
+                        handleApprove(
+                          !isProofOfAddressApproved,
+                          "isApproveProofOfAddress"
+                        );
+                        setIsProofOfAddressApproved(!isProofOfAddressApproved);
+                      }}
+                    >
+                      {isProofOfAddressApproved ? "Approve" : "Not Approved"}
+                    </button>
+                  </Col>
+                ) : null}
+              </>
+            ) : null}
           </FormGroup>
 
           {uniCountryValue === uniCountryValue2 ? null : (
@@ -363,22 +383,30 @@ const EligibilityForm = ({
                   />
                 </div>
               </Col>
-              <Col md="3">
-                {/* After the download button, add approve button */}
-                <button
-                  type="button"
-                  className={`btn ${
-                    isBrpApproved ? "btn-success" : "btn-danger"
-                  } ml-2`}
-                  style={{ width: "120px" }}
-                  onClick={() => {
-                    handleApprove(!isBrpApproved, "isApproveBRP");
-                    setIsBrpApproved(!isBrpApproved);
-                  }}
-                >
-                  {isBrpApproved ? "Approve" : "Not Approved"}
-                </button>
-              </Col>
+              {permissions?.includes(
+                permissionList?.Approve_Consultant_Eligibility
+              ) ? (
+                <>
+                  {brpFile !== null ? (
+                    <Col md="3">
+                      {/* After the download button, add approve button */}
+                      <button
+                        type="button"
+                        className={`btn ${
+                          isBrpApproved ? "btn-success" : "btn-danger"
+                        } ml-2`}
+                        style={{ width: "120px" }}
+                        onClick={() => {
+                          handleApprove(!isBrpApproved, "isApproveBRP");
+                          setIsBrpApproved(!isBrpApproved);
+                        }}
+                      >
+                        {isBrpApproved ? "Approve" : "Not Approved"}
+                      </button>
+                    </Col>
+                  ) : null}
+                </>
+              ) : null}
             </FormGroup>
           )}
           <FormGroup row className="has-icon-left position-relative">
@@ -400,22 +428,30 @@ const EligibilityForm = ({
                 />
               </div>
             </Col>
-            <Col md="3">
-              {/* After the download button, add approve button */}
-              <button
-                type="button"
-                className={`btn ${
-                  isCvApproved ? "btn-success" : "btn-danger"
-                } ml-2`}
-                style={{ width: "120px" }}
-                onClick={() => {
-                  handleApprove(!isCvApproved, "isApproveCv");
-                  setIsCvApproved(!isCvApproved);
-                }}
-              >
-                {isCvApproved ? "Approve" : "Not Approved"}
-              </button>
-            </Col>
+            {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {cvFile !== null ? (
+                  <Col md="3">
+                    {/* After the download button, add approve button */}
+                    <button
+                      type="button"
+                      className={`btn ${
+                        isCvApproved ? "btn-success" : "btn-danger"
+                      } ml-2`}
+                      style={{ width: "120px" }}
+                      onClick={() => {
+                        handleApprove(!isCvApproved, "isApproveCv");
+                        setIsCvApproved(!isCvApproved);
+                      }}
+                    >
+                      {isCvApproved ? "Approve" : "Not Approved"}
+                    </button>
+                  </Col>
+                ) : null}
+              </>
+            ) : null}
           </FormGroup>
           <FormGroup row className="has-icon-left position-relative">
             <Col md="3" className="text-md-right">
@@ -436,23 +472,33 @@ const EligibilityForm = ({
                 />
               </div>
             </Col>
-            {bacFile !== null ? (
-              <Col md="3">
-                {/* After the download button, add approve button */}
-                <button
-                  type="button"
-                  className={`btn ${
-                    isBacApproved ? "btn-success" : "btn-danger"
-                  } ml-2`}
-                  style={{ width: "120px" }}
-                  onClick={() => {
-                    handleApprove(!isBacApproved, "isApproveBacCertificate");
-                    setIsBacApproved(!isBacApproved);
-                  }}
-                >
-                  {isBacApproved ? "Approve" : "Not Approved"}
-                </button>
-              </Col>
+            {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {" "}
+                {bacFile !== null ? (
+                  <Col md="3">
+                    {/* After the download button, add approve button */}
+                    <button
+                      type="button"
+                      className={`btn ${
+                        isBacApproved ? "btn-success" : "btn-danger"
+                      } ml-2`}
+                      style={{ width: "120px" }}
+                      onClick={() => {
+                        handleApprove(
+                          !isBacApproved,
+                          "isApproveBacCertificate"
+                        );
+                        setIsBacApproved(!isBacApproved);
+                      }}
+                    >
+                      {isBacApproved ? "Approve" : "Not Approved"}
+                    </button>
+                  </Col>
+                ) : null}
+              </>
             ) : null}
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
