@@ -355,6 +355,11 @@ const ApplicationsCommon = () => {
   const [isHide, setIsHide] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [salesTeamLeader, setSalesTeamLeader] = useState([]);
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
+  );
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
   // table column data get from localstorage or initial set
   useEffect(() => {
@@ -534,6 +539,12 @@ const ApplicationsCommon = () => {
     label: companion?.name,
     value: companion?.id,
   }));
+  const consSalesTeamLeaderMenu = salesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
+    })
+  );
 
   const admissionManagerMenu = admissionManagerDD.map((admissionManager) => ({
     label: admissionManager?.name,
@@ -641,6 +652,11 @@ const ApplicationsCommon = () => {
   const selectCompanionDD = (label, value) => {
     setCompanionLabel(label);
     setCompanionValue(value);
+  };
+
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
   };
 
   const selectAdmissionManagerDD = (label, value) => {
@@ -818,6 +834,12 @@ const ApplicationsCommon = () => {
   ]);
 
   useEffect(() => {
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setSalesTeamLeader(res);
+    });
+  }, [branchValue]);
+
+  useEffect(() => {
     get(`AdmissionManagerDD/Index/${proValue}`).then((res) => {
       setAdmissionManagerDD(res);
 
@@ -901,7 +923,7 @@ const ApplicationsCommon = () => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }`
+        }&salesTeamLeaderId=${SalesTeamLeaderValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -945,6 +967,7 @@ const ApplicationsCommon = () => {
     selectedDates,
     applicationSubValue,
     confidenceValue,
+    SalesTeamLeaderValue,
   ]);
 
   // Delete Button Click Action
@@ -1434,6 +1457,25 @@ const ApplicationsCommon = () => {
                     isDisabled={companionId ? true : false}
                   />
                 </Col>
+                {userType === userTypes?.SalesManager ? (
+                  <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                    <Select
+                      options={consSalesTeamLeaderMenu}
+                      value={{
+                        label: SalesTeamLeaderLabel,
+                        value: SalesTeamLeaderValue,
+                      }}
+                      onChange={(opt) =>
+                        selectSalesTeamLeaderCons(opt.label, opt.value)
+                      }
+                      name="salesTeamLeaderId"
+                      id="salesTeamLeaderId"
+                      placeholder="Sales Team Leader"
+                      isDisabled={companionId ? true : false}
+                    />
+                  </Col>
+                ) : null}
+
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Filter
                     data={confidenceLevelDD}

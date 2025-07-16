@@ -43,6 +43,12 @@ const SearchAndClear = ({
   setCheck,
   setIsTyping,
   setSearchStr,
+  consSalesTeamLeaderMenu,
+  SalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  selectSalesTeamLeaderCons,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
 }) => {
   const userType = localStorage.getItem("userType");
 
@@ -70,6 +76,28 @@ const SearchAndClear = ({
                 />
               </Col>
             )}
+
+            {userType === userTypes?.SystemAdmin ||
+            userType === userTypes?.Admin ||
+            userType === userTypes?.BranchAdmin ||
+            userType === userTypes?.BranchManager ||
+            userType === userTypes?.SalesManager ? (
+              <Col className="uapp-mb mb-2" md="4" sm="12">
+                <Select
+                  className="form-mt"
+                  options={consSalesTeamLeaderMenu}
+                  value={{
+                    label: SalesTeamLeaderLabel,
+                    value: SalesTeamLeaderValue,
+                  }}
+                  onChange={(opt) =>
+                    selectSalesTeamLeaderCons(opt.label, opt.value)
+                  }
+                  name="salesTeamLeaderId"
+                  id="salesTeamLeaderId"
+                />
+              </Col>
+            ) : null}
 
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select

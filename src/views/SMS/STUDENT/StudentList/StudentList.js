@@ -104,6 +104,11 @@ const StudentList = () => {
   const [tableData, setTableData] = useState([]);
   const [check, setCheck] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
+  const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
+    "Select Sales Team Leader"
+  );
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
   // api starts here
   useEffect(() => {
@@ -187,6 +192,12 @@ const StudentList = () => {
   }, [studentTypeValue, cId, consultantValue, type, id, branchValue]);
 
   useEffect(() => {
+    get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
+      setConsSalesTeamLeader(res);
+    });
+  }, [branchValue]);
+
+  useEffect(() => {
     if (!isTyping) {
       type
         ? get(
@@ -194,7 +205,7 @@ const StudentList = () => {
               userTypeId === userTypes?.Consultant
                 ? referenceId
                 : consultantValue
-            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
           ).then((res) => {
             setStudentData(res?.models);
             setEntity(res?.totalEntity);
@@ -205,7 +216,7 @@ const StudentList = () => {
         ? get(
             `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
               userTypeId === userTypes?.Consultant ? referenceId : cId
-            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}`
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
           ).then((res) => {
             setStudentData(res?.models);
             setEntity(res?.totalEntity);
@@ -219,7 +230,7 @@ const StudentList = () => {
                 : consultantValue
             }&status=${statusValue}&sortby=${orderValue}&branchid=${
               branchValue ? branchValue : id ? id : 0
-            }&isconsultant=${check}`
+            }&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
           ).then((res) => {
             console.log(res?.models, "pore");
 
@@ -252,6 +263,7 @@ const StudentList = () => {
     check,
     isTyping,
     id,
+    SalesTeamLeaderValue,
   ]);
 
   // api ends here
@@ -366,6 +378,17 @@ const StudentList = () => {
     setConsultantLabel(label);
     setConsultantValue(value);
     handleSearch();
+  };
+
+  const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
+    (consSalesTeamLeaderOptions) => ({
+      label: consSalesTeamLeaderOptions?.name,
+      value: consSalesTeamLeaderOptions?.id,
+    })
+  );
+  const selectSalesTeamLeaderCons = (label, value) => {
+    setSalesTeamLeaderLabel(label);
+    setSalesTeamLeaderValue(value);
   };
 
   // toggle dropdown
@@ -617,6 +640,12 @@ const StudentList = () => {
             setConsultantValue={setConsultantValue}
             setConsultantLabel={setConsultantLabel}
             setIsTyping={setIsTyping}
+            consSalesTeamLeaderMenu={consSalesTeamLeaderMenu}
+            SalesTeamLeaderLabel={SalesTeamLeaderLabel}
+            SalesTeamLeaderValue={SalesTeamLeaderValue}
+            selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
+            setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
+            setSalesTeamLeaderValue={setSalesTeamLeaderValue}
           />
 
           {/*SearchAndClear ends here */}
