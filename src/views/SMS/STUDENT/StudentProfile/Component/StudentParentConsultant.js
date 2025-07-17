@@ -64,8 +64,8 @@ const StudentParentConsultant = ({ id }) => {
               )}
             </div>
 
-            <div className="ml-4">
-              <h5>
+            <div className="ml-4 std-cons-parent">
+              <h5 className="word-break">
                 {userTypeId === userTypes?.SystemAdmin.toString() ||
                 userTypeId === userTypes?.Admin.toString() ? (
                   <span
@@ -84,7 +84,7 @@ const StudentParentConsultant = ({ id }) => {
                 </p>
               )} */}
               <p className="mb-1"> Consultant </p>
-              <ul className="std-parent-cons">
+              <ul className="std-parent-cons word-break">
                 {consultantData?.email === null ? null : (
                   <li>
                     <i className="far fa-envelope pr-2"></i>{" "}
