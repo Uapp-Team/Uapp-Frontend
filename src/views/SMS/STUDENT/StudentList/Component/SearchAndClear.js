@@ -170,11 +170,30 @@ const SearchAndClear = ({
             <Col lg="12" md="12" sm="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="d-flex mt-1">
-                  {studentTypeValue !== 0 ||
-                  consultantValue !== 0 ||
+                  {SalesTeamLeaderValue !== 0 ||
+                  studentTypeValue !== 0 ||
+                  branchValue !== 0 ||
                   statusValue !== 0
                     ? ""
                     : ""}
+                  {SalesTeamLeaderValue !== 0 ? (
+                    <TagButton
+                      label={SalesTeamLeaderLabel}
+                      setValue={() => setSalesTeamLeaderValue(0)}
+                      setLabel={() =>
+                        setSalesTeamLeaderLabel("Select Sales Team Leader")
+                      }
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {SalesTeamLeaderValue !== 0 &&
+                    (studentTypeValue !== 0 ||
+                    branchValue !== 0 ||
+                    statusValue !== 0
+                      ? ""
+                      : "")}
+
                   {studentTypeValue !== 0 ? (
                     <TagButton
                       label={studentTypeLabel}
@@ -218,7 +237,8 @@ const SearchAndClear = ({
                   )}
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
-                  {studentTypeValue !== 0 ||
+                  {SalesTeamLeaderValue !== 0 ||
+                  studentTypeValue !== 0 ||
                   consultantValue !== 0 ||
                   (!branchId && branchValue !== 0) ||
                   statusValue !== 0 ? (

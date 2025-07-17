@@ -417,6 +417,8 @@ const StudentList = () => {
   // on clear button parts here
 
   const handleClearSearch = () => {
+    setSalesTeamLeaderLabel("Select Sales Team Leader");
+    setSalesTeamLeaderValue(0);
     setCurrentPage(1);
     setStudentTypeLabel("Type");
     setStudentTypeValue(0);

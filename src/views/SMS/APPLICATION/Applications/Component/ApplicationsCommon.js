@@ -1047,6 +1047,8 @@ const ApplicationsCommon = () => {
     !affiliateId && setAffiliateValue(0);
     !companionId && setCompanionLabel("Companion");
     !companionId && setCompanionValue(0);
+    setSalesTeamLeaderLabel("Select Sales Team Leader");
+    setSalesTeamLeaderValue(0);
     !adoId && setAdmissionOfficerLabel("Admission Officer");
     !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
@@ -1536,6 +1538,10 @@ const ApplicationsCommon = () => {
                   companionLabel={companionLabel}
                   setCompanionLabel={setCompanionLabel}
                   companionValue={companionValue}
+                  setSalesTeamLeaderValue={setSalesTeamLeaderValue}
+                  SalesTeamLeaderValue={SalesTeamLeaderValue}
+                  SalesTeamLeaderLabel={SalesTeamLeaderLabel}
+                  setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
                   setCompanionValue={setCompanionValue}
                   companionId={companionId}
                   commonUappIdValue={commonUappIdValue}
@@ -1636,6 +1642,7 @@ const ApplicationsCommon = () => {
                   (!affiliateId && affiliateValue !== 0) ||
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
+                  SalesTeamLeaderValue !== 0 ||
                   percentageValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>

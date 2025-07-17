@@ -215,6 +215,7 @@ const SelectAndClear = ({
                 ) : (
                   ""
                 )}
+
                 {empValue !== 0 &&
                   (branchValue !== 0 || statusValue !== 0 ? "" : "")}
 

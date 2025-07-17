@@ -102,7 +102,7 @@ const ConsultantTable = ({
             ) ? (
               <>{tableData[13]?.isActive ? <th>Status</th> : null}</>
             ) : null} */}
-            {tableData[14]?.isActive ? <th>BAC Cer</th> : null}
+            {tableData[14]?.isActive ? <th>BAC Cert</th> : null}
             {tableData[15]?.isActive ? <th>Status</th> : null}
             {tableData[16]?.isActive ? <th>Tier</th> : null}
             {permissions?.includes(

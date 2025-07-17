@@ -111,6 +111,10 @@ const ConditionForText = ({
   setConfidenceLevel,
   confidenceValue,
   setConfidenceValue,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  SalesTeamLeaderLabel,
 }) => {
   return (
     <>
@@ -338,6 +342,15 @@ const ConditionForText = ({
             label={companionLabel}
             setValue={() => setCompanionValue(0)}
             setLabel={() => setCompanionLabel("Companion")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {SalesTeamLeaderValue && SalesTeamLeaderValue !== 0 ? (
+          <TagButton
+            label={SalesTeamLeaderLabel}
+            setValue={() => setSalesTeamLeaderValue(0)}
+            setLabel={() => setSalesTeamLeaderLabel("Select Sales Team Leader")}
           ></TagButton>
         ) : (
           ""
