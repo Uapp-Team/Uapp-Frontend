@@ -125,6 +125,7 @@ const ApplicationInfo = ({
   // const [offerModalOpen, setOfferModalOpen] = useState(false);
 
   const [uniStdIdModalOpen, setUniStdIdModalOpen] = useState(false);
+  const [tuitionFeeModalOpen, setTuitionFeeModalOpen] = useState(false);
   const [CampusModalOpen, setCampusModalOpen] = useState(false);
   const [uniAppDateModalOpen, setUniAppDateModalOpen] = useState(false);
 
@@ -162,6 +163,7 @@ const ApplicationInfo = ({
   const [progress8, setProgress8] = useState(false);
   const [progress9, setProgress9] = useState(false);
   const [progress10, setProgress10] = useState(false);
+  const [progress13, setProgress13] = useState(false);
   // const [progress11, setProgress11] = useState(false);
   const [progress12, setProgress12] = useState(false);
 
@@ -555,6 +557,9 @@ const ApplicationInfo = ({
   const handleEditUniStdId = (id) => {
     setUniStdIdModalOpen(true);
   };
+  const handleEditTuitionFee = (id) => {
+    setTuitionFeeModalOpen(true);
+  };
 
   const handleUpdateIntake = (value, label) => {
     setIntakeModal(true);
@@ -589,6 +594,7 @@ const ApplicationInfo = ({
     // setOfferValue(0);
     // setOfferModalOpen(false);
     setUniStdIdModalOpen(false);
+    setTuitionFeeModalOpen(false);
     setUniAppDateModalOpen(false);
     setCampusModalOpen(false);
     setIntakeModal(false);
@@ -743,6 +749,20 @@ const ApplicationInfo = ({
     e.preventDefault();
     const subData = new FormData(e.target);
     setProgress5(true);
+    put(`Application/UpdateUniversityStudentId`, subData).then((action) => {
+      setProgress5(false);
+      setSuccess(!success);
+      setUniStdIdModalOpen(false);
+      addToast(action?.data?.message, {
+        appearance: "success",
+        autoDismiss: true,
+      });
+    });
+  };
+  const handleTuitionFeeSubmit = (e) => {
+    e.preventDefault();
+    const subData = new FormData(e.target);
+    setProgress13(true);
     put(`Application/UpdateUniversityStudentId`, subData).then((action) => {
       setProgress5(false);
       setSuccess(!success);
@@ -1694,93 +1714,87 @@ const ApplicationInfo = ({
                 </div>
               </td>
             </tr>
-            {usersType !== userTypes?.Student &&
-              usersType !== userTypes?.Consultant &&
-              usersType !== userTypes?.Affiliate &&
-              usersType !== userTypes?.Companion && (
-                <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-                  <td td className="w-50">
-                    Confidence Level
-                  </td>
 
-                  <td td className="w-50">
-                    <div className="d-flex justify-content-between">
-                      {applicationInfo?.confidenceLevelName}
-                      {applicationInfo?.confidenceLevel === 0 && (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{ color: "#619bff", cursor: "pointer" }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleEditConfidence(
-                              applicationInfo?.confidenceLevelName,
-                              applicationInfo?.confidenceLevel
-                            )
-                          }
-                          permission={6}
-                        />
-                      )}
+            <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+              <td td className="w-50">
+                Confidence Level
+              </td>
 
-                      <Modal
-                        isOpen={confidenceModalOpen}
-                        toggle={closeModal}
-                        className="uapp-modal"
-                      >
-                        <ModalBody className="p-5">
-                          <h4>Update Confidence Level</h4>
-                          <Form onSubmit={handleConfidenceUpdateSubmit}>
-                            <FormGroup row>
-                              <input
-                                type="hidden"
-                                name="applicationId"
-                                id="applicationId"
-                                value={applicationInfo?.id}
+              <td td className="w-50">
+                <div className="d-flex justify-content-between">
+                  {applicationInfo?.confidenceLevelName}
+                  {applicationInfo?.confidenceLevel === 0 &&
+                    usersType !== userTypes?.Student &&
+                    usersType !== userTypes?.Consultant &&
+                    usersType !== userTypes?.Affiliate &&
+                    usersType !== userTypes?.Companion && (
+                      <SpanButton
+                        icon={
+                          <i
+                            class="far fa-edit"
+                            style={{ color: "#619bff", cursor: "pointer" }}
+                          ></i>
+                        }
+                        func={() =>
+                          handleEditConfidence(
+                            applicationInfo?.confidenceLevelName,
+                            applicationInfo?.confidenceLevel
+                          )
+                        }
+                        permission={6}
+                      />
+                    )}
+
+                  <Modal
+                    isOpen={confidenceModalOpen}
+                    toggle={closeModal}
+                    className="uapp-modal"
+                  >
+                    <ModalBody className="p-5">
+                      <h4>Update Confidence Level</h4>
+                      <Form onSubmit={handleConfidenceUpdateSubmit}>
+                        <FormGroup row>
+                          <input
+                            type="hidden"
+                            name="applicationId"
+                            id="applicationId"
+                            value={applicationInfo?.id}
+                          />
+                        </FormGroup>
+                        <Row>
+                          <Col md={7}>
+                            <FormGroup>
+                              <span>
+                                Confidence Status{" "}
+                                <span className="text-danger">*</span>{" "}
+                              </span>
+
+                              <Select
+                                options={confidenceMenu}
+                                value={{
+                                  label: confidenceLabel,
+                                  value: confidenceValue,
+                                }}
+                                onChange={(opt) =>
+                                  selectConfidence(opt.label, opt.value)
+                                }
+                                name="confidenceLevel"
+                                id="ConfidenceLevel "
                               />
                             </FormGroup>
-                            <Row>
-                              <Col md={7}>
-                                <FormGroup>
-                                  <span>
-                                    Confidence Status{" "}
-                                    <span className="text-danger">*</span>{" "}
-                                  </span>
 
-                                  <Select
-                                    options={confidenceMenu}
-                                    value={{
-                                      label: confidenceLabel,
-                                      value: confidenceValue,
-                                    }}
-                                    onChange={(opt) =>
-                                      selectConfidence(opt.label, opt.value)
-                                    }
-                                    name="confidenceLevel"
-                                    id="ConfidenceLevel "
-                                  />
-                                </FormGroup>
-
-                                <FormGroup>
-                                  <CancelButton
-                                    text="Close"
-                                    cancel={closeModal}
-                                  />
-                                  <SaveButton
-                                    text="Submit"
-                                    progress={progress3}
-                                  />
-                                </FormGroup>
-                              </Col>
-                            </Row>
-                          </Form>
-                        </ModalBody>
-                      </Modal>
-                    </div>
-                  </td>
-                </tr>
-              )}
+                            <FormGroup>
+                              <CancelButton text="Close" cancel={closeModal} />
+                              <SaveButton text="Submit" progress={progress3} />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </ModalBody>
+                  </Modal>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </Table>
       </div>
@@ -2226,6 +2240,82 @@ const ApplicationInfo = ({
                               <CancelButton text="Close" cancel={closeModal} />
 
                               <SaveButton text="Submit" progress={progress5} />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </ModalBody>
+                  </Modal>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td td className="w-50">
+                Tuition Fee
+              </td>
+
+              <td td className="w-50">
+                <div className="d-flex justify-content-between">
+                  <div>{applicationInfo?.tuitionFee}</div>
+
+                  {permissions?.includes(
+                    permissionList.Update_Application_Info
+                  ) ? (
+                    <SpanButton
+                      icon={
+                        <i
+                          class="far fa-edit"
+                          style={{
+                            color: "#619bff",
+                            cursor: "pointer",
+                          }}
+                        ></i>
+                      }
+                      func={() =>
+                        handleEditTuitionFee(
+                          applicationInfo?.applicationInfo?.tuitionFee
+                        )
+                      }
+                      permission={6}
+                    />
+                  ) : null}
+
+                  <Modal
+                    isOpen={tuitionFeeModalOpen}
+                    toggle={closeModal}
+                    className="uapp-modal"
+                  >
+                    <ModalBody className="p-5">
+                      <h4>Update TUition Fee</h4>
+                      <Form onSubmit={handleTuitionFeeSubmit}>
+                        <FormGroup row>
+                          <input
+                            type="hidden"
+                            name="id"
+                            id="id"
+                            value={applicationInfo?.id}
+                          />
+                        </FormGroup>
+
+                        <Row>
+                          <Col md={7}>
+                            <FormGroup>
+                              <span>Tuition Fee</span>
+
+                              <Input
+                                type="text"
+                                defaultValue={
+                                  applicationInfo?.universityStudentId
+                                }
+                                name="universityStudentId"
+                                id="universityStudentId"
+                              />
+                            </FormGroup>
+
+                            <FormGroup>
+                              <CancelButton text="Close" cancel={closeModal} />
+
+                              <SaveButton text="Submit" progress={progress13} />
                             </FormGroup>
                           </Col>
                         </Row>

@@ -494,49 +494,65 @@ const StudentApplication = ({ currentUser }) => {
 
                             {tableData[1]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                University
+                                Provider
                               </th>
                             ) : null}
+
                             {tableData[2]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Campus
+                                University
                               </th>
                             ) : null}
                             {tableData[3]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Course
+                                University Student Id
                               </th>
                             ) : null}
                             {tableData[4]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Intake
+                                Tuition Fee
                               </th>
                             ) : null}
                             {tableData[5]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Application Date
+                                Campus
                               </th>
                             ) : null}
                             {tableData[6]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Course
+                              </th>
+                            ) : null}
+                            {tableData[7]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Intake
+                              </th>
+                            ) : null}
+                            {tableData[8]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Application Date
+                              </th>
+                            ) : null}
+                            {tableData[9]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Status
                               </th>
                             ) : null}
 
-                            {tableData[7]?.isActive ? (
+                            {tableData[10]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
                               </th>
                             ) : null}
-                            {tableData[8]?.isActive ? (
+                            {tableData[11]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
 
-                            {tableData[9]?.isActive ? (
+                            {tableData[12]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
 
-                            {tableData[10]?.isActive ? (
+                            {tableData[13]?.isActive ? (
                               <th
                                 style={{ verticalAlign: "middle" }}
                                 className="text-center"
@@ -608,6 +624,12 @@ const StudentApplication = ({ currentUser }) => {
                       ) : null} */}
 
                               {tableData[1]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.providerName}
+                                </td>
+                              ) : null}
+
+                              {tableData[2]?.isActive ? (
                                 <td
                                   style={{ verticalAlign: "middle" }}
                                   className="cursor-pointer hyperlink-hover"
@@ -623,57 +645,67 @@ const StudentApplication = ({ currentUser }) => {
                                   </span>
                                 </td>
                               ) : null}
-
-                              {tableData[2]?.isActive ? (
-                                <td style={{ verticalAlign: "middle" }}>
-                                  {app?.campusName}
-                                </td>
-                              ) : null}
-
                               {tableData[3]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.subjectName}
+                                  {app?.universityStudentId}
                                 </td>
                               ) : null}
-
                               {tableData[4]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.intakeName}
+                                  {app?.tuitionFee}
                                 </td>
                               ) : null}
 
                               {tableData[5]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.createdOn}
+                                  {app?.campusName}
                                 </td>
                               ) : null}
 
                               {tableData[6]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.subjectName}
+                                </td>
+                              ) : null}
+
+                              {tableData[7]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.intakeName}
+                                </td>
+                              ) : null}
+
+                              {tableData[8]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.createdOn}
+                                </td>
+                              ) : null}
+
+                              {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.applicationStatusName} <br />
                                   {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[7]?.isActive ? (
+                              {tableData[10]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.interviewStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[8]?.isActive ? (
+                              {tableData[11]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.elptStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[9]?.isActive ? (
+                              {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.studentFinanceName}
                                 </td>
                               ) : null}
 
-                              {tableData[10]?.isActive ? (
+                              {tableData[13]?.isActive ? (
                                 <td
                                   style={{ width: "8%" }}
                                   className="text-center"
