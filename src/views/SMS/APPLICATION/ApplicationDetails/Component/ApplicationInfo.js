@@ -58,6 +58,10 @@ const ApplicationInfo = ({
   setElptSpeaking,
   elptOverall,
   setElptOverall,
+  tuiTionFee,
+  setTuitionFee,
+  setTuitionFeeError,
+  tuiTionFeeError,
 }) => {
   const currentUser = localStorage.getItem("userType");
   console.log(applicationInfo);
@@ -759,19 +763,34 @@ const ApplicationInfo = ({
       });
     });
   };
+
+  const validateTuitionForm = () => {
+    var isFormValid = true;
+
+    if (tuiTionFee === "") {
+      isFormValid = false;
+      setTuitionFeeError("Input must contain only numbers");
+    }
+
+    return isFormValid;
+  };
+
   const handleTuitionFeeSubmit = (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
-    setProgress13(true);
-    put(`Application/UpdateUniversityStudentId`, subData).then((action) => {
-      setProgress5(false);
-      setSuccess(!success);
-      setUniStdIdModalOpen(false);
-      addToast(action?.data?.message, {
-        appearance: "success",
-        autoDismiss: true,
+    var formIsValid = validateTuitionForm(subData);
+    if (formIsValid) {
+      setProgress13(true);
+      put(`Application/UpdateTuitionFee`, subData).then((action) => {
+        setProgress13(false);
+        setSuccess(!success);
+        setTuitionFeeModalOpen(false);
+        addToast(action?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
       });
-    });
+    }
   };
 
   const handleUpdateIntakeSubmit = (e) => {
@@ -829,6 +848,20 @@ const ApplicationInfo = ({
         autoDismiss: true,
       });
     });
+  };
+
+  const handleTuitionFee = (e) => {
+    const newValue = e.target.value;
+    const isNumeric = /^\d+$/.test(newValue);
+    setTuitionFee(newValue);
+
+    if (!newValue) {
+      setTuitionFeeError("Input must contain only numbers");
+    } else if (!isNumeric) {
+      setTuitionFeeError("Input must contain only numbers");
+    } else {
+      setTuitionFeeError("");
+    }
   };
 
   const handleElptupdate = (e) => {
@@ -2272,9 +2305,7 @@ const ApplicationInfo = ({
                         ></i>
                       }
                       func={() =>
-                        handleEditTuitionFee(
-                          applicationInfo?.applicationInfo?.tuitionFee
-                        )
+                        handleEditTuitionFee(applicationInfo?.tuitionFee)
                       }
                       permission={6}
                     />
@@ -2303,13 +2334,17 @@ const ApplicationInfo = ({
                               <span>Tuition Fee</span>
 
                               <Input
-                                type="text"
-                                defaultValue={
-                                  applicationInfo?.universityStudentId
-                                }
-                                name="universityStudentId"
-                                id="universityStudentId"
+                                type="number"
+                                value={tuiTionFee}
+                                name="tuitionFee"
+                                id="tuitionFee"
+                                onChange={(e) => {
+                                  handleTuitionFee(e);
+                                }}
                               />
+                              <span className="text-danger">
+                                {tuiTionFeeError}
+                              </span>
                             </FormGroup>
 
                             <FormGroup>

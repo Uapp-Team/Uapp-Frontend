@@ -305,6 +305,26 @@ const ApplicationsCommon = () => {
       ? application?.admissionOfficerValue
       : 0
   );
+  const [educationLevelDD, setEducationLevelDD] = useState([]);
+  const [educationLevelLabel, setEducationLevelLabel] = useState(
+    application?.educationLevelLabel
+      ? application?.educationLevelLabel
+      : "Select Education Level"
+  );
+
+  const [educationLevelValue, setEducationLevelValue] = useState(
+    application?.educationLevelValue ? application?.educationLevelValue : 0
+  );
+  const [departmentDD, setDepartmentDD] = useState([]);
+  const [departmentLabel, setDepartmentLabel] = useState(
+    application?.departmentLabel
+      ? application?.departmentLabel
+      : "Select Department"
+  );
+
+  const [departmentValue, setDepartmentValue] = useState(
+    application?.departmentValue ? application?.departmentValue : 0
+  );
   const [proLabel, setProLabel] = useState(
     application?.proLabel ? application?.proLabel : "Select Provider"
   );
@@ -430,6 +450,10 @@ const ApplicationsCommon = () => {
           !adoId && admissionOfficerValue && admissionOfficerValue,
         branchLabel: !branchId && branchLabel && branchLabel,
         branchValue: !branchId && branchValue && branchValue,
+        educationLevelLabel: educationLevelLabel && educationLevelLabel,
+        educationLevelValue: educationLevelValue && educationLevelValue,
+        departmentLabel: departmentLabel && departmentLabel,
+        departmentValue: departmentValue && departmentValue,
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
@@ -502,6 +526,10 @@ const ApplicationsCommon = () => {
     percentageValue,
     status,
     selectedDates,
+    educationLevelValue,
+    educationLevelLabel,
+    departmentValue,
+    departmentLabel,
   ]);
 
   // for all dropdown
@@ -554,6 +582,16 @@ const ApplicationsCommon = () => {
   const admissionOfficerMenu = admissionOfficerDD.map((admissionOfficer) => ({
     label: admissionOfficer?.name,
     value: admissionOfficer?.id,
+  }));
+
+  const educationLevelMenu = educationLevelDD.map((educationLevel) => ({
+    label: educationLevel?.name,
+    value: educationLevel?.id,
+  }));
+
+  const departmentMenu = departmentDD.map((department) => ({
+    label: department?.name,
+    value: department?.id,
   }));
 
   const financeMenu = financeDD.map((finance) => ({
@@ -663,6 +701,7 @@ const ApplicationsCommon = () => {
     setAdmissionManagerLabel(label);
     setAdmissionManagerValue(value);
   };
+
   const selectAdmissionOfficerDD = (label, value) => {
     setAdmissionOfficerLabel(label);
     setAdmissionOfficerValue(value);
@@ -736,6 +775,12 @@ const ApplicationsCommon = () => {
 
     get("OfferStatusDD/Index").then((res) => {
       setOfferDD(res);
+    });
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevelDD(res);
+    });
+    get("DepartmentDD/Index").then((res) => {
+      setDepartmentDD(res);
     });
 
     get("EnrollmentStatusDD/Index").then((res) => {
@@ -923,7 +968,7 @@ const ApplicationsCommon = () => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }&salesTeamLeaderId=${SalesTeamLeaderValue}`
+        }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -968,6 +1013,8 @@ const ApplicationsCommon = () => {
     applicationSubValue,
     confidenceValue,
     SalesTeamLeaderValue,
+    educationLevelValue,
+    departmentValue,
   ]);
 
   // Delete Button Click Action
@@ -1049,6 +1096,10 @@ const ApplicationsCommon = () => {
     !companionId && setCompanionValue(0);
     setSalesTeamLeaderLabel("Select Sales Team Leader");
     setSalesTeamLeaderValue(0);
+    setEducationLevelLabel("Select Education Level");
+    setEducationLevelValue(0);
+    setDepartmentLabel("Select Department");
+    setDepartmentValue(0);
     !adoId && setAdmissionOfficerLabel("Admission Officer");
     !adoId && setAdmissionOfficerValue(0);
     setdocumentStatusValue(0);
@@ -1473,7 +1524,6 @@ const ApplicationsCommon = () => {
                       name="salesTeamLeaderId"
                       id="salesTeamLeaderId"
                       placeholder="Sales Team Leader"
-                      isDisabled={companionId ? true : false}
                     />
                   </Col>
                 ) : null}
@@ -1488,6 +1538,29 @@ const ApplicationsCommon = () => {
                     action={() => {}}
                     className="mr-2"
                     isDisabled={selector > 0 ? true : false}
+                  />
+                </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={educationLevelDD}
+                    label={educationLevelLabel}
+                    setLabel={setEducationLevelLabel}
+                    value={educationLevelValue}
+                    setValue={setEducationLevelValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={departmentDD}
+                    label={departmentLabel}
+                    setLabel={setDepartmentLabel}
+                    value={departmentValue}
+                    setValue={setDepartmentValue}
+                    action={() => {}}
+                    className="mr-2"
                   />
                 </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
@@ -1542,6 +1615,14 @@ const ApplicationsCommon = () => {
                   SalesTeamLeaderValue={SalesTeamLeaderValue}
                   SalesTeamLeaderLabel={SalesTeamLeaderLabel}
                   setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
+                  educationLevelValue={educationLevelValue}
+                  setEducationLevelValue={setEducationLevelValue}
+                  educationLevelLabel={educationLevelLabel}
+                  setEducationLevelLabel={setEducationLevelLabel}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
                   setCompanionValue={setCompanionValue}
                   companionId={companionId}
                   commonUappIdValue={commonUappIdValue}
@@ -1643,6 +1724,8 @@ const ApplicationsCommon = () => {
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
                   SalesTeamLeaderValue !== 0 ||
+                  educationLevelValue !== 0 ||
+                  departmentValue !== 0 ||
                   percentageValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
