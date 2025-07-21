@@ -305,26 +305,27 @@ const ApplicationsCommon = () => {
       ? application?.admissionOfficerValue
       : 0
   );
+
   const [educationLevelDD, setEducationLevelDD] = useState([]);
   const [educationLevelLabel, setEducationLevelLabel] = useState(
     application?.educationLevelLabel
       ? application?.educationLevelLabel
       : "Select Education Level"
   );
-
   const [educationLevelValue, setEducationLevelValue] = useState(
     application?.educationLevelValue ? application?.educationLevelValue : 0
   );
+
   const [departmentDD, setDepartmentDD] = useState([]);
   const [departmentLabel, setDepartmentLabel] = useState(
     application?.departmentLabel
       ? application?.departmentLabel
       : "Select Department"
   );
-
   const [departmentValue, setDepartmentValue] = useState(
     application?.departmentValue ? application?.departmentValue : 0
   );
+
   const [proLabel, setProLabel] = useState(
     application?.proLabel ? application?.proLabel : "Select Provider"
   );
@@ -582,16 +583,6 @@ const ApplicationsCommon = () => {
   const admissionOfficerMenu = admissionOfficerDD.map((admissionOfficer) => ({
     label: admissionOfficer?.name,
     value: admissionOfficer?.id,
-  }));
-
-  const educationLevelMenu = educationLevelDD.map((educationLevel) => ({
-    label: educationLevel?.name,
-    value: educationLevel?.id,
-  }));
-
-  const departmentMenu = departmentDD.map((department) => ({
-    label: department?.name,
-    value: department?.id,
   }));
 
   const financeMenu = financeDD.map((finance) => ({

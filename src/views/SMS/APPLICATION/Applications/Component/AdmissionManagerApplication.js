@@ -75,6 +75,31 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       ? AdmissionManagerApplicationPaging?.orderValue
       : 0
   );
+
+  const [educationLevelDD, setEducationLevelDD] = useState([]);
+  const [educationLevelLabel, setEducationLevelLabel] = useState(
+    AdmissionManagerApplicationPaging?.educationLevelLabel
+      ? AdmissionManagerApplicationPaging?.educationLevelLabel
+      : "Select Education Level"
+  );
+  const [educationLevelValue, setEducationLevelValue] = useState(
+    AdmissionManagerApplicationPaging?.educationLevelValue
+      ? AdmissionManagerApplicationPaging?.educationLevelValue
+      : 0
+  );
+
+  const [departmentDD, setDepartmentDD] = useState([]);
+  const [departmentLabel, setDepartmentLabel] = useState(
+    AdmissionManagerApplicationPaging?.departmentLabel
+      ? AdmissionManagerApplicationPaging?.departmentLabel
+      : "Select Department"
+  );
+  const [departmentValue, setDepartmentValue] = useState(
+    AdmissionManagerApplicationPaging?.departmentValue
+      ? AdmissionManagerApplicationPaging?.departmentValue
+      : 0
+  );
+
   const [consultantTypeDD, setConsultantTypeDD] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -383,6 +408,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         financeValue: financeValue && financeValue,
         managerUniLabel: managerUniLabel && managerUniLabel,
         managerUniValue: managerUniValue && managerUniValue,
+        educationLevelLabel: educationLevelLabel && educationLevelLabel,
+        educationLevelValue: educationLevelValue && educationLevelValue,
+        departmentLabel: departmentLabel && departmentLabel,
+        departmentValue: departmentValue && departmentValue,
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
@@ -441,6 +470,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     confidenceValue,
     confidenceLevel,
     selectedDates,
+    educationLevelValue,
+    educationLevelLabel,
+    departmentValue,
+    departmentLabel,
   ]);
 
   // for all dropdown
@@ -582,6 +615,10 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     setdocumentStatusValue(0);
     setdocumentStatusLabel("Select Document Status");
     setConfidenceLevel("Confidence Level");
+    setEducationLevelLabel("Select Education Level");
+    setEducationLevelValue(0);
+    setDepartmentLabel("Select Department");
+    setDepartmentValue(0);
     setConfidenceValue("");
     setSelectedDates([]);
   };
@@ -708,6 +745,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     get("StudentFinanceStatusDD/Index").then((res) => {
       setFinanceDD(res);
     });
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevelDD(res);
+    });
+    get("DepartmentDD/Index").then((res) => {
+      setDepartmentDD(res);
+    });
 
     // for admission manager
     if (currentUser !== undefined) {
@@ -771,7 +814,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             selectedDates[1] ? selectedDates[1] : ""
           }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
             confidenceValue ? confidenceValue : ""
-          }`
+          }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -812,6 +855,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     selectedDates,
     applicationSubValue,
     confidenceValue,
+    educationLevelValue,
+    departmentValue,
   ]);
 
   // Function for open delete modal
@@ -1165,6 +1210,28 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   />
                 </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={educationLevelDD}
+                    label={educationLevelLabel}
+                    setLabel={setEducationLevelLabel}
+                    value={educationLevelValue}
+                    setValue={setEducationLevelValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={departmentDD}
+                    label={departmentLabel}
+                    setLabel={setDepartmentLabel}
+                    value={departmentValue}
+                    setValue={setDepartmentValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <DateRange
                     selectedDates={selectedDates}
                     setSelectedDates={setSelectedDates}
@@ -1210,6 +1277,14 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   elptLabel={elptLabel}
                   financeLabel={financeLabel}
                   commonUniLabel={managerUniLabel}
+                  educationLevelValue={educationLevelValue}
+                  setEducationLevelValue={setEducationLevelValue}
+                  educationLevelLabel={educationLevelLabel}
+                  setEducationLevelLabel={setEducationLevelLabel}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
                   setApplicationLabel={setApplicationLabel}
                   setApplicationValue={setApplicationValue}
                   setOfferLabel={setOfferLabel}
@@ -1275,6 +1350,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                   documentStatusValue !== 0 ||
                   managerUniValue !== 0 ||
                   confidenceValue !== "" ||
+                  educationLevelValue !== 0 ||
+                  departmentValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All

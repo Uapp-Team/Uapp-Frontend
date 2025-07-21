@@ -177,6 +177,26 @@ const ProviderApplication = ({ currentUser }) => {
       ? application?.enrollValue
       : 0
   );
+
+  const [educationLevelDD, setEducationLevelDD] = useState([]);
+  const [educationLevelLabel, setEducationLevelLabel] = useState(
+    application?.educationLevelLabel
+      ? application?.educationLevelLabel
+      : "Select Education Level"
+  );
+  const [educationLevelValue, setEducationLevelValue] = useState(
+    application?.educationLevelValue ? application?.educationLevelValue : 0
+  );
+
+  const [departmentDD, setDepartmentDD] = useState([]);
+  const [departmentLabel, setDepartmentLabel] = useState(
+    application?.departmentLabel
+      ? application?.departmentLabel
+      : "Select Department"
+  );
+  const [departmentValue, setDepartmentValue] = useState(
+    application?.departmentValue ? application?.departmentValue : 0
+  );
   const [intakeLabel, setIntakeLabel] = useState(
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
@@ -323,6 +343,10 @@ const ProviderApplication = ({ currentUser }) => {
         financeValue: financeValue && financeValue,
         commonUniLabel: commonUniLabel && commonUniLabel,
         commonUniValue: commonUniValue && commonUniValue,
+        educationLevelLabel: educationLevelLabel && educationLevelLabel,
+        educationLevelValue: educationLevelValue && educationLevelValue,
+        departmentLabel: departmentLabel && departmentLabel,
+        departmentValue: departmentValue && departmentValue,
         // proLabel: !providerId && proLabel && proLabel,
         // proValue: !providerId && proValue && proValue,
         admissionManagerLabel:
@@ -387,6 +411,10 @@ const ProviderApplication = ({ currentUser }) => {
     confidenceValue,
     confidenceLevel,
     selectedDates,
+    educationLevelValue,
+    educationLevelLabel,
+    departmentValue,
+    departmentLabel,
   ]);
 
   // for all dropdown
@@ -535,6 +563,10 @@ const ProviderApplication = ({ currentUser }) => {
     setConsultantValue(0);
     setCommonUniLabel("University Name");
     setCommonUniValue(0);
+    setEducationLevelLabel("Select Education Level");
+    setEducationLevelValue(0);
+    setDepartmentLabel("Select Department");
+    setDepartmentValue(0);
     setproviderPhoneLabel("Phone No.");
     setproviderPhoneValue(0);
     setCurrentPage(1);
@@ -671,6 +703,13 @@ const ProviderApplication = ({ currentUser }) => {
       setInterviewDD(res);
     });
 
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevelDD(res);
+    });
+    get("DepartmentDD/Index").then((res) => {
+      setDepartmentDD(res);
+    });
+
     get("ElptStatusDD/Index").then((res) => {
       setElptDD(res);
     });
@@ -741,7 +780,7 @@ const ProviderApplication = ({ currentUser }) => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }`
+        }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -775,6 +814,8 @@ const ProviderApplication = ({ currentUser }) => {
     selectedDates,
     applicationSubValue,
     confidenceValue,
+    educationLevelValue,
+    departmentValue,
   ]);
 
   // Delete Button Click Action
@@ -1094,6 +1135,29 @@ const ProviderApplication = ({ currentUser }) => {
                     isDisabled={selector > 0 ? true : false}
                   />
                 </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={educationLevelDD}
+                    label={educationLevelLabel}
+                    setLabel={setEducationLevelLabel}
+                    value={educationLevelValue}
+                    setValue={setEducationLevelValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={departmentDD}
+                    label={departmentLabel}
+                    setLabel={setDepartmentLabel}
+                    value={departmentValue}
+                    setValue={setDepartmentValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <DateRange
                     selectedDates={selectedDates}
@@ -1146,6 +1210,14 @@ const ProviderApplication = ({ currentUser }) => {
                   commonUniValue={commonUniValue}
                   commonUappIdLabel={commonUappIdLabel}
                   commonStdLabel={commonStdLabel}
+                  educationLevelValue={educationLevelValue}
+                  setEducationLevelValue={setEducationLevelValue}
+                  educationLevelLabel={educationLevelLabel}
+                  setEducationLevelLabel={setEducationLevelLabel}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
                   offerLabel={offerLabel}
@@ -1225,6 +1297,8 @@ const ProviderApplication = ({ currentUser }) => {
                   documentStatusValue !== 0 ||
                   (!admId && admissionManagerValue !== 0) ||
                   confidenceValue !== "" ||
+                  educationLevelValue !== 0 ||
+                  departmentValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
