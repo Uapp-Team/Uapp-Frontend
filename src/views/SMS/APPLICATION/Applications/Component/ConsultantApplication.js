@@ -62,6 +62,30 @@ const ConsultantApplication = ({ currentUser }) => {
   const [orderValue, setOrderValue] = useState(
     applicationConsultant?.orderValue ? applicationConsultant?.orderValue : 0
   );
+
+  const [educationLevelDD, setEducationLevelDD] = useState([]);
+  const [educationLevelLabel, setEducationLevelLabel] = useState(
+    applicationConsultant?.educationLevelLabel
+      ? applicationConsultant?.educationLevelLabel
+      : "Select Education Level"
+  );
+  const [educationLevelValue, setEducationLevelValue] = useState(
+    applicationConsultant?.educationLevelValue
+      ? applicationConsultant?.educationLevelValue
+      : 0
+  );
+
+  const [departmentDD, setDepartmentDD] = useState([]);
+  const [departmentLabel, setDepartmentLabel] = useState(
+    applicationConsultant?.departmentLabel
+      ? applicationConsultant?.departmentLabel
+      : "Select Department"
+  );
+  const [departmentValue, setDepartmentValue] = useState(
+    applicationConsultant?.departmentValue
+      ? applicationConsultant?.departmentValue
+      : 0
+  );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [entity, setEntity] = useState(0);
@@ -343,6 +367,10 @@ const ConsultantApplication = ({ currentUser }) => {
         dataPerPage: dataPerPage && dataPerPage,
         orderLabel: orderLabel && orderLabel,
         orderValue: orderValue && orderValue,
+        educationLevelLabel: educationLevelLabel && educationLevelLabel,
+        educationLevelValue: educationLevelValue && educationLevelValue,
+        departmentLabel: departmentLabel && departmentLabel,
+        departmentValue: departmentValue && departmentValue,
         documentStatusLabel: documentStatusLabel && documentStatusLabel,
         documentStatusValue: documentStatusValue && documentStatusValue,
         percentageLabel: percentageLabel && percentageLabel,
@@ -395,6 +423,10 @@ const ConsultantApplication = ({ currentUser }) => {
     confidenceValue,
     confidenceLevel,
     selectedDates,
+    educationLevelValue,
+    educationLevelLabel,
+    departmentValue,
+    departmentLabel,
   ]);
 
   // user select order
@@ -542,6 +574,13 @@ const ConsultantApplication = ({ currentUser }) => {
       setInterviewDD(res);
     });
 
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevelDD(res);
+    });
+    get("DepartmentDD/Index").then((res) => {
+      setDepartmentDD(res);
+    });
+
     get("ElptStatusDD/Index").then((res) => {
       setElptDD(res);
     });
@@ -617,7 +656,7 @@ const ConsultantApplication = ({ currentUser }) => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }`
+        }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -648,6 +687,8 @@ const ConsultantApplication = ({ currentUser }) => {
     selectedDates,
     percentageValue,
     applicationSubValue,
+    educationLevelValue,
+    departmentValue,
   ]);
 
   // for all dropdown
@@ -764,6 +805,10 @@ const ConsultantApplication = ({ currentUser }) => {
     setdocumentStatusLabel("Select Document Status");
     setPercentageLabel("All");
     setPercentageValue(0);
+    setEducationLevelLabel("Select Education Level");
+    setEducationLevelValue(0);
+    setDepartmentLabel("Select Department");
+    setDepartmentValue(0);
     setSelectedDates([]);
     setCurrentPage(1);
   };
@@ -1026,6 +1071,29 @@ const ConsultantApplication = ({ currentUser }) => {
                     isDisabled={selector > 0 ? true : false}
                   />
                 </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={educationLevelDD}
+                    label={educationLevelLabel}
+                    setLabel={setEducationLevelLabel}
+                    value={educationLevelValue}
+                    setValue={setEducationLevelValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={departmentDD}
+                    label={departmentLabel}
+                    setLabel={setDepartmentLabel}
+                    value={departmentValue}
+                    setValue={setDepartmentValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <DateRange
                     selectedDates={selectedDates}
@@ -1065,6 +1133,14 @@ const ConsultantApplication = ({ currentUser }) => {
                   applicationLabel={applicationLabel}
                   offerLabel={offerLabel}
                   enrollLabel={enrollLabel}
+                  educationLevelValue={educationLevelValue}
+                  setEducationLevelValue={setEducationLevelValue}
+                  educationLevelLabel={educationLevelLabel}
+                  setEducationLevelLabel={setEducationLevelLabel}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
                   intakeLabel={intakeLabel}
                   intakeRngLabel={intakeRngLabel}
                   interviewLabel={interviewLabel}
@@ -1132,6 +1208,8 @@ const ConsultantApplication = ({ currentUser }) => {
                   documentStatusValue !== 0 ||
                   consUniValue !== 0 ||
                   confidenceValue !== "" ||
+                  educationLevelValue !== 0 ||
+                  departmentValue !== 0 ||
                   percentageValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
