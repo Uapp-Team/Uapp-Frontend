@@ -62,11 +62,10 @@ const CompanionApplication = ({ currentUser }) => {
   useEffect(() => {
     if (currentUser != undefined) {
       get(
-        `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${referenceId}&enrollmentStatus=${false}`
+        `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${referenceId}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
-        console.log("dsdsdsd", res);
         // setEntity(res?.totalEntity);
         // setSerialNumber(res?.firstSerialNumber);
       });
