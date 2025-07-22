@@ -296,7 +296,7 @@ const EligibilityForm = ({
                     <button
                       type="button"
                       className={`btn ${
-                        isIdPassportApproved ? "btn-success" : "btn-danger"
+                        isIdPassportApproved ? "btn-danger" : "btn-success"
                       } ml-2`}
                       style={{ width: "120px" }}
                       onClick={() => {
@@ -307,7 +307,7 @@ const EligibilityForm = ({
                         setIsIdPassportApproved(!isIdPassportApproved);
                       }}
                     >
-                      {isIdPassportApproved ? "Approve" : "Not Approved"}
+                      {isIdPassportApproved ? "Not Approved" : "Approve"}
                     </button>
                   </Col>
                 ) : null}
@@ -344,7 +344,7 @@ const EligibilityForm = ({
                     <button
                       type="button"
                       className={`btn ${
-                        isProofOfAddressApproved ? "btn-success" : "btn-danger"
+                        isProofOfAddressApproved ? "btn-danger" : "btn-success"
                       } ml-2`}
                       style={{ width: "120px" }}
                       onClick={() => {
@@ -355,7 +355,7 @@ const EligibilityForm = ({
                         setIsProofOfAddressApproved(!isProofOfAddressApproved);
                       }}
                     >
-                      {isProofOfAddressApproved ? "Approve" : "Not Approved"}
+                      {isProofOfAddressApproved ? "Not Approved" : "Approve"}
                     </button>
                   </Col>
                 ) : null}
@@ -393,7 +393,7 @@ const EligibilityForm = ({
                       <button
                         type="button"
                         className={`btn ${
-                          isBrpApproved ? "btn-success" : "btn-danger"
+                          isBrpApproved ? "btn-danger" : "btn-success"
                         } ml-2`}
                         style={{ width: "120px" }}
                         onClick={() => {
@@ -401,7 +401,7 @@ const EligibilityForm = ({
                           setIsBrpApproved(!isBrpApproved);
                         }}
                       >
-                        {isBrpApproved ? "Approve" : "Not Approved"}
+                        {isBrpApproved ? "Not Approved" : "Approve"}
                       </button>
                     </Col>
                   ) : null}
@@ -438,7 +438,7 @@ const EligibilityForm = ({
                     <button
                       type="button"
                       className={`btn ${
-                        isCvApproved ? "btn-success" : "btn-danger"
+                        isCvApproved ? "btn-danger" : "btn-success"
                       } ml-2`}
                       style={{ width: "120px" }}
                       onClick={() => {
@@ -446,7 +446,7 @@ const EligibilityForm = ({
                         setIsCvApproved(!isCvApproved);
                       }}
                     >
-                      {isCvApproved ? "Approve" : "Not Approved"}
+                      {isCvApproved ? "Not Approved" : "Approve"}
                     </button>
                   </Col>
                 ) : null}
@@ -483,7 +483,7 @@ const EligibilityForm = ({
                     <button
                       type="button"
                       className={`btn ${
-                        isBacApproved ? "btn-success" : "btn-danger"
+                        isBacApproved ? "btn-danger" : "btn-success"
                       } ml-2`}
                       style={{ width: "120px" }}
                       onClick={() => {
@@ -494,7 +494,7 @@ const EligibilityForm = ({
                         setIsBacApproved(!isBacApproved);
                       }}
                     >
-                      {isBacApproved ? "Approve" : "Not Approved"}
+                      {isBacApproved ? "Not Approved" : "Approve"}
                     </button>
                   </Col>
                 ) : null}
