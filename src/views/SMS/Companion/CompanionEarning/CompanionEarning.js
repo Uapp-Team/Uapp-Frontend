@@ -53,19 +53,19 @@ const CompanionEarning = () => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
+    Uget(`Referrer/get-active-status/${referenceId}`).then((res) => {
       console.log(res?.data);
       setActive(res?.data);
     });
   }, [referenceId]);
 
   useEffect(() => {
-    get(`CompanionTransactoin/Balance/${referenceId}`).then((res) => {
+    get(`ReferrerTransactoin/Balance/${referenceId}`).then((res) => {
       setBalance(res);
     });
     if (!isTyping) {
       get(
-        `CompanionTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}`
+        `ReferrerTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}`
       ).then((res) => {
         setData(res?.models);
         setEntity(res?.totalEntity);
@@ -110,7 +110,7 @@ const CompanionEarning = () => {
       setamountError("Minimum Amount is 50");
     } else {
       put(
-        `CompanionTransactoin/Createwithdrawrequest?affiliateid=${referenceId}&amount=${amount}`
+        `ReferrerTransactoin/Createwithdrawrequest?affiliateid=${referenceId}&amount=${amount}`
       ).then((res) => {
         setProgress(false);
         if (res.status === 200 && res.data.isSuccess === true) {

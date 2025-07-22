@@ -123,7 +123,7 @@ const CompanionList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Companion/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
+        `Referrer/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
       ).then((res) => {
         console.log(res);
         setCompanionList(res?.items);
@@ -257,11 +257,11 @@ const CompanionList = () => {
   };
 
   const redirectToConsultantDashboard = (id) => {
-    history.push(`/companion-dashboard/${id}`);
+    history.push(`/referrer-dashboard/${id}`);
   };
 
   const redirectToConsultantProfile = (id) => {
-    history.push(`/companion-profile/${id}`);
+    history.push(`/referrer-profile/${id}`);
   };
 
   const handleReset = () => {
@@ -293,7 +293,7 @@ const CompanionList = () => {
   };
 
   const handleEdit = (data) => {
-    history.push(`/companionPersonalInfo/${data?.id}`);
+    history.push(`/referrerPersonalInfo/${data?.id}`);
   };
 
   const toggleDanger = (p) => {
@@ -304,7 +304,7 @@ const CompanionList = () => {
   const handleDeleteData = () => {
     setButtonStatus(true);
     setProgress(true);
-    Uremove(`Companion/Delete/${delData?.id}`).then((res) => {
+    Uremove(`Referrer/Delete/${delData?.id}`).then((res) => {
       setProgress(false);
       setButtonStatus(false);
       addToast(res?.data?.title, {
@@ -323,7 +323,7 @@ const CompanionList = () => {
   console.log("entity", entity);
   return (
     <div>
-      <BreadCrumb title="Companion List" backTo="" path="/" />
+      <BreadCrumb title="Referrer List" backTo="" path="/" />
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
           <Row>
@@ -447,9 +447,9 @@ const CompanionList = () => {
             <Col lg="5" md="5" sm="12" xs="12" style={{ marginBottom: "10px" }}>
               {/* {permissions?.includes(permissionList?.Add_Consultant) ? ( */}
               <LinkButton
-                url={"/companion-registration"}
+                url={"/referrer-registration"}
                 className={"btn btn-uapp-add "}
-                name={"Add Companion"}
+                name={"Add Referrer"}
                 icon={<i className="fas fa-plus"></i>}
               />
               {/* ) : null} */}

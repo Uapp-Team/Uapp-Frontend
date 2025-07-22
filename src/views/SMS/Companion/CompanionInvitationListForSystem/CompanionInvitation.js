@@ -62,7 +62,7 @@ const CompanionInvitation = () => {
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}`
+        `ReferrerInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);

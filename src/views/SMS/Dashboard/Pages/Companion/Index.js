@@ -46,7 +46,7 @@ const Companion = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
+    Uget(`Referrer/get-active-status/${referenceId}`).then((res) => {
       console.log(res?.data);
       setActive(res?.data);
     });
@@ -56,7 +56,7 @@ const Companion = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await Uget(`Companion/get-dashboard-info/${userId}`);
+        const res = await Uget(`Referrer/get-dashboard-info/${userId}`);
         setCount(res?.data);
       } catch (error) {
         console.error("Error fetching dashboard info:", error);
@@ -68,7 +68,7 @@ const Companion = () => {
   }, [userId]);
 
   useEffect(() => {
-    get(`CompanionTransactoin/Balance/${referenceId}`).then((res) => {
+    get(`ReferrerTransactoin/Balance/${referenceId}`).then((res) => {
       setAvailableWithdraw(res);
     });
   }, []);
@@ -95,7 +95,7 @@ const Companion = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?companionid=${referenceId}&email=${email}`,
+        `ReferrerTeamInvitation?companionid=${referenceId}&email=${email}`,
         subData
       ).then((action) => {
         setButtonStatus(false);

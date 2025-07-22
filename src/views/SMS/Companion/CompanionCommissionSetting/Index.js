@@ -22,7 +22,7 @@ const DistributionLevelSetting = () => {
   const [percentError, setPercentError] = useState("");
 
   useEffect(() => {
-    Uget(`CompanionCommissionSetting/Index`).then((res) => {
+    Uget(`ReferrerCommissionSetting/Index`).then((res) => {
       setDistributionData(res?.data);
       setLoading(false);
     });
@@ -32,7 +32,7 @@ const DistributionLevelSetting = () => {
     setUpdate(true);
     setNameError("");
     setPercentError("");
-    Uget(`CompanionCommissionSetting/${data?.id}`).then((res) => {
+    Uget(`ReferrerCommissionSetting/${data?.id}`).then((res) => {
       console.log(res);
       setData(res?.data);
       setName(res?.data?.name);
@@ -42,7 +42,7 @@ const DistributionLevelSetting = () => {
 
   return (
     <div>
-      <BreadCrumb title="Companion Commission Settings" backTo="" path="/" />
+      <BreadCrumb title="Referrer Commission Settings" backTo="" path="/" />
       <div>
         <Card>
           <CardBody>

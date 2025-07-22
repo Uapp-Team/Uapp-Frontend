@@ -18,7 +18,7 @@ const EmergencyContact = ({
             {companionId === referenceId ||
             userType === userTypes?.SystemAdmin ||
             userType === userTypes?.Admin ? (
-              <Link to={`/companionEmergencyInfo/${companionId}`}> Edit</Link>
+              <Link to={`/referrerEmergencyInfo/${companionId}`}> Edit</Link>
             ) : null}
           </td>
         </thead>

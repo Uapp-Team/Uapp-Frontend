@@ -13,7 +13,7 @@ const CountingCards = ({ id, count, setCount }) => {
               value={count?.invited}
               bgColor="#E1F5FC"
               borderColor="#24A1CD"
-              link="/companion-Invitation"
+              link="/referrer-Invitation"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">
@@ -30,7 +30,7 @@ const CountingCards = ({ id, count, setCount }) => {
               value={count?.responsed}
               bgColor="#E8FAF5"
               borderColor="#5B9A8B"
-              link="/companion-Invitation"
+              link="/referrer-Invitation"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">
@@ -39,7 +39,7 @@ const CountingCards = ({ id, count, setCount }) => {
               value={count?.inProgress}
               bgColor="#FBF5E8"
               borderColor="#FFBA08"
-              link="/companion-Invitation"
+              link="/referrer-Invitation"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">

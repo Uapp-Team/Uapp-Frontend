@@ -44,7 +44,7 @@ const ConsultantBankDetails = () => {
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
-    Uget(`CompanionBankDetails/get-by/${companionId}`).then((res) => {
+    Uget(`ReferrerBankDetails/get-by/${companionId}`).then((res) => {
       setBankDetailsData(res?.data);
     });
   }, [success, companionId]);
@@ -84,13 +84,13 @@ const ConsultantBankDetails = () => {
   };
 
   const goPrevious = () => {
-    history.push(`/companionEligibilityInfo/${companionId}`);
+    history.push(`/referrerEligibilityInfo/${companionId}`);
   };
   const goForward = () => {
     if (userTypeId === userTypes?.Companion.toString()) {
-      history.push(`/companionTerms/${companionId}`);
+      history.push(`/referrerTerms/${companionId}`);
     } else {
-      history.push(`/companionCommission/${companionId}`);
+      history.push(`/referrerCommission/${companionId}`);
     }
   };
 
@@ -106,7 +106,7 @@ const ConsultantBankDetails = () => {
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      post("CompanionBankDetails/save", subData).then((res) => {
+      post("ReferrerBankDetails/save", subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         addToast(res?.data?.title, {
@@ -128,7 +128,7 @@ const ConsultantBankDetails = () => {
   const handleDeletePermission = () => {
     setButtonStatus(true);
     setProgress(true);
-    Uremove(`CompanionBankDetails/Delete/${deleteData?.id}`).then((res) => {
+    Uremove(`ReferrerBankDetails/Delete/${deleteData?.id}`).then((res) => {
       setProgress(false);
       setButtonStatus(false);
       console.log(res);
@@ -219,7 +219,7 @@ const ConsultantBankDetails = () => {
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      post("CompanionBankDetails/save", subData).then((res) => {
+      post("ReferrerBankDetails/save", subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res?.data?.statusCode === 200) {

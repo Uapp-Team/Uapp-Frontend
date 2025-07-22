@@ -91,7 +91,7 @@ const ApplicationsCommon = () => {
   const [interviewDD, setInterviewDD] = useState([]);
   const [elptDD, setElptDD] = useState([]);
   const [affiliateDD, setAffiliateDD] = useState([]);
-  const [companionDD, setCompanionDD] = useState([]);
+  const [ReferrerDD, setReferrerDD] = useState([]);
   const [financeDD, setFinanceDD] = useState([]);
 
   const [branch, setBranch] = useState([]);
@@ -530,7 +530,7 @@ const ApplicationsCommon = () => {
     label: affiliate?.name,
     value: affiliate?.id,
   }));
-  const companionMenu = companionDD.map((companion) => ({
+  const companionMenu = ReferrerDD.map((companion) => ({
     label: companion?.name,
     value: companion?.id,
   }));
@@ -638,7 +638,7 @@ const ApplicationsCommon = () => {
     setAffiliateLabel(label);
     setAffiliateValue(value);
   };
-  const selectCompanionDD = (label, value) => {
+  const selectReferrerDD = (label, value) => {
     setCompanionLabel(label);
     setCompanionValue(value);
   };
@@ -767,8 +767,8 @@ const ApplicationsCommon = () => {
         setAffiliateLabel(result?.name);
       }
     });
-    get("companionDD").then((res) => {
-      setCompanionDD(res);
+    get("ReferrerDD").then((res) => {
+      setReferrerDD(res);
       if (companionId) {
         const result = res?.find((ans) => ans.id.toString() === companionId);
         setCompanionLabel(result?.name);
@@ -1427,7 +1427,7 @@ const ApplicationsCommon = () => {
                   <Select
                     options={companionMenu}
                     value={{ label: companionLabel, value: companionValue }}
-                    onChange={(opt) => selectCompanionDD(opt.label, opt.value)}
+                    onChange={(opt) => selectReferrerDD(opt.label, opt.value)}
                     placeholder="companion"
                     name="name"
                     id="id"

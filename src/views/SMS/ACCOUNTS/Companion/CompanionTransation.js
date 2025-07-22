@@ -13,7 +13,7 @@ const CompanionTransation = () => {
   const [dataPerPage, setDataPerPage] = useState(15);
   const [entity, setEntity] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [companionLabel, setCompanionLabel] = useState("Select Companion");
+  const [companionLabel, setCompanionLabel] = useState("Select Referrer");
   const [companionValue, setCompanionValue] = useState(0);
   const [fromDate, setfromDate] = useState("");
   const [toDate, settoDate] = useState("");
@@ -36,7 +36,7 @@ const CompanionTransation = () => {
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}&companionid=${companionValue}&branchid=${branchValue}`
+        `ReferrerTransactoin?&page=${currentPage}&pageSize=${dataPerPage}&status=${statusValue}&type=${typeValue}&fromdate=${fromDate}&todate=${toDate}&string=${searchStr}&companionid=${companionValue}&branchid=${branchValue}`
       ).then((res) => {
         setData(res?.models);
         setEntity(res?.totalEntity);
@@ -57,7 +57,7 @@ const CompanionTransation = () => {
 
   return (
     <div>
-      <BreadCrumb title="Companion Transaction List" backTo="" path="/" />
+      <BreadCrumb title="Referrer Transaction List" backTo="" path="/" />
       <Card className="zindex-100">
         <CardBody>
           <div className="row">
@@ -75,13 +75,13 @@ const CompanionTransation = () => {
             )}
 
             <div className="col-lg-3 col-md-4 mb-2">
-              <span>Companion</span>
+              <span>Referrer</span>
               <DefaultDropdown
                 label={companionLabel}
                 setLabel={setCompanionLabel}
                 value={companionValue}
                 setValue={setCompanionValue}
-                url="CompanionDD"
+                url="ReferrerDD"
                 name="status"
                 error={() => {}}
                 setError={() => {}}

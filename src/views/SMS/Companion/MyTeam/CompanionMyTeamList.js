@@ -112,14 +112,14 @@ const CompanionMyTeamList = () => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
+    Uget(`Referrer/get-active-status/${referenceId}`).then((res) => {
       console.log(res?.data);
       setActive(res?.data);
     });
   }, [referenceId]);
 
   useEffect(() => {
-    get(`CompanionTeamInvitation?&companionid=${referenceId}`).then(
+    get(`ReferrerTeamInvitation?&companionid=${referenceId}`).then(
       (action) => {
         setInvitationList(action);
 
@@ -131,7 +131,7 @@ const CompanionMyTeamList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Companion/get-team-members/?&companionId=${referenceId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
+        `Referrer/get-team-members/?&companionId=${referenceId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
       ).then((res) => {
         console.log(res);
         setCompanionTeamList(res?.items);
@@ -255,11 +255,11 @@ const CompanionMyTeamList = () => {
   };
 
   const redirectToConsultantDashboard = (id) => {
-    history.push(`/companion-dashboard/${id}`);
+    history.push(`/referrer-dashboard/${id}`);
   };
 
   const redirectToConsultantProfile = (id) => {
-    history.push(`/companion-profile/${id}`);
+    history.push(`/referrer-profile/${id}`);
   };
 
   const handleCompanionSubmit = (event) => {
@@ -276,7 +276,7 @@ const CompanionMyTeamList = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?companionid=${referenceId}&email=${emailCompanion}`,
+        `ReferrerTeamInvitation?companionid=${referenceId}&email=${emailCompanion}`,
         subData
       ).then((action) => {
         setButtonStatus(false);
@@ -325,7 +325,7 @@ const CompanionMyTeamList = () => {
   };
 
   const handleEdit = (data) => {
-    history.push(`/companionPersonalInfo/${data?.id}`);
+    history.push(`/referrerPersonalInfo/${data?.id}`);
   };
 
   const closeModalCompanion = () => {

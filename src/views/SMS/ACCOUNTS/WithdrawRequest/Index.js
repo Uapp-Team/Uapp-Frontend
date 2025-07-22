@@ -618,7 +618,7 @@ const Index = () => {
                         setLabel={setCompanionLabel}
                         value={companionValue}
                         setValue={setCompanionValue}
-                        url="CompanionDD"
+                        url="ReferrerDD"
                         name="status"
                         error={() => {}}
                         setError={() => {}}

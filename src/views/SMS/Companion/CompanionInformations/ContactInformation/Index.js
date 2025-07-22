@@ -39,7 +39,7 @@ const ContactInformation = () => {
       setCountry(res);
     });
 
-    Uget(`companionAddress/Get-by-companionId?companionId=${companionId}`).then(
+    Uget(`ReferrerAddress/Get-by-companionId?companionId=${companionId}`).then(
       (res) => {
         setAddressData(res);
         setCountryLabel(
@@ -153,10 +153,10 @@ const ContactInformation = () => {
       setButtonStatus(true);
       setProgress(true);
 
-      post("CompanionAddress/save", subData).then((res) => {
+      post("ReferrerAddress/save", subData).then((res) => {
         setProgress(false);
         setSuccess(!success);
-        history.push(`/companionEmergencyInfo/${companionId}`);
+        history.push(`/referrerEmergencyInfo/${companionId}`);
         addToast(res?.data?.title, {
           appearance: res?.data?.isSuccess === true ? "success" : "error",
           autoDismiss: true,
@@ -167,7 +167,7 @@ const ContactInformation = () => {
     }
   };
   const handlePrevious = () => {
-    history.push(`/companionPersonalInfo/${companionId}`);
+    history.push(`/referrerPersonalInfo/${companionId}`);
   };
   return (
     <div>

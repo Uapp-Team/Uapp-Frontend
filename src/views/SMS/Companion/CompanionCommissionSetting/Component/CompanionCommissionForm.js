@@ -102,7 +102,7 @@ const CompanionCommissionForm = (props) => {
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionCommissionSetting/save`, subData).then((res) => {
+      post(`ReferrerCommissionSetting/save`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res?.status == 200 && res?.data?.isSuccess == true) {
@@ -137,7 +137,7 @@ const CompanionCommissionForm = (props) => {
     <div>
       <p className="section-title">
         {" "}
-        {data?.id ? "Edit" : "Add"} Companion Commission Group
+        {data?.id ? "Edit" : "Add"} Referrer Commission Group
       </p>
 
       <form onSubmit={handleSubmit}>

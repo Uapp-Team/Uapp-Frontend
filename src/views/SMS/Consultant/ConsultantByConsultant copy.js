@@ -130,13 +130,8 @@ const ConsultantByConsultant = () => {
       setPageLoad(false);
     });
 
-<<<<<<< HEAD
     Uget(
       `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
-=======
-    Uget(
-      `Ambassador/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
->>>>>>> b3c1e8ad6ddf97ce80cbdc6cdb8ab3ddead993fc
         id ? id : referenceId
       }`
     ).then((res) => {
@@ -250,7 +245,7 @@ const ConsultantByConsultant = () => {
     history.push(`/affiliate-profile/${affiliateId}`);
   };
   const handleCompanionView = (companionId) => {
-    history.push(`/companion-profile/${companionId}`);
+    history.push(`/referrer-profile/${companionId}`);
   };
 
   // for hide/unhide column
@@ -272,8 +267,8 @@ const ConsultantByConsultant = () => {
   };
   const handleAddCompanion = () => {
     id
-      ? history.push(`/companion-registrationByCons/${id}`)
-      : history.push(`/companion-registration`);
+      ? history.push(`/referrer-registrationByCons/${id}`)
+      : history.push(`/referrer-registration`);
   };
 
   const closeModal = () => {
@@ -370,7 +365,7 @@ const ConsultantByConsultant = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
+        `ReferrerTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
         subData
       ).then((action) => {
         setButtonStatus(false);
@@ -1609,7 +1604,7 @@ const ConsultantByConsultant = () => {
                             <td className="cursor-pointer hyperlink-hover">
                               <Link
                                 className="text-id hover"
-                                to={`/companion-profile/${companion?.id}`}
+                                to={`/referrer-profile/${companion?.id}`}
                               >
                                 {companion?.viewId}
                               </Link>
@@ -1620,7 +1615,7 @@ const ConsultantByConsultant = () => {
                               <div className="cursor-pointer hyperlink-hover">
                                 <Link
                                   className="text-id hover"
-                                  to={`/companion-profile/${companion?.id}`}
+                                  to={`/referrer-profile/${companion?.id}`}
                                 >
                                   {companion?.name}
                                 </Link>

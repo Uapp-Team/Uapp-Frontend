@@ -80,7 +80,7 @@ const ContactInformation = () => {
     //   setNavVisibility(res);
     // });
 
-    Uget(`CompanionEmergencyContact/get-by/${companionId}`).then((res) => {
+    Uget(`ReferrerEmergencyContact/get-by/${companionId}`).then((res) => {
       setOneData(res);
       setCountryValue(res?.data?.countryId ? res?.data?.countryId : 0);
       setReferenceName(res?.data?.personName);
@@ -242,10 +242,10 @@ const ContactInformation = () => {
       setButtonStatus(true);
       setProgress(true);
 
-      post("companionEmergencyContact/save", subData).then((res) => {
+      post("ReferrerEmergencyContact/save", subData).then((res) => {
         setProgress(false);
         setSuccess(!success);
-        history.push(`/companionEligibilityInfo/${companionId}`);
+        history.push(`/referrerEligibilityInfo/${companionId}`);
         addToast(res?.data?.title, {
           appearance: res?.data?.isSuccess === true ? "success" : "error",
           autoDismiss: true,
@@ -256,7 +256,7 @@ const ContactInformation = () => {
     }
   };
   const handlePrevious = () => {
-    history.push(`/companionContactInfo/${companionId}`);
+    history.push(`/referrerContactInfo/${companionId}`);
   };
 
   let addressField = document.querySelector("#addressLine");

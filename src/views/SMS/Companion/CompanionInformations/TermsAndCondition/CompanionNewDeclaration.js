@@ -41,7 +41,7 @@ const CompanionNewDeclaration = () => {
   // }, [success]);
 
   useEffect(() => {
-    Uget(`Companion/get-by/${companionId}`).then((res) => {
+    Uget(`Referrer/get-by/${companionId}`).then((res) => {
       setConsData(res);
       console.log(res, "declaration");
     });
@@ -52,7 +52,7 @@ const CompanionNewDeclaration = () => {
       <BreadCrumb
         title="Companion Declaration"
         backTo={companionId ? "Terms & Conditions" : null}
-        path={`/companionTerms/${companionId}`}
+        path={`/referrerTerms/${companionId}`}
       />
       {currentUserDetails === null ? (
         <h1 className="text-center">

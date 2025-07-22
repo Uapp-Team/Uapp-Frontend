@@ -90,20 +90,20 @@ const ConsultantTermsInformation = () => {
   // }, [companionId]);
 
   useEffect(() => {
-    Uget(`Companion/get-by/${companionId}`).then((res) => {
+    Uget(`Referrer/get-by/${companionId}`).then((res) => {
       setCompanionProfileData(res);
     });
   }, [companionId]);
 
   useEffect(() => {
-    Uget(`CompanionConsent/check-signed-status/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/check-signed-status/${companionId}`).then((res) => {
       setConscentDataStatus(res);
     });
-    Uget(`CompanionConsent/get-summery/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/get-summery/${companionId}`).then((res) => {
       setConscentSummaryData(res);
     });
 
-    Uget(`CompanionConsent/get-by/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/get-by/${companionId}`).then((res) => {
       setConscentGet(res);
     });
 

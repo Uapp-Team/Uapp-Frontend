@@ -9,12 +9,12 @@ const SideMenuCompanion = () => {
       <SideMenuItem
         title="Invitation"
         icon="fas fa-door-open"
-        path="/companion-Invitation"
+        path="/referrer-Invitation"
       />
       <SideMenuItem
         title="Earning"
         icon="fas fa-money-check-alt"
-        path="/companion-earning"
+        path="/referrer-earning"
       />
 
       <SideMenuItem
@@ -27,7 +27,7 @@ const SideMenuCompanion = () => {
       <SideMenuItem
         title="My Team"
         icon="fas fa-user-tie"
-        path="/companion-team-List"
+        path="/referrer-team-List"
       />
     </>
   );

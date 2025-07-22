@@ -230,7 +230,7 @@ const ConvertStudentIntoCompanionForm = () => {
 
     if (formIsValid) {
       setButtonStatus(true);
-      post(`BecomeCompanion/Submit`, subData).then((res) => {
+      post(`BecomeReferrer/Submit`, subData).then((res) => {
         setButtonStatus(false);
         if (res?.status === 200 && res?.data?.isSuccess === true) {
           addToast(res?.data?.message, {

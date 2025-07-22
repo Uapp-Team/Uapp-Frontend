@@ -62,7 +62,7 @@ const CompanionTeamMembersRegisteredApplication = () => {
 
   useEffect(() => {
     get(
-      `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${true}`
+      `ReferrerApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${companionId}&enrollmentStatus=${true}`
     ).then((res) => {
       setLoading(false);
       setApplicationList(res?.models);

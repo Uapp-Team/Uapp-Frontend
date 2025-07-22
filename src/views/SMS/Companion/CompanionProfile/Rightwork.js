@@ -30,7 +30,7 @@ const Rightwork = ({ companionId, companionProfileData, referenceId }) => {
             {companionId === referenceId ||
             userType === userTypes?.SystemAdmin ||
             userType === userTypes?.Admin ? (
-              <Link to={`/companionEligibilityInfo/${companionId}`}> Edit</Link>
+              <Link to={`/referrerEligibilityInfo/${companionId}`}> Edit</Link>
             ) : null}
           </td>
         </thead>
