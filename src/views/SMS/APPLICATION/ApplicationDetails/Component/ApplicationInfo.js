@@ -1748,86 +1748,96 @@ const ApplicationInfo = ({
               </td>
             </tr>
 
-            <tr style={{ borderBottom: "1px solid #dee2e6" }}>
-              <td td className="w-50">
-                Confidence Level
-              </td>
+            {usersType !== userTypes?.Student &&
+              usersType !== userTypes?.Affiliate &&
+              usersType !== userTypes?.Companion && (
+                <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+                  <td td className="w-50">
+                    Confidence Level
+                  </td>
 
-              <td td className="w-50">
-                <div className="d-flex justify-content-between">
-                  {applicationInfo?.confidenceLevelName}
-                  {applicationInfo?.confidenceLevel === 0 &&
-                    usersType !== userTypes?.Student &&
-                    usersType !== userTypes?.Consultant &&
-                    usersType !== userTypes?.Affiliate &&
-                    usersType !== userTypes?.Companion && (
-                      <SpanButton
-                        icon={
-                          <i
-                            class="far fa-edit"
-                            style={{ color: "#619bff", cursor: "pointer" }}
-                          ></i>
-                        }
-                        func={() =>
-                          handleEditConfidence(
-                            applicationInfo?.confidenceLevelName,
-                            applicationInfo?.confidenceLevel
-                          )
-                        }
-                        permission={6}
-                      />
-                    )}
-
-                  <Modal
-                    isOpen={confidenceModalOpen}
-                    toggle={closeModal}
-                    className="uapp-modal"
-                  >
-                    <ModalBody className="p-5">
-                      <h4>Update Confidence Level</h4>
-                      <Form onSubmit={handleConfidenceUpdateSubmit}>
-                        <FormGroup row>
-                          <input
-                            type="hidden"
-                            name="applicationId"
-                            id="applicationId"
-                            value={applicationInfo?.id}
+                  <td td className="w-50">
+                    <div className="d-flex justify-content-between">
+                      {applicationInfo?.confidenceLevelName}
+                      {applicationInfo?.confidenceLevel === 0 &&
+                        usersType !== userTypes?.Student &&
+                        usersType !== userTypes?.Consultant &&
+                        usersType !== userTypes?.Affiliate &&
+                        usersType !== userTypes?.Companion && (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleEditConfidence(
+                                applicationInfo?.confidenceLevelName,
+                                applicationInfo?.confidenceLevel
+                              )
+                            }
+                            permission={6}
                           />
-                        </FormGroup>
-                        <Row>
-                          <Col md={7}>
-                            <FormGroup>
-                              <span>
-                                Confidence Status{" "}
-                                <span className="text-danger">*</span>{" "}
-                              </span>
+                        )}
 
-                              <Select
-                                options={confidenceMenu}
-                                value={{
-                                  label: confidenceLabel,
-                                  value: confidenceValue,
-                                }}
-                                onChange={(opt) =>
-                                  selectConfidence(opt.label, opt.value)
-                                }
-                                name="confidenceLevel"
-                                id="ConfidenceLevel "
+                      <Modal
+                        isOpen={confidenceModalOpen}
+                        toggle={closeModal}
+                        className="uapp-modal"
+                      >
+                        <ModalBody className="p-5">
+                          <h4>Update Confidence Level</h4>
+                          <Form onSubmit={handleConfidenceUpdateSubmit}>
+                            <FormGroup row>
+                              <input
+                                type="hidden"
+                                name="applicationId"
+                                id="applicationId"
+                                value={applicationInfo?.id}
                               />
                             </FormGroup>
+                            <Row>
+                              <Col md={7}>
+                                <FormGroup>
+                                  <span>
+                                    Confidence Status{" "}
+                                    <span className="text-danger">*</span>{" "}
+                                  </span>
 
-                            <FormGroup>
-                              <CancelButton text="Close" cancel={closeModal} />
-                              <SaveButton text="Submit" progress={progress3} />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </ModalBody>
-                  </Modal>
-                </div>
-              </td>
-            </tr>
+                                  <Select
+                                    options={confidenceMenu}
+                                    value={{
+                                      label: confidenceLabel,
+                                      value: confidenceValue,
+                                    }}
+                                    onChange={(opt) =>
+                                      selectConfidence(opt.label, opt.value)
+                                    }
+                                    name="confidenceLevel"
+                                    id="ConfidenceLevel "
+                                  />
+                                </FormGroup>
+
+                                <FormGroup>
+                                  <CancelButton
+                                    text="Close"
+                                    cancel={closeModal}
+                                  />
+                                  <SaveButton
+                                    text="Submit"
+                                    progress={progress3}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </Form>
+                        </ModalBody>
+                      </Modal>
+                    </div>
+                  </td>
+                </tr>
+              )}
           </tbody>
         </Table>
       </div>
