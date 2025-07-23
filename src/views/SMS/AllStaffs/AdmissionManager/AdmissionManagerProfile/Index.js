@@ -4,7 +4,7 @@ import AdmissionManagerForAdministrator from "./Components/AdmissionManagerForAd
 import AdmissionmanagerForOthers from "./Components/AdmissionManagerForOthers/AdmissionmanagerForOthers";
 import AdmissionManagerOwnProfile from "./Components/AdmissionManagerOwnProfile/AdmissionManagerOwnProfile";
 
-const Index = ({ admissionManagerId }) => {
+const Index = () => {
   const userType = localStorage.getItem("userType");
 
   return (
@@ -12,13 +12,11 @@ const Index = ({ admissionManagerId }) => {
       {userType === userTypes?.SystemAdmin ||
       userType === userTypes?.Admin ||
       userType === userTypes?.ProviderAdmin ? (
-        <AdmissionManagerForAdministrator
-          admissionManagerId={admissionManagerId}
-        />
+        <AdmissionManagerForAdministrator />
       ) : userType === userTypes?.AdmissionManager ? (
-        <AdmissionManagerOwnProfile admissionManagerId={admissionManagerId} />
+        <AdmissionManagerOwnProfile />
       ) : (
-        <AdmissionmanagerForOthers admissionManagerId={admissionManagerId} />
+        <AdmissionmanagerForOthers />
       )}
     </div>
   );

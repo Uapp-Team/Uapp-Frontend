@@ -35,7 +35,7 @@ const AdmissionmanagerForOthers = () => {
         <div className="col-md-8">
           <ProviderHeadForOwnProfile
             admissionManagerId={
-              admissionManagerId === undefined ? admissionManagerId : userId
+              admissionManagerId !== undefined ? admissionManagerId : userId
             }
           />
         </div>
@@ -43,7 +43,7 @@ const AdmissionmanagerForOthers = () => {
         <div className="col-md-4">
           <ProviderCard
             admissionManagerId={
-              admissionManagerId === undefined ? admissionManagerId : userId
+              admissionManagerId !== undefined ? admissionManagerId : userId
             }
           />
         </div>
