@@ -108,7 +108,7 @@ const AffiliateStudentList = () => {
     } else {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionInvitation/Invite/${email}`, subData).then((action) => {
+      post(`ReferrerInvitation/Invite/${email}`, subData).then((action) => {
         setButtonStatus(false);
         setProgress(false);
         setSuccess(!success);

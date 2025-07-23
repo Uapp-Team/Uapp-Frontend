@@ -21,7 +21,7 @@ const InvitationCompanionRefer = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    post(`CompanionInvitation/Invite/${Name}`).then((res) => {
+    post(`ReferrerInvitation/Invite/${Name}`).then((res) => {
       if (res?.status === 200 && res?.data?.isSuccess == true) {
         addToast(res?.data?.message, {
           appearance: "success",

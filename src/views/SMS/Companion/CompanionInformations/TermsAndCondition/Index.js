@@ -120,7 +120,7 @@ const ConsultantTermsInformation = () => {
     subData.append("companionId", companionId);
     subData.append("deviceIp", apiInfo?.IPv4);
     setProgress(true);
-    post("CompanionConsent/save", subData).then((res) => {
+    post("ReferrerConsent/save", subData).then((res) => {
       setProgress(false);
       if (res?.data?.statusCode === 200 && res?.data?.isSuccess === true) {
         addToast(res?.data?.title, {

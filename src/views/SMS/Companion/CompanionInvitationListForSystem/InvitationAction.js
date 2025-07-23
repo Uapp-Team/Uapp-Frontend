@@ -10,7 +10,7 @@ const InvitationAction = ({ text, email, data }) => {
   const reSendEmail = (e) => {
     e.preventDefault();
 
-    post(`CompanionInvitation/Invite/${email}`).then((res) => {
+    post(`ReferrerInvitation/Invite/${email}`).then((res) => {
       if (res?.status === 200 && res.data?.isSuccess === true) {
         addToast(res?.data?.message, {
           appearance: "success",

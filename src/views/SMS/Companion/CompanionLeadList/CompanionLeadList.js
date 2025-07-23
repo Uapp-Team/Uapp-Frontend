@@ -60,7 +60,7 @@ const CompanionLeadList = () => {
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}`
+        `ReferrerInvitation?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}&companionid=${companionId}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);
@@ -108,7 +108,7 @@ const CompanionLeadList = () => {
     } else {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionInvitation/Invite/${email}`, subData).then((action) => {
+      post(`ReferrerInvitation/Invite/${email}`, subData).then((action) => {
         setButtonStatus(false);
         setProgress(false);
         setSuccess(!success);

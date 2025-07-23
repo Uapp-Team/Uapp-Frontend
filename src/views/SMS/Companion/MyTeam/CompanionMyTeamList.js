@@ -456,7 +456,7 @@ const CompanionMyTeamList = () => {
               {/* {permissions?.includes(permissionList?.Add_Consultant) && ( */}
               {active && (
                 <LinkButton
-                  url={`companion-registrationby/${referenceId}`}
+                  url={`referrer-registrationby/${referenceId}`}
                   className={"btn btn-uapp-add "}
                   name={"Add Team Member"}
                   icon={<i className="fas fa-plus"></i>}
