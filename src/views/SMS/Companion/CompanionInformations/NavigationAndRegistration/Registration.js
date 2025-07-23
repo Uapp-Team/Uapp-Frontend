@@ -604,8 +604,8 @@ const Registration = () => {
       </Card>
 
       <ConfirmModal
-        text="Companion added successfully"
-        text2="A companion account has been successfully created, and an email containing the login credentials has been sent to the companion's registered email address."
+        text="Referrer added successfully"
+        text2="A Referrer account has been successfully created, and an email containing the login credentials has been sent to the Referrer's registered email address."
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(!isModalOpen)}
         buttonStatus={buttonStatus}

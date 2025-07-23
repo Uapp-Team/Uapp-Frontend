@@ -401,7 +401,7 @@ const CompanionTable = ({
       </Modal>
 
       <ConfirmModal
-        text="Do You Want To Delete This Companion  ? Once Deleted it can't be Undone!"
+        text="Do You Want To Delete This Referrer  ? Once Deleted it can't be Undone!"
         isOpen={deleteModal}
         toggle={() => setDeleteModal(!deleteModal)}
         confirm={handleDeleteData}

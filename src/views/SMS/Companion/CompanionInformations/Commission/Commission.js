@@ -40,7 +40,7 @@ const Commission = () => {
     if (commissionValue) {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionCommissionLog/Assign`, subData).then((res) => {
+      post(`ReferrerCommissionLog/Assign`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         setSuccess(!success);
