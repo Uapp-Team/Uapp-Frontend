@@ -182,7 +182,7 @@ const ConsultantTermsInformation = () => {
                 <p>
                   Please read consultant terms & Conditions here{" "}
                   <span style={{ fontSize: "16px" }}>
-                    <Link to={`/companion-declaration/${companionId}`}>
+                    <Link to={`/referrer-declaration/${companionId}`}>
                       here
                     </Link>
                   </span>

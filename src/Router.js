@@ -2318,7 +2318,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/companion-declaration/:companionId?"
+                    path="/referrer-declaration/:companionId?"
                     component={CompanionNewDeclaration}
                   />
 
