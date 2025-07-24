@@ -177,6 +177,26 @@ const ProviderApplication = ({ currentUser }) => {
       ? application?.enrollValue
       : 0
   );
+
+  const [educationLevelDD, setEducationLevelDD] = useState([]);
+  const [educationLevelLabel, setEducationLevelLabel] = useState(
+    application?.educationLevelLabel
+      ? application?.educationLevelLabel
+      : "Select Education Level"
+  );
+  const [educationLevelValue, setEducationLevelValue] = useState(
+    application?.educationLevelValue ? application?.educationLevelValue : 0
+  );
+
+  const [departmentDD, setDepartmentDD] = useState([]);
+  const [departmentLabel, setDepartmentLabel] = useState(
+    application?.departmentLabel
+      ? application?.departmentLabel
+      : "Select Department"
+  );
+  const [departmentValue, setDepartmentValue] = useState(
+    application?.departmentValue ? application?.departmentValue : 0
+  );
   const [intakeLabel, setIntakeLabel] = useState(
     application?.intakeLabel ? application?.intakeLabel : "Intake"
   );
@@ -323,6 +343,10 @@ const ProviderApplication = ({ currentUser }) => {
         financeValue: financeValue && financeValue,
         commonUniLabel: commonUniLabel && commonUniLabel,
         commonUniValue: commonUniValue && commonUniValue,
+        educationLevelLabel: educationLevelLabel && educationLevelLabel,
+        educationLevelValue: educationLevelValue && educationLevelValue,
+        departmentLabel: departmentLabel && departmentLabel,
+        departmentValue: departmentValue && departmentValue,
         // proLabel: !providerId && proLabel && proLabel,
         // proValue: !providerId && proValue && proValue,
         admissionManagerLabel:
@@ -387,6 +411,10 @@ const ProviderApplication = ({ currentUser }) => {
     confidenceValue,
     confidenceLevel,
     selectedDates,
+    educationLevelValue,
+    educationLevelLabel,
+    departmentValue,
+    departmentLabel,
   ]);
 
   // for all dropdown
@@ -535,6 +563,10 @@ const ProviderApplication = ({ currentUser }) => {
     setConsultantValue(0);
     setCommonUniLabel("University Name");
     setCommonUniValue(0);
+    setEducationLevelLabel("Select Education Level");
+    setEducationLevelValue(0);
+    setDepartmentLabel("Select Department");
+    setDepartmentValue(0);
     setproviderPhoneLabel("Phone No.");
     setproviderPhoneValue(0);
     setCurrentPage(1);
@@ -671,6 +703,13 @@ const ProviderApplication = ({ currentUser }) => {
       setInterviewDD(res);
     });
 
+    get("EducationLevelDD/Index").then((res) => {
+      setEducationLevelDD(res);
+    });
+    get("DepartmentDD/Index").then((res) => {
+      setDepartmentDD(res);
+    });
+
     get("ElptStatusDD/Index").then((res) => {
       setElptDD(res);
     });
@@ -741,7 +780,7 @@ const ProviderApplication = ({ currentUser }) => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }`
+        }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -775,6 +814,8 @@ const ProviderApplication = ({ currentUser }) => {
     selectedDates,
     applicationSubValue,
     confidenceValue,
+    educationLevelValue,
+    departmentValue,
   ]);
 
   // Delete Button Click Action
@@ -1094,6 +1135,29 @@ const ProviderApplication = ({ currentUser }) => {
                     isDisabled={selector > 0 ? true : false}
                   />
                 </Col>
+
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={educationLevelDD}
+                    label={educationLevelLabel}
+                    setLabel={setEducationLevelLabel}
+                    value={educationLevelValue}
+                    setValue={setEducationLevelValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
+                <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                  <Filter
+                    data={departmentDD}
+                    label={departmentLabel}
+                    setLabel={setDepartmentLabel}
+                    value={departmentValue}
+                    setValue={setDepartmentValue}
+                    action={() => {}}
+                    className="mr-2"
+                  />
+                </Col>
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <DateRange
                     selectedDates={selectedDates}
@@ -1146,6 +1210,14 @@ const ProviderApplication = ({ currentUser }) => {
                   commonUniValue={commonUniValue}
                   commonUappIdLabel={commonUappIdLabel}
                   commonStdLabel={commonStdLabel}
+                  educationLevelValue={educationLevelValue}
+                  setEducationLevelValue={setEducationLevelValue}
+                  educationLevelLabel={educationLevelLabel}
+                  setEducationLevelLabel={setEducationLevelLabel}
+                  departmentValue={departmentValue}
+                  setDepartmentValue={setDepartmentValue}
+                  departmentLabel={departmentLabel}
+                  setDepartmentLabel={setDepartmentLabel}
                   consultantLabel={consultantLabel}
                   applicationLabel={applicationLabel}
                   offerLabel={offerLabel}
@@ -1225,6 +1297,8 @@ const ProviderApplication = ({ currentUser }) => {
                   documentStatusValue !== 0 ||
                   (!admId && admissionManagerValue !== 0) ||
                   confidenceValue !== "" ||
+                  educationLevelValue !== 0 ||
+                  departmentValue !== 0 ||
                   selectedDates?.length > 0 ? (
                     <button className="tag-clear" onClick={handleClearSearch}>
                       Clear All
@@ -1403,6 +1477,7 @@ const ProviderApplication = ({ currentUser }) => {
                                 Contact
                               </th>
                             ) : null}
+
                             {tableData[4]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 University
@@ -1410,58 +1485,68 @@ const ProviderApplication = ({ currentUser }) => {
                             ) : null}
                             {tableData[5]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Campus
+                                University Student Id
                               </th>
                             ) : null}
                             {tableData[6]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Course
+                                Tuition Fee
                               </th>
                             ) : null}
                             {tableData[7]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Intake
+                                Campus
                               </th>
                             ) : null}
                             {tableData[8]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Application Date
+                                Course
                               </th>
                             ) : null}
                             {tableData[9]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Status
+                                Intake
                               </th>
                             ) : null}
                             {tableData[10]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Document Status
+                                Application Date
                               </th>
                             ) : null}
                             {tableData[11]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Status
+                              </th>
+                            ) : null}
+                            {tableData[12]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Document Status
+                              </th>
+                            ) : null}
+                            {tableData[13]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Assessment
                               </th>
                             ) : null}
 
-                            {tableData[12]?.isActive ? (
+                            {tableData[14]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Interview
                               </th>
                             ) : null}
-                            {tableData[13]?.isActive ? (
+                            {tableData[15]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>ELPT</th>
                             ) : null}
 
-                            {tableData[14]?.isActive ? (
+                            {tableData[16]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>SLCs</th>
                             ) : null}
-                            {tableData[15]?.isActive ? (
+                            {tableData[17]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 Consultant
                               </th>
                             ) : null}
-                            {tableData[16]?.isActive ? (
+                            {tableData[18]?.isActive ? (
                               <th
                                 style={{ verticalAlign: "middle" }}
                                 className="text-center"
@@ -1545,75 +1630,85 @@ const ProviderApplication = ({ currentUser }) => {
                                   </span>
                                 </td>
                               ) : null}
-
                               {tableData[5]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.campusName}
+                                  {app?.universityStudentId}
                                 </td>
                               ) : null}
-
                               {tableData[6]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.subjectName}
+                                  {app?.tuitionFee}
                                 </td>
                               ) : null}
 
                               {tableData[7]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.intakeName}
+                                  {app?.campusName}
                                 </td>
                               ) : null}
 
                               {tableData[8]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.createdOn}
+                                  {app?.subjectName}
                                 </td>
                               ) : null}
 
                               {tableData[9]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.intakeName}
+                                </td>
+                              ) : null}
+
+                              {tableData[10]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.createdOn}
+                                </td>
+                              ) : null}
+
+                              {tableData[11]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.applicationStatusName} <br />
                                   {app?.ApplicationSubStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[10]?.isActive ? (
+                              {tableData[12]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.documentStatus}
                                 </td>
                               ) : null}
 
-                              {tableData[11]?.isActive ? (
+                              {tableData[13]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.assesmentPercentage}%
                                 </td>
                               ) : null}
 
-                              {tableData[12]?.isActive ? (
+                              {tableData[14]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.interviewStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[13]?.isActive ? (
+                              {tableData[15]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.elptStatusName}
                                 </td>
                               ) : null}
 
-                              {tableData[14]?.isActive ? (
+                              {tableData[16]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.studentFinanceName}
                                 </td>
                               ) : null}
 
-                              {tableData[15]?.isActive ? (
+                              {tableData[17]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.consultantName}
                                 </td>
                               ) : null}
 
-                              {tableData[16]?.isActive ? (
+                              {tableData[18]?.isActive ? (
                                 <td
                                   style={{ width: "8%" }}
                                   className="text-center"

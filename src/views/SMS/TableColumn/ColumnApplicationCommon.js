@@ -20,7 +20,19 @@ const ColumnApplicationCommon = [
     isActive: true,
   },
   {
+    title: "Provider",
+    isActive: true,
+  },
+  {
     title: "University",
+    isActive: true,
+  },
+  {
+    title: "University Student Id",
+    isActive: true,
+  },
+  {
+    title: "Tuition Fee",
     isActive: true,
   },
   {
@@ -51,10 +63,7 @@ const ColumnApplicationCommon = [
     title: "Assessment",
     isActive: true,
   },
-  // {
-  //   title: "Offer",
-  //   isActive: true,
-  // },
+
   {
     title: "Interview",
     isActive: true,
@@ -63,10 +72,7 @@ const ColumnApplicationCommon = [
     title: "Manager",
     isActive: true,
   },
-  // {
-  //   title: "Enrolment Status",
-  //   isActive: true,
-  // },
+
   {
     title: "SLCs",
     isActive: true,

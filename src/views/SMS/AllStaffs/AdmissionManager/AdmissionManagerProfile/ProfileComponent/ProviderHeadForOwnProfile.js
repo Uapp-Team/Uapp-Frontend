@@ -83,7 +83,7 @@ const ProviderHeadForOwnProfile = ({ admissionManagerId }) => {
         setStatusLabel(res?.accountStatus?.statusName);
       });
     }
-  }, [success, admissionManagerId]);
+  }, [success, admissionManagerId, userId]);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,

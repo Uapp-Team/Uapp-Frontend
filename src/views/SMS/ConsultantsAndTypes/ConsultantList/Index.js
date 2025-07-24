@@ -93,7 +93,7 @@ const Index = () => {
   const [cPass, setCPass] = useState("");
   const [error, setError] = useState("");
   // for hide/unhide column
-  // const [check, setCheck] = useState(true);
+
   const [tableData, setTableData] = useState([]);
   console.log(tableData, "table data");
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -101,6 +101,7 @@ const Index = () => {
   const userType = localStorage.getItem("userType");
   const history = useHistory();
   const [check, setCheck] = useState(false);
+  const [checkBac, setCheckBac] = useState(false);
   const [tierLabel, setTierLabel] = useState("Select Tier");
   const [tierValue, setTierValue] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
@@ -231,6 +232,10 @@ const Index = () => {
 
       let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
 
+      if (checkBac) {
+        url += `&isBacCertificate=${checkBac}`;
+      }
+
       // ✅ Append tier only if it's not null
       if (tierValue !== null) {
         url += `&tier=${tierValue}`;
@@ -257,6 +262,7 @@ const Index = () => {
     isTyping,
     tierValue,
     SalesTeamLeaderValue,
+    checkBac,
   ]);
 
   // useEffect(() => {
@@ -497,6 +503,8 @@ const Index = () => {
         <SelectAndClear
           setCheck={setCheck}
           check={check}
+          setCheckBac={setCheckBac}
+          checkBac={checkBac}
           empOptiopns={empOptiopns}
           empLabel={empLabel}
           empValue={empValue}

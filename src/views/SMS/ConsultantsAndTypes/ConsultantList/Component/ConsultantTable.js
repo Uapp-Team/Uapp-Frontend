@@ -102,15 +102,16 @@ const ConsultantTable = ({
             ) ? (
               <>{tableData[13]?.isActive ? <th>Status</th> : null}</>
             ) : null} */}
-            {tableData[14]?.isActive ? <th>Status</th> : null}
-            {tableData[15]?.isActive ? <th>Tier</th> : null}
+            {tableData[14]?.isActive ? <th>BAC Cert</th> : null}
+            {tableData[15]?.isActive ? <th>Status</th> : null}
+            {tableData[16]?.isActive ? <th>Tier</th> : null}
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[16]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[17]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[17]?.isActive ? (
+            {tableData[18]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -348,9 +349,16 @@ const ConsultantTable = ({
                 </td>
               ) : null}
               {tableData[14]?.isActive ? (
-                <td>{consultant?.accountStatus?.statusName}</td>
+                <td>
+                  {consultant?.isBacCertificateApproved === true
+                    ? "Approved"
+                    : "Not Approved"}
+                </td>
               ) : null}
               {tableData[15]?.isActive ? (
+                <td>{consultant?.accountStatus?.statusName}</td>
+              ) : null}
+              {tableData[16]?.isActive ? (
                 <td>{consultant?.tier !== "No Tier" && consultant?.tier}</td>
               ) : null}
 
@@ -358,7 +366,7 @@ const ConsultantTable = ({
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[16]?.isActive ? (
+                  {tableData[17]?.isActive ? (
                     <td>
                       <ConsultantActive
                         id={consultant?.id}
@@ -369,7 +377,7 @@ const ConsultantTable = ({
                 </>
               ) : null}
 
-              {tableData[17]?.isActive ? (
+              {tableData[18]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Consultant) ? (

@@ -203,51 +203,52 @@ const AffiliateApplication = ({ currentUser }) => {
                                 APP ID
                               </th>
                             ) : null}
-                            {/* {checkId ? (
-                      <th style={{ verticalAlign: "middle" }}>UAPP ID</th>
-                    ) : null} */}
-                            {/* {checkApplic ? (
-                      <th style={{ verticalAlign: "middle" }}>Applicant</th>
-                    ) : null} */}
-                            {/* {checkContact ? (
-                      <th style={{ verticalAlign: "middle" }}>Contact</th>
-                    ) : null} */}
                             {tableData[1]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Provider
+                              </th>
+                            ) : null}
+
+                            {tableData[2]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
                                 University
                               </th>
                             ) : null}
-                            {tableData[2]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Student
-                              </th>
-                            ) : null}
                             {tableData[3]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Course
+                                University Student Id
                               </th>
                             ) : null}
                             {tableData[4]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Intake
+                                Tuition Fee
                               </th>
                             ) : null}
                             {tableData[5]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
-                                Application Date
+                                Student
                               </th>
                             ) : null}
                             {tableData[6]?.isActive ? (
                               <th style={{ verticalAlign: "middle" }}>
+                                Course
+                              </th>
+                            ) : null}
+                            {tableData[7]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Intake
+                              </th>
+                            ) : null}
+                            {tableData[8]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
+                                Application Date
+                              </th>
+                            ) : null}
+                            {tableData[9]?.isActive ? (
+                              <th style={{ verticalAlign: "middle" }}>
                                 Status
                               </th>
                             ) : null}
-
-                            {/* {tableData[10]?.isActive ? (
-                              <th style={{ verticalAlign: "middle" }}>
-                                Enrolment Status
-                              </th>
-                            ) : null} */}
                           </tr>
                         </thead>
                         <tbody>
@@ -278,35 +279,51 @@ const AffiliateApplication = ({ currentUser }) => {
 
                               {tableData[1]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.universityName}
+                                  {app?.providerName}
                                 </td>
                               ) : null}
 
                               {tableData[2]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.studentName}
+                                  {app?.universityName}
                                 </td>
                               ) : null}
-
                               {tableData[3]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.subjectName}
+                                  {app?.universityStudentId}
                                 </td>
                               ) : null}
-
                               {tableData[4]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.intakeName}
+                                  {app?.tuitionFee}
                                 </td>
                               ) : null}
 
                               {tableData[5]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
-                                  {app?.createdOn}
+                                  {app?.studentName}
                                 </td>
                               ) : null}
 
                               {tableData[6]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.subjectName}
+                                </td>
+                              ) : null}
+
+                              {tableData[7]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.intakeName}
+                                </td>
+                              ) : null}
+
+                              {tableData[8]?.isActive ? (
+                                <td style={{ verticalAlign: "middle" }}>
+                                  {app?.createdOn}
+                                </td>
+                              ) : null}
+
+                              {tableData[9]?.isActive ? (
                                 <td style={{ verticalAlign: "middle" }}>
                                   {app?.applicationStatusName} <br />
                                   {app?.ApplicationSubStatusName}

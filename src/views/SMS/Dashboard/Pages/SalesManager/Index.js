@@ -29,10 +29,13 @@ const SalesTeamLeader = () => {
   const [consultants, setConsultants] = useState([]);
 
   const [intakeRngDD, setIntakeRngDD] = useState([]);
+
   const [intakeRngLabel, setIntakeRngLabel] = useState("Intake Range");
   const [intakeRngValue, setIntakeRngValue] = useState(0);
+
   const history = useHistory();
   const [intake, setIntake] = useState({});
+
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
@@ -72,7 +75,7 @@ const SalesTeamLeader = () => {
       <div className="d-flex justify-content-between flex-wrap">
         <div>
           <span className="std-dashboard-style1">
-            Hello, {currentUser?.displayName}!
+            Hello, va{currentUser?.displayName}!
           </span>
           <br />
           <span className="std-dashboard-style2">

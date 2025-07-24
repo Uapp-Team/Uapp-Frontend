@@ -34,6 +34,8 @@ const SelectAndClear = ({
   handleReset,
   check,
   setCheck,
+  checkBac,
+  setCheckBac,
   tierLabel,
   setTierLabel,
   tierValue,
@@ -143,7 +145,7 @@ const SelectAndClear = ({
               </div>
             </div>
           </Col>
-          <Col className="uapp-mb mb-2" md="4" sm="12">
+          <Col className="uapp-mb mb-2" md="2" sm="12">
             <div>
               <input
                 onChange={(e) => {
@@ -155,6 +157,20 @@ const SelectAndClear = ({
                 checked={check}
               />{" "}
               <span>Is From Student?</span>
+            </div>
+          </Col>
+          <Col className="uapp-mb mb-2" md="2" sm="12">
+            <div>
+              <input
+                onChange={(e) => {
+                  setCheckBac(e.target.checked);
+                }}
+                type="checkbox"
+                name=""
+                value=""
+                checked={checkBac}
+              />{" "}
+              <span>BAC Certificate</span>
             </div>
           </Col>
         </Row>
@@ -199,6 +215,7 @@ const SelectAndClear = ({
                 ) : (
                   ""
                 )}
+
                 {empValue !== 0 &&
                   (branchValue !== 0 || statusValue !== 0 ? "" : "")}
 

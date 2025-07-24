@@ -26,6 +26,9 @@ import { Student } from "../../../../components/core/User";
 const ApplicationDetails = () => {
   const [activetab, setActivetab] = useState("1");
   const [applicationInfo, setApplicationInfo] = useState({});
+  const [tuiTionFee, setTuitionFee] = useState("");
+  const [tuiTionFeeError, setTuitionFeeError] = useState("");
+
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -87,6 +90,7 @@ const ApplicationDetails = () => {
     get(`Application/Get/${id}`).then((res) => {
       setLoading(false);
       setApplicationInfo(res);
+      setTuitionFee(res?.tuitionFee);
       setManagerId(res?.admissionManager?.id);
       setOfficerId(res?.admissionOfficer?.id);
       setUniId(res?.university?.id);
@@ -331,6 +335,10 @@ const ApplicationDetails = () => {
                       setElptOverall={setElptOverall}
                       success={success}
                       setSuccess={setSuccess}
+                      tuiTionFee={tuiTionFee}
+                      setTuitionFee={setTuitionFee}
+                      tuiTionFeeError={tuiTionFeeError}
+                      setTuitionFeeError={setTuitionFeeError}
                     />
                   </TabPane>
                 </TabContent>

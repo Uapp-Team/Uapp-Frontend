@@ -56,6 +56,12 @@ const EligibilityInformation = () => {
   const [dateError, setDateError] = useState("");
   const history = useHistory();
   const userType = localStorage.getItem("userType");
+  const [isIdPassportApproved, setIsIdPassportApproved] = useState(true);
+  const [isProofOfAddressApproved, setIsProofOfAddressApproved] =
+    useState(true);
+  const [isBrpApproved, setIsBrpApproved] = useState(true);
+  const [isCvApproved, setIsCvApproved] = useState(true);
+  const [isBacApproved, setIsBacApproved] = useState(true);
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -125,6 +131,11 @@ const EligibilityInformation = () => {
           : null
       );
       setVisa(res?.visaType);
+      setIsIdPassportApproved(res?.isIdOrPasswordApproved);
+      setIsProofOfAddressApproved(res?.isProofOfAddressApproved);
+      setIsBrpApproved(res?.isBRPApproved);
+      setIsCvApproved(res?.isCvApproved);
+      setIsBacApproved(res?.isBacCertificateApproved);
     });
   }, [success, consultantRegisterId, setRightToWork]);
 
@@ -517,6 +528,16 @@ const EligibilityInformation = () => {
                 setDateError={setDateError}
                 handleDate={handleDate}
                 handlePrevious={handlePrevious}
+                isIdPassportApproved={isIdPassportApproved}
+                setIsIdPassportApproved={setIsIdPassportApproved}
+                isProofOfAddressApproved={isProofOfAddressApproved}
+                setIsProofOfAddressApproved={setIsProofOfAddressApproved}
+                isBrpApproved={isBrpApproved}
+                setIsBrpApproved={setIsBrpApproved}
+                isCvApproved={isCvApproved}
+                setIsCvApproved={setIsCvApproved}
+                isBacApproved={isBacApproved}
+                setIsBacApproved={setIsBacApproved}
               ></EligibilityForm>
             </TabPane>
           </TabContent>

@@ -43,6 +43,12 @@ const SearchAndClear = ({
   setCheck,
   setIsTyping,
   setSearchStr,
+  consSalesTeamLeaderMenu,
+  SalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  selectSalesTeamLeaderCons,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
 }) => {
   const userType = localStorage.getItem("userType");
 
@@ -70,6 +76,28 @@ const SearchAndClear = ({
                 />
               </Col>
             )}
+
+            {userType === userTypes?.SystemAdmin ||
+            userType === userTypes?.Admin ||
+            userType === userTypes?.BranchAdmin ||
+            userType === userTypes?.BranchManager ||
+            userType === userTypes?.SalesManager ? (
+              <Col className="uapp-mb mb-2" md="4" sm="12">
+                <Select
+                  className="form-mt"
+                  options={consSalesTeamLeaderMenu}
+                  value={{
+                    label: SalesTeamLeaderLabel,
+                    value: SalesTeamLeaderValue,
+                  }}
+                  onChange={(opt) =>
+                    selectSalesTeamLeaderCons(opt.label, opt.value)
+                  }
+                  name="salesTeamLeaderId"
+                  id="salesTeamLeaderId"
+                />
+              </Col>
+            ) : null}
 
             <Col lg="4" md="3" sm="12" className="mb-2">
               <Select
@@ -142,11 +170,30 @@ const SearchAndClear = ({
             <Col lg="12" md="12" sm="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="d-flex mt-1">
-                  {studentTypeValue !== 0 ||
-                  consultantValue !== 0 ||
+                  {SalesTeamLeaderValue !== 0 ||
+                  studentTypeValue !== 0 ||
+                  branchValue !== 0 ||
                   statusValue !== 0
                     ? ""
                     : ""}
+                  {SalesTeamLeaderValue !== 0 ? (
+                    <TagButton
+                      label={SalesTeamLeaderLabel}
+                      setValue={() => setSalesTeamLeaderValue(0)}
+                      setLabel={() =>
+                        setSalesTeamLeaderLabel("Select Sales Team Leader")
+                      }
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {SalesTeamLeaderValue !== 0 &&
+                    (studentTypeValue !== 0 ||
+                    branchValue !== 0 ||
+                    statusValue !== 0
+                      ? ""
+                      : "")}
+
                   {studentTypeValue !== 0 ? (
                     <TagButton
                       label={studentTypeLabel}
@@ -190,7 +237,8 @@ const SearchAndClear = ({
                   )}
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
-                  {studentTypeValue !== 0 ||
+                  {SalesTeamLeaderValue !== 0 ||
+                  studentTypeValue !== 0 ||
                   consultantValue !== 0 ||
                   (!branchId && branchValue !== 0) ||
                   statusValue !== 0 ? (

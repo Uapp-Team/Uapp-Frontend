@@ -58,6 +58,10 @@ const ApplicationInfo = ({
   setElptSpeaking,
   elptOverall,
   setElptOverall,
+  tuiTionFee,
+  setTuitionFee,
+  setTuitionFeeError,
+  tuiTionFeeError,
 }) => {
   const currentUser = localStorage.getItem("userType");
   console.log(applicationInfo);
@@ -125,6 +129,7 @@ const ApplicationInfo = ({
   // const [offerModalOpen, setOfferModalOpen] = useState(false);
 
   const [uniStdIdModalOpen, setUniStdIdModalOpen] = useState(false);
+  const [tuitionFeeModalOpen, setTuitionFeeModalOpen] = useState(false);
   const [CampusModalOpen, setCampusModalOpen] = useState(false);
   const [uniAppDateModalOpen, setUniAppDateModalOpen] = useState(false);
 
@@ -162,6 +167,7 @@ const ApplicationInfo = ({
   const [progress8, setProgress8] = useState(false);
   const [progress9, setProgress9] = useState(false);
   const [progress10, setProgress10] = useState(false);
+  const [progress13, setProgress13] = useState(false);
   // const [progress11, setProgress11] = useState(false);
   const [progress12, setProgress12] = useState(false);
 
@@ -555,6 +561,9 @@ const ApplicationInfo = ({
   const handleEditUniStdId = (id) => {
     setUniStdIdModalOpen(true);
   };
+  const handleEditTuitionFee = (id) => {
+    setTuitionFeeModalOpen(true);
+  };
 
   const handleUpdateIntake = (value, label) => {
     setIntakeModal(true);
@@ -589,6 +598,7 @@ const ApplicationInfo = ({
     // setOfferValue(0);
     // setOfferModalOpen(false);
     setUniStdIdModalOpen(false);
+    setTuitionFeeModalOpen(false);
     setUniAppDateModalOpen(false);
     setCampusModalOpen(false);
     setIntakeModal(false);
@@ -754,6 +764,35 @@ const ApplicationInfo = ({
     });
   };
 
+  const validateTuitionForm = () => {
+    var isFormValid = true;
+
+    if (tuiTionFee === "") {
+      isFormValid = false;
+      setTuitionFeeError("Input must contain only numbers");
+    }
+
+    return isFormValid;
+  };
+
+  const handleTuitionFeeSubmit = (e) => {
+    e.preventDefault();
+    const subData = new FormData(e.target);
+    var formIsValid = validateTuitionForm(subData);
+    if (formIsValid) {
+      setProgress13(true);
+      put(`Application/UpdateTuitionFee`, subData).then((action) => {
+        setProgress13(false);
+        setSuccess(!success);
+        setTuitionFeeModalOpen(false);
+        addToast(action?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+      });
+    }
+  };
+
   const handleUpdateIntakeSubmit = (e) => {
     e.preventDefault();
     const subData = new FormData(e.target);
@@ -809,6 +848,20 @@ const ApplicationInfo = ({
         autoDismiss: true,
       });
     });
+  };
+
+  const handleTuitionFee = (e) => {
+    const newValue = e.target.value;
+    const isNumeric = /^\d+$/.test(newValue);
+    setTuitionFee(newValue);
+
+    if (!newValue) {
+      setTuitionFeeError("Input must contain only numbers");
+    } else if (!isNumeric) {
+      setTuitionFeeError("Input must contain only numbers");
+    } else {
+      setTuitionFeeError("");
+    }
   };
 
   const handleElptupdate = (e) => {
@@ -1694,8 +1747,8 @@ const ApplicationInfo = ({
                 </div>
               </td>
             </tr>
+
             {usersType !== userTypes?.Student &&
-              usersType !== userTypes?.Consultant &&
               usersType !== userTypes?.Affiliate &&
               usersType !== userTypes?.Companion && (
                 <tr style={{ borderBottom: "1px solid #dee2e6" }}>
@@ -1706,23 +1759,27 @@ const ApplicationInfo = ({
                   <td td className="w-50">
                     <div className="d-flex justify-content-between">
                       {applicationInfo?.confidenceLevelName}
-                      {applicationInfo?.confidenceLevel === 0 && (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{ color: "#619bff", cursor: "pointer" }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleEditConfidence(
-                              applicationInfo?.confidenceLevelName,
-                              applicationInfo?.confidenceLevel
-                            )
-                          }
-                          permission={6}
-                        />
-                      )}
+                      {applicationInfo?.confidenceLevel === 0 &&
+                        usersType !== userTypes?.Student &&
+                        usersType !== userTypes?.Consultant &&
+                        usersType !== userTypes?.Affiliate &&
+                        usersType !== userTypes?.Companion && (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleEditConfidence(
+                                applicationInfo?.confidenceLevelName,
+                                applicationInfo?.confidenceLevel
+                              )
+                            }
+                            permission={6}
+                          />
+                        )}
 
                       <Modal
                         isOpen={confidenceModalOpen}
@@ -2226,6 +2283,84 @@ const ApplicationInfo = ({
                               <CancelButton text="Close" cancel={closeModal} />
 
                               <SaveButton text="Submit" progress={progress5} />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </ModalBody>
+                  </Modal>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td td className="w-50">
+                Tuition Fee
+              </td>
+
+              <td td className="w-50">
+                <div className="d-flex justify-content-between">
+                  <div>{applicationInfo?.tuitionFee}</div>
+
+                  {permissions?.includes(
+                    permissionList.Update_Application_Info
+                  ) ? (
+                    <SpanButton
+                      icon={
+                        <i
+                          class="far fa-edit"
+                          style={{
+                            color: "#619bff",
+                            cursor: "pointer",
+                          }}
+                        ></i>
+                      }
+                      func={() =>
+                        handleEditTuitionFee(applicationInfo?.tuitionFee)
+                      }
+                      permission={6}
+                    />
+                  ) : null}
+
+                  <Modal
+                    isOpen={tuitionFeeModalOpen}
+                    toggle={closeModal}
+                    className="uapp-modal"
+                  >
+                    <ModalBody className="p-5">
+                      <h4>Update TUition Fee</h4>
+                      <Form onSubmit={handleTuitionFeeSubmit}>
+                        <FormGroup row>
+                          <input
+                            type="hidden"
+                            name="id"
+                            id="id"
+                            value={applicationInfo?.id}
+                          />
+                        </FormGroup>
+
+                        <Row>
+                          <Col md={7}>
+                            <FormGroup>
+                              <span>Tuition Fee</span>
+
+                              <Input
+                                type="number"
+                                value={tuiTionFee}
+                                name="tuitionFee"
+                                id="tuitionFee"
+                                onChange={(e) => {
+                                  handleTuitionFee(e);
+                                }}
+                              />
+                              <span className="text-danger">
+                                {tuiTionFeeError}
+                              </span>
+                            </FormGroup>
+
+                            <FormGroup>
+                              <CancelButton text="Close" cancel={closeModal} />
+
+                              <SaveButton text="Submit" progress={progress13} />
                             </FormGroup>
                           </Col>
                         </Row>
