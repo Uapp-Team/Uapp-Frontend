@@ -22,7 +22,6 @@ const CompanionRegisterForm = () => {
   const [email, setEmail] = useState("");
   const [names, setNames] = useState([]);
   const [consultants, setConsultants] = useState([]);
-  
   const [error, setError] = useState("");
   const [emailError, setEmailError] = useState("");
   const { addToast } = useToasts();

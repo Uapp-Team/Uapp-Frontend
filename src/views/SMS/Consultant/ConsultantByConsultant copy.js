@@ -131,7 +131,7 @@ const ConsultantByConsultant = () => {
     });
 
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
+      `Referrer/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
         id ? id : referenceId
       }`
     ).then((res) => {
