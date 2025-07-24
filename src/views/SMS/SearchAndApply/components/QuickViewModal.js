@@ -135,14 +135,14 @@ const QuickViewModal = ({
         </div>
         <ModalBody className="p-30px modal-overflow">
           <Row className="quickview-header">
-            <Col md={12} lg={7}>
+            <Col md={12} lg={6}>
               <h2 className="quickview-title mb-3">
                 {quickViewData?.subjectName}
               </h2>
             </Col>
             <Col
               md={12}
-              lg={5}
+              lg={6}
               className="d-flex align-items-center justify-content-between mb-3"
             >
               <div className="d-flex">

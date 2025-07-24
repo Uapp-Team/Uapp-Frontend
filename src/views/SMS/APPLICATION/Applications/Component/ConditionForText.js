@@ -111,6 +111,18 @@ const ConditionForText = ({
   setConfidenceLevel,
   confidenceValue,
   setConfidenceValue,
+  setSalesTeamLeaderValue,
+  setSalesTeamLeaderLabel,
+  SalesTeamLeaderValue,
+  SalesTeamLeaderLabel,
+  educationLevelValue,
+  setEducationLevelValue,
+  educationLevelLabel,
+  setEducationLevelLabel,
+  departmentValue,
+  setDepartmentValue,
+  departmentLabel,
+  setDepartmentLabel,
 }) => {
   return (
     <>
@@ -342,11 +354,38 @@ const ConditionForText = ({
         ) : (
           ""
         )}
+        {SalesTeamLeaderValue && SalesTeamLeaderValue !== 0 ? (
+          <TagButton
+            label={SalesTeamLeaderLabel}
+            setValue={() => setSalesTeamLeaderValue(0)}
+            setLabel={() => setSalesTeamLeaderLabel("Select Sales Team Leader")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
         {confidenceValue?.toString() === "0" || confidenceValue > 0 ? (
           <TagButton
             label={confidenceLevel}
             setValue={() => setConfidenceValue("")}
             setLabel={() => setConfidenceLevel("Confidence Level")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {educationLevelValue && educationLevelValue !== 0 ? (
+          <TagButton
+            label={educationLevelLabel}
+            setValue={() => setEducationLevelValue(0)}
+            setLabel={() => setEducationLevelLabel("Select Education Level")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {departmentValue && departmentValue !== 0 ? (
+          <TagButton
+            label={departmentLabel}
+            setValue={() => setDepartmentValue(0)}
+            setLabel={() => setDepartmentLabel("Select Department")}
           ></TagButton>
         ) : (
           ""

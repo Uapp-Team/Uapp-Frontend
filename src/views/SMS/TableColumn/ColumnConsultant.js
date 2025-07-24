@@ -56,6 +56,10 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
+    title: "BAC Cer",
+    isActive: true,
+  },
+  {
     title: "Status",
     isActive: true,
   },

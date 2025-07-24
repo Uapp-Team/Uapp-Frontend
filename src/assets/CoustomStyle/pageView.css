@@ -963,6 +963,18 @@
   list-style: none;
 }
 
+.std-parent-cons {
+  margin: 0%;
+  padding: 0;
+}
+
+.std-parent-cons li {
+  padding: 0px 0px;
+  list-style: none;
+}
+
+
+
 .uapp-profile-CardHeader h5 {
   font-size: 15px;
   margin-bottom: 0px !important;

@@ -253,9 +253,11 @@ export default function ApplicationList({
                     </div>
 
                     <div className="col-md-2" style={{ marginTop: "-7px" }}>
-                      {appinfo?.enrollmentStatusId === 2 ? (
+                      {appinfo?.applicationStatusId === 12 &&
+                      appinfo?.applicationSubStatusId === 38 ? (
                         <>
-                          {appinfo?.enrollmentStatusId === 2 &&
+                          {appinfo?.applicationStatusId === 12 &&
+                          appinfo?.applicationSubStatusId === 38 &&
                           appinfo?.alreadyReviewed === true ? (
                             <>
                               <span

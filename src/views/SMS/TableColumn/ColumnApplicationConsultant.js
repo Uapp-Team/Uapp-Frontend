@@ -16,7 +16,19 @@ const ColumnApplicationConsultant = [
     isActive: true,
   },
   {
+    title: "Provider",
+    isActive: true,
+  },
+  {
     title: "University",
+    isActive: true,
+  },
+  {
+    title: "University Student Id",
+    isActive: true,
+  },
+  {
+    title: "Tuition Fee",
     isActive: true,
   },
   {
