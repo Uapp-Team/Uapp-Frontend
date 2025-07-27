@@ -71,7 +71,7 @@ const EligibilityInformation = () => {
       setResidency(res);
     });
 
-    Uget(`CompanionEligibility/get-by/${companionId}`).then((res) => {
+    Uget(`ReferrerEligibility/get-by/${companionId}`).then((res) => {
       setEligibilityData(res?.data);
       setIdPassportFile(
         res?.data?.idOrPassport?.fileUrl
@@ -307,7 +307,7 @@ const EligibilityInformation = () => {
     if (ValidateForm()) {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionEligibility/save`, subData).then((res) => {
+      post(`ReferrerEligibility/save`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res?.data?.statusCode === 200 && res?.data?.isSuccess === true) {
@@ -322,12 +322,12 @@ const EligibilityInformation = () => {
             autoDismiss: true,
           });
         }
-        history.push(`/companionBankInfo/${companionId}`);
+        history.push(`/referrerBankInfo/${companionId}`);
       });
     }
   };
   const handlePrevious = () => {
-    history.push(`/companionEmergencyInfo/${companionId}`);
+    history.push(`/referrerEmergencyInfo/${companionId}`);
   };
 
   return (

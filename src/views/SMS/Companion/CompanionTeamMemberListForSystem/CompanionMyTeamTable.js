@@ -92,7 +92,7 @@ const CompanionMyTeamTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/companion-profile/${companionTeam?.id}`}
+                    to={`/referrer-profile/${companionTeam?.id}`}
                   >
                     {companionTeam?.uappId}
                   </Link>
@@ -104,7 +104,7 @@ const CompanionMyTeamTable = ({
                   <div className="cursor-pointer hyperlink-hover">
                     <Link
                       className="text-id hover"
-                      to={`/companion-profile/${companionTeam?.id}`}
+                      to={`/referrer-profile/${companionTeam?.id}`}
                     >
                       {companionTeam?.name}
                     </Link>

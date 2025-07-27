@@ -2107,7 +2107,7 @@ class AppRouter extends React.Component {
                   {/* Companion paths */}
 
                   <AppRoute
-                    path="/companion-transation"
+                    path="/referrer-transation"
                     component={CompanionTransation}
                   />
 
@@ -2116,21 +2116,21 @@ class AppRouter extends React.Component {
                     component={CompanionLeadList}
                   />
                   <AppRoute
-                    path="/companion-lead-list/:companionId"
+                    path="/referrer-lead-list/:companionId"
                     component={CompanionLeadListForSystem}
                   />
                   <AppRoute
-                    path="/companion-student-list/:companionId"
+                    path="/referrer-student-list/:companionId"
                     component={CompanionStudentListForSystem}
                   />
 
                   <AppRoute
-                    path="/companion-Invitation"
+                    path="/referrer-Invitation"
                     component={CompanionInvitation}
                   />
 
                   <AppRoute
-                    path="/companion-Invitation-list/:companionId"
+                    path="/referrer-Invitation-list/:companionId"
                     component={CompanionInvitationListForSystem}
                   />
                   <AppRoute
@@ -2155,7 +2155,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/companion-earning"
+                    path="/referrer-earning"
                     component={CompanionEarning}
                   />
                   <AppRoute
@@ -2164,7 +2164,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/companion-team-List/:companionId"
+                    path="/referrer-team-List/:companionId"
                     component={CompanionTeamMemberListForSystem}
                   />
                   <AppRoute
@@ -2180,20 +2180,20 @@ class AppRouter extends React.Component {
                     component={CompanionTeamMembersRegisteredApplication}
                   />
                   <AppRoute
-                    path="/companion-team-List"
+                    path="/referrer-team-List"
                     component={CompanionMyTeamList}
                   />
 
                   <AppRoute
-                    path="/companion-commission-setting"
+                    path="/referrer-commission-setting"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionCommissionSetting
                         : NotAuthorized
                     }
                   />
-                  <AppRoute
-                    path="/companion-List"
+                  <AppRoute     
+                    path="/referrer-list"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionList
@@ -2201,7 +2201,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/companion-registration"
+                    path="/referrer-registration"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionListRegistration
@@ -2209,7 +2209,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/companion-registrationby/:companionId"
+                   path="/referrer-registrationby/:refererId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionListRegistration
@@ -2218,7 +2218,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/companion-profile/:companionId"
+                    path="/referrer-profile/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionProfile
@@ -2226,7 +2226,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/companion-dashboard/:id"
+                    path="/referrer-dashboard/:id"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionDashboard
@@ -2260,7 +2260,7 @@ class AppRouter extends React.Component {
                     />
                   </Route> */}
                   <AffiliateRoute
-                    path="/companionPersonalInfo/:companionId"
+                    path="/referrerPersonalInfo/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionPersonalInfo
@@ -2268,7 +2268,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionContactInfo/:companionId"
+                    path="/referrerContactInfo/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionContactInfo
@@ -2276,7 +2276,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionEmergencyInfo/:companionId"
+                    path="/referrerEmergencyInfo/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionEmergencyInfo
@@ -2284,7 +2284,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionEligibilityInfo/:companionId"
+                    path="/referrerEligibilityInfo/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionEligibilityInfo
@@ -2292,7 +2292,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionBankInfo/:companionId"
+                    path="/referrerBankInfo/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionBankInfo
@@ -2300,7 +2300,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionCommission/:companionId"
+                    path="/referrerCommission/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionCommission
@@ -2308,7 +2308,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AffiliateRoute
-                    path="/companionTerms/:companionId"
+                    path="/referrerTerms/:companionId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionTerms
@@ -2317,7 +2317,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/companion-declaration/:companionId?"
+                    path="/referrer-declaration/:companionId?"
                     component={CompanionNewDeclaration}
                   />
 
@@ -3424,7 +3424,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/companion-registrationByCons/:id"
+                    path="/referrer-registrationByCons/:id"
                     component={
                       permissions?.includes(permissionList?.Add_Associate)
                         ? CompanionListRegistration
@@ -4307,7 +4307,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/companion-applications/:status/:selector/:companionId"
+                    path="/referrer-applications/:status/:selector/:companionId"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List
@@ -4359,7 +4359,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/ApplicationListByCompanion/:companionId"
+                    path="/ApplicationListByReferrer/:companionId"
                     component={
                       permissions?.includes(
                         permissionList?.View_Application_List
@@ -5673,7 +5673,7 @@ class AppRouter extends React.Component {
 
                   {/* make student a consultant path */}
                   <AppRoute
-                    path="/becomeCompanion"
+                    path="/becomeReferrer"
                     component={ConvertStudentIntoCompanionForm}
                   />
 

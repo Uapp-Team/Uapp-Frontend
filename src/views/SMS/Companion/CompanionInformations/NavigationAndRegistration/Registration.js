@@ -23,7 +23,7 @@ const Registration = () => {
   const [companionParent, setCompanionParent] = useState([]);
   // const [consType, setConsType] = useState([]);
   const [companionParentLabel, setCompanionParentLabel] = useState(
-    "Select Parent Companion"
+    "Select Parent Referrer"
   );
   const [companionParentValue, setCompanionParentValue] = useState(
     companionId ? companionId : 0
@@ -86,7 +86,7 @@ const Registration = () => {
   }, [branchValue]);
 
   useEffect(() => {
-    get(`CompanionDD/Index/${consultantValue}`).then((res) => {
+    get(`ReferrerDD/Index/${consultantValue}`).then((res) => {
       setCompanionParent(res);
       if (companionId) {
         const result = res?.find((ans) => ans?.id.toString() === companionId);
@@ -107,7 +107,7 @@ const Registration = () => {
     setConsultantValue(0);
     setconsultantLabel("Select Consultant");
     setCompanionParentValue(0);
-    setCompanionParentLabel("Select Parent Companion");
+    setCompanionParentLabel("Select Parent Referrer");
   };
 
   const companionParentMenu = companionParent?.map(
@@ -276,7 +276,7 @@ const Registration = () => {
       setFirstNameError("");
       setLastNameError("");
       setEmailError("");
-      post("CompanionRegister", subdata).then((res) => {
+      post("ReferrerRegister", subdata).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res.status === 200 && res.data.isSuccess === true) {
@@ -300,37 +300,37 @@ const Registration = () => {
   };
 
   const ToConsultantList = () => {
-    history.push("/companion-List");
-  };
+    history.push("/referrer-list");
+   };
 
   const goToProfile = () => {
     companionId && userType === userTypes?.SystemAdmin
-      ? history.push(`/companion-team-List/${companionId}`)
+      ? history.push(`/referrer-team-List/${companionId}`)
       : companionId
-      ? history.push(`/companion-team-List`)
-      : history.push(`/companionPersonalInfo/${registerId}`);
+      ? history.push(`/referrer-team-List`)
+      : history.push(`/referrerPersonalInfo/${registerId}`);
   };
 
   return (
     <div>
       {userType === userTypes?.Consultant ? (
         <BreadCrumb
-          title="Add Companion"
+          title="Add Referrer"
           backTo="My Companion List"
           path={"/ConsultantByCompanionList"}
         />
       ) : (
         <BreadCrumb
-          title="Add Companion"
-          backTo={companionId ? "My Team List" : "Companion List"}
-          path={companionId ? "/companion-team-List" : "/companion-List"}
+          title="Add Referrer"
+          backTo={companionId ? "My Team List" : "Referrer List"}
+          path={companionId ? "/referrer-team-List" : "/referrer-list"}
         />
       )}
 
       <Card>
         <CardBody>
           <Form onSubmit={handleSubmit}>
-            <p className="section-title"> Add Companion </p>
+            <p className="section-title"> Add Referrer </p>
 
             <div className="mt-1 mb-4 d-flex justify-between cardborder">
               <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
@@ -448,7 +448,7 @@ const Registration = () => {
                     userType === userTypes?.Companion ||
                     userType === userTypes?.Consultant ? (
                       <FormGroup>
-                        <span>Parent Companion</span>
+                        <span>Parent Referrer</span>
                         <Select
                           className="form-mt"
                           options={companionParentMenu}
@@ -466,7 +466,7 @@ const Registration = () => {
 
                         {parentError && (
                           <span className="text-danger">
-                            Parent Companion is required.
+                            Parent Referrer is required.
                           </span>
                         )}
                       </FormGroup>
@@ -591,7 +591,7 @@ const Registration = () => {
 
                   {/* {permissions?.includes(permissionList?.Add_Consultant) && ( */}
                   <SaveButton
-                    text="Create Companion"
+                    text="Create Referrer"
                     progress={progress}
                     buttonStatus={buttonStatus}
                   />
@@ -604,8 +604,8 @@ const Registration = () => {
       </Card>
 
       <ConfirmModal
-        text="Companion added successfully"
-        text2="A companion account has been successfully created, and an email containing the login credentials has been sent to the companion's registered email address."
+        text="Referrer added successfully"
+        text2="A Referrer account has been successfully created, and an email containing the login credentials has been sent to the Referrer's registered email address."
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(!isModalOpen)}
         buttonStatus={buttonStatus}

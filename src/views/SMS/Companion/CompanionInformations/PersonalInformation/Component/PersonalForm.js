@@ -192,7 +192,7 @@ const PersonalForm = ({
         {userType !== userTypes?.Companion ? (
           <FormGroup row>
             <Col lg="6" md="8">
-              <span>Parent Companion</span>
+              <span>Parent Referrer</span>
               <Select
                 className="form-mt"
                 options={companionParentMenu}

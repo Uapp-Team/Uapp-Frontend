@@ -34,7 +34,7 @@ const CompanionBanner = ({
   }, [companionProfileData]);
 
   useEffect(() => {
-    Uget(`CompanionDD/get-account-status-selects/${companionId}`).then(
+    Uget(`ReferrerDD/get-account-status-selects/${companionId}`).then(
       (res) => {
         setStatusType(res?.data);
       }
@@ -52,7 +52,7 @@ const CompanionBanner = ({
     setStatusLabel(data?.label);
 
     put(
-      `Companion/update-status?companionId=${companionId}&status=${value}`
+      `Referrer/update-status?companionId=${companionId}&status=${value}`
     ).then((res) => {
       addToast(res?.data?.title, {
         appearance: "success",
@@ -100,7 +100,7 @@ const CompanionBanner = ({
                 {companionId === referenceId ||
                 userType === userTypes?.SystemAdmin ||
                 userType === userTypes?.Admin ? (
-                  <Link to={`/companionPersonalInfo/${companionId}`}>
+                  <Link to={`/referrerPersonalInfo/${companionId}`}>
                     {" "}
                     <img
                       style={{ width: "24px", height: "24px" }}

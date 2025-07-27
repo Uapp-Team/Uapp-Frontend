@@ -90,20 +90,20 @@ const ConsultantTermsInformation = () => {
   // }, [companionId]);
 
   useEffect(() => {
-    Uget(`Companion/get-by/${companionId}`).then((res) => {
+    Uget(`Referrer/get-by/${companionId}`).then((res) => {
       setCompanionProfileData(res);
     });
   }, [companionId]);
 
   useEffect(() => {
-    Uget(`CompanionConsent/check-signed-status/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/check-signed-status/${companionId}`).then((res) => {
       setConscentDataStatus(res);
     });
-    Uget(`CompanionConsent/get-summery/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/get-summery/${companionId}`).then((res) => {
       setConscentSummaryData(res);
     });
 
-    Uget(`CompanionConsent/get-by/${companionId}`).then((res) => {
+    Uget(`ReferrerConsent/get-by/${companionId}`).then((res) => {
       setConscentGet(res);
     });
 
@@ -120,7 +120,7 @@ const ConsultantTermsInformation = () => {
     subData.append("companionId", companionId);
     subData.append("deviceIp", apiInfo?.IPv4);
     setProgress(true);
-    post("CompanionConsent/save", subData).then((res) => {
+    post("ReferrerConsent/save", subData).then((res) => {
       setProgress(false);
       if (res?.data?.statusCode === 200 && res?.data?.isSuccess === true) {
         addToast(res?.data?.title, {
@@ -182,7 +182,7 @@ const ConsultantTermsInformation = () => {
                 <p>
                   Please read consultant terms & Conditions here{" "}
                   <span style={{ fontSize: "16px" }}>
-                    <Link to={`/companion-declaration/${companionId}`}>
+                    <Link to={`/referrer-declaration/${companionId}`}>
                       here
                     </Link>
                   </span>

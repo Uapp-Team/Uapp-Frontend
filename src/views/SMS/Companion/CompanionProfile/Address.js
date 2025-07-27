@@ -15,7 +15,7 @@ const Address = ({ companionId, companionProfileData, referenceId }) => {
               {companionId === referenceId ||
               userType === userTypes?.SystemAdmin ||
               userType === userTypes?.Admin ? (
-                <Link to={`/companionContactInfo/${companionId}`}> Edit</Link>
+                <Link to={`/referrerContactInfo/${companionId}`}> Edit</Link>
               ) : null}
             </div>
             <hr />

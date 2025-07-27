@@ -57,7 +57,7 @@ const CompanionInvitation = () => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
+    Uget(`Referrer/get-active-status/${referenceId}`).then((res) => {
       console.log(res?.data);
       setActive(res?.data);
     });
@@ -70,7 +70,7 @@ const CompanionInvitation = () => {
   useEffect(() => {
     if (!isTyping) {
       get(
-        `CompanionInvitation/for-own?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}`
+        `ReferrerInvitation/for-own?&page=${currentPage}&pageSize=${dataPerPage}&fromdate=${fromDate}&todate=${toDate}&status=${statusValue}&email=${searchStr}`
       ).then((res) => {
         console.log(res);
         setData(res?.models);
@@ -117,7 +117,7 @@ const CompanionInvitation = () => {
     } else {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionInvitation/Invite/${email}`, subData).then((action) => {
+      post(`ReferrerInvitation/Invite/${email}`, subData).then((action) => {
         setButtonStatus(false);
         setProgress(false);
         setSuccess(!success);

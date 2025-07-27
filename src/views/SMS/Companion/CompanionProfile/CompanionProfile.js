@@ -21,18 +21,19 @@ const CompanionProfile = () => {
   const userId = companionId ? companionId : referenceId;
 
   useEffect(() => {
-    Uget(`Companion/get-by/${userId}`).then((res) => {
+    Uget(`Referrer/get-by/${userId}`).then((res) => {
       setCompanionProfileData(res);
     });
   }, [userId]);
   return (
     <div>
       <BreadCrumb
-        title="Companion
+        title="Referrer
        Profile"
         backTo=""
         path="/"
       />
+
       <Row>
         <Col md="8">
           <CompanionBanner

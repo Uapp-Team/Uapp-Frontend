@@ -16,7 +16,7 @@ const Navigation = ({ title, activetab, companionId, success, action }) => {
   }, [success, activetab]);
 
   useEffect(() => {
-    get(`CompanionNavbar/GetNavbar/${companionId}`).then((res) => {
+    get(`ReferrerNavbar/GetNavbar/${companionId}`).then((res) => {
       setActivity(res);
     });
   }, [companionId, success]);
@@ -29,37 +29,37 @@ const Navigation = ({ title, activetab, companionId, success, action }) => {
     setcurrentTab(tab);
 
     if (tab === "1") {
-      history.push(`/companionPersonalInfo/${companionId}`);
+      history.push(`/referrerPersonalInfo/${companionId}`);
     }
 
     if (tab === "2") {
-      history.push(`/companionContactInfo/${companionId}`);
+      history.push(`/referrerContactInfo/${companionId}`);
     }
 
     if (tab === "3") {
-      history.push(`/companionEmergencyInfo/${companionId}`);
+      history.push(`/referrerEmergencyInfo/${companionId}`);
     }
 
     if (tab === "4") {
-      history.push(`/companionEligibilityInfo/${companionId}`);
+      history.push(`/referrerEligibilityInfo/${companionId}`);
     }
 
     if (tab === "5") {
-      history.push(`/companionBankInfo/${companionId}`);
+      history.push(`/referrerBankInfo/${companionId}`);
     }
     if (tab === "6") {
-      history.push(`/companionCommission/${companionId}`);
+      history.push(`/referrerCommission/${companionId}`);
     }
     if (tab === "7") {
-      history.push(`/companionTerms/${companionId}`);
+      history.push(`/referrerTerms/${companionId}`);
     }
   };
   return (
     <>
       <BreadCrumb
         title={title}
-        backTo={userType === userTypes?.Companion ? null : "Companion"}
-        path={`/companion-list`}
+        backTo={userType === userTypes?.Companion ? null : "Referrer"}
+        path={`/referrer-list`}
       />
 
       <Nav tabs>
@@ -69,7 +69,7 @@ const Navigation = ({ title, activetab, companionId, success, action }) => {
             onClick={() => navigateTo("1")}
             disabled={!activity?.openDetails}
           >
-            Companion Details
+            Referrer Details
           </NavLink>
         </NavItem>
 

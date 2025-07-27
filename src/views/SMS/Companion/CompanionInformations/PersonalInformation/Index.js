@@ -58,7 +58,7 @@ const PersonalInformation = () => {
   const userTypeId = localStorage.getItem("userType");
   const [companionParent, setCompanionParent] = useState([]);
   const [companionParentLabel, setCompanionParentLabel] = useState(
-    "Select Parent Companion"
+    "Select Parent Referrer"
   );
   const [companionParentValue, setCompanionParentValue] = useState(0);
   const [parentError, setParentError] = useState(false);
@@ -145,13 +145,13 @@ const PersonalInformation = () => {
       setConsultant(res);
     });
 
-    get(`CompanionDD/Index/${consultantValue}`).then((res) => {
+    get(`ReferrerDD/Index/${consultantValue}`).then((res) => {
       setCompanionParent(res);
     });
   }, [branchValue, consultantValue]);
 
   useEffect(() => {
-    Uget(`Companion/get-by/${companionId}`).then((res) => {
+    Uget(`Referrer/get-by/${companionId}`).then((res) => {
       console.log("personalInfo", res?.data);
       setCompanionPersonalInfo(res);
       setBranchValue(res?.data?.branchId == null ? 0 : res?.data?.branchId);
@@ -163,7 +163,7 @@ const PersonalInformation = () => {
       );
       setCompanionParentLabel(
         res?.data?.parentCompanionName == ""
-          ? "Select Parent Companion"
+          ? "Select Parent Referrer"
           : res?.data?.parentCompanionName
       );
       setconsultantLabel(
@@ -391,7 +391,7 @@ const PersonalInformation = () => {
     if (IsFormValid()) {
       setButtonStatus(true);
       setProgress(true);
-      post("Companion/update", subdata).then((res) => {
+      post("Referrer/update", subdata).then((res) => {
         setProgress(false);
         setSuccess(!success);
         addToast(res?.data?.title, {
@@ -405,7 +405,7 @@ const PersonalInformation = () => {
           setFileList2([]);
         }
         setButtonStatus(false);
-        history.push(`/companionContactInfo/${companionId}`);
+        history.push(`/referrerContactInfo/${companionId}`);
       });
     }
   };

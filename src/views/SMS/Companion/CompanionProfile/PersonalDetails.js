@@ -21,7 +21,7 @@ const PersonalDetails = ({
             {companionId === referenceId ||
             userType === userTypes?.SystemAdmin ||
             userType === userTypes?.Admin ? (
-              <Link to={`/companionPersonalInfo/${companionId}`}> Edit</Link>
+              <Link to={`/referrerPersonalInfo/${companionId}`}> Edit</Link>
             ) : null}
           </td>
         </thead>

@@ -58,7 +58,7 @@ const NavbarUser = () => {
       );
 
       get(
-        `BecomeCompanion/CanSwitchToCompanion/${userInfo?.displayEmail}`
+        `BecomeReferrer/CanSwitchToCompanion/${userInfo?.displayEmail}`
       ).then((res) => {
         setIsCompanion(res);
       });
@@ -72,7 +72,7 @@ const NavbarUser = () => {
       });
 
       get(
-        `BecomeCompanion/CanSwitchToCompanion/${userInfo?.displayEmail}`
+        `BecomeReferrer/CanSwitchToCompanion/${userInfo?.displayEmail}`
       ).then((res) => {
         setIsCompanion(res);
       });
@@ -85,7 +85,7 @@ const NavbarUser = () => {
         }
       );
 
-      get(`BecomeCompanion/CanSwitchToStudent/${userInfo?.displayEmail}`).then(
+      get(`BecomeReferrer/CanSwitchToStudent/${userInfo?.displayEmail}`).then(
         (res) => {
           setIsStudent(res);
         }

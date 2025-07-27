@@ -107,7 +107,7 @@ const ConsultantByCompanion = () => {
   }, [currentPage, dataPerPage, id, referenceId, success]);
 
   useEffect(() => {
-    get(`CompanionTeamInvitation?consultantid=${referenceId}`).then(
+    get(`ReferrerTeamInvitation?consultantid=${referenceId}`).then(
       (action) => {
         setInvitationList(action);
 
@@ -150,7 +150,7 @@ const ConsultantByCompanion = () => {
   const componentRef = useRef();
 
   const handleCompanionView = (companionId) => {
-    history.push(`/companion-profile/${companionId}`);
+    history.push(`/referrer-profile/${companionId}`);
   };
 
   // for hide/unhide column
@@ -164,8 +164,8 @@ const ConsultantByCompanion = () => {
 
   const handleAddCompanion = () => {
     id
-      ? history.push(`/companion-registrationByCons/${id}`)
-      : history.push(`/companion-registration`);
+      ? history.push(`/referrer-registrationByCons/${id}`)
+      : history.push(`/referrer-registration`);
   };
 
   const handleCompanionSubmit = (event) => {
@@ -182,7 +182,7 @@ const ConsultantByCompanion = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
+        `ReferrerTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
         subData
       ).then((action) => {
         setButtonStatus(false);
@@ -474,7 +474,7 @@ const ConsultantByCompanion = () => {
                           <td className="cursor-pointer hyperlink-hover">
                             <Link
                               className="text-id hover"
-                              to={`/companion-profile/${companion?.id}`}
+                              to={`/referrer-profile/${companion?.id}`}
                             >
                               {companion?.viewId}
                             </Link>
@@ -486,7 +486,7 @@ const ConsultantByCompanion = () => {
                             <div className="cursor-pointer hyperlink-hover">
                               <Link
                                 className="text-id hover"
-                                to={`/companion-profile/${companion?.id}`}
+                                to={`/referrer-profile/${companion?.id}`}
                               >
                                 {companion?.name}
                               </Link>
@@ -536,7 +536,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-first"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-Invitation-list/${companion?.id}`
+                                    `/referrer-Invitation-list/${companion?.id}`
                                   );
                                 }}
                               >
@@ -553,7 +553,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-fifth-no-pointer"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-lead-List/${companion?.id}`
+                                    `/referrer-lead-List/${companion?.id}`
                                   );
                                 }}
                               >
@@ -569,7 +569,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-sixth-no-pointer"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-student-List/${companion?.id}`
+                                    `/referrer-student-List/${companion?.id}`
                                   );
                                 }}
                               >
@@ -586,7 +586,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-second"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-team-List/${companion?.id}`
+                                    `/referrer-team-List/${companion?.id}`
                                   );
                                 }}
                               >

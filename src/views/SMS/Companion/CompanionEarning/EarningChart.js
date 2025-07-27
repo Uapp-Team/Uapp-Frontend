@@ -7,7 +7,7 @@ const EarningChart = () => {
   const referenceId = localStorage.getItem("referenceId");
 
   useEffect(() => {
-    get(`CompanionTransactoin/Graph?companionid=${referenceId}`).then((res) => {
+    get(`ReferrerTransactoin/Graph?companionid=${referenceId}`).then((res) => {
       setdata(res);
     });
   }, [referenceId]);
