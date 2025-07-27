@@ -351,7 +351,29 @@ const EligibilityForm = ({
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {idPassportFile !== null ? (
+                  <>
+                    {isIdPassportApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isIdPassportApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
 
           <FormGroup row className="has-icon-left position-relative">
@@ -438,7 +460,29 @@ const EligibilityForm = ({
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {proofOfAddressFile !== null ? (
+                  <>
+                    {isProofOfAddressApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isProofOfAddressApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
 
           {uniCountryValue === uniCountryValue2 ? null : (
@@ -526,7 +570,29 @@ const EligibilityForm = ({
                     </Col>
                   ) : null}
                 </>
-              ) : null}
+              ) : (
+                <>
+                  {brpFile !== null ? (
+                    <>
+                      {isBrpApproved === null ? (
+                        <>
+                          <p className="d-flex align-items-center text-warning font-weight-bold">
+                            In Review
+                          </p>
+                        </>
+                      ) : isBrpApproved === true ? (
+                        <p className="d-flex align-items-center text-success font-weight-bold">
+                          Approved
+                        </p>
+                      ) : (
+                        <p className="d-flex align-items-center text-danger font-weight-bold">
+                          Rejected (Need valid document)
+                        </p>
+                      )}
+                    </>
+                  ) : null}
+                </>
+              )}
             </FormGroup>
           )}
           <FormGroup row className="has-icon-left position-relative">
@@ -613,7 +679,29 @@ const EligibilityForm = ({
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {cvFile !== null ? (
+                  <>
+                    {isCvApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isCvApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
           <FormGroup row className="has-icon-left position-relative">
             <Col md="3" className="text-md-right">
@@ -700,7 +788,29 @@ const EligibilityForm = ({
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {bacFile !== null ? (
+                  <>
+                    {isBacApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isBacApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />
