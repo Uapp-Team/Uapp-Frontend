@@ -16,7 +16,7 @@ import { userTypes } from "../../../../../constants/userTypeConstant";
 
 const Registration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const { companionId, id } = useParams();
+  const { referrerId, id } = useParams();
   const userId = localStorage.getItem("referenceId");
   const current_user = JSON.parse(localStorage.getItem("current_user"));
 
@@ -26,7 +26,7 @@ const Registration = () => {
     "Select Parent Referrer"
   );
   const [companionParentValue, setCompanionParentValue] = useState(
-    companionId ? companionId : 0
+    referrerId ? referrerId : 0
   );
   // const [typeLabel, setTypeLabel] = useState("Select Affiliate Type");
   // const [typeValue, setTypeValue] = useState(0);
@@ -88,12 +88,12 @@ const Registration = () => {
   useEffect(() => {
     get(`ReferrerDD/Index/${consultantValue}`).then((res) => {
       setCompanionParent(res);
-      if (companionId) {
-        const result = res?.find((ans) => ans?.id.toString() === companionId);
+      if (referrerId) {
+        const result = res?.find((ans) => ans?.id.toString() === referrerId);
         setCompanionParentLabel(result?.name);
       }
     });
-  }, [companionId, consultantValue]);
+  }, [referrerId, consultantValue]);
 
   const branchOptions = branch?.map((b) => ({
     label: b.name,
@@ -215,7 +215,7 @@ const Registration = () => {
       isValid = false;
     }
 
-    if (!companionId && consultantValue === 0) {
+    if (!referrerId && consultantValue === 0) {
       setConsultantError(true);
       isValid = false;
     }
@@ -285,8 +285,8 @@ const Registration = () => {
           } else {
             setIsModalOpen(true);
             setRegisterId(res?.data?.result);
-            !companionId && setCompanionParentValue(0);
-            !companionId && setCompanionParentLabel("Select Parent Companion");
+            !referrerId && setCompanionParentValue(0);
+            !referrerId && setCompanionParentLabel("Select Parent Companion");
             setTitleValue(0);
             setFirstName("");
             setLastName("");
@@ -301,12 +301,12 @@ const Registration = () => {
 
   const ToConsultantList = () => {
     history.push("/referrer-list");
-   };
+  };
 
   const goToProfile = () => {
-    companionId && userType === userTypes?.SystemAdmin
-      ? history.push(`/referrer-team-List/${companionId}`)
-      : companionId
+    referrerId && userType === userTypes?.SystemAdmin
+      ? history.push(`/referrer-team-List/${referrerId}`)
+      : referrerId
       ? history.push(`/referrer-team-List`)
       : history.push(`/referrerPersonalInfo/${registerId}`);
   };
@@ -322,8 +322,8 @@ const Registration = () => {
       ) : (
         <BreadCrumb
           title="Add Referrer"
-          backTo={companionId ? "My Team List" : "Referrer List"}
-          path={companionId ? "/referrer-team-List" : "/referrer-list"}
+          backTo={referrerId ? "My Team List" : "Referrer List"}
+          path={referrerId ? "/referrer-team-List" : "/referrer-list"}
         />
       )}
 
@@ -342,7 +342,7 @@ const Registration = () => {
             </div>
             <Row>
               <Col lg="6" md="6">
-                {!companionId && (
+                {!referrerId && (
                   <>
                     {userType === userTypes?.SystemAdmin.toString() ? (
                       <FormGroup className="has-icon-left position-relative">
@@ -370,7 +370,7 @@ const Registration = () => {
                   </>
                 )}
 
-                {!companionId && (
+                {!referrerId && (
                   <>
                     {" "}
                     {userType === userTypes?.Consultant.toString() ? (
@@ -434,12 +434,12 @@ const Registration = () => {
                   </>
                 )}
 
-                {companionId ? (
+                {referrerId ? (
                   <input
                     type="hidden"
-                    name="parentCompanionId"
-                    id="parentCompanionId"
-                    value={companionId}
+                    name="parentreferrerId"
+                    id="parentreferrerId"
+                    value={referrerId}
                   />
                 ) : (
                   <>
@@ -459,9 +459,9 @@ const Registration = () => {
                           onChange={(opt) =>
                             selectParentCompanion(opt.label, opt.value)
                           }
-                          name="parentCompanionId"
-                          id="parentCompanionId"
-                          isDisabled={companionId ? true : false}
+                          name="parentreferrerId"
+                          id="parentreferrerId"
+                          isDisabled={referrerId ? true : false}
                         />
 
                         {parentError && (
@@ -611,7 +611,7 @@ const Registration = () => {
         buttonStatus={buttonStatus}
         progress={progress}
         noText="Add Another"
-        yesText={companionId ? "Return" : "Complete Profile"}
+        yesText={referrerId ? "Return" : "Complete Profile"}
         cancel={() => setIsModalOpen(false)}
         confirm={goToProfile}
       />

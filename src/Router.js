@@ -2192,7 +2192,7 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
-                  <AppRoute     
+                  <AppRoute
                     path="/referrer-list"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
@@ -2209,7 +2209,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                   path="/referrer-registrationby/:refererId"
+                    path="/referrer-registrationby/:referrerId"
                     component={
                       permissions?.includes(permissionList?.View_Consultant)
                         ? CompanionListRegistration
