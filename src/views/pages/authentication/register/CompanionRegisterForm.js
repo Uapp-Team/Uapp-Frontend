@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, FormGroup, Input, Label } from "reactstrap";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupText,
+  Label,
+} from "reactstrap";
 import { connect } from "react-redux";
 import { signupWithJWT } from "../../../../redux/actions/auth/registerActions";
 import { rootUrl } from "../../../../constants/constants";
@@ -43,6 +52,9 @@ const CompanionRegisterForm = () => {
   const [phoneNumber, setphoneNumber] = useState("");
   const [emailExistError, setEmailExistError] = useState(true);
   const [valid, setValid] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
 
   useEffect(() => {
     setParameter(invitationcode);
@@ -145,18 +157,43 @@ const CompanionRegisterForm = () => {
   };
 
   const handlePassword = (e) => {
-    setPassword(e.target.value);
-    if (e.target.value === "") {
-      setPasswordError("Provide a valid password");
+    const password = e.target.value;
+    setPassword(password);
+    const errors = [];
+    if (password === "") {
+      errors.push("Password is required");
+    } else {
+      if (password.length < 8) {
+        errors.push("At least 8 characters");
+      }
+      if (!/[A-Z]/.test(password)) {
+        errors.push("One uppercase letter");
+      }
+      if (!/[a-z]/.test(password)) {
+        errors.push("One lowercase letter");
+      }
+      if (!/\d/.test(password)) {
+        errors.push("One number");
+      }
+      if (!/[@$!%*?&]/.test(password)) {
+        errors.push("One special character");
+      }
+    }
+    if (errors.length > 0) {
+      setPasswordError(errors.join(" & "));
     } else {
       setPasswordError("");
     }
-    // if (confirmPassword && e.target.value !== confirmPassword) {
-    //   setPasswordError("Password doesn't match");
-    // } else {
-    //   setPasswordError("");
-    // }
   };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevState) => !prevState);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible((prevState) => !prevState);
+  };
+
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
     if (e.target.value === "") {
@@ -249,23 +286,21 @@ const CompanionRegisterForm = () => {
       //   },
       //   body: subData,
       // })
-      axios
-        .post(`${rootUrl}CompanionRegister/Register`, subData)
-        .then((res) => {
-          if (res?.data?.isSuccess == true) {
-            console.log("data", res);
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            history.push("/companionAccountCreated");
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
+      axios.post(`${rootUrl}ReferrerRegister/Register`, subData).then((res) => {
+        if (res?.data?.isSuccess == true) {
+          console.log("data", res);
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          history.push("/companionAccountCreated");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
     }
   };
 
@@ -416,13 +451,21 @@ const CompanionRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <Input
-              className="inside-placeholder"
-              type="password"
-              placeholder="Enter Password"
-              onChange={(e) => handlePassword(e)}
-              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            />
+            <InputGroup>
+              <Input
+                type={isPasswordVisible ? "text" : "password"}
+                placeholder="Enter Password"
+                value={password}
+                onChange={handlePassword}
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+              />
+              <InputGroupText
+                onClick={togglePasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {isPasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              </InputGroupText>
+            </InputGroup>
             <span className="text-danger">{passwordError}</span>
           </FormGroup>
         </div>
@@ -432,13 +475,28 @@ const CompanionRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            <Input
-              className="inside-placeholder"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => handleConfirmPassword(e)}
-              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            />
+            <InputGroup>
+              <Input
+                className="inside-placeholder"
+                type={isConfirmPasswordVisible ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  handleConfirmPassword(e);
+                }}
+                style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
+              />
+              <InputGroupText
+                onClick={toggleConfirmPasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {isConfirmPasswordVisible ? (
+                  <EyeOutlined />
+                ) : (
+                  <EyeInvisibleOutlined />
+                )}
+              </InputGroupText>
+            </InputGroup>
             <span className="text-danger">{confirmPasswordError}</span>
           </FormGroup>
         </div>

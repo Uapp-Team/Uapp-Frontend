@@ -32,7 +32,7 @@ class CompanionRegister extends React.Component {
             <div className="d-flex justify-content-center">
               <div className="responsive-form">
                 <div className="register-header">
-                  <h1 style={{ fontSize: "28px" }}>Become a Companion</h1>
+                  <h1 style={{ fontSize: "28px" }}>Become a Referrers</h1>
                   {/* <p>Help student to apply in appropriate university </p> */}
                 </div>
                 <div className="register-form">
