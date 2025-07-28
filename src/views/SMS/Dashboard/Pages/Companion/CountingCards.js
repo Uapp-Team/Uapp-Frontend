@@ -35,11 +35,11 @@ const CountingCards = ({ id, count, setCount }) => {
           </Col>
           <Col lg={4} sm={6} className="pb-4">
             <DashboardCount
-              title="Total Application"
+              title="In Progress"
               value={count?.inProgress}
               bgColor="#FBF5E8"
               borderColor="#FFBA08"
-              link="/applications"
+              link="/referrer-Invitation"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">

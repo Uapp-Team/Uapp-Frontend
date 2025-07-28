@@ -336,7 +336,7 @@ const Registration = () => {
               <img style={{ height: "100%" }} src={icon_info} alt="" />{" "}
               <div className="pl-3">
                 <span>
-                  Provide Information Below To Create Companion Account.
+                  Provide Information Below To Create Referrer Account.
                 </span>
               </div>
             </div>
