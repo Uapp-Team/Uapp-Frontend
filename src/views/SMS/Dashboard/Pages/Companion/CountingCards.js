@@ -39,7 +39,7 @@ const CountingCards = ({ id, count, setCount }) => {
               value={count?.inProgress}
               bgColor="#FBF5E8"
               borderColor="#FFBA08"
-              link="/referrer-Invitation"
+              link="/applications"
             />
           </Col>
           <Col lg={4} sm={6} className="pb-4">

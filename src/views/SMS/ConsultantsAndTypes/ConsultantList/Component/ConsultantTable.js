@@ -95,7 +95,7 @@ const ConsultantTable = ({
             {tableData[10]?.isActive ? <th>Applications</th> : null}
             {tableData[11]?.isActive ? <th>Associates</th> : null}
             {tableData[12]?.isActive ? <th>Affiliates</th> : null}
-            {tableData[13]?.isActive ? <th>Companions</th> : null}
+            {tableData[13]?.isActive ? <th>Referrers</th> : null}
 
             {/* {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus

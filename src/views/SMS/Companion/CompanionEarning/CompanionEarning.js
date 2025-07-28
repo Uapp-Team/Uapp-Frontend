@@ -115,11 +115,16 @@ const CompanionEarning = () => {
         setProgress(false);
         if (res.status === 200 && res.data.isSuccess === true) {
           addToast(res?.data?.message, {
-            appearance: res?.data?.isSuccess === true ? "success" : "error",
+            appearance: "success",
             autoDismiss: true,
           });
           setIsOpen(!isOpen);
           setSuccess(!success);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
         }
       });
     }

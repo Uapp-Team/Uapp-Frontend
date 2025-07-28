@@ -275,8 +275,8 @@ const CompanionMyTeamList = () => {
     <div>
       <BreadCrumb
         title="My Team"
-        backTo="Referrer List"
-         path="/referrer-list"
+        backTo={userTypeId == 19 ? "My Team" : "Referrer List"}
+        path={userTypeId == 19 ? "/referrer-team-List" : "/referrer-list"}
       />
       <Card className="uapp-employee-search zindex-100">
         <CardBody>

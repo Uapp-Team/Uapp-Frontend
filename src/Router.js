@@ -5757,7 +5757,7 @@ class AppRouter extends React.Component {
                     fullLayout
                   />
                   <AppRoute
-                    path="/companion-Register/:invitationcode?"
+                    path="/referrer-Register/:invitationcode?"
                     component={CompanionRegister}
                     fullLayout
                   />
