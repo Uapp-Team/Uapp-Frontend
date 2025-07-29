@@ -16,9 +16,10 @@ import remove from "../../../../helpers/remove";
 import get from "../../../../helpers/get";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
-import CompanionColumnHide from "../CompanionList/CompanionColumnHide";
+
 import CompanionMyTeamTable from "./CompanionMyTeamTable";
 import Uget from "../../../../helpers/Uget";
+import CompanionColumnHide from "./CompanionColumnHide";
 
 const CompanionMyTeamList = () => {
   const [statusType, setStatusType] = useState([]);

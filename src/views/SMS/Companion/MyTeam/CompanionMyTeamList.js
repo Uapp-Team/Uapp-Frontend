@@ -28,12 +28,13 @@ import remove from "../../../../helpers/remove";
 import get from "../../../../helpers/get";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
-import CompanionColumnHide from "../CompanionList/CompanionColumnHide";
+
 import CompanionMyTeamTable from "./CompanionMyTeamTable";
 import Uget from "../../../../helpers/Uget";
 import ButtonForFunction from "../../Components/ButtonForFunction";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import CompanionColumnHide from "./CompanionColumnHide";
 
 const CompanionMyTeamList = () => {
   const [statusType, setStatusType] = useState([]);
@@ -119,13 +120,11 @@ const CompanionMyTeamList = () => {
   }, [referenceId]);
 
   useEffect(() => {
-    get(`ReferrerTeamInvitation?&companionid=${referenceId}`).then(
-      (action) => {
-        setInvitationList(action);
+    get(`ReferrerTeamInvitation?&companionid=${referenceId}`).then((action) => {
+      setInvitationList(action);
 
-        console.log(action, "emergency");
-      }
-    );
+      console.log(action, "emergency");
+    });
   }, [referenceId, success]);
 
   useEffect(() => {

@@ -29,6 +29,7 @@ import Loader from "../../../Search/Loader/Loader";
 import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCrop";
 import Filter from "../../../../../components/Dropdown/Filter";
 import { consultantTier } from "../../../../../constants/presetData";
+import bacCertImg from "../../../../../assets/img/bac-cert.svg";
 
 const ProfileHeadCard = ({ id, status = false }) => {
   const userType = localStorage.getItem("userType");
@@ -312,7 +313,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
                   <Col>
                     <div className="uapp-employee-profile-image">
                       <div className="text-left">
-                        <div className="profile-pic">
+                        <div className="profile-pic position-relative d-inline-block">
                           {headData?.consultantProfileImageMedia == null ? (
                             <img
                               className="empProfileImg bg-white"
@@ -327,6 +328,21 @@ const ProfileHeadCard = ({ id, status = false }) => {
                                 headData?.consultantProfileImageMedia?.fileUrl
                               }
                               alt="img-desc"
+                            />
+                          )}
+
+                          {headData?.isBacCertificateApproved === true && (
+                            <img
+                              src={bacCertImg}
+                              alt="certification"
+                              className="position-absolute"
+                              style={{
+                                width: "60px",
+                                bottom: "-70px",
+                                left: "50%",
+                                border: "none",
+                                transform: "translateX(-50%)",
+                              }}
                             />
                           )}
 

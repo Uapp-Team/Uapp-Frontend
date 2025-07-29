@@ -5,6 +5,7 @@ import { rootUrl } from "../../../../../constants/constants";
 import { userTypes } from "../../../../../constants/userTypeConstant";
 import { useHistory } from "react-router-dom";
 import profileImage from "../../../../../assets/img/profile/user-uploads/user-07.jpg";
+import bacCertImg from "../../../../../assets/img/bac-cert.svg";
 
 const ParentConsultant = ({ id }) => {
   const [consultantData, setConsultantData] = useState({});
@@ -29,36 +30,44 @@ const ParentConsultant = ({ id }) => {
     <>
       {consultantData === null ? null : (
         <Card className="p-4">
-          <div className="d-flex justify-between-start">
-            <div className="pr-3">
-              {consultantData?.consultantProfileImageMedia == null ? (
+          <div className="d-flex align-items-center">
+            <div
+              className="position-relative d-inline-block"
+              style={{ width: "120px", height: "120px" }}
+            >
+              <img
+                src={
+                  consultantData?.consultantProfileImageMedia == null
+                    ? profileImage
+                    : rootUrl +
+                      consultantData?.consultantProfileImageMedia?.fileUrl
+                }
+                alt="profile_img"
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+
+              {consultantData?.isBacCertificateApproved === true && (
                 <img
-                  src={profileImage}
-                  alt="profile_img"
+                  src={bacCertImg}
+                  alt="certification"
+                  className="position-absolute"
                   style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50px",
-                  }}
-                />
-              ) : (
-                <img
-                  src={
-                    rootUrl +
-                    consultantData?.consultantProfileImageMedia?.fileUrl
-                  }
-                  alt="profile_img"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50px",
+                    width: "60px",
+                    bottom: "-15px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
                   }}
                 />
               )}
             </div>
-            <div>
-              {" "}
-              <h5>
+
+            <div className="ml-4 std-cons-parent">
+              <h5 className="word-break">
                 {userTypeId === userTypes?.SystemAdmin.toString() ||
                 userTypeId === userTypes?.Admin.toString() ? (
                   <span
@@ -81,16 +90,10 @@ const ParentConsultant = ({ id }) => {
                   {consultantData?.parentConsultant}{" "}
                 </p>
               )} */}
-              <p> Parent Consultant</p>
-            </div>
-          </div>
-
-          <Row>
-            <Col>
-              <ul className="uapp-ul">
+              <p className="mb-1"> Consultant </p>
+              <ul className="std-parent-cons word-break">
                 {consultantData?.email === null ? null : (
                   <li>
-                    {" "}
                     <i className="far fa-envelope pr-2"></i>{" "}
                     {consultantData?.email}{" "}
                   </li>
@@ -98,14 +101,13 @@ const ParentConsultant = ({ id }) => {
 
                 {consultantData?.phoneNumber === null ? null : (
                   <li>
-                    {" "}
                     <i className="fas fa-phone pr-2"></i>{" "}
                     {consultantData?.phoneNumber}{" "}
                   </li>
                 )}
               </ul>
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Card>
       )}
     </>

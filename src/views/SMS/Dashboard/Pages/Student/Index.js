@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Col, Row } from "reactstrap";
+import { Card, Col, Row } from "reactstrap";
 import profileImage from "../../../../../assets/img/profile/user-uploads/user-07.jpg";
 import { rootUrl } from "../../../../../constants/constants";
 import get from "../../../../../helpers/get";
@@ -10,6 +10,7 @@ import UserNotices from "../../Component/UserNotices";
 import ApplicationList from "./Components/ApplicationList";
 import Department from "./Components/Department";
 import BecomeConsultant from "../../../../../components/ui/BecomeConsultant";
+import bacCertImg from "../../../../../assets/img/bac-cert.svg";
 
 const Student = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -221,46 +222,71 @@ const Student = () => {
           <Department />
         </div>
         <div className="col-md-4">
-          <div className="custom-card-border p-4 mb-3 ">
-            <div className="d-flex justify-content-between">
-              <Row>
-                <Col md="3">
-                  <div className="user-profile-pic">
-                    {consultantData?.consultantProfileImageMedia == null ? (
-                      <img src={profileImage} alt="profile_img" />
-                    ) : (
-                      <img
-                        src={
-                          rootUrl +
-                          consultantData?.consultantProfileImageMedia?.fileUrl
-                        }
-                        alt="profile_img"
-                      />
-                    )}
-                  </div>
-                </Col>
-                <Col md="9">
-                  <div>
-                    <h5>Consultant</h5>
+          <Card className="p-4">
+            <div className="d-flex align-items-center">
+              <div
+                className="position-relative d-inline-block"
+                style={{ width: "120px", height: "120px" }}
+              >
+                <img
+                  src={
+                    consultantData?.consultantProfileImageMedia == null
+                      ? profileImage
+                      : rootUrl +
+                        consultantData?.consultantProfileImageMedia?.fileUrl
+                  }
+                  alt="profile_img"
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
 
-                    <p>{consultantData?.fullName}</p>
-                    <ul className="uapp-ul">
-                      <li>
-                        <i className="far fa-envelope pr-2 pb-2"></i>
-                        {consultantData?.email}
-                      </li>
-                      {consultantData?.phoneNumber == null ? null : (
-                        <li>
-                          <i className="fas fa-phone pr-2"></i>+
-                          {consultantData?.phoneNumber}
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                </Col>
-              </Row>
+                {consultantData?.isBacCertificateApproved === true && (
+                  <img
+                    src={bacCertImg}
+                    alt="certification"
+                    className="position-absolute"
+                    style={{
+                      width: "60px",
+                      bottom: "-15px",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                    }}
+                  />
+                )}
+              </div>
+
+              <div className="ml-4 std-cons-parent">
+                <h5 className="word-break">
+                  <span>{consultantData?.fullName}</span>
+                </h5>
+                {/* {userTypeId === userTypes?.Consultant.toString() ? null : (
+                          <p className="text-gray-70">
+                            {consultantData?.parentConsultant}{" "}
+                          </p>
+                        )} */}
+                <p className="mb-1"> Consultant </p>
+                <ul className="std-parent-cons word-break">
+                  {consultantData?.email === null ? null : (
+                    <li>
+                      <i className="far fa-envelope pr-2"></i>{" "}
+                      {consultantData?.email}{" "}
+                    </li>
+                  )}
+
+                  {consultantData?.phoneNumber === null ? null : (
+                    <li>
+                      <i className="fas fa-phone pr-2"></i>{" "}
+                      {consultantData?.phoneNumber}{" "}
+                    </li>
+                  )}
+                </ul>
+              </div>
             </div>
-          </div>
+          </Card>
 
           {/* <Consent
             sId={referenceId}
