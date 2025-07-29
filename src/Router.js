@@ -5741,7 +5741,7 @@ class AppRouter extends React.Component {
                     fullLayout
                   />
                   <AppRoute
-                    path="/companionAccountCreated"
+                    path="/referrerAccountCreated"
                     component={CompanionAccountCreateSuccessfully}
                     fullLayout
                   />

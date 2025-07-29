@@ -239,7 +239,7 @@ const CompanionEarning = () => {
 
               <Typing
                 name="search"
-                placeholder="Email"
+                placeholder="code"
                 value={searchStr}
                 setValue={setSearchStr}
                 setIsTyping={setIsTyping}

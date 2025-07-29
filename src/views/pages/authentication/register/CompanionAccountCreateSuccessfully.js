@@ -28,7 +28,7 @@ const CompanionAccountCreateSuccessfully = () => {
                 </h1>
 
                 <p style={{ fontSize: "14px" }}>
-                  Your companion account has been created. We have send a
+                  Your referrers account has been created. We have send a
                   verification email to your email address. To continue to the
                   next steps please verify your email first.
                 </p>
