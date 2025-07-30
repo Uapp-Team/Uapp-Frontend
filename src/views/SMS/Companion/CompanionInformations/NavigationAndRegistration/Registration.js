@@ -317,7 +317,7 @@ const Registration = () => {
         <BreadCrumb
           title="Add Referrer"
           backTo="My Referrer List"
-          path={"/ConsultantByCompanionList"}
+          path={"/ConsultantByReferrerList"}
         />
       ) : (
         <BreadCrumb

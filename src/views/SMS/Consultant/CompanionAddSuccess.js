@@ -29,7 +29,7 @@ const CompanionAddSuccess = () => {
       <BreadCrumb
         title="Referrer Registration"
         backTo="My Teams"
-        path={`/ConsultantByCompanionList`}
+        path={`/ConsultantByReferrerList`}
       />
 
       <Card>
