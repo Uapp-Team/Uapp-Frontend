@@ -23,14 +23,11 @@ import UploadButton from "../../../components/buttons/UploadButton";
 
 const ConvertStudentIntoConsultantForm = () => {
   const referenceId = localStorage.getItem("referenceId");
-
   const history = useHistory();
-
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [FileList, setFileList] = useState([]);
-
   const [previewVisible2, setPreviewVisible2] = useState(false);
   const [previewImage2, setPreviewImage2] = useState("");
   const [previewTitle2, setPreviewTitle2] = useState("");

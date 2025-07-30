@@ -8,11 +8,9 @@ const StudentJoinBanner = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
 
   useEffect(() => {
-    get(`Student/CanBecomeReferrer/${currentUser?.referenceId}`).then(
-      (res) => {
-        setCanConsultant(res);
-      }
-    );
+    get(`Student/CanBecomeReferrer/${currentUser?.referenceId}`).then((res) => {
+      setCanConsultant(res);
+    });
   }, [currentUser]);
 
   return (
@@ -25,7 +23,7 @@ const StudentJoinBanner = () => {
           }}
         >
           <div className="text-center">
-            <p className="fs-14px fw-700 text-white">Companion program</p>
+            <p className="fs-14px fw-700 text-white">Referrer program</p>
             <Link to={`/becomeReferrer`}>
               <button type="button" className="save-button mb-4">
                 Join Now
