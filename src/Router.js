@@ -3670,7 +3670,7 @@ class AppRouter extends React.Component {
                     component={AffiliateAddSuccess}
                   />
                   <AppRoute
-                    path="/companionAddSuccess"
+                    path="/referrerAddSuccess"
                     component={CompanionAddSuccess}
                   />
 

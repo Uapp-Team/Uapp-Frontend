@@ -93,7 +93,7 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
+      `referrer/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
         id ? id : 0
       }`
     ).then((res) => {
@@ -107,13 +107,11 @@ const ConsultantByCompanion = () => {
   }, [currentPage, dataPerPage, id, referenceId, success]);
 
   useEffect(() => {
-    get(`ReferrerTeamInvitation?consultantid=${referenceId}`).then(
-      (action) => {
-        setInvitationList(action);
+    get(`ReferrerTeamInvitation?consultantid=${referenceId}`).then((action) => {
+      setInvitationList(action);
 
-        console.log(action, "emergency");
-      }
-    );
+      console.log(action, "emergency");
+    });
   }, [referenceId, success]);
 
   // user select data per page
@@ -217,7 +215,7 @@ const ConsultantByCompanion = () => {
     <div>
       <>
         <BreadCrumb
-          title="Companions"
+          title="Referrers"
           backTo={id === undefined ? "" : "Consultant"}
           path={id === undefined ? "" : "/consultantList"}
         />
@@ -233,7 +231,7 @@ const ConsultantByCompanion = () => {
                         func={handleAddCompanion}
                         className={"btn btn-uapp-add "}
                         icon={<i className="fas fa-plus"></i>}
-                        name={" Add Companion"}
+                        name={" Add Referrer"}
                         permission={6}
                       />
                     </div>

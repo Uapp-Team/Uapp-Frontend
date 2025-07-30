@@ -281,7 +281,7 @@ const Registration = () => {
         setButtonStatus(false);
         if (res.status === 200 && res.data.isSuccess === true) {
           if (userType === userTypes?.Consultant) {
-            history.push(`/companionAddSuccess`);
+            history.push(`/referrerAddSuccess`);
           } else {
             setIsModalOpen(true);
             setRegisterId(res?.data?.result);
@@ -316,7 +316,7 @@ const Registration = () => {
       {userType === userTypes?.Consultant ? (
         <BreadCrumb
           title="Add Referrer"
-          backTo="My Companion List"
+          backTo="My Referrer List"
           path={"/ConsultantByCompanionList"}
         />
       ) : (

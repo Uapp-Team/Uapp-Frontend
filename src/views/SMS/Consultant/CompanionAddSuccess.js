@@ -27,7 +27,7 @@ const CompanionAddSuccess = () => {
   return (
     <div>
       <BreadCrumb
-        title="Companion Registration"
+        title="Referrer Registration"
         backTo="My Teams"
         path={`/ConsultantByCompanionList`}
       />
@@ -35,7 +35,7 @@ const CompanionAddSuccess = () => {
       <Card>
         <div className="p-3">
           <h2>Success</h2>
-          <p>Kindly inform the new companion to complete their profile</p>
+          <p>Kindly inform the new referrer to complete their profile</p>
         </div>
       </Card>
     </div>
