@@ -38,7 +38,7 @@ const LeadStudentList = () => {
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [studentTypeList, setStudentTypeList] = useState([]);
   const [studentData, setStudentData] = useState([]);
-  const [companionLabel, setCompanionLabel] = useState("Select Companion");
+  const [companionLabel, setCompanionLabel] = useState("Select Referrer");
   const [companionValue, setCompanionValue] = useState(0);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState(

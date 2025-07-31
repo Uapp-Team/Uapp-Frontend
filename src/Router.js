@@ -3644,7 +3644,7 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
-                    path="/ConsultantByCompanion/:id"
+                    path="/ConsultantByReferrer/:id"
                     component={
                       permissions?.includes(permissionList?.View_Associate)
                         ? ConsultantByCompanion

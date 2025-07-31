@@ -338,9 +338,7 @@ const ConsultantTable = ({
                     <span
                       className="Count-fourth"
                       onClick={() => {
-                        history.push(
-                          `/ConsultantByCompanion/${consultant?.id}`
-                        );
+                        history.push(`/ConsultantByReferrer/${consultant?.id}`);
                       }}
                     >
                       {consultant?.companionCount}

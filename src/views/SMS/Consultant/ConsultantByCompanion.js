@@ -459,12 +459,12 @@ const ConsultantByCompanion = () => {
                       {tableData[4]?.isActive ? <th>Started</th> : null}
                       {tableData[5]?.isActive ? <th>Invitation</th> : null}
                       {tableData[6]?.isActive ? <th>Leads</th> : null}
-                      {tableData[6]?.isActive ? <th>Students</th> : null}
-                      {tableData[7]?.isActive ? <th>Team Member</th> : null}
-                      {tableData[8]?.isActive ? <th>Application</th> : null}
-                      {tableData[9]?.isActive ? <th>Registered</th> : null}
-                      {tableData[10]?.isActive ? <th>Status</th> : null}
-                      {tableData[11]?.isActive ? <th>Action</th> : null}
+                      {tableData[7]?.isActive ? <th>Students</th> : null}
+                      {tableData[8]?.isActive ? <th>Team Member</th> : null}
+                      {tableData[9]?.isActive ? <th>Application</th> : null}
+                      {tableData[10]?.isActive ? <th>Registered</th> : null}
+                      {tableData[11]?.isActive ? <th>Status</th> : null}
+                      {tableData[12]?.isActive ? <th>Action</th> : null}
                     </tr>
                   </thead>
                   <tbody>
@@ -562,7 +562,7 @@ const ConsultantByCompanion = () => {
                             </div>
                           </td>
                         ) : null}
-                        {tableData[6]?.isActive ? (
+                        {tableData[7]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -579,7 +579,7 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[7]?.isActive ? (
+                        {tableData[8]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -596,7 +596,7 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[8]?.isActive ? (
+                        {tableData[9]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -613,7 +613,7 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[9]?.isActive ? (
+                        {tableData[10]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -630,11 +630,11 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[10]?.isActive ? (
+                        {tableData[11]?.isActive ? (
                           <td>{companion?.accountStatus}</td>
                         ) : null}
 
-                        {tableData[11]?.isActive ? (
+                        {tableData[12]?.isActive ? (
                           <>
                             {" "}
                             <td style={{ width: "8%" }} className="text-center">
