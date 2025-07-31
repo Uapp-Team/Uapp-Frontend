@@ -8,8 +8,8 @@ import {
   Input,
 } from "reactstrap";
 
-import ColumnAffiliate from "../../TableColumn/ColumnAffiliate";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import ColumnCompanionsTeam from "../../TableColumn/ColumnCompanionsTeam";
 
 const CompanionColumnHide = ({
   dropdownOpen1,
@@ -22,12 +22,15 @@ const CompanionColumnHide = ({
 
   useEffect(() => {
     const tableColumnConsultant = JSON.parse(
-      localStorage.getItem("ColumnConsultant")
+      localStorage.getItem("ColumnCompanionsTeam")
     );
     tableColumnConsultant && setTableData(tableColumnConsultant);
     !tableColumnConsultant &&
-      localStorage.setItem("ColumnConsultant", JSON.stringify(ColumnAffiliate));
-    !tableColumnConsultant && setTableData(ColumnAffiliate);
+      localStorage.setItem(
+        "ColumnCompanionsTeam",
+        JSON.stringify(ColumnCompanionsTeam)
+      );
+    !tableColumnConsultant && setTableData(ColumnCompanionsTeam);
   }, [setTableData]);
 
   return (

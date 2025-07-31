@@ -113,7 +113,7 @@ const CompanionTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/companion-profile/${companion?.id}`}
+                    to={`/referrer-profile/${companion?.id}`}
                   >
                     {companion?.viewId}
                   </Link>
@@ -125,7 +125,7 @@ const CompanionTable = ({
                   <div className="cursor-pointer hyperlink-hover">
                     <Link
                       className="text-id hover"
-                      to={`/companion-profile/${companion?.id}`}
+                      to={`/referrer-profile/${companion?.id}`}
                     >
                       {companion?.name}
                     </Link>
@@ -192,7 +192,7 @@ const CompanionTable = ({
                       className="Count-first"
                       onClick={() => {
                         history.push(
-                          `/companion-Invitation-list/${companion?.id}`
+                          `/referrer-Invitation-list/${companion?.id}`
                         );
                       }}
                     >
@@ -208,7 +208,7 @@ const CompanionTable = ({
                     <span
                       className="Count-fifth-no-pointer"
                       onClick={() => {
-                        history.push(`/companion-lead-list/${companion?.id}`);
+                        history.push(`/referrer-lead-list/${companion?.id}`);
                       }}
                     >
                       {companion?.leadCount}
@@ -223,7 +223,7 @@ const CompanionTable = ({
                       className="Count-sixth-no-pointer"
                       onClick={() => {
                         history.push(
-                          `/companion-student-list/${companion?.id}`
+                          `/referrer-student-list/${companion?.id}`
                         );
                       }}
                     >
@@ -239,7 +239,7 @@ const CompanionTable = ({
                     <span
                       className="Count-second"
                       onClick={() => {
-                        history.push(`/companion-team-List/${companion?.id}`);
+                        history.push(`/referrer-team-List/${companion?.id}`);
                       }}
                     >
                       {companion?.teamMembersCount}
@@ -255,7 +255,7 @@ const CompanionTable = ({
                       className="Count-third"
                       onClick={() => {
                         history.push(
-                          `/ApplicationListByCompanion/${companion?.id}`
+                          `/ApplicationListByReferrer/${companion?.id}`
                         );
                       }}
                     >
@@ -271,7 +271,7 @@ const CompanionTable = ({
                       className="Count-fourth-no-pointer"
                       onClick={() => {
                         history.push(
-                          `/companion-applications/${2}/${3}/${companion?.id}`
+                          `/referrer-applications/${2}/${3}/${companion?.id}`
                         );
                       }}
                     >
@@ -401,7 +401,7 @@ const CompanionTable = ({
       </Modal>
 
       <ConfirmModal
-        text="Do You Want To Delete This Companion  ? Once Deleted it can't be Undone!"
+        text="Do You Want To Delete This Referrer  ? Once Deleted it can't be Undone!"
         isOpen={deleteModal}
         toggle={() => setDeleteModal(!deleteModal)}
         confirm={handleDeleteData}

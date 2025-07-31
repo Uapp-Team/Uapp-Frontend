@@ -23,11 +23,11 @@ const Commission = () => {
   const [progress, setProgress] = useState(false);
 
   useEffect(() => {
-    Uget(`CompanionCommissionLog/Index/${companionId}`).then((res) => {
+    Uget(`ReferrerCommissionLog/Index/${companionId}`).then((res) => {
       console.log(res);
       setCurrent(res?.data);
     });
-    Uget(`CompanionCommissionLog/logs/${companionId}`).then((res) => {
+    Uget(`ReferrerCommissionLog/logs/${companionId}`).then((res) => {
       console.log(res);
       setLogs(res?.data);
     });
@@ -40,7 +40,7 @@ const Commission = () => {
     if (commissionValue) {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionCommissionLog/Assign`, subData).then((res) => {
+      post(`ReferrerCommissionLog/Assign`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         setSuccess(!success);
@@ -57,10 +57,10 @@ const Commission = () => {
   };
 
   const goPrevious = () => {
-    history.push(`/companionBankInfo/${companionId}`);
+    history.push(`/referrerBankInfo/${companionId}`);
   };
   const goForward = () => {
-    history.push(`/companionTerms/${companionId}`);
+    history.push(`/referrerTerms/${companionId}`);
   };
 
   return (
@@ -99,7 +99,7 @@ const Commission = () => {
                       setLabel={setCommissionLable}
                       value={commissionValue}
                       setValue={setCommissionValue}
-                      url="CompanionCommissionSetting/SelectList"
+                      url="ReferrerCommissionSetting/SelectList"
                       name="commissionSettingId"
                       error={commissionError}
                       setError={setCommissionError}

@@ -18,7 +18,7 @@ const BankDetails = ({ companionProfileData, companionId, referenceId }) => {
             {companionId === referenceId ||
             userType === userTypes?.SystemAdmin ||
             userType === userTypes?.Admin ? (
-              <Link to={`/companionBankInfo/${companionId}`}> Edit</Link>
+              <Link to={`/referrerBankInfo/${companionId}`}> Edit</Link>
             ) : null}
           </td>
         </thead>

@@ -87,7 +87,7 @@ const CompanionMyTeamTable = ({
                 <td className="cursor-pointer hyperlink-hover">
                   <Link
                     className="text-id hover"
-                    to={`/companion-profile/${companionTeam?.id}`}
+                    to={`/referrer-profile/${companionTeam?.id}`}
                   >
                     {companionTeam?.uappId}
                   </Link>
@@ -99,7 +99,7 @@ const CompanionMyTeamTable = ({
                   <div className="cursor-pointer hyperlink-hover">
                     <Link
                       className="text-id hover"
-                      to={`/companion-profile/${companionTeam?.id}`}
+                      to={`/referrer-profile/${companionTeam?.id}`}
                     >
                       {companionTeam?.name}
                     </Link>
@@ -147,7 +147,7 @@ const CompanionMyTeamTable = ({
                       className="Count-first"
                       onClick={() => {
                         history.push(
-                          `/companion-Invitation-list/${companionTeam?.id}`
+                          `/referrer-Invitation-list/${companionTeam?.id}`
                         );
                       }}
                     >
@@ -164,7 +164,7 @@ const CompanionMyTeamTable = ({
                       className="Count-fifth-no-pointer"
                       onClick={() => {
                         history.push(
-                          `/companion-lead-list/${companionTeam?.id}`
+                          `/referrer-lead-list/${companionTeam?.id}`
                         );
                       }}
                     >
@@ -180,7 +180,7 @@ const CompanionMyTeamTable = ({
                       className="Count-sixth-no-pointer"
                       onClick={() => {
                         history.push(
-                          `/companion-student-list/${companionTeam?.id}`
+                          `/referrer-student-list/${companionTeam?.id}`
                         );
                       }}
                     >
@@ -197,7 +197,7 @@ const CompanionMyTeamTable = ({
                       className="Count-second"
                       onClick={() => {
                         history.push(
-                          `/companion-team-List/${companionTeam?.id}`
+                          `/referrer-team-List/${companionTeam?.id}`
                         );
                       }}
                     >

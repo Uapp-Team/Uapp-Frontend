@@ -16,7 +16,7 @@ const TeamCommission = () => {
   const [registrationAmounttError, setregistrationAmountError] = useState("");
 
   useEffect(() => {
-    get(`CompanionTeamCommission`).then((res) => {
+    get(`ReferrerTeamCommission`).then((res) => {
       console.log(res);
       setPercent(res?.percentage);
       setregistrationAmount(res?.registrationAmount);
@@ -90,7 +90,7 @@ const TeamCommission = () => {
     if (formIsValid) {
       setButtonStatus(true);
       setProgress(true);
-      post(`CompanionTeamCommission`, subData).then((res) => {
+      post(`ReferrerTeamCommission`, subData).then((res) => {
         setProgress(false);
         setButtonStatus(false);
         if (res?.status == 200 && res?.data?.isSuccess == true) {

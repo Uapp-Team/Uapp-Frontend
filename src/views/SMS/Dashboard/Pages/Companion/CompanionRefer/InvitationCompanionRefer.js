@@ -15,27 +15,47 @@ const InvitationCompanionRefer = ({
   modalClose,
   userViewId,
 }) => {
-  const [Name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const { addToast } = useToasts();
   const [success, setSuccess] = useState(false);
 
+  const handleEmailError = (e) => {
+    setEmail(e.target.value);
+    if (e.target.value === "") {
+      setEmailError("Email is required");
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
+    ) {
+      setEmailError("Email is not valid");
+    } else {
+      setEmailError("");
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    post(`CompanionInvitation/Invite/${Name}`).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess == true) {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: "true",
-        });
-        setSuccess(!success);
-        setName("");
-      } else {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: "error",
-        });
-      }
-    });
+    if (!email) {
+      setEmailError("Email is required");
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      setEmailError("Email is not Valid");
+    } else {
+      post(`ReferrerInvitation/Invite/${email}`).then((res) => {
+        if (res?.status === 200 && res?.data?.isSuccess == true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: "true",
+          });
+          setSuccess(!success);
+          setEmail("");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: "error",
+          });
+        }
+      });
+    }
   };
 
   // useEffect(() => {
@@ -108,10 +128,13 @@ const InvitationCompanionRefer = ({
                         type="email"
                         name="name"
                         id="name"
-                        value={Name}
+                        value={email}
                         placeholder="Enter email"
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => {
+                          handleEmailError(e);
+                        }}
                       />
+                      <span className="text-danger">{emailError}</span>
                     </Col>
                   </FormGroup>
 

@@ -32,10 +32,10 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
 import CancelButton from "../../../components/buttons/CancelButton.js";
 import SaveButton from "../../../components/buttons/SaveButton.js";
 import PopOverText from "../../../components/PopOverText";
-import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 import Uget from "../../../helpers/Uget.js";
 import { dateFormate } from "../../../components/date/calenderFormate.js";
 import { userTypes } from "../../../constants/userTypeConstant.js";
+import ColumnConsultantByReferrer from "../TableColumn/ColumnConsultantByReferrer.js";
 
 const ConsultantByCompanion = () => {
   const associates = JSON.parse(sessionStorage.getItem("associates"));
@@ -69,16 +69,18 @@ const ConsultantByCompanion = () => {
   const [popoverOpen, setPopoverOpen] = useState("");
 
   useEffect(() => {
-    const tableColumnAssociates = JSON.parse(
-      localStorage.getItem("ColumnAssociates")
+    const tableColumnConsultantByReferrer = JSON.parse(
+      localStorage.getItem("ColumnConsultantByReferrer")
     );
-    tableColumnAssociates && setTableData(tableColumnAssociates);
-    !tableColumnAssociates &&
+    tableColumnConsultantByReferrer &&
+      setTableData(tableColumnConsultantByReferrer);
+    !tableColumnConsultantByReferrer &&
       localStorage.setItem(
-        "ColumnAssociates",
-        JSON.stringify(ColumnAssociates)
+        "ColumnConsultantByReferrer",
+        JSON.stringify(ColumnConsultantByReferrer)
       );
-    !tableColumnAssociates && setTableData(ColumnAssociates);
+    !tableColumnConsultantByReferrer &&
+      setTableData(ColumnConsultantByReferrer);
   }, []);
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const ConsultantByCompanion = () => {
 
   useEffect(() => {
     Uget(
-      `Companion/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
+      `referrer/consultant-paginated-list?page=${currentPage}&pageSize=${dataPerPage}&consultantid=${
         id ? id : 0
       }`
     ).then((res) => {
@@ -107,13 +109,11 @@ const ConsultantByCompanion = () => {
   }, [currentPage, dataPerPage, id, referenceId, success]);
 
   useEffect(() => {
-    get(`CompanionTeamInvitation?consultantid=${referenceId}`).then(
-      (action) => {
-        setInvitationList(action);
+    get(`ReferrerTeamInvitation?consultantid=${referenceId}`).then((action) => {
+      setInvitationList(action);
 
-        console.log(action, "emergency");
-      }
-    );
+      console.log(action, "emergency");
+    });
   }, [referenceId, success]);
 
   // user select data per page
@@ -150,7 +150,7 @@ const ConsultantByCompanion = () => {
   const componentRef = useRef();
 
   const handleCompanionView = (companionId) => {
-    history.push(`/companion-profile/${companionId}`);
+    history.push(`/referrer-profile/${companionId}`);
   };
 
   // for hide/unhide column
@@ -159,13 +159,13 @@ const ConsultantByCompanion = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnAssociates", JSON.stringify(values));
+    localStorage.setItem("ColumnConsultantByReferrer", JSON.stringify(values));
   };
 
   const handleAddCompanion = () => {
     id
-      ? history.push(`/companion-registrationByCons/${id}`)
-      : history.push(`/companion-registration`);
+      ? history.push(`/referrer-registrationByCons/${id}`)
+      : history.push(`/referrer-registration`);
   };
 
   const handleCompanionSubmit = (event) => {
@@ -182,7 +182,7 @@ const ConsultantByCompanion = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
+        `ReferrerTeamInvitation?consultantid=${referenceId}&email=${emailCompanion}`,
         subData
       ).then((action) => {
         setButtonStatus(false);
@@ -217,7 +217,7 @@ const ConsultantByCompanion = () => {
     <div>
       <>
         <BreadCrumb
-          title="Companions"
+          title="Referrers"
           backTo={id === undefined ? "" : "Consultant"}
           path={id === undefined ? "" : "/consultantList"}
         />
@@ -233,7 +233,7 @@ const ConsultantByCompanion = () => {
                         func={handleAddCompanion}
                         className={"btn btn-uapp-add "}
                         icon={<i className="fas fa-plus"></i>}
-                        name={" Add Companion"}
+                        name={" Add Referrer"}
                         permission={6}
                       />
                     </div>
@@ -459,12 +459,12 @@ const ConsultantByCompanion = () => {
                       {tableData[4]?.isActive ? <th>Started</th> : null}
                       {tableData[5]?.isActive ? <th>Invitation</th> : null}
                       {tableData[6]?.isActive ? <th>Leads</th> : null}
-                      {tableData[6]?.isActive ? <th>Students</th> : null}
-                      {tableData[7]?.isActive ? <th>Team Member</th> : null}
-                      {tableData[8]?.isActive ? <th>Application</th> : null}
-                      {tableData[9]?.isActive ? <th>Registered</th> : null}
-                      {tableData[10]?.isActive ? <th>Status</th> : null}
-                      {tableData[11]?.isActive ? <th>Action</th> : null}
+                      {tableData[7]?.isActive ? <th>Students</th> : null}
+                      {tableData[8]?.isActive ? <th>Team Member</th> : null}
+                      {tableData[9]?.isActive ? <th>Application</th> : null}
+                      {tableData[10]?.isActive ? <th>Registered</th> : null}
+                      {tableData[11]?.isActive ? <th>Status</th> : null}
+                      {tableData[12]?.isActive ? <th>Action</th> : null}
                     </tr>
                   </thead>
                   <tbody>
@@ -474,7 +474,7 @@ const ConsultantByCompanion = () => {
                           <td className="cursor-pointer hyperlink-hover">
                             <Link
                               className="text-id hover"
-                              to={`/companion-profile/${companion?.id}`}
+                              to={`/referrer-profile/${companion?.id}`}
                             >
                               {companion?.viewId}
                             </Link>
@@ -486,7 +486,7 @@ const ConsultantByCompanion = () => {
                             <div className="cursor-pointer hyperlink-hover">
                               <Link
                                 className="text-id hover"
-                                to={`/companion-profile/${companion?.id}`}
+                                to={`/referrer-profile/${companion?.id}`}
                               >
                                 {companion?.name}
                               </Link>
@@ -536,7 +536,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-first"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-Invitation-list/${companion?.id}`
+                                    `/referrer-Invitation-list/${companion?.id}`
                                   );
                                 }}
                               >
@@ -553,7 +553,7 @@ const ConsultantByCompanion = () => {
                                 className="Count-fifth-no-pointer"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-lead-List/${companion?.id}`
+                                    `/referrer-lead-List/${companion?.id}`
                                   );
                                 }}
                               >
@@ -562,14 +562,14 @@ const ConsultantByCompanion = () => {
                             </div>
                           </td>
                         ) : null}
-                        {tableData[6]?.isActive ? (
+                        {tableData[7]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
                                 className="Count-sixth-no-pointer"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-student-List/${companion?.id}`
+                                    `/referrer-student-List/${companion?.id}`
                                   );
                                 }}
                               >
@@ -579,14 +579,14 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[7]?.isActive ? (
+                        {tableData[8]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
                                 className="Count-second"
                                 onClick={() => {
                                   history.push(
-                                    `/companion-team-List/${companion?.id}`
+                                    `/referrer-team-List/${companion?.id}`
                                   );
                                 }}
                               >
@@ -596,7 +596,7 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[8]?.isActive ? (
+                        {tableData[9]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -613,7 +613,7 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[9]?.isActive ? (
+                        {tableData[10]?.isActive ? (
                           <td>
                             <div style={{ marginTop: "5px" }}>
                               <span
@@ -630,11 +630,11 @@ const ConsultantByCompanion = () => {
                           </td>
                         ) : null}
 
-                        {tableData[10]?.isActive ? (
+                        {tableData[11]?.isActive ? (
                           <td>{companion?.accountStatus}</td>
                         ) : null}
 
-                        {tableData[11]?.isActive ? (
+                        {tableData[12]?.isActive ? (
                           <>
                             {" "}
                             <td style={{ width: "8%" }} className="text-center">

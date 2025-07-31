@@ -1,10 +1,10 @@
-const ColumnLeadStudent = [
+const ColumnConsultantByReferrer = [
   {
     title: "UAPP ID",
     isActive: true,
   },
   {
-    title: "Full Name",
+    title: "Name",
     isActive: true,
   },
   {
@@ -12,31 +12,39 @@ const ColumnLeadStudent = [
     isActive: true,
   },
   {
-    title: "Consultant",
+    title: "Parent",
     isActive: true,
   },
   {
-    title: "Referrer",
+    title: "Started",
     isActive: true,
   },
   {
-    title: "Branch",
+    title: "Invitation",
     isActive: true,
   },
   {
-    title: "UAPP Reg Date",
+    title: "Leads",
     isActive: true,
   },
   {
-    title: "Password",
+    title: "Students",
     isActive: true,
   },
   {
-    title: "Black List",
+    title: "Team Member",
     isActive: true,
   },
   {
-    title: "Verified",
+    title: "Application",
+    isActive: true,
+  },
+  {
+    title: "Registered",
+    isActive: true,
+  },
+  {
+    title: "Status",
     isActive: true,
   },
   {
@@ -45,4 +53,4 @@ const ColumnLeadStudent = [
   },
 ];
 
-export default ColumnLeadStudent;
+export default ColumnConsultantByReferrer;

@@ -415,6 +415,7 @@ const ApplicationInfo = ({
     setSubStatusValue(0);
     setStatusLabel(label);
     setStatusvalue(value);
+    setSubStatusError(false);
     get(`ApplicationSubStatus/SelectList/${value}`).then((res) => {
       setApplicationSubStatus(res);
     });
@@ -604,6 +605,7 @@ const ApplicationInfo = ({
     setIntakeModal(false);
     setIntakeLabel("");
     setIntakeValue(0);
+    setSubStatusError(false);
   };
 
   const handleApplicationUpdateSubmit = (e) => {
@@ -1362,32 +1364,55 @@ const ApplicationInfo = ({
                               />
                             ) : (
                               <FormGroup>
-                                <span>
-                                  Additional Status
-                                  <span className="text-danger">*</span>
-                                </span>
-
-                                <Select
-                                  options={subStatusOptions}
-                                  value={{
-                                    label: subStatusLabel,
-                                    value: subStatusValue,
-                                  }}
-                                  onChange={(opt) => {
-                                    selectApplicationSubStatus(
-                                      opt.label,
-                                      opt.value
-                                    );
-                                    setSubStatusError(false);
-                                  }}
-                                  name="subStatusId"
-                                  id="subStatusId"
-                                />
-                                {subStatusError ? (
-                                  <span className="text-danger">
-                                    Sub status is required
-                                  </span>
-                                ) : null}
+                                {statusValue === 9 ? (
+                                  <>
+                                    <span>Additional Status</span>
+                                    <Select
+                                      options={subStatusOptions}
+                                      value={{
+                                        label: subStatusLabel,
+                                        value: subStatusValue,
+                                      }}
+                                      onChange={(opt) => {
+                                        selectApplicationSubStatus(
+                                          opt.label,
+                                          opt.value
+                                        );
+                                      }}
+                                      name="subStatusId"
+                                      id="subStatusId"
+                                    />
+                                  </>
+                                ) : (
+                                  <>
+                                    {" "}
+                                    <span>
+                                      Additional Status
+                                      <span className="text-danger">*</span>
+                                    </span>
+                                    <Select
+                                      options={subStatusOptions}
+                                      value={{
+                                        label: subStatusLabel,
+                                        value: subStatusValue,
+                                      }}
+                                      onChange={(opt) => {
+                                        selectApplicationSubStatus(
+                                          opt.label,
+                                          opt.value
+                                        );
+                                        setSubStatusError(false);
+                                      }}
+                                      name="subStatusId"
+                                      id="subStatusId"
+                                    />
+                                    {subStatusError ? (
+                                      <span className="text-danger">
+                                        Sub status is required
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )}
                               </FormGroup>
                             )}
                             {statusValue === 9 ? (

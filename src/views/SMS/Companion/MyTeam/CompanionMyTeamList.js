@@ -28,12 +28,13 @@ import remove from "../../../../helpers/remove";
 import get from "../../../../helpers/get";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
-import CompanionColumnHide from "../CompanionList/CompanionColumnHide";
+
 import CompanionMyTeamTable from "./CompanionMyTeamTable";
 import Uget from "../../../../helpers/Uget";
 import ButtonForFunction from "../../Components/ButtonForFunction";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import SaveButton from "../../../../components/buttons/SaveButton";
+import CompanionColumnHide from "./CompanionColumnHide";
 
 const CompanionMyTeamList = () => {
   const [statusType, setStatusType] = useState([]);
@@ -112,26 +113,24 @@ const CompanionMyTeamList = () => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    Uget(`Companion/get-active-status/${referenceId}`).then((res) => {
+    Uget(`Referrer/get-active-status/${referenceId}`).then((res) => {
       console.log(res?.data);
       setActive(res?.data);
     });
   }, [referenceId]);
 
   useEffect(() => {
-    get(`CompanionTeamInvitation?&companionid=${referenceId}`).then(
-      (action) => {
-        setInvitationList(action);
+    get(`ReferrerTeamInvitation?&companionid=${referenceId}`).then((action) => {
+      setInvitationList(action);
 
-        console.log(action, "emergency");
-      }
-    );
+      console.log(action, "emergency");
+    });
   }, [referenceId, success]);
 
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Companion/get-team-members/?&companionId=${referenceId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
+        `Referrer/get-team-members/?&companionId=${referenceId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
       ).then((res) => {
         console.log(res);
         setCompanionTeamList(res?.items);
@@ -255,11 +254,11 @@ const CompanionMyTeamList = () => {
   };
 
   const redirectToConsultantDashboard = (id) => {
-    history.push(`/companion-dashboard/${id}`);
+    history.push(`/referrer-dashboard/${id}`);
   };
 
   const redirectToConsultantProfile = (id) => {
-    history.push(`/companion-profile/${id}`);
+    history.push(`/referrer-profile/${id}`);
   };
 
   const handleCompanionSubmit = (event) => {
@@ -276,7 +275,7 @@ const CompanionMyTeamList = () => {
       setButtonStatus(true);
       setProgress(true);
       put(
-        `CompanionTeamInvitation?companionid=${referenceId}&email=${emailCompanion}`,
+        `ReferrerTeamInvitation?companionid=${referenceId}&email=${emailCompanion}`,
         subData
       ).then((action) => {
         setButtonStatus(false);
@@ -325,7 +324,7 @@ const CompanionMyTeamList = () => {
   };
 
   const handleEdit = (data) => {
-    history.push(`/companionPersonalInfo/${data?.id}`);
+    history.push(`/referrerPersonalInfo/${data?.id}`);
   };
 
   const closeModalCompanion = () => {
@@ -456,7 +455,7 @@ const CompanionMyTeamList = () => {
               {/* {permissions?.includes(permissionList?.Add_Consultant) && ( */}
               {active && (
                 <LinkButton
-                  url={`companion-registrationby/${referenceId}`}
+                  url={`referrer-registrationby/${referenceId}`}
                   className={"btn btn-uapp-add "}
                   name={"Add Team Member"}
                   icon={<i className="fas fa-plus"></i>}

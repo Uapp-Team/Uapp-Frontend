@@ -292,27 +292,88 @@ const EligibilityForm = ({
                 {" "}
                 {idPassportFile !== null ? (
                   <Col md="3">
-                    {/* After the download button, add approve button */}
-                    <button
-                      type="button"
-                      className={`btn ${
-                        isIdPassportApproved ? "btn-danger" : "btn-success"
-                      } ml-2`}
-                      style={{ width: "120px" }}
-                      onClick={() => {
-                        handleApprove(
-                          !isIdPassportApproved,
-                          "isApproveIdOrPassport"
-                        );
-                        setIsIdPassportApproved(!isIdPassportApproved);
-                      }}
-                    >
-                      {isIdPassportApproved ? "Not Approved" : "Approve"}
-                    </button>
+                    <div className="d-flex">
+                      {isIdPassportApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(true, "isApproveIdOrPassport");
+                              setIsIdPassportApproved(true);
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(false, "isApproveIdOrPassport");
+                              setIsIdPassportApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : isIdPassportApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(false, "isApproveIdOrPassport");
+                            setIsIdPassportApproved(false);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(true, "isApproveIdOrPassport");
+                            setIsIdPassportApproved(true);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {idPassportFile !== null ? (
+                  <>
+                    {isIdPassportApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isIdPassportApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
 
           <FormGroup row className="has-icon-left position-relative">
@@ -340,27 +401,88 @@ const EligibilityForm = ({
               <>
                 {proofOfAddressFile !== null ? (
                   <Col md="3">
-                    {/* After the download button, add approve button */}
-                    <button
-                      type="button"
-                      className={`btn ${
-                        isProofOfAddressApproved ? "btn-danger" : "btn-success"
-                      } ml-2`}
-                      style={{ width: "120px" }}
-                      onClick={() => {
-                        handleApprove(
-                          !isProofOfAddressApproved,
-                          "isApproveProofOfAddress"
-                        );
-                        setIsProofOfAddressApproved(!isProofOfAddressApproved);
-                      }}
-                    >
-                      {isProofOfAddressApproved ? "Not Approved" : "Approve"}
-                    </button>
+                    <div className="d-flex">
+                      {isProofOfAddressApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(true, "isApproveProofOfAddress");
+                              setIsProofOfAddressApproved(true);
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(false, "isApproveProofOfAddress");
+                              setIsProofOfAddressApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : isProofOfAddressApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(false, "isApproveProofOfAddress");
+                            setIsProofOfAddressApproved(false);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(true, "isApproveProofOfAddress");
+                            setIsProofOfAddressApproved(true);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {proofOfAddressFile !== null ? (
+                  <>
+                    {isProofOfAddressApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isProofOfAddressApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
 
           {uniCountryValue === uniCountryValue2 ? null : (
@@ -389,24 +511,88 @@ const EligibilityForm = ({
                 <>
                   {brpFile !== null ? (
                     <Col md="3">
-                      {/* After the download button, add approve button */}
-                      <button
-                        type="button"
-                        className={`btn ${
-                          isBrpApproved ? "btn-danger" : "btn-success"
-                        } ml-2`}
-                        style={{ width: "120px" }}
-                        onClick={() => {
-                          handleApprove(!isBrpApproved, "isApproveBRP");
-                          setIsBrpApproved(!isBrpApproved);
-                        }}
-                      >
-                        {isBrpApproved ? "Not Approved" : "Approve"}
-                      </button>
+                      <div className="d-flex">
+                        {isBrpApproved === null ? (
+                          <>
+                            <button
+                              type="button"
+                              className="btn btn-success mr-2"
+                              style={{ width: "55px", height: "33px" }}
+                              onClick={() => {
+                                handleApprove(true, "isApproveBRP");
+                                setIsBrpApproved(true);
+                              }}
+                              title="Approve"
+                            >
+                              <i className="fas fa-check"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-danger"
+                              style={{ width: "55px", height: "33px" }}
+                              onClick={() => {
+                                handleApprove(false, "isApproveBRP");
+                                setIsBrpApproved(false);
+                              }}
+                              title="Not Approve"
+                            >
+                              <i className="fas fa-times"></i>
+                            </button>
+                          </>
+                        ) : isBrpApproved === true ? (
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(false, "isApproveBRP");
+                              setIsBrpApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(true, "isApproveBRP");
+                              setIsBrpApproved(true);
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                        )}
+                      </div>
                     </Col>
                   ) : null}
                 </>
-              ) : null}
+              ) : (
+                <>
+                  {brpFile !== null ? (
+                    <>
+                      {isBrpApproved === null ? (
+                        <>
+                          <p className="d-flex align-items-center text-warning font-weight-bold">
+                            In Review
+                          </p>
+                        </>
+                      ) : isBrpApproved === true ? (
+                        <p className="d-flex align-items-center text-success font-weight-bold">
+                          Approved
+                        </p>
+                      ) : (
+                        <p className="d-flex align-items-center text-danger font-weight-bold">
+                          Rejected (Need valid document)
+                        </p>
+                      )}
+                    </>
+                  ) : null}
+                </>
+              )}
             </FormGroup>
           )}
           <FormGroup row className="has-icon-left position-relative">
@@ -434,24 +620,88 @@ const EligibilityForm = ({
               <>
                 {cvFile !== null ? (
                   <Col md="3">
-                    {/* After the download button, add approve button */}
-                    <button
-                      type="button"
-                      className={`btn ${
-                        isCvApproved ? "btn-danger" : "btn-success"
-                      } ml-2`}
-                      style={{ width: "120px" }}
-                      onClick={() => {
-                        handleApprove(!isCvApproved, "isApproveCv");
-                        setIsCvApproved(!isCvApproved);
-                      }}
-                    >
-                      {isCvApproved ? "Not Approved" : "Approve"}
-                    </button>
+                    <div className="d-flex">
+                      {isCvApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(true, "isApproveCv");
+                              setIsCvApproved(true);
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(false, "isApproveCv");
+                              setIsCvApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : isCvApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(false, "isApproveCv");
+                            setIsCvApproved(false);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(true, "isApproveCv");
+                            setIsCvApproved(true);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {cvFile !== null ? (
+                  <>
+                    {isCvApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isCvApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
           <FormGroup row className="has-icon-left position-relative">
             <Col md="3" className="text-md-right">
@@ -479,27 +729,88 @@ const EligibilityForm = ({
                 {" "}
                 {bacFile !== null ? (
                   <Col md="3">
-                    {/* After the download button, add approve button */}
-                    <button
-                      type="button"
-                      className={`btn ${
-                        isBacApproved ? "btn-danger" : "btn-success"
-                      } ml-2`}
-                      style={{ width: "120px" }}
-                      onClick={() => {
-                        handleApprove(
-                          !isBacApproved,
-                          "isApproveBacCertificate"
-                        );
-                        setIsBacApproved(!isBacApproved);
-                      }}
-                    >
-                      {isBacApproved ? "Not Approved" : "Approve"}
-                    </button>
+                    <div className="d-flex">
+                      {isBacApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(true, "isApproveBacCertificate");
+                              setIsBacApproved(true);
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApprove(false, "isApproveBacCertificate");
+                              setIsBacApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : isBacApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(false, "isApproveBacCertificate");
+                            setIsBacApproved(false);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApprove(true, "isApproveBacCertificate");
+                            setIsBacApproved(true);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
                   </Col>
                 ) : null}
               </>
-            ) : null}
+            ) : (
+              <>
+                {bacFile !== null ? (
+                  <>
+                    {isBacApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : isBacApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
           </FormGroup>
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />

@@ -8,12 +8,12 @@ const CompanionCommissionSetting = ({ companionId, affiliateProfileData }) => {
   const [companionCommission, setCompanionCommission] = useState([]);
   const [success, setSuccess] = useState(false);
   useEffect(() => {
-    Uget(`CompanionCommissionLog/Index/${companionId}`).then((res) => {
+    Uget(`ReferrerCommissionLog/Index/${companionId}`).then((res) => {
       console.log(res);
       setCurrent(res?.data);
     });
 
-    get(`CompanionTeamCommission`).then((res) => {
+    get(`ReferrerTeamCommission`).then((res) => {
       setCompanionCommission(res);
     });
   }, [companionId, success]);

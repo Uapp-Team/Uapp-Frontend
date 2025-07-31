@@ -36,7 +36,7 @@ const CompanionCommissionList = (props) => {
 
   return (
     <div>
-      <p className="section-title">Companion Commission Setting List</p>
+      <p className="section-title">Referrer Commission Setting List</p>
 
       <div className="table-responsive">
         <Table className="table-sm table-bordered">

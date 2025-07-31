@@ -16,9 +16,10 @@ import remove from "../../../../helpers/remove";
 import get from "../../../../helpers/get";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
 import Pagination from "../../Pagination/Pagination";
-import CompanionColumnHide from "../CompanionList/CompanionColumnHide";
+
 import CompanionMyTeamTable from "./CompanionMyTeamTable";
 import Uget from "../../../../helpers/Uget";
+import CompanionColumnHide from "./CompanionColumnHide";
 
 const CompanionMyTeamList = () => {
   const [statusType, setStatusType] = useState([]);
@@ -93,7 +94,7 @@ const CompanionMyTeamList = () => {
   useEffect(() => {
     if (!isTyping) {
       Uget(
-        `Companion/get-team-members/?&companionId=${companionId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
+        `Referrer/get-team-members/?&companionId=${companionId}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}`
       ).then((res) => {
         console.log(res);
         setCompanionTeamList(res?.items);
@@ -217,11 +218,11 @@ const CompanionMyTeamList = () => {
   };
 
   const redirectToConsultantDashboard = (id) => {
-    history.push(`/companion-dashboard/${id}`);
+    history.push(`/referrer-dashboard/${id}`);
   };
 
   const redirectToConsultantProfile = (id) => {
-    history.push(`/companion-profile/${id}`);
+    history.push(`/referrer-profile/${id}`);
   };
 
   const handleUpdate = (data) => {
@@ -242,7 +243,7 @@ const CompanionMyTeamList = () => {
   };
 
   const handleEdit = (data) => {
-    history.push(`/companionPersonalInfo/${data?.id}`);
+    history.push(`/referrerPersonalInfo/${data?.id}`);
   };
 
   const toggleDanger = (p) => {
@@ -268,15 +269,12 @@ const CompanionMyTeamList = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  console.log("dataPerPage", dataPerPage);
-  console.log("entity", entity);
   return (
     <div>
       <BreadCrumb
         title="My Team"
-        backTo="Companion List"
-        path="/companion-List"
+        backTo={userTypeId == 19 ? "My Team" : "Referrer List"}
+        path={userTypeId == 19 ? "/referrer-team-List" : "/referrer-list"}
       />
       <Card className="uapp-employee-search zindex-100">
         <CardBody>
@@ -369,7 +367,7 @@ const CompanionMyTeamList = () => {
             <Col lg="5" md="5" sm="12" xs="12" style={{ marginBottom: "10px" }}>
               {/* {permissions?.includes(permissionList?.Add_Consultant) && ( */}
               <LinkButton
-                url={`/companion-registrationby/${companionId}`}
+                url={`/referrer-registrationby/${companionId}`}
                 className={"btn btn-uapp-add "}
                 name={"Add Team Member"}
                 icon={<i className="fas fa-plus"></i>}

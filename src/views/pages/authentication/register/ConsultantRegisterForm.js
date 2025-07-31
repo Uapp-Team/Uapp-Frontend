@@ -173,8 +173,6 @@ const ConsultantRegisterForm = () => {
   const handlePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
-
-    // Define validation conditions
     const errors = [];
     if (password === "") {
       errors.push("Password is required");
@@ -195,12 +193,10 @@ const ConsultantRegisterForm = () => {
         errors.push("One special character");
       }
     }
-
-    // Join errors into a single message or clear the error
     if (errors.length > 0) {
       setPasswordError(errors.join(" & "));
     } else {
-      setPasswordError(""); // Clear the error if everything is valid
+      setPasswordError("");
     }
   };
 
@@ -547,13 +543,6 @@ const ConsultantRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            {/* <Input
-              className="inside-placeholder"
-              type="password"
-              placeholder="Enter Password"
-              onChange={(e) => handlePassword(e)}
-              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            /> */}
             <InputGroup>
               <Input
                 type={isPasswordVisible ? "text" : "password"}
@@ -578,13 +567,6 @@ const ConsultantRegisterForm = () => {
             className="form-label-group position-relative has-icon-left"
             style={{ marginBottom: "-6px" }}
           >
-            {/* <Input
-              className="inside-placeholder"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => handleConfirmPassword(e)}
-              style={{ height: "calc(1.5em + 1.3rem + 2px)" }}
-            /> */}
             <InputGroup>
               <Input
                 className="inside-placeholder"

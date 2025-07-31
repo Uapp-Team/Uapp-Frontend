@@ -61,7 +61,7 @@ const CompanionApplication = ({ currentUser }) => {
   useEffect(() => {
     if (currentUser != undefined) {
       get(
-        `CompanionApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${referenceId}&enrollmentStatus=${false}`
+        `ReferrerApplication/Index?page=${currentPage}&pagesize=${dataPerPage}&companionid=${referenceId}&enrollmentStatus=${false}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);

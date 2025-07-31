@@ -77,17 +77,35 @@ const Rightwork = ({ id }) => {
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Id/Passport</td>
             <td>
-              <a href={rootUrl + data?.idOrPassport?.fileUrl} target="blank">
+              <a
+                className="mr-2"
+                href={rootUrl + data?.idOrPassport?.fileUrl}
+                target="blank"
+              >
                 {data?.idOrPassport?.fileName}
-              </a>
+              </a>{" "}
+              {data?.isIdOrPasswordApproved === true ? (
+                <i className="fas fa-check text-success"></i>
+              ) : (
+                <i className="fas fa-times text-danger"></i>
+              )}
             </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Proof of Address</td>
             <td>
-              <a href={rootUrl + data?.proofOfAddress?.fileUrl} target="blank">
+              <a
+                className="mr-2"
+                href={rootUrl + data?.proofOfAddress?.fileUrl}
+                target="blank"
+              >
                 {data?.proofOfAddress?.fileName}
-              </a>
+              </a>{" "}
+              {data?.isProofOfAddressApproved === true ? (
+                <i className="fas fa-check text-success"></i>
+              ) : (
+                <i className="fas fa-times text-danger"></i>
+              )}
             </td>
           </tr>
           {data?.countryOfCitizenShip?.name !==
@@ -95,9 +113,18 @@ const Rightwork = ({ id }) => {
             <tr style={{ borderBottom: "1px solid #dee2e6" }}>
               <td>BRP / TRP / Settled / Pre-Settled / Share Code</td>
               <td>
-                <a href={rootUrl + data?.brp?.fileUrl} target="blank">
+                <a
+                  className="mr-2"
+                  href={rootUrl + data?.brp?.fileUrl}
+                  target="blank"
+                >
                   {data?.brp?.fileName}
                 </a>
+                {data?.isBRPApproved === true ? (
+                  <i className="fas fa-check text-success"></i>
+                ) : (
+                  <i className="fas fa-times text-danger"></i>
+                )}
               </td>
             </tr>
           )}
@@ -105,9 +132,35 @@ const Rightwork = ({ id }) => {
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>CV File</td>
             <td>
-              <a href={rootUrl + data?.cv?.fileUrl} target="blank">
+              <a
+                className="mr-2"
+                href={rootUrl + data?.cv?.fileUrl}
+                target="blank"
+              >
                 {data?.cv?.fileName}
               </a>
+              {data?.isCvApproved === true ? (
+                <i className="fas fa-check text-success"></i>
+              ) : (
+                <i className="fas fa-times text-danger"></i>
+              )}
+            </td>
+          </tr>
+          <tr style={{ borderBottom: "1px solid #dee2e6" }}>
+            <td>BAC File</td>
+            <td>
+              <a
+                className="mr-2"
+                href={rootUrl + data?.bacCertificate?.fileUrl}
+                target="blank"
+              >
+                {data?.bacCertificate?.fileName}
+              </a>
+              {data?.isBacCertificateApproved === true ? (
+                <i className="fas fa-check text-success"></i>
+              ) : (
+                <i className="fas fa-times text-danger"></i>
+              )}
             </td>
           </tr>
         </tbody>
