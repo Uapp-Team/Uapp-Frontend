@@ -32,10 +32,10 @@ import BreadCrumb from "../../../components/breadCrumb/BreadCrumb.js";
 import CancelButton from "../../../components/buttons/CancelButton.js";
 import SaveButton from "../../../components/buttons/SaveButton.js";
 import PopOverText from "../../../components/PopOverText";
-import ColumnAssociates from "../TableColumn/ColumnAssociates.js";
 import Uget from "../../../helpers/Uget.js";
 import { dateFormate } from "../../../components/date/calenderFormate.js";
 import { userTypes } from "../../../constants/userTypeConstant.js";
+import ColumnConsultantByReferrer from "../TableColumn/ColumnConsultantByReferrer.js";
 
 const ConsultantByCompanion = () => {
   const associates = JSON.parse(sessionStorage.getItem("associates"));
@@ -69,16 +69,18 @@ const ConsultantByCompanion = () => {
   const [popoverOpen, setPopoverOpen] = useState("");
 
   useEffect(() => {
-    const tableColumnAssociates = JSON.parse(
-      localStorage.getItem("ColumnAssociates")
+    const tableColumnConsultantByReferrer = JSON.parse(
+      localStorage.getItem("ColumnConsultantByReferrer")
     );
-    tableColumnAssociates && setTableData(tableColumnAssociates);
-    !tableColumnAssociates &&
+    tableColumnConsultantByReferrer &&
+      setTableData(tableColumnConsultantByReferrer);
+    !tableColumnConsultantByReferrer &&
       localStorage.setItem(
-        "ColumnAssociates",
-        JSON.stringify(ColumnAssociates)
+        "ColumnConsultantByReferrer",
+        JSON.stringify(ColumnConsultantByReferrer)
       );
-    !tableColumnAssociates && setTableData(ColumnAssociates);
+    !tableColumnConsultantByReferrer &&
+      setTableData(ColumnConsultantByReferrer);
   }, []);
 
   useEffect(() => {
@@ -157,7 +159,7 @@ const ConsultantByCompanion = () => {
     const values = [...tableData];
     values[i].isActive = e.target.checked;
     setTableData(values);
-    localStorage.setItem("ColumnAssociates", JSON.stringify(values));
+    localStorage.setItem("ColumnConsultantByReferrer", JSON.stringify(values));
   };
 
   const handleAddCompanion = () => {

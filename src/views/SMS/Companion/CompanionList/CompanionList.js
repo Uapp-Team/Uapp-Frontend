@@ -269,8 +269,8 @@ const CompanionList = () => {
     setBranchValue(0);
     setStatusLabel("Status");
     setStatusValue(0);
-    setconsultantLabel("Select Consultant");
-    setConsultantValue(0);
+    !userTypeId === 13 && setconsultantLabel("Select Consultant");
+    !userTypeId === 13 && setConsultantValue(0);
     setSearchStr("");
     setCurrentPage(1);
   };

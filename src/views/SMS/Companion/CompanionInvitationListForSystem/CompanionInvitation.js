@@ -30,6 +30,7 @@ import Loader from "../../Search/Loader/Loader";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import { useParams } from "react-router";
 import DMYPicker from "../../../../components/form/DMYPicker";
+import TagButton from "../../../../components/buttons/TagButton";
 
 const CompanionInvitation = () => {
   const { addToast } = useToasts();
@@ -81,6 +82,12 @@ const CompanionInvitation = () => {
     success,
     companionId,
   ]);
+
+  const handleReset = () => {
+    setStatusLable("Select Status");
+    setStatusValue(0);
+    setCurrentPage(1);
+  };
 
   const closeModal = () => {
     setModalOpen(false);
@@ -166,6 +173,34 @@ const CompanionInvitation = () => {
                 setIsTyping={setIsTyping}
               />
             </div>
+          </div>
+          <div className="row">
+            <Col lg="12" md="12" sm="12" xs="12">
+              <div className="d-flex justify-between-start">
+                <div className="mt-1 mx-1" style={{ display: "flex" }}>
+                  {statusValue !== 0 ? "" : ""}
+                  {statusValue !== 0 ? (
+                    <TagButton
+                      label={inStatusLable}
+                      setValue={() => setStatusValue(0)}
+                      setLabel={() => setStatusLable("Select Status")}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                <div className="mt-1 mx-0 d-flex btn-clear mb-2">
+                  {statusValue !== 0 ? (
+                    <button className="tag-clear" onClick={handleReset}>
+                      Clear All
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </Col>
           </div>
         </CardBody>
       </Card>

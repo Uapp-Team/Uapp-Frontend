@@ -114,7 +114,7 @@ const LeadTable = ({
             {userType !== userTypes?.Consultant ? (
               <> {tableData[3]?.isActive ? <th>Consultant</th> : null}</>
             ) : null}
-            {tableData[4]?.isActive ? <th>Companion</th> : null}
+            {tableData[4]?.isActive ? <th>Referrer</th> : null}
             {tableData[5]?.isActive ? <th>Branch</th> : null}
             {tableData[6]?.isActive ? <th>UAPP Reg Date</th> : null}
             {permissions?.includes(permissionList.Change_Student_Password) ? (

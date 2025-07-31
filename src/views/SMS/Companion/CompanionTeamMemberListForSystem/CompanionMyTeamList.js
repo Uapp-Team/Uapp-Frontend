@@ -269,9 +269,6 @@ const CompanionMyTeamList = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  console.log("dataPerPage", dataPerPage);
-  console.log("entity", entity);
   return (
     <div>
       <BreadCrumb

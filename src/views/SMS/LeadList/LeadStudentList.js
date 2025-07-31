@@ -710,7 +710,32 @@ const LeadStudentList = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData?.map((table, i) => (
                             <div key={i}>
-                              {i === 6 ? (
+                              {i === 3 ? (
+                                <>
+                                  {userTypeId !== userTypes?.Consultant && (
+                                    <div className="d-flex justify-content-between">
+                                      <Col md="8" className="">
+                                        <p className="">{table?.title}</p>
+                                      </Col>
+
+                                      <Col md="4" className="text-center">
+                                        <FormGroup check inline>
+                                          <Input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id=""
+                                            name="check"
+                                            onChange={(e) => {
+                                              handleChecked(e, i);
+                                            }}
+                                            checked={table?.isActive}
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    </div>
+                                  )}
+                                </>
+                              ) : i === 6 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Password
