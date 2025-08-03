@@ -15,6 +15,8 @@ import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import ButtonLoader from "../../../Components/ButtonLoader";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import ContinueModal from "../../../../../components/modal/ContinueModal";
+import ExploreModal from "../../../../../components/modal/ExploreModal";
 
 const ConsultantTermsInformation = () => {
   const activetab = "9";
@@ -368,6 +370,14 @@ const ConsultantTermsInformation = () => {
           </div>
         </CardBody>
       </Card>
+
+      {conscentData == null || conscentData?.isSigned === true ? (
+        <ExploreModal
+          text="your profile"
+          text2="100% Completed"
+          text3="Discover and understand how it functions."
+        />
+      ) : null}
       <div style={{ display: "none", margin: "20px" }}>
         <div ref={componentRef}>
           <div

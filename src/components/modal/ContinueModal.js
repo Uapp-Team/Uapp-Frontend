@@ -1,6 +1,7 @@
 import React from "react";
-import { Modal, ModalBody } from "reactstrap";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import CancelButton from "../buttons/CancelButton";
+import ButtonForFunction from "../../views/SMS/Components/ButtonForFunction";
 
 const ContinueModal = ({
   text,

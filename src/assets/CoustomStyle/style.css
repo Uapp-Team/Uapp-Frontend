@@ -824,6 +824,7 @@ tbody tr:hover {
   opacity: 0.7;
 }
 
+
 .bg-fb532e {
   background-color: #fb532e !important;
 }
@@ -5900,3 +5901,70 @@ span.ant-upload-list-item-name {
   border: 0 !important;
   border-radius: 50px !important;
 }
+
+/* consultant on board */
+
+
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 20px 0px;
+}
+
+.guided-title {
+  color: #495057;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.guided-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.guided-btn {
+  padding: 8px 25px;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.guided-btn.active {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.guided-btn:hover:not(.active) {
+  background-color: #dee2e6;
+}
+
+.add-video-btn {
+  padding: 10px 40px;
+  background-color: #045D5E;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.separator {
+  height: 1px;
+  background-color: #E9E9E9;
+  width: 100%;
+}
+
+.click-bg-shadow {
+  background-color: rgb(248 249 250);
+  background-image: linear-gradient(to right, rgb(248 249 250), rgb(241 244 243));
+}
+
+/* consultant on board */

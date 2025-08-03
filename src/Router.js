@@ -523,6 +523,21 @@ const ConsultantDetails = lazy(() =>
   import("./views/SMS/Consultant/ConsultantDetails")
 );
 
+//consultant On board
+const ConsultantOnBoard = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/Index.js"
+  )
+);
+
+const VideoAndQuizFor = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/VideoAndQuizFor.js"
+  )
+);
+
+//consultant On board
+
 const AdmissionManagerDetails = lazy(() =>
   import(
     "./views/SMS/AllStaffs/AdmissionManager/AdmissionManagerProfile/Components/AdmissionManagerDetailsAndTerms/Component/AdmissionManagerDetails"
@@ -3274,6 +3289,18 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  {/* consultant on board */}
+
+                  <AppRoute
+                    path="/consultantOnBoard"
+                    component={ConsultantOnBoard}
+                  />
+                  <AppRoute
+                    path="/videoAndQuizFor"
+                    component={VideoAndQuizFor}
+                  />
+
+                  {/* consultant on board */}
 
                   {/* consultant */}
                   <AppRoute
