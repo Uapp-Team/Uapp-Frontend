@@ -6285,10 +6285,7 @@ span.ant-upload-list-item-name {
   resize: vertical;
 }
 
-.detailed-answer-input:focus {
-  border-color: #045D5E;
-  box-shadow: 0 0 0 0.2rem rgba(4, 93, 94, 0.25);
-}
+
 
 .save-button-container {
   display: flex;
