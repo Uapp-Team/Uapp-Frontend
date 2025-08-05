@@ -3,6 +3,7 @@ import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import Select from "react-select";
 import get from "../../../../../helpers/get";
+import QuizAnswers from "./QuizAnswers";
 
 const VideoAndQuizFor = () => {
   const [branch, setBranch] = useState([]);
@@ -34,9 +35,13 @@ const VideoAndQuizFor = () => {
   const [answers, setAnswers] = useState([
     { id: 1, text: "", isCorrect: false, isEditing: false },
     { id: 2, text: "", isCorrect: false, isEditing: false },
+    { id: 3, text: "", isCorrect: false, isEditing: false },
   ]);
   const [detailedAnswer, setDetailedAnswer] = useState("");
   const [detailedAnswerError, setDetailedAnswerError] = useState("");
+  const [isDetailedAnswerExpanded, setIsDetailedAnswerExpanded] =
+    useState(false);
+  const [isDetailedAnswerEditing, setIsDetailedAnswerEditing] = useState(false);
 
   const toggleConsultantModal = () => setConsultantModal(!consultantModal);
   const toggleVideoQuizModal = () => setVideoQuizModal(!videoQuizModal);
@@ -195,6 +200,28 @@ const VideoAndQuizFor = () => {
     setDetailedAnswer(e.target.value);
     setDetailedAnswerError("");
   };
+
+  const handleDetailedAnswerKeyPress = (e) => {
+    if (e.key === "Enter") {
+      setIsDetailedAnswerEditing(false);
+      if (detailedAnswer.trim() === "") {
+        setDetailedAnswerError("Answer is required");
+      } else {
+        setDetailedAnswerError("");
+      }
+    }
+  };
+
+  const handleDetailedAnswerBlur = () => {
+    setIsDetailedAnswerEditing(false);
+    if (detailedAnswer.trim() === "") {
+      setDetailedAnswerError("Answer is required");
+    } else {
+      setDetailedAnswerError("");
+    }
+  };
+
+  const handleDetailedAnswerClick = () => setIsDetailedAnswerEditing(true);
 
   const handleVideoFileChange = (e) => {
     const file = e.target.files[0];
@@ -872,30 +899,33 @@ const VideoAndQuizFor = () => {
                     </div>
 
                     {/* Detailed Answer Section */}
-                    <div className="detailed-answer-section">
-                      <div className="detailed-answer-label">
-                        Write in details answer{" "}
-                        <span className="optional-text">(optional)</span>
-                      </div>
-                      <Input
-                        type="textarea"
-                        value={detailedAnswer}
-                        onChange={handleDetailedAnswerChange}
-                        placeholder="Enter detailed explanation..."
-                        className="detailed-answer-input"
-                        rows="3"
-                      />
-                      {detailedAnswerError && (
-                        <div className="error-message">
-                          {detailedAnswerError}
+                    <div className="quiz-question-input-container">
+                      {isDetailedAnswerEditing ? (
+                        <Input
+                          type="text"
+                          value={detailedAnswer}
+                          onChange={handleDetailedAnswerChange}
+                          onKeyPress={handleDetailedAnswerKeyPress}
+                          onBlur={handleDetailedAnswerBlur}
+                          placeholder="Write in details answer (optional)"
+                          className="quiz-question-input"
+                          autoFocus
+                        />
+                      ) : (
+                        <div
+                          className="quiz-question-placeholder"
+                          onClick={handleDetailedAnswerClick}
+                        >
+                          {detailedAnswer ||
+                            "Write in details answer (optional)"}
                         </div>
                       )}
                     </div>
 
                     {/* Save Button */}
-                    <div className="save-button-container">
+                    <div className="quiz-save-button-container">
                       <button
-                        className="save-button"
+                        className="quiz-save-button"
                         onClick={() => {
                           // Handle save logic here
                           console.log("Question:", question);
@@ -909,6 +939,7 @@ const VideoAndQuizFor = () => {
                   </div>
                 </CardBody>
               </Card>
+              <QuizAnswers />
 
               <FormGroup className="mt-4 text-left">
                 <SaveButton
