@@ -4,6 +4,7 @@ import SaveButton from "../../../../../components/buttons/SaveButton";
 import Select from "react-select";
 import get from "../../../../../helpers/get";
 import QuizAnswers from "./QuizAnswers";
+import PreviousButton from "../../../../../components/buttons/PreviousButton";
 
 const VideoAndQuizFor = () => {
   const [branch, setBranch] = useState([]);
@@ -27,6 +28,8 @@ const VideoAndQuizFor = () => {
   const [videoFileError, setVideoFileError] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false);
 
   // Question and Answer states
   const [question, setQuestion] = useState("");
@@ -64,6 +67,15 @@ const VideoAndQuizFor = () => {
       setCountry(res);
     });
   }, []);
+
+  // Cleanup video URL when component unmounts or video changes
+  useEffect(() => {
+    return () => {
+      if (videoUrl) {
+        URL.revokeObjectURL(videoUrl);
+      }
+    };
+  }, [videoUrl]);
 
   const branchOptions = branch?.map((b) => ({
     label: b.name,
@@ -226,6 +238,8 @@ const VideoAndQuizFor = () => {
   const handleVideoFileChange = (e) => {
     const file = e.target.files[0];
     setVideoFile(file);
+    setShowVideoPlayer(false);
+    setVideoUrl(null);
 
     if (!file) {
       setVideoFileError("Video file is required");
@@ -243,10 +257,9 @@ const VideoAndQuizFor = () => {
           "Please select a valid video file (MP4, AVI, MOV, WMV, FLV)"
         );
       } else {
-        // Check file size (max 100MB)
-        const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+        const maxSize = 200 * 1024 * 1024;
         if (file.size > maxSize) {
-          setVideoFileError("Video file size should be less than 100MB");
+          setVideoFileError("Video file size should be less than 200MB");
         } else {
           setVideoFileError("");
           // Start upload simulation
@@ -259,12 +272,19 @@ const VideoAndQuizFor = () => {
   const simulateUploadProgress = () => {
     setIsUploading(true);
     setUploadProgress(0);
+    setShowVideoPlayer(false);
 
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
+          // Create video URL for playback after upload completes
+          if (videoFile) {
+            const url = URL.createObjectURL(videoFile);
+            setVideoUrl(url);
+            setShowVideoPlayer(true);
+          }
           return 100;
         }
         return prev + Math.random() * 15; // Random increment between 0-15
@@ -717,79 +737,157 @@ const VideoAndQuizFor = () => {
                     <Col md="5" sm="12">
                       {videoFile && (
                         <div className="quiz-progress-container">
-                          <div className="quiz-circular-progress-container">
-                            <div className="quiz-circular-progress">
-                              <svg
-                                className="quiz-circular-progress-svg"
-                                viewBox="0 0 120 120"
-                              >
-                                <defs>
-                                  <linearGradient
-                                    id="progressGradient"
-                                    x1="0%"
-                                    y1="0%"
-                                    x2="100%"
-                                    y2="0%"
-                                  >
-                                    <stop offset="40%" stopColor="#045D5E" />
+                          {!showVideoPlayer ? (
+                            <div className="quiz-circular-progress-container">
+                              <div className="quiz-circular-progress">
+                                <svg
+                                  className="quiz-circular-progress-svg"
+                                  viewBox="0 0 120 120"
+                                >
+                                  <defs>
+                                    <linearGradient
+                                      id="progressGradient"
+                                      x1="0%"
+                                      y1="0%"
+                                      x2="100%"
+                                      y2="0%"
+                                    >
+                                      <stop offset="40%" stopColor="#045D5E" />
 
-                                    <stop offset="90%" stopColor="#045D5E" />
-                                    <stop offset="100%" stopColor="#05E594" />
-                                  </linearGradient>
-                                </defs>
-                                <circle
-                                  className="quiz-circular-progress-bg"
-                                  cx="60"
-                                  cy="60"
-                                  r="50"
-                                  fill="none"
-                                  stroke="#e9ecef"
-                                  strokeWidth="8"
-                                />
-                                <circle
-                                  className="quiz-circular-progress-fill"
-                                  cx="60"
-                                  cy="60"
-                                  r="50"
-                                  fill="none"
-                                  strokeWidth="8"
-                                  strokeLinecap="round"
-                                  strokeDasharray={`${2 * Math.PI * 50}`}
-                                  strokeDashoffset={`${
-                                    2 *
-                                    Math.PI *
-                                    50 *
-                                    (1 - uploadProgress / 100)
-                                  }`}
-                                  transform="rotate(-90 60 60)"
-                                />
-                              </svg>
-                              <div className="quiz-circular-progress-text">
-                                <span className="quiz-progress-percentage">
-                                  {Math.round(uploadProgress)}%
-                                </span>
+                                      <stop offset="90%" stopColor="#045D5E" />
+                                      <stop offset="100%" stopColor="#05E594" />
+                                    </linearGradient>
+                                  </defs>
+                                  <circle
+                                    className="quiz-circular-progress-bg"
+                                    cx="60"
+                                    cy="60"
+                                    r="50"
+                                    fill="none"
+                                    stroke="#e9ecef"
+                                    strokeWidth="8"
+                                  />
+                                  <circle
+                                    className="quiz-circular-progress-fill"
+                                    cx="60"
+                                    cy="60"
+                                    r="50"
+                                    fill="none"
+                                    strokeWidth="8"
+                                    strokeLinecap="round"
+                                    strokeDasharray={`${2 * Math.PI * 50}`}
+                                    strokeDashoffset={`${
+                                      2 *
+                                      Math.PI *
+                                      50 *
+                                      (1 - uploadProgress / 100)
+                                    }`}
+                                    transform="rotate(-90 60 60)"
+                                  />
+                                </svg>
+                                <div className="quiz-circular-progress-text">
+                                  <span className="quiz-progress-percentage">
+                                    {Math.round(uploadProgress)}%
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="quiz-upload-status">
+                                {isUploading ? (
+                                  <span className="quiz-status-uploading">
+                                    <i className="fas fa-spinner fa-spin me-1"></i>
+                                    Uploading...
+                                  </span>
+                                ) : uploadProgress >= 100 ? (
+                                  <span className="quiz-status-complete">
+                                    <i className="fas fa-check-circle me-1"></i>
+                                    Upload Complete
+                                  </span>
+                                ) : (
+                                  <span className="quiz-status-ready">
+                                    <i className="fas fa-clock me-1"></i>
+                                    Ready to upload
+                                  </span>
+                                )}
                               </div>
                             </div>
-
-                            <div className="quiz-upload-status">
-                              {isUploading ? (
-                                <span className="quiz-status-uploading">
-                                  <i className="fas fa-spinner fa-spin me-1"></i>
-                                  Uploading...
-                                </span>
-                              ) : uploadProgress >= 100 ? (
-                                <span className="quiz-status-complete">
-                                  <i className="fas fa-check-circle me-1"></i>
-                                  Upload Complete
-                                </span>
-                              ) : (
-                                <span className="quiz-status-ready">
-                                  <i className="fas fa-clock me-1"></i>
-                                  Ready to upload
-                                </span>
-                              )}
+                          ) : (
+                            <div
+                              className="video-player-container"
+                              style={{
+                                border: "1px solid #e9ecef",
+                                borderRadius: "8px",
+                                padding: "15px",
+                                backgroundColor: "#f8f9fa",
+                              }}
+                            >
+                              <div
+                                className="video-player-header"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  marginBottom: "10px",
+                                }}
+                              >
+                                <h6 className="mb-0">
+                                  <i
+                                    className="fas fa-play-circle me-2"
+                                    style={{ color: "#0D9596" }}
+                                  ></i>
+                                  Video Preview
+                                </h6>
+                                <button
+                                  className="btn btn-sm btn-outline-secondary"
+                                  onClick={() => {
+                                    setShowVideoPlayer(false);
+                                    if (videoUrl) {
+                                      URL.revokeObjectURL(videoUrl);
+                                      setVideoUrl(null);
+                                    }
+                                  }}
+                                  style={{
+                                    padding: "2px 8px",
+                                    fontSize: "0.75rem",
+                                  }}
+                                >
+                                  <i className="fas fa-times"></i>
+                                </button>
+                              </div>
+                              <div className="video-player-wrapper">
+                                <video
+                                  controls
+                                  className="video-player"
+                                  style={{
+                                    width: "100%",
+                                    maxHeight: "300px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#000",
+                                  }}
+                                >
+                                  <source
+                                    src={videoUrl}
+                                    type={videoFile.type}
+                                  />
+                                  Your browser does not support the video tag.
+                                </video>
+                              </div>
+                              <div className="video-info mt-2">
+                                <small className="text-muted">
+                                  <i className="fas fa-file-video me-1"></i>
+                                  {videoFile.name}
+                                </small>
+                                <br />
+                                <small className="text-muted">
+                                  <i className="fas fa-info-circle me-1"></i>
+                                  {(videoFile.size / (1024 * 1024)).toFixed(
+                                    2
+                                  )}{" "}
+                                  MB
+                                </small>
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       )}
                     </Col>
@@ -940,10 +1038,18 @@ const VideoAndQuizFor = () => {
                 </CardBody>
               </Card>
               <QuizAnswers />
+              {/* Add More Button */}
+              <div className="quiz-add-more-container">
+                <button className="quiz-add-more-button" type="button">
+                  <i className="fas fa-plus quiz-add-more-icon"></i>
+                  <span className="quiz-add-more-text">Add more</span>
+                </button>
+              </div>
 
               <FormGroup className="mt-4 text-left">
+                <PreviousButton />
                 <SaveButton
-                  text="Continue"
+                  text="Submit"
                   // progress={progress}
                   // buttonStatus={buttonStatus}
                 />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ButtonForFunction from "../../../Components/ButtonForFunction";
 import { useHistory } from "react-router";
+import VideoList from "./VideoList";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState("active");
@@ -42,7 +43,8 @@ const Index = () => {
           />
         </div>
       </div>
-      <div className="separator"></div>
+      <div className="separator mb-4"></div>
+      <VideoList />
     </div>
   );
 };
