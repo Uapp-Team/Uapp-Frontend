@@ -5,6 +5,7 @@ import Select from "react-select";
 import get from "../../../../../helpers/get";
 import QuizAnswers from "./QuizAnswers";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
+import YourConsultantForm from "./YourConsultantForm";
 
 const VideoAndQuizFor = () => {
   const [branch, setBranch] = useState([]);
@@ -262,7 +263,10 @@ const VideoAndQuizFor = () => {
           setVideoFileError("Video file size should be less than 200MB");
         } else {
           setVideoFileError("");
-          // Start upload simulation
+          // Create video URL but don't show player yet
+          const url = URL.createObjectURL(file);
+          setVideoUrl(url);
+          // Start upload simulation - player will show at 100%
           simulateUploadProgress();
         }
       }
@@ -272,19 +276,15 @@ const VideoAndQuizFor = () => {
   const simulateUploadProgress = () => {
     setIsUploading(true);
     setUploadProgress(0);
-    setShowVideoPlayer(false);
+    setShowVideoPlayer(false); // Hide video player during upload
 
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsUploading(false);
-          // Create video URL for playback after upload completes
-          if (videoFile) {
-            const url = URL.createObjectURL(videoFile);
-            setVideoUrl(url);
-            setShowVideoPlayer(true);
-          }
+          // Show video player only when upload is complete
+          setShowVideoPlayer(true);
           return 100;
         }
         return prev + Math.random() * 15; // Random increment between 0-15
@@ -511,147 +511,27 @@ const VideoAndQuizFor = () => {
         </Col>
         <Col md="9" sm="12">
           {activeStep === "consultant" && (
-            <div>
-              <Form onSubmit={handleSubmitVideoFor}>
-                <Card>
-                  <CardBody>
-                    <h5 className="fw-bold mb-3">video For</h5>
-                    <Row>
-                      <Col lg="8" md="8">
-                        <FormGroup className="has-icon-left position-relative">
-                          <span>
-                            <span className="text-danger">*</span>
-                            Branch
-                          </span>
-
-                          <Select
-                            className="form-mt"
-                            options={branchOptions}
-                            value={{ label: branchLabel, value: branchValue }}
-                            onChange={(opt) =>
-                              selectBranch(opt.label, opt.value)
-                            }
-                            name="BranchId"
-                            id="BranchId"
-                            // isDisabled={consultantRegisterId ? true : false}
-                          />
-
-                          {branchError && (
-                            <span className="text-danger">
-                              Branch is required
-                            </span>
-                          )}
-                        </FormGroup>
-                        <FormGroup className="has-icon-left position-relative">
-                          <span>
-                            <span className="text-danger">*</span> Country
-                          </span>
-
-                          <Select
-                            options={countryName}
-                            value={{ label: countryLabel, value: countryValue }}
-                            onChange={(opt) =>
-                              selectCountry(opt.label, opt.value)
-                            }
-                            required
-                          />
-                          {countryError && (
-                            <span className="text-danger">
-                              Country is required
-                            </span>
-                          )}
-                        </FormGroup>
-
-                        <FormGroup className="has-icon-left position-relative">
-                          <span>
-                            {/* <span className="text-danger">*</span> */}
-                            <b> Recruitment Type</b>
-                          </span>
-
-                          <Row>
-                            <Col
-                              xs="2"
-                              sm="12"
-                              md="3"
-                              className="text-center mt-2"
-                            >
-                              <FormGroup check inline>
-                                <Input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  onChange={(e) => {
-                                    setHomeAccept(e.target.checked);
-                                    setAcceptError(false);
-                                  }}
-                                  checked={homeAccept}
-                                />
-                                <span className="mr-2">Home/UK </span>
-                              </FormGroup>
-                            </Col>
-
-                            <Col
-                              xs="2"
-                              sm="12"
-                              md="3"
-                              className="text-center mt-2"
-                            >
-                              <FormGroup check inline>
-                                <Input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  onChange={(e) => {
-                                    setUkAccept(e.target.checked);
-                                    setAcceptError(false);
-                                  }}
-                                  checked={ukAccept}
-                                />
-                                <span className="mr-2">EU/EEU </span>
-                              </FormGroup>
-                            </Col>
-
-                            <Col
-                              xs="2"
-                              sm="12"
-                              md="3"
-                              className="text-center mt-2"
-                            >
-                              <FormGroup check inline>
-                                <Input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  onChange={(e) => {
-                                    setIntAccept(e.target.checked);
-                                    setAcceptError(false);
-                                    console.log(
-                                      "Tria testing",
-                                      e.target.checked
-                                    );
-                                  }}
-                                  checked={intAccept}
-                                />
-                                <span className="mr-2">International </span>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          {acceptError ? (
-                            <span className="text-danger">
-                              Recruitment type is required
-                            </span>
-                          ) : null}
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </CardBody>
-                </Card>
-                <FormGroup className="mt-4 text-left">
-                  <SaveButton
-                    text="Continue"
-                    // progress={progress}
-                    // buttonStatus={buttonStatus}
-                  />
-                </FormGroup>
-              </Form>
-            </div>
+            <YourConsultantForm
+              handleSubmitVideoFor={handleSubmitVideoFor}
+              branchOptions={branchOptions}
+              branchLabel={branchLabel}
+              branchValue={branchValue}
+              selectBranch={selectBranch}
+              branchError={branchError}
+              countryName={countryName}
+              countryLabel={countryLabel}
+              countryValue={countryValue}
+              selectCountry={selectCountry}
+              countryError={countryError}
+              homeAccept={homeAccept}
+              setAcceptError={setAcceptError}
+              setHomeAccept={setHomeAccept}
+              intAccept={intAccept}
+              setIntAccept={setIntAccept}
+              ukAccept={ukAccept}
+              setUkAccept={setUkAccept}
+              acceptError={acceptError}
+            />
           )}
           {activeStep === "videoQuiz" && (
             <Form onSubmit={handleSubmitQuizFor}>
@@ -812,15 +692,7 @@ const VideoAndQuizFor = () => {
                               </div>
                             </div>
                           ) : (
-                            <div
-                              className="video-player-container"
-                              style={{
-                                border: "1px solid #e9ecef",
-                                borderRadius: "8px",
-                                padding: "15px",
-                                backgroundColor: "#f8f9fa",
-                              }}
-                            >
+                            <div className="video-player-container">
                               <div
                                 className="video-player-header"
                                 style={{
@@ -837,22 +709,6 @@ const VideoAndQuizFor = () => {
                                   ></i>
                                   Video Preview
                                 </h6>
-                                <button
-                                  className="btn btn-sm btn-outline-secondary"
-                                  onClick={() => {
-                                    setShowVideoPlayer(false);
-                                    if (videoUrl) {
-                                      URL.revokeObjectURL(videoUrl);
-                                      setVideoUrl(null);
-                                    }
-                                  }}
-                                  style={{
-                                    padding: "2px 8px",
-                                    fontSize: "0.75rem",
-                                  }}
-                                >
-                                  <i className="fas fa-times"></i>
-                                </button>
                               </div>
                               <div className="video-player-wrapper">
                                 <video
@@ -871,20 +727,6 @@ const VideoAndQuizFor = () => {
                                   />
                                   Your browser does not support the video tag.
                                 </video>
-                              </div>
-                              <div className="video-info mt-2">
-                                <small className="text-muted">
-                                  <i className="fas fa-file-video me-1"></i>
-                                  {videoFile.name}
-                                </small>
-                                <br />
-                                <small className="text-muted">
-                                  <i className="fas fa-info-circle me-1"></i>
-                                  {(videoFile.size / (1024 * 1024)).toFixed(
-                                    2
-                                  )}{" "}
-                                  MB
-                                </small>
                               </div>
                             </div>
                           )}
