@@ -223,7 +223,7 @@ const ApplyCardVar = ({
                       className="card-title-vertical fw-700 fs-20px"
                       height="60px"
                       line={2}
-                      link={item.subjectId}
+                      // link={item.subjectId}
                     />
                     {/* <div className="tags">
                   <span className="card-tag fast-track">Fast Track</span>

@@ -197,12 +197,12 @@ const QuickViewModal = ({
                   )
                 ) : null}
 
-                <div
+                {/* <div
                   className="mr-2 icon-design"
                   onClick={() => handleCourseDetails(quickViewData?.subjectId)}
                 >
                   <LuArrowUpRight size={16} className="fs-20px" />
-                </div>
+                </div> */}
               </div>
 
               {quickViewData.intakeStatusId !== 1 ? (
