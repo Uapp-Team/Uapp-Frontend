@@ -6438,4 +6438,255 @@ span.ant-upload-list-item-name {
 
 }
 
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+
+.videoSection {
+  position: relative;
+  background-color: #111827;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+
+.video {
+  width: 100%;
+  height: 384px;
+  object-fit: cover;
+}
+
+
+.videoControls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 16px;
+}
+
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.leftControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+
+.rightControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.playButton {
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+
+.playButtonHover {
+  color: #60A5FA,
+}
+
+
+.pauseIcon {
+  width: 32px;
+  height: 32px;
+  background-color: red;
+  border-radius: 50%;
+  display: "flex";
+  align-items: center;
+  justify-content: center;
+}
+
+
+.pauseBars {
+  width: 8px;
+  height: 16px;
+  background-color: white;
+  border-radius: 2px;
+  margin: 0 2px;
+}
+
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.volumeSlider {
+  width: 64px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+}
+
+
+.timeDisplay {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.controlButton {
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+
+.progressBar {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+
+.progressFill {
+  height: 100%;
+  background-color: #3B82F6;
+  border-radius: 4px;
+  transition: width 0.15s ease;
+}
+
+
+.infoSection {
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+}
+
+
+.editButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2563EB;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.editButtonHover {
+  color: #1D4ED8;
+}
+
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 16px;
+  padding-right: 80px;
+}
+
+
+.locationDetails {
+  margin-bottom: 16px;
+}
+
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+
+.label {
+  color: #6B7280;
+  font-weight: 500;
+}
+
+
+.value {
+  color: #111827;
+}
+
+
+.tagsSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+
+.tagsContainer {
+  display: flex;
+  gap: 8px;
+}
+
+
+.tag {
+  padding: 4px 12px;
+  background-color: #E5E7EB;
+  color: #374151;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.progressSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.progressValue {
+  color: #2563EB;
+  font-weight: 600;
+}
+
+
+
+
+
+
+
 /* consultant on board */

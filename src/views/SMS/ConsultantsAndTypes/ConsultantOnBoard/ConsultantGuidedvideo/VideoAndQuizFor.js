@@ -281,16 +281,34 @@ const VideoAndQuizFor = () => {
 
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
-        if (prev >= 100) {
+        // Use a more controlled increment to avoid large jumps
+        const increment = Math.random() * 8 + 2; // Random increment between 2-10
+        const newProgress = Math.min(prev + increment, 100); // Ensure it never exceeds 100
+
+        if (newProgress >= 100) {
           clearInterval(interval);
           setIsUploading(false);
-          // Show video player only when upload is complete
+          // Show video player exactly when upload reaches 100%
           setShowVideoPlayer(true);
           return 100;
         }
-        return prev + Math.random() * 15; // Random increment between 0-15
+
+        // If we're very close to 100%, complete it in the next step
+        if (newProgress >= 95) {
+          return 95; // Hold at 95% for one more step
+        }
+
+        // If we're at 95%, complete to 100%
+        if (prev >= 95) {
+          clearInterval(interval);
+          setIsUploading(false);
+          setShowVideoPlayer(true);
+          return 100;
+        }
+
+        return newProgress;
       });
-    }, 200); // Update every 200ms
+    }, 300); // Update every 300ms for smoother progress
   };
 
   const ValidateFormQuizFor = () => {

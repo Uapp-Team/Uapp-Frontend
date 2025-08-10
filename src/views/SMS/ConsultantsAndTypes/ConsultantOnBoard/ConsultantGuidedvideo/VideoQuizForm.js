@@ -39,6 +39,8 @@ const VideoQuizForm = ({
   handleQuestionClick,
   handleQuestionBlur,
 }) => {
+  // Ensure upload progress never exceeds 100%
+  const safeUploadProgress = Math.min(uploadProgress || 0, 100);
   return (
     <div>
       <Form onSubmit={handleSubmitQuizFor}>
@@ -164,14 +166,17 @@ const VideoQuizForm = ({
                               strokeLinecap="round"
                               strokeDasharray={`${2 * Math.PI * 50}`}
                               strokeDashoffset={`${
-                                2 * Math.PI * 50 * (1 - uploadProgress / 100)
+                                2 *
+                                Math.PI *
+                                50 *
+                                (1 - safeUploadProgress / 100)
                               }`}
                               transform="rotate(-90 60 60)"
                             />
                           </svg>
                           <div className="quiz-circular-progress-text">
                             <span className="quiz-progress-percentage">
-                              {Math.round(uploadProgress)}%
+                              {Math.round(safeUploadProgress)}%
                             </span>
                           </div>
                         </div>
@@ -182,7 +187,7 @@ const VideoQuizForm = ({
                               <i className="fas fa-spinner fa-spin me-1"></i>
                               Uploading...
                             </span>
-                          ) : uploadProgress >= 100 ? (
+                          ) : safeUploadProgress >= 100 ? (
                             <span className="quiz-status-complete">
                               <i className="fas fa-check-circle me-1"></i>
                               Upload Complete
