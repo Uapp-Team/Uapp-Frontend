@@ -146,9 +146,9 @@ const ApplyCardVar = ({
                           <ArrowLeftRightIcon />
                         )}
                       </span>
-                      <span className="mr-2 cursor-pointer icon">
+                      {/* <span className="mr-2 cursor-pointer icon">
                         <ShareIcon />
-                      </span>
+                      </span> */}
                       {Student() ? (
                         item.isFavorite ? (
                           <span
