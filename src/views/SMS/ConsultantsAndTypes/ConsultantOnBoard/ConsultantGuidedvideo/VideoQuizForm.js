@@ -77,7 +77,7 @@ const VideoQuizForm = ({
                     <Input
                       className="d-none"
                       type="file"
-                      accept="video/*"
+                      accept="video/mp4"
                       onChange={handleVideoFileChange}
                       id="videoFile"
                       name="videoFile"

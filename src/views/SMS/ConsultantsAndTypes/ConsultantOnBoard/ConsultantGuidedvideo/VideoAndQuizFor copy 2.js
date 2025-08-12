@@ -241,7 +241,7 @@ const VideoAndQuizFor = () => {
   const handleDetailedAnswerClick = () => setIsDetailedAnswerEditing(true);
 
   const handleVideoFileChange = (event) => {
-    console.log(event.target.files[0], "event");
+    event.preventDefault();
 
     const file = event.target.files[0];
     setVideoFile(file);
@@ -296,15 +296,14 @@ const VideoAndQuizFor = () => {
 
   const AuthStr = localStorage.getItem("token");
 
-  const uploadVideo = (file) => {
+  const uploadVideo = async (file) => {
     setIsUploading(true);
     setUploadProgress(0);
     setShowVideoPlayer(false);
     const formData = new FormData();
 
     // Try only the "file" field name as that's most common
-
-    formData.append("VideoFile", file);
+    formData.append("file", file);
 
     console.log("Uploading file:", {
       fileName: file.name,
@@ -315,12 +314,11 @@ const VideoAndQuizFor = () => {
 
     // Use axios directly for file uploads to ensure proper FormData handling
 
-    axios
+    await axios
       .post(`${rootUrl}OnboardingVideo/UploadVideo`, formData, {
         headers: {
-          // "content-type": "multipart/form-data",
-          Authorization: `Bearer ${AuthStr}`,
-          // authorization: AuthStr,
+          "content-type": "multipart/form-data",
+          authorization: AuthStr,
           Accept: "application/json, text/plain, */*",
         },
         onUploadProgress: (progressEvent) => {

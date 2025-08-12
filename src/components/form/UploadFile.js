@@ -29,6 +29,8 @@ const UploadFile = ({
 
     if (file?.type && !file?.type.includes("image")) {
       const url = URL.createObjectURL(file);
+      console.log(url, "imad naki");
+
       setBash64(url);
     } else if (file?.type && file?.type.includes("image")) {
       const reader = new FileReader();

@@ -8,8 +8,6 @@ import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import YourConsultantForm from "./YourConsultantForm";
 import VideoQuizForm from "./VideoQuizForm";
 import post from "../../../../../helpers/post";
-import axios from "axios";
-import { rootUrl } from "../../../../../constants/constants";
 
 const VideoAndQuizFor = () => {
   const [branch, setBranch] = useState([]);
@@ -241,7 +239,7 @@ const VideoAndQuizFor = () => {
   const handleDetailedAnswerClick = () => setIsDetailedAnswerEditing(true);
 
   const handleVideoFileChange = (event) => {
-    console.log(event.target.files[0], "event");
+    event.preventDefault();
 
     const file = event.target.files[0];
     setVideoFile(file);
@@ -251,41 +249,26 @@ const VideoAndQuizFor = () => {
     if (!file) {
       setVideoFileError("Video file is required");
     } else {
-      // Check file type - only allow MP4 as that's what the server supports
-      const allowedTypes = ["video/mp4"];
-      const allowedExtensions = [".mp4"];
-
-      // Check both MIME type and file extension
-      const hasValidType = allowedTypes.includes(file.type);
-      const hasValidExtension = allowedExtensions.some((ext) =>
-        file.name.toLowerCase().endsWith(ext)
-      );
-
-      if (!hasValidType || !hasValidExtension) {
+      // Check file type
+      const allowedTypes = [
+        "video/mp4",
+        "video/avi",
+        "video/mov",
+        "video/wmv",
+        "video/flv",
+      ];
+      if (!allowedTypes.includes(file.type)) {
         setVideoFileError(
-          "Please select a valid MP4 video file (.mp4 extension required)"
+          "Please select a valid video file (MP4, AVI, MOV, WMV, FLV)"
         );
-        console.log("File validation failed:", {
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: file.size,
-          hasValidType,
-          hasValidExtension,
-        });
       } else {
         const maxSize = 200 * 1024 * 1024;
         if (file.size > maxSize) {
           setVideoFileError("Video file size should be less than 200MB");
         } else {
           setVideoFileError("");
-          console.log("File validation passed:", {
-            fileName: file.name,
-            fileType: file.type,
-            fileSize: file.size,
-          });
           // Create video URL but don't show player yet
           const url = URL.createObjectURL(file);
-
           setVideoUrl(url);
           // Start actual video upload
           uploadVideo(file);
@@ -301,35 +284,16 @@ const VideoAndQuizFor = () => {
     setUploadProgress(0);
     setShowVideoPlayer(false);
     const formData = new FormData();
+    formData.append("file", file);
 
-    // Try only the "file" field name as that's most common
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+        authorization: AuthStr,
+      },
+    };
 
-    formData.append("VideoFile", file);
-
-    console.log("Uploading file:", {
-      fileName: file.name,
-      fileType: file.type,
-      fileSize: file.size,
-      formDataEntries: Array.from(formData.entries()),
-    });
-
-    // Use axios directly for file uploads to ensure proper FormData handling
-
-    axios
-      .post(`${rootUrl}OnboardingVideo/UploadVideo`, formData, {
-        headers: {
-          // "content-type": "multipart/form-data",
-          Authorization: `Bearer ${AuthStr}`,
-          // authorization: AuthStr,
-          Accept: "application/json, text/plain, */*",
-        },
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadProgress(percentCompleted);
-        },
-      })
+    post("OnboardingVideo/UploadVideo", formData, config)
       .then((res) => {
         setUploadProgress(100);
         setIsUploading(false);
@@ -338,20 +302,8 @@ const VideoAndQuizFor = () => {
       })
       .catch((error) => {
         setIsUploading(false);
+        setVideoFileError("Failed to upload video. Please try again.");
         console.error("Video upload failed:", error);
-        console.error("Error response:", error.response);
-        console.error("Error status:", error.response?.status);
-        console.error("Error data:", error.response?.data);
-        console.error("Error headers:", error.response?.headers);
-        console.error("Full error object:", error);
-
-        if (error.response?.status === 415) {
-          setVideoFileError(
-            "Server rejected video format. Please ensure you're uploading an MP4 file."
-          );
-        } else {
-          setVideoFileError("Failed to upload video. Please try again.");
-        }
       });
   };
 
