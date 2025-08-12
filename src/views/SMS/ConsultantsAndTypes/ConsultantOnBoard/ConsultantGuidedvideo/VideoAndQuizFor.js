@@ -241,7 +241,7 @@ const VideoAndQuizFor = () => {
   const handleDetailedAnswerClick = () => setIsDetailedAnswerEditing(true);
 
   const handleVideoFileChange = (event) => {
-    console.log(event.target.files[0], "event");
+    console.log(event.target.files, "event");
 
     const file = event.target.files[0];
     setVideoFile(file);
@@ -301,27 +301,12 @@ const VideoAndQuizFor = () => {
     setUploadProgress(0);
     setShowVideoPlayer(false);
     const formData = new FormData();
-
-    // Try only the "file" field name as that's most common
-
     formData.append("VideoFile", file);
-
-    console.log("Uploading file:", {
-      fileName: file.name,
-      fileType: file.type,
-      fileSize: file.size,
-      formDataEntries: Array.from(formData.entries()),
-    });
-
-    // Use axios directly for file uploads to ensure proper FormData handling
 
     axios
       .post(`${rootUrl}OnboardingVideo/UploadVideo`, formData, {
         headers: {
-          // "content-type": "multipart/form-data",
-          Authorization: `Bearer ${AuthStr}`,
-          // authorization: AuthStr,
-          Accept: "application/json, text/plain, */*",
+          authorization: AuthStr,
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(

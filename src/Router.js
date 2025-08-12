@@ -524,6 +524,11 @@ const ConsultantDetails = lazy(() =>
 );
 
 //consultant On board
+const ConsultantDashBoardGuidedVideo = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantDashboardGuidedVideo/Index.js"
+  )
+);
 const ConsultantOnBoard = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/Index.js"
@@ -3296,6 +3301,10 @@ class AppRouter extends React.Component {
                   />
                   {/* consultant on board */}
 
+                  <AppRoute
+                    path="/consultant-DashBoard-Guided-Video"
+                    component={ConsultantDashBoardGuidedVideo}
+                  />
                   <AppRoute
                     path="/consultantOnBoard"
                     component={ConsultantOnBoard}
