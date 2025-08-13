@@ -36,12 +36,8 @@ const VideoAndQuizFor = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [blobUrl, setBlobUrl] = useState(null);
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
-  const [FileList1, setFileList1] = useState([]);
-  const [previewImage1, setPreviewImage1] = useState("");
-  const [previewTitle1, setPreviewTitle1] = useState("");
-  const [previewVisible1, setPreviewVisible1] = useState(false);
-  const [error, setError] = useState("");
 
   // Question and Answer states
   const [question, setQuestion] = useState("");
@@ -62,7 +58,7 @@ const VideoAndQuizFor = () => {
   const [savedQuestions, setSavedQuestions] = useState([]);
   const [showQuestionForm, setShowQuestionForm] = useState(true);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
-  const [blobUrl, setBlobUrl] = useState(null);
+
   // Form data storage key
   const FORM_DATA_KEY = "consultantGuidedVideoFormData";
 
@@ -531,6 +527,7 @@ const VideoAndQuizFor = () => {
         }
       });
   };
+
   const ValidateFormQuizFor = () => {
     var isValid = true;
 
@@ -558,62 +555,29 @@ const VideoAndQuizFor = () => {
   };
 
   const handleSubmitQuizFor = (event) => {
-    event.preventDefault();
+    const subData = new FormData(event.target);
+
+    subData.append("BranchId", branchValue);
+    subData.append("CountryId", countryValue);
+    subData.append("VideoTitle", videoTitle);
+    if (blobUrl) {
+      subData.append("BlobUrl", blobUrl);
+    }
+    // subData.append("ImageFile", zipCode);
+    subData.append("IsAcceptHome", homeAccept);
+    subData.append("IsAcceptEU_UK", ukAccept);
+    subData.append("IsAcceptInternational", intAccept);
 
     if (ValidateFormQuizFor()) {
-      // Save form data to memory and navigate
       handleVideoQuizContinue();
-      event.preventDefault();
-      const subData = new FormData(event.target);
-      subData.append("BranchId", branchValue);
-      subData.append("CountryId", countryValue);
-      subData.append("VideoTitle", videoTitle);
-      if (blobUrl) {
-        subData.append("BlobUrl", blobUrl);
-      }
-      subData.append("ImageFile", FileList1[0]?.originFileObj);
-      subData.append("IsAcceptHome", homeAccept);
-      subData.append("IsAcceptEU_UK", ukAccept);
-      subData.append("IsAcceptInternational", intAccept);
 
-      // Add quiz questions and answers to FormData
-      if (savedQuestions && savedQuestions.length > 0) {
-        savedQuestions.forEach((question, questionIndex) => {
-          // Add question text and order
-          subData.append(`Questions[${questionIndex}].text`, question.question);
-          subData.append(`Questions[${questionIndex}].order`, question.number);
-
-          // Add question options/answers
-          if (question.answers && question.answers.length > 0) {
-            question.answers.forEach((answer, answerIndex) => {
-              subData.append(
-                `Questions[${questionIndex}].options[${answerIndex}].text`,
-                answer.text
-              );
-              subData.append(
-                `Questions[${questionIndex}].options[${answerIndex}].order`,
-                answerIndex + 1
-              );
-              subData.append(
-                `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
-                answer.isCorrect
-              );
-            });
-          }
+      post("ConsultantOnboarding/Submit", subData).then((res) => {
+        // history.push(`/affiliateEmergencyInfo/${affiliateId}`);
+        addToast(res?.data?.title, {
+          appearance: res?.data?.isSuccess === true ? "success" : "error",
+          autoDismiss: true,
         });
-      }
-
-      if (ValidateFormQuizFor()) {
-        handleVideoQuizContinue();
-
-        post("ConsultantOnboarding/Submit", subData).then((res) => {
-          // history.push(`/affiliateEmergencyInfo/${affiliateId}`);
-          addToast(res?.data?.title, {
-            appearance: res?.data?.isSuccess === true ? "success" : "error",
-            autoDismiss: true,
-          });
-        });
-      }
+      });
     }
   };
 
@@ -641,66 +605,10 @@ const VideoAndQuizFor = () => {
     }
   };
 
-  const handleAllPart = (event) => {
-    event.preventDefault();
-    const subData = new FormData(event.target);
-
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
-    subData.append("VideoTitle", videoTitle);
-    if (blobUrl) {
-      subData.append("BlobUrl", blobUrl);
-    }
-    // subData.append("ImageFile", zipCode);
-    subData.append("IsAcceptHome", homeAccept);
-    subData.append("IsAcceptEU_UK", ukAccept);
-    subData.append("IsAcceptInternational", intAccept);
-
-    // Add quiz questions and answers to FormData
-    if (savedQuestions && savedQuestions.length > 0) {
-      savedQuestions.forEach((question, questionIndex) => {
-        // Add question text and order
-        subData.append(`Questions[${questionIndex}].text`, question.question);
-        subData.append(`Questions[${questionIndex}].order`, question.number);
-
-        // Add question options/answers
-        if (question.answers && question.answers.length > 0) {
-          question.answers.forEach((answer, answerIndex) => {
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].text`,
-              answer.text
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].order`,
-              answerIndex + 1
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
-              answer.isCorrect
-            );
-          });
-        }
-      });
-    }
-
-    if (ValidateFormQuizFor()) {
-      handleVideoQuizContinue();
-
-      post("ConsultantOnboarding/Submit", subData).then((res) => {
-        // history.push(`/affiliateEmergencyInfo/${affiliateId}`);
-        addToast(res?.data?.title, {
-          appearance: res?.data?.isSuccess === true ? "success" : "error",
-          autoDismiss: true,
-        });
-      });
-    }
-  };
-
   return (
     <div className="p-4">
-      {/* Steps */}
-      {/* <Form onSubmit={handleAllPart}>
-      
+      {/* <Form onSubmit={handleSubmitQuizFor}>
+       
       </Form> */}
       <Row>
         <Col md="3" sm="12">
@@ -886,16 +794,6 @@ const VideoAndQuizFor = () => {
               handleAddMoreQuestion={handleAddMoreQuestion}
               handleDeleteQuestion={handleDeleteQuestion}
               currentQuestionNumber={currentQuestionNumber}
-              FileList1={FileList1}
-              setFileList1={setFileList1}
-              previewImage1={previewImage1}
-              setPreviewImage1={setPreviewImage1}
-              setPreviewTitle1={setPreviewTitle1}
-              previewTitle1={previewTitle1}
-              previewVisible1={previewVisible1}
-              setPreviewVisible1={setPreviewVisible1}
-              error={error}
-              setError={setError}
             />
           )}
         </Col>
