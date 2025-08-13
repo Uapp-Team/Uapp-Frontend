@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardBody } from "reactstrap";
+import { rootUrl } from "../../../../../constants/constants";
 
 const VideoCard = ({ video }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -29,41 +30,41 @@ const VideoCard = ({ video }) => {
           <div>
             <img
               className="cons-guided-video-list-img "
-              src={video.image}
-              alt={video.title}
+              src={video.videoImage}
+              alt={video.videoTitle}
             />
           </div>
           <div style={{ flex: 1 }}>
             <div className="cons-guided-video-list-video-title">
-              {video.title}
+              {video.videoTitle}
             </div>
             <div className="mt-3 cons-guided-video-list-branch">
-              Branch: {video.branch}
+              Branch: {video.branchName}
             </div>
-            <div className="my-3">
+            {/* <div className="my-3">
               {video.tags.map((tag, idx) => (
                 <span key={tag} className="cons-guided-video-list-tags">
                   {tag}
                 </span>
               ))}
-            </div>
+            </div> */}
             <div className="cons-guided-video-list-question">
               Question {video.questionCount}/5
             </div>
           </div>
           <div className="d-flex align-items-center">
             <div className="cons-guided-video-list-video-date">
-              {video.date}
+              {video.creationDate}
             </div>
             <div className="mx-3">
               <span
                 className={
-                  video.status === "Active"
+                  video.isActive === true
                     ? "cons-guided-video-list-status-active"
                     : "cons-guided-video-list-status-deactivate"
                 }
               >
-                {video.status}
+                {video.isActive === true ? "Active" : "Deactivate"}
               </span>
             </div>
             <div ref={menuRef}>
