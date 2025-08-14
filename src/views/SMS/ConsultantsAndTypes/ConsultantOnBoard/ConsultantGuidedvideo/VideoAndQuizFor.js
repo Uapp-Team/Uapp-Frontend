@@ -91,6 +91,15 @@ const VideoAndQuizFor = () => {
   useEffect(() => {
     Uget(`ConsultantOnboarding/GetVideoByQuizId/${id}`).then((res) => {
       setGuidedVideoData(res?.data);
+      setBranchLabel(res?.data?.branchName);
+      setBranchValue(res?.data?.branchId);
+      setCountryLabel(res?.data?.countryName);
+      setCountryValue(res?.data?.countryId);
+      setHomeAccept(res?.data?.isAcceptHome);
+      setUkAccept(res?.data?.isAcceptEU_UK);
+      setIntAccept(res?.data?.isAcceptInternational);
+      setVideoTitle(res?.data?.videoTitle);
+      setVideoFile(res?.data?.blobUrl);
 
       // Set stats data from API response
       if (res) {
