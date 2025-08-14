@@ -70,7 +70,6 @@ const VideoAndQuizFor = () => {
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [blobUrl, setBlobUrl] = useState(null);
 
-  // Stats data states
   const [statsData, setStatsData] = useState({
     questionCount: 0,
     isAcceptEU_UK: false,
