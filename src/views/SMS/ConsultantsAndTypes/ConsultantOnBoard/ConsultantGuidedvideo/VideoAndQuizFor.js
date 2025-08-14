@@ -69,6 +69,7 @@ const VideoAndQuizFor = () => {
   const [showQuestionForm, setShowQuestionForm] = useState(true);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [blobUrl, setBlobUrl] = useState(null);
+  const [blobName, setBlobName] = useState(null);
 
   const [statsData, setStatsData] = useState({
     questionCount: 0,
@@ -668,7 +669,9 @@ const VideoAndQuizFor = () => {
         // Extract blobUrl from the API response
         if (res.data && res.data.data && res.data.data.blobUrl) {
           setBlobUrl(res.data.data.blobUrl);
+          setBlobName(res.data.data.blobName);
           console.log("Blob URL extracted:", res.data.data.blobUrl);
+          console.log("Blob URL extracted:", res.data.data.blobName);
         } else {
           console.warn("No blobUrl found in response:", res.data);
         }
@@ -725,7 +728,7 @@ const VideoAndQuizFor = () => {
       subData.append("CountryId", countryValue);
       subData.append("VideoTitle", videoTitle);
       if (blobUrl) {
-        subData.append("BlobUrl", blobUrl);
+        subData.append("BlobUrl", blobName);
       }
       subData.append("ImageFile", FileList1[0]?.originFileObj);
       subData.append("IsAcceptHome", homeAccept);
