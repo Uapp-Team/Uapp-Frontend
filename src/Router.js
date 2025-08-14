@@ -540,6 +540,7 @@ const VideoAndQuizFor = lazy(() =>
     "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/VideoAndQuizFor.js"
   )
 );
+
 const VideoDetails = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/VideoDetails.js"
@@ -3305,14 +3306,21 @@ class AppRouter extends React.Component {
                     path="/consultant-DashBoard-Guided-Video"
                     component={ConsultantDashBoardGuidedVideo}
                   />
+
                   <AppRoute
                     path="/consultantOnBoard"
                     component={ConsultantOnBoard}
                   />
+
                   <AppRoute
                     path="/videoAndQuizFor"
                     component={VideoAndQuizFor}
                   />
+                  <AppRoute
+                    path="/videoAndQuizFor-edit/:id"
+                    component={VideoAndQuizFor}
+                  />
+
                   <AppRoute
                     path="/onBoard-video-details"
                     component={VideoDetails}

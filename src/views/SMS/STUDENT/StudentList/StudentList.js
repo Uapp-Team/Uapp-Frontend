@@ -455,13 +455,6 @@ const StudentList = () => {
 
   const componentRef = useRef();
 
-  // Delete Modal parts here
-
-  const toggleDanger = (data) => {
-    setDelData(data);
-    setDeleteModal(true);
-  };
-
   //password parts starts here
   const handlePass = (data) => {
     setPassData(data);
@@ -529,6 +522,13 @@ const StudentList = () => {
   };
 
   //Update and change password submitting ends here
+
+  // Delete Modal parts here
+
+  const toggleDanger = (data) => {
+    setDelData(data);
+    setDeleteModal(true);
+  };
 
   //student delete parts here
   const handleDeleteData = () => {

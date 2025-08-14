@@ -16,8 +16,18 @@ const Index = () => {
   const [videoList, setVideoList] = useState([]);
   const [entity, setEntity] = useState(0);
   const [checkBac, setCheckBac] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const videoAndQuizFor = () => {
+    // Clear any saved form data from localStorage before navigating
+    const FORM_DATA_KEY = "consultantGuidedVideoFormData";
+    try {
+      localStorage.removeItem(FORM_DATA_KEY);
+      console.log("Form data cleared before navigation");
+    } catch (error) {
+      console.error("Error clearing form data:", error);
+    }
+
     history.push("/videoAndQuizFor");
   };
   const paginate = (pageNumber) => {
@@ -31,10 +41,10 @@ const Index = () => {
     }
     // For "all" filter, no isActive parameter is added
     Uget(url).then((res) => {
-      setVideoList(res?.data);
-      setEntity(res?.totalEntity);
+      setVideoList(res?.items);
+      setEntity(res?.totalFiltered);
     });
-  }, [currentPage, dataPerPage, activeFilter]);
+  }, [currentPage, dataPerPage, activeFilter, success]);
 
   return (
     <div>
@@ -69,7 +79,11 @@ const Index = () => {
         </div>
       </div>
       <div className="separator mb-4"></div>
-      <VideoList videoList={videoList} />
+      <VideoList
+        videoList={videoList}
+        success={success}
+        setSuccess={setSuccess}
+      />
       <Pagination
         dataPerPage={dataPerPage}
         totalData={entity}
