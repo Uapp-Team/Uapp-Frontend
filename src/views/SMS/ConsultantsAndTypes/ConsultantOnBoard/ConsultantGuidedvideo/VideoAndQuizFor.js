@@ -65,7 +65,6 @@ const VideoAndQuizFor = () => {
     useState(false);
   const [isDetailedAnswerEditing, setIsDetailedAnswerEditing] = useState(false);
 
-  // New state for managing saved questions and form visibility
   const [savedQuestions, setSavedQuestions] = useState([]);
   const [showQuestionForm, setShowQuestionForm] = useState(true);
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
