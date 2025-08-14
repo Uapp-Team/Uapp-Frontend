@@ -299,7 +299,6 @@ const VideoAndQuizFor = () => {
     console.log("All form data cleared and reset to initial state");
   };
 
-  // Function to reset form manually (can be called from UI)
   const handleResetForm = () => {
     clearAllFormData();
     addToast("Form has been reset to initial state", {
