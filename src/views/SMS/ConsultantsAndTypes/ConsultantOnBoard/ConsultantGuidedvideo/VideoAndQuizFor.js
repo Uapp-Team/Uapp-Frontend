@@ -83,8 +83,8 @@ const VideoAndQuizFor = () => {
     countryId: 0,
     videoTitle: "",
     countryName: "",
-    creationDate: "",
     videoImage: "",
+    blobUrl: "",
   });
   console.log(statsData, "imad bro");
 
@@ -104,9 +104,11 @@ const VideoAndQuizFor = () => {
           isAcceptInternational: res.data?.isAcceptInternational || false,
           isActive: res.data?.isActive || false,
           branchName: res.data?.branchName || "",
+          branchId: res.data?.branchId || "",
+          countryId: res.data?.countryId || "",
           countryName: res.data?.countryName || "",
-          creationDate: res.data?.creationDate || "",
-          videoImage: res.videoImage || "",
+          videoImage: res.data?.videoImage || "",
+          blobUrl: res.data?.blobUrl || "",
         });
 
         console.log("Stats data set:", {
@@ -115,13 +117,12 @@ const VideoAndQuizFor = () => {
           isAcceptHome: res.data?.isAcceptHome || false,
           isAcceptInternational: res.data?.isAcceptInternational || false,
           isActive: res.data?.isActive || false,
-          isVideoShown: res.data?.isVideoShown || false,
-          recruitmentTypes: res.recruitmentTypes || [],
           branchName: res.data?.branchName || "",
+          branchId: res.data?.branchId || "",
+          countryId: res.data?.countryId || "",
           countryName: res.data?.countryName || "",
-          creationDate: res.data?.creationDate || "",
-          videoImage: res.videoImage || "",
-          videoTitle: res.videoTitle || "",
+          videoImage: res.data?.videoImage || "",
+          blobUrl: res.data?.blobUrl || "",
         });
       }
 
