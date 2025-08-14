@@ -9,7 +9,7 @@ import CloseBtn from "../../../../../components/buttons/CloseBtn";
 
 const Index = () => {
   const [activeStep, setActiveStep] = useState("consultant");
-  const [videoWatched, setVideoWatched] = useState(false);
+  const [videoWatched, setVideoWatched] = useState(true);
   const [data, setData] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,16 +67,16 @@ const Index = () => {
     }
   };
   const handleQuiz = (id) => {
-    const formData = new FormData();
-    formData.append("onboardingQuizId", id);
-    formData.append("consultantQuestionAnswersDtos", JSON.stringify(answers));
+    // const formData = new FormData();
+    // formData.append("onboardingQuizId", id);
+    // formData.append("consultantQuestionAnswersDtos", JSON.stringify(answers));
 
-    // const formData = {
-    //   onboardingQuizId: id,
-    //   consultantQuestionAnswersDtos: answers,
-    // };
+    const formData = {
+      onboardingQuizId: id,
+      consultantQuestionAnswersDtos: answers,
+    };
 
-    post(`OnboardingQuizAttempt//QuestionAttempt`, formData).then((res) => {
+    post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
       console.log(res);
       if (res?.status === 200) {
         toggleModal();
