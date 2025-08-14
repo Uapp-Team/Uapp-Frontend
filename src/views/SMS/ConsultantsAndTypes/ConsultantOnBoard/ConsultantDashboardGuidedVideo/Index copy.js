@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { Col, Row } from "reactstrap";
-import SaveButton from "../../../../../components/buttons/SaveButton";
-import PreviousButton from "../../../../../components/buttons/PreviousButton";
-import Uget from "../../../../../helpers/Uget";
-import post from "../../../../../helpers/post";
+import { Card, Col, Row } from "reactstrap";
 
 const Index = () => {
   const [activeStep, setActiveStep] = useState("consultant");
-  const [videoWatched, setVideoWatched] = useState(true);
-  const [data, setData] = useState(null);
-  const [answers, setAnswers] = useState([]);
 
   const handleStepClick = (step) => {
     setActiveStep(step);
@@ -21,63 +14,17 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    Uget("ConsultantOnboarding/GetVideoByConsultant").then((res) => {
-      setData(res?.data);
-      // setVideoWatched(res?.data?.isVideoShown);
-    });
-  }, []);
-
-  const handleNext = (id) => {
-    post(`OnboardingQuizAttempt/CreateQuizAttempt?onboardingQuizId=${id}`).then(
-      (res) => {
-        console.log(res);
-        if (res?.status == 200) {
-          setVideoWatched(true);
-        }
-      }
-    );
-  };
-
-  const handleAnswer = (id, answer) => {
-    const isExist = answers.find(
-      (answer) =>
-        answer.onboardingQuestionId === id &&
-        answer.onboardingAnswerId === answer
-    );
-    if (isExist) {
-      setAnswers(
-        answers.filter(
-          (answer) =>
-            answer.onboardingQuestionId !== id &&
-            answer.onboardingAnswerId !== answer
-        )
-      );
-    } else {
-      setAnswers([
-        ...answers,
-        { onboardingQuestionId: id, onboardingAnswerId: answer },
-      ]);
-    }
-  };
-  const handleQuiz = (id) => {
-    const formData = new FormData();
-    formData.append("onboardingQuizId", id);
-    formData.append("consultantQuestionAnswersDtos", JSON.stringify(answers));
-
-    post(`OnboardingQuizAttempt//QuestionAttempt`, formData).then((res) => {
-      console.log(res);
-    });
-  };
-
   return (
     <div className="custom-card-border mb-3 ">
+      {/* Steps */}
+      {/* <Form onSubmit={handleAllPart}>
+      
+      </Form> */}
       <Row>
         <Col md="3" sm="12" className="border-right pr-0">
-          <div
-            className="d-flex align-items-center p-4"
-            style={{ minHeight: 60 }}
-          >
+          <h5 className="fw-bold mb-3">Consultant Guided video</h5>
+
+          <div className="d-flex align-items-center" style={{ minHeight: 60 }}>
             <div id="chart" className="p-0" style={{ width: 60, height: 60 }}>
               <ReactApexChart
                 options={{
@@ -195,7 +142,7 @@ const Index = () => {
                 color: activeStep === "consultant" ? "black" : "#6c757d",
               }}
             >
-              Guided video
+              Your Consultant
             </h5>
           </div>
           {/* Video and Quiz Step */}
@@ -252,119 +199,88 @@ const Index = () => {
                 color: activeStep === "videoQuiz" ? "black" : "#6c757d",
               }}
             >
-              Quiz
+              Video and Quiz
             </h5>
           </div>
         </Col>
-        <Col md="9" sm="12" className="p-4 bg-white">
-          {/* Guided Video Section */}
-          {(activeStep === "consultant" || activeStep === "videoQuiz") && (
-            <div>
-              <div className="mb-4">
-                <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
-                  Guided video
-                </h6>
-
-                <div
-                  style={{
-                    borderRadius: 8,
-                    overflow: "hidden",
-                    boxShadow: "0 2px 8px #0001",
-                  }}
-                >
-                  {data?.blobUrl && (
-                    <video
-                      src={data?.blobUrl}
-                      width="100%"
-                      height="450"
-                      controls
-                      // autoPlay
-                      // loop
-                      className="w-100 bg-black"
-                      onEnded={() => handleNext(data?.id)}
-                      poster={data?.videoImage}
-                    />
-                  )}
-                </div>
-
-                {videoWatched && (
-                  <SaveButton
-                    text="Next"
-                    className="mt-3 px-4 py-2"
-                    style={{ fontWeight: 500, fontSize: 15 }}
-                    action={() => handleStepClick("videoQuiz")}
-                    // action={() => handleNext(data?.id)}
-                  />
-                )}
-              </div>
-            </div>
+        <Col md="9" sm="12" className="p-4">
+          {/* {activeStep === "consultant" && (
+            <YourConsultantForm
+              handleSubmitVideoFor={handleSubmitVideoFor}
+              branchOptions={branchOptions}
+              branchLabel={branchLabel}
+              branchValue={branchValue}
+              selectBranch={selectBranch}
+              branchError={branchError}
+              countryName={countryName}
+              countryLabel={countryLabel}
+              countryValue={countryValue}
+              selectCountry={selectCountry}
+              countryError={countryError}
+              homeAccept={homeAccept}
+              setAcceptError={setAcceptError}
+              setHomeAccept={setHomeAccept}
+              intAccept={intAccept}
+              setIntAccept={setIntAccept}
+              ukAccept={ukAccept}
+              setUkAccept={setUkAccept}
+              acceptError={acceptError}
+            />
           )}
-          {/* Quiz Section */}
           {activeStep === "videoQuiz" && (
-            <div>
-              <div className="mb-4">
-                <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
-                  Quiz
-                </h6>
-                <span className="text-muted fs-14px">
-                  Some question has multiple choice
-                </span>
-                <hr className="my-4" />
-                <Row>
-                  <Col md="12" lg="9">
-                    {data?.questions?.map((question) => (
-                      <div
-                        className="custom-card-border p-4 mb-4"
-                        key={question?.id}
-                      >
-                        <div className="fw-600 fs-20px mb-2">
-                          Question {question?.order} of{" "}
-                          {data?.questions?.length}
-                        </div>
-                        <div className="mb-2" style={{ fontSize: 15 }}>
-                          {question?.question}
-                        </div>
-                        <div>
-                          {question?.answers?.map((answer) => (
-                            <div className="form-check mb-1">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name={`q${question?.id}`}
-                                id={`q${question?.id}a${answer?.id}`}
-                                onChange={() =>
-                                  handleAnswer(question?.id, answer?.id)
-                                }
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={`q${question?.id}a${answer?.id}`}
-                              >
-                                {answer?.option}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-
-                    <div className="mt-4">
-                      <PreviousButton
-                        className="px-4"
-                        action={() => handleStepClick("consultant")}
-                      />
-
-                      <SaveButton
-                        text="Done"
-                        className="px-4"
-                        action={() => handleQuiz(data?.id)}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-            </div>
-          )}
+            <VideoQuizForm
+              handleSubmitQuizFor={handleSubmitQuizFor}
+              handleFirstNameChange={handleFirstNameChange}
+              videoTitle={videoTitle}
+              videoTitleError={videoTitleError}
+              handleVideoFileChange={handleVideoFileChange}
+              videoFile={videoFile}
+              videoFileError={videoFileError}
+              showVideoPlayer={showVideoPlayer}
+              uploadProgress={uploadProgress}
+              isUploading={isUploading}
+              videoUrl={videoUrl}
+              question={question}
+              setQuestion={setQuestion}
+              setIsQuestionEditing={setIsQuestionEditing}
+              questionError={questionError}
+              setQuestionError={setQuestionError}
+              answers={answers}
+              handleCorrectAnswerChange={handleCorrectAnswerChange}
+              handleAnswerChange={handleAnswerChange}
+              handleAnswerKeyPress={handleAnswerKeyPress}
+              handleAnswerBlur={handleAnswerBlur}
+              handleAnswerClick={handleAnswerClick}
+              isDetailedAnswerEditing={isDetailedAnswerEditing}
+              detailedAnswer={detailedAnswer}
+              detailedAnswerError={detailedAnswerError}
+              handleDetailedAnswerChange={handleDetailedAnswerChange}
+              handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
+              handleDetailedAnswerBlur={handleDetailedAnswerBlur}
+              handleDetailedAnswerClick={handleDetailedAnswerClick}
+              isQuestionEditing={isQuestionEditing}
+              handleQuestionChange={handleQuestionChange}
+              handleQuestionKeyPress={handleQuestionKeyPress}
+              handleQuestionClick={handleQuestionClick}
+              handleQuestionBlur={handleQuestionBlur}
+              savedQuestions={savedQuestions}
+              handleSaveQuestion={handleSaveQuestion}
+              showQuestionForm={showQuestionForm}
+              handleAddMoreQuestion={handleAddMoreQuestion}
+              handleDeleteQuestion={handleDeleteQuestion}
+              currentQuestionNumber={currentQuestionNumber}
+              FileList1={FileList1}
+              setFileList1={setFileList1}
+              previewImage1={previewImage1}
+              setPreviewImage1={setPreviewImage1}
+              setPreviewTitle1={setPreviewTitle1}
+              previewTitle1={previewTitle1}
+              previewVisible1={previewVisible1}
+              setPreviewVisible1={setPreviewVisible1}
+              error={error}
+              setError={setError}
+            />
+          )} */}
         </Col>
       </Row>
     </div>
