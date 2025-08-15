@@ -58,6 +58,8 @@ const VideoQuizForm = ({
   error,
   setError,
 }) => {
+  console.log(FileList1, "sakib check");
+
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
 
@@ -75,9 +77,9 @@ const VideoQuizForm = ({
 
   const handlePreview1 = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase641(file.originFileObj);
+      file.url = await getBase641(file.originFileObj);
     }
-    setPreviewImage1(file.url || file.preview);
+    setPreviewImage1(file.url || file.url);
     setPreviewVisible1(true);
     setPreviewTitle1(
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
@@ -86,6 +88,8 @@ const VideoQuizForm = ({
 
   const handleChange1 = ({ fileList }) => {
     setFileList1(fileList);
+    console.log(fileList, "aita sakib");
+
     if (
       fileList.length > 0 &&
       fileList[0]?.type !== "image/jpeg" &&

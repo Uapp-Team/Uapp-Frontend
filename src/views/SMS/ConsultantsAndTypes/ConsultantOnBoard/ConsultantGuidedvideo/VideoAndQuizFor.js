@@ -101,6 +101,7 @@ const VideoAndQuizFor = () => {
       setIntAccept(res?.data?.isAcceptInternational);
       setVideoTitle(res?.data?.videoTitle);
       setVideoFile(res?.data?.blobUrl);
+      setVideoUrl(res?.data?.blobUrl);
 
       // Set stats data from API response
       if (res) {
@@ -136,6 +137,19 @@ const VideoAndQuizFor = () => {
       console.log("Full API response:", res);
     });
   }, [success, id]);
+
+  useEffect(() => {
+    if (guidedVideoData?.videoImage) {
+      setFileList1([
+        {
+          uid: "-1",
+          name: "",
+          status: "done",
+          url: guidedVideoData?.videoImage,
+        },
+      ]);
+    }
+  }, [guidedVideoData]);
 
   const toggleConsultantModal = () => setConsultantModal(!consultantModal);
   const toggleVideoQuizModal = () => setVideoQuizModal(!videoQuizModal);
@@ -1003,6 +1017,7 @@ const VideoAndQuizFor = () => {
               setPreviewVisible1={setPreviewVisible1}
               error={error}
               setError={setError}
+              existingThumbnail={guidedVideoData?.videoImage}
             />
           )}
         </Col>

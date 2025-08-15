@@ -10,8 +10,17 @@ import VideoQuizForm from "./VideoQuizForm";
 import post from "../../../../../helpers/post";
 import axios from "axios";
 import { rootUrl } from "../../../../../constants/constants";
+import { useToasts } from "react-toast-notifications";
+import { useHistory, useParams } from "react-router-dom";
+import Uget from "../../../../../helpers/Uget";
+import { ConsoleLogger } from "@microsoft/signalr/dist/esm/Utils";
 
 const VideoAndQuizFor = () => {
+  const history = useHistory();
+  const { id } = useParams();
+  const { addToast } = useToasts();
+  const [guidedVideoData, setGuidedVideoData] = useState({});
+  const [success, setSuccess] = useState(false);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("London office");
   const [branchValue, setBranchValue] = useState(1);
@@ -35,6 +44,11 @@ const VideoAndQuizFor = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
+  const [FileList1, setFileList1] = useState([]);
+  const [previewImage1, setPreviewImage1] = useState("");
+  const [previewTitle1, setPreviewTitle1] = useState("");
+  const [previewVisible1, setPreviewVisible1] = useState(false);
+  const [error, setError] = useState("");
 
   // Question and Answer states
   const [question, setQuestion] = useState("");
@@ -51,6 +65,78 @@ const VideoAndQuizFor = () => {
     useState(false);
   const [isDetailedAnswerEditing, setIsDetailedAnswerEditing] = useState(false);
 
+  const [savedQuestions, setSavedQuestions] = useState([]);
+  const [showQuestionForm, setShowQuestionForm] = useState(true);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const [blobUrl, setBlobUrl] = useState(null);
+  const [blobName, setBlobName] = useState(null);
+
+  const [statsData, setStatsData] = useState({
+    questionCount: 0,
+    isAcceptEU_UK: false,
+    isAcceptHome: false,
+    isAcceptInternational: false,
+    isActive: false,
+    branchName: "",
+    branchId: 0,
+    countryId: 0,
+    videoTitle: "",
+    countryName: "",
+    videoImage: "",
+    blobUrl: "",
+  });
+  console.log(statsData, "imad bro");
+
+  const FORM_DATA_KEY = "consultantGuidedVideoFormData";
+
+  useEffect(() => {
+    Uget(`ConsultantOnboarding/GetVideoByQuizId/${id}`).then((res) => {
+      setGuidedVideoData(res?.data);
+      setBranchLabel(res?.data?.branchName);
+      setBranchValue(res?.data?.branchId);
+      setCountryLabel(res?.data?.countryName);
+      setCountryValue(res?.data?.countryId);
+      setHomeAccept(res?.data?.isAcceptHome);
+      setUkAccept(res?.data?.isAcceptEU_UK);
+      setIntAccept(res?.data?.isAcceptInternational);
+      setVideoTitle(res?.data?.videoTitle);
+      setVideoFile(res?.data?.blobUrl);
+
+      // Set stats data from API response
+      if (res) {
+        setStatsData({
+          questionCount: res.data?.questionCount || 0,
+          isAcceptEU_UK: res.data?.isAcceptEU_UK || false,
+          isAcceptHome: res.data?.isAcceptHome || false,
+          isAcceptInternational: res.data?.isAcceptInternational || false,
+          isActive: res.data?.isActive || false,
+          branchName: res.data?.branchName || "",
+          branchId: res.data?.branchId || "",
+          countryId: res.data?.countryId || "",
+          countryName: res.data?.countryName || "",
+          videoImage: res.data?.videoImage || "",
+          blobUrl: res.data?.blobUrl || "",
+        });
+
+        console.log("Stats data set:", {
+          questionCount: res.data?.questionCount || 0,
+          isAcceptEU_UK: res.data?.isAcceptEU_UK || false,
+          isAcceptHome: res.data?.isAcceptHome || false,
+          isAcceptInternational: res.data?.isAcceptInternational || false,
+          isActive: res.data?.isActive || false,
+          branchName: res.data?.branchName || "",
+          branchId: res.data?.branchId || "",
+          countryId: res.data?.countryId || "",
+          countryName: res.data?.countryName || "",
+          videoImage: res.data?.videoImage || "",
+          blobUrl: res.data?.blobUrl || "",
+        });
+      }
+
+      console.log("Full API response:", res);
+    });
+  }, [success, id]);
+
   const toggleConsultantModal = () => setConsultantModal(!consultantModal);
   const toggleVideoQuizModal = () => setVideoQuizModal(!videoQuizModal);
 
@@ -61,6 +147,200 @@ const VideoAndQuizFor = () => {
     } else if (step === "videoQuiz") {
       toggleVideoQuizModal();
     }
+  };
+
+  // Load saved form data from localStorage on component mount
+  useEffect(() => {
+    loadSavedFormData();
+  }, []);
+
+  // Additional effect to ensure clean form state when no saved data exists
+  useEffect(() => {
+    const savedData = localStorage.getItem(FORM_DATA_KEY);
+    if (!savedData) {
+      // No saved data, ensure form is in clean state
+      clearAllFormData();
+    }
+  }, []);
+
+  // Cleanup effect when component unmounts
+  useEffect(() => {
+    return () => {
+      // Clear form data when component unmounts to prevent stale data
+      clearSavedFormData();
+    };
+  }, []);
+
+  // Load saved form data from localStorage
+  const loadSavedFormData = () => {
+    try {
+      const savedData = localStorage.getItem(FORM_DATA_KEY);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+
+        // Restore form state from saved data
+        if (parsedData.branchLabel) setBranchLabel(parsedData.branchLabel);
+        if (parsedData.branchValue) setBranchValue(parsedData.branchValue);
+        if (parsedData.countryLabel) setCountryLabel(parsedData.countryLabel);
+        if (parsedData.countryValue) setCountryValue(parsedData.countryValue);
+        if (parsedData.homeAccept !== undefined)
+          setHomeAccept(parsedData.homeAccept);
+        if (parsedData.ukAccept !== undefined) setUkAccept(parsedData.ukAccept);
+        if (parsedData.intAccept !== undefined)
+          setIntAccept(parsedData.intAccept);
+        if (parsedData.videoTitle) setVideoTitle(parsedData.videoTitle);
+        if (parsedData.blobUrl) setBlobUrl(parsedData.blobUrl);
+        if (parsedData.question) setQuestion(parsedData.question);
+        if (parsedData.answers) setAnswers(parsedData.answers);
+        if (parsedData.detailedAnswer)
+          setDetailedAnswer(parsedData.detailedAnswer);
+        if (parsedData.savedQuestions)
+          setSavedQuestions(parsedData.savedQuestions);
+        if (parsedData.currentQuestionNumber)
+          setCurrentQuestionNumber(parsedData.currentQuestionNumber);
+
+        // Set form visibility based on whether there are saved questions
+        if (parsedData.savedQuestions && parsedData.savedQuestions.length > 0) {
+          setShowQuestionForm(false);
+        }
+
+        console.log("Form data loaded from localStorage:", parsedData);
+      } else {
+        // No saved data found, ensure form is in clean state
+        clearAllFormData();
+      }
+    } catch (error) {
+      console.error("Error loading saved form data:", error);
+      // If there's an error loading data, clear the form
+      clearAllFormData();
+    }
+  };
+
+  // Save form data to localStorage
+  const saveFormDataToMemory = () => {
+    try {
+      const formData = {
+        branchLabel,
+        branchValue,
+        countryLabel,
+        countryValue,
+        homeAccept,
+        ukAccept,
+        intAccept,
+        videoTitle,
+        question,
+        answers,
+        detailedAnswer,
+        savedQuestions,
+        currentQuestionNumber,
+        timestamp: new Date().toISOString(),
+      };
+
+      localStorage.setItem(FORM_DATA_KEY, JSON.stringify(formData));
+      console.log("Form data saved to localStorage:", formData);
+    } catch (error) {
+      console.error("Error saving form data:", error);
+    }
+  };
+
+  // Clear saved form data
+  const clearSavedFormData = () => {
+    try {
+      localStorage.removeItem(FORM_DATA_KEY);
+      console.log("Saved form data cleared");
+    } catch (error) {
+      console.error("Error clearing saved form data:", error);
+    }
+  };
+
+  // Clear all form data and reset to initial state
+  const clearAllFormData = () => {
+    // Reset all state variables to initial values
+    setBranchLabel("London office");
+    setBranchValue(1);
+    setBranchError(false);
+    setConsultantModal(false);
+    setVideoQuizModal(false);
+    setActiveStep("consultant");
+    setHomeAccept(false);
+    setUkAccept(false);
+    setIntAccept(false);
+    setAcceptError(false);
+    setCountryLabel("Country");
+    setCountryValue(0);
+    setCountryError(false);
+    setVideoTitle("");
+    setVideoTitleError("");
+    setVideoFile(null);
+    setVideoFileError("");
+    setUploadProgress(0);
+    setIsUploading(false);
+    setVideoUrl(null);
+    setShowVideoPlayer(false);
+    setFileList1([]);
+    setPreviewImage1("");
+    setPreviewTitle1("");
+    setPreviewVisible1(false);
+    setError("");
+
+    // Reset question and answer states
+    setQuestion("");
+    setQuestionError("");
+    setIsQuestionEditing(false);
+    setAnswers([
+      { id: 1, text: "", isCorrect: false, isEditing: false },
+      { id: 2, text: "", isCorrect: false, isEditing: false },
+      { id: 3, text: "", isCorrect: false, isEditing: false },
+    ]);
+    setDetailedAnswer("");
+    setDetailedAnswerError("");
+    setIsDetailedAnswerExpanded(false);
+    setIsDetailedAnswerEditing(false);
+
+    // Reset saved questions and form visibility
+    setSavedQuestions([]);
+    setShowQuestionForm(true);
+    setCurrentQuestionNumber(1);
+    setBlobUrl(null);
+
+    // Clear localStorage
+    clearSavedFormData();
+
+    console.log("All form data cleared and reset to initial state");
+  };
+
+  const handleResetForm = () => {
+    clearAllFormData();
+    addToast("Form has been reset to initial state", {
+      appearance: "success",
+      autoDismiss: true,
+    });
+  };
+
+  // Handle continue button click for consultant form
+  const handleConsultantContinue = () => {
+    // Save form data to memory
+    saveFormDataToMemory();
+
+    // Navigate to video and quiz step
+    setActiveStep("videoQuiz");
+
+    // Show success message or toast
+    console.log(
+      "Consultant form data saved and navigating to Video & Quiz step"
+    );
+  };
+
+  // Handle continue button click for video quiz form
+  const handleVideoQuizContinue = () => {
+    // Save form data to memory
+    saveFormDataToMemory();
+
+    // Navigate to consultant step (or wherever you want to go next)
+    // setActiveStep("consultant");
+
+    // Show success message or toast
+    console.log("Video Quiz form data saved and navigating to Consultant step");
   };
 
   useEffect(() => {
@@ -240,6 +520,76 @@ const VideoAndQuizFor = () => {
 
   const handleDetailedAnswerClick = () => setIsDetailedAnswerEditing(true);
 
+  // New functions for managing questions
+  const handleSaveQuestion = () => {
+    // Validate question and answers
+    if (!question.trim()) {
+      setQuestionError("Question is required");
+      return;
+    }
+
+    const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
+    if (!hasCorrectAnswer) {
+      alert("Please select a correct answer");
+      return;
+    }
+
+    const hasAnswers = answers.some((answer) => answer.text.trim());
+    if (!hasAnswers) {
+      alert("Please provide at least one answer");
+      return;
+    }
+
+    // Create new question object
+    const newQuestion = {
+      id: Date.now(),
+      number: currentQuestionNumber,
+      question: question,
+      answers: answers.filter((answer) => answer.text.trim()),
+      detailedAnswer: detailedAnswer,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Add to saved questions
+    setSavedQuestions((prev) => [...prev, newQuestion]);
+
+    // Reset form
+    setQuestion("");
+    setAnswers([
+      { id: 1, text: "", isCorrect: false, isEditing: false },
+      { id: 2, text: "", isCorrect: false, isEditing: false },
+      { id: 3, text: "", isCorrect: false, isEditing: false },
+    ]);
+    setDetailedAnswer("");
+    setQuestionError("");
+    setIsQuestionEditing(false);
+    setIsDetailedAnswerEditing(false);
+
+    // Hide question form
+    setShowQuestionForm(false);
+
+    // Increment question number for next question
+    setCurrentQuestionNumber((prev) => prev + 1);
+
+    // Save to localStorage
+    saveFormDataToMemory();
+  };
+
+  const handleAddMoreQuestion = () => {
+    // Show question form again
+    setShowQuestionForm(true);
+  };
+
+  const handleDeleteQuestion = (questionId) => {
+    setSavedQuestions((prev) => prev.filter((q) => q.id !== questionId));
+    // Reorder question numbers
+    setSavedQuestions((prev) =>
+      prev.map((q, index) => ({ ...q, number: index + 1 }))
+    );
+    setCurrentQuestionNumber((prev) => Math.max(1, prev - 1));
+    saveFormDataToMemory();
+  };
+
   const handleVideoFileChange = (event) => {
     console.log(event.target.files, "event");
 
@@ -278,11 +628,7 @@ const VideoAndQuizFor = () => {
           setVideoFileError("Video file size should be less than 200MB");
         } else {
           setVideoFileError("");
-          console.log("File validation passed:", {
-            fileName: file.name,
-            fileType: file.type,
-            fileSize: file.size,
-          });
+
           // Create video URL but don't show player yet
           const url = URL.createObjectURL(file);
 
@@ -319,16 +665,21 @@ const VideoAndQuizFor = () => {
         setUploadProgress(100);
         setIsUploading(false);
         setShowVideoPlayer(true);
+
+        // Extract blobUrl from the API response
+        if (res.data && res.data.data && res.data.data.blobUrl) {
+          setBlobUrl(res.data.data.blobUrl);
+          setBlobName(res.data.data.blobName);
+          console.log("Blob URL extracted:", res.data.data.blobUrl);
+          console.log("Blob URL extracted:", res.data.data.blobName);
+        } else {
+          console.warn("No blobUrl found in response:", res.data);
+        }
+
         console.log("Video uploaded successfully:", res);
       })
       .catch((error) => {
         setIsUploading(false);
-        console.error("Video upload failed:", error);
-        console.error("Error response:", error.response);
-        console.error("Error status:", error.response?.status);
-        console.error("Error data:", error.response?.data);
-        console.error("Error headers:", error.response?.headers);
-        console.error("Full error object:", error);
 
         if (error.response?.status === 415) {
           setVideoFileError(
@@ -339,7 +690,6 @@ const VideoAndQuizFor = () => {
         }
       });
   };
-
   const ValidateFormQuizFor = () => {
     var isValid = true;
 
@@ -368,33 +718,64 @@ const VideoAndQuizFor = () => {
 
   const handleSubmitQuizFor = (event) => {
     event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("isAcceptedHome", homeAccept);
-    subdata.append("isAcceptedEU_UK", ukAccept);
-    subdata.append("isAcceptedInternational", intAccept);
-
-    // Add video file to FormData
-    if (videoFile) {
-      subdata.append("videoFile", videoFile);
-    }
-
-    for (var value of subdata) {
-      console.log(value);
-    }
 
     if (ValidateFormQuizFor()) {
-      // setButtonStatus(true);
-      // setProgress(true);
-      // post("Consultant/GeneralInformation", subdata).then((res) => {
-      //   setProgress(false);
-      //   addToast(res?.data?.message, {
-      //     appearance: res?.data?.isSuccess === true ? "success" : "error",
-      //     autoDismiss: true,
-      //   });
-      //   setButtonStatus(false);
-      //   setSuccess(!success);
-      //   history.push(`/consultantPersonalInformation/${consultantRegisterId}`);
-      // });
+      // Save form data to memory and navigate
+      handleVideoQuizContinue();
+      event.preventDefault();
+      const subData = new FormData(event.target);
+      subData.append("BranchId", branchValue);
+      subData.append("CountryId", countryValue);
+      subData.append("VideoTitle", videoTitle);
+      if (blobUrl) {
+        subData.append("BlobUrl", blobName);
+      }
+      subData.append("ImageFile", FileList1[0]?.originFileObj);
+      subData.append("IsAcceptHome", homeAccept);
+      subData.append("IsAcceptEU_UK", ukAccept);
+      subData.append("IsAcceptInternational", intAccept);
+
+      // Add quiz questions and answers to FormData
+      if (savedQuestions && savedQuestions.length > 0) {
+        savedQuestions.forEach((question, questionIndex) => {
+          // Add question text and order
+          subData.append(`Questions[${questionIndex}].text`, question.question);
+          subData.append(`Questions[${questionIndex}].order`, question.number);
+
+          // Add question options/answers
+          if (question.answers && question.answers.length > 0) {
+            question.answers.forEach((answer, answerIndex) => {
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].text`,
+                answer.text
+              );
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].order`,
+                answerIndex + 1
+              );
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
+                answer.isCorrect
+              );
+            });
+          }
+        });
+      }
+
+      post("ConsultantOnboarding/Submit", subData).then((res) => {
+        addToast(res?.data?.title, {
+          appearance: res?.data?.isSuccess === true ? "success" : "error",
+          autoDismiss: true,
+        });
+
+        // Clear form data from localStorage after successful submission
+        if (res?.data?.isSuccess === true) {
+          clearSavedFormData();
+          console.log("Form data cleared after successful submission");
+        }
+
+        history.push(`/consultantOnBoard`);
+      });
     }
   };
 
@@ -415,30 +796,19 @@ const VideoAndQuizFor = () => {
   };
   const handleSubmitVideoFor = (event) => {
     event.preventDefault();
-    const subdata = new FormData(event.target);
-    subdata.append("isAcceptedHome", homeAccept);
-    subdata.append("isAcceptedEU_UK", ukAccept);
-    subdata.append("isAcceptedInternational", intAccept);
 
     if (ValidateFormVideoFor()) {
-      // setButtonStatus(true);
-      // setProgress(true);
-      // post("Consultant/GeneralInformation", subdata).then((res) => {
-      //   setProgress(false);
-      //   addToast(res?.data?.message, {
-      //     appearance: res?.data?.isSuccess === true ? "success" : "error",
-      //     autoDismiss: true,
-      //   });
-      //   setButtonStatus(false);
-      //   setSuccess(!success);
-      //   history.push(`/consultantPersonalInformation/${consultantRegisterId}`);
-      // });
+      // Save form data to memory and navigate
+      handleConsultantContinue();
     }
   };
 
   return (
     <div className="p-4">
       {/* Steps */}
+      {/* <Form onSubmit={handleAllPart}>
+      
+      </Form> */}
       <Row>
         <Col md="3" sm="12">
           <h5 className="fw-bold mb-3">Consultant Guided video</h5>
@@ -607,6 +977,7 @@ const VideoAndQuizFor = () => {
               handleAnswerClick={handleAnswerClick}
               isDetailedAnswerEditing={isDetailedAnswerEditing}
               detailedAnswer={detailedAnswer}
+              detailedAnswerError={detailedAnswerError}
               handleDetailedAnswerChange={handleDetailedAnswerChange}
               handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
               handleDetailedAnswerBlur={handleDetailedAnswerBlur}
@@ -616,6 +987,23 @@ const VideoAndQuizFor = () => {
               handleQuestionKeyPress={handleQuestionKeyPress}
               handleQuestionClick={handleQuestionClick}
               handleQuestionBlur={handleQuestionBlur}
+              savedQuestions={savedQuestions}
+              handleSaveQuestion={handleSaveQuestion}
+              showQuestionForm={showQuestionForm}
+              handleAddMoreQuestion={handleAddMoreQuestion}
+              handleDeleteQuestion={handleDeleteQuestion}
+              currentQuestionNumber={currentQuestionNumber}
+              FileList1={FileList1}
+              setFileList1={setFileList1}
+              previewImage1={previewImage1}
+              setPreviewImage1={setPreviewImage1}
+              setPreviewTitle1={setPreviewTitle1}
+              previewTitle1={previewTitle1}
+              previewVisible1={previewVisible1}
+              setPreviewVisible1={setPreviewVisible1}
+              error={error}
+              setError={setError}
+              existingThumbnail={guidedVideoData?.videoImage}
             />
           )}
         </Col>
