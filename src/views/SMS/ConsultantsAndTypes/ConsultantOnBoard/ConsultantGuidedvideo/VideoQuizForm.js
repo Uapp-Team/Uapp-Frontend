@@ -224,9 +224,9 @@ const VideoQuizForm = ({
                   </FormGroup>
                 </Col>
                 <Col md="5" sm="12">
-                  {videoFile && (
+                  {(videoFile || videoUrl) && (
                     <div className="quiz-progress-container">
-                      {!showVideoPlayer ? (
+                      {videoFile && !showVideoPlayer && !videoUrl ? (
                         <div className="quiz-circular-progress-container">
                           <div className="quiz-circular-progress">
                             <svg
@@ -330,7 +330,10 @@ const VideoQuizForm = ({
                                 backgroundColor: "#000",
                               }}
                             >
-                              <source src={videoUrl} type={videoFile.type} />
+                              <source
+                                src={videoUrl}
+                                type={videoFile?.type || "video/mp4"}
+                              />
                               Your browser does not support the video tag.
                             </video>
                           </div>
