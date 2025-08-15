@@ -1,19 +1,40 @@
 import React, { useState } from "react";
 import { Card, CardBody } from "reactstrap";
 
-const QuizAnswers = ({ savedQuestions }) => {
+const QuizAnswers = ({ savedQuestions, onDeleteQuestion }) => {
+  console.log(savedQuestions, "savedquestions");
+
   return (
     <>
-      {savedQuestions.map((savedQuestion) => (
-        <Card key={savedQuestion.id}>
+      {savedQuestions?.map((savedQuestion) => (
+        <Card key={savedQuestion.id} className="mb-3">
           <CardBody>
-            <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 16 }}>
-              {savedQuestion.question}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 16,
+              }}
+            >
+              <div style={{ fontWeight: 600, fontSize: 16 }}>
+                Question {savedQuestion.order}: {savedQuestion.question}
+              </div>
+              {onDeleteQuestion && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-danger"
+                  onClick={() => onDeleteQuestion(savedQuestion.id)}
+                  style={{ marginLeft: 10 }}
+                >
+                  <i className="fas fa-trash"></i>
+                </button>
+              )}
             </div>
             <form>
-              {savedQuestion.answers.map((opt, id) => (
+              {savedQuestion?.answers.map((answer) => (
                 <div
-                  key={id}
+                  key={answer.id}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -24,14 +45,20 @@ const QuizAnswers = ({ savedQuestions }) => {
                   <input
                     type="radio"
                     name={`saved-${savedQuestion.id}`}
-                    checked={opt.isCorrect}
+                    checked={answer.isCorrect}
                     disabled
                     style={{ marginRight: 12 }}
                   />
                   <label
-                    style={{ fontSize: 15, color: "#222", cursor: "pointer" }}
+                    style={{
+                      fontSize: 15,
+
+                      cursor: "pointer",
+                      fontWeight: answer.isCorrect ? "bold" : "normal",
+                      color: answer.isCorrect ? "#28a745" : "#222",
+                    }}
                   >
-                    {opt.text}
+                    {answer.text}
                   </label>
                 </div>
               ))}

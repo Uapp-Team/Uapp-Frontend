@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import QuizAnswers from "./QuizAnswers";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
@@ -18,6 +18,8 @@ const VideoQuizForm = ({
   uploadProgress,
   isUploading,
   videoUrl,
+  blobUrl, // Add this prop for the uploaded video URL
+  blobName, // Add this prop for the uploaded video name
   question,
   setQuestion,
   setIsQuestionEditing,
@@ -31,6 +33,7 @@ const VideoQuizForm = ({
   handleAnswerClick,
   isDetailedAnswerEditing,
   detailedAnswer,
+  detailedAnswerError,
   handleDetailedAnswerChange,
   handleDetailedAnswerKeyPress,
   handleDetailedAnswerBlur,
@@ -57,13 +60,40 @@ const VideoQuizForm = ({
   setPreviewVisible1,
   error,
   setError,
+  existingThumbnail,
+  // New prop for API questions
+  apiQuestions,
 }) => {
   console.log(FileList1, "sakib check");
   console.log(videoFile, "sakib check video file");
   console.log(videoUrl, "sakib check video url");
+  console.log(blobUrl, "sakib check blob url");
 
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
+
+  // Determine which video source to use
+  // For local files, only show preview if upload is complete or if it's a final uploaded video
+  const videoSource =
+    blobUrl ||
+    videoUrl ||
+    (videoFile && (safeUploadProgress === 100 || !isUploading)
+      ? URL.createObjectURL(videoFile)
+      : null);
+
+  // Clean up object URL when component unmounts or videoFile changes
+  useEffect(() => {
+    return () => {
+      if (
+        videoFile &&
+        videoSource &&
+        videoSource !== blobUrl &&
+        videoSource !== videoUrl
+      ) {
+        URL.revokeObjectURL(videoSource);
+      }
+    };
+  }, [videoFile, videoSource, blobUrl, videoUrl]);
 
   function getBase641(file) {
     return new Promise((resolve, reject) => {
@@ -105,6 +135,7 @@ const VideoQuizForm = ({
       setError("");
     }
   };
+
   return (
     <div>
       <Form onSubmit={handleSubmitQuizFor}>
@@ -332,10 +363,7 @@ const VideoQuizForm = ({
                                 backgroundColor: "#000",
                               }}
                             >
-                              <source
-                                src={videoUrl?.blob}
-                                type={videoUrl?.type || "video/mp4"}
-                              />
+                              <source src={videoSource} type="video/mp4" />
                               Your browser does not support the video tag.
                             </video>
                           </div>

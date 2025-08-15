@@ -139,13 +139,13 @@ const VideoAndQuizFor = () => {
   }, [success, id]);
 
   useEffect(() => {
-    if (guidedVideoData?.videoImage) {
+    if (guidedVideoData?.videoImageUrl) {
       setFileList1([
         {
           uid: "-1",
           name: "",
           status: "done",
-          url: guidedVideoData?.videoImage,
+          url: guidedVideoData?.videoImageUrl,
         },
       ]);
     }
@@ -1020,6 +1020,7 @@ const VideoAndQuizFor = () => {
               error={error}
               setError={setError}
               existingThumbnail={guidedVideoData?.videoImage}
+              apiQuestions={guidedVideoData?.questions}
             />
           )}
         </Col>

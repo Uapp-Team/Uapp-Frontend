@@ -61,12 +61,9 @@ const VideoQuizForm = ({
   error,
   setError,
   existingThumbnail,
+  // New prop for API questions
+  apiQuestions,
 }) => {
-  console.log(FileList1, "sakib check");
-  console.log(videoFile, "sakib check video file");
-  console.log(videoUrl, "sakib check video url");
-  console.log(blobUrl, "sakib check blob url");
-
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
 
@@ -515,6 +512,12 @@ const VideoQuizForm = ({
           {savedQuestions.length > 0 && (
             <QuizAnswers savedQuestions={savedQuestions} />
           )}
+
+          <QuizAnswers
+            savedQuestions={apiQuestions}
+            isApiQuestions={true}
+            showDeleteButton={false}
+          />
 
           {/* Add More Button */}
           <div className="quiz-add-more-container">
