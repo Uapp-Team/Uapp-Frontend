@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import { Col, Modal, ModalFooter, ModalHeader, Row } from "reactstrap";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import Uget from "../../../../../helpers/Uget";
 import post from "../../../../../helpers/post";
 import CloseBtn from "../../../../../components/buttons/CloseBtn";
+import { useHistory } from "react-router-dom";
 
 const Index = () => {
+  const history = useHistory();
   const [activeStep, setActiveStep] = useState("consultant");
   const [videoWatched, setVideoWatched] = useState(true);
   const [data, setData] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizDone, setIsQuizDone] = useState(false);
+  const [quizResults, setQuizResults] = useState([]);
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -44,7 +46,6 @@ const Index = () => {
       }
     );
   };
-
   const handleAnswer = (id, answer) => {
     const isExist = answers.find(
       (answer) =>
@@ -77,8 +78,9 @@ const Index = () => {
     };
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
-      console.log(res);
+      console.log(res?.data?.data?.questionResults);
       if (res?.status === 200) {
+        setQuizResults(res?.data?.data);
         toggleModal();
       }
     });
@@ -89,73 +91,6 @@ const Index = () => {
       <div className="custom-card-border mb-3 ">
         <Row>
           <Col md="3" sm="12" className="border-right pr-0">
-            <div
-              className="d-flex align-items-center p-4"
-              style={{ minHeight: 60 }}
-            >
-              <div id="chart" className="p-0" style={{ width: 60, height: 60 }}>
-                <ReactApexChart
-                  options={{
-                    chart: {
-                      type: "radialBar",
-                      sparkline: { enabled: true },
-                    },
-                    plotOptions: {
-                      radialBar: {
-                        startAngle: -90,
-                        endAngle: 270,
-                        hollow: {
-                          margin: 0,
-                          size: "70%",
-                          // background: "#F4F6F8",
-                        },
-                        track: {
-                          background: "#F4F6F8",
-                          strokeWidth: "100%",
-                          margin: 0,
-                        },
-                        dataLabels: {
-                          show: true,
-                          name: {
-                            show: false,
-                          },
-                          value: {
-                            show: true,
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            color: "#222",
-                            offsetY: 4,
-                            formatter: function (val) {
-                              return `${val}%`;
-                            },
-                          },
-                        },
-                      },
-                    },
-                    colors: ["#FC7300"],
-                    stroke: {
-                      lineCap: "round",
-                    },
-                    labels: [""],
-                  }}
-                  series={[20]}
-                  type="radialBar"
-                  height={60}
-                  width={60}
-                />
-              </div>
-              <span
-                style={{
-                  marginLeft: 12,
-                  fontSize: 16,
-                  color: "#222",
-                  fontWeight: 400,
-                }}
-              >
-                Completed
-              </span>
-            </div>
-
             {/* Your Consultant Step */}
             <div
               className={`d-flex align-items-center p-4 cursor-pointer ${
@@ -400,39 +335,53 @@ const Index = () => {
                 <span
                   style={{ fontWeight: 500, fontSize: 15, color: "#667085" }}
                 >
-                  60% Completed
+                  {quizResults?.percentange?.toString()}% Completed
                 </span>
               </div>
               <div>
-                {/* Example question/answer list */}
-
-                <div
-                  style={{
-                    background: "#fff",
-                    borderRadius: 8,
-                    border: "1px solid #EAECF0",
-                    marginBottom: 16,
-                    padding: 16,
-                  }}
-                >
+                {quizResults?.questionResults?.map((result, index) => (
                   <div
-                    style={{ fontWeight: 600, fontSize: 15, color: "#045D5E" }}
+                    style={{
+                      background: "#fff",
+                      borderRadius: 8,
+                      border: "1px solid #EAECF0",
+                      borderLeft: `4px solid ${
+                        result?.isCorrect ? "#0D9596" : "#F04438"
+                      }`,
+                      marginBottom: 16,
+                      padding: 16,
+                    }}
                   >
-                    Question 2 of 5
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 15,
+                        color: "#045D5E",
+                      }}
+                    >
+                      Question {index + 1} of{" "}
+                      {quizResults?.questionResults?.length}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 14,
+                        color: "#344054",
+                        margin: "8px 0",
+                      }}
+                    >
+                      {result?.questionText}
+                    </div>
+                    <div
+                      style={{
+                        color: result?.isCorrect ? "#0D9596" : "#F04438",
+                        fontWeight: 500,
+                        fontSize: 14,
+                      }}
+                    >
+                      {result?.isCorrect ? "Correct answer" : "Wrong answer"}
+                    </div>
                   </div>
-                  <div
-                    style={{ fontSize: 14, color: "#344054", margin: "8px 0" }}
-                  >
-                    When will you get your commission?
-                  </div>
-                  <div
-                    style={{ color: "#F04438", fontWeight: 500, fontSize: 14 }}
-                  >
-                    Wrong answer
-                  </div>
-                </div>
-
-                {/* Add more questions as needed */}
+                ))}
               </div>
             </div>
           </div>
@@ -511,12 +460,35 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          <SaveButton
-            text="Continue"
-            action={() => {
-              setIsQuizDone(true);
-            }}
-          />
+          {isQuizDone ? (
+            <>
+              {quizResults?.percentage === 100 ? (
+                <SaveButton
+                  text="Done"
+                  action={() => {
+                    history.push("/");
+                  }}
+                />
+              ) : (
+                <SaveButton
+                  text="Try Again"
+                  className="px-4 bg-danger text-white"
+                  action={() => {
+                    toggleModal();
+                    setQuizResults([]);
+                    setAnswers([]);
+                  }}
+                />
+              )}
+            </>
+          ) : (
+            <SaveButton
+              text="Continue"
+              action={() => {
+                setIsQuizDone(true);
+              }}
+            />
+          )}
         </ModalFooter>
       </Modal>
     </>
