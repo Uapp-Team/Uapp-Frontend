@@ -100,7 +100,7 @@ const VideoAndQuizFor = () => {
       setUkAccept(res?.data?.isAcceptEU_UK);
       setIntAccept(res?.data?.isAcceptInternational);
       setVideoTitle(res?.data?.videoTitle);
-      setVideoFile(res?.data?.blobUrl);
+      // setVideoFile(res?.data?.blobUrl);
       setVideoUrl(res?.data?.blobUrl);
 
       // Set stats data from API response
@@ -978,6 +978,8 @@ const VideoAndQuizFor = () => {
               uploadProgress={uploadProgress}
               isUploading={isUploading}
               videoUrl={videoUrl}
+              blobUrl={blobUrl}
+              blobName={blobName}
               question={question}
               setQuestion={setQuestion}
               setIsQuestionEditing={setIsQuestionEditing}

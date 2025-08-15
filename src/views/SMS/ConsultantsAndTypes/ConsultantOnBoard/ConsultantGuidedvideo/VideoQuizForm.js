@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import QuizAnswers from "./QuizAnswers";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
@@ -18,6 +18,8 @@ const VideoQuizForm = ({
   uploadProgress,
   isUploading,
   videoUrl,
+  blobUrl, // Add this prop for the uploaded video URL
+  blobName, // Add this prop for the uploaded video name
   question,
   setQuestion,
   setIsQuestionEditing,
@@ -31,6 +33,7 @@ const VideoQuizForm = ({
   handleAnswerClick,
   isDetailedAnswerEditing,
   detailedAnswer,
+  detailedAnswerError,
   handleDetailedAnswerChange,
   handleDetailedAnswerKeyPress,
   handleDetailedAnswerBlur,
@@ -57,13 +60,38 @@ const VideoQuizForm = ({
   setPreviewVisible1,
   error,
   setError,
+  existingThumbnail,
 }) => {
   console.log(FileList1, "sakib check");
   console.log(videoFile, "sakib check video file");
   console.log(videoUrl, "sakib check video url");
+  console.log(blobUrl, "sakib check blob url");
 
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
+
+  // Determine which video source to use
+  // For local files, only show preview if upload is complete or if it's a final uploaded video
+  const videoSource =
+    blobUrl ||
+    videoUrl ||
+    (videoFile && (safeUploadProgress === 100 || !isUploading)
+      ? URL.createObjectURL(videoFile)
+      : null);
+
+  // Clean up object URL when component unmounts or videoFile changes
+  useEffect(() => {
+    return () => {
+      if (
+        videoFile &&
+        videoSource &&
+        videoSource !== blobUrl &&
+        videoSource !== videoUrl
+      ) {
+        URL.revokeObjectURL(videoSource);
+      }
+    };
+  }, [videoFile, videoSource, blobUrl, videoUrl]);
 
   function getBase641(file) {
     return new Promise((resolve, reject) => {
@@ -105,6 +133,7 @@ const VideoQuizForm = ({
       setError("");
     }
   };
+
   return (
     <div>
       <Form onSubmit={handleSubmitQuizFor}>
@@ -228,43 +257,116 @@ const VideoQuizForm = ({
                 <Col md="5" sm="12">
                   {(videoFile || videoUrl) && (
                     <div className="quiz-progress-container">
-                      <div className="video-player-container">
-                        <div
-                          className="video-player-header"
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <h6 className="mb-0">
-                            <i
-                              className="fas fa-play-circle me-2"
-                              style={{ color: "#0D9596" }}
-                            ></i>
-                            Video Preview
-                          </h6>
+                      {!showVideoPlayer && videoFile ? (
+                        <div className="quiz-circular-progress-container">
+                          <div className="quiz-circular-progress">
+                            <svg
+                              className="quiz-circular-progress-svg"
+                              viewBox="0 0 120 120"
+                            >
+                              <defs>
+                                <linearGradient
+                                  id="progressGradient"
+                                  x1="0%"
+                                  y1="0%"
+                                  x2="100%"
+                                  y2="0%"
+                                >
+                                  <stop offset="40%" stopColor="#045D5E" />
+
+                                  <stop offset="90%" stopColor="#045D5E" />
+                                  <stop offset="100%" stopColor="#05E594" />
+                                </linearGradient>
+                              </defs>
+                              <circle
+                                className="quiz-circular-progress-bg"
+                                cx="60"
+                                cy="60"
+                                r="50"
+                                fill="none"
+                                stroke="#e9ecef"
+                                strokeWidth="8"
+                              />
+                              <circle
+                                className="quiz-circular-progress-fill"
+                                cx="60"
+                                cy="60"
+                                r="50"
+                                fill="none"
+                                strokeWidth="8"
+                                strokeLinecap="round"
+                                strokeDasharray={`${2 * Math.PI * 50}`}
+                                strokeDashoffset={`${
+                                  2 *
+                                  Math.PI *
+                                  50 *
+                                  (1 - safeUploadProgress / 100)
+                                }`}
+                                transform="rotate(-90 60 60)"
+                              />
+                            </svg>
+                            <div className="quiz-circular-progress-text">
+                              <span className="quiz-progress-percentage">
+                                {Math.round(safeUploadProgress)}%
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="quiz-upload-status">
+                            {isUploading ? (
+                              <span className="quiz-status-uploading">
+                                <i className="fas fa-spinner fa-spin me-1"></i>
+                                Uploading...
+                              </span>
+                            ) : safeUploadProgress >= 100 ? (
+                              <span className="quiz-status-complete">
+                                <i className="fas fa-check-circle me-1"></i>
+                                Upload Complete
+                              </span>
+                            ) : (
+                              <span className="quiz-status-ready">
+                                <i className="fas fa-clock me-1"></i>
+                                Ready to upload
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <div className="video-player-wrapper">
-                          <video
-                            controls
-                            className="video-player"
+                      ) : (
+                        <div className="video-player-container">
+                          <div
+                            className="video-player-header"
                             style={{
-                              width: "100%",
-                              maxHeight: "300px",
-                              borderRadius: "8px",
-                              backgroundColor: "#000",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginBottom: "10px",
                             }}
                           >
-                            <source
-                              src={videoFile}
-                              type={videoFile?.type || "video/mp4"}
-                            />
-                            Your browser does not support the video tag.
-                          </video>
+                            <h6 className="mb-0">
+                              <i
+                                className="fas fa-play-circle me-2"
+                                style={{ color: "#0D9596" }}
+                              ></i>
+                              Video Preview
+                            </h6>
+                          </div>
+                          <div className="video-player-wrapper">
+                            <video
+                              controls
+                              className="video-player"
+                              style={{
+                                width: "100%",
+                                maxHeight: "300px",
+                                borderRadius: "8px",
+                                backgroundColor: "#000",
+                              }}
+                            >
+                              <source src={videoSource} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
                 </Col>
