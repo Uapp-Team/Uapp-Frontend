@@ -8,7 +8,6 @@ import PreviousButton from "../../../../../components/buttons/PreviousButton";
 import YourConsultantForm from "./YourConsultantForm";
 import VideoQuizForm from "./VideoQuizForm";
 import post from "../../../../../helpers/post";
-import put from "../../../../../helpers/put";
 import axios from "axios";
 import { rootUrl } from "../../../../../constants/constants";
 import { useToasts } from "react-toast-notifications";
@@ -39,11 +38,6 @@ const VideoAndQuizFor = () => {
   const [countryError, setCountryError] = useState(false);
   const [videoTitle, setVideoTitle] = useState("");
   const [videoTitleError, setVideoTitleError] = useState("");
-
-  // Debug effect to track video title changes
-  useEffect(() => {
-    console.log("Video title state changed:", videoTitle);
-  }, [videoTitle]);
   const [videoFile, setVideoFile] = useState(null);
   const [videoFileError, setVideoFileError] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -105,78 +99,9 @@ const VideoAndQuizFor = () => {
       setHomeAccept(res?.data?.isAcceptHome);
       setUkAccept(res?.data?.isAcceptEU_UK);
       setIntAccept(res?.data?.isAcceptInternational);
-
-      // Ensure video title is properly set with fallback options
-      const title = res?.data?.videoTitle || res?.data?.VideoTitle || "";
-      if (title && title.trim()) {
-        setVideoTitle(title);
-        console.log("Setting video title from API:", title);
-      } else {
-        console.warn("No video title found in API response");
-        // Don't clear existing video title if API doesn't have one
-        if (!videoTitle || !videoTitle.trim()) {
-          console.log("Current video title is empty, keeping it empty");
-        }
-      }
-
+      setVideoTitle(res?.data?.videoTitle);
       // setVideoFile(res?.data?.blobUrl);
       setVideoUrl(res?.data?.blobUrl);
-      setBlobName(res?.data?.blobUrl || "");
-
-      // Load existing questions if editing (API response includes questions)
-      if (res?.data?.questions && res.data.questions.length > 0) {
-        console.log("Raw API questions:", res.data.questions);
-
-        const formattedQuestions = res.data.questions.map((q, index) => {
-          console.log(`Processing question ${index}:`, q);
-          console.log(`Question ${index} options:`, q.options);
-
-          const formattedQuestion = {
-            id: Date.now() + index, // Local ID for UI
-            originalId: q.id, // Preserve original ID from API for update
-            number: q.order || index + 1,
-            question: q.question || "",
-            answers:
-              q.answers?.map((answer) => ({
-                id: answer.id,
-                text: answer.text,
-                isCorrect: answer.isCorrect,
-                order: answer.order,
-              })) || [],
-            detailedAnswer: "",
-            timestamp: new Date().toISOString(),
-          };
-
-          // Handle options/answers with better null checking
-          if (q.options && Array.isArray(q.options) && q.options.length > 0) {
-            formattedQuestion.answers = q.options.map((opt, optIndex) => {
-              console.log(
-                `Processing option ${optIndex} for question ${index}:`,
-                opt
-              );
-              return {
-                id: Date.now() + optIndex, // Local ID for UI
-                originalId: opt.id, // Preserve original ID from API for update
-                text: opt.text || "",
-                isCorrect: opt.isCorrect || false,
-                isEditing: false,
-              };
-            });
-          } else {
-            console.warn(
-              `Question ${index} has no options or invalid options:`,
-              q.options
-            );
-          }
-
-          console.log(`Formatted question ${index}:`, formattedQuestion);
-          return formattedQuestion;
-        });
-
-        console.log("Final formatted questions:", formattedQuestions);
-        setSavedQuestions(formattedQuestions);
-        setCurrentQuestionNumber(formattedQuestions.length + 1);
-      }
 
       // Set stats data from API response
       if (res) {
@@ -210,11 +135,6 @@ const VideoAndQuizFor = () => {
       }
 
       console.log("Full API response:", res);
-      console.log("Guided video data fields:", Object.keys(res?.data || {}));
-      console.log(
-        "Is edit mode:",
-        !!(res?.data?.id || res?.data?.onboardingQuizId)
-      );
     });
   }, [success, id]);
 
@@ -254,25 +174,16 @@ const VideoAndQuizFor = () => {
     if (!savedData) {
       // No saved data, ensure form is in clean state
       clearAllFormData();
-    } else {
-      // If there's saved data, don't clear the form - let the API data take precedence
-      console.log("Saved data exists, not clearing form");
     }
   }, []);
 
   // Cleanup effect when component unmounts
   useEffect(() => {
     return () => {
-      // Only clear form data when component unmounts if not in edit mode
-      // In edit mode, we want to preserve the data
-      if (
-        !guidedVideoData ||
-        !(guidedVideoData.id || guidedVideoData.onboardingQuizId)
-      ) {
-        clearSavedFormData();
-      }
+      // Clear form data when component unmounts to prevent stale data
+      clearSavedFormData();
     };
-  }, [guidedVideoData]);
+  }, []);
 
   // Load saved form data from localStorage
   const loadSavedFormData = () => {
@@ -291,18 +202,7 @@ const VideoAndQuizFor = () => {
         if (parsedData.ukAccept !== undefined) setUkAccept(parsedData.ukAccept);
         if (parsedData.intAccept !== undefined)
           setIntAccept(parsedData.intAccept);
-
-        // Enhanced video title restoration with logging
-        if (parsedData.videoTitle) {
-          setVideoTitle(parsedData.videoTitle);
-          console.log(
-            "Video title restored from localStorage:",
-            parsedData.videoTitle
-          );
-        } else {
-          console.log("No video title found in localStorage");
-        }
-
+        if (parsedData.videoTitle) setVideoTitle(parsedData.videoTitle);
         if (parsedData.blobUrl) setBlobUrl(parsedData.blobUrl);
         if (parsedData.question) setQuestion(parsedData.question);
         if (parsedData.answers) setAnswers(parsedData.answers);
@@ -349,9 +249,6 @@ const VideoAndQuizFor = () => {
         currentQuestionNumber,
         timestamp: new Date().toISOString(),
       };
-
-      // Ensure video title is included and log it
-      console.log("Saving video title to localStorage:", videoTitle);
 
       localStorage.setItem(FORM_DATA_KEY, JSON.stringify(formData));
       console.log("Form data saved to localStorage:", formData);
@@ -505,16 +402,11 @@ const VideoAndQuizFor = () => {
   const handleFirstNameChange = (e) => {
     let data = e.target.value.trimStart();
     setVideoTitle(data);
-    console.log("Video title changed to:", data);
-
     if (data === "") {
       setVideoTitleError("Video title is required");
     } else {
       setVideoTitleError("");
     }
-
-    // Save to localStorage immediately to prevent loss
-    saveFormDataToMemory();
   };
 
   // Question handlers
@@ -825,24 +717,12 @@ const VideoAndQuizFor = () => {
     //   setAcceptError(true);
     // }
 
-    // Enhanced video title validation
-    if (!videoTitle || !videoTitle.trim()) {
+    if (!videoTitle.trim()) {
       setVideoTitleError("Video title is required");
       isValid = false;
-      console.error("Video title validation failed:", {
-        videoTitle,
-        type: typeof videoTitle,
-      });
-    } else {
-      setVideoTitleError("");
-      console.log("Video title validation passed:", videoTitle);
     }
 
-    // In edit mode, video file is not required if we already have a video
-    const isEditMode =
-      guidedVideoData &&
-      (guidedVideoData.id || guidedVideoData.onboardingQuizId);
-    if (!videoFile && !isEditMode) {
+    if (!videoFile) {
       setVideoFileError("Video file is required");
       isValid = false;
     }
@@ -853,232 +733,64 @@ const VideoAndQuizFor = () => {
   const handleSubmitQuizFor = (event) => {
     event.preventDefault();
 
-    // Debug current state before validation
-    console.log("Current state before validation:", {
-      videoTitle,
-      videoTitleType: typeof videoTitle,
-      videoTitleLength: videoTitle ? videoTitle.length : 0,
-      guidedVideoData,
-      isEditMode: !!(
-        guidedVideoData &&
-        (guidedVideoData.id || guidedVideoData.onboardingQuizId)
-      ),
-    });
-
     if (ValidateFormQuizFor()) {
       // Save form data to memory and navigate
       handleVideoQuizContinue();
       event.preventDefault();
-
-      // Check if this is an edit operation (guidedVideoData has an id or onboardingQuizId)
-      const isEditMode =
-        guidedVideoData &&
-        (guidedVideoData.id || guidedVideoData.onboardingQuizId);
-
-      console.log("Submit mode:", isEditMode ? "UPDATE" : "CREATE");
-      console.log("Guided video data:", guidedVideoData);
-      console.log("ID fields:", {
-        id: guidedVideoData?.id,
-        onboardingQuizId: guidedVideoData?.onboardingQuizId,
-      });
-
-      if (isEditMode) {
-        // Update operation - use PUT API
-        handleUpdateQuizFor();
-      } else {
-        // Create operation - use POST API
-        handleCreateQuizFor();
+      const subData = new FormData(event.target);
+      subData.append("BranchId", branchValue);
+      subData.append("CountryId", countryValue);
+      subData.append("VideoTitle", videoTitle);
+      if (blobUrl) {
+        subData.append("BlobUrl", blobName);
       }
-    } else {
-      console.error("Form validation failed");
-    }
-  };
-
-  const handleCreateQuizFor = () => {
-    const subData = new FormData();
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
-    subData.append("VideoTitle", videoTitle);
-    if (blobUrl) {
-      subData.append("BlobUrl", blobName);
-    }
-    // Only append ImageFile if there's a new file
-    if (FileList1[0]?.originFileObj) {
       subData.append("ImageFile", FileList1[0]?.originFileObj);
-    }
-    subData.append("IsAcceptHome", homeAccept.toString());
-    subData.append("IsAcceptEU_UK", ukAccept.toString());
-    subData.append("IsAcceptInternational", intAccept.toString());
+      subData.append("IsAcceptHome", homeAccept);
+      subData.append("IsAcceptEU_UK", ukAccept);
+      subData.append("IsAcceptInternational", intAccept);
 
-    // Add quiz questions and answers to FormData
-    if (savedQuestions && savedQuestions.length > 0) {
-      savedQuestions.forEach((question, questionIndex) => {
-        // Add question text and order
-        subData.append(`Questions[${questionIndex}].text`, question.question);
-        subData.append(`Questions[${questionIndex}].order`, question.number);
+      // Add quiz questions and answers to FormData
+      if (savedQuestions && savedQuestions.length > 0) {
+        savedQuestions.forEach((question, questionIndex) => {
+          // Add question text and order
+          subData.append(`Questions[${questionIndex}].text`, question.question);
+          subData.append(`Questions[${questionIndex}].order`, question.number);
 
-        // Add question options/answers
-        if (question.answers && question.answers.length > 0) {
-          question.answers.forEach((answer, answerIndex) => {
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].text`,
-              answer.text
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].order`,
-              answerIndex + 1
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
-              answer.isCorrect.toString()
-            );
-          });
-        }
-      });
-    }
+          // Add question options/answers
+          if (question.answers && question.answers.length > 0) {
+            question.answers.forEach((answer, answerIndex) => {
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].text`,
+                answer.text
+              );
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].order`,
+                answerIndex + 1
+              );
+              subData.append(
+                `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
+                answer.isCorrect
+              );
+            });
+          }
+        });
+      }
 
-    // Log FormData contents for debugging
-    console.log("FormData contents for create:");
-    for (let [key, value] of subData.entries()) {
-      console.log(`${key}:`, value);
-    }
+      post("ConsultantOnboarding/Submit", subData).then((res) => {
+        addToast(res?.data?.title, {
+          appearance: res?.data?.isSuccess === true ? "success" : "error",
+          autoDismiss: true,
+        });
 
-    post("ConsultantOnboarding/Submit", subData)
-      .then((res) => {
-        console.log("Create API response:", res);
-
+        // Clear form data from localStorage after successful submission
         if (res?.data?.isSuccess === true) {
-          addToast(res?.data?.title || "Submission successful", {
-            appearance: "success",
-            autoDismiss: true,
-          });
-
-          // Clear form data from localStorage after successful submission
           clearSavedFormData();
           console.log("Form data cleared after successful submission");
-          history.push(`/consultantOnBoard`);
-        } else {
-          // Handle error case
-          addToast(res?.data?.title || "Submission failed", {
-            appearance: "error",
-            autoDismiss: true,
-          });
-          console.error("Submission failed:", res);
-        }
-      })
-      .catch((error) => {
-        console.error("Create API error:", error);
-        addToast("Submission failed due to network error", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      });
-  };
-
-  const handleUpdateQuizFor = () => {
-    const subData = new FormData();
-    subData.append("OnboardingQuizId", guidedVideoData?.id);
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
-    subData.append("IsAcceptHome", homeAccept.toString());
-    subData.append("IsAcceptEU_UK", ukAccept.toString());
-    subData.append("IsAcceptInternational", intAccept.toString());
-    subData.append("VideoTitle", guidedVideoData?.videoTitle);
-    subData.append("BlobUrl", blobName);
-    subData.append("VideoImage", guidedVideoData.videoImage);
-    if (FileList1[0]?.originFileObj) {
-      subData.append("ImageFile", FileList1[0]?.originFileObj);
-    }
-
-    // Add quiz questions and answers to FormData
-    // Since savedQuestions already contains both API questions and new questions, we can use them directly
-    const allQuestions = [...(savedQuestions || [])];
-    console.log("All questions to be sent:", allQuestions);
-
-    // Debug: Check each question's answers
-    allQuestions.forEach((q, index) => {
-      console.log(`Question ${index} (ID: ${q.originalId}):`, {
-        text: q.question,
-        answersCount: q.answers ? q.answers.length : 0,
-        answers: q.answers,
-      });
-    });
-
-    // Now append all questions to FormData
-    if (allQuestions && allQuestions.length > 0) {
-      allQuestions.forEach((question, questionIndex) => {
-        // Add question ID if it exists (for editing existing questions)
-        if (question.originalId) {
-          subData.append(`Questions[${questionIndex}].id`, question.originalId);
         }
 
-        // Add question text and order
-        subData.append(`Questions[${questionIndex}].text`, question.question);
-        subData.append(`Questions[${questionIndex}].order`, question.number);
-
-        // Add question options/answers
-        if (question.answers && question.answers.length > 0) {
-          question.answers.forEach((answer, answerIndex) => {
-            // Add answer ID if it exists (for editing existing answers)
-            if (answer.originalId) {
-              subData.append(
-                `Questions[${questionIndex}].options[${answerIndex}].id`,
-                answer.originalId
-              );
-            }
-
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].text`,
-              answer.text
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].order`,
-              answerIndex + 1
-            );
-            subData.append(
-              `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
-              answer.isCorrect.toString()
-            );
-          });
-        }
+        history.push(`/consultantOnBoard`);
       });
     }
-
-    // Log FormData contents for debugging
-    console.log("FormData contents for update:");
-    for (let [key, value] of subData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
-    put("ConsultantOnboarding/Update", subData)
-      .then((res) => {
-        console.log("Update API response:", res);
-
-        if (res?.data?.isSuccess === true) {
-          addToast(res?.data?.title || "Update successful", {
-            appearance: "success",
-            autoDismiss: true,
-          });
-
-          clearSavedFormData();
-          console.log("Form data cleared after successful update");
-          history.push(`/consultantOnBoard`);
-        } else {
-          // Handle error case
-          addToast(res?.data?.title || "Update failed", {
-            appearance: "error",
-            autoDismiss: true,
-          });
-          console.error("Update failed:", res);
-        }
-      })
-      .catch((error) => {
-        console.error("Update API error:", error);
-        addToast("Update failed due to network error", {
-          appearance: "error",
-          autoDismiss: true,
-        });
-      });
   };
 
   const ValidateFormVideoFor = () => {

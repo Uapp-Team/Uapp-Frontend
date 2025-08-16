@@ -513,12 +513,6 @@ const VideoQuizForm = ({
             <QuizAnswers savedQuestions={savedQuestions} />
           )}
 
-          <QuizAnswers
-            savedQuestions={apiQuestions}
-            isApiQuestions={true}
-            showDeleteButton={false}
-          />
-
           {/* Add More Button */}
           <div className="quiz-add-more-container">
             <button
