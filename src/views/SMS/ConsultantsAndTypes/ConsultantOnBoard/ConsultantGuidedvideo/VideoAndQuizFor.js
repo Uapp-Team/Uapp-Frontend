@@ -850,6 +850,26 @@ const VideoAndQuizFor = () => {
     return isValid;
   };
 
+  // Helper function to log question structure for debugging
+  const logQuestionStructure = (questions, context) => {
+    console.log(`=== ${context} ===`);
+    questions.forEach((q, index) => {
+      console.log(`Question ${index}:`, {
+        id: q.originalId || "NEW",
+        text: q.question,
+        order: q.number,
+        answersCount: q.answers?.length || 0,
+        answers: q.answers?.map((a) => ({
+          id: a.originalId || "NEW",
+          text: a.text,
+          isCorrect: a.isCorrect,
+          order: a.order,
+        })),
+      });
+    });
+    console.log(`=== End ${context} ===`);
+  };
+
   const handleSubmitQuizFor = (event) => {
     event.preventDefault();
 
@@ -912,25 +932,121 @@ const VideoAndQuizFor = () => {
 
     // Add quiz questions and answers to FormData
     if (savedQuestions && savedQuestions.length > 0) {
-      savedQuestions.forEach((question, questionIndex) => {
+      // Validate questions before sending
+      const validQuestions = savedQuestions.filter((question, index) => {
+        if (!question.question || question.question.trim() === "") {
+          console.warn(`Question ${index} has no text, skipping`);
+          return false;
+        }
+
+        if (!question.answers || question.answers.length === 0) {
+          console.warn(`Question ${index} has no answers, skipping`);
+          return false;
+        }
+
+        // Check if at least one answer is marked as correct
+        const hasCorrectAnswer = question.answers.some(
+          (answer) => answer.isCorrect === true
+        );
+        if (!hasCorrectAnswer) {
+          console.warn(`Question ${index} has no correct answer, skipping`);
+          return false;
+        }
+
+        // Validate each answer
+        const validAnswers = question.answers.filter((answer) => {
+          if (!answer.text || answer.text.trim() === "") {
+            console.warn(
+              `Question ${index} has answer with no text, skipping answer`
+            );
+            return false;
+          }
+          return true;
+        });
+
+        if (validAnswers.length === 0) {
+          console.warn(
+            `Question ${index} has no valid answers, skipping question`
+          );
+          return false;
+        }
+
+        // Update the question with only valid answers
+        question.answers = validAnswers;
+
+        return true;
+      });
+
+      console.log(
+        `Valid questions to send: ${validQuestions.length}/${savedQuestions.length}`
+      );
+
+      // Log the question structure for debugging
+      logQuestionStructure(validQuestions, "CREATE REQUEST");
+
+      if (validQuestions.length === 0) {
+        addToast(
+          "No valid questions to submit. Please ensure all questions have text and at least one correct answer.",
+          {
+            appearance: "error",
+            autoDismiss: true,
+          }
+        );
+        return;
+      }
+
+      validQuestions.forEach((question, questionIndex) => {
+        console.log(`Processing question ${questionIndex}:`, question);
+
         // Add question text and order
-        subData.append(`Questions[${questionIndex}].text`, question.question);
-        subData.append(`Questions[${questionIndex}].order`, question.number);
+        subData.append(
+          `Questions[${questionIndex}].text`,
+          question.question.trim()
+        );
+        subData.append(
+          `Questions[${questionIndex}].order`,
+          question.number || questionIndex + 1
+        );
+        console.log(
+          `Added question text: Questions[${questionIndex}].text = ${question.question.trim()}`
+        );
+        console.log(
+          `Added question order: Questions[${questionIndex}].order = ${
+            question.number || questionIndex + 1
+          }`
+        );
 
         // Add question options/answers
         if (question.answers && question.answers.length > 0) {
           question.answers.forEach((answer, answerIndex) => {
+            console.log(
+              `Processing answer ${answerIndex} for question ${questionIndex}:`,
+              answer
+            );
+
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].text`,
-              answer.text
+              answer.text.trim()
             );
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].order`,
-              answerIndex + 1
+              (answerIndex + 1).toString()
             );
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
               answer.isCorrect.toString()
+            );
+
+            console.log(
+              `Added answer: Questions[${questionIndex}].options[${answerIndex}].text = ${answer.text.trim()}`
+            );
+            console.log(
+              `Added answer order: Questions[${questionIndex}].options[${answerIndex}].order = ${(
+                answerIndex + 1
+              ).toString()}`
+            );
+            console.log(
+              `Added answer correctness: Questions[${questionIndex}].options[${answerIndex}].isCorrect = ${answer.isCorrect.toString()}`
             );
           });
         }
@@ -939,8 +1055,26 @@ const VideoAndQuizFor = () => {
 
     // Log FormData contents for debugging
     console.log("FormData contents for create:");
+    console.log("=== FormData Entries ===");
     for (let [key, value] of subData.entries()) {
       console.log(`${key}:`, value);
+    }
+    console.log("=== End FormData Entries ===");
+
+    // Additional validation before sending
+    const formDataEntries = Array.from(subData.entries());
+    const questionFields = formDataEntries.filter(([key]) =>
+      key.startsWith("Questions[")
+    );
+
+    console.log("Question fields being sent:", questionFields);
+
+    if (questionFields.length === 0) {
+      addToast("No question data found. Please check your form.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
     }
 
     post("ConsultantOnboarding/Submit", subData)
@@ -958,12 +1092,18 @@ const VideoAndQuizFor = () => {
           console.log("Form data cleared after successful submission");
           history.push(`/consultantOnBoard`);
         } else {
-          // Handle error case
-          addToast(res?.data?.title || "Submission failed", {
+          // Handle error case with more details
+          console.error("Submission failed - Full response:", res);
+          console.error("Submission failed - Response data:", res?.data);
+          console.error("Submission failed - Status:", res?.status);
+          console.error("Submission failed - Status text:", res?.statusText);
+
+          const errorMessage =
+            res?.data?.message || res?.data?.title || "Submission failed";
+          addToast(errorMessage, {
             appearance: "error",
             autoDismiss: true,
           });
-          console.error("Submission failed:", res);
         }
       })
       .catch((error) => {
@@ -1004,50 +1144,168 @@ const VideoAndQuizFor = () => {
       });
     });
 
-    // Now append all questions to FormData
-    if (allQuestions && allQuestions.length > 0) {
-      allQuestions.forEach((question, questionIndex) => {
+    // Validate questions before sending
+    const validQuestions = allQuestions.filter((question, index) => {
+      if (!question.question || question.question.trim() === "") {
+        console.warn(`Question ${index} has no text, skipping`);
+        return false;
+      }
+
+      if (!question.answers || question.answers.length === 0) {
+        console.warn(`Question ${index} has no answers, skipping`);
+        return false;
+      }
+
+      // Check if at least one answer is marked as correct
+      const hasCorrectAnswer = question.answers.some(
+        (answer) => answer.isCorrect === true
+      );
+      if (!hasCorrectAnswer) {
+        console.warn(`Question ${index} has no correct answer, skipping`);
+        return false;
+      }
+
+      // Validate each answer
+      const validAnswers = question.answers.filter((answer) => {
+        if (!answer.text || answer.text.trim() === "") {
+          console.warn(
+            `Question ${index} has answer with no text, skipping answer`
+          );
+          return false;
+        }
+        return true;
+      });
+
+      if (validAnswers.length === 0) {
+        console.warn(
+          `Question ${index} has no valid answers, skipping question`
+        );
+        return false;
+      }
+
+      // Update the question with only valid answers
+      question.answers = validAnswers;
+
+      return true;
+    });
+
+    console.log(
+      `Valid questions to send: ${validQuestions.length}/${allQuestions.length}`
+    );
+
+    // Log the question structure for debugging
+    logQuestionStructure(validQuestions, "UPDATE REQUEST");
+
+    // Now append all valid questions to FormData
+    if (validQuestions && validQuestions.length > 0) {
+      validQuestions.forEach((question, questionIndex) => {
+        console.log(`Processing question ${questionIndex}:`, question);
+
         // Add question ID if it exists (for editing existing questions)
         if (question.originalId) {
           subData.append(`Questions[${questionIndex}].id`, question.originalId);
+          console.log(
+            `Added question ID: Questions[${questionIndex}].id = ${question.originalId}`
+          );
         }
 
         // Add question text and order
-        subData.append(`Questions[${questionIndex}].text`, question.question);
-        subData.append(`Questions[${questionIndex}].order`, question.number);
+        subData.append(
+          `Questions[${questionIndex}].text`,
+          question.question.trim()
+        );
+        subData.append(
+          `Questions[${questionIndex}].order`,
+          question.number || questionIndex + 1
+        );
+        console.log(
+          `Added question text: Questions[${questionIndex}].text = ${question.question.trim()}`
+        );
+        console.log(
+          `Added question order: Questions[${questionIndex}].order = ${
+            question.number || questionIndex + 1
+          }`
+        );
 
         // Add question options/answers
         if (question.answers && question.answers.length > 0) {
           question.answers.forEach((answer, answerIndex) => {
+            console.log(
+              `Processing answer ${answerIndex} for question ${questionIndex}:`,
+              answer
+            );
+
             // Add answer ID if it exists (for editing existing answers)
             if (answer.originalId) {
               subData.append(
                 `Questions[${questionIndex}].options[${answerIndex}].id`,
                 answer.originalId
               );
+              console.log(
+                `Added answer ID: Questions[${questionIndex}].options[${answerIndex}].id = ${answer.originalId}`
+              );
             }
 
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].text`,
-              answer.text
+              answer.text.trim()
             );
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].order`,
-              answerIndex + 1
+              (answerIndex + 1).toString()
             );
             subData.append(
               `Questions[${questionIndex}].options[${answerIndex}].isCorrect`,
               answer.isCorrect.toString()
             );
+
+            console.log(
+              `Added answer: Questions[${questionIndex}].options[${answerIndex}].text = ${answer.text.trim()}`
+            );
+            console.log(
+              `Added answer order: Questions[${questionIndex}].options[${answerIndex}].order = ${(
+                answerIndex + 1
+              ).toString()}`
+            );
+            console.log(
+              `Added answer correctness: Questions[${questionIndex}].options[${answerIndex}].isCorrect = ${answer.isCorrect.toString()}`
+            );
           });
         }
       });
+    } else {
+      addToast(
+        "No valid questions to update. Please ensure all questions have text and at least one correct answer.",
+        {
+          appearance: "error",
+          autoDismiss: true,
+        }
+      );
+      return;
     }
 
     // Log FormData contents for debugging
     console.log("FormData contents for update:");
+    console.log("=== FormData Entries ===");
     for (let [key, value] of subData.entries()) {
       console.log(`${key}:`, value);
+    }
+    console.log("=== End FormData Entries ===");
+
+    // Additional validation before sending
+    const formDataEntries = Array.from(subData.entries());
+    const questionFields = formDataEntries.filter(([key]) =>
+      key.startsWith("Questions[")
+    );
+
+    console.log("Question fields being sent:", questionFields);
+
+    if (questionFields.length === 0) {
+      addToast("No question data found. Please check your form.", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
     }
 
     put("ConsultantOnboarding/Update", subData)
@@ -1064,12 +1322,18 @@ const VideoAndQuizFor = () => {
           console.log("Form data cleared after successful update");
           history.push(`/consultantOnBoard`);
         } else {
-          // Handle error case
-          addToast(res?.data?.title || "Update failed", {
+          // Handle error case with more details
+          console.error("Update failed - Full response:", res);
+          console.error("Update failed - Response data:", res?.data);
+          console.error("Update failed - Status:", res?.status);
+          console.error("Update failed - Status text:", res?.statusText);
+
+          const errorMessage =
+            res?.data?.message || res?.data?.title || "Update failed";
+          addToast(errorMessage, {
             appearance: "error",
             autoDismiss: true,
           });
-          console.error("Update failed:", res);
         }
       })
       .catch((error) => {
