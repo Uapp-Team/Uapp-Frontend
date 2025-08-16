@@ -291,7 +291,7 @@ const Index = () => {
                                   className="form-check-label"
                                   htmlFor={`q${question?.id}a${answer?.id}`}
                                 >
-                                  {answer?.option}
+                                  {answer?.text}
                                 </label>
                               </div>
                             ))}
