@@ -232,8 +232,8 @@ const Index = () => {
                         // loop
                         className="w-100 bg-black"
                         onEnded={() => handleNext(data?.id)}
-                        // poster={data?.videoImage}
-                        poster="https://uappstorage.blob.core.windows.net/onboarding-temp-videos/012c64b0-eda8-4128-ac3d-d912f797058c.mp4?sp=r&st=2025-08-14T12:07:51Z&se=2025-08-14T20:22:51Z&sv=2024-11-04&sr=b&sig=SqSvJWOrN2eaaJ14egFo6R4jYlsYuNI9cveQmNmoIS8%3D"
+                        poster={data?.videoImage}
+                        // poster="https://uappstorage.blob.core.windows.net/onboarding-temp-videos/012c64b0-eda8-4128-ac3d-d912f797058c.mp4?sp=r&st=2025-08-14T12:07:51Z&se=2025-08-14T20:22:51Z&sv=2024-11-04&sr=b&sig=SqSvJWOrN2eaaJ14egFo6R4jYlsYuNI9cveQmNmoIS8%3D"
                       />
                     )}
                   </div>

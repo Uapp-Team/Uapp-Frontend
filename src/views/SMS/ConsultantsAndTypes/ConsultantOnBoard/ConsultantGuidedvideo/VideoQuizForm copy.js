@@ -64,11 +64,6 @@ const VideoQuizForm = ({
   // New prop for API questions
   apiQuestions,
 }) => {
-  console.log(FileList1, "sakib check");
-  console.log(videoFile, "sakib check video file");
-  console.log(videoUrl, "sakib check video url");
-  console.log(blobUrl, "sakib check blob url");
-
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
 
