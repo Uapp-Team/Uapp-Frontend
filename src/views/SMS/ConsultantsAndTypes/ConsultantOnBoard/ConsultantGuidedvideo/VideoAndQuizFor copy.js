@@ -76,6 +76,7 @@ const VideoAndQuizFor = () => {
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [blobUrl, setBlobUrl] = useState(null);
   const [blobName, setBlobName] = useState(null);
+  console.log(blobName, "sakib blobname");
 
   const [statsData, setStatsData] = useState({
     questionCount: 0,
@@ -121,7 +122,7 @@ const VideoAndQuizFor = () => {
 
       // setVideoFile(res?.data?.blobUrl);
       setVideoUrl(res?.data?.blobUrl);
-      setBlobName(res?.data?.blobUrl || "");
+      setBlobName(res?.data?.blobName || "");
 
       // Load existing questions if editing (API response includes questions)
       if (res?.data?.questions && res.data.questions.length > 0) {
@@ -791,7 +792,7 @@ const VideoAndQuizFor = () => {
         // Extract blobUrl from the API response
         if (res.data && res.data.data && res.data.data.blobUrl) {
           setBlobUrl(res.data.data.blobUrl);
-          setBlobName(res.data.data.blobName);
+          setBlobName(res?.data?.data?.blobName);
           console.log("Blob URL extracted:", res.data.data.blobUrl);
           console.log("Blob URL extracted:", res.data.data.blobName);
         } else {
@@ -894,13 +895,6 @@ const VideoAndQuizFor = () => {
       const isEditMode =
         guidedVideoData &&
         (guidedVideoData.id || guidedVideoData.onboardingQuizId);
-
-      console.log("Submit mode:", isEditMode ? "UPDATE" : "CREATE");
-      console.log("Guided video data:", guidedVideoData);
-      console.log("ID fields:", {
-        id: guidedVideoData?.id,
-        onboardingQuizId: guidedVideoData?.onboardingQuizId,
-      });
 
       if (isEditMode) {
         // Update operation - use PUT API
@@ -1124,7 +1118,12 @@ const VideoAndQuizFor = () => {
     subData.append("IsAcceptEU_UK", ukAccept.toString());
     subData.append("IsAcceptInternational", intAccept.toString());
     subData.append("VideoTitle", guidedVideoData?.videoTitle);
-    subData.append("BlobUrl", blobName);
+    console.log(blobName, "last check blob");
+
+    subData.append(
+      "BlobUrl",
+      blobName === null ? guidedVideoData?.blobName : blobName
+    );
     subData.append("VideoImage", guidedVideoData.videoImage);
     if (FileList1[0]?.originFileObj) {
       subData.append("ImageFile", FileList1[0]?.originFileObj);
