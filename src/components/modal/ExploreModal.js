@@ -9,7 +9,7 @@ const ExploreModal = ({ text, text2, text3, cancel, isOpen = true }) => {
   const history = useHistory();
 
   const exploreMore = () => {
-    history.push("/consultantOnBoard");
+    history.push("/consultant-DashBoard-Guided-Video");
   };
 
   return (
