@@ -6774,3 +6774,122 @@ span.ant-upload-list-item-name {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+.onboard-dashboard-card {
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+  background: #f8f9fa;
+  border-radius: 20px;
+
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+}
+
+.onboard-dashboard-section-third {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  min-height: 120px;
+  border-right: 1px solid #e6efef;
+}
+.onboard-dashboard-section-four {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  text-align: center;
+  flex: 1;
+  min-height: 120px;
+}
+.onboard-dashboard-section-two {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  text-align: center;
+  flex: 1;
+  min-height: 120px;
+}
+
+.onboard-dashboard-section-first {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  min-height: 120px;
+  border-right: 1px solid #e6efef;
+}
+
+.onboard-section-icon {
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #20c997;
+}
+
+.onboard-section-icon i {
+  font-size: 32px;
+}
+
+.onboard-section-title {
+  font-size: 14px;
+  color: #252525;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.onboard-section-content {
+  display: flex;
+  border-bottom: 1px solid #e6efef;
+  align-items: center;
+  gap: 10px;
+}
+
+.onboard-pass {
+  width: 50px;
+  background: #d4edda;
+  color: #155724;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.onboard-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top: 3px solid #20c997;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.onboard-review-text {
+  max-width: 200px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .onboard-dashboard-card {
+    flex-direction: column;
+    padding: 20px;
+    gap: 30px;
+  }
+
+  .onboard-dashboard-section {
+    min-height: auto;
+  }
+}

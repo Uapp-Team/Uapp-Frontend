@@ -315,7 +315,7 @@ const Index = () => {
           <CloseBtn action={toggleModal} />
         </ModalHeader>
 
-        {isQuizDone ? (
+        {quizResults?.isPass === false ? (
           <div>
             <div className="p-4" style={{ minWidth: 320 }}>
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -329,49 +329,51 @@ const Index = () => {
                 </span>
               </div>
               <div>
-                {quizResults?.questionResults?.map((result, index) => (
-                  <div
-                    style={{
-                      background: "#fff",
-                      borderRadius: 8,
-                      border: "1px solid #EAECF0",
-                      borderLeft: `4px solid ${
-                        result?.isCorrect ? "#0D9596" : "#F04438"
-                      }`,
-                      marginBottom: 16,
-                      padding: 16,
-                    }}
-                  >
+                {quizResults?.questionResults
+                  ?.sort((a, b) => a.order - b.order)
+                  ?.map((result, index) => (
                     <div
                       style={{
-                        fontWeight: 600,
-                        fontSize: 15,
-                        color: "#045D5E",
+                        background: "#fff",
+                        borderRadius: 8,
+                        border: "1px solid #EAECF0",
+                        borderLeft: `4px solid ${
+                          result?.isCorrect ? "#0D9596" : "#F04438"
+                        }`,
+                        marginBottom: 16,
+                        padding: 16,
                       }}
                     >
-                      Question {index + 1} of{" "}
-                      {quizResults?.questionResults?.length}
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 15,
+                          color: "#045D5E",
+                        }}
+                      >
+                        Question {result.order} of{" "}
+                        {quizResults?.questionResults?.length}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 14,
+                          color: "#344054",
+                          margin: "8px 0",
+                        }}
+                      >
+                        {result?.questionText}
+                      </div>
+                      <div
+                        style={{
+                          color: result?.isCorrect ? "#0D9596" : "#F04438",
+                          fontWeight: 500,
+                          fontSize: 14,
+                        }}
+                      >
+                        {result?.isCorrect ? "Correct answer" : "Wrong answer"}
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        color: "#344054",
-                        margin: "8px 0",
-                      }}
-                    >
-                      {result?.questionText}
-                    </div>
-                    <div
-                      style={{
-                        color: result?.isCorrect ? "#0D9596" : "#F04438",
-                        fontWeight: 500,
-                        fontSize: 14,
-                      }}
-                    >
-                      {result?.isCorrect ? "Correct answer" : "Wrong answer"}
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -450,32 +452,26 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          {isQuizDone ? (
+          {quizResults?.isPass === false ? (
             <>
-              {quizResults?.percentage === 100 ? (
-                <SaveButton
-                  text="Done"
-                  action={() => {
-                    history.push("/");
-                  }}
-                />
-              ) : (
-                <SaveButton
-                  text="Try Again"
-                  className="px-4 bg-danger text-white"
-                  action={() => {
-                    toggleModal();
-                    setQuizResults([]);
-                    setActiveStep("videoQuiz");
-                  }}
-                />
-              )}
+              <SaveButton
+                text="Try Again"
+                className="px-4 bg-danger text-white"
+                action={() => {
+                  toggleModal();
+                  setQuizResults([]);
+                  setActiveStep("videoQuiz");
+                }}
+              />
             </>
           ) : (
             <SaveButton
               text="Continue"
+              // action={() => {
+              //   setIsQuizDone(true);
+              // }}
               action={() => {
-                setIsQuizDone(true);
+                history.push("/");
               }}
             />
           )}

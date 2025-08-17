@@ -529,6 +529,12 @@ const ConsultantDashBoardGuidedVideo = lazy(() =>
     "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantDashboardGuidedVideo/Index.js"
   )
 );
+const DashboardCard = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/DashboardCard/index.js"
+  )
+);
+
 const ConsultantOnBoard = lazy(() =>
   import(
     "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/Index.js"
@@ -3305,6 +3311,10 @@ class AppRouter extends React.Component {
                   <AppRoute
                     path="/consultant-DashBoard-Guided-Video"
                     component={ConsultantDashBoardGuidedVideo}
+                  />
+                  <AppRoute
+                    path="/consultant-DashBoard-card"
+                    component={DashboardCard}
                   />
 
                   <AppRoute
