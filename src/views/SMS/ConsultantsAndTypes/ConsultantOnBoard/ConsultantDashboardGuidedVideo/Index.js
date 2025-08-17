@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 const Index = () => {
   const history = useHistory();
   const [activeStep, setActiveStep] = useState("consultant");
-  const [videoWatched, setVideoWatched] = useState(true);
+  const [videoWatched, setVideoWatched] = useState(false);
   const [data, setData] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const Index = () => {
   useEffect(() => {
     Uget("ConsultantOnboarding/GetVideoByConsultant").then((res) => {
       setData(res?.data);
-      // setVideoWatched(res?.data?.isVideoShown);
+      setVideoWatched(res?.data?.isVideoShown);
     });
   }, []);
 
@@ -46,27 +46,19 @@ const Index = () => {
       }
     );
   };
-  const handleAnswer = (id, answer) => {
-    console.log(answer, id, "answer");
-
-    const isExist = answers.find(
-      (ans) =>
-        ans.onboardingQuestionId === id && ans.onboardingAnswerId === answer
-    );
+  const handleAnswer = (id, answerId) => {
+    const isExist = answers.find((ans) => ans.onboardingAnswerId === answerId);
     if (isExist) {
-      setAnswers(
-        answers.filter(
-          (ans) =>
-            ans.onboardingQuestionId !== id && ans.onboardingAnswerId !== answer
-        )
-      );
+      setAnswers(answers.filter((ans) => ans.onboardingAnswerId !== answerId));
     } else {
       setAnswers([
         ...answers,
-        { onboardingQuestionId: id, onboardingAnswerId: answer },
+        { onboardingQuestionId: id, onboardingAnswerId: answerId },
       ]);
     }
   };
+
+  console.log(answers, "answers");
   const handleQuiz = (id) => {
     // const formData = new FormData();
     // formData.append("onboardingQuizId", id);
@@ -233,7 +225,6 @@ const Index = () => {
                         className="w-100 bg-black"
                         onEnded={() => handleNext(data?.id)}
                         poster={data?.videoImage}
-                        // poster="https://uappstorage.blob.core.windows.net/onboarding-temp-videos/012c64b0-eda8-4128-ac3d-d912f797058c.mp4?sp=r&st=2025-08-14T12:07:51Z&se=2025-08-14T20:22:51Z&sv=2024-11-04&sr=b&sig=SqSvJWOrN2eaaJ14egFo6R4jYlsYuNI9cveQmNmoIS8%3D"
                       />
                     )}
                   </div>
@@ -244,7 +235,6 @@ const Index = () => {
                       className="mt-3 px-4 py-2"
                       style={{ fontWeight: 500, fontSize: 15 }}
                       action={() => handleStepClick("videoQuiz")}
-                      // action={() => handleNext(data?.id)}
                     />
                   )}
                 </div>
@@ -476,7 +466,7 @@ const Index = () => {
                   action={() => {
                     toggleModal();
                     setQuizResults([]);
-                    setAnswers([]);
+                    setActiveStep("videoQuiz");
                   }}
                 />
               )}
