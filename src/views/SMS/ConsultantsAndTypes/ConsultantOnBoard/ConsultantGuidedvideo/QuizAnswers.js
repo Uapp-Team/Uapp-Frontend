@@ -43,8 +43,7 @@ const QuizAnswers = ({ savedQuestions, onDeleteQuestion }) => {
                   }}
                 >
                   <input
-                    type="radio"
-                    name={`saved-${savedQuestion.id}`}
+                    type="checkbox"
                     checked={answer.isCorrect}
                     disabled
                     style={{ marginRight: 12 }}

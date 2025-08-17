@@ -609,10 +609,11 @@ const VideoAndQuizFor = () => {
 
   const handleCorrectAnswerChange = (answerId) => {
     setAnswers((prev) =>
-      prev.map((answer) => ({
-        ...answer,
-        isCorrect: answer.id === answerId,
-      }))
+      prev.map((answer) =>
+        answer.id === answerId
+          ? { ...answer, isCorrect: !answer.isCorrect }
+          : answer
+      )
     );
   };
 
@@ -653,7 +654,7 @@ const VideoAndQuizFor = () => {
 
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
-      alert("Please select a correct answer");
+      alert("Please select at least one correct answer");
       return;
     }
 

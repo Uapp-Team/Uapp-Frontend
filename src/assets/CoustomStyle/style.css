@@ -6258,7 +6258,19 @@ span.ant-upload-list-item-name {
   align-items: center;
 }
 
+.quiz-checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
 .quiz-answer-radio {
+  width: 18px;
+  height: 18px;
+  accent-color: #045d5e;
+  cursor: pointer;
+}
+
+.quiz-answer-checkbox {
   width: 18px;
   height: 18px;
   accent-color: #045d5e;

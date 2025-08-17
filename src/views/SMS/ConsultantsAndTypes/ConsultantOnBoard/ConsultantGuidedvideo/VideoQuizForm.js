@@ -425,21 +425,20 @@ const VideoQuizForm = ({
                   {/* Answer Section */}
                   <div className="quiz-answer-section">
                     <div className="quiz-answer-instruction">
-                      Check the write answer
+                      Check the correct answers (multiple allowed)
                     </div>
 
                     <div className="quiz-answer-options">
                       {answers.map((answer, index) => (
                         <div key={answer.id} className="quiz-answer-option">
-                          <div className="quiz-radio-container">
+                          <div className="quiz-checkbox-container">
                             <input
-                              type="radio"
-                              name="correctAnswer"
+                              type="checkbox"
                               checked={answer.isCorrect}
                               onChange={() =>
                                 handleCorrectAnswerChange(answer.id)
                               }
-                              className="quiz-answer-radio"
+                              className="quiz-answer-checkbox"
                             />
                           </div>
 
