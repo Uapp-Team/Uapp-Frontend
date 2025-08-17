@@ -3,6 +3,7 @@ import { Card, CardBody } from "reactstrap";
 import { rootUrl } from "../../../../../constants/constants";
 import ConfirmModal from "../../../../../components/modal/ConfirmModal";
 import remove from "../../../../../helpers/remove";
+import put from "../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import { useHistory, useParams } from "react-router";
 
@@ -10,9 +11,15 @@ const VideoCard = ({ video, success, setSuccess }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [activateModal, setActivateModal] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [buttonStatus1, setButtonStatus1] = useState(false);
+  const [progress1, setProgress1] = useState(false);
   const [delData, setDelData] = useState({});
+  const [activateData, setActivateData] = useState({});
+  console.log(activateData, "activate data");
+
   const { addToast } = useToasts();
   const history = useHistory();
 
@@ -37,7 +44,6 @@ const VideoCard = ({ video, success, setSuccess }) => {
     setDelData(p);
     setDeleteModal(true);
   };
-
   const handleDeleteData = () => {
     setButtonStatus(true);
     setProgress(true);
@@ -50,6 +56,29 @@ const VideoCard = ({ video, success, setSuccess }) => {
         autoDismiss: true,
       });
       setDeleteModal(false);
+      setSuccess(!success);
+    });
+  };
+
+  const toggleForActivate = (p) => {
+    setActivateData(p);
+    setActivateModal(true);
+  };
+
+  const handleActivate = () => {
+    setButtonStatus1(true);
+    setProgress1(true);
+    put(
+      `ConsultantOnboarding/ActiveOnboardingVideo?onboardingQuizId=${activateData?.id}`
+    ).then((res) => {
+      console.log(res);
+      setProgress1(false);
+      setButtonStatus1(false);
+      addToast(res?.data?.title, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setActivateModal(false);
       setSuccess(!success);
     });
   };
@@ -133,7 +162,7 @@ const VideoCard = ({ video, success, setSuccess }) => {
                       Edit
                     </button>
                     <button
-                      className="cons-guided-video-list-dot-btn-dlt"
+                      className="cons-guided-video-list-dot-btn-dlt my-3"
                       onClick={() => {
                         setShowMenu(false);
                         toggleDanger(video);
@@ -141,6 +170,17 @@ const VideoCard = ({ video, success, setSuccess }) => {
                     >
                       <i className="fas fa-trash-alt mr-2"></i>Delete
                     </button>
+                    {video?.isActive === false && (
+                      <button
+                        className="cons-guided-video-list-dot-btn-activate"
+                        onClick={() => {
+                          setShowMenu(false);
+                          toggleForActivate(video);
+                        }}
+                      >
+                        Activate
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -156,6 +196,15 @@ const VideoCard = ({ video, success, setSuccess }) => {
         cancel={() => setDeleteModal(false)}
         buttonStatus={buttonStatus}
         progress={progress}
+      />
+      <ConfirmModal
+        text="Do You Want To activate This consultant Guided Video ? Previous one will be deactivate!"
+        isOpen={activateModal}
+        toggle={() => setActivateModal(!activateModal)}
+        confirm={handleActivate}
+        cancel={() => setActivateModal(false)}
+        buttonStatus={buttonStatus1}
+        progress={progress1}
       />
     </>
   );

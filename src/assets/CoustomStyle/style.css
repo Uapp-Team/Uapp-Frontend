@@ -6458,7 +6458,7 @@ span.ant-upload-list-item-name {
   font-size: 15px;
   color: #222;
   border: none;
-  border-bottom: 1px solid #f1f1f1 !important;
+  /* border-bottom: 1px solid #f1f1f1 !important; */
 }
 
 .cons-guided-video-list-dot-btn-dlt {
@@ -6469,6 +6469,16 @@ span.ant-upload-list-item-name {
   cursor: pointer;
   font-size: 15px;
   color: #e74c3c !important;
+  border: none;
+}
+.cons-guided-video-list-dot-btn-activate {
+  background: none;
+  text-align: left;
+  padding: "8px 16px";
+  width: "100%";
+  cursor: pointer;
+  font-size: 15px;
+  color: green !important;
   border: none;
 }
 
