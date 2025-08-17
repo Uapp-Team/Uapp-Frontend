@@ -61,6 +61,7 @@ const VideoQuizForm = ({
   error,
   setError,
   existingThumbnail,
+  id,
   // New prop for API questions
   apiQuestions,
 }) => {
@@ -371,6 +372,7 @@ const VideoQuizForm = ({
             </CardBody>
           </Card>
           <b>Question ({currentQuestionNumber})</b>
+
           {showQuestionForm && (
             <Card>
               <CardBody>

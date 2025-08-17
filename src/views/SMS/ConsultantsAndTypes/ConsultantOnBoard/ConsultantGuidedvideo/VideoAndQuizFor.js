@@ -1572,6 +1572,7 @@ const VideoAndQuizFor = () => {
               setError={setError}
               existingThumbnail={guidedVideoData?.videoImage}
               apiQuestions={guidedVideoData?.questions}
+              id={id}
             />
           )}
         </Col>
