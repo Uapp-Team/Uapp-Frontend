@@ -1357,13 +1357,13 @@ const VideoAndQuizFor = () => {
     var isValid = true;
 
     // Validate branch selection
-    if (branchLabel === "Select Branch" || branchValue === 0) {
+    if (branchLabel === "Select Branch") {
       isValid = false;
       setBranchError(true);
     }
 
     // Validate country selection
-    if (countryLabel === "Select Country" || countryValue === 0) {
+    if (countryLabel === "Select Country") {
       isValid = false;
       setCountryError(true);
     }
