@@ -36,6 +36,7 @@ import ContinueModal from "../../../../../components/modal/ContinueModal";
 import TandC from "./TandC";
 import DashboardCard from "../../../ConsultantsAndTypes/ConsultantOnBoard/DashboardCard";
 import Uget from "../../../../../helpers/Uget";
+import Index from "../../../ConsultantsAndTypes/ConsultantOnBoard/ConsultantDashboardGuidedVideo/Index";
 
 const Consultant = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -198,8 +199,8 @@ const Consultant = () => {
           <UserNotices />
         </div>
       </div>
-      {status?.isOnboardingComplete === true &&
-      status?.accountStatusId === 3 ? (
+
+      {status?.accountStatusId === 3 ? (
         <>
           <div className="row">
             <div className="col-sm-12 col-12">
@@ -357,21 +358,21 @@ const Consultant = () => {
             </Col>
           </Row>
         </>
-      ) : status?.isOnboardingComplete === true &&
-        status?.accountStatusId === 2 ? (
-        <DashboardCard />
-      ) : status?.isOnboardingComplete === false &&
-        status?.accountStatusId === 1 ? (
+      ) : status?.accountStatusId === 4 ? (
         <p className="text-center my-5">
           <b>Your Account is not active</b>
         </p>
-      ) : status?.isOnboardingComplete === true &&
-        status?.accountStatusId === 1 ? (
+      ) : status?.isConsentSign === false ? (
         <ContinueModal
           text="Please Complete your profile"
           text2="We need some more information from you to set up your account."
           cancel={redirectEditProfile}
         />
+      ) : status?.isConsentSign === true && status?.accountStatusId === 1 ? (
+        <Index />
+      ) : status?.isOnboardingComplete === true &&
+        status?.accountStatusId === 2 ? (
+        <DashboardCard />
       ) : null}
 
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
