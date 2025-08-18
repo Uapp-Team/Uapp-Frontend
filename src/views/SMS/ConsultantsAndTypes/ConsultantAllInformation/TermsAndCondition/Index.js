@@ -168,7 +168,7 @@ const ConsultantTermsInformation = () => {
         setStatus(res?.data);
       });
     }
-  }, [conscentData.isSigned, consultantRegisterId]);
+  }, [conscentData?.isSigned, consultantRegisterId]);
 
   return (
     <>

@@ -23,8 +23,8 @@ const VideoAndQuizFor = () => {
   const [guidedVideoData, setGuidedVideoData] = useState({});
   const [success, setSuccess] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("London office");
-  const [branchValue, setBranchValue] = useState(1);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
   const [consultantModal, setConsultantModal] = useState(false);
   const [videoQuizModal, setVideoQuizModal] = useState(false);
@@ -34,7 +34,7 @@ const VideoAndQuizFor = () => {
   const [intAccept, setIntAccept] = useState(false);
   const [acceptError, setAcceptError] = useState(false);
   const [country, setCountry] = useState([]);
-  const [countryLabel, setCountryLabel] = useState("Country");
+  const [countryLabel, setCountryLabel] = useState("Select Country");
   const [countryValue, setCountryValue] = useState(0);
   const [countryError, setCountryError] = useState(false);
   const [videoTitle, setVideoTitle] = useState("");
@@ -374,8 +374,8 @@ const VideoAndQuizFor = () => {
   // Clear all form data and reset to initial state
   const clearAllFormData = () => {
     // Reset all state variables to initial values
-    setBranchLabel("London office");
-    setBranchValue(1);
+    setBranchLabel("Select Branch");
+    setBranchValue(0);
     setBranchError(false);
     setConsultantModal(false);
     setVideoQuizModal(false);
@@ -384,7 +384,7 @@ const VideoAndQuizFor = () => {
     setUkAccept(false);
     setIntAccept(false);
     setAcceptError(false);
-    setCountryLabel("Country");
+    setCountryLabel("Select Country");
     setCountryValue(0);
     setCountryError(false);
     setVideoTitle("");
@@ -911,8 +911,8 @@ const VideoAndQuizFor = () => {
 
   const handleCreateQuizFor = () => {
     const subData = new FormData();
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
+    subData.append("BranchId", branchValue === 0 ? null : branchValue);
+    subData.append("CountryId", countryValue === 0 ? null : countryValue);
     subData.append("VideoTitle", videoTitle);
     if (blobUrl) {
       subData.append("BlobUrl", blobName);
@@ -1113,8 +1113,8 @@ const VideoAndQuizFor = () => {
   const handleUpdateQuizFor = () => {
     const subData = new FormData();
     subData.append("OnboardingQuizId", guidedVideoData?.id);
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
+    subData.append("BranchId", branchValue === 0 ? null : branchValue);
+    subData.append("CountryId", countryValue === 0 ? null : countryValue);
     subData.append("IsAcceptHome", homeAccept.toString());
     subData.append("IsAcceptEU_UK", ukAccept.toString());
     subData.append("IsAcceptInternational", intAccept.toString());
@@ -1499,12 +1499,18 @@ const VideoAndQuizFor = () => {
               handleSubmitVideoFor={handleSubmitVideoFor}
               branchOptions={branchOptions}
               branchLabel={branchLabel}
+              setBranchLabel={setBranchLabel}
               branchValue={branchValue}
+              setBranchValue={setBranchValue}
               selectBranch={selectBranch}
               branchError={branchError}
+              setBranchError={setBranchError}
               countryName={countryName}
               countryLabel={countryLabel}
               countryValue={countryValue}
+              setCountryError={setCountryError}
+              setCountryValue={setCountryValue}
+              setCountryLabel={setCountryLabel}
               selectCountry={selectCountry}
               countryError={countryError}
               homeAccept={homeAccept}

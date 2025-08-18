@@ -2,25 +2,17 @@ import React from "react";
 import { Card, CardBody, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import Select from "react-select";
 import SaveButton from "../../../../../components/buttons/SaveButton";
-import DefaultDropdownU from "../../../../../components/Dropdown/DefaultDropdownU";
-import DefaultDropdown from "../../../../../components/Dropdown/DefaultDropdown";
 
 const YourConsultantForm = ({
   handleSubmitVideoFor,
   branchOptions,
   branchLabel,
   branchValue,
-  setBranchError,
-  setBranchValue,
-  setBranchLabel,
   selectBranch,
   branchError,
   countryName,
   countryLabel,
-  setCountryLabel,
   countryValue,
-  setCountryValue,
-  setCountryError,
   selectCountry,
   countryError,
   homeAccept,
@@ -46,35 +38,34 @@ const YourConsultantForm = ({
                     Branch
                   </span>
 
-                  <DefaultDropdown
-                    label={branchLabel}
-                    setLabel={setBranchLabel}
-                    value={branchValue}
-                    setValue={setBranchValue}
-                    url="BranchDD/index"
+                  <Select
+                    className="form-mt"
+                    options={branchOptions}
+                    value={{ label: branchLabel, value: branchValue }}
+                    onChange={(opt) => selectBranch(opt.label, opt.value)}
                     name="BranchId"
-                    selectAll={true}
-                    error={branchError}
-                    setError={setBranchError}
-                    action={() => {}}
+                    id="BranchId"
+                    // isDisabled={consultantRegisterId ? true : false}
                   />
+
+                  {branchError && (
+                    <span className="text-danger">Branch is required</span>
+                  )}
                 </FormGroup>
                 <FormGroup className="has-icon-left position-relative">
                   <span>
                     <span className="text-danger">*</span> Country
                   </span>
-                  <DefaultDropdown
-                    label={countryLabel}
-                    setLabel={setCountryLabel}
-                    value={countryValue}
-                    setValue={setCountryValue}
-                    url="CountryDD/index"
-                    // name="BranchId"
-                    selectAll={true}
-                    error={countryError}
-                    setError={setCountryError}
-                    action={() => {}}
+
+                  <Select
+                    options={countryName}
+                    value={{ label: countryLabel, value: countryValue }}
+                    onChange={(opt) => selectCountry(opt.label, opt.value)}
+                    required
                   />
+                  {countryError && (
+                    <span className="text-danger">Country is required</span>
+                  )}
                 </FormGroup>
 
                 <FormGroup className="has-icon-left position-relative">
