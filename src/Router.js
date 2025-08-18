@@ -3309,7 +3309,7 @@ class AppRouter extends React.Component {
                   {/* consultant on board */}
 
                   <AppRoute
-                    path="/consultant-DashBoard-Guided-Video"
+                    path="/consultant-onboarding-video-quiz"
                     component={ConsultantDashBoardGuidedVideo}
                   />
                   <AppRoute
@@ -3318,7 +3318,7 @@ class AppRouter extends React.Component {
                   />
 
                   <AppRoute
-                    path="/consultantOnBoard"
+                    path="/consultant-Onboardings"
                     component={ConsultantOnBoard}
                   />
 

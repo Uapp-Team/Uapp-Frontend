@@ -1089,7 +1089,7 @@ const VideoAndQuizFor = () => {
           // Clear form data from localStorage after successful submission
           clearSavedFormData();
           console.log("Form data cleared after successful submission");
-          history.push(`/consultantOnBoard`);
+          history.push(`/consultant-Onboardings`);
         } else {
           // Handle error case with more details
           console.error("Submission failed - Full response:", res);
@@ -1328,7 +1328,7 @@ const VideoAndQuizFor = () => {
 
           clearSavedFormData();
           console.log("Form data cleared after successful update");
-          history.push(`/consultantOnBoard`);
+          history.push(`/consultant-Onboardings`);
         } else {
           // Handle error case with more details
           console.error("Update failed - Full response:", res);
