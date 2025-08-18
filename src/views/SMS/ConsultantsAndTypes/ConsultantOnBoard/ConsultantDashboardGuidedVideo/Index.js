@@ -163,39 +163,47 @@ const Index = () => {
                   }}
                 ></div>
               )}
-              <div
-                className={`d-flex align-items-center justify-content-center me-3 ${
-                  activeStep === "videoQuiz" ? "text-black" : "text-muted"
-                }`}
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                  border:
-                    activeStep === "videoQuiz"
-                      ? "2px solid black"
-                      : "2px solid #dee2e6",
-                }}
-              >
-                {activeStep === "videoQuiz" ? (
-                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-                ) : (
+              {videoWatched && (
+                <>
+                  {" "}
                   <div
+                    className={`d-flex align-items-center justify-content-center me-3 ${
+                      activeStep === "videoQuiz" ? "text-black" : "text-muted"
+                    }`}
                     style={{
+                      width: "24px",
+                      height: "24px",
                       borderRadius: "50%",
-                      backgroundColor: "#dee2e6",
+                      border:
+                        activeStep === "videoQuiz"
+                          ? "2px solid black"
+                          : "2px solid #dee2e6",
                     }}
-                  ></div>
-                )}
-              </div>
-              <h5
-                className="fw-bold mt-1 ml-2"
-                style={{
-                  color: activeStep === "videoQuiz" ? "black" : "#6c757d",
-                }}
-              >
-                Quiz
-              </h5>
+                  >
+                    {activeStep === "videoQuiz" ? (
+                      <i
+                        className="fas fa-check"
+                        style={{ fontSize: "12px" }}
+                      ></i>
+                    ) : (
+                      <div
+                        style={{
+                          borderRadius: "50%",
+                          backgroundColor: "#dee2e6",
+                        }}
+                      ></div>
+                    )}
+                  </div>
+                  <h5
+                    className="fw-bold mt-1 ml-2"
+                    style={{
+                      color: activeStep === "videoQuiz" ? "black" : "#6c757d",
+                    }}
+                  >
+                    Quiz
+                  </h5>
+                </>
+              )}
             </div>
           </Col>
           <Col md="9" sm="12" className="p-4 bg-white">

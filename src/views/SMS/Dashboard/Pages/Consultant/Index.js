@@ -169,7 +169,7 @@ const Consultant = () => {
             )} */}
           </div>
           <div style={{ cursor: "pointer" }}>
-            {overview?.consentSigned && status ? (
+            {overview?.consentSigned && overview?.accountStatusId === 3 ? (
               <div className="std-student">
                 <span onClick={redirectToAddStudent}>Add New Student</span>
               </div>

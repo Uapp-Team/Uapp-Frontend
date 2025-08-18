@@ -386,7 +386,7 @@ const ConsultantTermsInformation = () => {
           {" "}
           {status?.isConsentSign === true && status?.accountStatusId === 1 ? (
             <ExploreModal
-              text="your profile"
+              text="Your profile"
               text2="100% Completed"
               text3="Discover and understand how it functions."
             />
