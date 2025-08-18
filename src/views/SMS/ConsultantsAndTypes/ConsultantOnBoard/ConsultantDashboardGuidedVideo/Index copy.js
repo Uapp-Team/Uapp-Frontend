@@ -16,6 +16,9 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizDone, setIsQuizDone] = useState(false);
   const [quizResults, setQuizResults] = useState([]);
+  const [progress, setProgress] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -68,12 +71,16 @@ const Index = () => {
       onboardingQuizId: id,
       consultantQuestionAnswersDtos: answers,
     };
+    setButtonStatus(true);
+    setProgress(true);
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
       console.log(res?.data?.data?.questionResults);
       if (res?.status === 200) {
         setQuizResults(res?.data?.data);
         toggleModal();
+        setButtonStatus(false);
+        setProgress(false);
       }
     });
   };
@@ -163,39 +170,47 @@ const Index = () => {
                   }}
                 ></div>
               )}
-              <div
-                className={`d-flex align-items-center justify-content-center me-3 ${
-                  activeStep === "videoQuiz" ? "text-black" : "text-muted"
-                }`}
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                  border:
-                    activeStep === "videoQuiz"
-                      ? "2px solid black"
-                      : "2px solid #dee2e6",
-                }}
-              >
-                {activeStep === "videoQuiz" ? (
-                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-                ) : (
+              {videoWatched && (
+                <>
+                  {" "}
                   <div
+                    className={`d-flex align-items-center justify-content-center me-3 ${
+                      activeStep === "videoQuiz" ? "text-black" : "text-muted"
+                    }`}
                     style={{
+                      width: "24px",
+                      height: "24px",
                       borderRadius: "50%",
-                      backgroundColor: "#dee2e6",
+                      border:
+                        activeStep === "videoQuiz"
+                          ? "2px solid black"
+                          : "2px solid #dee2e6",
                     }}
-                  ></div>
-                )}
-              </div>
-              <h5
-                className="fw-bold mt-1 ml-2"
-                style={{
-                  color: activeStep === "videoQuiz" ? "black" : "#6c757d",
-                }}
-              >
-                Quiz
-              </h5>
+                  >
+                    {activeStep === "videoQuiz" ? (
+                      <i
+                        className="fas fa-check"
+                        style={{ fontSize: "12px" }}
+                      ></i>
+                    ) : (
+                      <div
+                        style={{
+                          borderRadius: "50%",
+                          backgroundColor: "#dee2e6",
+                        }}
+                      ></div>
+                    )}
+                  </div>
+                  <h5
+                    className="fw-bold mt-1 ml-2"
+                    style={{
+                      color: activeStep === "videoQuiz" ? "black" : "#6c757d",
+                    }}
+                  >
+                    Quiz
+                  </h5>
+                </>
+              )}
             </div>
           </Col>
           <Col md="9" sm="12" className="p-4 bg-white">
@@ -241,70 +256,77 @@ const Index = () => {
               </div>
             )}
             {/* Quiz Section */}
-            {activeStep === "videoQuiz" && (
-              <div>
-                <div className="mb-4">
-                  <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
-                    Quiz
-                  </h6>
-                  <span className="text-muted fs-14px">
-                    Some question has multiple choice
-                  </span>
-                  <hr className="my-4" />
-                  <Row>
-                    <Col md="12" lg="9">
-                      {data?.questions?.map((question) => (
-                        <div
-                          className="custom-card-border p-4 mb-4"
-                          key={question?.id}
-                        >
-                          <div className="fw-600 fs-20px mb-2">
-                            Question {question?.order} of{" "}
-                            {data?.questions?.length}
-                          </div>
-                          <div className="mb-2" style={{ fontSize: 15 }}>
-                            {question?.question}
-                          </div>
-                          <div>
-                            {question?.answers?.map((answer) => (
-                              <div className="form-check mb-1">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name={`q${question?.id}`}
-                                  id={`q${question?.id}a${answer?.id}`}
-                                  onChange={() =>
-                                    handleAnswer(question?.id, answer?.id)
-                                  }
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={`q${question?.id}a${answer?.id}`}
-                                >
-                                  {answer?.text}
-                                </label>
+            {videoWatched && (
+              <>
+                {" "}
+                {activeStep === "videoQuiz" && (
+                  <div>
+                    <div className="mb-4">
+                      <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
+                        Quiz
+                      </h6>
+                      <span className="text-muted fs-14px">
+                        Some question has multiple choice
+                      </span>
+                      <hr className="my-4" />
+                      <Row>
+                        <Col md="12" lg="9">
+                          {data?.questions?.map((question) => (
+                            <div
+                              className="custom-card-border p-4 mb-4"
+                              key={question?.id}
+                            >
+                              <div className="fw-600 fs-20px mb-2">
+                                Question {question?.order} of{" "}
+                                {data?.questions?.length}
                               </div>
-                            ))}
+                              <div className="mb-2" style={{ fontSize: 15 }}>
+                                {question?.question}
+                              </div>
+                              <div>
+                                {question?.answers?.map((answer) => (
+                                  <div className="form-check mb-1">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name={`q${question?.id}`}
+                                      id={`q${question?.id}a${answer?.id}`}
+                                      onChange={() =>
+                                        handleAnswer(question?.id, answer?.id)
+                                      }
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={`q${question?.id}a${answer?.id}`}
+                                    >
+                                      {answer?.text}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+
+                          <div className="mt-4">
+                            <PreviousButton
+                              className="px-4"
+                              action={() => handleStepClick("consultant")}
+                            />
+
+                            <SaveButton
+                              text="Done"
+                              className="px-4"
+                              action={() => handleQuiz(data?.id)}
+                              progress={progress}
+                              buttonStatus={buttonStatus}
+                            />
                           </div>
-                        </div>
-                      ))}
-
-                      <div className="mt-4">
-                        <PreviousButton
-                          className="px-4"
-                          action={() => handleStepClick("consultant")}
-                        />
-
-                        <SaveButton
-                          text="Done"
-                          className="px-4"
-                          action={() => handleQuiz(data?.id)}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </Col>
         </Row>
@@ -315,7 +337,7 @@ const Index = () => {
           <CloseBtn action={toggleModal} />
         </ModalHeader>
 
-        {isQuizDone ? (
+        {quizResults?.isPass === false ? (
           <div>
             <div className="p-4" style={{ minWidth: 320 }}>
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -329,49 +351,51 @@ const Index = () => {
                 </span>
               </div>
               <div>
-                {quizResults?.questionResults?.map((result, index) => (
-                  <div
-                    style={{
-                      background: "#fff",
-                      borderRadius: 8,
-                      border: "1px solid #EAECF0",
-                      borderLeft: `4px solid ${
-                        result?.isCorrect ? "#0D9596" : "#F04438"
-                      }`,
-                      marginBottom: 16,
-                      padding: 16,
-                    }}
-                  >
+                {quizResults?.questionResults
+                  ?.sort((a, b) => a.order - b.order)
+                  ?.map((result, index) => (
                     <div
                       style={{
-                        fontWeight: 600,
-                        fontSize: 15,
-                        color: "#045D5E",
+                        background: "#fff",
+                        borderRadius: 8,
+                        border: "1px solid #EAECF0",
+                        borderLeft: `4px solid ${
+                          result?.isCorrect ? "#0D9596" : "#F04438"
+                        }`,
+                        marginBottom: 16,
+                        padding: 16,
                       }}
                     >
-                      Question {index + 1} of{" "}
-                      {quizResults?.questionResults?.length}
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 15,
+                          color: "#045D5E",
+                        }}
+                      >
+                        Question {result.order} of{" "}
+                        {quizResults?.questionResults?.length}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 14,
+                          color: "#344054",
+                          margin: "8px 0",
+                        }}
+                      >
+                        {result?.questionText}
+                      </div>
+                      <div
+                        style={{
+                          color: result?.isCorrect ? "#0D9596" : "#F04438",
+                          fontWeight: 500,
+                          fontSize: 14,
+                        }}
+                      >
+                        {result?.isCorrect ? "Correct answer" : "Wrong answer"}
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        color: "#344054",
-                        margin: "8px 0",
-                      }}
-                    >
-                      {result?.questionText}
-                    </div>
-                    <div
-                      style={{
-                        color: result?.isCorrect ? "#0D9596" : "#F04438",
-                        fontWeight: 500,
-                        fontSize: 14,
-                      }}
-                    >
-                      {result?.isCorrect ? "Correct answer" : "Wrong answer"}
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -450,32 +474,26 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          {isQuizDone ? (
+          {quizResults?.isPass === false ? (
             <>
-              {quizResults?.percentage === 100 ? (
-                <SaveButton
-                  text="Done"
-                  action={() => {
-                    history.push("/");
-                  }}
-                />
-              ) : (
-                <SaveButton
-                  text="Try Again"
-                  className="px-4 bg-danger text-white"
-                  action={() => {
-                    toggleModal();
-                    setQuizResults([]);
-                    setActiveStep("videoQuiz");
-                  }}
-                />
-              )}
+              <SaveButton
+                text="Try Again"
+                className="px-4 bg-danger text-white"
+                action={() => {
+                  toggleModal();
+                  setQuizResults([]);
+                  setActiveStep("videoQuiz");
+                }}
+              />
             </>
           ) : (
             <SaveButton
               text="Continue"
+              // action={() => {
+              //   setIsQuizDone(true);
+              // }}
               action={() => {
-                setIsQuizDone(true);
+                history.push("/");
               }}
             />
           )}

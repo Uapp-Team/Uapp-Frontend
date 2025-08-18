@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Col, Modal, ModalFooter, ModalHeader, Row } from "reactstrap";
 import SaveButton from "../../../../../components/buttons/SaveButton";
 import PreviousButton from "../../../../../components/buttons/PreviousButton";
@@ -18,6 +18,17 @@ const Index = () => {
   const [quizResults, setQuizResults] = useState([]);
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
+
+  // Video player states
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [showVolumeControl, setShowVolumeControl] = useState(false);
+
+  const videoRef = useRef(null);
+  const progressBarRef = useRef(null);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -83,6 +94,101 @@ const Index = () => {
         setProgress(false);
       }
     });
+  };
+
+  // Video player functions
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+    }
+  };
+
+  const handleProgressClick = (e) => {
+    if (videoRef.current && progressBarRef.current && duration > 0) {
+      const rect = progressBarRef.current.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickPercent = clickX / rect.width;
+      const newTime = clickPercent * duration;
+
+      // Check if forward seeking is allowed
+      if (newTime > currentTime && !data?.isVideoShown) {
+        // Don't allow forward seeking
+        return;
+      }
+
+      videoRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const handleSeek = (direction) => {
+    if (videoRef.current && duration > 0) {
+      const seekTime = 10; // 10 seconds
+      let newTime;
+
+      if (direction === "forward") {
+        newTime = currentTime + seekTime;
+        // Check if forward seeking is allowed
+        if (!data?.isVideoShown) {
+          return;
+        }
+      } else {
+        newTime = currentTime - seekTime;
+      }
+
+      // Ensure time is within bounds
+      newTime = Math.max(0, Math.min(newTime, duration));
+      videoRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (videoRef.current) {
+      videoRef.current.volume = newVolume;
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (videoRef.current) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        videoRef.current.requestFullscreen();
+      }
+    }
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -213,7 +319,7 @@ const Index = () => {
               )}
             </div>
           </Col>
-          <Col md="9" sm="12" className="p-4 bg-white">
+          <Col md="8" sm="12" className="p-4 bg-white">
             {/* Guided Video Section */}
             {(activeStep === "consultant" || activeStep === "videoQuiz") && (
               <div>
@@ -230,17 +336,121 @@ const Index = () => {
                     }}
                   >
                     {data?.blobUrl && (
-                      <video
-                        src={data?.blobUrl}
-                        width="100%"
-                        height="450"
-                        controls
-                        // autoPlay
-                        // loop
-                        className="w-100 bg-black"
-                        onEnded={() => handleNext(data?.id)}
-                        poster={data?.videoImage}
-                      />
+                      <div className="onboard-custom-video-player">
+                        <video
+                          ref={videoRef}
+                          src={data?.blobUrl}
+                          width="100%"
+                          height="450"
+                          className="w-100 bg-black"
+                          onEnded={() => handleNext(data?.id)}
+                          poster={data?.videoImage}
+                          onTimeUpdate={handleTimeUpdate}
+                          onLoadedMetadata={handleLoadedMetadata}
+                          onPlay={() => setIsPlaying(true)}
+                          onPause={() => setIsPlaying(false)}
+                        />
+
+                        {/* Custom Video Controls */}
+                        <div className="onboard-video-controls">
+                          {/* Play/Pause Button */}
+                          <button
+                            className="onboard-control-btn onboard-play-btn"
+                            onClick={togglePlay}
+                          >
+                            <i
+                              className={`fas fa-${
+                                isPlaying ? "pause" : "play"
+                              }`}
+                            ></i>
+                          </button>
+
+                          {/* Time Display */}
+                          <div className="onboard-time-display">
+                            <span>{formatTime(currentTime)}</span>
+                            <span>/</span>
+                            <span>{formatTime(duration)}</span>
+                          </div>
+
+                          {/* Progress Bar */}
+                          <div
+                            className="onboard-progress-container"
+                            ref={progressBarRef}
+                            onClick={handleProgressClick}
+                          >
+                            <div
+                              className="onboard-progress-bar"
+                              style={{
+                                width: `${
+                                  duration > 0
+                                    ? (currentTime / duration) * 100
+                                    : 0
+                                }%`,
+                              }}
+                            ></div>
+                          </div>
+
+                          {/* Seek Buttons */}
+                          <div className="onboard-seek-controls">
+                            <button
+                              className="onboard-control-btn onboard-seek-btn"
+                              onClick={() => handleSeek("backward")}
+                              title="Rewind 10s"
+                            >
+                              <i className="fas fa-backward"></i>
+                            </button>
+                            <button
+                              className={`onboard-control-btn onboard-seek-btn ${
+                                !data?.isVideoShown ? "disabled" : ""
+                              }`}
+                              onClick={() => handleSeek("forward")}
+                              title={
+                                data?.isVideoShown
+                                  ? "Forward 10s"
+                                  : "Forward seeking not allowed"
+                              }
+                              disabled={!data?.isVideoShown}
+                            >
+                              <i className="fas fa-forward"></i>
+                            </button>
+                          </div>
+
+                          {/* Volume Control */}
+                          <div className="onboard-volume-control">
+                            <button
+                              className="onboard-control-btn onboard-volume-btn"
+                              onClick={toggleMute}
+                              onMouseEnter={() => setShowVolumeControl(true)}
+                              onMouseLeave={() => setShowVolumeControl(false)}
+                            >
+                              <i
+                                className={`fas fa-volume-${
+                                  isMuted ? "mute" : "up"
+                                }`}
+                              ></i>
+                            </button>
+                            {showVolumeControl && (
+                              <input
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.1"
+                                value={volume}
+                                onChange={handleVolumeChange}
+                                className="onboard-volume-slider"
+                              />
+                            )}
+                          </div>
+
+                          {/* Fullscreen Button */}
+                          <button
+                            className="onboard-control-btn onboard-fullscreen-btn"
+                            onClick={toggleFullscreen}
+                          >
+                            <i className="fas fa-expand"></i>
+                          </button>
+                        </div>
+                      </div>
                     )}
                   </div>
 
