@@ -241,70 +241,75 @@ const Index = () => {
               </div>
             )}
             {/* Quiz Section */}
-            {activeStep === "videoQuiz" && (
-              <div>
-                <div className="mb-4">
-                  <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
-                    Quiz
-                  </h6>
-                  <span className="text-muted fs-14px">
-                    Some question has multiple choice
-                  </span>
-                  <hr className="my-4" />
-                  <Row>
-                    <Col md="12" lg="9">
-                      {data?.questions?.map((question) => (
-                        <div
-                          className="custom-card-border p-4 mb-4"
-                          key={question?.id}
-                        >
-                          <div className="fw-600 fs-20px mb-2">
-                            Question {question?.order} of{" "}
-                            {data?.questions?.length}
-                          </div>
-                          <div className="mb-2" style={{ fontSize: 15 }}>
-                            {question?.question}
-                          </div>
-                          <div>
-                            {question?.answers?.map((answer) => (
-                              <div className="form-check mb-1">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  name={`q${question?.id}`}
-                                  id={`q${question?.id}a${answer?.id}`}
-                                  onChange={() =>
-                                    handleAnswer(question?.id, answer?.id)
-                                  }
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={`q${question?.id}a${answer?.id}`}
-                                >
-                                  {answer?.text}
-                                </label>
+            {videoWatched && (
+              <>
+                {" "}
+                {activeStep === "videoQuiz" && (
+                  <div>
+                    <div className="mb-4">
+                      <h6 className="fw-bold mb-3" style={{ fontSize: 17 }}>
+                        Quiz
+                      </h6>
+                      <span className="text-muted fs-14px">
+                        Some question has multiple choice
+                      </span>
+                      <hr className="my-4" />
+                      <Row>
+                        <Col md="12" lg="9">
+                          {data?.questions?.map((question) => (
+                            <div
+                              className="custom-card-border p-4 mb-4"
+                              key={question?.id}
+                            >
+                              <div className="fw-600 fs-20px mb-2">
+                                Question {question?.order} of{" "}
+                                {data?.questions?.length}
                               </div>
-                            ))}
+                              <div className="mb-2" style={{ fontSize: 15 }}>
+                                {question?.question}
+                              </div>
+                              <div>
+                                {question?.answers?.map((answer) => (
+                                  <div className="form-check mb-1">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name={`q${question?.id}`}
+                                      id={`q${question?.id}a${answer?.id}`}
+                                      onChange={() =>
+                                        handleAnswer(question?.id, answer?.id)
+                                      }
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={`q${question?.id}a${answer?.id}`}
+                                    >
+                                      {answer?.text}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+
+                          <div className="mt-4">
+                            <PreviousButton
+                              className="px-4"
+                              action={() => handleStepClick("consultant")}
+                            />
+
+                            <SaveButton
+                              text="Done"
+                              className="px-4"
+                              action={() => handleQuiz(data?.id)}
+                            />
                           </div>
-                        </div>
-                      ))}
-
-                      <div className="mt-4">
-                        <PreviousButton
-                          className="px-4"
-                          action={() => handleStepClick("consultant")}
-                        />
-
-                        <SaveButton
-                          text="Done"
-                          className="px-4"
-                          action={() => handleQuiz(data?.id)}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </Col>
         </Row>
