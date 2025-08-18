@@ -1356,15 +1356,30 @@ const VideoAndQuizFor = () => {
   const ValidateFormVideoFor = () => {
     var isValid = true;
 
-    // if (
-    //   userTypeId !== userTypes?.Consultant &&
-    //   homeAccept === false &&
-    //   ukAccept === false &&
-    //   intAccept === false
-    // ) {
-    //   isValid = false;
-    //   setAcceptError(true);
-    // }
+    // Validate branch selection
+    if (branchLabel === "Select Branch" || branchValue === 0) {
+      isValid = false;
+      setBranchError(true);
+    }
+
+    // Validate country selection
+    if (countryLabel === "Select Country" || countryValue === 0) {
+      isValid = false;
+      setCountryError(true);
+    }
+
+    // Validate recruitment type selection (at least one must be selected)
+    if (homeAccept === false && ukAccept === false && intAccept === false) {
+      isValid = false;
+      setAcceptError(true);
+    }
+
+    // Clear all errors if validation passes
+    if (isValid) {
+      setBranchError(false);
+      setCountryError(false);
+      setAcceptError(false);
+    }
 
     return isValid;
   };
@@ -1374,6 +1389,12 @@ const VideoAndQuizFor = () => {
     if (ValidateFormVideoFor()) {
       // Save form data to memory and navigate
       handleConsultantContinue();
+    } else {
+      // Show error message when validation fails
+      addToast("Please fill in all required fields before continuing", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
 

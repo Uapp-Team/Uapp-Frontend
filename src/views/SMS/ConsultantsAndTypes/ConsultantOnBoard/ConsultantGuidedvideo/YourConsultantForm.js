@@ -56,6 +56,7 @@ const YourConsultantForm = ({
                     selectAll={true}
                     error={branchError}
                     setError={setBranchError}
+                    errorText="Branch is required"
                     action={() => {}}
                   />
                 </FormGroup>
@@ -73,13 +74,14 @@ const YourConsultantForm = ({
                     selectAll={true}
                     error={countryError}
                     setError={setCountryError}
+                    errorText="Country is required"
                     action={() => {}}
                   />
                 </FormGroup>
 
                 <FormGroup className="has-icon-left position-relative">
                   <span>
-                    {/* <span className="text-danger">*</span> */}
+                    <span className="text-danger">*</span>
                     <b> Recruitment Type</b>
                   </span>
 
