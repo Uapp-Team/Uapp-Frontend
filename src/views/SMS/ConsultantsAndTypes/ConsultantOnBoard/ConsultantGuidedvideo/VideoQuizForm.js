@@ -64,6 +64,7 @@ const VideoQuizForm = ({
   id,
   // New prop for API questions
   apiQuestions,
+  handleStepClick,
 }) => {
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
@@ -527,7 +528,7 @@ const VideoQuizForm = ({
           </div>
 
           <FormGroup className="mt-4 text-left">
-            <PreviousButton />
+            <PreviousButton action={() => handleStepClick("consultant")} />
             <SaveButton
               text="Submit"
               // progress={progress}

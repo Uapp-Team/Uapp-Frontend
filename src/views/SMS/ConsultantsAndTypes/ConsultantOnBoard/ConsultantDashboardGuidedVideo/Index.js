@@ -16,6 +16,9 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizDone, setIsQuizDone] = useState(false);
   const [quizResults, setQuizResults] = useState([]);
+  const [progress, setProgress] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -68,12 +71,16 @@ const Index = () => {
       onboardingQuizId: id,
       consultantQuestionAnswersDtos: answers,
     };
+    setButtonStatus(true);
+    setProgress(true);
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
       console.log(res?.data?.data?.questionResults);
       if (res?.status === 200) {
         setQuizResults(res?.data?.data);
         toggleModal();
+        setButtonStatus(false);
+        setProgress(false);
       }
     });
   };
@@ -310,6 +317,8 @@ const Index = () => {
                               text="Done"
                               className="px-4"
                               action={() => handleQuiz(data?.id)}
+                              progress={progress}
+                              buttonStatus={buttonStatus}
                             />
                           </div>
                         </Col>

@@ -1588,6 +1588,7 @@ const VideoAndQuizFor = () => {
               existingThumbnail={guidedVideoData?.videoImage}
               apiQuestions={guidedVideoData?.questions}
               id={id}
+              handleStepClick={handleStepClick}
             />
           )}
         </Col>
