@@ -911,8 +911,12 @@ const VideoAndQuizFor = () => {
 
   const handleCreateQuizFor = () => {
     const subData = new FormData();
-    subData.append("BranchId", branchValue === 0 ? null : branchValue);
-    subData.append("CountryId", countryValue === 0 ? null : countryValue);
+    if (branchValue !== 0) {
+      subData.append("BranchId", branchValue);
+    }
+    if (countryValue !== 0) {
+      subData.append("CountryId", countryValue);
+    }
     subData.append("VideoTitle", videoTitle);
     if (blobUrl) {
       subData.append("BlobUrl", blobName);
@@ -1113,8 +1117,12 @@ const VideoAndQuizFor = () => {
   const handleUpdateQuizFor = () => {
     const subData = new FormData();
     subData.append("OnboardingQuizId", guidedVideoData?.id);
-    subData.append("BranchId", branchValue === 0 ? null : branchValue);
-    subData.append("CountryId", countryValue === 0 ? null : countryValue);
+    if (branchValue !== 0) {
+      subData.append("BranchId", branchValue);
+    }
+    if (countryValue !== 0) {
+      subData.append("CountryId", countryValue);
+    }
     subData.append("IsAcceptHome", homeAccept.toString());
     subData.append("IsAcceptEU_UK", ukAccept.toString());
     subData.append("IsAcceptInternational", intAccept.toString());
