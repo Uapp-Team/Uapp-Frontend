@@ -160,9 +160,9 @@ const QuickViewModal = ({
                 <div className="mr-2 icon-design">
                   <ArrowLeftRightIcon />
                 </div>
-                <div className="mr-2 icon-design">
+                {/* <div className="mr-2 icon-design">
                   <LuShare2 size={16} />
-                </div>
+                </div> */}
                 {Student() ? (
                   quickViewData.isFavorite ? (
                     <div
@@ -197,12 +197,12 @@ const QuickViewModal = ({
                   )
                 ) : null}
 
-                <div
+                {/* <div
                   className="mr-2 icon-design"
                   onClick={() => handleCourseDetails(quickViewData?.subjectId)}
                 >
                   <LuArrowUpRight size={16} className="fs-20px" />
-                </div>
+                </div> */}
               </div>
 
               {quickViewData.intakeStatusId !== 1 ? (
@@ -744,14 +744,14 @@ const QuickViewModal = ({
             </div>
           </Row>
         </ModalBody>
-        <ModalFooter className="view-more-container">
+        {/* <ModalFooter className="view-more-container">
           <button
             className="view-more-btn"
             onClick={() => handleCourseDetails(quickViewData?.subjectId)}
           >
             View course profile
           </button>
-        </ModalFooter>
+        </ModalFooter> */}
         <ApplyModal
           open={openApplyModal}
           onClose={() => setOpenApplyModal(false)}
