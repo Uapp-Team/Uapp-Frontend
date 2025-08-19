@@ -86,9 +86,8 @@ const Index = () => {
     setProgress(true);
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
-      console.log(res?.data?.data?.questionResults);
+      setQuizResults(res?.data?.data);
       if (res?.status === 200) {
-        setQuizResults(res?.data?.data);
         toggleModal();
         setButtonStatus(false);
         setProgress(false);
@@ -688,7 +687,7 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          {quizResults?.isPass === false ? (
+          {/* {quizResults?.isPass === false ? (
             <>
               <SaveButton
                 text="Try Again"
@@ -701,15 +700,21 @@ const Index = () => {
               />
             </>
           ) : (
+            <SaveButton text="Continue" action={goForward} />
+          )} */}
+          {quizResults?.isPass === true ? (
+            <>
+              <SaveButton text="Continue" action={goForward} />
+            </>
+          ) : (
             <SaveButton
-              text="Continue"
-              action={goForward}
-              // action={() => {
-              //   setIsQuizDone(true);
-              // }}
-              // action={() => {
-              //   history.push("/");
-              // }}
+              text="Try Again"
+              className="px-4 bg-danger text-white"
+              action={() => {
+                toggleModal();
+                setQuizResults([]);
+                setActiveStep("videoQuiz");
+              }}
             />
           )}
         </ModalFooter>
