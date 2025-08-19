@@ -191,6 +191,10 @@ const Index = () => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const goForward = () => {
+    history.push("/");
+  };
+
   return (
     <>
       <div className="custom-card-border mb-3 ">
@@ -699,12 +703,13 @@ const Index = () => {
           ) : (
             <SaveButton
               text="Continue"
+              action={goForward}
               // action={() => {
               //   setIsQuizDone(true);
               // }}
-              action={() => {
-                history.push("/");
-              }}
+              // action={() => {
+              //   history.push("/");
+              // }}
             />
           )}
         </ModalFooter>
