@@ -16,6 +16,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizDone, setIsQuizDone] = useState(false);
   const [quizResults, setQuizResults] = useState([]);
+
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
 
