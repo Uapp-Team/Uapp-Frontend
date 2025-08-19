@@ -15,6 +15,9 @@ import post from "../../../../../helpers/post";
 import put from "../../../../../helpers/put";
 import ButtonLoader from "../../../Components/ButtonLoader";
 import ConsultantNavigation from "../NavigationAndRegistration/ConsultantNavigation";
+import ContinueModal from "../../../../../components/modal/ContinueModal";
+import ExploreModal from "../../../../../components/modal/ExploreModal";
+import Uget from "../../../../../helpers/Uget";
 
 const ConsultantTermsInformation = () => {
   const activetab = "9";
@@ -39,6 +42,7 @@ const ConsultantTermsInformation = () => {
   const [loading, setLoading] = useState(true);
   const [consData, setConsData] = useState({});
   const [check, setCheck] = useState(false);
+  const [status, setStatus] = useState({});
   /////////////////////////
 
   const createMarkup = (html) => {
@@ -157,6 +161,14 @@ const ConsultantTermsInformation = () => {
     var options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(string).toString([], options);
   }
+
+  useEffect(() => {
+    if (conscentData?.isSigned === true) {
+      Uget(`Consultant/Status/${consultantRegisterId}`).then((res) => {
+        setStatus(res?.data);
+      });
+    }
+  }, [conscentData?.isSigned, consultantRegisterId]);
 
   return (
     <>
@@ -368,6 +380,20 @@ const ConsultantTermsInformation = () => {
           </div>
         </CardBody>
       </Card>
+
+      {userTypeId === userTypes?.Consultant.toString() && (
+        <>
+          {" "}
+          {status?.isConsentSign === true && status?.accountStatusId === 1 ? (
+            <ExploreModal
+              text="Your profile"
+              text2="100% Completed"
+              text3="Discover and understand how it functions."
+            />
+          ) : null}
+        </>
+      )}
+
       <div style={{ display: "none", margin: "20px" }}>
         <div ref={componentRef}>
           <div

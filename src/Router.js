@@ -523,6 +523,38 @@ const ConsultantDetails = lazy(() =>
   import("./views/SMS/Consultant/ConsultantDetails")
 );
 
+//consultant On board
+const ConsultantDashBoardGuidedVideo = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantDashboardGuidedVideo/Index.js"
+  )
+);
+const DashboardCard = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/DashboardCard/index.js"
+  )
+);
+
+const ConsultantOnBoard = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/Index.js"
+  )
+);
+
+const VideoAndQuizFor = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/VideoAndQuizFor.js"
+  )
+);
+
+const VideoDetails = lazy(() =>
+  import(
+    "./views/SMS/ConsultantsAndTypes/ConsultantOnBoard/ConsultantGuidedvideo/VideoDetails.js"
+  )
+);
+
+//consultant On board
+
 const AdmissionManagerDetails = lazy(() =>
   import(
     "./views/SMS/AllStaffs/AdmissionManager/AdmissionManagerProfile/Components/AdmissionManagerDetailsAndTerms/Component/AdmissionManagerDetails"
@@ -3274,6 +3306,37 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  {/* consultant on board */}
+
+                  <AppRoute
+                    path="/consultant-onboarding-video-quiz"
+                    component={ConsultantDashBoardGuidedVideo}
+                  />
+                  <AppRoute
+                    path="/consultant-DashBoard-card"
+                    component={DashboardCard}
+                  />
+
+                  <AppRoute
+                    path="/consultant-Onboardings"
+                    component={ConsultantOnBoard}
+                  />
+
+                  <AppRoute
+                    path="/videoAndQuizFor"
+                    component={VideoAndQuizFor}
+                  />
+                  <AppRoute
+                    path="/videoAndQuizFor-edit/:id"
+                    component={VideoAndQuizFor}
+                  />
+
+                  <AppRoute
+                    path="/onBoard-video-details"
+                    component={VideoDetails}
+                  />
+
+                  {/* consultant on board */}
 
                   {/* consultant */}
                   <AppRoute

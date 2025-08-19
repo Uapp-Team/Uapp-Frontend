@@ -165,6 +165,8 @@ const PersonalInformation = () => {
   };
 
   const handlePreview2 = async (file) => {
+    console.log(file, "aita ki");
+
     if (!file.url && !file.preview) {
       file.preview = await getBase642(file.originFileObj);
     }

@@ -7,11 +7,14 @@ const SaveButton = ({
   progress,
   buttonStatus,
   action,
+  className,
 }) => {
   return (
     <span>
       <button
-        className={`${text === "Save" ? "save-button" : "saved-button"}`}
+        className={`${
+          text === "Save" ? "save-button" : "saved-button"
+        } ${className}`}
         type={type}
         onClick={action}
         disabled={buttonStatus === true ? true : false}

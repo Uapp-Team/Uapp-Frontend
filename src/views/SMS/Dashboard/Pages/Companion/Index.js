@@ -18,6 +18,7 @@ import UserNotices from "../../Component/UserNotices";
 import CompanionRefer from "./CompanionRefer/CompanionRefer";
 import CountingCards from "./CountingCards";
 import RecentInvitations from "./RecentInvitations";
+import post from "../../../../../helpers/post";
 
 const Companion = () => {
   const { id } = useParams();
@@ -94,10 +95,7 @@ const Companion = () => {
     } else {
       setButtonStatus(true);
       setProgress(true);
-      put(
-        `ReferrerTeamInvitation?companionid=${referenceId}&email=${email}`,
-        subData
-      ).then((action) => {
+      post(`ReferrerInvitation/Invite/${email}`, subData).then((action) => {
         setButtonStatus(false);
         setProgress(false);
         setSuccess(!success);
@@ -110,6 +108,32 @@ const Companion = () => {
       });
     }
   };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const subData = new FormData(event.target);
+  //   if (!email) {
+  //     setEmailError("Email is required");
+  //   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+  //     setEmailError("Email is not Valid");
+  //   } else {
+  //     setButtonStatus(true);
+  //     setProgress(true);
+  //     put(
+  //       `ReferrerTeamInvitation?companionid=${referenceId}&email=${email}`,
+  //       subData
+  //     ).then((action) => {
+  //       setButtonStatus(false);
+  //       setProgress(false);
+  //       setSuccess(!success);
+  //       setEmail("");
+  //       setModalOpen(false);
+  //       addToast(action?.data?.message, {
+  //         appearance: "success",
+  //         autoDismiss: true,
+  //       });
+  //     });
+  //   }
+  // };
 
   const handleEmailError = (e) => {
     setEmail(e.target.value);

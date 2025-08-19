@@ -153,7 +153,7 @@ const ConsultantTable = ({
                   <div className="d-flex d-print-none">
                     <PopOverText
                       value={
-                        consultant?.phoneNumberr &&
+                        consultant?.phoneNumber &&
                         consultant?.phoneNumber.includes("+")
                           ? consultant?.phoneNumber
                           : consultant?.phoneNumber &&
@@ -176,7 +176,7 @@ const ConsultantTable = ({
               ) : null}
 
               <td className="d-none d-print-block">
-                {consultant?.phoneNumberr &&
+                {consultant?.phoneNumber &&
                 consultant?.phoneNumber.includes("+")
                   ? consultant?.phoneNumber
                   : consultant?.phoneNumber &&

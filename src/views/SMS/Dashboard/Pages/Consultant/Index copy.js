@@ -35,17 +35,13 @@ import Refer from "./Refer";
 import ContinueModal from "../../../../../components/modal/ContinueModal";
 import TandC from "./TandC";
 import DashboardCard from "../../../ConsultantsAndTypes/ConsultantOnBoard/DashboardCard";
-import Uget from "../../../../../helpers/Uget";
-import Index from "../../../ConsultantsAndTypes/ConsultantOnBoard/ConsultantDashboardGuidedVideo/Index";
 
 const Consultant = () => {
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
   const referenceId = localStorage.getItem("referenceId");
   const [showBal, setShowBal] = useState(false);
   const [availableWithdraw, setAvailableWithdraw] = useState(0);
-  const [status, setStatus] = useState({});
-  console.log(status?.accountStatusId, "status");
-
+  const [status, setStatus] = useState(false);
   // const [balance, setBalance] = useState(0);
   // const [open, setOpen] = useState(false);
   const history = useHistory();
@@ -60,8 +56,8 @@ const Consultant = () => {
   const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
-    Uget(`Consultant/Status/${referenceId}`).then((res) => {
-      setStatus(res?.data);
+    get(`Consultant/Status/${referenceId}`).then((res) => {
+      setStatus(res);
     });
 
     // get(
@@ -169,7 +165,7 @@ const Consultant = () => {
             )} */}
           </div>
           <div style={{ cursor: "pointer" }}>
-            {overview?.consentSigned && overview?.accountStatusId === 3 ? (
+            {overview?.consentSigned && status ? (
               <div className="std-student">
                 <span onClick={redirectToAddStudent}>Add New Student</span>
               </div>
@@ -200,7 +196,7 @@ const Consultant = () => {
         </div>
       </div>
 
-      {status?.accountStatusId === 3 ? (
+      {status ? (
         <>
           <div className="row">
             <div className="col-sm-12 col-12">
@@ -358,23 +354,11 @@ const Consultant = () => {
             </Col>
           </Row>
         </>
-      ) : status?.accountStatusId === 4 ? (
+      ) : (
         <p className="text-center my-5">
           <b>Your Account is not active</b>
         </p>
-      ) : status?.isConsentSign === false ? (
-        <ContinueModal
-          text="Please Complete your profile"
-          text2="We need some more information from you to set up your account."
-          cancel={redirectEditProfile}
-        />
-      ) : status?.isConsentSign === true && status?.accountStatusId === 1 ? (
-        <Index />
-      ) : status?.isOnboardingComplete === true &&
-        status?.accountStatusId === 2 ? (
-        <DashboardCard />
-      ) : null}
-
+      )}
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal2">
         <ModalHeader>Send an invitation to email</ModalHeader>
         <ModalBody>

@@ -621,7 +621,11 @@ const ApplicationInfo = ({
     );
     if (statusValue === 0) {
       setStatusError(true);
-    } else if (applicationSubStatus?.length !== 0 && subStatusValue === 0) {
+    } else if (
+      applicationSubStatus?.length !== 0 &&
+      subStatusValue === 0 &&
+      statusValue !== 9
+    ) {
       setSubStatusError(true);
     } else if (statusValue === 4 && statusDate === null) {
       setDateError(true);
