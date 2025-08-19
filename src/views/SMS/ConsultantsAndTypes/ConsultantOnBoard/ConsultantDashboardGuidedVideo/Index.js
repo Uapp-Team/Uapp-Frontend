@@ -87,7 +87,7 @@ const Index = () => {
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
       setQuizResults(res?.data?.data);
-      if (res?.status === 200) {
+      if (res?.data?.isSuccess === true) {
         toggleModal();
         setButtonStatus(false);
         setProgress(false);
