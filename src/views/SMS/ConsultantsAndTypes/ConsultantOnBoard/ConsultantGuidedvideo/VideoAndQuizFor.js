@@ -76,7 +76,6 @@ const VideoAndQuizFor = () => {
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
   const [blobUrl, setBlobUrl] = useState(null);
   const [blobName, setBlobName] = useState(null);
-  console.log(blobName, "sakib blobname");
 
   const [statsData, setStatsData] = useState({
     questionCount: 0,
@@ -1117,10 +1116,10 @@ const VideoAndQuizFor = () => {
   const handleUpdateQuizFor = () => {
     const subData = new FormData();
     subData.append("OnboardingQuizId", guidedVideoData?.id);
-    if (branchValue !== 0) {
+    if (branchValue !== null) {
       subData.append("BranchId", branchValue);
     }
-    if (countryValue !== 0) {
+    if (countryValue !== null) {
       subData.append("CountryId", countryValue);
     }
     subData.append("IsAcceptHome", homeAccept.toString());

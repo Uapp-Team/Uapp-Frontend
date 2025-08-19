@@ -128,7 +128,7 @@ const Index = () => {
       const newTime = clickPercent * duration;
 
       // Check if forward seeking is allowed
-      if (newTime > currentTime && !videoWatched) {
+      if (newTime > currentTime && !data?.isVideoShown) {
         // Don't allow forward seeking
         return;
       }
@@ -146,7 +146,7 @@ const Index = () => {
       if (direction === "forward") {
         newTime = currentTime + seekTime;
         // Check if forward seeking is allowed
-        if (!videoWatched) {
+        if (!data?.isVideoShown) {
           return;
         }
       } else {
@@ -401,15 +401,15 @@ const Index = () => {
                             </button>
                             <button
                               className={`onboard-control-btn onboard-seek-btn ${
-                                !videoWatched ? "disabled" : ""
+                                !data?.isVideoShown ? "disabled" : ""
                               }`}
                               onClick={() => handleSeek("forward")}
                               title={
-                                videoWatched
+                                data?.isVideoShown
                                   ? "Forward 10s"
                                   : "Forward seeking not allowed"
                               }
-                              disabled={!videoWatched}
+                              disabled={!data?.isVideoShown}
                             >
                               <i className="fas fa-forward"></i>
                             </button>

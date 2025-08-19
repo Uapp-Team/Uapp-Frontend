@@ -6,6 +6,7 @@ import remove from "../../../../../helpers/remove";
 import put from "../../../../../helpers/put";
 import { useToasts } from "react-toast-notifications";
 import { useHistory, useParams } from "react-router";
+import videoImage from "../../../../../assets/img/videoImage.svg";
 
 const VideoCard = ({ video, success, setSuccess }) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -94,11 +95,19 @@ const VideoCard = ({ video, success, setSuccess }) => {
         <CardBody>
           <div className="d-flex align-items-lg-start cons-guided-video-list-card position-relative">
             <div>
-              <img
-                className="cons-guided-video-list-img "
-                src={video.videoImage}
-                alt={video.videoTitle}
-              />
+              {video.videoImage ? (
+                <img
+                  className="cons-guided-video-list-img "
+                  src={video.videoImage}
+                  alt={video.videoTitle}
+                />
+              ) : (
+                <img
+                  className="cons-guided-video-list-img "
+                  src={videoImage}
+                  alt={video.videoTitle}
+                />
+              )}
             </div>
             <div style={{ flex: 1 }}>
               <div className="cons-guided-video-list-video-title">
