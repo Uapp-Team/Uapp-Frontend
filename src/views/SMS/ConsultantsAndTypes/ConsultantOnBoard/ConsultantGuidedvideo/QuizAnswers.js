@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardBody } from "reactstrap";
 
-const QuizAnswers = ({ savedQuestions, onDeleteQuestion }) => {
+const QuizAnswers = ({ savedQuestions, onDeleteQuestion, onEditQuestion }) => {
   console.log(savedQuestions, "savedquestions");
 
   return (
@@ -18,18 +18,31 @@ const QuizAnswers = ({ savedQuestions, onDeleteQuestion }) => {
               }}
             >
               <div style={{ fontWeight: 600, fontSize: 16 }}>
-                Question {savedQuestion.order}: {savedQuestion.question}
+                Question {savedQuestion.number || savedQuestion.order}:{" "}
+                {savedQuestion.question}
               </div>
-              {onDeleteQuestion && (
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline-danger"
-                  onClick={() => onDeleteQuestion(savedQuestion.id)}
-                  style={{ marginLeft: 10 }}
-                >
-                  <i className="fas fa-trash"></i>
-                </button>
-              )}
+              <div style={{ display: "flex", gap: "8px" }}>
+                {/* {onEditQuestion && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={() => onEditQuestion(savedQuestion.id)}
+                    title="Edit Question"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                )} */}
+                {onDeleteQuestion && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => onDeleteQuestion(savedQuestion.id)}
+                    title="Delete Question"
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                )}
+              </div>
             </div>
             <form>
               {savedQuestion?.answers.map((answer) => (
@@ -51,7 +64,6 @@ const QuizAnswers = ({ savedQuestions, onDeleteQuestion }) => {
                   <label
                     style={{
                       fontSize: 15,
-
                       cursor: "pointer",
                       fontWeight: answer.isCorrect ? "bold" : "normal",
                       color: answer.isCorrect ? "#28a745" : "#222",

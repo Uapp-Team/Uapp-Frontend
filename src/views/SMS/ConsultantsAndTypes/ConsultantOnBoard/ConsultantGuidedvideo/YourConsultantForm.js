@@ -42,6 +42,24 @@ const YourConsultantForm = ({
               <Col lg="8" md="8">
                 <FormGroup className="has-icon-left position-relative">
                   <span>
+                    <span className="text-danger">*</span> Country
+                  </span>
+                  <DefaultDropdown
+                    label={countryLabel}
+                    setLabel={setCountryLabel}
+                    value={countryValue}
+                    setValue={setCountryValue}
+                    url="CountryDD/index"
+                    // name="BranchId"
+                    selectAll={true}
+                    error={countryError}
+                    setError={setCountryError}
+                    errorText="Country is required"
+                    action={() => {}}
+                  />
+                </FormGroup>
+                <FormGroup className="has-icon-left position-relative">
+                  <span>
                     <span className="text-danger">*</span>
                     Branch
                   </span>
@@ -57,24 +75,6 @@ const YourConsultantForm = ({
                     error={branchError}
                     setError={setBranchError}
                     errorText="Branch is required"
-                    action={() => {}}
-                  />
-                </FormGroup>
-                <FormGroup className="has-icon-left position-relative">
-                  <span>
-                    <span className="text-danger">*</span> Country
-                  </span>
-                  <DefaultDropdown
-                    label={countryLabel}
-                    setLabel={setCountryLabel}
-                    value={countryValue}
-                    setValue={setCountryValue}
-                    url="CountryDD/index"
-                    // name="BranchId"
-                    selectAll={true}
-                    error={countryError}
-                    setError={setCountryError}
-                    errorText="Country is required"
                     action={() => {}}
                   />
                 </FormGroup>

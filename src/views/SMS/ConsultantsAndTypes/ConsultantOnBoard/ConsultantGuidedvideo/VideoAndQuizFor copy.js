@@ -647,7 +647,7 @@ const VideoAndQuizFor = () => {
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
       alert("Please select at least one correct answer");
-      // return;
+      return;
     }
 
     const hasAnswers = answers.some((answer) => answer.text.trim());
@@ -667,9 +667,7 @@ const VideoAndQuizFor = () => {
     };
 
     // Add to saved questions
-    if (hasCorrectAnswer) {
-      setSavedQuestions((prev) => [...prev, newQuestion]);
-    }
+    setSavedQuestions((prev) => [...prev, newQuestion]);
 
     // Reset form
     setQuestion("");
@@ -687,9 +685,7 @@ const VideoAndQuizFor = () => {
     setShowQuestionForm(false);
 
     // Update currentQuestionNumber to match the new count
-    if (hasCorrectAnswer) {
-      setCurrentQuestionNumber((prev) => prev + 1);
-    }
+    setCurrentQuestionNumber((prev) => prev + 1);
 
     // Save to localStorage
     saveFormDataToMemory();
@@ -701,128 +697,31 @@ const VideoAndQuizFor = () => {
   };
 
   const handleDeleteQuestion = (questionId) => {
-    // Show confirmation dialog
-    if (
-      window.confirm(
-        "Are you sure you want to delete this question? This action cannot be undone."
-      )
-    ) {
-      setSavedQuestions((prev) => {
-        const filteredQuestions = prev.filter((q) => q.id !== questionId);
-        // Reorder question numbers to ensure they are sequential and unique
-        const reorderedQuestions = filteredQuestions.map((q, index) => ({
-          ...q,
-          number: index + 1,
-        }));
+    setSavedQuestions((prev) => {
+      const filteredQuestions = prev.filter((q) => q.id !== questionId);
+      // Reorder question numbers to ensure they are sequential and unique
+      const reorderedQuestions = filteredQuestions.map((q, index) => ({
+        ...q,
+        number: index + 1,
+      }));
 
-        // Update currentQuestionNumber to match the new count
-        setCurrentQuestionNumber(reorderedQuestions.length + 1);
+      // Update currentQuestionNumber to match the new count
+      setCurrentQuestionNumber(reorderedQuestions.length + 1);
 
-        return reorderedQuestions;
-      });
-      saveFormDataToMemory();
-
-      // Show success message
-      addToast("Question deleted successfully!", { appearance: "success" });
-    }
+      return reorderedQuestions;
+    });
+    saveFormDataToMemory();
   };
 
   const handleEditQuestion = (questionId) => {
     const questionToEdit = savedQuestions.find((q) => q.id === questionId);
     if (questionToEdit) {
       setQuestion(questionToEdit.question);
-
-      // Ensure answers array has the correct structure
-      const formattedAnswers = questionToEdit.answers?.map((answer, index) => ({
-        id: answer.id || Date.now() + index,
-        text: answer.text || "",
-        isCorrect: answer.isCorrect || false,
-        isEditing: false,
-        originalId: answer.originalId || answer.id,
-      })) || [
-        { id: 1, text: "", isCorrect: false, isEditing: false },
-        { id: 2, text: "", isCorrect: false, isEditing: false },
-        { id: 3, text: "", isCorrect: false, isEditing: false },
-      ];
-
-      setAnswers(formattedAnswers);
+      setAnswers(questionToEdit.answers || []);
       setDetailedAnswer(questionToEdit.detailedAnswer || "");
       setIsQuestionEditing(true);
       setEditingQuestionId(questionId);
       setShowQuestionForm(true);
-
-      // Scroll to question form
-      setTimeout(() => {
-        const questionForm = document.querySelector(".quiz-question-section");
-        if (questionForm) {
-          questionForm.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
-    }
-  };
-
-  // Function to handle individual answer editing
-  const handleAnswerEdit = (answerId) => {
-    setAnswers((prev) =>
-      prev.map((answer) =>
-        answer.id === answerId ? { ...answer, isEditing: true } : answer
-      )
-    );
-  };
-
-  // Function to handle answer save
-  const handleAnswerSave = (answerId) => {
-    setAnswers((prev) =>
-      prev.map((answer) =>
-        answer.id === answerId ? { ...answer, isEditing: false } : answer
-      )
-    );
-  };
-
-  // Function to handle answer cancel
-  const handleAnswerCancel = (answerId) => {
-    setAnswers((prev) =>
-      prev.map((answer) =>
-        answer.id === answerId ? { ...answer, isEditing: false } : answer
-      )
-    );
-  };
-
-  // Function to add new answer option
-  const handleAddAnswer = () => {
-    const newAnswerId = Math.max(...answers.map((a) => a.id), 0) + 1;
-    setAnswers((prev) => [
-      ...prev,
-      {
-        id: newAnswerId,
-        text: "",
-        isCorrect: false,
-        isEditing: false,
-      },
-    ]);
-  };
-
-  // Function to remove answer option
-  const handleRemoveAnswer = (answerId) => {
-    if (answers.length > 2) {
-      // Keep at least 2 answer options
-      setAnswers((prev) => prev.filter((answer) => answer.id !== answerId));
-    }
-  };
-
-  // Function to clear all questions
-  const handleClearAllQuestions = () => {
-    if (
-      window.confirm(
-        "Are you sure you want to clear all questions? This action cannot be undone."
-      )
-    ) {
-      setSavedQuestions([]);
-      setCurrentQuestionNumber(0);
-      saveFormDataToMemory();
-      addToast("All questions cleared successfully!", {
-        appearance: "success",
-      });
     }
   };
 
@@ -835,7 +734,7 @@ const VideoAndQuizFor = () => {
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
       alert("Please select at least one correct answer");
-      // return;
+      return;
     }
 
     const hasAnswers = answers.some((answer) => answer.text.trim());
@@ -844,32 +743,21 @@ const VideoAndQuizFor = () => {
       return;
     }
 
-    // Find the original question to preserve its properties
-    const originalQuestion = savedQuestions.find(
-      (q) => q.id === editingQuestionId
-    );
-
     const updatedQuestion = {
-      ...originalQuestion, // Preserve all original properties
       id: editingQuestionId,
-      number: originalQuestion?.number || savedQuestions.length + 1,
-      question: question.trim(),
-      answers: answers
-        .filter((answer) => answer.text.trim())
-        .map((answer, index) => ({
-          ...answer,
-          order: index + 1,
-        })),
-      detailedAnswer: detailedAnswer.trim(),
+      number:
+        savedQuestions.find((q) => q.id === editingQuestionId)?.number ||
+        savedQuestions.length + 1,
+      question: question,
+      answers: answers.filter((answer) => answer.text.trim()),
+      detailedAnswer: detailedAnswer,
       timestamp: new Date().toISOString(),
-      isEdited: true,
     };
 
     setSavedQuestions((prev) =>
       prev.map((q) => (q.id === editingQuestionId ? updatedQuestion : q))
     );
 
-    // Reset form
     setQuestion("");
     setAnswers([
       { id: 1, text: "", isCorrect: false, isEditing: false },
@@ -885,11 +773,11 @@ const VideoAndQuizFor = () => {
     // Hide question form
     setShowQuestionForm(false);
 
+    // Update currentQuestionNumber to match the new count
+    setCurrentQuestionNumber((prev) => prev + 1);
+
     // Save to localStorage
     saveFormDataToMemory();
-
-    // Show success message
-    addToast("Question updated successfully!", { appearance: "success" });
   };
 
   const handleVideoFileChange = (event) => {
@@ -1798,21 +1686,6 @@ const VideoAndQuizFor = () => {
               handleStepClick={handleStepClick}
               handleEditQuestion={handleEditQuestion}
               handleUpdateQuestion={handleUpdateQuestion}
-              // New props for enhanced editing
-              handleAnswerEdit={handleAnswerEdit}
-              handleAnswerSave={handleAnswerSave}
-              handleAnswerCancel={handleAnswerCancel}
-              editingQuestionId={editingQuestionId}
-              // State setters for form management
-              setAnswers={setAnswers}
-              setDetailedAnswer={setDetailedAnswer}
-              setEditingQuestionId={setEditingQuestionId}
-              setShowQuestionForm={setShowQuestionForm}
-              // Answer management functions
-              handleAddAnswer={handleAddAnswer}
-              handleRemoveAnswer={handleRemoveAnswer}
-              // Question management functions
-              handleClearAllQuestions={handleClearAllQuestions}
             />
           )}
         </Col>

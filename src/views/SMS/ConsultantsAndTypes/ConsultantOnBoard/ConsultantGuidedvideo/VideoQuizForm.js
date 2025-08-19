@@ -65,6 +65,23 @@ const VideoQuizForm = ({
   // New prop for API questions
   apiQuestions,
   handleStepClick,
+  // New props for enhanced editing
+  handleAnswerEdit,
+  handleAnswerSave,
+  handleAnswerCancel,
+  handleEditQuestion,
+  handleUpdateQuestion,
+  editingQuestionId,
+  // State setters for form management
+  setAnswers,
+  setDetailedAnswer,
+  setEditingQuestionId,
+  setShowQuestionForm,
+  // Answer management functions
+  handleAddAnswer,
+  handleRemoveAnswer,
+  // Question management functions
+  handleClearAllQuestions,
 }) => {
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
@@ -473,29 +490,6 @@ const VideoQuizForm = ({
                     </div>
                   </div>
 
-                  {/* Detailed Answer Section */}
-                  <div className="quiz-question-input-container">
-                    {isDetailedAnswerEditing ? (
-                      <Input
-                        type="text"
-                        value={detailedAnswer}
-                        onChange={handleDetailedAnswerChange}
-                        onKeyPress={handleDetailedAnswerKeyPress}
-                        onBlur={handleDetailedAnswerBlur}
-                        placeholder="Write in details answer (optional)"
-                        className="quiz-question-input"
-                        autoFocus
-                      />
-                    ) : (
-                      <div
-                        className="quiz-question-placeholder"
-                        onClick={handleDetailedAnswerClick}
-                      >
-                        {detailedAnswer || "Write in details answer (optional)"}
-                      </div>
-                    )}
-                  </div>
-
                   {/* Save Button */}
                   <div className="quiz-save-button-container">
                     <button
@@ -512,7 +506,11 @@ const VideoQuizForm = ({
 
           {/* Saved Questions Display */}
           {savedQuestions.length > 0 && (
-            <QuizAnswers savedQuestions={savedQuestions} />
+            <QuizAnswers
+              savedQuestions={savedQuestions}
+              onDeleteQuestion={handleDeleteQuestion}
+              onEditQuestion={handleEditQuestion}
+            />
           )}
 
           {/* Add More Button */}
