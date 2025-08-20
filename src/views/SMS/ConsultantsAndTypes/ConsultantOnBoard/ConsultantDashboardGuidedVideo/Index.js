@@ -6,6 +6,7 @@ import Uget from "../../../../../helpers/Uget";
 import post from "../../../../../helpers/post";
 import CloseBtn from "../../../../../components/buttons/CloseBtn";
 import { useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 
 const Index = () => {
   const history = useHistory();
@@ -27,7 +28,7 @@ const Index = () => {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeControl, setShowVolumeControl] = useState(false);
-
+  const { addToast } = useToasts();
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
 
@@ -73,12 +74,7 @@ const Index = () => {
     }
   };
 
-  console.log(answers, "answers");
   const handleQuiz = (id) => {
-    // const formData = new FormData();
-    // formData.append("onboardingQuizId", id);
-    // formData.append("consultantQuestionAnswersDtos", JSON.stringify(answers));
-
     const formData = {
       onboardingQuizId: id,
       consultantQuestionAnswersDtos: answers,
@@ -88,10 +84,21 @@ const Index = () => {
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
       setQuizResults(res?.data?.data);
-      if (res?.data?.isSuccess === true) {
+      console.log(res, "sakib check res");
+
+      if (res?.data?.statusCode === 200) {
+        addToast(res?.data?.title, {
+          appearance: "success",
+          autoDismiss: true,
+        });
         toggleModal();
         setButtonStatus(false);
         setProgress(false);
+      } else {
+        addToast(res?.data?.title, {
+          appearance: "error",
+          autoDismiss: true,
+        });
       }
     });
   };
@@ -162,8 +169,22 @@ const Index = () => {
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      if (isMuted) {
+        // Unmuting - restore previous volume
+        videoRef.current.muted = false;
+        setIsMuted(false);
+        // Restore the volume to what it was before muting
+        if (volume === 0) {
+          const newVolume = 0.5; // Default volume when unmuting from 0
+          setVolume(newVolume);
+          videoRef.current.volume = newVolume;
+        }
+      } else {
+        // Muting - store current volume and set to 0
+        videoRef.current.muted = true;
+        setIsMuted(true);
+        // Don't change the volume state, just mute the video
+      }
     }
   };
 
@@ -172,6 +193,16 @@ const Index = () => {
     setVolume(newVolume);
     if (videoRef.current) {
       videoRef.current.volume = newVolume;
+      // If user moves the slider, unmute the video
+      if (isMuted && newVolume > 0) {
+        videoRef.current.muted = false;
+        setIsMuted(false);
+      }
+      // If user sets volume to 0, mute the video
+      if (newVolume === 0) {
+        videoRef.current.muted = true;
+        setIsMuted(true);
+      }
     }
   };
 
@@ -420,16 +451,28 @@ const Index = () => {
                           </div>
 
                           {/* Volume Control */}
-                          <div className="onboard-volume-control">
+                          <div
+                            className="onboard-volume-control"
+                            onMouseEnter={() => setShowVolumeControl(true)}
+                            onMouseLeave={() => {
+                              // Add a small delay to allow users to move mouse to slider
+                              setTimeout(
+                                () => setShowVolumeControl(false),
+                                10000
+                              );
+                            }}
+                          >
                             <button
                               className="onboard-control-btn onboard-volume-btn"
                               onClick={toggleMute}
-                              onMouseEnter={() => setShowVolumeControl(true)}
-                              onMouseLeave={() => setShowVolumeControl(false)}
                             >
                               <i
                                 className={`fas fa-volume-${
-                                  isMuted ? "mute" : "up"
+                                  isMuted || volume === 0
+                                    ? "mute"
+                                    : volume < 0.5
+                                    ? "down"
+                                    : "up"
                                 }`}
                               ></i>
                             </button>
@@ -439,7 +482,7 @@ const Index = () => {
                                 min="0"
                                 max="1"
                                 step="0.1"
-                                value={volume}
+                                value={isMuted ? 0 : volume}
                                 onChange={handleVolumeChange}
                                 className="onboard-volume-slider"
                               />

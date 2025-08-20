@@ -256,7 +256,7 @@ const VideoQuizForm = ({
                       </Upload>
                       <Modal
                         visible={previewVisible1}
-                        title={previewTitle1}
+                        // title={previewTitle1}
                         footer={null}
                         onCancel={handleCancel1}
                       >
