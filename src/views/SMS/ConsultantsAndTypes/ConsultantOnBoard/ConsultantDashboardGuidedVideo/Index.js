@@ -7,6 +7,7 @@ import post from "../../../../../helpers/post";
 import CloseBtn from "../../../../../components/buttons/CloseBtn";
 import { useHistory } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const Index = () => {
   const history = useHistory();
@@ -748,7 +749,12 @@ const Index = () => {
           )} */}
           {quizResults?.isPass === true ? (
             <>
-              <SaveButton text="Continue" action={goForward} />
+              <Link to={`/`}>
+                <button type="button" class="save-button">
+                  Continue
+                </button>
+              </Link>
+              {/* <SaveButton text="Continue" action={goForward} /> */}
             </>
           ) : (
             <SaveButton
