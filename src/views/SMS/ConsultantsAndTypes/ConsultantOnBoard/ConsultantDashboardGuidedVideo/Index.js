@@ -732,24 +732,9 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          {/* {quizResults?.isPass === false ? (
-            <>
-              <SaveButton
-                text="Try Again"
-                className="px-4 bg-danger text-white"
-                action={() => {
-                  toggleModal();
-                  setQuizResults([]);
-                  setActiveStep("videoQuiz");
-                }}
-              />
-            </>
-          ) : (
-            <SaveButton text="Continue" action={goForward} />
-          )} */}
           {quizResults?.isPass === true ? (
             <>
-              <Link to={`/`}>
+              <Link to={"/"}>
                 <button type="button" class="save-button">
                   Continue
                 </button>
