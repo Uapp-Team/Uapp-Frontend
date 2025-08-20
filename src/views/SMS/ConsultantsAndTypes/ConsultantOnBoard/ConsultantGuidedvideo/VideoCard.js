@@ -48,17 +48,33 @@ const VideoCard = ({ video, success, setSuccess }) => {
   const handleDeleteData = () => {
     setButtonStatus(true);
     setProgress(true);
-    remove(`ConsultantOnboarding/Delete/${delData?.id}`).then((res) => {
-      console.log(res);
-      setProgress(false);
-      setButtonStatus(false);
-      addToast(res, {
-        appearance: "error",
-        autoDismiss: true,
+    remove(`ConsultantOnboarding/Delete/${delData?.id}`)
+      .then((res) => {
+        console.log(res);
+        setProgress(false);
+        setButtonStatus(false);
+        addToast(res, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+        setDeleteModal(false);
+        setSuccess(!success);
+      })
+      .catch((error) => {
+        setProgress(false);
+        setButtonStatus(false);
+        setDeleteModal(false);
+
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.title ||
+          "An unexpected error occurred";
+
+        addToast(errorMessage, {
+          appearance: "error",
+          autoDismiss: true,
+        });
       });
-      setDeleteModal(false);
-      setSuccess(!success);
-    });
   };
 
   const toggleForActivate = (p) => {
