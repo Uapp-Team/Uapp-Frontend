@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import VideoList from "./VideoList";
 import Pagination from "../../../Pagination/Pagination";
 import Uget from "../../../../../helpers/Uget";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState("active");
@@ -48,7 +49,8 @@ const Index = () => {
 
   return (
     <div>
-      <div>
+      <BreadCrumb title="Consultant guided video" backTo="" path="/" />
+      <div className="mt-5">
         <h3 className="guided-title">Consultant guided video</h3>
       </div>
       <div className="video-header">

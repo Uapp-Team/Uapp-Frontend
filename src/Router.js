@@ -3319,7 +3319,13 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     path="/consultant-Onboardings"
-                    component={ConsultantOnBoard}
+                    component={
+                      permissions?.includes(
+                        permissionList?.Onboarding_Consultant
+                      )
+                        ? ConsultantOnBoard
+                        : NotAuthorized
+                    }
                   />
 
                   <AppRoute

@@ -31,6 +31,8 @@ export const permissionList = {
   View_Associate: 260,
   Add_Associate: 261,
 
+  // onBoard
+  Onboarding_Consultant: 69,
   ///// branch
   Add_Branch: 220,
   Edit_Branch: 221,

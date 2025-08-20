@@ -15,6 +15,7 @@ import { useToasts } from "react-toast-notifications";
 import { useHistory, useParams } from "react-router-dom";
 import Uget from "../../../../../helpers/Uget";
 import { ConsoleLogger } from "@microsoft/signalr/dist/esm/Utils";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 
 const VideoAndQuizFor = () => {
   const history = useHistory();
@@ -1585,238 +1586,245 @@ const VideoAndQuizFor = () => {
   };
 
   return (
-    <div className="p-4">
-      {/* Steps */}
-      {/* <Form onSubmit={handleAllPart}>
+    <div>
+      <BreadCrumb
+        title="Consultant guided video Information"
+        backTo="Consultant On Boardings"
+        path="/consultant-Onboardings"
+      />
+      <div className="p-4">
+        {/* Steps */}
+        {/* <Form onSubmit={handleAllPart}>
       
       </Form> */}
-      <Row>
-        <Col md="3" sm="12">
-          <h5 className="fw-bold mb-3">Consultant Guided video</h5>
-          {/* Your Consultant Step */}
-          <div
-            className={`d-flex align-items-center p-4 cursor-pointer ${
-              activeStep === "consultant" ? "click-bg-shadow" : ""
-            }`}
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-            onClick={() => handleStepClick("consultant")}
-          >
+        <Row>
+          <Col md="3" sm="12">
+            <h5 className="fw-bold mb-3">Consultant Guided video</h5>
+            {/* Your Consultant Step */}
+            <div
+              className={`d-flex align-items-center p-4 cursor-pointer ${
+                activeStep === "consultant" ? "click-bg-shadow" : ""
+              }`}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+              }}
+              onClick={() => handleStepClick("consultant")}
+            >
+              {activeStep === "consultant" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "#0D9596",
+                  }}
+                ></div>
+              )}
+              <div
+                className={`d-flex align-items-center justify-content-center me-3 ${
+                  activeStep === "consultant" ? "text-black" : "text-muted"
+                }`}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  borderRadius: "50%",
+                  border:
+                    activeStep === "consultant"
+                      ? "2px solid black"
+                      : "2px solid #dee2e6",
+                }}
+              >
+                {activeStep === "consultant" ? (
+                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
+                ) : (
+                  <div
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#dee2e6",
+                    }}
+                  ></div>
+                )}
+              </div>
+              <h5
+                className="fw-bold mt-1 ml-2"
+                style={{
+                  color: activeStep === "consultant" ? "black" : "#6c757d",
+                }}
+              >
+                Your Consultant
+              </h5>
+            </div>
+            {/* Video and Quiz Step */}
+            <div
+              className={`d-flex align-items-center p-4 cursor-pointer ${
+                activeStep === "videoQuiz" ? "click-bg-shadow" : ""
+              }`}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+              }}
+              onClick={() => handleStepClick("videoQuiz")}
+            >
+              {activeStep === "videoQuiz" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "#0D9596",
+                  }}
+                ></div>
+              )}
+              <div
+                className={`d-flex align-items-center justify-content-center me-3 ${
+                  activeStep === "videoQuiz" ? "text-black" : "text-muted"
+                }`}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  borderRadius: "50%",
+                  border:
+                    activeStep === "videoQuiz"
+                      ? "2px solid black"
+                      : "2px solid #dee2e6",
+                }}
+              >
+                {activeStep === "videoQuiz" ? (
+                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
+                ) : (
+                  <div
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#dee2e6",
+                    }}
+                  ></div>
+                )}
+              </div>
+              <h5
+                className="fw-bold mt-1 ml-2"
+                style={{
+                  color: activeStep === "videoQuiz" ? "black" : "#6c757d",
+                }}
+              >
+                Video and Quiz
+              </h5>
+            </div>
+          </Col>
+          <Col md="9" sm="12">
             {activeStep === "consultant" && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: "4px",
-                  backgroundColor: "#0D9596",
-                }}
-              ></div>
+              <YourConsultantForm
+                handleSubmitVideoFor={handleSubmitVideoFor}
+                branchOptions={branchOptions}
+                branchLabel={branchLabel}
+                setBranchLabel={setBranchLabel}
+                branchValue={branchValue}
+                setBranchValue={setBranchValue}
+                selectBranch={selectBranch}
+                branchError={branchError}
+                setBranchError={setBranchError}
+                countryName={countryName}
+                countryLabel={countryLabel}
+                countryValue={countryValue}
+                setCountryError={setCountryError}
+                setCountryValue={setCountryValue}
+                setCountryLabel={setCountryLabel}
+                selectCountry={selectCountry}
+                countryError={countryError}
+                homeAccept={homeAccept}
+                setAcceptError={setAcceptError}
+                setHomeAccept={setHomeAccept}
+                intAccept={intAccept}
+                setIntAccept={setIntAccept}
+                ukAccept={ukAccept}
+                setUkAccept={setUkAccept}
+                acceptError={acceptError}
+              />
             )}
-            <div
-              className={`d-flex align-items-center justify-content-center me-3 ${
-                activeStep === "consultant" ? "text-black" : "text-muted"
-              }`}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                border:
-                  activeStep === "consultant"
-                    ? "2px solid black"
-                    : "2px solid #dee2e6",
-              }}
-            >
-              {activeStep === "consultant" ? (
-                <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-              ) : (
-                <div
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#dee2e6",
-                  }}
-                ></div>
-              )}
-            </div>
-            <h5
-              className="fw-bold mt-1 ml-2"
-              style={{
-                color: activeStep === "consultant" ? "black" : "#6c757d",
-              }}
-            >
-              Your Consultant
-            </h5>
-          </div>
-          {/* Video and Quiz Step */}
-          <div
-            className={`d-flex align-items-center p-4 cursor-pointer ${
-              activeStep === "videoQuiz" ? "click-bg-shadow" : ""
-            }`}
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-            onClick={() => handleStepClick("videoQuiz")}
-          >
             {activeStep === "videoQuiz" && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: "4px",
-                  backgroundColor: "#0D9596",
-                }}
-              ></div>
+              <VideoQuizForm
+                handleSubmitQuizFor={handleSubmitQuizFor}
+                handleFirstNameChange={handleFirstNameChange}
+                videoTitle={videoTitle}
+                videoTitleError={videoTitleError}
+                handleVideoFileChange={handleVideoFileChange}
+                videoFile={videoFile}
+                videoFileError={videoFileError}
+                showVideoPlayer={showVideoPlayer}
+                uploadProgress={uploadProgress}
+                isUploading={isUploading}
+                videoUrl={videoUrl}
+                blobUrl={blobUrl}
+                blobName={blobName}
+                question={question}
+                setQuestion={setQuestion}
+                setIsQuestionEditing={setIsQuestionEditing}
+                questionError={questionError}
+                setQuestionError={setQuestionError}
+                answers={answers}
+                handleCorrectAnswerChange={handleCorrectAnswerChange}
+                handleAnswerChange={handleAnswerChange}
+                handleAnswerKeyPress={handleAnswerKeyPress}
+                handleAnswerBlur={handleAnswerBlur}
+                handleAnswerClick={handleAnswerClick}
+                isDetailedAnswerEditing={isDetailedAnswerEditing}
+                detailedAnswer={detailedAnswer}
+                detailedAnswerError={detailedAnswerError}
+                handleDetailedAnswerChange={handleDetailedAnswerChange}
+                handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
+                handleDetailedAnswerBlur={handleDetailedAnswerBlur}
+                handleDetailedAnswerClick={handleDetailedAnswerClick}
+                isQuestionEditing={isQuestionEditing}
+                handleQuestionChange={handleQuestionChange}
+                handleQuestionKeyPress={handleQuestionKeyPress}
+                handleQuestionClick={handleQuestionClick}
+                handleQuestionBlur={handleQuestionBlur}
+                savedQuestions={savedQuestions}
+                handleSaveQuestion={handleSaveQuestion}
+                showQuestionForm={showQuestionForm}
+                handleAddMoreQuestion={handleAddMoreQuestion}
+                handleDeleteQuestion={handleDeleteQuestion}
+                currentQuestionNumber={currentQuestionNumber}
+                FileList1={FileList1}
+                setFileList1={setFileList1}
+                previewImage1={previewImage1}
+                setPreviewImage1={setPreviewImage1}
+                setPreviewTitle1={setPreviewTitle1}
+                previewTitle1={previewTitle1}
+                previewVisible1={previewVisible1}
+                setPreviewVisible1={setPreviewVisible1}
+                error={error}
+                setError={setError}
+                existingThumbnail={guidedVideoData?.videoImage}
+                apiQuestions={guidedVideoData?.questions}
+                id={id}
+                handleStepClick={handleStepClick}
+                handleEditQuestion={handleEditQuestion}
+                handleUpdateQuestion={handleUpdateQuestion}
+                // New props for enhanced editing
+                handleAnswerEdit={handleAnswerEdit}
+                handleAnswerSave={handleAnswerSave}
+                handleAnswerCancel={handleAnswerCancel}
+                editingQuestionId={editingQuestionId}
+                // State setters for form management
+                setAnswers={setAnswers}
+                setDetailedAnswer={setDetailedAnswer}
+                setEditingQuestionId={setEditingQuestionId}
+                setShowQuestionForm={setShowQuestionForm}
+                // Answer management functions
+                handleAddAnswer={handleAddAnswer}
+                handleRemoveAnswer={handleRemoveAnswer}
+                // Question management functions
+                handleClearAllQuestions={handleClearAllQuestions}
+              />
             )}
-            <div
-              className={`d-flex align-items-center justify-content-center me-3 ${
-                activeStep === "videoQuiz" ? "text-black" : "text-muted"
-              }`}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                border:
-                  activeStep === "videoQuiz"
-                    ? "2px solid black"
-                    : "2px solid #dee2e6",
-              }}
-            >
-              {activeStep === "videoQuiz" ? (
-                <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-              ) : (
-                <div
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#dee2e6",
-                  }}
-                ></div>
-              )}
-            </div>
-            <h5
-              className="fw-bold mt-1 ml-2"
-              style={{
-                color: activeStep === "videoQuiz" ? "black" : "#6c757d",
-              }}
-            >
-              Video and Quiz
-            </h5>
-          </div>
-        </Col>
-        <Col md="9" sm="12">
-          {activeStep === "consultant" && (
-            <YourConsultantForm
-              handleSubmitVideoFor={handleSubmitVideoFor}
-              branchOptions={branchOptions}
-              branchLabel={branchLabel}
-              setBranchLabel={setBranchLabel}
-              branchValue={branchValue}
-              setBranchValue={setBranchValue}
-              selectBranch={selectBranch}
-              branchError={branchError}
-              setBranchError={setBranchError}
-              countryName={countryName}
-              countryLabel={countryLabel}
-              countryValue={countryValue}
-              setCountryError={setCountryError}
-              setCountryValue={setCountryValue}
-              setCountryLabel={setCountryLabel}
-              selectCountry={selectCountry}
-              countryError={countryError}
-              homeAccept={homeAccept}
-              setAcceptError={setAcceptError}
-              setHomeAccept={setHomeAccept}
-              intAccept={intAccept}
-              setIntAccept={setIntAccept}
-              ukAccept={ukAccept}
-              setUkAccept={setUkAccept}
-              acceptError={acceptError}
-            />
-          )}
-          {activeStep === "videoQuiz" && (
-            <VideoQuizForm
-              handleSubmitQuizFor={handleSubmitQuizFor}
-              handleFirstNameChange={handleFirstNameChange}
-              videoTitle={videoTitle}
-              videoTitleError={videoTitleError}
-              handleVideoFileChange={handleVideoFileChange}
-              videoFile={videoFile}
-              videoFileError={videoFileError}
-              showVideoPlayer={showVideoPlayer}
-              uploadProgress={uploadProgress}
-              isUploading={isUploading}
-              videoUrl={videoUrl}
-              blobUrl={blobUrl}
-              blobName={blobName}
-              question={question}
-              setQuestion={setQuestion}
-              setIsQuestionEditing={setIsQuestionEditing}
-              questionError={questionError}
-              setQuestionError={setQuestionError}
-              answers={answers}
-              handleCorrectAnswerChange={handleCorrectAnswerChange}
-              handleAnswerChange={handleAnswerChange}
-              handleAnswerKeyPress={handleAnswerKeyPress}
-              handleAnswerBlur={handleAnswerBlur}
-              handleAnswerClick={handleAnswerClick}
-              isDetailedAnswerEditing={isDetailedAnswerEditing}
-              detailedAnswer={detailedAnswer}
-              detailedAnswerError={detailedAnswerError}
-              handleDetailedAnswerChange={handleDetailedAnswerChange}
-              handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
-              handleDetailedAnswerBlur={handleDetailedAnswerBlur}
-              handleDetailedAnswerClick={handleDetailedAnswerClick}
-              isQuestionEditing={isQuestionEditing}
-              handleQuestionChange={handleQuestionChange}
-              handleQuestionKeyPress={handleQuestionKeyPress}
-              handleQuestionClick={handleQuestionClick}
-              handleQuestionBlur={handleQuestionBlur}
-              savedQuestions={savedQuestions}
-              handleSaveQuestion={handleSaveQuestion}
-              showQuestionForm={showQuestionForm}
-              handleAddMoreQuestion={handleAddMoreQuestion}
-              handleDeleteQuestion={handleDeleteQuestion}
-              currentQuestionNumber={currentQuestionNumber}
-              FileList1={FileList1}
-              setFileList1={setFileList1}
-              previewImage1={previewImage1}
-              setPreviewImage1={setPreviewImage1}
-              setPreviewTitle1={setPreviewTitle1}
-              previewTitle1={previewTitle1}
-              previewVisible1={previewVisible1}
-              setPreviewVisible1={setPreviewVisible1}
-              error={error}
-              setError={setError}
-              existingThumbnail={guidedVideoData?.videoImage}
-              apiQuestions={guidedVideoData?.questions}
-              id={id}
-              handleStepClick={handleStepClick}
-              handleEditQuestion={handleEditQuestion}
-              handleUpdateQuestion={handleUpdateQuestion}
-              // New props for enhanced editing
-              handleAnswerEdit={handleAnswerEdit}
-              handleAnswerSave={handleAnswerSave}
-              handleAnswerCancel={handleAnswerCancel}
-              editingQuestionId={editingQuestionId}
-              // State setters for form management
-              setAnswers={setAnswers}
-              setDetailedAnswer={setDetailedAnswer}
-              setEditingQuestionId={setEditingQuestionId}
-              setShowQuestionForm={setShowQuestionForm}
-              // Answer management functions
-              handleAddAnswer={handleAddAnswer}
-              handleRemoveAnswer={handleRemoveAnswer}
-              // Question management functions
-              handleClearAllQuestions={handleClearAllQuestions}
-            />
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
