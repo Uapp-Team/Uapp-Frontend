@@ -29,6 +29,7 @@ const Index = () => {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeControl, setShowVolumeControl] = useState(false);
+  const [previousTime, setPreviousTime] = useState(0);
   const { addToast } = useToasts();
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
@@ -118,13 +119,23 @@ const Index = () => {
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
+      const newTime = videoRef.current.currentTime;
+
+      // Allow normal playback to continue
+      setPreviousTime(currentTime);
+      setCurrentTime(newTime);
     }
   };
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
+      // Ensure video starts from beginning when restrictions are active
+      if (!videoWatched) {
+        videoRef.current.currentTime = 0;
+        setCurrentTime(0);
+        setPreviousTime(0);
+      }
     }
   };
 
@@ -216,6 +227,69 @@ const Index = () => {
       }
     }
   };
+
+  // Handle fullscreen change events
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        // Video is now in fullscreen - ensure restrictions are applied
+        if (videoRef.current) {
+          // Disable seeking when videoWatched is false
+          if (!videoWatched) {
+            videoRef.current.addEventListener(
+              "seeking",
+              handleSeekingRestriction
+            );
+            videoRef.current.addEventListener(
+              "seeked",
+              handleSeekingRestriction
+            );
+          }
+        }
+      } else {
+        // Video exited fullscreen - remove restrictions
+        if (videoRef.current) {
+          videoRef.current.removeEventListener(
+            "seeking",
+            handleSeekingRestriction
+          );
+          videoRef.current.removeEventListener(
+            "seeked",
+            handleSeekingRestriction
+          );
+        }
+      }
+    };
+
+    const handleSeekingRestriction = (e) => {
+      if (!videoWatched && videoRef.current) {
+        const newTime = videoRef.current.currentTime;
+
+        // Only prevent significant forward seeking (more than 2 seconds)
+        if (newTime > previousTime + 2) {
+          videoRef.current.currentTime = previousTime;
+          e.preventDefault();
+          return false;
+        }
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      if (videoRef.current) {
+        videoRef.current.removeEventListener(
+          "seeking",
+          handleSeekingRestriction
+        );
+        videoRef.current.removeEventListener(
+          "seeked",
+          handleSeekingRestriction
+        );
+      }
+    };
+  }, [videoWatched]);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -385,6 +459,38 @@ const Index = () => {
                           onLoadedMetadata={handleLoadedMetadata}
                           onPlay={() => setIsPlaying(true)}
                           onPause={() => setIsPlaying(false)}
+                          onSeeking={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              const newTime = videoRef.current.currentTime;
+
+                              // Only prevent significant forward seeking (more than 2 seconds)
+                              if (newTime > previousTime + 2) {
+                                videoRef.current.currentTime = previousTime;
+                                e.preventDefault();
+                                return false;
+                              }
+                            }
+                          }}
+                          onSeeked={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              const newTime = videoRef.current.currentTime;
+
+                              // Only prevent significant forward seeking (more than 2 seconds)
+                              if (newTime > previousTime + 2) {
+                                videoRef.current.currentTime = previousTime;
+                                e.preventDefault();
+                                return false;
+                              }
+                            }
+                          }}
+                          onRateChange={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              // Prevent fast-forwarding by setting playback rate to 1
+                              if (videoRef.current.playbackRate > 1) {
+                                videoRef.current.playbackRate = 1;
+                              }
+                            }
+                          }}
                         />
 
                         {/* Custom Video Controls */}
@@ -734,10 +840,8 @@ const Index = () => {
         <ModalFooter className="d-flex justify-content-center">
           {quizResults?.isPass === true ? (
             <>
-              <Link to="/">
-                <button type="button" class="save-button">
-                  Continue
-                </button>
+              <Link to="/" className="quiz-saved-button text-white">
+                Continue
               </Link>
               {/* <SaveButton text="Continue" action={goForward} /> */}
             </>

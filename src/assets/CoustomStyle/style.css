@@ -7046,3 +7046,17 @@ span.ant-upload-list-item-name {
 .onboard-fullscreen-btn {
   font-size: 14px;
 }
+.quiz-saved-button {
+  text-decoration: none;
+  border: 1px solid #045d5e;
+  background-color: #045d5e;
+  color: rgb(255, 255, 255);
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.quiz-saved-button:hover {
+  text-decoration: none;
+  border: 1px solid #019088;
+  background-color: #019088;
+}
