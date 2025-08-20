@@ -647,7 +647,11 @@ const VideoAndQuizFor = () => {
 
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
-      alert("Please select at least one correct answer");
+      addToast("Please select at least one correct answer", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      // alert("Please select at least one correct answer");
       // return;
     }
 
@@ -717,7 +721,7 @@ const VideoAndQuizFor = () => {
         }));
 
         // Update currentQuestionNumber to match the new count
-        setCurrentQuestionNumber(reorderedQuestions.length + 1);
+        setCurrentQuestionNumber(reorderedQuestions.length);
 
         return reorderedQuestions;
       });
@@ -835,7 +839,11 @@ const VideoAndQuizFor = () => {
 
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
-      alert("Please select at least one correct answer");
+      addToast("Please select at least one correct answer", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      // alert("Please select at least one correct answer");
       // return;
     }
 

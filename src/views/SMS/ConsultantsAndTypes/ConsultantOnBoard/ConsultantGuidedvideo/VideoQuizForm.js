@@ -389,7 +389,9 @@ const VideoQuizForm = ({
               </Row>
             </CardBody>
           </Card>
-          <b>Question ({currentQuestionNumber})</b>
+          <div className="my-4">
+            <b>Question ({currentQuestionNumber})</b>
+          </div>
 
           {showQuestionForm && (
             <Card>
@@ -401,7 +403,7 @@ const VideoQuizForm = ({
                       <span className="quiz-character-counter">
                         {question.length}/150
                       </span>
-                      <i
+                      {/* <i
                         className="fas fa-trash quiz-delete-icon"
                         onClick={() => {
                           setQuestion("");
@@ -409,7 +411,7 @@ const VideoQuizForm = ({
                           setQuestionError("");
                         }}
                         style={{ cursor: "pointer" }}
-                      ></i>
+                      ></i> */}
                     </div>
 
                     <div className="quiz-question-input-container">

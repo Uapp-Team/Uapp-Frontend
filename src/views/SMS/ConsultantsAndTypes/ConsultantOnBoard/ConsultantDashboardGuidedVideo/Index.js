@@ -734,7 +734,7 @@ const Index = () => {
         <ModalFooter className="d-flex justify-content-center">
           {quizResults?.isPass === true ? (
             <>
-              <Link to={"/"}>
+              <Link to="/">
                 <button type="button" class="save-button">
                   Continue
                 </button>
