@@ -97,7 +97,7 @@ const Index = () => {
         setButtonStatus(false);
         setProgress(false);
       } else {
-        addToast(res?.data?.title, {
+        addToast(res?.data?.errors?.[0], {
           appearance: "error",
           autoDismiss: true,
         });
