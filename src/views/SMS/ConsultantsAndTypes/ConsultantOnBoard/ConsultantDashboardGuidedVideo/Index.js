@@ -101,6 +101,8 @@ const Index = () => {
           appearance: "error",
           autoDismiss: true,
         });
+        setButtonStatus(false);
+        setProgress(false);
       }
     });
   };
