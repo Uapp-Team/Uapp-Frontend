@@ -26,6 +26,7 @@ import post from "../../../../helpers/post";
 import put from "../../../../helpers/put";
 import { Image } from "antd";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import BranchManagerDetailsCard from "./BranchManagerDetailsCard";
 
 const AddBranchManager = () => {
   const { branchId } = useParams();
@@ -63,6 +64,7 @@ const AddBranchManager = () => {
   const { addToast } = useToasts();
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branchManagerDetailsData, setBranchManagerDetailsData] = useState([]);
 
   useEffect(() => {
     get("NameTittle/GetAll").then((res) => {
@@ -304,7 +306,37 @@ const AddBranchManager = () => {
           activeTab={activetab}
           branchId={branchId}
         />
+
         <Card>
+        <CardBody>
+            <div className="row mx-2 mb-3">
+              <div className="col-12 border p-2 rounded" key={branchManager?.id}>
+                <BranchManagerDetailsCard
+                  details={branchManager}
+                  // handleEdit={handleEdit}
+                  progress={progress}
+                />
+              </div>
+            </div>
+                <button
+                  id="bank-details"
+                  className="add-button mb-4"
+                  // onClick={addNewData}
+                  // permission={6}
+                >
+                  Add New Admin 
+                </button>
+          {/* <div className="d-flex justify-content-between mt-5">
+            <PreviousButton action={goPrevious} />
+            {bankDetailsData?.length > 0 && (
+              <SaveButton text="Next" action={goForward} />
+            )}
+          </div> */}
+        </CardBody>
+      </Card>
+
+<div id="adminEditForm">
+ <Card>
           <CardBody>
             <TabContent activeTab={activetab}>
               <TabPane tabId="2">
@@ -613,6 +645,8 @@ const AddBranchManager = () => {
             </TabContent>
           </CardBody>
         </Card>
+</div>
+       
       </div>
     </div>
   );
