@@ -170,8 +170,11 @@ const Consultant = () => {
           </div>
           <div style={{ cursor: "pointer" }}>
             {overview?.consentSigned && overview?.accountStatusId === 3 ? (
-              <div className="std-student">
-                <span onClick={redirectToAddStudent}>Add New Student</span>
+              <div className="d-flex flex-wrap">
+                <div className="std-student">
+                  <span onClick={redirectToAddStudent}>Add New Student</span>
+                </div>
+                <Refer />
               </div>
             ) : overview?.profileCompleted === false &&
               overview?.consentSigned ? (
@@ -195,7 +198,6 @@ const Consultant = () => {
             ) : null}
           </div>
 
-          <Refer />
           <UserNotices />
         </div>
       </div>
