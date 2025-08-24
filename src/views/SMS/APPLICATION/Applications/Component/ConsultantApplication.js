@@ -609,6 +609,7 @@ const ConsultantApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/UappId`).then((res) => {
         setConsultantUappIdDD(res);
       });
+
       get(`CommonApplicationFilterDD/Student`).then((res) => {
         setConsultantStdDD(res);
       });

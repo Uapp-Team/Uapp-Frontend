@@ -120,7 +120,7 @@ const Filter = ({
   }, [department, departmentId, setDepartmentLabel, setDepartmentValue]);
 
   useEffect(() => {
-    get(`SearchFilter/Students`).then((res) => {
+    get(`SearchFilter/FetchStudents`).then((res) => {
       setStudentData([{ id: "0", name: "Select Student" }, ...res]);
     });
 
