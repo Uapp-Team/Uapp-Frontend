@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 // import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-
 import {
   Card,
   CardBody,
@@ -13,6 +12,9 @@ import {
   Input,
   TabContent,
   TabPane,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
@@ -22,6 +24,8 @@ import "react-phone-input-2/lib/style.css";
 import BranchNavbar from "../Branch/BranchNavbar";
 import put from "../../../../helpers/put";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import ButtonForFunction from "../../Components/ButtonForFunction";
+import AssignBranchConsultantModal from "./AssignBranchConsultantModal";
 
 const BranchConsultantRegistration = () => {
   const [titleValue, setTitleValue] = useState(0);
@@ -60,6 +64,7 @@ const BranchConsultantRegistration = () => {
   const [intAccept, setIntAccept] = useState(false);
   const [acceptError, setAcceptError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     get("NameTittleDD/index").then((res) => {
@@ -84,14 +89,7 @@ const BranchConsultantRegistration = () => {
     });
   }, [success, branchId]);
 
-  // const consParentMenu = consParent?.map((consParentOptions) => ({
-  //   label: consParentOptions?.name,
-  //   value: consParentOptions?.id,
-  // }));
-  // const consTypeMenu = consType?.map((consTypeOptions) => ({
-  //   label: consTypeOptions?.name,
-  //   value: consTypeOptions?.id,
-  // }));
+  
 
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
@@ -142,7 +140,9 @@ const BranchConsultantRegistration = () => {
       setpasswordError("");
     }
   };
-
+ const closeModal = () => {
+    setModalOpen(false);
+  };
   const handlePhoneNumber = (value) => {
     setphoneNumber(value);
     if (value === "") {
@@ -154,29 +154,12 @@ const BranchConsultantRegistration = () => {
     }
   };
 
-  // const selectParentCons = (label, value) => {
-  //   setParentError(false);
-  //   setParentLabel(label);
-  //   setParentValue(value);
-  // };
-
-  // const selectConsType = (label, value) => {
-  //   setConsultantError(false);
-  //   setTypeLabel(label);
-  //   setTypeValue(value);
-  // };
+ 
 
   const validateRegisterForm = () => {
     let isFormValid = true;
 
-    // if (typeValue === 0) {
-    //   isFormValid = false;
-    //   setConsultantError(true);
-    // }
-    // if (parentValue === 0) {
-    //   isFormValid = false;
-    //   setParentError(true);
-    // }
+   
 
     if (titleValue === 0) {
       isFormValid = false;
@@ -207,24 +190,6 @@ const BranchConsultantRegistration = () => {
       isFormValid = false;
       setEmailError("Email is not Valid");
     }
-
-    // if (emailExistError === false) {
-    //   isFormValid = false;
-    //   setEmailExistError(emailExistError);
-    // }
-
-    // if (!email) {
-    //   isFormValid = false;
-    //   setEmailError("Email is required");
-    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-    //   isFormValid = false;
-    //   setEmailError("Email is not Valid");
-    // }
-
-    // if (emailExistError === false) {
-    //   isFormValid = false;
-    //   setEmailExistError(emailExistError);
-    // }
 
     if (!phoneNumber) {
       isFormValid = false;
@@ -299,11 +264,23 @@ const BranchConsultantRegistration = () => {
   return (
     <div>
       <BranchNavbar activeTab={activetab} branchId={branchId} />
-
+            <Col lg="5" md="5" sm="12" xs="12">
+              <div className="d-sm-flex">
+                <ButtonForFunction
+                  func={() => setModalOpen(true)}
+                  className={"btn btn-uapp-add mr-2 "}
+                  icon={<i className="fas fa-plus"></i>}
+                  name={"Assign Consultant"}
+                />
+              </div>
+            </Col>
+          <br></br>
       <Card>
         <CardBody>
+          
           <TabContent activeTab={activetab}>
             <TabPane tabId="3">
+              
               <p className="section-title">Consultant Information</p>
               <Form onSubmit={handleSubmit} className="mt-4">
                 <input
@@ -325,46 +302,6 @@ const BranchConsultantRegistration = () => {
                 )}
                 <Row>
                   <Col lg="6" md="8">
-                    {/* <FormGroup>
-                  <span>
-                    Consultant Type <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={consTypeMenu}
-                    value={{ label: typeLabel, value: typeValue }}
-                    onChange={(opt) => selectConsType(opt.label, opt.value)}
-                    name="consultantTypeId"
-                    id="consultantTypeId"
-                  />
-
-                  {consultantError && (
-                    <span className="text-danger">
-                      Consultant type is required
-                    </span>
-                  )}
-                </FormGroup> */}
-
-                    {/* <FormGroup>
-                  <span>
-                    Parent Consultant <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={consParentMenu}
-                    value={{ label: parentLabel, value: parentValue }}
-                    onChange={(opt) => selectParentCons(opt.label, opt.value)}
-                    name="parentConsultantId"
-                    id="parentConsultantId"
-                  />
-
-                  {parentError && (
-                    <span className="text-danger">
-                      Parent consultant is required
-                    </span>
-                  )}
-                </FormGroup> */}
-
                     <FormGroup>
                       <span>
                         Title <span className="text-danger">*</span>{" "}
@@ -570,7 +507,7 @@ const BranchConsultantRegistration = () => {
                     {permissions?.includes(permissionList.Edit_Branch) ? (
                       <FormGroup className="text-right">
                         <SaveButton
-                          text="submit"
+                          text="Submit"
                           progress={progress}
                           buttonStatus={buttonStatus}
                         />
@@ -578,6 +515,26 @@ const BranchConsultantRegistration = () => {
                     ) : null}
                   </Col>
                 </Row>
+                <div>
+                  <Modal
+                    isOpen={modalOpen}
+                    toggle={closeModal}
+                    className="uapp-modal2"
+                    size="lg"
+                  >
+                    <ModalHeader>
+                      <span></span>
+                    </ModalHeader>
+                    <ModalBody>
+                      <AssignBranchConsultantModal
+                        branchId={branchId}
+                        setModalOpen={setModalOpen}
+                        success={success}
+                        setSuccess={setSuccess}
+                      />
+                    </ModalBody>
+                  </Modal>
+                </div>
               </Form>
             </TabPane>
           </TabContent>
