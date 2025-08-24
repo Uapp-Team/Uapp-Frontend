@@ -23,8 +23,8 @@ const VideoAndQuizFor = () => {
   const [guidedVideoData, setGuidedVideoData] = useState({});
   const [success, setSuccess] = useState(false);
   const [branch, setBranch] = useState([]);
-  const [branchLabel, setBranchLabel] = useState("London office");
-  const [branchValue, setBranchValue] = useState(1);
+  const [branchLabel, setBranchLabel] = useState("Select Branch");
+  const [branchValue, setBranchValue] = useState(0);
   const [branchError, setBranchError] = useState(false);
   const [consultantModal, setConsultantModal] = useState(false);
   const [videoQuizModal, setVideoQuizModal] = useState(false);
@@ -34,7 +34,7 @@ const VideoAndQuizFor = () => {
   const [intAccept, setIntAccept] = useState(false);
   const [acceptError, setAcceptError] = useState(false);
   const [country, setCountry] = useState([]);
-  const [countryLabel, setCountryLabel] = useState("Country");
+  const [countryLabel, setCountryLabel] = useState("Select Country");
   const [countryValue, setCountryValue] = useState(0);
   const [countryError, setCountryError] = useState(false);
   const [videoTitle, setVideoTitle] = useState("");
@@ -73,10 +73,11 @@ const VideoAndQuizFor = () => {
 
   const [savedQuestions, setSavedQuestions] = useState([]);
   const [showQuestionForm, setShowQuestionForm] = useState(true);
-  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
+  console.log(currentQuestionNumber, "currentquestionnumber");
   const [blobUrl, setBlobUrl] = useState(null);
   const [blobName, setBlobName] = useState(null);
-  console.log(blobName, "sakib blobname");
 
   const [statsData, setStatsData] = useState({
     questionCount: 0,
@@ -176,7 +177,8 @@ const VideoAndQuizFor = () => {
 
         console.log("Final formatted questions:", formattedQuestions);
         setSavedQuestions(formattedQuestions);
-        setCurrentQuestionNumber(formattedQuestions.length + 1);
+        setCurrentQuestionNumber(formattedQuestions.length);
+        console.log(formattedQuestions.length, "currentquestionnumber");
       }
 
       // Set stats data from API response
@@ -374,8 +376,8 @@ const VideoAndQuizFor = () => {
   // Clear all form data and reset to initial state
   const clearAllFormData = () => {
     // Reset all state variables to initial values
-    setBranchLabel("London office");
-    setBranchValue(1);
+    setBranchLabel("Select Branch");
+    setBranchValue(0);
     setBranchError(false);
     setConsultantModal(false);
     setVideoQuizModal(false);
@@ -384,7 +386,7 @@ const VideoAndQuizFor = () => {
     setUkAccept(false);
     setIntAccept(false);
     setAcceptError(false);
-    setCountryLabel("Country");
+    setCountryLabel("Select Country");
     setCountryValue(0);
     setCountryError(false);
     setVideoTitle("");
@@ -418,7 +420,7 @@ const VideoAndQuizFor = () => {
     // Reset saved questions and form visibility
     setSavedQuestions([]);
     setShowQuestionForm(true);
-    setCurrentQuestionNumber(1);
+    setCurrentQuestionNumber(0);
     setBlobUrl(null);
 
     // Clear localStorage
@@ -460,16 +462,6 @@ const VideoAndQuizFor = () => {
     // Show success message or toast
     console.log("Video Quiz form data saved and navigating to Consultant step");
   };
-
-  useEffect(() => {
-    get("BranchDD/index").then((res) => {
-      setBranch(res);
-      // res?.length === 1 && setBranchValue(res[0].id);
-    });
-    get("CountryDD/index").then((res) => {
-      setCountry(res);
-    });
-  }, []);
 
   // Cleanup video URL when component unmounts or video changes
   useEffect(() => {
@@ -609,10 +601,11 @@ const VideoAndQuizFor = () => {
 
   const handleCorrectAnswerChange = (answerId) => {
     setAnswers((prev) =>
-      prev.map((answer) => ({
-        ...answer,
-        isCorrect: answer.id === answerId,
-      }))
+      prev.map((answer) =>
+        answer.id === answerId
+          ? { ...answer, isCorrect: !answer.isCorrect }
+          : answer
+      )
     );
   };
 
@@ -653,7 +646,7 @@ const VideoAndQuizFor = () => {
 
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
-      alert("Please select a correct answer");
+      alert("Please select at least one correct answer");
       return;
     }
 
@@ -666,7 +659,7 @@ const VideoAndQuizFor = () => {
     // Create new question object
     const newQuestion = {
       id: Date.now(),
-      number: currentQuestionNumber,
+      number: savedQuestions.length + 1, // Use actual count instead of currentQuestionNumber
       question: question,
       answers: answers.filter((answer) => answer.text.trim()),
       detailedAnswer: detailedAnswer,
@@ -691,7 +684,7 @@ const VideoAndQuizFor = () => {
     // Hide question form
     setShowQuestionForm(false);
 
-    // Increment question number for next question
+    // Update currentQuestionNumber to match the new count
     setCurrentQuestionNumber((prev) => prev + 1);
 
     // Save to localStorage
@@ -704,12 +697,86 @@ const VideoAndQuizFor = () => {
   };
 
   const handleDeleteQuestion = (questionId) => {
-    setSavedQuestions((prev) => prev.filter((q) => q.id !== questionId));
-    // Reorder question numbers
+    setSavedQuestions((prev) => {
+      const filteredQuestions = prev.filter((q) => q.id !== questionId);
+      // Reorder question numbers to ensure they are sequential and unique
+      const reorderedQuestions = filteredQuestions.map((q, index) => ({
+        ...q,
+        number: index + 1,
+      }));
+
+      // Update currentQuestionNumber to match the new count
+      setCurrentQuestionNumber(reorderedQuestions.length + 1);
+
+      return reorderedQuestions;
+    });
+    saveFormDataToMemory();
+  };
+
+  const handleEditQuestion = (questionId) => {
+    const questionToEdit = savedQuestions.find((q) => q.id === questionId);
+    if (questionToEdit) {
+      setQuestion(questionToEdit.question);
+      setAnswers(questionToEdit.answers || []);
+      setDetailedAnswer(questionToEdit.detailedAnswer || "");
+      setIsQuestionEditing(true);
+      setEditingQuestionId(questionId);
+      setShowQuestionForm(true);
+    }
+  };
+
+  const handleUpdateQuestion = () => {
+    if (!question.trim()) {
+      setQuestionError("Question is required");
+      return;
+    }
+
+    const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
+    if (!hasCorrectAnswer) {
+      alert("Please select at least one correct answer");
+      return;
+    }
+
+    const hasAnswers = answers.some((answer) => answer.text.trim());
+    if (!hasAnswers) {
+      alert("Please provide at least one answer");
+      return;
+    }
+
+    const updatedQuestion = {
+      id: editingQuestionId,
+      number:
+        savedQuestions.find((q) => q.id === editingQuestionId)?.number ||
+        savedQuestions.length + 1,
+      question: question,
+      answers: answers.filter((answer) => answer.text.trim()),
+      detailedAnswer: detailedAnswer,
+      timestamp: new Date().toISOString(),
+    };
+
     setSavedQuestions((prev) =>
-      prev.map((q, index) => ({ ...q, number: index + 1 }))
+      prev.map((q) => (q.id === editingQuestionId ? updatedQuestion : q))
     );
-    setCurrentQuestionNumber((prev) => Math.max(1, prev - 1));
+
+    setQuestion("");
+    setAnswers([
+      { id: 1, text: "", isCorrect: false, isEditing: false },
+      { id: 2, text: "", isCorrect: false, isEditing: false },
+      { id: 3, text: "", isCorrect: false, isEditing: false },
+    ]);
+    setDetailedAnswer("");
+    setQuestionError("");
+    setIsQuestionEditing(false);
+    setIsDetailedAnswerEditing(false);
+    setEditingQuestionId(null);
+
+    // Hide question form
+    setShowQuestionForm(false);
+
+    // Update currentQuestionNumber to match the new count
+    setCurrentQuestionNumber((prev) => prev + 1);
+
+    // Save to localStorage
     saveFormDataToMemory();
   };
 
@@ -910,8 +977,12 @@ const VideoAndQuizFor = () => {
 
   const handleCreateQuizFor = () => {
     const subData = new FormData();
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
+    if (branchValue !== 0) {
+      subData.append("BranchId", branchValue);
+    }
+    if (countryValue !== 0) {
+      subData.append("CountryId", countryValue);
+    }
     subData.append("VideoTitle", videoTitle);
     if (blobUrl) {
       subData.append("BlobUrl", blobName);
@@ -1084,7 +1155,7 @@ const VideoAndQuizFor = () => {
           // Clear form data from localStorage after successful submission
           clearSavedFormData();
           console.log("Form data cleared after successful submission");
-          history.push(`/consultantOnBoard`);
+          history.push(`/consultant-Onboardings`);
         } else {
           // Handle error case with more details
           console.error("Submission failed - Full response:", res);
@@ -1109,11 +1180,22 @@ const VideoAndQuizFor = () => {
       });
   };
 
+  const normalizeQuestionOrder = (questions) => {
+    return questions.map((question, index) => ({
+      ...question,
+      number: index + 1,
+    }));
+  };
+
   const handleUpdateQuizFor = () => {
     const subData = new FormData();
     subData.append("OnboardingQuizId", guidedVideoData?.id);
-    subData.append("BranchId", branchValue);
-    subData.append("CountryId", countryValue);
+    if (branchValue !== null) {
+      subData.append("BranchId", branchValue);
+    }
+    if (countryValue !== null) {
+      subData.append("CountryId", countryValue);
+    }
     subData.append("IsAcceptHome", homeAccept.toString());
     subData.append("IsAcceptEU_UK", ukAccept.toString());
     subData.append("IsAcceptInternational", intAccept.toString());
@@ -1188,16 +1270,19 @@ const VideoAndQuizFor = () => {
       return true;
     });
 
+    // Normalize question order numbers to ensure they are unique and sequential
+    const normalizedQuestions = normalizeQuestionOrder(validQuestions);
+
     console.log(
-      `Valid questions to send: ${validQuestions.length}/${allQuestions.length}`
+      `Valid questions to send: ${normalizedQuestions.length}/${allQuestions.length}`
     );
 
     // Log the question structure for debugging
-    logQuestionStructure(validQuestions, "UPDATE REQUEST");
+    logQuestionStructure(normalizedQuestions, "UPDATE REQUEST");
 
     // Now append all valid questions to FormData
-    if (validQuestions && validQuestions.length > 0) {
-      validQuestions.forEach((question, questionIndex) => {
+    if (normalizedQuestions && normalizedQuestions.length > 0) {
+      normalizedQuestions.forEach((question, questionIndex) => {
         console.log(`Processing question ${questionIndex}:`, question);
 
         // Add question ID if it exists (for editing existing questions)
@@ -1215,15 +1300,13 @@ const VideoAndQuizFor = () => {
         );
         subData.append(
           `Questions[${questionIndex}].order`,
-          question.number || questionIndex + 1
+          question.number // Use the normalized order number
         );
         console.log(
           `Added question text: Questions[${questionIndex}].text = ${question.question.trim()}`
         );
         console.log(
-          `Added question order: Questions[${questionIndex}].order = ${
-            question.number || questionIndex + 1
-          }`
+          `Added question order: Questions[${questionIndex}].order = ${question.number}`
         );
 
         // Add question options/answers
@@ -1319,7 +1402,7 @@ const VideoAndQuizFor = () => {
 
           clearSavedFormData();
           console.log("Form data cleared after successful update");
-          history.push(`/consultantOnBoard`);
+          history.push(`/consultant-Onboardings`);
         } else {
           // Handle error case with more details
           console.error("Update failed - Full response:", res);
@@ -1347,15 +1430,30 @@ const VideoAndQuizFor = () => {
   const ValidateFormVideoFor = () => {
     var isValid = true;
 
-    // if (
-    //   userTypeId !== userTypes?.Consultant &&
-    //   homeAccept === false &&
-    //   ukAccept === false &&
-    //   intAccept === false
-    // ) {
-    //   isValid = false;
-    //   setAcceptError(true);
-    // }
+    // Validate branch selection
+    if (branchLabel === "Select Branch") {
+      isValid = false;
+      setBranchError(true);
+    }
+
+    // Validate country selection
+    if (countryLabel === "Select Country") {
+      isValid = false;
+      setCountryError(true);
+    }
+
+    // Validate recruitment type selection (at least one must be selected)
+    if (homeAccept === false && ukAccept === false && intAccept === false) {
+      isValid = false;
+      setAcceptError(true);
+    }
+
+    // Clear all errors if validation passes
+    if (isValid) {
+      setBranchError(false);
+      setCountryError(false);
+      setAcceptError(false);
+    }
 
     return isValid;
   };
@@ -1365,6 +1463,12 @@ const VideoAndQuizFor = () => {
     if (ValidateFormVideoFor()) {
       // Save form data to memory and navigate
       handleConsultantContinue();
+    } else {
+      // Show error message when validation fails
+      addToast("Please fill in all required fields before continuing", {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
 
@@ -1498,12 +1602,18 @@ const VideoAndQuizFor = () => {
               handleSubmitVideoFor={handleSubmitVideoFor}
               branchOptions={branchOptions}
               branchLabel={branchLabel}
+              setBranchLabel={setBranchLabel}
               branchValue={branchValue}
+              setBranchValue={setBranchValue}
               selectBranch={selectBranch}
               branchError={branchError}
+              setBranchError={setBranchError}
               countryName={countryName}
               countryLabel={countryLabel}
               countryValue={countryValue}
+              setCountryError={setCountryError}
+              setCountryValue={setCountryValue}
+              setCountryLabel={setCountryLabel}
               selectCountry={selectCountry}
               countryError={countryError}
               homeAccept={homeAccept}
@@ -1573,6 +1683,9 @@ const VideoAndQuizFor = () => {
               existingThumbnail={guidedVideoData?.videoImage}
               apiQuestions={guidedVideoData?.questions}
               id={id}
+              handleStepClick={handleStepClick}
+              handleEditQuestion={handleEditQuestion}
+              handleUpdateQuestion={handleUpdateQuestion}
             />
           )}
         </Col>

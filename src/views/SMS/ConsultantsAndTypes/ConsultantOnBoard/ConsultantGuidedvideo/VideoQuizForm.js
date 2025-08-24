@@ -65,6 +65,23 @@ const VideoQuizForm = ({
   // New prop for API questions
   apiQuestions,
   handleStepClick,
+  // New props for enhanced editing
+  handleAnswerEdit,
+  handleAnswerSave,
+  handleAnswerCancel,
+  handleEditQuestion,
+  handleUpdateQuestion,
+  editingQuestionId,
+  // State setters for form management
+  setAnswers,
+  setDetailedAnswer,
+  setEditingQuestionId,
+  setShowQuestionForm,
+  // Answer management functions
+  handleAddAnswer,
+  handleRemoveAnswer,
+  // Question management functions
+  handleClearAllQuestions,
 }) => {
   // Ensure upload progress never exceeds 100%
   const safeUploadProgress = Math.min(uploadProgress || 0, 100);
@@ -239,7 +256,7 @@ const VideoQuizForm = ({
                       </Upload>
                       <Modal
                         visible={previewVisible1}
-                        title={previewTitle1}
+                        // title={previewTitle1}
                         footer={null}
                         onCancel={handleCancel1}
                       >
@@ -372,7 +389,9 @@ const VideoQuizForm = ({
               </Row>
             </CardBody>
           </Card>
-          <b>Question ({currentQuestionNumber})</b>
+          <div className="my-4">
+            <b>Question ({currentQuestionNumber})</b>
+          </div>
 
           {showQuestionForm && (
             <Card>
@@ -384,7 +403,7 @@ const VideoQuizForm = ({
                       <span className="quiz-character-counter">
                         {question.length}/150
                       </span>
-                      <i
+                      {/* <i
                         className="fas fa-trash quiz-delete-icon"
                         onClick={() => {
                           setQuestion("");
@@ -392,7 +411,7 @@ const VideoQuizForm = ({
                           setQuestionError("");
                         }}
                         style={{ cursor: "pointer" }}
-                      ></i>
+                      ></i> */}
                     </div>
 
                     <div className="quiz-question-input-container">
@@ -473,29 +492,6 @@ const VideoQuizForm = ({
                     </div>
                   </div>
 
-                  {/* Detailed Answer Section */}
-                  <div className="quiz-question-input-container">
-                    {isDetailedAnswerEditing ? (
-                      <Input
-                        type="text"
-                        value={detailedAnswer}
-                        onChange={handleDetailedAnswerChange}
-                        onKeyPress={handleDetailedAnswerKeyPress}
-                        onBlur={handleDetailedAnswerBlur}
-                        placeholder="Write in details answer (optional)"
-                        className="quiz-question-input"
-                        autoFocus
-                      />
-                    ) : (
-                      <div
-                        className="quiz-question-placeholder"
-                        onClick={handleDetailedAnswerClick}
-                      >
-                        {detailedAnswer || "Write in details answer (optional)"}
-                      </div>
-                    )}
-                  </div>
-
                   {/* Save Button */}
                   <div className="quiz-save-button-container">
                     <button
@@ -512,7 +508,11 @@ const VideoQuizForm = ({
 
           {/* Saved Questions Display */}
           {savedQuestions.length > 0 && (
-            <QuizAnswers savedQuestions={savedQuestions} />
+            <QuizAnswers
+              savedQuestions={savedQuestions}
+              onDeleteQuestion={handleDeleteQuestion}
+              onEditQuestion={handleEditQuestion}
+            />
           )}
 
           {/* Add More Button */}

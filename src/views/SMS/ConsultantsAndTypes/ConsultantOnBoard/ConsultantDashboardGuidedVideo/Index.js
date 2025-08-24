@@ -6,6 +6,8 @@ import Uget from "../../../../../helpers/Uget";
 import post from "../../../../../helpers/post";
 import CloseBtn from "../../../../../components/buttons/CloseBtn";
 import { useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const Index = () => {
   const history = useHistory();
@@ -16,6 +18,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizDone, setIsQuizDone] = useState(false);
   const [quizResults, setQuizResults] = useState([]);
+
   const [progress, setProgress] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
 
@@ -26,7 +29,8 @@ const Index = () => {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeControl, setShowVolumeControl] = useState(false);
-
+  const [previousTime, setPreviousTime] = useState(0);
+  const { addToast } = useToasts();
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
 
@@ -72,12 +76,7 @@ const Index = () => {
     }
   };
 
-  console.log(answers, "answers");
   const handleQuiz = (id) => {
-    // const formData = new FormData();
-    // formData.append("onboardingQuizId", id);
-    // formData.append("consultantQuestionAnswersDtos", JSON.stringify(answers));
-
     const formData = {
       onboardingQuizId: id,
       consultantQuestionAnswersDtos: answers,
@@ -86,10 +85,22 @@ const Index = () => {
     setProgress(true);
 
     post(`OnboardingQuizAttempt/QuestionAttempt`, formData).then((res) => {
-      console.log(res?.data?.data?.questionResults);
-      if (res?.status === 200) {
-        setQuizResults(res?.data?.data);
+      setQuizResults(res?.data?.data);
+      console.log(res, "sakib check res");
+
+      if (res?.data?.statusCode === 200) {
+        addToast(res?.data?.title, {
+          appearance: "success",
+          autoDismiss: true,
+        });
         toggleModal();
+        setButtonStatus(false);
+        setProgress(false);
+      } else {
+        addToast(res?.data?.errors?.[0], {
+          appearance: "error",
+          autoDismiss: true,
+        });
         setButtonStatus(false);
         setProgress(false);
       }
@@ -110,13 +121,23 @@ const Index = () => {
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
+      const newTime = videoRef.current.currentTime;
+
+      // Allow normal playback to continue
+      setPreviousTime(currentTime);
+      setCurrentTime(newTime);
     }
   };
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
+      // Ensure video starts from beginning when restrictions are active
+      if (!videoWatched) {
+        videoRef.current.currentTime = 0;
+        setCurrentTime(0);
+        setPreviousTime(0);
+      }
     }
   };
 
@@ -162,8 +183,22 @@ const Index = () => {
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      if (isMuted) {
+        // Unmuting - restore previous volume
+        videoRef.current.muted = false;
+        setIsMuted(false);
+        // Restore the volume to what it was before muting
+        if (volume === 0) {
+          const newVolume = 0.5; // Default volume when unmuting from 0
+          setVolume(newVolume);
+          videoRef.current.volume = newVolume;
+        }
+      } else {
+        // Muting - store current volume and set to 0
+        videoRef.current.muted = true;
+        setIsMuted(true);
+        // Don't change the volume state, just mute the video
+      }
     }
   };
 
@@ -172,6 +207,16 @@ const Index = () => {
     setVolume(newVolume);
     if (videoRef.current) {
       videoRef.current.volume = newVolume;
+      // If user moves the slider, unmute the video
+      if (isMuted && newVolume > 0) {
+        videoRef.current.muted = false;
+        setIsMuted(false);
+      }
+      // If user sets volume to 0, mute the video
+      if (newVolume === 0) {
+        videoRef.current.muted = true;
+        setIsMuted(true);
+      }
     }
   };
 
@@ -185,10 +230,77 @@ const Index = () => {
     }
   };
 
+  // Handle fullscreen change events
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (document.fullscreenElement) {
+        // Video is now in fullscreen - ensure restrictions are applied
+        if (videoRef.current) {
+          // Disable seeking when videoWatched is false
+          if (!videoWatched) {
+            videoRef.current.addEventListener(
+              "seeking",
+              handleSeekingRestriction
+            );
+            videoRef.current.addEventListener(
+              "seeked",
+              handleSeekingRestriction
+            );
+          }
+        }
+      } else {
+        // Video exited fullscreen - remove restrictions
+        if (videoRef.current) {
+          videoRef.current.removeEventListener(
+            "seeking",
+            handleSeekingRestriction
+          );
+          videoRef.current.removeEventListener(
+            "seeked",
+            handleSeekingRestriction
+          );
+        }
+      }
+    };
+
+    const handleSeekingRestriction = (e) => {
+      if (!videoWatched && videoRef.current) {
+        const newTime = videoRef.current.currentTime;
+
+        // Only prevent significant forward seeking (more than 2 seconds)
+        if (newTime > previousTime + 2) {
+          videoRef.current.currentTime = previousTime;
+          e.preventDefault();
+          return false;
+        }
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      if (videoRef.current) {
+        videoRef.current.removeEventListener(
+          "seeking",
+          handleSeekingRestriction
+        );
+        videoRef.current.removeEventListener(
+          "seeked",
+          handleSeekingRestriction
+        );
+      }
+    };
+  }, [videoWatched]);
+
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const goForward = () => {
+    history.push("/");
   };
 
   return (
@@ -349,6 +461,38 @@ const Index = () => {
                           onLoadedMetadata={handleLoadedMetadata}
                           onPlay={() => setIsPlaying(true)}
                           onPause={() => setIsPlaying(false)}
+                          onSeeking={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              const newTime = videoRef.current.currentTime;
+
+                              // Only prevent significant forward seeking (more than 2 seconds)
+                              if (newTime > previousTime + 2) {
+                                videoRef.current.currentTime = previousTime;
+                                e.preventDefault();
+                                return false;
+                              }
+                            }
+                          }}
+                          onSeeked={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              const newTime = videoRef.current.currentTime;
+
+                              // Only prevent significant forward seeking (more than 2 seconds)
+                              if (newTime > previousTime + 2) {
+                                videoRef.current.currentTime = previousTime;
+                                e.preventDefault();
+                                return false;
+                              }
+                            }
+                          }}
+                          onRateChange={(e) => {
+                            if (!videoWatched && videoRef.current) {
+                              // Prevent fast-forwarding by setting playback rate to 1
+                              if (videoRef.current.playbackRate > 1) {
+                                videoRef.current.playbackRate = 1;
+                              }
+                            }
+                          }}
                         />
 
                         {/* Custom Video Controls */}
@@ -416,16 +560,28 @@ const Index = () => {
                           </div>
 
                           {/* Volume Control */}
-                          <div className="onboard-volume-control">
+                          <div
+                            className="onboard-volume-control"
+                            onMouseEnter={() => setShowVolumeControl(true)}
+                            onMouseLeave={() => {
+                              // Add a small delay to allow users to move mouse to slider
+                              setTimeout(
+                                () => setShowVolumeControl(false),
+                                10000
+                              );
+                            }}
+                          >
                             <button
                               className="onboard-control-btn onboard-volume-btn"
                               onClick={toggleMute}
-                              onMouseEnter={() => setShowVolumeControl(true)}
-                              onMouseLeave={() => setShowVolumeControl(false)}
                             >
                               <i
                                 className={`fas fa-volume-${
-                                  isMuted ? "mute" : "up"
+                                  isMuted || volume === 0
+                                    ? "mute"
+                                    : volume < 0.5
+                                    ? "down"
+                                    : "up"
                                 }`}
                               ></i>
                             </button>
@@ -435,7 +591,7 @@ const Index = () => {
                                 min="0"
                                 max="1"
                                 step="0.1"
-                                value={volume}
+                                value={isMuted ? 0 : volume}
                                 onChange={handleVolumeChange}
                                 className="onboard-volume-slider"
                               />
@@ -684,26 +840,21 @@ const Index = () => {
         )}
 
         <ModalFooter className="d-flex justify-content-center">
-          {quizResults?.isPass === false ? (
+          {quizResults?.isPass === true ? (
             <>
-              <SaveButton
-                text="Try Again"
-                className="px-4 bg-danger text-white"
-                action={() => {
-                  toggleModal();
-                  setQuizResults([]);
-                  setActiveStep("videoQuiz");
-                }}
-              />
+              <Link to="/" className="quiz-saved-button text-white">
+                Continue
+              </Link>
+              {/* <SaveButton text="Continue" action={goForward} /> */}
             </>
           ) : (
             <SaveButton
-              text="Continue"
-              // action={() => {
-              //   setIsQuizDone(true);
-              // }}
+              text="Try Again"
+              className="px-4 bg-danger text-white"
               action={() => {
-                history.push("/");
+                toggleModal();
+                setQuizResults([]);
+                setActiveStep("videoQuiz");
               }}
             />
           )}

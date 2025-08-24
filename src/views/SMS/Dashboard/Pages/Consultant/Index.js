@@ -418,7 +418,7 @@ const Consultant = () => {
           </Form>
         </ModalBody>
       </Modal>
-      {overview?.profileCompleted === false ? (
+      {/* {overview?.profileCompleted === false ? (
         <ContinueModal
           text="Please Complete your profile"
           text2="We need some more information from you to set up your account."
@@ -426,7 +426,7 @@ const Consultant = () => {
         />
       ) : (
         <TandC />
-      )}
+      )} */}
     </>
   );
 };

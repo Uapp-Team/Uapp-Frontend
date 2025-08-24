@@ -45,7 +45,7 @@ const DashboardCard = () => {
         </div>
         <div className="onboard-section-title onboard-review-text">
           Please wait a moment while your profile is under review. We'll approve
-          it ASAP
+          it ASAP. It may take up to 3 hours.
         </div>
       </div>
     </div>

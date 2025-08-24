@@ -15,6 +15,7 @@ import { useToasts } from "react-toast-notifications";
 import { useHistory, useParams } from "react-router-dom";
 import Uget from "../../../../../helpers/Uget";
 import { ConsoleLogger } from "@microsoft/signalr/dist/esm/Utils";
+import BreadCrumb from "../../../../../components/breadCrumb/BreadCrumb";
 
 const VideoAndQuizFor = () => {
   const history = useHistory();
@@ -73,7 +74,9 @@ const VideoAndQuizFor = () => {
 
   const [savedQuestions, setSavedQuestions] = useState([]);
   const [showQuestionForm, setShowQuestionForm] = useState(true);
-  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
+  console.log(currentQuestionNumber, "currentquestionnumber");
   const [blobUrl, setBlobUrl] = useState(null);
   const [blobName, setBlobName] = useState(null);
 
@@ -175,7 +178,8 @@ const VideoAndQuizFor = () => {
 
         console.log("Final formatted questions:", formattedQuestions);
         setSavedQuestions(formattedQuestions);
-        setCurrentQuestionNumber(formattedQuestions.length + 1);
+        setCurrentQuestionNumber(formattedQuestions.length);
+        console.log(formattedQuestions.length, "currentquestionnumber");
       }
 
       // Set stats data from API response
@@ -417,7 +421,7 @@ const VideoAndQuizFor = () => {
     // Reset saved questions and form visibility
     setSavedQuestions([]);
     setShowQuestionForm(true);
-    setCurrentQuestionNumber(1);
+    setCurrentQuestionNumber(0);
     setBlobUrl(null);
 
     // Clear localStorage
@@ -459,16 +463,6 @@ const VideoAndQuizFor = () => {
     // Show success message or toast
     console.log("Video Quiz form data saved and navigating to Consultant step");
   };
-
-  useEffect(() => {
-    get("BranchDD/index").then((res) => {
-      setBranch(res);
-      // res?.length === 1 && setBranchValue(res[0].id);
-    });
-    get("CountryDD/index").then((res) => {
-      setCountry(res);
-    });
-  }, []);
 
   // Cleanup video URL when component unmounts or video changes
   useEffect(() => {
@@ -653,8 +647,12 @@ const VideoAndQuizFor = () => {
 
     const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
     if (!hasCorrectAnswer) {
-      alert("Please select at least one correct answer");
-      return;
+      addToast("Please select at least one correct answer", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      // alert("Please select at least one correct answer");
+      // return;
     }
 
     const hasAnswers = answers.some((answer) => answer.text.trim());
@@ -666,7 +664,7 @@ const VideoAndQuizFor = () => {
     // Create new question object
     const newQuestion = {
       id: Date.now(),
-      number: currentQuestionNumber,
+      number: savedQuestions.length + 1, // Use actual count instead of currentQuestionNumber
       question: question,
       answers: answers.filter((answer) => answer.text.trim()),
       detailedAnswer: detailedAnswer,
@@ -674,7 +672,9 @@ const VideoAndQuizFor = () => {
     };
 
     // Add to saved questions
-    setSavedQuestions((prev) => [...prev, newQuestion]);
+    if (hasCorrectAnswer) {
+      setSavedQuestions((prev) => [...prev, newQuestion]);
+    }
 
     // Reset form
     setQuestion("");
@@ -691,8 +691,10 @@ const VideoAndQuizFor = () => {
     // Hide question form
     setShowQuestionForm(false);
 
-    // Increment question number for next question
-    setCurrentQuestionNumber((prev) => prev + 1);
+    // Update currentQuestionNumber to match the new count
+    if (hasCorrectAnswer) {
+      setCurrentQuestionNumber((prev) => prev + 1);
+    }
 
     // Save to localStorage
     saveFormDataToMemory();
@@ -704,13 +706,199 @@ const VideoAndQuizFor = () => {
   };
 
   const handleDeleteQuestion = (questionId) => {
-    setSavedQuestions((prev) => prev.filter((q) => q.id !== questionId));
-    // Reorder question numbers
-    setSavedQuestions((prev) =>
-      prev.map((q, index) => ({ ...q, number: index + 1 }))
+    // Show confirmation dialog
+    if (
+      window.confirm(
+        "Are you sure you want to delete this question? This action cannot be undone."
+      )
+    ) {
+      setSavedQuestions((prev) => {
+        const filteredQuestions = prev.filter((q) => q.id !== questionId);
+        // Reorder question numbers to ensure they are sequential and unique
+        const reorderedQuestions = filteredQuestions.map((q, index) => ({
+          ...q,
+          number: index + 1,
+        }));
+
+        // Update currentQuestionNumber to match the new count
+        setCurrentQuestionNumber(reorderedQuestions.length);
+
+        return reorderedQuestions;
+      });
+      saveFormDataToMemory();
+
+      // Show success message
+      addToast("Question deleted successfully!", { appearance: "success" });
+    }
+  };
+
+  const handleEditQuestion = (questionId) => {
+    const questionToEdit = savedQuestions.find((q) => q.id === questionId);
+    if (questionToEdit) {
+      setQuestion(questionToEdit.question);
+
+      // Ensure answers array has the correct structure
+      const formattedAnswers = questionToEdit.answers?.map((answer, index) => ({
+        id: answer.id || Date.now() + index,
+        text: answer.text || "",
+        isCorrect: answer.isCorrect || false,
+        isEditing: false,
+        originalId: answer.originalId || answer.id,
+      })) || [
+        { id: 1, text: "", isCorrect: false, isEditing: false },
+        { id: 2, text: "", isCorrect: false, isEditing: false },
+        { id: 3, text: "", isCorrect: false, isEditing: false },
+      ];
+
+      setAnswers(formattedAnswers);
+      setDetailedAnswer(questionToEdit.detailedAnswer || "");
+      setIsQuestionEditing(true);
+      setEditingQuestionId(questionId);
+      setShowQuestionForm(true);
+
+      // Scroll to question form
+      setTimeout(() => {
+        const questionForm = document.querySelector(".quiz-question-section");
+        if (questionForm) {
+          questionForm.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 100);
+    }
+  };
+
+  // Function to handle individual answer editing
+  const handleAnswerEdit = (answerId) => {
+    setAnswers((prev) =>
+      prev.map((answer) =>
+        answer.id === answerId ? { ...answer, isEditing: true } : answer
+      )
     );
-    setCurrentQuestionNumber((prev) => Math.max(1, prev - 1));
+  };
+
+  // Function to handle answer save
+  const handleAnswerSave = (answerId) => {
+    setAnswers((prev) =>
+      prev.map((answer) =>
+        answer.id === answerId ? { ...answer, isEditing: false } : answer
+      )
+    );
+  };
+
+  // Function to handle answer cancel
+  const handleAnswerCancel = (answerId) => {
+    setAnswers((prev) =>
+      prev.map((answer) =>
+        answer.id === answerId ? { ...answer, isEditing: false } : answer
+      )
+    );
+  };
+
+  // Function to add new answer option
+  const handleAddAnswer = () => {
+    const newAnswerId = Math.max(...answers.map((a) => a.id), 0) + 1;
+    setAnswers((prev) => [
+      ...prev,
+      {
+        id: newAnswerId,
+        text: "",
+        isCorrect: false,
+        isEditing: false,
+      },
+    ]);
+  };
+
+  // Function to remove answer option
+  const handleRemoveAnswer = (answerId) => {
+    if (answers.length > 2) {
+      // Keep at least 2 answer options
+      setAnswers((prev) => prev.filter((answer) => answer.id !== answerId));
+    }
+  };
+
+  // Function to clear all questions
+  const handleClearAllQuestions = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to clear all questions? This action cannot be undone."
+      )
+    ) {
+      setSavedQuestions([]);
+      setCurrentQuestionNumber(0);
+      saveFormDataToMemory();
+      addToast("All questions cleared successfully!", {
+        appearance: "success",
+      });
+    }
+  };
+
+  const handleUpdateQuestion = () => {
+    if (!question.trim()) {
+      setQuestionError("Question is required");
+      return;
+    }
+
+    const hasCorrectAnswer = answers.some((answer) => answer.isCorrect);
+    if (!hasCorrectAnswer) {
+      addToast("Please select at least one correct answer", {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      // alert("Please select at least one correct answer");
+      // return;
+    }
+
+    const hasAnswers = answers.some((answer) => answer.text.trim());
+    if (!hasAnswers) {
+      alert("Please provide at least one answer");
+      return;
+    }
+
+    // Find the original question to preserve its properties
+    const originalQuestion = savedQuestions.find(
+      (q) => q.id === editingQuestionId
+    );
+
+    const updatedQuestion = {
+      ...originalQuestion, // Preserve all original properties
+      id: editingQuestionId,
+      number: originalQuestion?.number || savedQuestions.length + 1,
+      question: question.trim(),
+      answers: answers
+        .filter((answer) => answer.text.trim())
+        .map((answer, index) => ({
+          ...answer,
+          order: index + 1,
+        })),
+      detailedAnswer: detailedAnswer.trim(),
+      timestamp: new Date().toISOString(),
+      isEdited: true,
+    };
+
+    setSavedQuestions((prev) =>
+      prev.map((q) => (q.id === editingQuestionId ? updatedQuestion : q))
+    );
+
+    // Reset form
+    setQuestion("");
+    setAnswers([
+      { id: 1, text: "", isCorrect: false, isEditing: false },
+      { id: 2, text: "", isCorrect: false, isEditing: false },
+      { id: 3, text: "", isCorrect: false, isEditing: false },
+    ]);
+    setDetailedAnswer("");
+    setQuestionError("");
+    setIsQuestionEditing(false);
+    setIsDetailedAnswerEditing(false);
+    setEditingQuestionId(null);
+
+    // Hide question form
+    setShowQuestionForm(false);
+
+    // Save to localStorage
     saveFormDataToMemory();
+
+    // Show success message
+    addToast("Question updated successfully!", { appearance: "success" });
   };
 
   const handleVideoFileChange = (event) => {
@@ -1113,6 +1301,13 @@ const VideoAndQuizFor = () => {
       });
   };
 
+  const normalizeQuestionOrder = (questions) => {
+    return questions.map((question, index) => ({
+      ...question,
+      number: index + 1,
+    }));
+  };
+
   const handleUpdateQuizFor = () => {
     const subData = new FormData();
     subData.append("OnboardingQuizId", guidedVideoData?.id);
@@ -1196,16 +1391,19 @@ const VideoAndQuizFor = () => {
       return true;
     });
 
+    // Normalize question order numbers to ensure they are unique and sequential
+    const normalizedQuestions = normalizeQuestionOrder(validQuestions);
+
     console.log(
-      `Valid questions to send: ${validQuestions.length}/${allQuestions.length}`
+      `Valid questions to send: ${normalizedQuestions.length}/${allQuestions.length}`
     );
 
     // Log the question structure for debugging
-    logQuestionStructure(validQuestions, "UPDATE REQUEST");
+    logQuestionStructure(normalizedQuestions, "UPDATE REQUEST");
 
     // Now append all valid questions to FormData
-    if (validQuestions && validQuestions.length > 0) {
-      validQuestions.forEach((question, questionIndex) => {
+    if (normalizedQuestions && normalizedQuestions.length > 0) {
+      normalizedQuestions.forEach((question, questionIndex) => {
         console.log(`Processing question ${questionIndex}:`, question);
 
         // Add question ID if it exists (for editing existing questions)
@@ -1223,15 +1421,13 @@ const VideoAndQuizFor = () => {
         );
         subData.append(
           `Questions[${questionIndex}].order`,
-          question.number || questionIndex + 1
+          question.number // Use the normalized order number
         );
         console.log(
           `Added question text: Questions[${questionIndex}].text = ${question.question.trim()}`
         );
         console.log(
-          `Added question order: Questions[${questionIndex}].order = ${
-            question.number || questionIndex + 1
-          }`
+          `Added question order: Questions[${questionIndex}].order = ${question.number}`
         );
 
         // Add question options/answers
@@ -1398,221 +1594,245 @@ const VideoAndQuizFor = () => {
   };
 
   return (
-    <div className="p-4">
-      {/* Steps */}
-      {/* <Form onSubmit={handleAllPart}>
+    <div>
+      <BreadCrumb
+        title="Consultant guided video Information"
+        backTo="Consultant On Boardings"
+        path="/consultant-Onboardings"
+      />
+      <div className="p-4">
+        {/* Steps */}
+        {/* <Form onSubmit={handleAllPart}>
       
       </Form> */}
-      <Row>
-        <Col md="3" sm="12">
-          <h5 className="fw-bold mb-3">Consultant Guided video</h5>
-          {/* Your Consultant Step */}
-          <div
-            className={`d-flex align-items-center p-4 cursor-pointer ${
-              activeStep === "consultant" ? "click-bg-shadow" : ""
-            }`}
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-            onClick={() => handleStepClick("consultant")}
-          >
+        <Row>
+          <Col md="3" sm="12">
+            <h5 className="fw-bold mb-3">Consultant Guided video</h5>
+            {/* Your Consultant Step */}
+            <div
+              className={`d-flex align-items-center p-4 cursor-pointer ${
+                activeStep === "consultant" ? "click-bg-shadow" : ""
+              }`}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+              }}
+              onClick={() => handleStepClick("consultant")}
+            >
+              {activeStep === "consultant" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "#0D9596",
+                  }}
+                ></div>
+              )}
+              <div
+                className={`d-flex align-items-center justify-content-center me-3 ${
+                  activeStep === "consultant" ? "text-black" : "text-muted"
+                }`}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  borderRadius: "50%",
+                  border:
+                    activeStep === "consultant"
+                      ? "2px solid black"
+                      : "2px solid #dee2e6",
+                }}
+              >
+                {activeStep === "consultant" ? (
+                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
+                ) : (
+                  <div
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#dee2e6",
+                    }}
+                  ></div>
+                )}
+              </div>
+              <h5
+                className="fw-bold mt-1 ml-2"
+                style={{
+                  color: activeStep === "consultant" ? "black" : "#6c757d",
+                }}
+              >
+                Your Consultant
+              </h5>
+            </div>
+            {/* Video and Quiz Step */}
+            <div
+              className={`d-flex align-items-center p-4 cursor-pointer ${
+                activeStep === "videoQuiz" ? "click-bg-shadow" : ""
+              }`}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+              }}
+              onClick={() => handleStepClick("videoQuiz")}
+            >
+              {activeStep === "videoQuiz" && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: "4px",
+                    backgroundColor: "#0D9596",
+                  }}
+                ></div>
+              )}
+              <div
+                className={`d-flex align-items-center justify-content-center me-3 ${
+                  activeStep === "videoQuiz" ? "text-black" : "text-muted"
+                }`}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  borderRadius: "50%",
+                  border:
+                    activeStep === "videoQuiz"
+                      ? "2px solid black"
+                      : "2px solid #dee2e6",
+                }}
+              >
+                {activeStep === "videoQuiz" ? (
+                  <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
+                ) : (
+                  <div
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#dee2e6",
+                    }}
+                  ></div>
+                )}
+              </div>
+              <h5
+                className="fw-bold mt-1 ml-2"
+                style={{
+                  color: activeStep === "videoQuiz" ? "black" : "#6c757d",
+                }}
+              >
+                Video and Quiz
+              </h5>
+            </div>
+          </Col>
+          <Col md="9" sm="12">
             {activeStep === "consultant" && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: "4px",
-                  backgroundColor: "#0D9596",
-                }}
-              ></div>
+              <YourConsultantForm
+                handleSubmitVideoFor={handleSubmitVideoFor}
+                branchOptions={branchOptions}
+                branchLabel={branchLabel}
+                setBranchLabel={setBranchLabel}
+                branchValue={branchValue}
+                setBranchValue={setBranchValue}
+                selectBranch={selectBranch}
+                branchError={branchError}
+                setBranchError={setBranchError}
+                countryName={countryName}
+                countryLabel={countryLabel}
+                countryValue={countryValue}
+                setCountryError={setCountryError}
+                setCountryValue={setCountryValue}
+                setCountryLabel={setCountryLabel}
+                selectCountry={selectCountry}
+                countryError={countryError}
+                homeAccept={homeAccept}
+                setAcceptError={setAcceptError}
+                setHomeAccept={setHomeAccept}
+                intAccept={intAccept}
+                setIntAccept={setIntAccept}
+                ukAccept={ukAccept}
+                setUkAccept={setUkAccept}
+                acceptError={acceptError}
+              />
             )}
-            <div
-              className={`d-flex align-items-center justify-content-center me-3 ${
-                activeStep === "consultant" ? "text-black" : "text-muted"
-              }`}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                border:
-                  activeStep === "consultant"
-                    ? "2px solid black"
-                    : "2px solid #dee2e6",
-              }}
-            >
-              {activeStep === "consultant" ? (
-                <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-              ) : (
-                <div
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#dee2e6",
-                  }}
-                ></div>
-              )}
-            </div>
-            <h5
-              className="fw-bold mt-1 ml-2"
-              style={{
-                color: activeStep === "consultant" ? "black" : "#6c757d",
-              }}
-            >
-              Your Consultant
-            </h5>
-          </div>
-          {/* Video and Quiz Step */}
-          <div
-            className={`d-flex align-items-center p-4 cursor-pointer ${
-              activeStep === "videoQuiz" ? "click-bg-shadow" : ""
-            }`}
-            style={{
-              cursor: "pointer",
-              position: "relative",
-            }}
-            onClick={() => handleStepClick("videoQuiz")}
-          >
             {activeStep === "videoQuiz" && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: "4px",
-                  backgroundColor: "#0D9596",
-                }}
-              ></div>
+              <VideoQuizForm
+                handleSubmitQuizFor={handleSubmitQuizFor}
+                handleFirstNameChange={handleFirstNameChange}
+                videoTitle={videoTitle}
+                videoTitleError={videoTitleError}
+                handleVideoFileChange={handleVideoFileChange}
+                videoFile={videoFile}
+                videoFileError={videoFileError}
+                showVideoPlayer={showVideoPlayer}
+                uploadProgress={uploadProgress}
+                isUploading={isUploading}
+                videoUrl={videoUrl}
+                blobUrl={blobUrl}
+                blobName={blobName}
+                question={question}
+                setQuestion={setQuestion}
+                setIsQuestionEditing={setIsQuestionEditing}
+                questionError={questionError}
+                setQuestionError={setQuestionError}
+                answers={answers}
+                handleCorrectAnswerChange={handleCorrectAnswerChange}
+                handleAnswerChange={handleAnswerChange}
+                handleAnswerKeyPress={handleAnswerKeyPress}
+                handleAnswerBlur={handleAnswerBlur}
+                handleAnswerClick={handleAnswerClick}
+                isDetailedAnswerEditing={isDetailedAnswerEditing}
+                detailedAnswer={detailedAnswer}
+                detailedAnswerError={detailedAnswerError}
+                handleDetailedAnswerChange={handleDetailedAnswerChange}
+                handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
+                handleDetailedAnswerBlur={handleDetailedAnswerBlur}
+                handleDetailedAnswerClick={handleDetailedAnswerClick}
+                isQuestionEditing={isQuestionEditing}
+                handleQuestionChange={handleQuestionChange}
+                handleQuestionKeyPress={handleQuestionKeyPress}
+                handleQuestionClick={handleQuestionClick}
+                handleQuestionBlur={handleQuestionBlur}
+                savedQuestions={savedQuestions}
+                handleSaveQuestion={handleSaveQuestion}
+                showQuestionForm={showQuestionForm}
+                handleAddMoreQuestion={handleAddMoreQuestion}
+                handleDeleteQuestion={handleDeleteQuestion}
+                currentQuestionNumber={currentQuestionNumber}
+                FileList1={FileList1}
+                setFileList1={setFileList1}
+                previewImage1={previewImage1}
+                setPreviewImage1={setPreviewImage1}
+                setPreviewTitle1={setPreviewTitle1}
+                previewTitle1={previewTitle1}
+                previewVisible1={previewVisible1}
+                setPreviewVisible1={setPreviewVisible1}
+                error={error}
+                setError={setError}
+                existingThumbnail={guidedVideoData?.videoImage}
+                apiQuestions={guidedVideoData?.questions}
+                id={id}
+                handleStepClick={handleStepClick}
+                handleEditQuestion={handleEditQuestion}
+                handleUpdateQuestion={handleUpdateQuestion}
+                // New props for enhanced editing
+                handleAnswerEdit={handleAnswerEdit}
+                handleAnswerSave={handleAnswerSave}
+                handleAnswerCancel={handleAnswerCancel}
+                editingQuestionId={editingQuestionId}
+                // State setters for form management
+                setAnswers={setAnswers}
+                setDetailedAnswer={setDetailedAnswer}
+                setEditingQuestionId={setEditingQuestionId}
+                setShowQuestionForm={setShowQuestionForm}
+                // Answer management functions
+                handleAddAnswer={handleAddAnswer}
+                handleRemoveAnswer={handleRemoveAnswer}
+                // Question management functions
+                handleClearAllQuestions={handleClearAllQuestions}
+              />
             )}
-            <div
-              className={`d-flex align-items-center justify-content-center me-3 ${
-                activeStep === "videoQuiz" ? "text-black" : "text-muted"
-              }`}
-              style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "50%",
-                border:
-                  activeStep === "videoQuiz"
-                    ? "2px solid black"
-                    : "2px solid #dee2e6",
-              }}
-            >
-              {activeStep === "videoQuiz" ? (
-                <i className="fas fa-check" style={{ fontSize: "12px" }}></i>
-              ) : (
-                <div
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#dee2e6",
-                  }}
-                ></div>
-              )}
-            </div>
-            <h5
-              className="fw-bold mt-1 ml-2"
-              style={{
-                color: activeStep === "videoQuiz" ? "black" : "#6c757d",
-              }}
-            >
-              Video and Quiz
-            </h5>
-          </div>
-        </Col>
-        <Col md="9" sm="12">
-          {activeStep === "consultant" && (
-            <YourConsultantForm
-              handleSubmitVideoFor={handleSubmitVideoFor}
-              branchOptions={branchOptions}
-              branchLabel={branchLabel}
-              setBranchLabel={setBranchLabel}
-              branchValue={branchValue}
-              setBranchValue={setBranchValue}
-              selectBranch={selectBranch}
-              branchError={branchError}
-              setBranchError={setBranchError}
-              countryName={countryName}
-              countryLabel={countryLabel}
-              countryValue={countryValue}
-              setCountryError={setCountryError}
-              setCountryValue={setCountryValue}
-              setCountryLabel={setCountryLabel}
-              selectCountry={selectCountry}
-              countryError={countryError}
-              homeAccept={homeAccept}
-              setAcceptError={setAcceptError}
-              setHomeAccept={setHomeAccept}
-              intAccept={intAccept}
-              setIntAccept={setIntAccept}
-              ukAccept={ukAccept}
-              setUkAccept={setUkAccept}
-              acceptError={acceptError}
-            />
-          )}
-          {activeStep === "videoQuiz" && (
-            <VideoQuizForm
-              handleSubmitQuizFor={handleSubmitQuizFor}
-              handleFirstNameChange={handleFirstNameChange}
-              videoTitle={videoTitle}
-              videoTitleError={videoTitleError}
-              handleVideoFileChange={handleVideoFileChange}
-              videoFile={videoFile}
-              videoFileError={videoFileError}
-              showVideoPlayer={showVideoPlayer}
-              uploadProgress={uploadProgress}
-              isUploading={isUploading}
-              videoUrl={videoUrl}
-              blobUrl={blobUrl}
-              blobName={blobName}
-              question={question}
-              setQuestion={setQuestion}
-              setIsQuestionEditing={setIsQuestionEditing}
-              questionError={questionError}
-              setQuestionError={setQuestionError}
-              answers={answers}
-              handleCorrectAnswerChange={handleCorrectAnswerChange}
-              handleAnswerChange={handleAnswerChange}
-              handleAnswerKeyPress={handleAnswerKeyPress}
-              handleAnswerBlur={handleAnswerBlur}
-              handleAnswerClick={handleAnswerClick}
-              isDetailedAnswerEditing={isDetailedAnswerEditing}
-              detailedAnswer={detailedAnswer}
-              detailedAnswerError={detailedAnswerError}
-              handleDetailedAnswerChange={handleDetailedAnswerChange}
-              handleDetailedAnswerKeyPress={handleDetailedAnswerKeyPress}
-              handleDetailedAnswerBlur={handleDetailedAnswerBlur}
-              handleDetailedAnswerClick={handleDetailedAnswerClick}
-              isQuestionEditing={isQuestionEditing}
-              handleQuestionChange={handleQuestionChange}
-              handleQuestionKeyPress={handleQuestionKeyPress}
-              handleQuestionClick={handleQuestionClick}
-              handleQuestionBlur={handleQuestionBlur}
-              savedQuestions={savedQuestions}
-              handleSaveQuestion={handleSaveQuestion}
-              showQuestionForm={showQuestionForm}
-              handleAddMoreQuestion={handleAddMoreQuestion}
-              handleDeleteQuestion={handleDeleteQuestion}
-              currentQuestionNumber={currentQuestionNumber}
-              FileList1={FileList1}
-              setFileList1={setFileList1}
-              previewImage1={previewImage1}
-              setPreviewImage1={setPreviewImage1}
-              setPreviewTitle1={setPreviewTitle1}
-              previewTitle1={previewTitle1}
-              previewVisible1={previewVisible1}
-              setPreviewVisible1={setPreviewVisible1}
-              error={error}
-              setError={setError}
-              existingThumbnail={guidedVideoData?.videoImage}
-              apiQuestions={guidedVideoData?.questions}
-              id={id}
-              handleStepClick={handleStepClick}
-            />
-          )}
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
