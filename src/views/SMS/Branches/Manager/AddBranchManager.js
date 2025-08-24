@@ -40,11 +40,8 @@ const AddBranchManager = () => {
   const [imageError, setImageError] = useState(false);
 
   const [title, setTitle] = useState([]);
-  // const [titleLabel, setTitleLabel] = useState("Select Title");
   const [titleValue, setTitleValue] = useState(0);
   const [titleError, setTitleError] = useState(false);
-
-  // const [emailError, setEmailError] = useState(true);
 
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -65,8 +62,16 @@ const AddBranchManager = () => {
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const [branchManagerDetailsData, setBranchManagerDetailsData] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
+    fetchData();
+    // console.log("admin id = ",branchManagerId);
+    
+  }, []);
+
+  const fetchData=()=>{
     get("NameTittle/GetAll").then((res) => {
       setTitle(res);
     });
@@ -79,10 +84,9 @@ const AddBranchManager = () => {
       setemail(res?.email);
       setphoneNumber(res?.phoneNumber);
       setBranchManagerId(res?.id);
-      console.log(res, "sakib");
+      setIsEdit(true);
     });
-  }, []);
-
+  }
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setfirstName(data);
@@ -154,7 +158,18 @@ const AddBranchManager = () => {
       reader.onerror = (error) => reject(error);
     });
   }
-
+  const handleEdit = (data) => {
+    setIsEdit(true);
+    get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
+      setBranchManager(res);
+      setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
+      setfirstName(res?.firstName);
+      setlastName(res?.lastName);
+      setemail(res?.email);
+      setphoneNumber(res?.phoneNumber);
+      setBranchManagerId(res?.id);
+    });
+  };
   const handleCancel = () => {
     setPreviewVisible(false);
   };
@@ -253,14 +268,25 @@ const AddBranchManager = () => {
 
     return isFormValid;
   };
-
+  const addNewData = () => {
+    setShowForm(true);
+    ResetFormField();
+    setIsEdit(false);
+  };
+  const ResetFormField=()=>{
+    setfirstName("");  
+    setlastName("");
+    setemail("");
+    setphoneNumber("");  
+    setBranchManagerId(0);
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const subdata = new FormData(event.target);
     subdata.append("phoneNumber", phoneNumber);
     subdata.append("managerImage", FileList[0]?.originFileObj);
-
+    if(isEdit)
+    {
     if (validateRegisterForm()) {
       if (branchManager?.branchId) {
         setButtonStatus(true);
@@ -296,6 +322,21 @@ const AddBranchManager = () => {
           setProgress(false);
         });
       }
+      }
+    }
+    else
+    {
+       if(validateRegisterForm())
+        {
+          post(`BranchManager/Create`, subdata).then((res) => {
+            if (res?.status === 200 && res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+            }
+          });
+        }
     }
   };
 
@@ -313,25 +354,18 @@ const AddBranchManager = () => {
               <div className="col-12 border p-2 rounded" key={branchManager?.id}>
                 <BranchManagerDetailsCard
                   details={branchManager}
-                  // handleEdit={handleEdit}
+                  handleEdit={handleEdit}
                   progress={progress}
                 />
               </div>
             </div>
                 <button
-                  id="bank-details"
+                  id="branch_admin_details"
                   className="add-button mb-4"
-                  // onClick={addNewData}
-                  // permission={6}
+                  onClick={addNewData}
                 >
                   Add New Admin 
                 </button>
-          {/* <div className="d-flex justify-content-between mt-5">
-            <PreviousButton action={goPrevious} />
-            {bankDetailsData?.length > 0 && (
-              <SaveButton text="Next" action={goForward} />
-            )}
-          </div> */}
         </CardBody>
       </Card>
 
@@ -474,8 +508,9 @@ const AddBranchManager = () => {
                         </FormGroup>
                       )}
 
-                      {branchManagerId === 0 ||
-                      branchManagerId === undefined ? (
+                      { branchManagerId === 0 ||
+                      branchManagerId === undefined ? 
+                      (
                         <FormGroup>
                           <span>
                             Password <span className="text-danger">*</span>{" "}
@@ -556,8 +591,6 @@ const AddBranchManager = () => {
                                     style={{ marginTop: 8 }}
                                   >
                                     <Icon.Upload />
-                                    {/* <br />
-                                  <span>Upload Here</span> */}
                                   </div>
                                 ) : (
                                   ""
@@ -593,46 +626,12 @@ const AddBranchManager = () => {
                             centered
                           </span>
                         </Col>
-                        {/* 
-                        <Upload
-                          listType="picture-card"
-                          multiple={false}
-                          fileList={FileList}
-                          onPreview={handlePreview}
-                          onChange={handleChange}
-                          beforeUpload={(file) => {
-                            return false;
-                          }}
-                        >
-                          {FileList.length < 1 ? (
-                            <div
-                              className="text-danger"
-                              style={{ marginTop: 8 }}
-                            >
-                              <Icon.Upload />
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </Upload>
-                        <Modal
-                          open={previewVisible}
-                          title={previewTitle}
-                          footer={null}
-                          onCancel={handleCancel}
-                        >
-                          <img
-                            alt="example"
-                            style={{ width: "100%" }}
-                            src={previewImage}
-                          />
-                        </Modal> */}
                       </FormGroup>
 
                       {permissions?.includes(permissionList.Edit_Branch) ? (
                         <FormGroup className="text-right">
                           <SaveButton
-                            text="submit"
+                            text="Submit"
                             progress={progress}
                             buttonStatus={buttonStatus}
                           />

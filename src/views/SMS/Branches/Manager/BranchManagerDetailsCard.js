@@ -7,7 +7,7 @@ const BranchManagerDetailsCard =({
     progress
 })=>{
  useEffect(() => {
-    console.table(details);
+  
   }, [details]);
   
     return(
@@ -21,15 +21,7 @@ const BranchManagerDetailsCard =({
               <span className="ml-2 badge badge-secondary">Default</span>
             ) : null}
           </div>
-          <span
-           
-                  className="pointer text-body"
-                //   onClick={() => }
-            >
-                <a href="#adminEditForm"> Edit </a>
-                  
-          </span>
-          {/* {permissions?.includes(permissionList?.Edit_Consultant) && (
+          {
             <span>
               <a href="#bank-details">
                 <span
@@ -40,7 +32,7 @@ const BranchManagerDetailsCard =({
                 </span>
               </a>
 
-              {details?.isDefault === false && (
+              {/* {details?.isDefault === false && (
                 <>
                   {" "}
                   |{" "}
@@ -51,9 +43,9 @@ const BranchManagerDetailsCard =({
                     Delete
                   </span>
                 </>
-              )}
+              )} */}
             </span>
-          )} */}
+          }
         </div>
         <hr />
         <Row className="text-gray">
