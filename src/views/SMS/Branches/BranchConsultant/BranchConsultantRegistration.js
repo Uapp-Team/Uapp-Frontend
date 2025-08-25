@@ -58,6 +58,7 @@ const BranchConsultantRegistration = () => {
   const [success, setSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchCardData();
@@ -72,12 +73,15 @@ const BranchConsultantRegistration = () => {
 
   useEffect(() => {
     fetchFormData();
+    console.log("came in scs");
+    
   }, [success, branchId]);
 
   
  // Edit Admin
   const handleEdit = (data) => {
     setIsEdit(true);
+    setShowForm(true);
     fetchFormData();
   };
 
@@ -160,6 +164,7 @@ const BranchConsultantRegistration = () => {
   };
  const closeModal = () => {
     setModalOpen(false);
+    fetchFormData();
   };
   const handlePhoneNumber = (value) => {
     setphoneNumber(value);
@@ -279,14 +284,14 @@ const BranchConsultantRegistration = () => {
     }
   };
   return (
-    <div id="consultantEditForm">
-      
+    <>
       <BranchNavbar activeTab={activetab} branchId={branchId} />
         {(isEdit) &&
                 <BranchConsultantDetailsCard
                   details={branchConsultant}
                   handleEdit={handleEdit}
                   progress={progress}
+                  success={success}
                 />
               
         }
@@ -296,11 +301,12 @@ const BranchConsultantRegistration = () => {
                   onClick={() => setModalOpen(true)}
                 >
                   Assign New Consultant 
-                </button>
+               </button>
           <br></br>
+      <div id="consultantEditForm">
+      {(showForm)&&
       <Card>
         <CardBody>
-          
           <TabContent activeTab={activetab}>
             <TabPane tabId="3">
               
@@ -539,32 +545,36 @@ const BranchConsultantRegistration = () => {
                   </Col>
                 </Row>
                 
-                <div>
-                  <Modal
-                    isOpen={modalOpen}
-                    toggle={closeModal}
-                    className="uapp-modal2"
-                    size="lg"
-                  >
-                    <ModalHeader>
-                      <span></span>
-                    </ModalHeader>
-                    <ModalBody>
-                      <AssignBranchConsultantModal
-                        branchId={branchId}
-                        setModalOpen={setModalOpen}
-                        success={success}
-                        setSuccess={setSuccess}
-                      />
-                    </ModalBody>
-                  </Modal>
-                </div>
+                
               </Form>
             </TabPane>
           </TabContent>
         </CardBody>
       </Card>
+      }
+      <div>
+          <Modal
+            isOpen={modalOpen}
+            toggle={closeModal}
+            className="uapp-modal2"
+            size="lg"
+          >
+            <ModalHeader>
+              <span></span>
+            </ModalHeader>
+            <ModalBody>
+              <AssignBranchConsultantModal
+                branchId={branchId}
+                setModalOpen={setModalOpen}
+                success={success}
+                setSuccess={setSuccess}
+              />
+            </ModalBody>
+          </Modal>
+        </div>
     </div>
+    </>              
+    
   );
 };
 

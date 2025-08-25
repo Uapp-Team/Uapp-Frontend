@@ -42,14 +42,14 @@ const AssignBranchConsultantModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("branch id ",branchId);
-    console.log("selected cons ",selectedConsultant.value);
-  
+   
     put(`Branch/AssignDefaultConsultant?branchId=${branchId}&consultantId=${selectedConsultant.value}`).then((res)=>{
        addToast(res?.data?.message, {
-        appearance: "Branch's default consultant changed ",
+        appearance: "success",
         autoDismiss: true,
       });
+      setModalOpen(false);
+      setSuccess(true);
     });
 
     // post(`SalesManager/AssignSalesTeamLeadersByQuery`, subdata).then((res) => {

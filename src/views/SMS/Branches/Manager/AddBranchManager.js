@@ -177,6 +177,7 @@ const AddBranchManager = () => {
   // Edit Admin
   const handleEdit = (data) => {
     setIsEdit(true);
+    setShowForm(true);
     fetchFormData();
   };
   // Delete Admin
@@ -393,9 +394,9 @@ const AddBranchManager = () => {
         </CardBody>
       </Card>
       }
-
-<div id="adminEditForm">
- <Card>
+  {(showForm)&&
+  <div id="adminEditForm">
+  <Card>
           <CardBody>
             <TabContent activeTab={activetab}>
               <TabPane tabId="2">
@@ -670,8 +671,9 @@ const AddBranchManager = () => {
           </CardBody>
         </Card>
 </div>
-       
+}
       </div>
+      
     </div>
   );
 };
