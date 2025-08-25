@@ -26,19 +26,11 @@ import put from "../../../../helpers/put";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import ButtonForFunction from "../../Components/ButtonForFunction";
 import AssignBranchConsultantModal from "./AssignBranchConsultantModal";
+import BranchConsultantDetailsCard from "../BranchConsultant/BranchConsultantDetailsCard";
 
 const BranchConsultantRegistration = () => {
   const [titleValue, setTitleValue] = useState(0);
   const [nameTitle, setNameTitle] = useState([]);
-  // const [consParent, setConsParent] = useState([]);
-  // const [consType, setConsType] = useState([]);
-  // const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
-  // const [parentValue, setParentValue] = useState(0);
-  // const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
-  // const [typeValue, setTypeValue] = useState(0);
-
-  // const [consultantError, setConsultantError] = useState(false);
-  // const [parentError, setParentError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -65,32 +57,58 @@ const BranchConsultantRegistration = () => {
   const [acceptError, setAcceptError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
-    get("NameTittleDD/index").then((res) => {
-      setNameTitle(res);
-    });
+    fetchCardData();
   }, []);
 
   useEffect(() => {
+    if(consultantRegisterId!== 0 && consultantRegisterId!== undefined)
+    {
+        setIsEdit(true);
+    }
+  }, [consultantRegisterId]);
+
+  useEffect(() => {
+    fetchFormData();
+  }, [success, branchId]);
+
+  
+ // Edit Admin
+  const handleEdit = (data) => {
+    setIsEdit(true);
+    fetchFormData();
+  };
+
+  const fetchCardData=()=>{
+    get("NameTittle/GetAll").then((res) => {
+      setNameTitle(res);
+    });
+    get(`BranchConsultant/DefaultConsultant/${branchId}`).then((res) => {
+      setBranchConsultant(res);
+      setConsultantRegisterId(res?.id);
+    });
+  };
+
+  const fetchFormData=()=>{
     get(`BranchConsultant/DefaultConsultant/${branchId}`).then((res) => {
       setBranchConsultant(res);
       setemail(res?.email);
       setlastName(res?.lastName);
       setfirstName(res?.firstName);
       setphoneNumber(res?.phoneNumber);
+      console.log("Res = ");
+      
+      console.table(res);
       setTitleValue(res?.nameTittleId == null ? 0 : res?.nameTittleId);
       setConsultantRegisterId(res?.id);
       res?.isAcceptedHome && setHomeAccept(res?.isAcceptedHome);
       res?.isAcceptedEU_UK && setUkAccept(res?.isAcceptedEU_UK);
       res?.isAcceptedInternational &&
         setIntAccept(res?.isAcceptedInternational);
-      console.log(res, "branch consultant");
     });
-  }, [success, branchId]);
-
-  
-
+  }
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setfirstName(data);
@@ -225,7 +243,6 @@ const BranchConsultantRegistration = () => {
     subdata.append("isAcceptedEU_UK", ukAccept);
     subdata.append("isAcceptedInternational", intAccept);
     if (validateRegisterForm()) {
-      console.log("first");
       if (branchConsultant?.branchId) {
         setButtonStatus(true);
         setProgress(true);
@@ -262,18 +279,24 @@ const BranchConsultantRegistration = () => {
     }
   };
   return (
-    <div>
+    <div id="consultantEditForm">
+      
       <BranchNavbar activeTab={activetab} branchId={branchId} />
-            <Col lg="5" md="5" sm="12" xs="12">
-              <div className="d-sm-flex">
-                <ButtonForFunction
-                  func={() => setModalOpen(true)}
-                  className={"btn btn-uapp-add mr-2 "}
-                  icon={<i className="fas fa-plus"></i>}
-                  name={"Assign Consultant"}
+        {(isEdit) &&
+                <BranchConsultantDetailsCard
+                  details={branchConsultant}
+                  handleEdit={handleEdit}
+                  progress={progress}
                 />
-              </div>
-            </Col>
+              
+        }
+               <button
+                  id="branch_admin_details"
+                  className="add-button mb-4"
+                  onClick={() => setModalOpen(true)}
+                >
+                  Assign New Consultant 
+                </button>
           <br></br>
       <Card>
         <CardBody>
@@ -515,6 +538,7 @@ const BranchConsultantRegistration = () => {
                     ) : null}
                   </Col>
                 </Row>
+                
                 <div>
                   <Modal
                     isOpen={modalOpen}

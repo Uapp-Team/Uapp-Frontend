@@ -81,26 +81,23 @@ const AddBranchManager = () => {
   }, [branchManagerId]);
 
   const fetchCardData=()=>{
+    get("NameTittle/GetAll").then((res) => {
+      setTitle(res);
+    });
     get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
       setBranchManager(res);
       setBranchManagerId(res?.id);
     });
   };
   const fetchFormData=()=>{
-    get("NameTittle/GetAll").then((res) => {
-      setTitle(res);
-    });
-    
     get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
-      // setBranchManager(res);
+      
       setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
       setfirstName(res?.firstName);
       setlastName(res?.lastName);
       setemail(res?.email);
       setphoneNumber(res?.phoneNumber);
-      // setBranchManagerId(res?.id);
     });
-    
   }
   const toggleDanger = (p) => {
     setDeleteData(p);
