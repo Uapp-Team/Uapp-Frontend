@@ -70,26 +70,37 @@ const AddBranchManager = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    fetchData();
-    // console.log("admin id = ",branchManagerId);
-    
+    fetchCardData();
   }, []);
 
-  const fetchData=()=>{
+  useEffect(() => {
+    if(branchManagerId!== 0 && branchManagerId!== undefined)
+    {
+        setIsEdit(true);
+    }
+  }, [branchManagerId]);
+
+  const fetchCardData=()=>{
+    get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
+      setBranchManager(res);
+      setBranchManagerId(res?.id);
+    });
+  };
+  const fetchFormData=()=>{
     get("NameTittle/GetAll").then((res) => {
       setTitle(res);
     });
-
+    
     get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
-      setBranchManager(res);
+      // setBranchManager(res);
       setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
       setfirstName(res?.firstName);
       setlastName(res?.lastName);
       setemail(res?.email);
       setphoneNumber(res?.phoneNumber);
-      setBranchManagerId(res?.id);
-      setIsEdit(true);
+      // setBranchManagerId(res?.id);
     });
+    
   }
   const toggleDanger = (p) => {
     setDeleteData(p);
@@ -169,15 +180,7 @@ const AddBranchManager = () => {
   // Edit Admin
   const handleEdit = (data) => {
     setIsEdit(true);
-    get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
-      setBranchManager(res);
-      setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
-      setfirstName(res?.firstName);
-      setlastName(res?.lastName);
-      setemail(res?.email);
-      setphoneNumber(res?.phoneNumber);
-      setBranchManagerId(res?.id);
-    });
+    fetchFormData();
   };
   // Delete Admin
   const handleDelete = () => {
@@ -280,13 +283,6 @@ const AddBranchManager = () => {
       setphoneNumberError("Phone number required minimum 9 digit");
     }
 
-    // if (branchManagerId === 0) {
-    //   if (FileList.length < 1) {
-    //     isFormValid = false;
-    //     setImageError(true);
-    //   }
-    // }
-
     if (branchManager?.managerImageMedia == null && FileList.length < 1) {
       isFormValid = false;
       setImageError(true);
@@ -373,10 +369,11 @@ const AddBranchManager = () => {
           activeTab={activetab}
           branchId={branchId}
         />
-
+       {(isEdit)&&
         <Card>
         <CardBody>
-            <div className="row mx-2 mb-3">
+           
+              <div className="row mx-2 mb-3">
               <div className="col-12 border p-2 rounded" key={branchManager?.id}>
                 <BranchManagerDetailsCard
                   details={branchManager}
@@ -398,6 +395,7 @@ const AddBranchManager = () => {
                 </button>
         </CardBody>
       </Card>
+      }
 
 <div id="adminEditForm">
  <Card>
