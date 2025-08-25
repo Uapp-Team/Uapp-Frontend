@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { Card, CardBody, Col, Row } from "reactstrap";
+import ConfirmModal from "../../../../components/modal/ConfirmModal";
 
 const BranchManagerDetailsCard =({
     details,
     handleEdit,
+    handleDelete,
+    toggleDanger,
+    deleteModal,
+    setDeleteModal,
     progress
 })=>{
  useEffect(() => {
@@ -23,7 +28,7 @@ const BranchManagerDetailsCard =({
           </div>
           {
             <span>
-              <a href="#bank-details">
+              <a href="#adminEditForm">
                 <span
                   className="pointer text-body"
                   onClick={() => handleEdit(details)}
@@ -31,9 +36,6 @@ const BranchManagerDetailsCard =({
                   Edit
                 </span>
               </a>
-
-              {/* {details?.isDefault === false && (
-                <>
                   {" "}
                   |{" "}
                   <span
@@ -42,8 +44,8 @@ const BranchManagerDetailsCard =({
                   >
                     Delete
                   </span>
-                </>
-              )} */}
+               
+              
             </span>
           }
         </div>
@@ -70,15 +72,15 @@ const BranchManagerDetailsCard =({
           </Col>
         </Row>
       </CardBody>
-      {/* <ConfirmModal
-        text="Do You Want To Delete Bank Details Information ? Once Deleted it can't be Undone!"
+      <ConfirmModal
+        text="Do You Want To Delete This Admin ? "
         isOpen={deleteModal}
         toggle={() => setDeleteModal(!deleteModal)}
-        confirm={handleDeletePermission}
+        confirm={handleDelete}
         cancel={() => setDeleteModal(false)}
-        buttonStatus={buttonStatus}
+        // buttonStatus={buttonStatus}
         progress={progress}
-      /> */}
+      />
     </Card>
     );
 }

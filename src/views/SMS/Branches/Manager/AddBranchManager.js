@@ -27,6 +27,7 @@ import put from "../../../../helpers/put";
 import { Image } from "antd";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
 import BranchManagerDetailsCard from "./BranchManagerDetailsCard";
+import Uremove from "../../../../helpers/Uremove";
 
 const AddBranchManager = () => {
   const { branchId } = useParams();
@@ -64,6 +65,9 @@ const AddBranchManager = () => {
   const [branchManagerDetailsData, setBranchManagerDetailsData] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteData, setDeleteData] = useState({});
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -87,6 +91,10 @@ const AddBranchManager = () => {
       setIsEdit(true);
     });
   }
+  const toggleDanger = (p) => {
+    setDeleteData(p);
+    setDeleteModal(true);
+  };
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setfirstName(data);
@@ -158,6 +166,7 @@ const AddBranchManager = () => {
       reader.onerror = (error) => reject(error);
     });
   }
+  // Edit Admin
   const handleEdit = (data) => {
     setIsEdit(true);
     get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
@@ -170,6 +179,23 @@ const AddBranchManager = () => {
       setBranchManagerId(res?.id);
     });
   };
+  // Delete Admin
+  const handleDelete = () => {
+    setButtonStatus(true);
+    setProgress(true);
+    Uremove(`BranchManager/Delete/${deleteData?.id}`).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      addToast(res?.data?.title, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setDeleteModal(false);
+      setSuccess(!success);
+    });
+  };
+
+
   const handleCancel = () => {
     setPreviewVisible(false);
   };
@@ -356,6 +382,10 @@ const AddBranchManager = () => {
                   details={branchManager}
                   handleEdit={handleEdit}
                   progress={progress}
+                  toggleDanger={toggleDanger}
+                  deleteModal={deleteModal}
+                  setDeleteModal={setDeleteModal}
+                  handleDelete={handleDelete}
                 />
               </div>
             </div>
