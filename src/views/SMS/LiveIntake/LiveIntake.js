@@ -58,6 +58,10 @@ const LiveIntake = () => {
   const [intakeDataList, setIntakeDataList] = useState([]);
 
   const [entity, setEntity] = useState(0);
+  const [uniCount, setUniCount] = useState(0);
+  const [intakeCount, setIntakeCount] = useState(0);
+  const [courseCount, setCourseCount] = useState(0);
+  const [campusCount, setCampusCount] = useState(0);
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
@@ -106,8 +110,10 @@ const LiveIntake = () => {
       ).then((res) => {
         setLoading(false);
         setLiveIntakeList(res?.data?.rows);
-        console.log(res);
-
+        setIntakeCount(res?.data?.totalIntake);
+        setCourseCount(res?.data?.sumOfTotalCourse);
+        setUniCount(res?.data?.totalUniversity);
+        setCampusCount(res?.data?.totalCampus);
         setEntity(res?.data?.total);
       });
     }
@@ -234,6 +240,10 @@ const LiveIntake = () => {
         paginate={paginate}
         currentPage={currentPage}
         liveIntakeList={liveIntakeList}
+        uniCount={uniCount}
+        intakeCount={intakeCount}
+        courseCount={courseCount}
+        campusCount={campusCount}
       />
     </div>
   );

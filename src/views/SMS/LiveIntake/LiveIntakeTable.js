@@ -41,6 +41,10 @@ const LiveIntakeTable = ({
   paginate,
   currentPage,
   liveIntakeList,
+  uniCount,
+  intakeCount,
+  courseCount,
+  campusCount,
 }) => {
   // const [intakeDataList, setIntakeDataList] = useState(liveIntake?.intakeNames);
   const [popoverOpen, setPopoverOpen] = useState("");
@@ -184,20 +188,40 @@ const LiveIntakeTable = ({
                 <Table id="table-to-xls" className="table-sm table-bordered">
                   <thead className="tablehead">
                     <tr style={{ textAlign: "center" }}>
-                      {tableData[0]?.isActive ? <th>University</th> : null}
+                      {tableData[0]?.isActive ? (
+                        <th>
+                          University{" "}
+                          <span className="count-summery">{uniCount}</span>
+                        </th>
+                      ) : null}
                       {tableData[1]?.isActive ? (
                         <th>Admission Manager</th>
                       ) : null}
                       {tableData[2]?.isActive ? <th>Contact</th> : null}
-                      {tableData[3]?.isActive ? <th>Intake</th> : null}
-                      {tableData[4]?.isActive ? <th>Campus</th> : null}
+                      {tableData[3]?.isActive ? (
+                        <th>
+                          Intake{" "}
+                          <span className="count-summery">{intakeCount}</span>
+                        </th>
+                      ) : null}
+                      {tableData[4]?.isActive ? (
+                        <th>
+                          Campus{" "}
+                          <span className="count-summery">{campusCount}</span>
+                        </th>
+                      ) : null}
                       {tableData[5]?.isActive ? (
                         <th>Recruitment Type</th>
                       ) : null}
                       {tableData[6]?.isActive ? (
                         <th>Delivery Pattern</th>
                       ) : null}
-                      {tableData[7]?.isActive ? <th>Course</th> : null}
+                      {tableData[7]?.isActive ? (
+                        <th>
+                          Course{" "}
+                          <span className="count-summery">{courseCount}</span>
+                        </th>
+                      ) : null}
                       {tableData[8]?.isActive ? (
                         <th style={{ width: "8%" }} className="text-center">
                           Action
@@ -209,7 +233,7 @@ const LiveIntakeTable = ({
                     {liveIntakeList?.map((liveIntake, i) => (
                       <tr key={i} style={{ textAlign: "center" }}>
                         {tableData[0]?.isActive ? (
-                          <td>{liveIntake?.universityName}</td>
+                          <td>{liveIntake?.universityName} </td>
                         ) : null}
                         {tableData[1]?.isActive ? (
                           <td>
@@ -222,7 +246,18 @@ const LiveIntakeTable = ({
                               }
                               title={liveIntake?.admissionManagers[0]?.name}
                               alt="adm_logo"
-                            />
+                            />{" "}
+                            <span
+                              className="for-intake-table cursor-pointer ml-3"
+                              onClick={() => handleUpdate(liveIntake)}
+                            >
+                              {liveIntake?.admissionManagers.length - 1 !==
+                                0 && (
+                                <>
+                                  {liveIntake?.admissionManagers.length - 1} +
+                                </>
+                              )}
+                            </span>
                           </td>
                         ) : null}
                         {tableData[2]?.isActive ? (
