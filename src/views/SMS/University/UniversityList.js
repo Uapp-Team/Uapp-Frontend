@@ -1173,7 +1173,7 @@ const UniversityList = (props) => {
                                       university?.universityLogo?.thumbnailUrl
                                     }
                                     alt="university_logo"
-                                  />{" "}
+                                  />
                                 </>
                               )}
                             </td>

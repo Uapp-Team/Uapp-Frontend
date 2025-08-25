@@ -42,15 +42,25 @@ const SideModal = ({ data, action }) => {
             </div>
           </div>
           <div className="mt-3">
-            <p className="section-title">Total Course: {data?.courseCount}</p>
+            <p className="section-title">Total Course: {data?.totalCourse}</p>
           </div>
           <div className="mt-3">
             <p className="section-title">Campus</p>
-            <p>{data?.campusNames}</p>
+            {data?.campuses?.map((campus, i, array) => (
+              <span key={campus?.id}>
+                {campus?.name}
+                {i < array.length - 1 && ", "}
+              </span>
+            ))}
           </div>
           <div className="mt-3">
             <p className="section-title">Intake</p>
-            <p>{data?.intakeNames}</p>
+            {data?.intakes?.map((intake, i, array) => (
+              <span key={intake?.id}>
+                {intake?.name}
+                {i < array.length - 1 && ", "}
+              </span>
+            ))}
           </div>
           <div className="mt-3">
             <p className="section-title">Recruitment Type</p>

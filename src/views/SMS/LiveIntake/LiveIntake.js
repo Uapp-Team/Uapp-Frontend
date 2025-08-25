@@ -100,14 +100,15 @@ const LiveIntake = () => {
     if (!isTyping) {
       setLoading(true);
       Uget(
-        `LiveIntake/paginated-list?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
+        `LiveIntake/paginated?page=${currentPage}&pageSize=${dataPerPage}&accountIntakeId=${intakeRngValue}&universityId=${universityValue}&campusId=${campusValue}&deliveryPatternId=${deliveryPatternValue}&recruitmentTypeId=${
           recruitmentValue ? recruitmentValue : 0
         }&searchText=${searchStr}`
       ).then((res) => {
         setLoading(false);
-        setLiveIntakeList(res?.items);
+        setLiveIntakeList(res?.data?.rows);
+        console.log(res);
 
-        setEntity(res?.total);
+        setEntity(res?.data?.total);
       });
     }
   }, [

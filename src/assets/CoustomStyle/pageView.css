@@ -1202,6 +1202,12 @@ flexbox-container2 h4 {
   border-radius: 100px;
 }
 
+.live-intake-c-image {
+  height: 40px;
+  width: 40px;
+  border-radius: 100px;
+}
+
 /*CampusCard*/
 
 .CampusCard .CampusCardAction {
