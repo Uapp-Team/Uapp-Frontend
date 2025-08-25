@@ -6,8 +6,8 @@ import SaveButton from "../../../../components/buttons/SaveButton";
 import CancelButton from "../../../../components/buttons/CancelButton";
 import Uget from "../../../../helpers/Uget";
 import { post } from "../../../ReusableFunction/Api/ApiFunc";
-
-
+import axios from "axios";
+import put from "../../../../helpers/put";
 const AssignBranchConsultantModal = ({
   branchId,
   setModalOpen,
@@ -20,24 +20,20 @@ const AssignBranchConsultantModal = ({
   const [selectedConsultant, setSelectedConsultant] = useState(null);
   const [callApi, setCallApi] = useState(false);
   const [entity, setEntity] = useState(0);
-  const [consultantList, setConsultantList] = useState({});
-
-  const onChangeSelectedConsultant = (value) => {
-    setSelectedConsultant(value);
-    // setCallApi((prev) => !prev);
-  };
-
+  const [consultantList, setConsultantList] = useState([{ label: "", value: "" }]);
 
   useEffect(() => {
     Uget(
       `ConsultantDD/ByBranch/${branchId}`
     ).then((res) => {
-        console.table(res?.result);
-      setConsultantList(res?.result);
-      console.table(consultantList);
-      setEntity(res?.totalFiltered);
+      const mapped = res?.result?.map((r) => ({
+        label: r.name,
+        value: r.id,
+        }));
+      setConsultantList((prev) => [...prev, ...mapped]);
     });
   }, [branchId]);
+
 
   // on Close Modal
   const closeModal = () => {
@@ -46,14 +42,16 @@ const AssignBranchConsultantModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("branch id ",branchId);
+    console.log("selected cons ",selectedConsultant.value);
+  
+    put(`Branch/AssignDefaultConsultant?branchId=${branchId}&consultantId=${selectedConsultant.value}`).then((res)=>{
+       addToast(res?.data?.message, {
+        appearance: "Branch's default consultant changed ",
+        autoDismiss: true,
+      });
+    });
 
-    // const salesTeamLeaderIds = unAssignSalesTeam
-    //   .filter((c) => c.isAssign)
-    //   .map((c) => c.salesTeamLeaderId);
-
-    const subdata = {
-      branchId: branchId
-    };
     // post(`SalesManager/AssignSalesTeamLeadersByQuery`, subdata).then((res) => {
     //   addToast(res?.data?.message, {
     //     appearance: "success",
@@ -82,8 +80,8 @@ const AssignBranchConsultantModal = ({
           <div className="ddzindex">
             <Select
               options={consultantList}
-              value={{ selectedConsultant}}
-              onChange={(opt) => onChangeSelectedConsultant(opt.value)}
+              value={selectedConsultant}
+              onChange={setSelectedConsultant}
             />
           </div>
         </Col>
