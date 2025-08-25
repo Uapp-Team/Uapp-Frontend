@@ -19,6 +19,7 @@ import CompanionRefer from "./CompanionRefer/CompanionRefer";
 import CountingCards from "./CountingCards";
 import RecentInvitations from "./RecentInvitations";
 import post from "../../../../../helpers/post";
+import { domain } from "../../../../../constants/constants";
 
 const Companion = () => {
   const { id } = useParams();
@@ -40,7 +41,7 @@ const Companion = () => {
   const [emailError, setEmailError] = useState("");
   const [count, setCount] = useState({});
   const userViewId = JSON.parse(localStorage.getItem("current_user"));
-  const url = `https://portal.uapp.uk/studentRegister/${userViewId.userViewId}`;
+  const url = `${domain}/studentRegister/${userViewId.userViewId}`;
   const userType = localStorage.getItem("userType");
 
   const [active, setActive] = useState(false);
