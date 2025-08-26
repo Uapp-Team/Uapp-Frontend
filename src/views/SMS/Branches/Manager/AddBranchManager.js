@@ -313,6 +313,7 @@ const AddBranchManager = () => {
     setemail("");
     setphoneNumber("");  
     setBranchManagerId(0);
+    setBranchManager(null);
   }
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -345,7 +346,8 @@ const AddBranchManager = () => {
               appearance: "success",
               autoDismiss: true,
             });
-
+            setButtonStatus(true);
+            setProgress(true);
             history.push(`/addBranchConsultant/${branchId}`);
           } else if (res?.status === 200 && res?.data?.isSuccess === false)
             addToast(res?.data?.message, {
