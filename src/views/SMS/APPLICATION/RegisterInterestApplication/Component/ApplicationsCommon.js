@@ -798,7 +798,7 @@ const ApplicationsCommon = () => {
         setConsultantLabel(result?.name);
       }
     });
-    get("CommonApplicationFilterDD/Student").then((res) => {
+    get("CommonApplicationFilterDD/InterestStudent").then((res) => {
       setCommonStdDD(res);
     });
   }, [

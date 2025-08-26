@@ -77,7 +77,7 @@ const AdmissionManagerOwnProfile = () => {
 
                       <td width="60%">
                         {data?.admissionManagerGeneralInfo?.firstName}{" "}
-                        {data?.dmissionManagerGeneralInfo?.lastName}
+                        {data?.admissionManagerGeneralInfo?.lastName}
                       </td>
                     </tr>
 
@@ -261,7 +261,7 @@ const AdmissionManagerOwnProfile = () => {
 
                 {/* Eligibility */}
 
-                <span
+                {/* <span
                   className="app-style-const p-2"
                   style={{ backgroundColor: "#DFEEEE" }}
                 >
@@ -488,7 +488,7 @@ const AdmissionManagerOwnProfile = () => {
                       ) : null}
                     </tr>
                   </tbody>
-                </Table>
+                </Table> */}
               </Card>
               {/* Eligibility */}
             </>

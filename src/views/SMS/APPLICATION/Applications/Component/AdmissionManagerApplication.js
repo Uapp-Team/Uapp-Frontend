@@ -757,9 +757,15 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/UappId`).then((res) => {
         setManagerUappIdDD(res);
       });
-      get(`CommonApplicationFilterDD/Student`).then((res) => {
-        setManagerStdDD(res);
-      });
+      if (universityId) {
+        get(`CommonApplicationFilterDD/Student/${universityId}`).then((res) => {
+          setManagerStdDD(res);
+        });
+      } else {
+        get("CommonApplicationFilterDD/Student").then((res) => {
+          setManagerStdDD(res);
+        });
+      }
       get(`CommonApplicationFilterDD/Consultant`).then((res) => {
         setManagerConsDD(res);
         if (consultantId) {

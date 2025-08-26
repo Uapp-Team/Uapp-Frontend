@@ -276,7 +276,7 @@ const CompanionList = () => {
   };
 
   const handleUpdate = (data) => {
-    put(`Companion/toggle-block-status/${data?.id}`).then((res) => {
+    put(`Referrer/toggle-block-status/${data?.id}`).then((res) => {
       if (res?.status == 200 && res?.data?.isSuccess == true) {
         addToast(res?.data?.title, {
           autoDismiss: true,

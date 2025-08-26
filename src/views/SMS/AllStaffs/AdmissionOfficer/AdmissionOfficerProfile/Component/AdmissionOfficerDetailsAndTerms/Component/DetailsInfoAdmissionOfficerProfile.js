@@ -49,7 +49,7 @@ const DetailsInfoAdmissionOfficerProfile = ({ userId }) => {
           <GeneralInformation data={generalInfo} />
           <PersonalInformation data={personalInfo} />
           <ContactInformation data={contactInfo} />
-          <Eligibility data={eligibility} />
+          {/* <Eligibility data={eligibility} /> */}
         </CardBody>
       </Card>
     </div>

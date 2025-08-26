@@ -9,7 +9,7 @@ const Student = ({ data, setData, name, error, setError, action }) => {
   const [dataLabel, setDataLabel] = useState("Select Student");
 
   useEffect(() => {
-    get(`SearchFilter/Students`).then((res) => {
+    get(`SearchFilter/FetchStudents`).then((res) => {
       setStudentData([{ id: "0", name: "Select Student" }, ...res]);
     });
   }, []);

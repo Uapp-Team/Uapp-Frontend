@@ -16,6 +16,7 @@ import { useToasts } from "react-toast-notifications";
 import put from "../../helpers/put";
 import CopyButton from "./CopyButton";
 import anotherFriend from "../../assets/img/refer-friend-icon.svg";
+import { domain } from "../../constants/constants";
 
 const StudentRegRefer = ({ apiUrl, setModalShow, modalClose }) => {
   const [referID, setReferId] = useState(null);
@@ -48,7 +49,7 @@ const StudentRegRefer = ({ apiUrl, setModalShow, modalClose }) => {
     });
   }, [apiUrl]);
 
-  const url = `https://portal.uapp.uk/studentRegister/${referID}`;
+  const url = `${domain}/studentRegister/${referID}`;
   return (
     <div>
       <h5 className="d-flex justify-content-between px-4 mt-4">

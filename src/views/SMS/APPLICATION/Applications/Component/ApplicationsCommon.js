@@ -831,9 +831,16 @@ const ApplicationsCommon = () => {
       setFinanceDD(res);
     });
     // for common
-    get("CommonApplicationFilterDD/UappId").then((res) => {
-      setCommonUappIdDD(res);
-    });
+    if (universityId) {
+      get(`CommonApplicationFilterDD/UappId/${universityId}`).then((res) => {
+        setCommonUappIdDD(res);
+      });
+    } else {
+      get("CommonApplicationFilterDD/UappId").then((res) => {
+        setCommonUappIdDD(res);
+      });
+    }
+
     get("CommonApplicationFilterDD/University").then((res) => {
       setCommonUniDD(res);
       if (universityId) {
@@ -850,9 +857,15 @@ const ApplicationsCommon = () => {
         setConsultantLabel(result?.name);
       }
     });
-    get("CommonApplicationFilterDD/Student").then((res) => {
-      setCommonStdDD(res);
-    });
+    if (universityId) {
+      get(`CommonApplicationFilterDD/Student/${universityId}`).then((res) => {
+        setCommonStdDD(res);
+      });
+    } else {
+      get("CommonApplicationFilterDD/Student").then((res) => {
+        setCommonStdDD(res);
+      });
+    }
   }, [
     branchId,
     intake,

@@ -79,7 +79,7 @@ const ProviderAddress = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   useEffect(() => {
-    get("UniversityCountryDD/index").then((res) => {
+    get("CountryDD/index").then((res) => {
       setCountry(res);
     });
 
