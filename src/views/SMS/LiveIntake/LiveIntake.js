@@ -62,6 +62,8 @@ const LiveIntake = () => {
   const [intakeCount, setIntakeCount] = useState(0);
   const [courseCount, setCourseCount] = useState(0);
   const [campusCount, setCampusCount] = useState(0);
+  const [deliveryCount, setDeliveryCount] = useState(0);
+  const [recruitmentCount, setRecruitmentCount] = useState(0);
 
   const dataSizeArr = [10, 15, 20, 30, 50, 100, 1000];
   const dataSizeName = dataSizeArr.map((dsn) => ({ label: dsn, value: dsn }));
@@ -114,6 +116,8 @@ const LiveIntake = () => {
         setCourseCount(res?.data?.sumOfTotalCourse);
         setUniCount(res?.data?.totalUniversity);
         setCampusCount(res?.data?.totalCampus);
+        setDeliveryCount(res?.data?.totalDeliverySchedules);
+        setRecruitmentCount(res?.data?.totalRecruitmentTypes);
         setEntity(res?.data?.total);
       });
     }
@@ -244,6 +248,8 @@ const LiveIntake = () => {
         intakeCount={intakeCount}
         courseCount={courseCount}
         campusCount={campusCount}
+        deliveryCount={deliveryCount}
+        recruitmentCount={recruitmentCount}
       />
     </div>
   );

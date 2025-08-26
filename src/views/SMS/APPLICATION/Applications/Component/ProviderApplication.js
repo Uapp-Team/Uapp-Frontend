@@ -723,7 +723,9 @@ const ProviderApplication = ({ currentUser }) => {
     });
 
     if (universityId) {
-      get(`CommonApplicationFilterDD/Student/${universityId}`).then((res) => {
+      get(
+        `CommonApplicationFilterDD/Student?universityId=${universityId}`
+      ).then((res) => {
         setCommonStdDD(res);
       });
     } else {

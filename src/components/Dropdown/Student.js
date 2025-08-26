@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import get from "../../helpers/get";
 import { userTypes } from "../../constants/userTypeConstant";
+import Uget from "../../helpers/Uget";
 
 const Student = ({ data, setData, name, error, setError, action }) => {
   const userType = localStorage.getItem("userType");
@@ -9,7 +10,7 @@ const Student = ({ data, setData, name, error, setError, action }) => {
   const [dataLabel, setDataLabel] = useState("Select Student");
 
   useEffect(() => {
-    get(`SearchFilter/FetchStudents`).then((res) => {
+    get(`SearchFilter/Students`).then((res) => {
       setStudentData([{ id: "0", name: "Select Student" }, ...res]);
     });
   }, []);

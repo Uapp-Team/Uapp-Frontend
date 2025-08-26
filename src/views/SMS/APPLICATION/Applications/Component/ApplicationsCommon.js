@@ -832,9 +832,11 @@ const ApplicationsCommon = () => {
     });
     // for common
     if (universityId) {
-      get(`CommonApplicationFilterDD/UappId/${universityId}`).then((res) => {
-        setCommonUappIdDD(res);
-      });
+      get(`CommonApplicationFilterDD/UappId?universityId=${universityId}`).then(
+        (res) => {
+          setCommonUappIdDD(res);
+        }
+      );
     } else {
       get("CommonApplicationFilterDD/UappId").then((res) => {
         setCommonUappIdDD(res);
@@ -858,7 +860,9 @@ const ApplicationsCommon = () => {
       }
     });
     if (universityId) {
-      get(`CommonApplicationFilterDD/Student/${universityId}`).then((res) => {
+      get(
+        `CommonApplicationFilterDD/Student?universityId=${universityId}`
+      ).then((res) => {
         setCommonStdDD(res);
       });
     } else {

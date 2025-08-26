@@ -45,6 +45,8 @@ const LiveIntakeTable = ({
   intakeCount,
   courseCount,
   campusCount,
+  recruitmentCount,
+  deliveryCount,
 }) => {
   // const [intakeDataList, setIntakeDataList] = useState(liveIntake?.intakeNames);
   const [popoverOpen, setPopoverOpen] = useState("");
@@ -211,10 +213,18 @@ const LiveIntakeTable = ({
                         </th>
                       ) : null}
                       {tableData[5]?.isActive ? (
-                        <th>Recruitment Type</th>
+                        <th>
+                          Recruitment Type{" "}
+                          <span className="count-summery">
+                            {recruitmentCount}
+                          </span>
+                        </th>
                       ) : null}
                       {tableData[6]?.isActive ? (
-                        <th>Delivery Pattern</th>
+                        <th>
+                          Delivery Pattern{" "}
+                          <span className="count-summery">{deliveryCount}</span>
+                        </th>
                       ) : null}
                       {tableData[7]?.isActive ? (
                         <th>

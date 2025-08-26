@@ -461,7 +461,7 @@ function SearchAndApply() {
                 setValue={setStudentId}
                 selectAll={true}
                 all="All Student"
-                url="SearchFilter/FetchStudents"
+                url="SearchFilter/Students"
                 name="studentId"
               />
             </Col>
