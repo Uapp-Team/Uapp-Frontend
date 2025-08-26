@@ -754,9 +754,18 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     // for admission manager
     if (currentUser !== undefined) {
-      get(`CommonApplicationFilterDD/UappId`).then((res) => {
-        setManagerUappIdDD(res);
-      });
+      if (universityId) {
+        get(
+          `CommonApplicationFilterDD/UappId?universityId=${universityId}`
+        ).then((res) => {
+          setManagerUappIdDD(res);
+        });
+      } else {
+        get(`CommonApplicationFilterDD/UappId`).then((res) => {
+          setManagerUappIdDD(res);
+        });
+      }
+
       if (universityId) {
         get(
           `CommonApplicationFilterDD/Student?universityId=${universityId}`
