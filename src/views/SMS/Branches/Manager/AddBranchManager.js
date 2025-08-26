@@ -71,7 +71,15 @@ const AddBranchManager = () => {
 
   useEffect(() => {
     fetchCardData();
+    if(!isEdit)
+      setShowForm(true);
   }, []);
+
+  useEffect(() => {
+    fetchCardData();
+    if(isEdit)
+      setShowForm(false);
+  }, [isEdit]);
 
   useEffect(() => {
     if(branchManagerId!== 0 && branchManagerId!== undefined)

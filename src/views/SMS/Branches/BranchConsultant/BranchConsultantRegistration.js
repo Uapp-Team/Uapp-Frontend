@@ -63,8 +63,16 @@ const BranchConsultantRegistration = () => {
 
   useEffect(() => {
     fetchCardData();
+    if(!isEdit)
+      setShowForm(true);
   }, []);
 
+ useEffect(() => {
+    fetchCardData();
+    if(isEdit)
+      setShowForm(false);
+  }, [isEdit]);
+  
   useEffect(() => {
     if(consultantRegisterId!== 0 && consultantRegisterId!== undefined)
     {
