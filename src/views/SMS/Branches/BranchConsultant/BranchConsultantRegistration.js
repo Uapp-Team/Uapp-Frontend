@@ -59,6 +59,7 @@ const BranchConsultantRegistration = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  // const [shouldReRender, setShouldReRender] = useState(false);
 
   useEffect(() => {
     fetchCardData();
@@ -73,11 +74,8 @@ const BranchConsultantRegistration = () => {
 
   useEffect(() => {
     fetchFormData();
-    console.log("came in scs");
-    
   }, [success, branchId]);
 
-  
  // Edit Admin
   const handleEdit = (data) => {
     setIsEdit(true);
@@ -102,9 +100,7 @@ const BranchConsultantRegistration = () => {
       setlastName(res?.lastName);
       setfirstName(res?.firstName);
       setphoneNumber(res?.phoneNumber);
-      console.log("Res = ");
-      
-      console.table(res);
+     
       setTitleValue(res?.nameTittleId == null ? 0 : res?.nameTittleId);
       setConsultantRegisterId(res?.id);
       res?.isAcceptedHome && setHomeAccept(res?.isAcceptedHome);
@@ -177,12 +173,8 @@ const BranchConsultantRegistration = () => {
     }
   };
 
- 
-
   const validateRegisterForm = () => {
     let isFormValid = true;
-
-   
 
     if (titleValue === 0) {
       isFormValid = false;
@@ -236,7 +228,7 @@ const BranchConsultantRegistration = () => {
     return isFormValid;
   };
 
-  console.log(homeAccept, ukAccept, intAccept);
+  // console.log(homeAccept, ukAccept, intAccept);
 
   // on submit form
   const handleSubmit = (event) => {

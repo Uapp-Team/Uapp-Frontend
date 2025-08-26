@@ -12,7 +12,7 @@ const AssignBranchConsultantModal = ({
   branchId,
   setModalOpen,
   success,
-  setSuccess,
+  setSuccess
 }) => {
   const { addToast } = useToasts();
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -49,25 +49,9 @@ const AssignBranchConsultantModal = ({
         autoDismiss: true,
       });
       setModalOpen(false);
-      setSuccess(true);
+      setSuccess((prev)=>!prev);
     });
-
-    // post(`SalesManager/AssignSalesTeamLeadersByQuery`, subdata).then((res) => {
-    //   addToast(res?.data?.message, {
-    //     appearance: "success",
-    //     autoDismiss: true,
-    //   });
-    //   setModalOpen(false);
-    //   setSuccess(!success);
-    // });
   };
-
-//   const handleKeyDown = (event) => {
-//     if (event.key === "Enter") {
-//       setCurrentPage(1);
-//       setCallApi((prev) => !prev);
-//     }
-//   };
 
   return (
     <>
