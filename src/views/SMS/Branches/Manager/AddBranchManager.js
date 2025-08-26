@@ -364,14 +364,20 @@ const AddBranchManager = () => {
     {
        if(validateRegisterForm())
         {
+          setButtonStatus(true);
+          setProgress(true);
           post(`BranchManager/Create`, subdata).then((res) => {
             if (res?.status === 200 && res?.data?.isSuccess === true) {
               addToast(res?.data?.message, {
                 appearance: "success",
                 autoDismiss: true,
               });
+              setButtonStatus(false);
+              setProgress(false);
+              history.push(`/addBranchConsultant/${branchId}`);
             }
           });
+          
         }
     }
   };
