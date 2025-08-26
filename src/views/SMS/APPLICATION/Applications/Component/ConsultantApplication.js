@@ -606,13 +606,30 @@ const ConsultantApplication = ({ currentUser }) => {
 
     // for consultant
     if (currentUser !== undefined) {
-      get(`CommonApplicationFilterDD/UappId`).then((res) => {
-        setConsultantUappIdDD(res);
-      });
+      if (intake) {
+        get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then(
+          (res) => {
+            setConsultantUappIdDD(res);
+          }
+        );
+      } else {
+        get(`CommonApplicationFilterDD/UappId`).then((res) => {
+          setConsultantUappIdDD(res);
+        });
+      }
 
-      get(`CommonApplicationFilterDD/Student`).then((res) => {
-        setConsultantStdDD(res);
-      });
+      if (intake) {
+        get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+          (res) => {
+            setConsultantStdDD(res);
+          }
+        );
+      } else {
+        get("CommonApplicationFilterDD/Student").then((res) => {
+          setConsultantStdDD(res);
+        });
+      }
+
       get(`CommonApplicationFilterDD/University`).then((res) => {
         setConsultantUniDD(res);
         if (universityId) {

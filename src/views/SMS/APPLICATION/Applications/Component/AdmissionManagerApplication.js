@@ -760,6 +760,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         ).then((res) => {
           setManagerUappIdDD(res);
         });
+      } else if (intake) {
+        get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then(
+          (res) => {
+            setManagerUappIdDD(res);
+          }
+        );
       } else {
         get(`CommonApplicationFilterDD/UappId`).then((res) => {
           setManagerUappIdDD(res);
@@ -772,6 +778,12 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         ).then((res) => {
           setManagerStdDD(res);
         });
+      } else if (intake) {
+        get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+          (res) => {
+            setManagerStdDD(res);
+          }
+        );
       } else {
         get("CommonApplicationFilterDD/Student").then((res) => {
           setManagerStdDD(res);

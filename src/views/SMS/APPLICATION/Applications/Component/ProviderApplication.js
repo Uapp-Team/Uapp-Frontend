@@ -718,9 +718,22 @@ const ProviderApplication = ({ currentUser }) => {
     });
 
     // for provider admin
-    get(`CommonApplicationFilterDD/UappId`).then((res) => {
-      setCommonUappIdDD(res);
-    });
+
+    if (universityId) {
+      get(`CommonApplicationFilterDD/UappId?universityId=${universityId}`).then(
+        (res) => {
+          setCommonUappIdDD(res);
+        }
+      );
+    } else if (intake) {
+      get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then((res) => {
+        setCommonUappIdDD(res);
+      });
+    } else {
+      get(`CommonApplicationFilterDD/UappId`).then((res) => {
+        setCommonUappIdDD(res);
+      });
+    }
 
     if (universityId) {
       get(
@@ -728,6 +741,12 @@ const ProviderApplication = ({ currentUser }) => {
       ).then((res) => {
         setCommonStdDD(res);
       });
+    } else if (intake) {
+      get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+        (res) => {
+          setCommonStdDD(res);
+        }
+      );
     } else {
       get("CommonApplicationFilterDD/Student").then((res) => {
         setCommonStdDD(res);
