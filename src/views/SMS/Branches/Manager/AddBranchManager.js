@@ -26,6 +26,8 @@ import post from "../../../../helpers/post";
 import put from "../../../../helpers/put";
 import { Image } from "antd";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import BranchManagerDetailsCard from "./BranchManagerDetailsCard";
+import Uremove from "../../../../helpers/Uremove";
 
 const AddBranchManager = () => {
   const { branchId } = useParams();
@@ -39,11 +41,8 @@ const AddBranchManager = () => {
   const [imageError, setImageError] = useState(false);
 
   const [title, setTitle] = useState([]);
-  // const [titleLabel, setTitleLabel] = useState("Select Title");
   const [titleValue, setTitleValue] = useState(0);
   const [titleError, setTitleError] = useState(false);
-
-  // const [emailError, setEmailError] = useState(true);
 
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -63,24 +62,61 @@ const AddBranchManager = () => {
   const { addToast } = useToasts();
   const [emailExistError, setEmailExistError] = useState(true);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const [branchManagerDetailsData, setBranchManagerDetailsData] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteData, setDeleteData] = useState({});
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    fetchCardData();
+    if(!isEdit)
+      setShowForm(true);
+  }, []);
+
+  useEffect(() => {
+    if(isEdit)
+    {
+      fetchCardData();
+      setShowForm(false);
+    }
+    else
+    {
+      setShowForm(true);
+    }
+  }, [isEdit]);
+
+  useEffect(() => {
+    if(branchManagerId!== 0 && branchManagerId!== undefined)
+    {
+        setIsEdit(true);
+    }
+  }, [branchManagerId]);
+
+  const fetchCardData=()=>{
     get("NameTittle/GetAll").then((res) => {
       setTitle(res);
     });
-
     get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
       setBranchManager(res);
+      setBranchManagerId(res?.id);
+    });
+  };
+  const fetchFormData=()=>{
+    get(`BranchManager/GetbyBranch/${branchId}`).then((res) => {
+      
       setTitleValue(res?.nameTittle?.id == null ? 0 : res?.nameTittle?.id);
       setfirstName(res?.firstName);
       setlastName(res?.lastName);
       setemail(res?.email);
       setphoneNumber(res?.phoneNumber);
-      setBranchManagerId(res?.id);
-      console.log(res, "sakib");
     });
-  }, []);
-
+  }
+  const toggleDanger = (p) => {
+    setDeleteData(p);
+    setDeleteModal(true);
+  };
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setfirstName(data);
@@ -152,6 +188,28 @@ const AddBranchManager = () => {
       reader.onerror = (error) => reject(error);
     });
   }
+  // Edit Admin
+  const handleEdit = (data) => {
+    setIsEdit(true);
+    setShowForm(true);
+    fetchFormData();
+  };
+  // Delete Admin
+  const handleDelete = () => {
+    setButtonStatus(true);
+    setProgress(true);
+    Uremove(`BranchManager/Delete/${deleteData?.id}`).then((res) => {
+      setProgress(false);
+      setButtonStatus(false);
+      addToast(res?.data?.title, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      setDeleteModal(false);
+      setSuccess(!success);
+    });
+  };
+
 
   const handleCancel = () => {
     setPreviewVisible(false);
@@ -237,13 +295,6 @@ const AddBranchManager = () => {
       setphoneNumberError("Phone number required minimum 9 digit");
     }
 
-    // if (branchManagerId === 0) {
-    //   if (FileList.length < 1) {
-    //     isFormValid = false;
-    //     setImageError(true);
-    //   }
-    // }
-
     if (branchManager?.managerImageMedia == null && FileList.length < 1) {
       isFormValid = false;
       setImageError(true);
@@ -251,14 +302,26 @@ const AddBranchManager = () => {
 
     return isFormValid;
   };
-
+  const addNewData = () => {
+    setShowForm(true);
+    ResetFormField();
+    setIsEdit(false);
+  };
+  const ResetFormField=()=>{
+    setfirstName("");  
+    setlastName("");
+    setemail("");
+    setphoneNumber("");  
+    setBranchManagerId(0);
+    setBranchManager(null);
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const subdata = new FormData(event.target);
     subdata.append("phoneNumber", phoneNumber);
     subdata.append("managerImage", FileList[0]?.originFileObj);
-
+    if(isEdit)
+    {
     if (validateRegisterForm()) {
       if (branchManager?.branchId) {
         setButtonStatus(true);
@@ -283,7 +346,8 @@ const AddBranchManager = () => {
               appearance: "success",
               autoDismiss: true,
             });
-
+            setButtonStatus(true);
+            setProgress(true);
             history.push(`/addBranchConsultant/${branchId}`);
           } else if (res?.status === 200 && res?.data?.isSuccess === false)
             addToast(res?.data?.message, {
@@ -294,6 +358,27 @@ const AddBranchManager = () => {
           setProgress(false);
         });
       }
+      }
+    }
+    else
+    {
+       if(validateRegisterForm())
+        {
+          setButtonStatus(true);
+          setProgress(true);
+          post(`BranchManager/Create`, subdata).then((res) => {
+            if (res?.status === 200 && res?.data?.isSuccess === true) {
+              addToast(res?.data?.message, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+              setButtonStatus(false);
+              setProgress(false);
+              history.push(`/addBranchConsultant/${branchId}`);
+            }
+          });
+          
+        }
     }
   };
 
@@ -304,7 +389,36 @@ const AddBranchManager = () => {
           activeTab={activetab}
           branchId={branchId}
         />
+       {(isEdit)&&
         <Card>
+        <CardBody>
+           
+              <div className="row mx-2 mb-3">
+              <div className="col-12 border p-2 rounded" key={branchManager?.id}>
+                <BranchManagerDetailsCard
+                  details={branchManager}
+                  handleEdit={handleEdit}
+                  progress={progress}
+                  toggleDanger={toggleDanger}
+                  deleteModal={deleteModal}
+                  setDeleteModal={setDeleteModal}
+                  handleDelete={handleDelete}
+                />
+              </div>
+            </div>
+                <button
+                  id="branch_admin_details"
+                  className="add-button mb-4"
+                  onClick={addNewData}
+                >
+                  Add New Admin 
+                </button>
+        </CardBody>
+      </Card>
+      }
+  {(showForm)&&
+  <div id="adminEditForm">
+  <Card>
           <CardBody>
             <TabContent activeTab={activetab}>
               <TabPane tabId="2">
@@ -442,8 +556,9 @@ const AddBranchManager = () => {
                         </FormGroup>
                       )}
 
-                      {branchManagerId === 0 ||
-                      branchManagerId === undefined ? (
+                      { branchManagerId === 0 ||
+                      branchManagerId === undefined ? 
+                      (
                         <FormGroup>
                           <span>
                             Password <span className="text-danger">*</span>{" "}
@@ -524,8 +639,6 @@ const AddBranchManager = () => {
                                     style={{ marginTop: 8 }}
                                   >
                                     <Icon.Upload />
-                                    {/* <br />
-                                  <span>Upload Here</span> */}
                                   </div>
                                 ) : (
                                   ""
@@ -561,46 +674,12 @@ const AddBranchManager = () => {
                             centered
                           </span>
                         </Col>
-                        {/* 
-                        <Upload
-                          listType="picture-card"
-                          multiple={false}
-                          fileList={FileList}
-                          onPreview={handlePreview}
-                          onChange={handleChange}
-                          beforeUpload={(file) => {
-                            return false;
-                          }}
-                        >
-                          {FileList.length < 1 ? (
-                            <div
-                              className="text-danger"
-                              style={{ marginTop: 8 }}
-                            >
-                              <Icon.Upload />
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                        </Upload>
-                        <Modal
-                          open={previewVisible}
-                          title={previewTitle}
-                          footer={null}
-                          onCancel={handleCancel}
-                        >
-                          <img
-                            alt="example"
-                            style={{ width: "100%" }}
-                            src={previewImage}
-                          />
-                        </Modal> */}
                       </FormGroup>
 
                       {permissions?.includes(permissionList.Edit_Branch) ? (
                         <FormGroup className="text-right">
                           <SaveButton
-                            text="submit"
+                            text="Submit"
                             progress={progress}
                             buttonStatus={buttonStatus}
                           />
@@ -613,7 +692,10 @@ const AddBranchManager = () => {
             </TabContent>
           </CardBody>
         </Card>
+</div>
+}
       </div>
+      
     </div>
   );
 };

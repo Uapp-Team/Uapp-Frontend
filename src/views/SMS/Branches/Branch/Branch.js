@@ -71,7 +71,7 @@ const Branch = () => {
     });
 
     get(`Branch/Get/${branchId}`).then((res) => {
-      console.log("branch information", res);
+      // console.log("branch information", res);
       setname(res?.name);
       setaddressLine(res?.addressLine);
       setemail(res?.email);
@@ -299,7 +299,7 @@ const Branch = () => {
     // for (var value of subdata) {
     // }
     if (validateRegisterForm()) {
-      console.log(branchId);
+      // console.log(branchId);
       if (branchId) {
         console.log("object");
         setButtoStatus(true);

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 // import Select from "react-select";
 import { useToasts } from "react-toast-notifications";
-
 import {
   Card,
   CardBody,
@@ -13,6 +12,9 @@ import {
   Input,
   TabContent,
   TabPane,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import get from "../../../../helpers/get";
 import post from "../../../../helpers/post";
@@ -22,19 +24,13 @@ import "react-phone-input-2/lib/style.css";
 import BranchNavbar from "../Branch/BranchNavbar";
 import put from "../../../../helpers/put";
 import { permissionList } from "../../../../constants/AuthorizationConstant";
+import ButtonForFunction from "../../Components/ButtonForFunction";
+import AssignBranchConsultantModal from "./AssignBranchConsultantModal";
+import BranchConsultantDetailsCard from "../BranchConsultant/BranchConsultantDetailsCard";
 
 const BranchConsultantRegistration = () => {
   const [titleValue, setTitleValue] = useState(0);
   const [nameTitle, setNameTitle] = useState([]);
-  // const [consParent, setConsParent] = useState([]);
-  // const [consType, setConsType] = useState([]);
-  // const [parentLabel, setParentLabel] = useState("Select Parent Consultant");
-  // const [parentValue, setParentValue] = useState(0);
-  // const [typeLabel, setTypeLabel] = useState("Select Consultant Type");
-  // const [typeValue, setTypeValue] = useState(0);
-
-  // const [consultantError, setConsultantError] = useState(false);
-  // const [parentError, setParentError] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -60,39 +56,66 @@ const BranchConsultantRegistration = () => {
   const [intAccept, setIntAccept] = useState(false);
   const [acceptError, setAcceptError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    get("NameTittleDD/index").then((res) => {
-      setNameTitle(res);
-    });
+    fetchCardData();
+    if(!isEdit)
+      setShowForm(true);
   }, []);
 
+ useEffect(() => {
+    fetchCardData();
+    if(isEdit)
+      setShowForm(false);
+  }, [isEdit]);
+
   useEffect(() => {
+    if(consultantRegisterId!== 0 && consultantRegisterId!== undefined)
+    {
+        setIsEdit(true);
+    }
+  }, [consultantRegisterId]);
+
+  useEffect(() => {
+    fetchFormData();
+  }, [success, branchId]);
+
+ // Edit Admin
+  const handleEdit = (data) => {
+    setIsEdit(true);
+    setShowForm(true);
+    fetchFormData();
+  };
+
+  const fetchCardData=()=>{
+    get("NameTittle/GetAll").then((res) => {
+      setNameTitle(res);
+    });
+    get(`BranchConsultant/DefaultConsultant/${branchId}`).then((res) => {
+      setBranchConsultant(res);
+      setConsultantRegisterId(res?.id);
+    });
+  };
+
+  const fetchFormData=()=>{
     get(`BranchConsultant/DefaultConsultant/${branchId}`).then((res) => {
       setBranchConsultant(res);
       setemail(res?.email);
       setlastName(res?.lastName);
       setfirstName(res?.firstName);
       setphoneNumber(res?.phoneNumber);
+     
       setTitleValue(res?.nameTittleId == null ? 0 : res?.nameTittleId);
       setConsultantRegisterId(res?.id);
       res?.isAcceptedHome && setHomeAccept(res?.isAcceptedHome);
       res?.isAcceptedEU_UK && setUkAccept(res?.isAcceptedEU_UK);
       res?.isAcceptedInternational &&
         setIntAccept(res?.isAcceptedInternational);
-      console.log(res, "branch consultant");
     });
-  }, [success, branchId]);
-
-  // const consParentMenu = consParent?.map((consParentOptions) => ({
-  //   label: consParentOptions?.name,
-  //   value: consParentOptions?.id,
-  // }));
-  // const consTypeMenu = consType?.map((consTypeOptions) => ({
-  //   label: consTypeOptions?.name,
-  //   value: consTypeOptions?.id,
-  // }));
-
+  }
   const handleFirstName = (e) => {
     let data = e.target.value.trimStart();
     setfirstName(data);
@@ -142,7 +165,10 @@ const BranchConsultantRegistration = () => {
       setpasswordError("");
     }
   };
-
+ const closeModal = () => {
+    setModalOpen(false);
+    fetchFormData();
+  };
   const handlePhoneNumber = (value) => {
     setphoneNumber(value);
     if (value === "") {
@@ -154,29 +180,8 @@ const BranchConsultantRegistration = () => {
     }
   };
 
-  // const selectParentCons = (label, value) => {
-  //   setParentError(false);
-  //   setParentLabel(label);
-  //   setParentValue(value);
-  // };
-
-  // const selectConsType = (label, value) => {
-  //   setConsultantError(false);
-  //   setTypeLabel(label);
-  //   setTypeValue(value);
-  // };
-
   const validateRegisterForm = () => {
     let isFormValid = true;
-
-    // if (typeValue === 0) {
-    //   isFormValid = false;
-    //   setConsultantError(true);
-    // }
-    // if (parentValue === 0) {
-    //   isFormValid = false;
-    //   setParentError(true);
-    // }
 
     if (titleValue === 0) {
       isFormValid = false;
@@ -208,24 +213,6 @@ const BranchConsultantRegistration = () => {
       setEmailError("Email is not Valid");
     }
 
-    // if (emailExistError === false) {
-    //   isFormValid = false;
-    //   setEmailExistError(emailExistError);
-    // }
-
-    // if (!email) {
-    //   isFormValid = false;
-    //   setEmailError("Email is required");
-    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-    //   isFormValid = false;
-    //   setEmailError("Email is not Valid");
-    // }
-
-    // if (emailExistError === false) {
-    //   isFormValid = false;
-    //   setEmailExistError(emailExistError);
-    // }
-
     if (!phoneNumber) {
       isFormValid = false;
       setphoneNumberError("Phone Number required");
@@ -248,7 +235,7 @@ const BranchConsultantRegistration = () => {
     return isFormValid;
   };
 
-  console.log(homeAccept, ukAccept, intAccept);
+  // console.log(homeAccept, ukAccept, intAccept);
 
   // on submit form
   const handleSubmit = (event) => {
@@ -260,7 +247,6 @@ const BranchConsultantRegistration = () => {
     subdata.append("isAcceptedEU_UK", ukAccept);
     subdata.append("isAcceptedInternational", intAccept);
     if (validateRegisterForm()) {
-      console.log("first");
       if (branchConsultant?.branchId) {
         setButtonStatus(true);
         setProgress(true);
@@ -297,13 +283,35 @@ const BranchConsultantRegistration = () => {
     }
   };
   return (
-    <div>
+    <>
       <BranchNavbar activeTab={activetab} branchId={branchId} />
-
+        {(isEdit) &&
+                <>
+                <BranchConsultantDetailsCard
+                  details={branchConsultant}
+                  handleEdit={handleEdit}
+                  progress={progress}
+                  success={success}
+                />
+              
+        
+               <button
+                  id="branch_admin_details"
+                  className="add-button mb-4"
+                  onClick={() => setModalOpen(true)}
+                >
+                  Assign New Consultant 
+               </button>
+               </>
+        }
+          <br></br>
+      <div id="consultantEditForm">
+      {(showForm)&&
       <Card>
         <CardBody>
           <TabContent activeTab={activetab}>
             <TabPane tabId="3">
+              
               <p className="section-title">Consultant Information</p>
               <Form onSubmit={handleSubmit} className="mt-4">
                 <input
@@ -325,46 +333,6 @@ const BranchConsultantRegistration = () => {
                 )}
                 <Row>
                   <Col lg="6" md="8">
-                    {/* <FormGroup>
-                  <span>
-                    Consultant Type <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={consTypeMenu}
-                    value={{ label: typeLabel, value: typeValue }}
-                    onChange={(opt) => selectConsType(opt.label, opt.value)}
-                    name="consultantTypeId"
-                    id="consultantTypeId"
-                  />
-
-                  {consultantError && (
-                    <span className="text-danger">
-                      Consultant type is required
-                    </span>
-                  )}
-                </FormGroup> */}
-
-                    {/* <FormGroup>
-                  <span>
-                    Parent Consultant <span className="text-danger">*</span>{" "}
-                  </span>
-
-                  <Select
-                    options={consParentMenu}
-                    value={{ label: parentLabel, value: parentValue }}
-                    onChange={(opt) => selectParentCons(opt.label, opt.value)}
-                    name="parentConsultantId"
-                    id="parentConsultantId"
-                  />
-
-                  {parentError && (
-                    <span className="text-danger">
-                      Parent consultant is required
-                    </span>
-                  )}
-                </FormGroup> */}
-
                     <FormGroup>
                       <span>
                         Title <span className="text-danger">*</span>{" "}
@@ -570,7 +538,7 @@ const BranchConsultantRegistration = () => {
                     {permissions?.includes(permissionList.Edit_Branch) ? (
                       <FormGroup className="text-right">
                         <SaveButton
-                          text="submit"
+                          text="Submit"
                           progress={progress}
                           buttonStatus={buttonStatus}
                         />
@@ -578,12 +546,37 @@ const BranchConsultantRegistration = () => {
                     ) : null}
                   </Col>
                 </Row>
+                
+                
               </Form>
             </TabPane>
           </TabContent>
         </CardBody>
       </Card>
+      }
+      <div>
+          <Modal
+            isOpen={modalOpen}
+            toggle={closeModal}
+            className="uapp-modal2"
+            size="lg"
+          >
+            <ModalHeader>
+              <span></span>
+            </ModalHeader>
+            <ModalBody>
+              <AssignBranchConsultantModal
+                branchId={branchId}
+                setModalOpen={setModalOpen}
+                success={success}
+                setSuccess={setSuccess}
+              />
+            </ModalBody>
+          </Modal>
+        </div>
     </div>
+    </>              
+    
   );
 };
 

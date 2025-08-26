@@ -206,10 +206,7 @@ const Index = () => {
               </ModalBody>
             </Modal>
           </div>
-
-          {/* {loading ? (
-            <h2 className="text-center">Loading...</h2>
-          ) : ( */}
+          
           <div className="table-responsive fixedhead" ref={componentRef}>
             <Table id="table-to-xls" className="table-sm table-bordered">
               <thead className="thead-uapp-bg">
