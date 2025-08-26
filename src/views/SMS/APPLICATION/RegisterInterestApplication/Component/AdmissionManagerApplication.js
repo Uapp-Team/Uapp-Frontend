@@ -714,7 +714,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/InterestUappId`).then((res) => {
         setManagerUappIdDD(res);
       });
-      get(`CommonApplicationFilterDD/Student`).then((res) => {
+      get(`CommonApplicationFilterDD/InterestStudent`).then((res) => {
         setManagerStdDD(res);
       });
       get(`CommonApplicationFilterDD/Consultant`).then((res) => {
