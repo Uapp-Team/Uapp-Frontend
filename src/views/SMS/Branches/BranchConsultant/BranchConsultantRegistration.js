@@ -59,7 +59,6 @@ const BranchConsultantRegistration = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  // const [shouldReRender, setShouldReRender] = useState(false);
 
   useEffect(() => {
     fetchCardData();
@@ -72,7 +71,7 @@ const BranchConsultantRegistration = () => {
     if(isEdit)
       setShowForm(false);
   }, [isEdit]);
-  
+
   useEffect(() => {
     if(consultantRegisterId!== 0 && consultantRegisterId!== undefined)
     {
@@ -287,6 +286,7 @@ const BranchConsultantRegistration = () => {
     <>
       <BranchNavbar activeTab={activetab} branchId={branchId} />
         {(isEdit) &&
+                <>
                 <BranchConsultantDetailsCard
                   details={branchConsultant}
                   handleEdit={handleEdit}
@@ -294,7 +294,7 @@ const BranchConsultantRegistration = () => {
                   success={success}
                 />
               
-        }
+        
                <button
                   id="branch_admin_details"
                   className="add-button mb-4"
@@ -302,6 +302,8 @@ const BranchConsultantRegistration = () => {
                 >
                   Assign New Consultant 
                </button>
+               </>
+        }
           <br></br>
       <div id="consultantEditForm">
       {(showForm)&&

@@ -76,9 +76,15 @@ const AddBranchManager = () => {
   }, []);
 
   useEffect(() => {
-    fetchCardData();
     if(isEdit)
+    {
+      fetchCardData();
       setShowForm(false);
+    }
+    else
+    {
+      setShowForm(true);
+    }
   }, [isEdit]);
 
   useEffect(() => {
