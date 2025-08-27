@@ -5,6 +5,7 @@ const ConditionForText = ({
   status,
   selector,
   admId,
+  salesTeamLeaderId,
   adoId,
   branchId,
   branchLabel,
@@ -354,7 +355,9 @@ const ConditionForText = ({
         ) : (
           ""
         )}
-        {SalesTeamLeaderValue && SalesTeamLeaderValue !== 0 ? (
+        {!salesTeamLeaderId &&
+        SalesTeamLeaderValue &&
+        SalesTeamLeaderValue !== 0 ? (
           <TagButton
             label={SalesTeamLeaderLabel}
             setValue={() => setSalesTeamLeaderValue(0)}

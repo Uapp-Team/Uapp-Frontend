@@ -57,7 +57,9 @@ const ApplicationsCommon = () => {
     providerId,
     companionId,
     courseId,
+    salesTeamLeaderId,
   } = useParams();
+
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -378,9 +380,17 @@ const ApplicationsCommon = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [salesTeamLeader, setSalesTeamLeader] = useState([]);
   const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
-    "Select Sales Team Leader"
+    application?.SalesTeamLeaderLabel
+      ? application?.SalesTeamLeaderLabel
+      : "Select Sales Team Leader"
   );
-  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(
+    salesTeamLeaderId
+      ? salesTeamLeaderId
+      : application?.SalesTeamLeaderValue
+      ? application?.SalesTeamLeaderValue
+      : 0
+  );
 
   // table column data get from localstorage or initial set
   useEffect(() => {
@@ -451,6 +461,10 @@ const ApplicationsCommon = () => {
           !adoId && admissionOfficerValue && admissionOfficerValue,
         branchLabel: !branchId && branchLabel && branchLabel,
         branchValue: !branchId && branchValue && branchValue,
+        SalesTeamLeaderLabel:
+          !salesTeamLeaderId && SalesTeamLeaderLabel && SalesTeamLeaderLabel,
+        SalesTeamLeaderValue:
+          !salesTeamLeaderId && SalesTeamLeaderValue && SalesTeamLeaderValue,
         educationLevelLabel: educationLevelLabel && educationLevelLabel,
         educationLevelValue: educationLevelValue && educationLevelValue,
         departmentLabel: departmentLabel && departmentLabel,
@@ -531,6 +545,9 @@ const ApplicationsCommon = () => {
     educationLevelLabel,
     departmentValue,
     departmentLabel,
+    SalesTeamLeaderValue,
+    SalesTeamLeaderLabel,
+    salesTeamLeaderId,
   ]);
 
   // for all dropdown
@@ -899,8 +916,14 @@ const ApplicationsCommon = () => {
   useEffect(() => {
     get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
       setSalesTeamLeader(res);
+      if (salesTeamLeaderId) {
+        const result = res?.find(
+          (ans) => ans?.id.toString() === salesTeamLeaderId
+        );
+        setSalesTeamLeaderLabel(result?.name);
+      }
     });
-  }, [branchValue]);
+  }, [branchValue, salesTeamLeaderId]);
 
   useEffect(() => {
     get(`AdmissionManagerDD/Index/${proValue}`).then((res) => {
@@ -1112,8 +1135,8 @@ const ApplicationsCommon = () => {
     !affiliateId && setAffiliateValue(0);
     !companionId && setCompanionLabel("Companion");
     !companionId && setCompanionValue(0);
-    setSalesTeamLeaderLabel("Select Sales Team Leader");
-    setSalesTeamLeaderValue(0);
+    !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
+    !salesTeamLeaderId && setSalesTeamLeaderValue(0);
     setEducationLevelLabel("Select Education Level");
     setEducationLevelValue(0);
     setDepartmentLabel("Select Department");
@@ -1528,7 +1551,10 @@ const ApplicationsCommon = () => {
                     isDisabled={companionId ? true : false}
                   />
                 </Col>
-                {userType === userTypes?.SalesManager ? (
+                {userType === userTypes?.SalesManager ||
+                userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.BranchAdmin ||
+                userType === userTypes?.Admin ? (
                   <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                     <Select
                       options={consSalesTeamLeaderMenu}
@@ -1542,6 +1568,7 @@ const ApplicationsCommon = () => {
                       name="salesTeamLeaderId"
                       id="salesTeamLeaderId"
                       placeholder="Sales Team Leader"
+                      isDisabled={salesTeamLeaderId ? true : false}
                     />
                   </Col>
                 ) : null}
@@ -1599,6 +1626,7 @@ const ApplicationsCommon = () => {
                   selector={selector}
                   admId={admId}
                   adoId={adoId}
+                  salesTeamLeaderId={salesTeamLeaderId}
                   branchId={branchId}
                   branchLabel={branchLabel}
                   setBranchLabel={setBranchLabel}
@@ -1741,7 +1769,7 @@ const ApplicationsCommon = () => {
                   (!affiliateId && affiliateValue !== 0) ||
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
-                  SalesTeamLeaderValue !== 0 ||
+                  (!salesTeamLeaderId && SalesTeamLeaderValue !== 0) ||
                   educationLevelValue !== 0 ||
                   departmentValue !== 0 ||
                   percentageValue !== 0 ||

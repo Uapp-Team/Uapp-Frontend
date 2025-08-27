@@ -9,6 +9,7 @@ import { AdminUsers } from "../../../../../components/core/User";
 
 const SearchAndClear = ({
   branchId,
+  salesTeamLeaderId,
   branch,
   branchLabel,
   setBranchLabel,
@@ -95,6 +96,7 @@ const SearchAndClear = ({
                   }
                   name="salesTeamLeaderId"
                   id="salesTeamLeaderId"
+                  isDisabled={salesTeamLeaderId ? true : false}
                 />
               </Col>
             ) : null}
@@ -176,7 +178,9 @@ const SearchAndClear = ({
                   statusValue !== 0
                     ? ""
                     : ""}
-                  {SalesTeamLeaderValue !== 0 ? (
+                  {!salesTeamLeaderId &&
+                  SalesTeamLeaderValue &&
+                  SalesTeamLeaderValue !== 0 ? (
                     <TagButton
                       label={SalesTeamLeaderLabel}
                       setValue={() => setSalesTeamLeaderValue(0)}
@@ -237,7 +241,7 @@ const SearchAndClear = ({
                   )}
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
-                  {SalesTeamLeaderValue !== 0 ||
+                  {(!salesTeamLeaderId && SalesTeamLeaderValue !== 0) ||
                   studentTypeValue !== 0 ||
                   consultantValue !== 0 ||
                   (!branchId && branchValue !== 0) ||

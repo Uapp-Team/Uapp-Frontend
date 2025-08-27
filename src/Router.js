@@ -4290,6 +4290,16 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
+                    path="/applicationsFromSalesTeamLeader/:salesTeamLeaderId/:intake?"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
                     path="/applicationsFromAssociate/:consultantId/:intake?"
                     component={
                       permissions?.includes(
@@ -4802,6 +4812,14 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     path="/studentList"
+                    component={
+                      permissions?.includes(permissionList?.View_Student_list)
+                        ? StudentList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/sales-team-studentList/:salesTeamLeaderId"
                     component={
                       permissions?.includes(permissionList?.View_Student_list)
                         ? StudentList
