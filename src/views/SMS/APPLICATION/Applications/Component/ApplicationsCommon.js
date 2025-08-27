@@ -858,6 +858,12 @@ const ApplicationsCommon = () => {
       get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then((res) => {
         setCommonUappIdDD(res);
       });
+    } else if (companionId) {
+      get(`CommonApplicationFilterDD/UappId?referrerId=${companionId}`).then(
+        (res) => {
+          setCommonUappIdDD(res);
+        }
+      );
     } else {
       get("CommonApplicationFilterDD/UappId").then((res) => {
         setCommonUappIdDD(res);
@@ -888,6 +894,12 @@ const ApplicationsCommon = () => {
       });
     } else if (intake) {
       get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+        (res) => {
+          setCommonStdDD(res);
+        }
+      );
+    } else if (companionId) {
+      get(`CommonApplicationFilterDD/Student?referrerId=${companionId}`).then(
         (res) => {
           setCommonStdDD(res);
         }
