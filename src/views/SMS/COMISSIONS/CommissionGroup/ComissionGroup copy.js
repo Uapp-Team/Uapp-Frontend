@@ -79,7 +79,6 @@ const ComissionGroup = () => {
     setData(data);
     setEdit(true);
     setName(data?.name);
-
     setOpenModal(true);
   };
 
@@ -113,76 +112,60 @@ const ComissionGroup = () => {
     }
   };
 
-  const validateRegisterForm = () => {
-    let isFormValid = true;
-
-    if (
-      userType === userTypes?.SystemAdmin &&
-      userType === userTypes?.Admin &&
-      branchValue === 0
-    ) {
-      isFormValid = false;
-      setBranchError(true);
-    }
-    if (!name) {
-      isFormValid = false;
-      setNameError("Name is required");
-    }
-
-    return isFormValid;
-  };
-
   const submitModalForm = (event) => {
     event.preventDefault();
 
     const subData = new FormData(event.target);
-    var formIsValid = validateRegisterForm();
-
-    if (formIsValid === true) {
-      if (edit) {
-        setButtonStatus(true);
-        setProgress(true);
-        put(`CommissionGroup/Update`, subData).then((res) => {
-          setProgress(false);
-          setButtonStatus(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setEdit(false);
-            setData({});
-            setOpenModal(false);
-            setSuccess(!success);
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
-      } else {
-        setButtonStatus(true);
-        setProgress(true);
-        post(`CommissionGroup/Create`, subData).then((res) => {
-          setProgress(false);
-          setButtonStatus(false);
-          if (res?.status === 200 && res?.data?.isSuccess === true) {
-            addToast(res?.data?.message, {
-              appearance: "success",
-              autoDismiss: true,
-            });
-            setOpenModal(false);
-            setSuccess(!success);
-            setName("");
-          } else {
-            addToast(res?.data?.message, {
-              appearance: "error",
-              autoDismiss: true,
-            });
-          }
-        });
+    if (!name || branchValue === 0) {
+      if (!name) {
+        setNameError("Name is required");
       }
+      if (branchValue === 0) {
+        setBranchError(true);
+      }
+    } else if (edit) {
+      setButtonStatus(true);
+      setProgress(true);
+      put(`CommissionGroup/Update`, subData).then((res) => {
+        setProgress(false);
+        setButtonStatus(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setEdit(false);
+          setData({});
+          setOpenModal(false);
+          setSuccess(!success);
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
+    } else {
+      setButtonStatus(true);
+      setProgress(true);
+      post(`CommissionGroup/Create`, subData).then((res) => {
+        setProgress(false);
+        setButtonStatus(false);
+        if (res?.status === 200 && res?.data?.isSuccess === true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+          setOpenModal(false);
+          setSuccess(!success);
+          setName("");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+      });
     }
   };
 
@@ -393,7 +376,7 @@ const ComissionGroup = () => {
                         <td style={{ width: "15%" }} className="text-center">
                           <ButtonGroup variant="text">
                             {permissions?.includes(
-                              permissionList.View_Commission_Structure
+                              permissionList.Update_CommissionGroup_info
                             ) ? (
                               <Button
                                 className="mr-1 btn-sm"
