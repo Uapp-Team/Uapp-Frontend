@@ -31,22 +31,219 @@ const IntakeRangeReportForAdministrator = () => {
   const [typeCount, setTypeCount] = useState({});
   const [statistics, setStatistics] = useState({});
   const [monthStatistics, setMonthStatistics] = useState({});
-  const [options1, setOptions1] = useState({});
-  const [series1, setSeries1] = useState([]);
-  const [options2, setOptions2] = useState({});
-  const [series2, setSeries2] = useState([]);
-  const [options3, setOptions3] = useState({});
-  const [series3, setSeries3] = useState([]);
-  const [options4, setOptions4] = useState({});
-  const [series4, setSeries4] = useState([]);
-  const [options5, setOptions5] = useState({});
-  const [series5, setSeries5] = useState([]);
-  const [options6, setOptions6] = useState({});
-  const [series6, setSeries6] = useState([]);
+  const [options1, setOptions1] = useState({
+    chart: {
+      id: "basic-bar",
+      type: "bar",
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ["#5fb3cf"],
+    xaxis: {
+      categories: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+    },
+  });
+  const [series1, setSeries1] = useState([
+    {
+      name: "Total Applications",
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    },
+  ]);
+  const [options2, setOptions2] = useState({
+    chart: {
+      type: "pie",
+    },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: "10px",
+        fontWeight: "400",
+        colors: ["white"],
+      },
+    },
+    legend: {
+      show: true,
+      fontSize: "9px",
+      fontWeight: "400",
+      markers: {
+        width: 6,
+        height: 6,
+        strokeWidth: 0,
+        strokeColor: "red",
+        fillColors: undefined,
+        radius: 6,
+      },
+    },
+    colors: [
+      "#00687B",
+      "#B7DEE5",
+      "#9AD0DB",
+      "#B7DEE5",
+      "#9AD0DB",
+      "#D4EBF0",
+      "#9AD0DB",
+      "#B7DEE5",
+      "#9AD0DB",
+      "#B7DEE5",
+      "#9AD0DB",
+      "#B7DEE5",
+    ],
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+  });
+  const [series2, setSeries2] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [options3, setOptions3] = useState({
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ["#5fb3cf"],
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: true,
+      },
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    xaxis: {
+      categories: [
+        "Total Applications",
+        "Submitted to University",
+        "Unconditional Offer",
+        "Total Registered",
+        "Total Rejections",
+      ],
+    },
+    yaxis: {
+      axisBorder: {
+        show: true,
+      },
+      axisTicks: {
+        show: true,
+      },
+      labels: {
+        show: true,
+        formatter: function (val) {
+          return val;
+        },
+      },
+    },
+  });
+  const [series3, setSeries3] = useState([
+    {
+      data: [0, 0, 0, 0, 0],
+    },
+  ]);
+  const [options4, setOptions4] = useState({
+    chart: {
+      type: "pie",
+    },
+    colors: ["#4BADC0", "#9AD0DB"],
+    labels: ["Converted", "Not Converted"],
+  });
+  const [series4, setSeries4] = useState([0, 0]);
+  const [options5, setOptions5] = useState({
+    chart: {
+      type: "bar",
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ["#5fb3cf"],
+    plotOptions: {
+      bar: {
+        columnWidth: "20%",
+        dataLabels: {
+          position: "top",
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val) {
+        return val;
+      },
+      offsetY: -30,
+      style: {
+        fontSize: "14px",
+        colors: ["#304758"],
+        fontWeight: "500",
+      },
+    },
+    xaxis: {
+      categories: ["Home/UK", "EU/EEU", "International"],
+      axisBorder: {
+        show: true,
+      },
+      axisTicks: {
+        show: true,
+      },
+    },
+    yaxis: {
+      axisBorder: {
+        show: true,
+      },
+      axisTicks: {
+        show: true,
+      },
+      labels: {
+        show: true,
+        formatter: function (val) {
+          return val;
+        },
+      },
+    },
+  });
+  const [series5, setSeries5] = useState([
+    {
+      name: "Application Count",
+      data: [0, 0, 0],
+    },
+  ]);
+  const [options6, setOptions6] = useState({
+    chart: {
+      type: "pie",
+    },
+    colors: ["#4BADC0", "#9AD0DB", "#B7DEE5"],
+    labels: ["Home/UK", "EU/EEU", "International"],
+  });
+  const [series6, setSeries6] = useState([0, 0, 0]);
   const [estOption, setEstOption] = useState({});
   const [estSeries, setEstSeries] = useState([]);
   const [incomeData, setIncomeData] = useState({});
   const [progress, setProgress] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClearSearch = () => {
     setConsultantLabel("Select Consultant");
@@ -60,358 +257,419 @@ const IntakeRangeReportForAdministrator = () => {
   };
 
   useEffect(() => {
-    get(`SearchFilter/Universities/0/0/0`).then((res) => {
-      setUniversity(res);
-    });
+    setIsLoading(true);
 
-    get(`ConsultantDD/ByUser`).then((res) => {
-      setConsultant(res);
-    });
+    get(`SearchFilter/Universities/0/0/0`)
+      .then((res) => {
+        if (res && Array.isArray(res)) {
+          setUniversity(res);
+        } else {
+          setUniversity([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching universities:", error);
+        setUniversity([]);
+      });
 
-    get(`AccountIntakeDD/index`).then((res) => {
-      setAccountIntake(res);
-    });
+    get(`ConsultantDD/ByUser`)
+      .then((res) => {
+        if (res && Array.isArray(res)) {
+          setConsultant(res);
+        } else {
+          setConsultant([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching consultants:", error);
+        setConsultant([]);
+      });
 
-    get(`OfferStatusDD/Index`).then((res) => {
-      setOffer(res);
-    });
+    get(`AccountIntakeDD/index`)
+      .then((res) => {
+        if (res && Array.isArray(res)) {
+          setAccountIntake(res);
+        } else {
+          setAccountIntake([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching account intakes:", error);
+        setAccountIntake([]);
+      });
+
+    get(`OfferStatusDD/Index`)
+      .then((res) => {
+        if (res && Array.isArray(res)) {
+          setOffer(res);
+        } else {
+          setOffer([]);
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching offer statuses:", error);
+        setOffer([]);
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
-    get(`IntakeRangeReport/ApplicationTypeCount`).then((res) => {
-      setTypeCount(res);
-      setSeries5([
-        {
-          name: "Application Count",
-          data: [res?.home, res?.eu, res?.international],
-        },
-      ]);
+    get(`IntakeRangeReport/ApplicationTypeCount`)
+      .then((res) => {
+        if (res) {
+          setTypeCount(res);
+          setSeries5([
+            {
+              name: "Application Count",
+              data: [res?.home || 0, res?.eu || 0, res?.international || 0],
+            },
+          ]);
 
-      setSeries6([res?.home, res?.eu, res?.international]);
+          setSeries6([res?.home || 0, res?.eu || 0, res?.international || 0]);
 
-      setOptions6({
-        chart: {
-          type: "pie",
-        },
-        colors: ["#4BADC0", "#9AD0DB", "#B7DEE5"],
-        labels: ["Home/UK", "EU/EEU", "International"],
-        responsive: [
-          // {
-          //   breakpoint: 480,
-          //   options: {
-          //     chart: {
-          //       width: 200,
-          //     },
-          //   },
-          // },
-        ],
-      });
+          setOptions6({
+            chart: {
+              type: "pie",
+            },
+            colors: ["#4BADC0", "#9AD0DB", "#B7DEE5"],
+            labels: ["Home/UK", "EU/EEU", "International"],
+            responsive: [
+              // {
+              //   breakpoint: 480,
+              //   options: {
+              //     chart: {
+              //       width: 200,
+              //     },
+              //   },
+              // },
+            ],
+          });
 
-      setOptions5({
-        chart: {
-          type: "bar",
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ["#5fb3cf"],
-        plotOptions: {
-          bar: {
-            columnWidth: "20%",
+          setOptions5({
+            chart: {
+              type: "bar",
+              toolbar: {
+                show: false,
+              },
+            },
+            colors: ["#5fb3cf"],
+            plotOptions: {
+              bar: {
+                columnWidth: "20%",
+                dataLabels: {
+                  position: "top", // top, center, bottom
+                },
+              },
+            },
             dataLabels: {
-              position: "top", // top, center, bottom
+              enabled: true,
+              formatter: function (val) {
+                return val;
+              },
+              offsetY: -30,
+              style: {
+                fontSize: "14px",
+                colors: ["#304758"],
+                fontWeight: "500",
+              },
             },
-          },
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: function (val) {
-            return val;
-          },
-          offsetY: -30,
-          style: {
-            fontSize: "14px",
-            colors: ["#304758"],
-            fontWeight: "500",
-          },
-        },
 
-        xaxis: {
-          categories: ["Home/UK", "EU/EEU", "International"],
+            xaxis: {
+              categories: ["Home/UK", "EU/EEU", "International"],
 
-          axisBorder: {
-            show: true,
-          },
-          axisTicks: {
-            show: true,
-          },
-        },
-        yaxis: {
-          axisBorder: {
-            show: true,
-          },
-          axisTicks: {
-            show: true,
-          },
-          labels: {
-            show: true,
-            formatter: function (val) {
-              return val;
+              axisBorder: {
+                show: true,
+              },
+              axisTicks: {
+                show: true,
+              },
             },
-          },
-        },
+            yaxis: {
+              axisBorder: {
+                show: true,
+              },
+              axisTicks: {
+                show: true,
+              },
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val;
+                },
+              },
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching application type count:", error);
       });
-    });
 
     get(
       `IntakeRangeReport/ApplicationStatistics?consultantId=${consultantValue}&universityId=${universityValue}&accountIntakeId=${accountIntakeValue}&offerStatusId=${offerValue}`
-    ).then((res) => {
-      setStatistics(res);
-      setOptions3({
-        chart: {
-          type: "bar",
-          height: 350,
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ["#5fb3cf"],
-        plotOptions: {
-          bar: {
-            borderRadius: 4,
-            horizontal: true,
-          },
-        },
-        dataLabels: {
-          enabled: true,
-        },
-        xaxis: {
-          categories: [
-            "Total Applications",
-            "Submitted to University",
-            "Unconditional Offer",
-            "Total Registered",
-            "Total Rejections",
-          ],
-        },
-        yaxis: {
-          axisBorder: {
-            show: true,
-          },
-          axisTicks: {
-            show: true,
-          },
-          labels: {
-            show: true,
-            formatter: function (val) {
-              return val;
+    )
+      .then((res) => {
+        if (res) {
+          setStatistics(res);
+          setOptions3({
+            chart: {
+              type: "bar",
+              height: 350,
+              toolbar: {
+                show: false,
+              },
             },
-          },
-        },
+            colors: ["#5fb3cf"],
+            plotOptions: {
+              bar: {
+                borderRadius: 4,
+                horizontal: true,
+              },
+            },
+            dataLabels: {
+              enabled: true,
+            },
+            xaxis: {
+              categories: [
+                "Total Applications",
+                "Submitted to University",
+                "Unconditional Offer",
+                "Total Registered",
+                "Total Rejections",
+              ],
+            },
+            yaxis: {
+              axisBorder: {
+                show: true,
+              },
+              axisTicks: {
+                show: true,
+              },
+              labels: {
+                show: true,
+                formatter: function (val) {
+                  return val;
+                },
+              },
+            },
+          });
+
+          setSeries3([
+            {
+              data: [
+                res?.totalApplication || 0,
+                res?.submittedToUniversity || 0,
+                res?.unconditionalOffer || 0,
+                res?.totalRegistered || 0,
+                res?.totalRejected || 0,
+              ],
+            },
+          ]);
+
+          setOptions4({
+            chart: {
+              type: "pie",
+            },
+            colors: ["#4BADC0", "#9AD0DB"],
+            labels: ["Converted", "Not Converted"],
+            responsive: [
+              // {
+              //   breakpoint: 480,
+              //   options: {
+              //     chart: {
+              //       width: 200,
+              //     },
+              //   },
+              // },
+            ],
+          });
+
+          setSeries4([
+            res?.convertedPercentage || 0,
+            res?.notConvertedPercentage || 0,
+          ]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching application statistics:", error);
       });
-
-      setSeries3([
-        {
-          data: [
-            res?.totalApplication,
-            res?.submittedToUniversity,
-            res?.unconditionalOffer,
-            res?.totalRegistered,
-            res?.totalRejected,
-          ],
-        },
-      ]);
-
-      setOptions4({
-        chart: {
-          type: "pie",
-        },
-        colors: ["#4BADC0", "#9AD0DB"],
-        labels: ["Converted", "Not Converted"],
-        responsive: [
-          // {
-          //   breakpoint: 480,
-          //   options: {
-          //     chart: {
-          //       width: 200,
-          //     },
-          //   },
-          // },
-        ],
-      });
-
-      setSeries4([res?.convertedPercentage, res?.notConvertedPercentage]);
-    });
 
     get(
       `IntakeRangeReport/MonthWiseStatistics?consultantId=${consultantValue}&universityId=${universityValue}&accountIntakeId=${accountIntakeValue}&offerStatusId=${offerValue}`
-    ).then((res) => {
-      setMonthStatistics(res);
-      setOptions1({
-        chart: {
-          id: "basic-bar",
-          type: "bar",
-          toolbar: {
-            show: false,
-          },
-        },
-        colors: ["#5fb3cf"],
-        xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-        },
+    )
+      .then((res) => {
+        if (res) {
+          setMonthStatistics(res);
+          setOptions1({
+            chart: {
+              id: "basic-bar",
+              type: "bar",
+              toolbar: {
+                show: false,
+              },
+            },
+            colors: ["#5fb3cf"],
+            xaxis: {
+              categories: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ],
+            },
 
-        // yaxis: {
-        //   axisBorder: {
-        //     show: true,
-        //   },
-        //   axisTicks: {
-        //     show: true,
-        //   },
-        //   labels: {
-        //     show: true,
-        //     formatter: function (val) {
-        //       return val;
-        //     },
-        //   },
-        // },
-        // plotOptions: {
-        //   bar: {
-        //     columnWidth: "60%",
-        //     dataLabels: {
-        //       position: "top", // top, center, bottom
-        //     },
-        //   },
-        // },
-        // dataLabels: {
-        //   enabled: true,
-        //   formatter: function (val) {
-        //     return val;
-        //   },
-        //   offsetY: -30,
-        //   style: {
-        //     fontSize: "14px",
-        //     colors: ["#304758"],
-        //     fontWeight: "500",
-        //   },
-        // },
+            // yaxis: {
+            //   axisBorder: {
+            //     show: true,
+            //   },
+            //   axisTicks: {
+            //     show: true,
+            //   },
+            //   labels: {
+            //     show: true,
+            //     formatter: function (val) {
+            //       return val;
+            //     },
+            //   },
+            // },
+            // plotOptions: {
+            //   bar: {
+            //     columnWidth: "60%",
+            //     dataLabels: {
+            //       position: "top", // top, center, bottom
+            //     },
+            //   },
+            // },
+            // dataLabels: {
+            //   enabled: true,
+            //   formatter: function (val) {
+            //     return val;
+            //   },
+            //   offsetY: -30,
+            //   style: {
+            //     fontSize: "14px",
+            //     colors: ["#304758"],
+            //     fontWeight: "500",
+            //   },
+            // },
+          });
+
+          setSeries1([
+            {
+              name: "Total Applications",
+              data: [
+                res?.januaryData?.totalApplication || 0,
+                res?.februaryData?.totalApplication || 0,
+                res?.marchData?.totalApplication || 0,
+                res?.aprilData?.totalApplication || 0,
+                res?.mayData?.totalApplication || 0,
+                res?.juneData?.totalApplication || 0,
+                res?.julyData?.totalApplication || 0,
+                res?.augustData?.totalApplication || 0,
+                res?.septemberData?.totalApplication || 0,
+                res?.octoberData?.totalApplication || 0,
+                res?.novemberData?.totalApplication || 0,
+                res?.decemberData?.totalApplication || 0,
+              ],
+            },
+          ]);
+          setSeries2([
+            res?.januaryData?.totalApplicationPercentage || 0,
+            res?.februaryData?.totalApplicationPercentage || 0,
+            res?.marchData?.totalApplicationPercentage || 0,
+            res?.aprilData?.totalApplicationPercentage || 0,
+            res?.mayData?.totalApplicationPercentage || 0,
+            res?.juneData?.totalApplicationPercentage || 0,
+            res?.julyData?.totalApplicationPercentage || 0,
+            res?.augustData?.totalApplicationPercentage || 0,
+            res?.septemberData?.totalApplicationPercentage || 0,
+            res?.octoberData?.totalApplicationPercentage || 0,
+            res?.novemberData?.totalApplicationPercentage || 0,
+            res?.decemberData?.totalApplicationPercentage || 0,
+          ]);
+
+          setOptions2({
+            chart: {
+              type: "pie",
+            },
+            dataLabels: {
+              enabled: true,
+              style: {
+                fontSize: "10px",
+                fontWeight: "400",
+                colors: ["white"],
+              },
+            },
+            legend: {
+              show: true,
+              fontSize: "9px",
+              fontWeight: "400",
+              markers: {
+                width: 6,
+                height: 6,
+                strokeWidth: 0,
+                strokeColor: "red",
+                fillColors: undefined,
+                radius: 6,
+              },
+            },
+
+            colors: [
+              "#00687B",
+              "#B7DEE5",
+              "#9AD0DB",
+              "#B7DEE5",
+              "#9AD0DB",
+              "#D4EBF0",
+              "#9AD0DB",
+              "#B7DEE5",
+              "#9AD0DB",
+              "#B7DEE5",
+              "#9AD0DB",
+              "#B7DEE5",
+            ],
+            labels: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            // responsive: [
+            //   {
+            //     breakpoint: 480,
+            //     options: {
+            //       chart: {
+            //         width: 200,
+            //       },
+            //       legend: {
+            //         position: "bottom",
+            //       },
+            //     },
+            //   },
+            // ],
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching month-wise statistics:", error);
       });
-
-      setSeries1([
-        {
-          name: "Total Applications",
-          data: [
-            res?.januaryData?.totalApplication,
-            res?.februaryData?.totalApplication,
-            res?.marchData?.totalApplication,
-            res?.aprilData?.totalApplication,
-            res?.mayData?.totalApplication,
-            res?.juneData?.totalApplication,
-            res?.julyData?.totalApplication,
-            res?.augustData?.totalApplication,
-            res?.septemberData?.totalApplication,
-            res?.octoberData?.totalApplication,
-            res?.novemberData?.totalApplication,
-            res?.decemberData?.totalApplication,
-          ],
-        },
-      ]);
-      setSeries2([
-        res?.januaryData?.totalApplicationPercentage,
-        res?.februaryData?.totalApplicationPercentage,
-        res?.marchData?.totalApplicationPercentage,
-        res?.aprilData?.totalApplicationPercentage,
-        res?.mayData?.totalApplicationPercentage,
-        res?.juneData?.totalApplicationPercentage,
-        res?.julyData?.totalApplicationPercentage,
-        res?.augustData?.totalApplicationPercentage,
-        res?.septemberData?.totalApplicationPercentage,
-        res?.octoberData?.totalApplicationPercentage,
-        res?.novemberData?.totalApplicationPercentage,
-        res?.decemberData?.totalApplicationPercentage,
-      ]);
-
-      setOptions2({
-        chart: {
-          type: "pie",
-        },
-        dataLabels: {
-          enabled: true,
-          style: {
-            fontSize: "10px",
-            fontWeight: "400",
-            colors: ["white"],
-          },
-        },
-        legend: {
-          show: true,
-          fontSize: "9px",
-          fontWeight: "400",
-          markers: {
-            width: 6,
-            height: 6,
-            strokeWidth: 0,
-            strokeColor: "red",
-            fillColors: undefined,
-            radius: 6,
-          },
-        },
-
-        colors: [
-          "#00687B",
-          "#B7DEE5",
-          "#9AD0DB",
-          "#B7DEE5",
-          "#9AD0DB",
-          "#D4EBF0",
-          "#9AD0DB",
-          "#B7DEE5",
-          "#9AD0DB",
-          "#B7DEE5",
-          "#9AD0DB",
-          "#B7DEE5",
-        ],
-        labels: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
-        // responsive: [
-        //   {
-        //     breakpoint: 480,
-        //     options: {
-        //       chart: {
-        //         width: 200,
-        //       },
-        //       legend: {
-        //         position: "bottom",
-        //       },
-        //     },
-        //   },
-        // ],
-      });
-    });
 
     // if (consultantValue > 0) {
     //   get(
@@ -475,32 +733,53 @@ const IntakeRangeReportForAdministrator = () => {
     if (consultantValue) {
       get(
         `Report/IntakeRange/${consultantValue}/${universityValue}/${accountIntakeValue}/${offerValue}`
-      ).then((res) => {
-        console.log(res);
-        setProgress(res);
-      });
+      )
+        .then((res) => {
+          console.log(res);
+          if (res) {
+            setProgress(res);
+          } else {
+            setProgress(null);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching intake range report:", error);
+          setProgress(null);
+        });
     }
   }, [consultantValue, universityValue, accountIntakeValue, offerValue]);
 
-  const consultantOptions = consultant?.map((con) => ({
-    label: con?.name,
-    value: con?.id,
-  }));
+  const consultantOptions =
+    consultant && Array.isArray(consultant)
+      ? consultant.map((con) => ({
+          label: con?.name || "",
+          value: con?.id || 0,
+        }))
+      : [];
 
-  const universityOptions = university?.map((uni) => ({
-    label: uni?.name,
-    value: uni?.id,
-  }));
+  const universityOptions =
+    university && Array.isArray(university)
+      ? university.map((uni) => ({
+          label: uni?.name || "",
+          value: uni?.id || 0,
+        }))
+      : [];
 
-  const accountIntakeOptions = accountIntake?.map((ai) => ({
-    label: ai?.name,
-    value: ai?.id,
-  }));
+  const accountIntakeOptions =
+    accountIntake && Array.isArray(accountIntake)
+      ? accountIntake.map((ai) => ({
+          label: ai?.name || "",
+          value: ai?.id || 0,
+        }))
+      : [];
 
-  const offerOptions = offer?.map((os) => ({
-    label: os?.name,
-    value: os?.id,
-  }));
+  const offerOptions =
+    offer && Array.isArray(offer)
+      ? offer.map((os) => ({
+          label: os?.name || "",
+          value: os?.id || 0,
+        }))
+      : [];
 
   const selectConsultant = (label, value) => {
     setConsultantLabel(label);
@@ -537,9 +816,15 @@ const IntakeRangeReportForAdministrator = () => {
                   label: consultantLabel,
                   value: consultantValue,
                 }}
-                onChange={(opt) => selectConsultant(opt.label, opt.value)}
+                onChange={(opt) =>
+                  opt && selectConsultant(opt.label, opt.value)
+                }
                 name="consultantId"
                 id="consultantId"
+                isDisabled={
+                  !consultantOptions || consultantOptions.length === 0
+                }
+                placeholder="Loading consultants..."
               />
             </div>
 
@@ -550,9 +835,15 @@ const IntakeRangeReportForAdministrator = () => {
                   label: universityLabel,
                   value: universityValue,
                 }}
-                onChange={(opt) => selectUniversity(opt.label, opt.value)}
+                onChange={(opt) =>
+                  opt && selectUniversity(opt.label, opt.value)
+                }
                 name="universityId"
                 id="universityId"
+                isDisabled={
+                  !universityOptions || universityOptions.length === 0
+                }
+                placeholder="Loading universities..."
               />
             </div>
 
@@ -563,9 +854,15 @@ const IntakeRangeReportForAdministrator = () => {
                   label: accountIntakeLabel,
                   value: accountIntakeValue,
                 }}
-                onChange={(opt) => selectAccountIntake(opt.label, opt.value)}
+                onChange={(opt) =>
+                  opt && selectAccountIntake(opt.label, opt.value)
+                }
                 name="accountIntakeId"
                 id="accountIntakeId"
+                isDisabled={
+                  !accountIntakeOptions || accountIntakeOptions.length === 0
+                }
+                placeholder="Loading account intakes..."
               />
             </div>
 
@@ -576,9 +873,13 @@ const IntakeRangeReportForAdministrator = () => {
                   label: offerLabel,
                   value: offerValue,
                 }}
-                onChange={(opt) => selectOfferStatus(opt.label, opt.value)}
+                onChange={(opt) =>
+                  opt && selectOfferStatus(opt.label, opt.value)
+                }
                 name="offerStatusId"
                 id="offerStatusId"
+                isDisabled={!offerOptions || offerOptions.length === 0}
+                placeholder="Loading offer statuses..."
               />
             </div>
           </div>
@@ -666,13 +967,26 @@ const IntakeRangeReportForAdministrator = () => {
               <span style={{ fontWeight: "500", textAlign: "center" }}>
                 Total Applications
               </span>
-              <Chart
-                options={options1}
-                series={series1}
-                type="bar"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series1 &&
+                series1.length > 0 &&
+                series1[0]?.data &&
+                series1[0].data.some((val) => val > 0) ? (
+                <Chart
+                  options={options1}
+                  series={series1}
+                  type="bar"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -685,14 +999,26 @@ const IntakeRangeReportForAdministrator = () => {
                 {/* Total Applications: {statistics?.totalApplication} */}
               </span>
 
-              <Chart
-                options={options2}
-                series={series2}
-                type="pie"
-                // width="370"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series2 &&
+                series2.length > 0 &&
+                series2.some((val) => val > 0) ? (
+                <Chart
+                  options={options2}
+                  series={series2}
+                  type="pie"
+                  // width="370"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -705,16 +1031,26 @@ const IntakeRangeReportForAdministrator = () => {
       {consultantValue === 0 ? null : (
         <Card className="p-3">
           <CardBody>
-            <Consultant
-              progress={progress}
-              // estimate={`${
-              //   accountIntakeLabel !== "Select Account Intake"
-              //     ? accountIntakeLabel
-              //     : ""
-              // } ${offerLabel !== "Select Offer Status" ? offerLabel : ""} ${
-              //   universityLabel !== "Select University" ? universityLabel : ""
-              // } `}
-            />
+            {isLoading ? (
+              <div className="text-center py-3">
+                <p>Loading consultant data...</p>
+              </div>
+            ) : progress ? (
+              <Consultant
+                progress={progress}
+                // estimate={`${
+                //   accountIntakeLabel !== "Select Account Intake"
+                //     ? accountIntakeLabel
+                //     : ""
+                // } ${offerLabel !== "Select Offer Status" ? offerLabel : ""} ${
+                //   universityLabel !== "Select University" ? universityLabel : ""
+                // } `}
+              />
+            ) : (
+              <div className="text-center py-3">
+                <p>No data available for this selection.</p>
+              </div>
+            )}
           </CardBody>
         </Card>
       )}
@@ -794,13 +1130,26 @@ const IntakeRangeReportForAdministrator = () => {
           <Card style={{ height: "355.69px" }}>
             <CardBody>
               <span style={{ fontWeight: "500" }}>Overall Performance</span>
-              <Chart
-                options={options3}
-                series={series3}
-                type="bar"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series3 &&
+                series3.length > 0 &&
+                series3[0]?.data &&
+                series3[0].data.some((val) => val > 0) ? (
+                <Chart
+                  options={options3}
+                  series={series3}
+                  type="bar"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -809,14 +1158,26 @@ const IntakeRangeReportForAdministrator = () => {
           <Card style={{ height: "355.69px" }}>
             <CardBody>
               <span style={{ fontWeight: "500" }}>Conversions %</span>
-              <Chart
-                options={options4}
-                series={series4}
-                type="pie"
-                // width="420"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series4 &&
+                series4.length > 0 &&
+                series4.some((val) => val > 0) ? (
+                <Chart
+                  options={options4}
+                  series={series4}
+                  type="pie"
+                  // width="420"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -831,13 +1192,26 @@ const IntakeRangeReportForAdministrator = () => {
           <Card style={{ height: "355.69px" }}>
             <CardBody>
               <span style={{ fontWeight: "500" }}>Application Type</span>
-              <Chart
-                options={options5}
-                series={series5}
-                type="bar"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series5 &&
+                series5.length > 0 &&
+                series5[0]?.data &&
+                series5[0].data.some((val) => val > 0) ? (
+                <Chart
+                  options={options5}
+                  series={series5}
+                  type="bar"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -846,14 +1220,26 @@ const IntakeRangeReportForAdministrator = () => {
           <Card style={{ height: "355.69px" }}>
             <CardBody>
               <span style={{ fontWeight: "500" }}>Application Type</span>
-              <Chart
-                options={options6}
-                series={series6}
-                type="pie"
-                // width="420"
-                width="100%"
-                height="300"
-              />
+              {isLoading ? (
+                <div className="text-center py-5">
+                  <p>Loading chart data...</p>
+                </div>
+              ) : series6 &&
+                series6.length > 0 &&
+                series6.some((val) => val > 0) ? (
+                <Chart
+                  options={options6}
+                  series={series6}
+                  type="pie"
+                  // width="420"
+                  width="100%"
+                  height="300"
+                />
+              ) : (
+                <div className="text-center py-5">
+                  <p>No data available</p>
+                </div>
+              )}
             </CardBody>
           </Card>
         </div>
@@ -865,13 +1251,3 @@ const IntakeRangeReportForAdministrator = () => {
 };
 
 export default IntakeRangeReportForAdministrator;
-
-{
-  /* <span
-                    className="text-danger btn"
-                    onClick={() => setConsultantValue(0)}
-                  >
-                    {" "}
-                    <i className="fa fa-times"></i> Clear
-                  </span> */
-}
