@@ -580,6 +580,7 @@ function SearchAndApply() {
             <ApplyCardVar
               data={data?.items}
               studentName={studentName}
+              studentId={studentId}
               applicationTypeSelected={applicationTypeSelected}
               handleSubmit={handleSubmit}
               handleFavourite={handleFavourite}
@@ -594,6 +595,7 @@ function SearchAndApply() {
               <ApplyCardVar
                 data={data?.items}
                 studentName={studentName}
+                studentId={studentId}
                 applicationTypeSelected={applicationTypeSelected}
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
@@ -605,6 +607,7 @@ function SearchAndApply() {
               <ApplyCardHor
                 data={data?.items}
                 studentName={studentName}
+                studentId={studentId}
                 applicationTypeSelected={applicationTypeSelected}
                 handleSubmit={handleSubmit}
                 handleFavourite={handleFavourite}
