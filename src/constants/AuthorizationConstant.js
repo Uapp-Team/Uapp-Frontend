@@ -236,6 +236,9 @@ export const permissionList = {
   Edit_Departments: 77,
   Delete_Departments: 78,
 
+  ///report
+  View_ApplicationReport: 304,
+
   //Intakes
   View_Intakes: 79,
   Add_Intakes: 80,

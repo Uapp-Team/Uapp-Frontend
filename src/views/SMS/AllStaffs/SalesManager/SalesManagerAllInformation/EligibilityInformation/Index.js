@@ -440,7 +440,7 @@ const StaffEligibility = () => {
   return (
     <div>
       <BreadCrumb
-        title="Sales Manager Eligibility Information naki"
+        title="Sales Manager Eligibility Information"
         backTo={
           userType === userTypes?.Admin ||
           userType === userTypes?.AccountManager ||

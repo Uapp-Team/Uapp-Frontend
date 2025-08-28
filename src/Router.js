@@ -3545,10 +3545,18 @@ class AppRouter extends React.Component {
                     path="/intakeRangeReport"
                     component={IntakeRangeReport}
                   />
+
                   <AppRoute
                     path="/applicationreport"
-                    component={ApplicationReport}
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_ApplicationReport
+                      )
+                        ? ApplicationReport
+                        : NotAuthorized
+                    }
                   />
+
                   <AppRoute
                     path="/ProviderDailyReport"
                     component={ProviderDailyReport}

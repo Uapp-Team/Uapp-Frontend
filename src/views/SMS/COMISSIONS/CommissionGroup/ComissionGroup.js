@@ -393,7 +393,7 @@ const ComissionGroup = () => {
                         <td style={{ width: "15%" }} className="text-center">
                           <ButtonGroup variant="text">
                             {permissions?.includes(
-                              permissionList.View_Commission_Structure
+                              permissionList.Configure_CommissionStucture
                             ) ? (
                               <Button
                                 className="mr-1 btn-sm"
