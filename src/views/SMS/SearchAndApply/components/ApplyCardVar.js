@@ -43,6 +43,7 @@ import TuitionFee from "./TuitionFee";
 const ApplyCardVar = ({
   data,
   studentName,
+  studentId,
   applicationTypeSelected,
   setSubjectId,
   handleFavourite,
@@ -78,7 +79,9 @@ const ApplyCardVar = ({
   const handleApply = async (item) => {
     setSubjectId(item.subjectId);
     await get(
-      `Eligibility/ApplicationOverview/${item.universityId}/${item.subjectId}/${referenceId}`
+      `Eligibility/ApplicationOverview/${item.universityId}/${item.subjectId}/${
+        studentId > 0 ? studentId : referenceId
+      }`
     ).then((res) => setApplyEligibility(res));
 
     setQuickViewData(item);
