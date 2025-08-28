@@ -36,7 +36,7 @@ const ColumnSalesTeamLeader = [
     isActive: true,
   },
   {
-    title: "Companions",
+    title: "Referrers",
     isActive: true,
   },
   {
