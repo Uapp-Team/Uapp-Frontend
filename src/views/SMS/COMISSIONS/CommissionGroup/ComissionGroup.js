@@ -79,6 +79,8 @@ const ComissionGroup = () => {
     setData(data);
     setEdit(true);
     setName(data?.name);
+    setBranchLable(data?.branchName);
+    setBranchValue(data?.branchId);
 
     setOpenModal(true);
   };

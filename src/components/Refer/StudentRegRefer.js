@@ -21,26 +21,44 @@ import { domain } from "../../constants/constants";
 const StudentRegRefer = ({ apiUrl, setModalShow, modalClose }) => {
   const [referID, setReferId] = useState(null);
   const [Name, setName] = useState("");
+  const [NameError, setNameError] = useState("");
   const { addToast } = useToasts();
   const [success, setSuccess] = useState(false);
 
+  const handleEmailError = (e) => {
+    setName(e.target.value);
+    if (e.target.value === "") {
+      setNameError("Email is required");
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e.target.value)
+    ) {
+      setNameError("Email is not valid");
+    } else {
+      setNameError("");
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    put(`Reference/invite/${Name}`).then((res) => {
-      if (res?.status === 200 && res?.data?.isSuccess == true) {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: "true",
-        });
-        setSuccess(!success);
-        setName("");
-      } else {
-        addToast(res?.data?.message, {
-          appearance: "success",
-          autoDismiss: "error",
-        });
-      }
-    });
+    if (!Name) {
+      setNameError("Email is required");
+    } else {
+      put(`Reference/invite/${Name}`).then((res) => {
+        if (res?.status === 200 && res?.data?.isSuccess == true) {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: "true",
+          });
+          setSuccess(!success);
+          setName("");
+        } else {
+          addToast(res?.data?.message, {
+            appearance: "success",
+            autoDismiss: "error",
+          });
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -115,8 +133,9 @@ const StudentRegRefer = ({ apiUrl, setModalShow, modalClose }) => {
                         id="name"
                         value={Name}
                         placeholder="Enter email"
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => handleEmailError(e)}
                       />
+                      <span className="text-danger">{NameError}</span>
                     </Col>
                   </FormGroup>
 
