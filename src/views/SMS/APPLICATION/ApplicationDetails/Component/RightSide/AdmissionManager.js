@@ -27,7 +27,6 @@ const AdmissionManager = ({
   setSuccess,
   success,
 }) => {
-  console.log(managerId, "managerId");
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
   const userType = localStorage.getItem("userType");
@@ -113,11 +112,11 @@ const AdmissionManager = ({
                     <img
                       src={profileImage}
                       alt="profile_img"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50px",
-                      }}
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
                     />
                   ) : (
                     <img
@@ -127,11 +126,11 @@ const AdmissionManager = ({
                           ?.thumbnailUrl
                       }
                       alt="profile_img"
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50px",
-                      }}
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
                     />
                   )}
                 </div>
@@ -145,7 +144,7 @@ const AdmissionManager = ({
                         permissionList.Change_Admission_Manger
                       ) ? (
                         <>
-                          {applicationInfo?.applicationSubStatusId !== 38 &&
+                          {applicationInfo.applicationStatusId !== 13 &&
                           (userType === userTypes?.SystemAdmin ||
                             userType === userTypes?.Admin ||
                             userType === userTypes?.ProviderAdmin) ? (
@@ -169,7 +168,7 @@ const AdmissionManager = ({
                     {applicationInfo?.admissionManager?.firstName}{" "}
                     {applicationInfo?.admissionManager?.lastName}
                   </p>
-                  <ul className="uapp-ul">
+                  <ul className="uapp-ul word-break">
                     <li>
                       {" "}
                       <i className="far fa-envelope pr-1 pb-2"></i>{" "}
@@ -191,7 +190,7 @@ const AdmissionManager = ({
           {/* <div>
             {permissions?.includes(permissionList.Change_Admission_Manger) ? (
               <>
-                {applicationInfo?.applicationSubStatusId !== 38 &&
+                {applicationInfo.applicationStatusId !== 13 &&
                 (userType === userTypes?.SystemAdmin ||
                   userType === userTypes?.Admin ||
                   userType === userTypes?.ProviderAdmin) ? (
