@@ -226,6 +226,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       ? AdmissionManagerApplicationPaging?.applicationValue
       : 0
   );
+  console.log(applicationValue, "vai plz");
+
   const [applicationSubLabel, setApplicationSubLabel] = useState(
     AdmissionManagerApplicationPaging?.applicationSubLabel
       ? AdmissionManagerApplicationPaging?.applicationSubLabel
@@ -703,7 +705,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       if (status > 0) {
         const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
-        setApplicationValue(res?.id);
+        // setApplicationValue(res?.id);
       }
     });
 

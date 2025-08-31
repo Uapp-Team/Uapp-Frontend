@@ -44,6 +44,7 @@ const ApplicationsCommon = () => {
   const location = useLocation();
   const history = useHistory();
   const parameters = history?.location?.state?.state;
+
   const {
     affiliateId,
     admId,
@@ -180,6 +181,8 @@ const ApplicationsCommon = () => {
       ? application?.applicationValue
       : 0
   );
+  console.log(applicationValue, "vaiya");
+
   const [applicationSubLabel, setApplicationSubLabel] = useState(
     application?.applicationSubLabel
       ? application?.applicationSubLabel
