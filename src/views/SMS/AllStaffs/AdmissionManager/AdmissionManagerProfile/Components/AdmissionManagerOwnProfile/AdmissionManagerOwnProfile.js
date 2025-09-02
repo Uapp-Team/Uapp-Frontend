@@ -168,7 +168,18 @@ const AdmissionManagerOwnProfile = () => {
                       <td width="40%">Phone Number</td>
 
                       <td width="60%">
-                        {data?.admissionManagerPersonalInfo?.phoneNumber}
+                        {data?.admissionManagerPersonalInfo?.phoneNumber &&
+                        data?.admissionManagerPersonalInfo?.phoneNumber.includes(
+                          "+"
+                        )
+                          ? data?.admissionManagerPersonalInfo?.phoneNumber
+                          : data?.admissionManagerPersonalInfo?.phoneNumber &&
+                            !data?.admissionManagerPersonalInfo?.phoneNumber.includes(
+                              "+"
+                            )
+                          ? "+" +
+                            data?.admissionManagerPersonalInfo?.phoneNumber
+                          : null}
                       </td>
                     </tr>
                   </tbody>

@@ -333,7 +333,7 @@ const Index = () => {
       <BreadCrumb
         title="Admission Officer Emergency Information"
         backTo={
-          userType === userTypes?.AdmissionManager ? null : "Admission Officer"
+          userType === userTypes?.AdmissionOfficer ? null : "Admission Officer"
         }
         path={`/admissionOfficerList`}
       />

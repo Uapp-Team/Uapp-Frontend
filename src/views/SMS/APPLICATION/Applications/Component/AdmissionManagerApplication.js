@@ -39,7 +39,15 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const location = useLocation();
   const history = useHistory();
   const parameters = history?.location?.state?.state;
-  const { status, selector, universityId, consultantId, intake } = useParams();
+  const {
+    status,
+    selector,
+    universityId,
+    consultantId,
+    intake,
+    courseId,
+    adoId,
+  } = useParams();
 
   // Previous states get from session storage
   const AdmissionManagerApplicationPaging = JSON.parse(
@@ -845,7 +853,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             selectedDates[1] ? selectedDates[1] : ""
           }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
             confidenceValue ? confidenceValue : ""
-          }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
+          }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}&courseId=${
+            courseId ? courseId : 0
+          }&adoId=${adoId ? adoId : 0}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -888,6 +898,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     confidenceValue,
     educationLevelValue,
     departmentValue,
+    courseId,
+    adoId,
   ]);
 
   // Function for open delete modal

@@ -227,7 +227,7 @@ const StudentTable = ({
                   )}
                 </>
               ) : null}
-              {tableData[4]?.isActive ? (
+              {tableData[5]?.isActive ? (
                 <>
                   {" "}
                   {permissions?.includes(permissionList.View_Branch) ? (
@@ -245,13 +245,13 @@ const StudentTable = ({
                 </>
               ) : null}
 
-              {tableData[5]?.isActive ? (
+              {tableData[6]?.isActive ? (
                 <td>{dateFormate(student?.createdOn)}</td>
               ) : null}
 
               {permissions?.includes(permissionList.Change_Student_Password) ? (
                 <>
-                  {tableData[6]?.isActive ? (
+                  {tableData[7]?.isActive ? (
                     <td>
                       <Link
                         to="/studentList"
@@ -267,7 +267,7 @@ const StudentTable = ({
                 permissionList.Change_Student_Account_Status
               ) ? (
                 <>
-                  {tableData[7]?.isActive ? (
+                  {tableData[8]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={
@@ -285,7 +285,7 @@ const StudentTable = ({
                   ) : null}
                 </>
               ) : null}
-              {tableData[8]?.isActive ? (
+              {tableData[9]?.isActive ? (
                 <td>
                   {student?.isVerified === true ? (
                     <>
@@ -309,7 +309,7 @@ const StudentTable = ({
                 </td>
               ) : null}
 
-              {tableData[9]?.isActive ? (
+              {tableData[10]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Student) ? (

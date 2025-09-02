@@ -125,7 +125,7 @@ const StudentRegRefer = ({ apiUrl, setModalShow, modalClose }) => {
                           fontWeight: 500,
                         }}
                       >
-                        Enter your friend's email address
+                        Enter your email to get your student invitation
                       </span>
                       <Input
                         type="email"
