@@ -241,7 +241,7 @@ const LiveIntakeTable = ({
                   </thead>
                   <tbody>
                     {liveIntakeList?.map((liveIntake, i) => (
-                      <tr key={i} style={{ textAlign: "center" }}>
+                      <tr key={i} style={{ textAlign: "left" }}>
                         {tableData[0]?.isActive ? (
                           <td>{liveIntake?.universityName} </td>
                         ) : null}
