@@ -1616,21 +1616,6 @@ const ApplicationsCommon = () => {
           <Row className="mb-3 align-items-center">
             <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
-              <Download
-                url={`Application/GetReport?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
-                  percentageValue ? percentageValue : 0
-                }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
-                  courseId ? courseId : 0
-                }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
-                  selectedDates[0] ? selectedDates[0] : ""
-                }&toApplicationDate=${
-                  selectedDates[1] ? selectedDates[1] : ""
-                }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
-                  confidenceValue ? confidenceValue : ""
-                }&isTBC=${false}`}
-                className="mx-2"
-                fileName="Applications.xlsx"
-              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1662,39 +1647,21 @@ const ApplicationsCommon = () => {
                 </div>
 
                 <div className="mr-3">
-                  <Dropdown
-                    className="uapp-dropdown"
-                    style={{ float: "right" }}
-                    isOpen={dropdownOpen}
-                    toggle={toggle}
-                  >
-                    <DropdownToggle caret>
-                      <i className="fas fa-print fs-7"></i>
-                    </DropdownToggle>
-                    <DropdownMenu className="bg-dd-4">
-                      <div className="d-flex justify-content-around align-items-center mt-2">
-                        <div className="cursor-pointer">
-                          <ReactTableConvertToXl
-                            id="test-table-xls-button"
-                            table="table-to-xls"
-                            filename="tablexls"
-                            sheet="tablexls"
-                            icon={<i className="fas fa-file-excel"></i>}
-                          />
-                        </div>
-                        {/* <div className="cursor-pointer">
-                          <ReactToPrint
-                            trigger={() => (
-                              <p>
-                                <i className="fas fa-file-pdf"></i>
-                              </p>
-                            )}
-                            content={() => componentRef.current}
-                          />
-                        </div> */}
-                      </div>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <Download
+                    url={`Application/GetReport?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
+                      percentageValue ? percentageValue : 0
+                    }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
+                      courseId ? courseId : 0
+                    }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+                      selectedDates[0] ? selectedDates[0] : ""
+                    }&toApplicationDate=${
+                      selectedDates[1] ? selectedDates[1] : ""
+                    }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+                      confidenceValue ? confidenceValue : ""
+                    }&isTBC=${true}`}
+                    className="mx-2"
+                    fileName="Applications.xlsx"
+                  />
                 </div>
 
                 {/* column hide unhide starts here */}
