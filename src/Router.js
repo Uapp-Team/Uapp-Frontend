@@ -488,6 +488,9 @@ const ConsultantNewDeclaration = lazy(() =>
 const ConsultantList = lazy(() =>
   import("./views/SMS/ConsultantsAndTypes/ConsultantList/Index")
 );
+const ConsultantReport = lazy(() =>
+  import("./views/SMS/ConsultantsAndTypes/ConsultantsReport/Index.js")
+);
 
 const BranchConsultantList = lazy(() =>
   import("./views/SMS/Branches/Branch/BranchConsultantList/Index.js")
@@ -3352,6 +3355,16 @@ class AppRouter extends React.Component {
                         permissionList?.View_Consultant_list
                       )
                         ? ConsultantList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/consultantInsights"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Consultant_Report
+                      )
+                        ? ConsultantReport
                         : NotAuthorized
                     }
                   />

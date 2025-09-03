@@ -1810,9 +1810,19 @@ const ApplicationsCommon = () => {
             <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
               <Download
-                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}`}
+                url={`Application/ExportToCsv?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
+                  percentageValue ? percentageValue : 0
+                }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
+                  courseId ? courseId : 0
+                }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+                  selectedDates[0] ? selectedDates[0] : ""
+                }&toApplicationDate=${
+                  selectedDates[1] ? selectedDates[1] : ""
+                }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+                  confidenceValue ? confidenceValue : ""
+                }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`}
                 className="mx-2"
-                fileName="Applications.xlsx"
+                fileName="Applications.csv"
               />
             </Col>
 

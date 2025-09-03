@@ -30,13 +30,10 @@ import ColumnStudent from "../../TableColumn/ColumnStudent.js";
 
 const StudentList = () => {
   const student = JSON.parse(sessionStorage.getItem("student"));
-
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { cId, type, id, salesTeamLeaderId } = useParams();
-  console.log(salesTeamLeaderId, "salesTeamLeaderId");
-
   const [serialNum, setSerialNum] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
