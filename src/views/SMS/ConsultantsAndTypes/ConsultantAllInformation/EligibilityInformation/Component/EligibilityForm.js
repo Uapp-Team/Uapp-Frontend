@@ -28,6 +28,11 @@ const EligibilityForm = ({
   selectResidency,
   residencyError,
   residencyLabel,
+  permanetResidencyStatusValue,
+  permanetResidencyStatusOptions,
+  selectPermanentResidencyStatus,
+  permanetResidencyStatusError,
+  permanetResidencyStatusLabel,
   exDate,
   onRadioValueChange,
   rightToWork,
@@ -180,7 +185,25 @@ const EligibilityForm = ({
               <span className="text-danger">{residencyError}</span>
             </FormGroup>
           )}
+          {residencyValue === 1 && uniCountryValue !== uniCountryValue2 ? (
+            <>
+              <FormGroup className="has-icon-left position-relative">
+              <span>
+                <span className="text-danger">*</span> Status Type
+              </span>
 
+              <Select
+                options={permanetResidencyStatusOptions}
+                value={{ label: permanetResidencyStatusLabel, value: permanetResidencyStatusValue }}
+                onChange={(opt) => selectPermanentResidencyStatus(opt.label, opt.value)}
+                name="permanentResidencyStatusId"
+                id="permanentResidencyStatusId"
+              />
+
+              <span className="text-danger">{residencyError}</span>
+            </FormGroup>
+            </>
+          ) : null}
           {residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? (
             <>
               <FormGroup className="has-icon-left position-relative">
@@ -262,6 +285,7 @@ const EligibilityForm = ({
               </FormGroup>
             </>
           ) : null}
+          
         </Col>{" "}
       </Row>
       <Row>
@@ -812,6 +836,8 @@ const EligibilityForm = ({
               </>
             )}
           </FormGroup>
+
+
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />
             {permissions?.includes(permissionList?.Edit_Consultant) && (

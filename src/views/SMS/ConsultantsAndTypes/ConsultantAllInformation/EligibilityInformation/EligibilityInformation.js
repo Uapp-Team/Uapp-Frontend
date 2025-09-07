@@ -27,6 +27,13 @@ const EligibilityInformation = () => {
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
   );
+  const [permanentResidencyStatusList, setPermanentResidencyStatusList] = useState([]);
+  const [permanentResidencyStatusLabel, setPermanentResidencyStatusLabel] = useState(
+    "Select Permanent Residency Status"
+  );
+  const [permanentResidencyStatusValue, setPermanentResidencyStatusValue] = useState(0);
+  const [permanentResidencyStatusError, setPermanentResidencyStatusError] = useState("");
+  
   const [residencyValue, setResidencyValue] = useState(0);
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -117,7 +124,9 @@ const EligibilityInformation = () => {
         res !== null ? res?.residencyStatus?.name : "Select Residency Status"
       );
       setResidencyValue(res !== null ? res?.residencyStatus?.id : "0");
-      //   setRadioPracticalTraining();
+      
+      setPermanentResidencyStatusLabel(res !== null ? res?.permanentResidencyStatus : "Select Permanent Residency Status");
+      setPermanentResidencyStatusValue(res !== null ? res?.permanentResidencyStatusId : "0");
       setRightToWork(
         res != null && res?.haveRightToWork === true
           ? true
@@ -139,6 +148,15 @@ const EligibilityInformation = () => {
     });
   }, [success, consultantRegisterId, setRightToWork]);
 
+  useEffect(() => {
+      if(residencyValue === 1)
+      {
+        get(`ConsultantDD/GetPermanentResidencyStatusTypes`).then((res) => {
+            setPermanentResidencyStatusList(res);
+        });
+      }
+    },[residencyValue]);
+    
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
     value: countryOptions?.id,
@@ -147,6 +165,11 @@ const EligibilityInformation = () => {
   const countryDD2 = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
     value: countryOptions?.id,
+  }));
+
+ const permanentResidencyStatusOptions = permanentResidencyStatusList?.map((residencyStatusOption) => ({
+    label: residencyStatusOption?.name,
+    value: residencyStatusOption?.id,
   }));
 
   // select Country
@@ -169,6 +192,11 @@ const EligibilityInformation = () => {
       setResidencyValue(0);
       setResidencyLabel("Select Residency Status");
     }
+  };
+  // select permanent Residence
+  const selectPermanentResidencyStatus = (label, value) => {
+    setPermanentResidencyStatusLabel(label);
+    setPermanentResidencyStatusValue(value);
   };
 
   const residencyOptions = residency?.map((r) => ({
@@ -480,6 +508,11 @@ const EligibilityInformation = () => {
                 selectResidency={selectResidency}
                 residencyError={residencyError}
                 residencyLabel={residencyLabel}
+                permanetResidencyStatusValue={permanentResidencyStatusValue}
+                permanetResidencyStatusOptions={permanentResidencyStatusOptions}
+                selectPermanentResidencyStatus={selectPermanentResidencyStatus}
+                permanetResidencyStatusError={permanentResidencyStatusError}
+                permanetResidencyStatusLabel={permanentResidencyStatusLabel}
                 exDate={exDate}
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
