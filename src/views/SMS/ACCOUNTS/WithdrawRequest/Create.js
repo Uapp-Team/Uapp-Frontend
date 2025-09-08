@@ -37,6 +37,7 @@ import { useToasts } from "react-toast-notifications";
 import ButtonLoader from "../../Components/ButtonLoader";
 import { userTypes } from "../../../../constants/userTypeConstant";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb";
+import { event } from "jquery";
 
 const Create = () => {
   const history = useHistory();
@@ -47,6 +48,7 @@ const Create = () => {
   const [consultantError, setConsultantError] = useState("");
   const [amount, setAmount] = useState(null);
   const [amountInput, setAmountInput] = useState("");
+  const [amountInputError, setAmountInputError] = useState("");
   const { addToast } = useToasts();
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -79,10 +81,21 @@ const Create = () => {
     setConsultantError("");
     setConsultantLabel(label);
     setConsultantValue(value);
+    setAmountInputError("");
+    setAmount(null);
   };
 
   const handleInputAmount = (e) => {
     setAmountInput(e.target.value);
+    if (e.target.value < 50) {
+      setAmountInputError("Minimum withdraw limit is £ 50.");
+    } else if (e.target.value > amount) {
+      setAmountInputError(
+        "you don't have sufficient balance to complete the transaction."
+      );
+    } else {
+      setAmountInputError("");
+    }
   };
 
   const handleSubmit = (event) => {
@@ -196,8 +209,11 @@ const Create = () => {
                       id="amount"
                       placeholder="Enter Amount"
                       required
-                      onChange={handleInputAmount}
+                      onChange={(e) => {
+                        handleInputAmount(e);
+                      }}
                     />
+                    <span className="text-danger">{amountInputError}</span>
                   </Col>
                 </FormGroup>
 
@@ -209,9 +225,9 @@ const Create = () => {
                         type="submit"
                         disabled={
                           amountInput < 50 ||
-                            amountInput > amount ||
-                            amountInput == isNaN(amountInput) ||
-                            buttonStatus
+                          amountInput > amount ||
+                          amountInput == isNaN(amountInput) ||
+                          buttonStatus
                             ? true
                             : false
                         }

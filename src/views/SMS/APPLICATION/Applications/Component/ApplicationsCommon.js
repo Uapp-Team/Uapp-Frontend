@@ -267,7 +267,7 @@ const ApplicationsCommon = () => {
   //   application?.affiliateValue ? application?.affiliateValue : 0
   // );
   const [companionLabel, setCompanionLabel] = useState(
-    application?.companionLabel ? application?.companionLabel : "Companion"
+    application?.companionLabel ? application?.companionLabel : "Referrer"
   );
   const [companionValue, setCompanionValue] = useState(
     companionId ? companionId : 0
@@ -1148,7 +1148,7 @@ const ApplicationsCommon = () => {
     !admId && setAdmissionManagerValue(0);
     !affiliateId && setAffiliateLabel("Affiliate");
     !affiliateId && setAffiliateValue(0);
-    !companionId && setCompanionLabel("Companion");
+    !companionId && setCompanionLabel("Referrer");
     !companionId && setCompanionValue(0);
     !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
     !salesTeamLeaderId && setSalesTeamLeaderValue(0);
@@ -1560,7 +1560,7 @@ const ApplicationsCommon = () => {
                     options={companionMenu}
                     value={{ label: companionLabel, value: companionValue }}
                     onChange={(opt) => selectReferrerDD(opt.label, opt.value)}
-                    placeholder="companion"
+                    placeholder="Referrer"
                     name="name"
                     id="id"
                     isDisabled={companionId ? true : false}

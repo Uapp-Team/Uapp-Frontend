@@ -13,10 +13,12 @@ import { permissionList } from "../../../../../constants/AuthorizationConstant";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { userTypes } from "../../../../../constants/userTypeConstant";
+import { Consultant } from "../../../../../components/core/User";
 
 const Registration = () => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { referrerId, id } = useParams();
+
   const userId = localStorage.getItem("referenceId");
   const current_user = JSON.parse(localStorage.getItem("current_user"));
 
@@ -61,7 +63,9 @@ const Registration = () => {
 
   const [consultant, setConsultant] = useState([]);
   const [consultantLabel, setconsultantLabel] = useState("Select Consultant");
-  const [consultantValue, setConsultantValue] = useState(0);
+  const [consultantValue, setConsultantValue] = useState(
+    Consultant() ? userId : id ? id : 0
+  );
   const [consultantError, setConsultantError] = useState(false);
   const [branch, setBranch] = useState([]);
   const [branchLabel, setBranchLabel] = useState("London office");
