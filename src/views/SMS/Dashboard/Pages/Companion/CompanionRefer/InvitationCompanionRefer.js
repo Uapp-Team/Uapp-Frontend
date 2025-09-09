@@ -8,6 +8,7 @@ import referFriend from "../../../../../../assets/img/refer-friend.svg";
 import CopyButton from "../../../../../../components/Refer/CopyButton";
 import SocialShare from "../../../../../../components/Refer/SocialShare";
 import post from "../../../../../../helpers/post";
+import { domain } from "../../../../../../constants/constants";
 
 const InvitationCompanionRefer = ({
   apiUrl,
@@ -64,7 +65,7 @@ const InvitationCompanionRefer = ({
   //   });
   // }, [apiUrl]);
 
-  const url = `https://portal.uapp.uk/studentRegister/${userViewId.userViewId}`;
+  const url = `${domain}/studentRegister/${userViewId.userViewId}`;
   return (
     <div>
       <h5 className="d-flex justify-content-between px-4 mt-4">

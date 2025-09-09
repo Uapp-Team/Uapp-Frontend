@@ -18,7 +18,7 @@ const Refer = () => {
     <div>
       <div
         onClick={() => {
-          status && setModalShow(true);
+          setModalShow(true);
         }}
         className={`refer-button ${!status && "bg-gray"}`}
       >

@@ -103,6 +103,7 @@ export const permissionList = {
   View_Consultant_Associate: 62,
   View_Consultant_Application: 63,
   Approve_Consultant_Eligibility: 68,
+  View_Consultant_Report: 70,
 
   //Consultant_Commission
   Assign_Commission_Group: 64,
@@ -235,6 +236,9 @@ export const permissionList = {
   Add_Departments: 76,
   Edit_Departments: 77,
   Delete_Departments: 78,
+
+  ///report
+  View_ApplicationReport: 304,
 
   //Intakes
   View_Intakes: 79,

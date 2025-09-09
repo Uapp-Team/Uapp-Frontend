@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { rootUrl } from "../../../constants/constants";
 
 const SideModal = ({ data, action }) => {
   console.log(data);
@@ -42,18 +43,28 @@ const SideModal = ({ data, action }) => {
             </div>
           </div>
           <div className="mt-3">
-            <p className="section-title">Total Course: {data?.courseCount}</p>
+            <p className="section-title">Total Course: {data?.totalCourse}</p>
           </div>
           <div className="mt-3">
-            <p className="section-title">Campus</p>
-            <p>{data?.campusNames}</p>
+            <p className="section-title">Campus:</p>
+            {data?.campuses?.map((campus, i, array) => (
+              <span key={campus?.id} className="for-intake-table">
+                {campus?.name}
+                {/* {i < array.length - 1 && ", "} */}
+              </span>
+            ))}
           </div>
           <div className="mt-3">
-            <p className="section-title">Intake</p>
-            <p>{data?.intakeNames}</p>
+            <p className="section-title">Intake:</p>
+            {data?.intakes?.map((intake, i, array) => (
+              <span key={intake?.id} className="for-intake-table">
+                {intake?.name}
+                {/* {i < array.length - 1 && ", "} */}
+              </span>
+            ))}
           </div>
           <div className="mt-3">
-            <p className="section-title">Recruitment Type</p>
+            <p className="section-title">Recruitment Type:</p>
             {data?.isAcceptHome === true ? (
               <span className="for-intake-table">Home/UK</span>
             ) : null}
@@ -65,8 +76,25 @@ const SideModal = ({ data, action }) => {
             ) : null}
           </div>
           <div className="mt-3">
-            <p className="section-title">Delivery pattern</p>
+            <p className="section-title">Delivery pattern:</p>
             <p>{data?.deliveryPatternNames}</p>
+          </div>
+          <div className="mt-3">
+            <p className="section-title">Admission Managers: </p>
+            {data?.admissionManagers?.map((adm, i, array) => (
+              <div key={adm?.id} className="d-flex mb-3">
+                <img
+                  className="live-intake-c-image"
+                  src={rootUrl + adm?.profileImageUrl}
+                  alt="adm_logo"
+                />{" "}
+                <div className="ml-3">
+                  <p>Name: {adm?.name}</p>
+                  <p>Email: {adm?.email}</p>
+                  <p>Phone: {adm?.phone}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

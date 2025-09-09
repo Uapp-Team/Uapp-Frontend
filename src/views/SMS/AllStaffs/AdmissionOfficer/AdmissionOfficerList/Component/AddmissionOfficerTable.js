@@ -328,7 +328,7 @@ const AddmissionOfficerTable = ({
                           <span
                             onClick={() => {
                               history.push(
-                                `/admission-officer-applications/${2}/${3}/${
+                                `/admission-officer-applications/${12}/${38}/${
                                   officer?.id
                                 }`
                               );

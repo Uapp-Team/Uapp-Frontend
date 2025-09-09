@@ -1,5 +1,6 @@
 import React from "react";
 import { rootUrl } from "../../constants/constants";
+import xlDownload from "../../assets/img/xlDownloadBtn.svg";
 
 const Download = ({ url, className, fileName }) => {
   const AuthStr = localStorage.getItem("token");
@@ -37,7 +38,8 @@ const Download = ({ url, className, fileName }) => {
 
   return (
     <span className={`pointer ${className}`} onClick={onClick}>
-      <i class="fas fa-arrow-down"></i>
+      {/* <i class="fas fa-arrow-down"></i> */}
+      <img style={{ height: "38px" }} src={xlDownload} alt="" />
     </span>
   );
 };

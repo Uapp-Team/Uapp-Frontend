@@ -95,7 +95,13 @@ const StudentParentConsultant = ({ id }) => {
                 {consultantData?.phoneNumber === null ? null : (
                   <li>
                     <i className="fas fa-phone pr-2"></i>{" "}
-                    {consultantData?.phoneNumber}{" "}
+                    {consultantData?.phoneNumber &&
+                    consultantData?.phoneNumber.includes("+")
+                      ? consultantData?.phoneNumber
+                      : consultantData?.phoneNumber &&
+                        !consultantData?.phoneNumber.includes("+")
+                      ? "+" + consultantData?.phoneNumber
+                      : null}
                   </li>
                 )}
               </ul>

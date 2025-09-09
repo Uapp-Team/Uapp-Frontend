@@ -40,7 +40,15 @@ const PersonalInformationCard = ({
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Mobile Number</td>
-            <td>+{studentDetails?.phoneNumber}</td>
+            <td>
+              {studentDetails?.phoneNumber &&
+              studentDetails?.phoneNumber.includes("+")
+                ? studentDetails?.phoneNumber
+                : studentDetails?.phoneNumber &&
+                  !studentDetails?.phoneNumber.includes("+")
+                ? "+" + studentDetails?.phoneNumber
+                : null}
+            </td>
           </tr>
           <tr style={{ borderBottom: "1px solid #dee2e6" }}>
             <td>Email Address</td>

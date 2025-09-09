@@ -321,7 +321,8 @@ const StaffContactInformation = () => {
           userType === userTypes?.ComplianceManager ||
           userType === userTypes?.AccountOfficer ||
           userType === userTypes?.FinanceManager ||
-          userType === userTypes?.Editor
+          userType === userTypes?.Editor ||
+          userType === userTypes?.DirectorSalesMarketing
             ? null
             : "Staff"
         }

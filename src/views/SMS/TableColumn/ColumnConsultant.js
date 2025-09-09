@@ -52,7 +52,7 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
-    title: "Companions",
+    title: "Referrers",
     isActive: true,
   },
   {

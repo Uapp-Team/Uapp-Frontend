@@ -39,7 +39,15 @@ const AdmissionManagerApplication = ({ currentUser }) => {
   const location = useLocation();
   const history = useHistory();
   const parameters = history?.location?.state?.state;
-  const { status, selector, universityId, consultantId, intake } = useParams();
+  const {
+    status,
+    selector,
+    universityId,
+    consultantId,
+    intake,
+    courseId,
+    adoId,
+  } = useParams();
 
   // Previous states get from session storage
   const AdmissionManagerApplicationPaging = JSON.parse(
@@ -226,6 +234,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       ? AdmissionManagerApplicationPaging?.applicationValue
       : 0
   );
+  console.log(applicationValue, "vai plz");
+
   const [applicationSubLabel, setApplicationSubLabel] = useState(
     AdmissionManagerApplicationPaging?.applicationSubLabel
       ? AdmissionManagerApplicationPaging?.applicationSubLabel
@@ -703,7 +713,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       if (status > 0) {
         const result = res?.find((ans) => ans?.id.toString() === status);
         setApplicationLabel(result?.name);
-        setApplicationValue(res?.id);
+        // setApplicationValue(res?.id);
       }
     });
 
@@ -754,12 +764,41 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     // for admission manager
     if (currentUser !== undefined) {
-      get(`CommonApplicationFilterDD/UappId`).then((res) => {
-        setManagerUappIdDD(res);
-      });
-      get(`CommonApplicationFilterDD/Student`).then((res) => {
-        setManagerStdDD(res);
-      });
+      if (universityId) {
+        get(
+          `CommonApplicationFilterDD/UappId?universityId=${universityId}`
+        ).then((res) => {
+          setManagerUappIdDD(res);
+        });
+      } else if (intake) {
+        get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then(
+          (res) => {
+            setManagerUappIdDD(res);
+          }
+        );
+      } else {
+        get(`CommonApplicationFilterDD/UappId`).then((res) => {
+          setManagerUappIdDD(res);
+        });
+      }
+
+      if (universityId) {
+        get(
+          `CommonApplicationFilterDD/Student?universityId=${universityId}`
+        ).then((res) => {
+          setManagerStdDD(res);
+        });
+      } else if (intake) {
+        get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+          (res) => {
+            setManagerStdDD(res);
+          }
+        );
+      } else {
+        get("CommonApplicationFilterDD/Student").then((res) => {
+          setManagerStdDD(res);
+        });
+      }
       get(`CommonApplicationFilterDD/Consultant`).then((res) => {
         setManagerConsDD(res);
         if (consultantId) {
@@ -814,7 +853,9 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             selectedDates[1] ? selectedDates[1] : ""
           }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
             confidenceValue ? confidenceValue : ""
-          }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
+          }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}&courseId=${
+            courseId ? courseId : 0
+          }&adoId=${adoId ? adoId : 0}`
         ).then((res) => {
           setLoading(false);
           setApplicationList(res?.models);
@@ -857,6 +898,8 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     confidenceValue,
     educationLevelValue,
     departmentValue,
+    courseId,
+    adoId,
   ]);
 
   // Function for open delete modal
@@ -1373,11 +1416,6 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           <Row className="mb-3">
             <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
-              <Download
-                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`}
-                className="mx-2"
-                fileName="Applications.xlsx"
-              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1409,39 +1447,19 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 </div>
 
                 <div className="mr-3">
-                  <Dropdown
-                    className="uapp-dropdown"
-                    style={{ float: "right" }}
-                    isOpen={dropdownOpen}
-                    toggle={toggle}
-                  >
-                    <DropdownToggle caret>
-                      <i className="fas fa-print fs-7"></i>
-                    </DropdownToggle>
-                    <DropdownMenu className="bg-dd-4">
-                      <div className="d-flex justify-content-around align-items-center mt-2">
-                        <div className="cursor-pointer">
-                          <ReactTableConvertToXl
-                            id="test-table-xls-button"
-                            table="table-to-xls"
-                            filename="tablexls"
-                            sheet="tablexls"
-                            icon={<i className="fas fa-file-excel"></i>}
-                          />
-                        </div>
-                        {/* <div className="cursor-pointer">
-                          <ReactToPrint
-                            trigger={() => (
-                              <p>
-                                <i className="fas fa-file-pdf"></i>
-                              </p>
-                            )}
-                            content={() => componentRef.current}
-                          />
-                        </div> */}
-                      </div>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <Download
+                    url={`Application/GetReport?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+                      selectedDates[0] ? selectedDates[0] : ""
+                    }&toApplicationDate=${
+                      selectedDates[1] ? selectedDates[1] : ""
+                    }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+                      confidenceValue ? confidenceValue : ""
+                    }&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}&courseId=${
+                      courseId ? courseId : 0
+                    }&adoId=${adoId ? adoId : 0}`}
+                    className="mx-2"
+                    fileName="Applications.xlsx"
+                  />
                 </div>
 
                 {/* column hide unhide starts here */}

@@ -101,70 +101,93 @@ const AdmissionManager = ({
   return (
     <>
       <div className="custom-card-border p-4 mb-3">
-        <div className="d-flex">
-          <div className="user-profile-pic">
-            {applicationInfo?.admissionManager?.admissionManagerMedia ===
-            null ? (
-              <img
-                src={profileImage}
-                alt="profile_img"
-                // style={{
-                //   width: "150px",
-                //   height: "150px",
-                //   borderRadius: "7px",
-                // }}
-              />
-            ) : (
-              <img
-                src={
-                  rootUrl +
-                  applicationInfo?.admissionManager?.admissionManagerMedia
-                    ?.thumbnailUrl
-                }
-                alt="profile_img"
-                // style={{
-                //   width: "150px",
-                //   height: "150px",
-                //   borderRadius: "7px",
-                // }}
-              />
-            )}
-          </div>{" "}
-          <div className="mx-4">
-            <div className="">
-              <h5>Admission Manager</h5>
-            </div>
-
-            <p>
-              {" "}
-              {applicationInfo?.admissionManager?.firstName}{" "}
-              {applicationInfo?.admissionManager?.lastName}
-            </p>
-            <ul className="uapp-ul word-break">
-              <li>
-                {" "}
-                <i className="far fa-envelope pr-1 pb-2"></i>{" "}
-                {applicationInfo?.admissionManager?.email}
-              </li>
-              {applicationInfo?.admissionManager?.phoneNumber ===
-              null ? null : (
-                <li>
-                  {" "}
-                  <i className="fas fa-phone pr-1"></i>{" "}
-                  {applicationInfo?.admissionManager?.phoneNumber &&
-                  applicationInfo?.admissionManager?.phoneNumber.includes("+")
-                    ? applicationInfo?.admissionManager?.phoneNumber
-                    : applicationInfo?.admissionManager?.phoneNumber &&
-                      !applicationInfo?.admissionManager?.phoneNumber.includes(
-                        "+"
-                      )
-                    ? "+" + applicationInfo?.admissionManager?.phoneNumber
-                    : null}
-                </li>
-              )}
-            </ul>
-          </div>
+        <div className="d-flex justify-content-between">
           <div>
+            {" "}
+            <Row>
+              <Col md="3">
+                <div className="user-profile-pic">
+                  {applicationInfo?.admissionManager?.admissionManagerMedia ===
+                  null ? (
+                    <img
+                      src={profileImage}
+                      alt="profile_img"
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
+                    />
+                  ) : (
+                    <img
+                      src={
+                        rootUrl +
+                        applicationInfo?.admissionManager?.admissionManagerMedia
+                          ?.thumbnailUrl
+                      }
+                      alt="profile_img"
+                      // style={{
+                      //   width: "150px",
+                      //   height: "150px",
+                      //   borderRadius: "7px",
+                      // }}
+                    />
+                  )}
+                </div>
+              </Col>
+              <Col md="9">
+                <div>
+                  <div className="d-flex justify-content-between">
+                    <h5>Admission Manager</h5>
+                    <div>
+                      {permissions?.includes(
+                        permissionList.Change_Admission_Manger
+                      ) ? (
+                        <>
+                          {applicationInfo.applicationStatusId !== 13 &&
+                          (userType === userTypes?.SystemAdmin ||
+                            userType === userTypes?.Admin ||
+                            userType === userTypes?.ProviderAdmin) ? (
+                            <p
+                              className="text-blue text-underline pointer "
+                              onClick={() => handleChange(uniId)}
+                            >
+                              <i
+                                class="far fa-edit"
+                                style={{ color: "#619bff", cursor: "pointer" }}
+                              ></i>
+                            </p>
+                          ) : null}
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <p>
+                    {" "}
+                    {applicationInfo?.admissionManager?.firstName}{" "}
+                    {applicationInfo?.admissionManager?.lastName}
+                  </p>
+                  <ul className="uapp-ul word-break">
+                    <li>
+                      {" "}
+                      <i className="far fa-envelope pr-1 pb-2"></i>{" "}
+                      {applicationInfo?.admissionManager?.email}
+                    </li>
+                    {applicationInfo?.admissionManager?.phoneNumber ===
+                    null ? null : (
+                      <li>
+                        {" "}
+                        <i className="fas fa-phone pr-1"></i>{" "}
+                        {applicationInfo?.admissionManager?.phoneNumber}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+          </div>
+          {/* <div>
             {permissions?.includes(permissionList.Change_Admission_Manger) ? (
               <>
                 {applicationInfo.applicationStatusId !== 13 &&
@@ -183,7 +206,7 @@ const AdmissionManager = ({
                 ) : null}
               </>
             ) : null}
-          </div>
+          </div> */}
         </div>
       </div>
       <Modal isOpen={modalOpen} toggle={closeModal} className="uapp-modal">

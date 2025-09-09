@@ -682,7 +682,7 @@ const ProviderApplication = ({ currentUser }) => {
     get(`CommonApplicationFilterDD/InterestUappId`).then((res) => {
       setCommonUappIdDD(res);
     });
-    get(`CommonApplicationFilterDD/Student`).then((res) => {
+    get(`CommonApplicationFilterDD/InterestStudent`).then((res) => {
       setCommonStdDD(res);
     });
     get(`CommonApplicationFilterDD/Consultant`).then((res) => {

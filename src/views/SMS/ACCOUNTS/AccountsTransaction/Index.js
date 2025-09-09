@@ -1435,7 +1435,7 @@ const Index = () => {
                               {tableData[0]?.isActive ? <th>Date</th> : null}
                               {userType !== userTypes?.Consultant &&
                               tableData[1]?.isActive ? (
-                                <th>Name</th>
+                                <th>Consultant</th>
                               ) : null}
                               {tableData[2]?.isActive ? (
                                 <th>Transaction Code/Type</th>

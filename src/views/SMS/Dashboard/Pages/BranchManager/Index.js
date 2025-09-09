@@ -99,16 +99,24 @@ const BranchManager = () => {
 
       <Row>
         <Col lg={12}>
-          <CountCard id={manager?.branchId} intakeRngValue={intakeRngValue} />
+          {manager?.branchId && intakeRngValue && (
+            <CountCard id={manager?.branchId} intakeRngValue={intakeRngValue} />
+          )}
+
           {/* <ConsultantListForBranch id={manager?.branchId} /> */}
           {/* <ComplianceOfficerListForBranch id={manager?.branchId} /> */}
 
-          <DashboardApplication
-            url={`BranchManagerDashboard/Application?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
-          />
-          <DashboardReadyToApply
-            url={`BranchManagerDashboard/readytoapplyapplications?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
-          />
+          {manager?.branchId && intakeRngValue && (
+            <DashboardApplication
+              url={`BranchManagerDashboard/Application?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
+            />
+          )}
+
+          {manager?.branchId && intakeRngValue && (
+            <DashboardReadyToApply
+              url={`BranchManagerDashboard/readytoapplyapplications?id=${manager?.branchId}&rangeid=${intakeRngValue}`}
+            />
+          )}
         </Col>
         {/* <Col lg={3}>
           <IncomeAmount

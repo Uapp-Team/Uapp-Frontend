@@ -488,6 +488,9 @@ const ConsultantNewDeclaration = lazy(() =>
 const ConsultantList = lazy(() =>
   import("./views/SMS/ConsultantsAndTypes/ConsultantList/Index")
 );
+const ConsultantReport = lazy(() =>
+  import("./views/SMS/ConsultantsAndTypes/ConsultantsReport/Index.js")
+);
 
 const BranchConsultantList = lazy(() =>
   import("./views/SMS/Branches/Branch/BranchConsultantList/Index.js")
@@ -3355,6 +3358,16 @@ class AppRouter extends React.Component {
                         : NotAuthorized
                     }
                   />
+                  <AppRoute
+                    path="/consultantInsights"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Consultant_Report
+                      )
+                        ? ConsultantReport
+                        : NotAuthorized
+                    }
+                  />
 
                   <AppRoute
                     path="/branch-consultantList/:id"
@@ -3545,10 +3558,18 @@ class AppRouter extends React.Component {
                     path="/intakeRangeReport"
                     component={IntakeRangeReport}
                   />
+
                   <AppRoute
                     path="/applicationreport"
-                    component={ApplicationReport}
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_ApplicationReport
+                      )
+                        ? ApplicationReport
+                        : NotAuthorized
+                    }
                   />
+
                   <AppRoute
                     path="/ProviderDailyReport"
                     component={ProviderDailyReport}
@@ -4290,6 +4311,16 @@ class AppRouter extends React.Component {
                     }
                   />
                   <AppRoute
+                    path="/applicationsFromSalesTeamLeader/:salesTeamLeaderId/:intake?"
+                    component={
+                      permissions?.includes(
+                        permissionList?.View_Application_List
+                      )
+                        ? Applications
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
                     path="/applicationsFromAssociate/:consultantId/:intake?"
                     component={
                       permissions?.includes(
@@ -4802,6 +4833,14 @@ class AppRouter extends React.Component {
 
                   <AppRoute
                     path="/studentList"
+                    component={
+                      permissions?.includes(permissionList?.View_Student_list)
+                        ? StudentList
+                        : NotAuthorized
+                    }
+                  />
+                  <AppRoute
+                    path="/sales-team-studentList/:salesTeamLeaderId"
                     component={
                       permissions?.includes(permissionList?.View_Student_list)
                         ? StudentList

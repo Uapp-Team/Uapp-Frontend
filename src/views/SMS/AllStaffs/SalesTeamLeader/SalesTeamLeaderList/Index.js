@@ -288,6 +288,14 @@ const Index = (props) => {
   const redirectToStaffProfile = (empId) => {
     history.push(`/salesTeamLeaderProfile/${empId}`);
   };
+  const redirectStudentList = (salesTeamLeaderId) => {
+    history.push(`/sales-team-studentList/${salesTeamLeaderId}`);
+  };
+  const redirectToApplications = (salesTeamLeaderId) => {
+    history.push({
+      pathname: `/applicationsFromSalesTeamLeader/${salesTeamLeaderId}`,
+    });
+  };
 
   const redirectToAssignPage = (salesTeamLeaderId, branchId) => {
     history.push({
@@ -466,6 +474,8 @@ const Index = (props) => {
                         redirecttoStaffGeneralInfo={redirecttoStaffGeneralInfo}
                         handleDeleteStaff={handleDeleteStaff}
                         redirectToAssignPage={redirectToAssignPage}
+                        redirectStudentList={redirectStudentList}
+                        redirectToApplications={redirectToApplications}
                       />
                     )}
                   </>

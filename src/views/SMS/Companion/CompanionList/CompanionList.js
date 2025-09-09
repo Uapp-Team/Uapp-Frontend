@@ -122,6 +122,7 @@ const CompanionList = () => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `Referrer/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
       ).then((res) => {
@@ -137,7 +138,6 @@ const CompanionList = () => {
     dataPerPage,
     searchStr,
     statusValue,
-    loading,
     success,
     isTyping,
     consultantValue,
@@ -276,7 +276,7 @@ const CompanionList = () => {
   };
 
   const handleUpdate = (data) => {
-    put(`Companion/toggle-block-status/${data?.id}`).then((res) => {
+    put(`Referrer/toggle-block-status/${data?.id}`).then((res) => {
       if (res?.status == 200 && res?.data?.isSuccess == true) {
         addToast(res?.data?.title, {
           autoDismiss: true,
