@@ -69,6 +69,8 @@ const EligibilityInformation = () => {
   const [isBrpApproved, setIsBrpApproved] = useState(true);
   const [isCvApproved, setIsCvApproved] = useState(true);
   const [isBacApproved, setIsBacApproved] = useState(true);
+  const [extraDocuments, setExtraDocuments] = useState([]);
+  const [extraDocumentErrors, setExtraDocumentErrors] = useState([]);
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -156,6 +158,37 @@ const EligibilityInformation = () => {
         });
       }
     },[residencyValue]);
+
+ 
+  useEffect(() => {
+      if(extraDocuments.length>0)
+      {
+        extraDocuments.forEach((extraDocument,index) => {
+        if(extraDocuments[index].title === "")
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].titleError = "Document name is required ";       // update safely
+            
+            return newErrors;
+          });
+        }
+        else
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy array
+            newErrors[index] = { ...newErrors[index] };     // copy the object at index
+            newErrors[index].titleError = "";       // update safely
+            
+            return newErrors;
+          });
+        }
+      });
+      }
+    },[extraDocuments]);
     
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
@@ -209,6 +242,19 @@ const EligibilityInformation = () => {
     setResidencyLabel(label);
     setResidencyValue(value);
   };
+
+  // Add new extra doc
+  const addExtraDocument = () => {
+    setExtraDocuments([...extraDocuments, { title: "", file: null }]);
+    setExtraDocumentErrors([...extraDocumentErrors, { titleError: "", fileError: "" }]); 
+  };
+
+  // Remove extra doc by index
+  const removeExtraDocument = (index) => {
+    setExtraDocuments(extraDocuments.filter((element, i) => i !== index));
+    setExtraDocumentErrors(extraDocumentErrors.filter((element, i) => i !== index));
+  };
+
   // Id or Passport Code Start
 
   // function getBase643(file) {
@@ -434,7 +480,30 @@ const EligibilityInformation = () => {
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
     subData.append("BacCertificateFile", FileList7);
-
+    // extraDocuments.forEach((file) => {
+    //   console.log("file = ",file);
+     
+      
+    //   if (file) {
+    //     subData.append("ExtraDocuments", file); 
+    //   }
+    //   });
+    //   for (let [key, value] of subData.entries()) {
+    //     console.log("key val = ");
+    //     console.log(key, value);
+    //   }
+    // append each extra document
+    extraDocuments.forEach((doc, index) => {
+      console.log("doc = ",doc);
+      
+      if (doc.name) {
+        subData.append(`ExtraDocuments[${index}].Name`, doc.name);
+      }
+      if (doc.file) {
+        subData.append(`ExtraDocuments[${index}].Document`, doc.file);
+      }
+    });
+      // console.table(subData);
     subData.append(
       "expireDate",
       residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
@@ -571,6 +640,12 @@ const EligibilityInformation = () => {
                 setIsCvApproved={setIsCvApproved}
                 isBacApproved={isBacApproved}
                 setIsBacApproved={setIsBacApproved}
+                extraDocuments={extraDocuments}
+                setExtraDocuments={setExtraDocuments}
+                addExtraDocument={addExtraDocument}
+                removeExtraDocument={removeExtraDocument}
+                extraDocumentErrors={extraDocumentErrors}
+                setExtraDocumentErrors={setExtraDocumentErrors}
               ></EligibilityForm>
             </TabPane>
           </TabContent>

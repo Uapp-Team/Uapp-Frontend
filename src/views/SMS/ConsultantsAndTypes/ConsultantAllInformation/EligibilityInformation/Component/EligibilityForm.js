@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import DMYPicker from "../../../../../../components/form/DMYPicker";
@@ -87,9 +87,35 @@ const EligibilityForm = ({
   setIsCvApproved,
   isBacApproved,
   setIsBacApproved,
+  extraDocuments,
+  setExtraDocuments,
+  addExtraDocument,
+  removeExtraDocument,
+  extraDocumentErrors,
+  setExtraDocumentErrors
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
+
+  const handleExtraDocumentFileNameChange = (index, value) => {
+    const newDocs = [...extraDocuments];
+    newDocs[index].title = value;       
+    setExtraDocuments(newDocs);
+
+    const newErrors = [...extraDocumentErrors];
+    newErrors[index].titleError = value ? "" : "Document name is required";
+    setExtraDocumentErrors(newErrors);
+  };  
+
+  const handleExtraDocumentFileChange = (index, file) => {
+    const newDocs = [...extraDocuments];
+    newDocs[index].file = file;
+    setExtraDocuments(newDocs);
+
+    const newErrors = [...extraDocumentErrors];
+    newErrors[index].file = file ? "" : "File is required";
+    setExtraDocumentErrors(newErrors);
+  };
 
   const handleApprove = (newValue, param) => {
     post(
@@ -108,7 +134,6 @@ const EligibilityForm = ({
       }
     });
   };
-
   return (
     <Form onSubmit={handleSubmit}>
       <input
@@ -836,7 +861,50 @@ const EligibilityForm = ({
               </>
             )}
           </FormGroup>
+          {/* ----- New Addition ----- */}
+          {/* Map function rendering  */}
+          {extraDocuments.map((doc, index) => (
+            <FormGroup row key={index}>
+              {/* Document Name */}
+              <Col md="3">
+                <Input 
+                  type="text"
+                  name={`extraDocuments[${index}].Title`}
+                  placeholder="Enter Document Name"
+                  value={doc.title}
+                  onChange={(e)=>handleExtraDocumentFileNameChange(index,e.target.value)}
+                />
+                {extraDocumentErrors[index]?.titleError && <span className="text-danger">{extraDocumentErrors[index].titleError}</span>}
+              </Col>
 
+              {/* Upload */}                                                       
+              <Col md="6">
+                <UploadFile
+                  file={doc.file}
+                  id={`extraDocuments[${index}].Document`}
+                  // setFile={(file) => {
+                  //   const newDocs = [...extraDocuments];
+                  //   newDocs[index].file = file;
+                  //   setExtraDocuments(newDocs);
+                  // }}
+                  onChange={handleExtraDocumentFileChange}
+                />
+                {extraDocumentErrors[index]?.file && <span className="text-danger">{extraDocumentErrors[index].file}</span>}
+              </Col>
+
+              {/* Remove button */}
+              <Col md="3">
+                <Button color="danger" onClick={() => removeExtraDocument(index)}>
+                  <i className="fas fa-minus"></i>
+                </Button>
+              </Col>
+            </FormGroup>
+          ))}
+          <Button color="primary" onClick={addExtraDocument}>
+            <i className="fas fa-plus"></i> 
+          </Button>
+          {/* ---- New Addition  ----*/}
+        
 
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />
