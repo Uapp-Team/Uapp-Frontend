@@ -122,6 +122,7 @@ const CompanionList = () => {
 
   useEffect(() => {
     if (!isTyping) {
+      setLoading(true);
       Uget(
         `Referrer/paginated-list?&status=${statusValue}&searchstring=${searchStr}&page=${currentPage}&pageSize=${dataPerPage}&consultantid=${consultantValue}&branchid=${branchValue}`
       ).then((res) => {
@@ -137,7 +138,6 @@ const CompanionList = () => {
     dataPerPage,
     searchStr,
     statusValue,
-    loading,
     success,
     isTyping,
     consultantValue,

@@ -649,7 +649,7 @@ const AddMissionManagerAdd = ({
                                 <span
                                   onClick={() => {
                                     history.push(
-                                      `/admission-manager-applications/${2}/${3}/${
+                                      `/admission-manager-applications/${12}/${38}/${
                                         manager?.id
                                       }`
                                     );
