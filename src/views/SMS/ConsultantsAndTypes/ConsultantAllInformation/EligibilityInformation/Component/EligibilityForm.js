@@ -92,30 +92,12 @@ const EligibilityForm = ({
   addExtraDocument,
   removeExtraDocument,
   extraDocumentErrors,
-  setExtraDocumentErrors
+  setExtraDocumentErrors,
+  handleExtraDocumentFileNameChange,
+  handleExtraDocumentFileChange
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
-
-  const handleExtraDocumentFileNameChange = (index, value) => {
-    const newDocs = [...extraDocuments];
-    newDocs[index].title = value;       
-    setExtraDocuments(newDocs);
-
-    const newErrors = [...extraDocumentErrors];
-    newErrors[index].titleError = value ? "" : "Document name is required";
-    setExtraDocumentErrors(newErrors);
-  };  
-
-  const handleExtraDocumentFileChange = (index, file) => {
-    const newDocs = [...extraDocuments];
-    newDocs[index].file = file;
-    setExtraDocuments(newDocs);
-
-    const newErrors = [...extraDocumentErrors];
-    newErrors[index].file = file ? "" : "File is required";
-    setExtraDocumentErrors(newErrors);
-  };
 
   const handleApprove = (newValue, param) => {
     post(
@@ -871,7 +853,7 @@ const EligibilityForm = ({
                   type="text"
                   name={`extraDocuments[${index}].Title`}
                   placeholder="Enter Document Name"
-                  value={doc.title}
+                  value={extraDocuments[index].title}
                   onChange={(e)=>handleExtraDocumentFileNameChange(index,e.target.value)}
                 />
                 {extraDocumentErrors[index]?.titleError && <span className="text-danger">{extraDocumentErrors[index].titleError}</span>}
@@ -881,15 +863,16 @@ const EligibilityForm = ({
               <Col md="6">
                 <UploadFile
                   file={doc.file}
-                  id={`extraDocuments[${index}].Document`}
-                  // setFile={(file) => {
-                  //   const newDocs = [...extraDocuments];
-                  //   newDocs[index].file = file;
-                  //   setExtraDocuments(newDocs);
-                  // }}
-                  onChange={handleExtraDocumentFileChange}
+                  id = {`extraDocuments[${index}].Document`}
+                  name = {`extraDocuments[${index}].Document`}
+                  defaultValue = {extraDocuments[index].file}
+                  setFile={(file) => {
+                          const existingDocuments = [...extraDocuments];
+                          existingDocuments[index].file = file;
+                          setExtraDocuments(existingDocuments);
+                        }}
                 />
-                {extraDocumentErrors[index]?.file && <span className="text-danger">{extraDocumentErrors[index].file}</span>}
+                {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
               </Col>
 
               {/* Remove button */}

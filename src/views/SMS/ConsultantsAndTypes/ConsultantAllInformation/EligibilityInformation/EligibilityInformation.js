@@ -90,6 +90,8 @@ const EligibilityInformation = () => {
     get(
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
+      console.log("res = ");
+      console.table(res?.extraDocumentFiles[0]);
       setEligibilityData(res);
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
@@ -102,6 +104,18 @@ const EligibilityInformation = () => {
       setBacFile(
         res?.bacCertificate?.fileUrl ? res?.bacCertificate?.fileUrl : null
       );
+       
+      let existingDocuments = [...extraDocuments];
+      const result =  res?.extraDocumentFiles.map((extraDocumentFile,index)=>{
+        // console.log("extraDocumentFile url  = ",extraDocumentFile[fileUrl]);
+        // console.table(extraDocumentFile?.fileUrl);
+        existingDocuments =  [...existingDocuments, { title: "", file: null }];
+        existingDocuments[index].file = extraDocumentFile?.fileUrl;
+      });
+      setExtraDocuments(existingDocuments);
+      console.log("state ext doc  = ");
+      
+      console.table(extraDocuments);
       setUniCountryLabel(
         res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
@@ -147,6 +161,7 @@ const EligibilityInformation = () => {
       setIsBrpApproved(res?.isBRPApproved);
       setIsCvApproved(res?.isCvApproved);
       setIsBacApproved(res?.isBacCertificateApproved);
+
     });
   }, [success, consultantRegisterId, setRightToWork]);
 
@@ -159,37 +174,6 @@ const EligibilityInformation = () => {
       }
     },[residencyValue]);
 
- 
-  useEffect(() => {
-      if(extraDocuments.length>0)
-      {
-        extraDocuments.forEach((extraDocument,index) => {
-        if(extraDocuments[index].title === "")
-        {
-          const existingExtraDocumentErrors = [...extraDocumentErrors];
-          setExtraDocumentErrors((prevErrors) => {
-            const newErrors = [...prevErrors];              // copy existing error's array
-            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
-            newErrors[index].titleError = "Document name is required ";       // update safely
-            
-            return newErrors;
-          });
-        }
-        else
-        {
-          const existingExtraDocumentErrors = [...extraDocumentErrors];
-          setExtraDocumentErrors((prevErrors) => {
-            const newErrors = [...prevErrors];              // copy array
-            newErrors[index] = { ...newErrors[index] };     // copy the object at index
-            newErrors[index].titleError = "";       // update safely
-            
-            return newErrors;
-          });
-        }
-      });
-      }
-    },[extraDocuments]);
-    
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
     value: countryOptions?.id,
@@ -415,7 +399,23 @@ const EligibilityInformation = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
+  const handleExtraDocumentFileNameChange = (index, value) => {
+    const newDocs = [...extraDocuments];
+    newDocs[index].title = value;       
+    setExtraDocuments(newDocs);
+    displayErrorExtraDocumentNames(extraDocuments,index,setExtraDocumentErrors);
+  };  
 
+  const handleExtraDocumentFileChange = (index, file) => {
+    console.log("file = ");
+    
+    console.table(file);
+    const newDocs = [...extraDocuments];
+    newDocs[index].file = file;
+    setExtraDocuments(newDocs);
+    displayErrorExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
+
+  };
   const ValidateForm = () => {
     var isValid = true;
     if (uniCountryValue === 0) {
@@ -464,12 +464,96 @@ const EligibilityInformation = () => {
       isValid = false;
       setCvError("File is required");
     }
-    // if (FileList7 === null && bacFile == null) {
-    //   isValid = false;
-    //   setBacError("File is required");
-    // }
+
+    isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+    //Reassigning the isValid after checking extra Doc Names 
     return isValid;
+    
   };
+
+  const validateExtraDocumentNames = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
+    extraDocuments.forEach((element,index) => {
+      if(extraDocuments[index].title===null || extraDocuments[index].title==="")
+      {
+        isValid = false;
+        setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].titleError = "Document name is required";
+          return newErrors;
+        }) 
+      }
+    });
+    return isValid;
+  });
+
+  const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
+    extraDocuments.forEach((element,index) => {
+      if(extraDocuments[index].file===null)
+      {
+        isValid = false;
+        setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].fileError = "Document file is required";
+          return newErrors;
+        }) 
+      }
+    });
+    return isValid;
+  });
+
+  const displayErrorExtraDocumentNames = ((extraDocuments,index,setExtraDocumentErrors)=>{
+       if(extraDocuments[index].title === "")
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].titleError = "Document name is required ";       // update safely
+            
+            return newErrors;
+          });
+        }
+        else
+        {
+           const existingExtraDocumentErrors = [...extraDocumentErrors];
+            setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].titleError = "";      
+            
+            return newErrors;
+          });
+        }
+  });
+
+  const displayErrorExtraDocuments = ((extraDocuments,index,setExtraDocumentErrors)=>{
+       if(extraDocuments[index].file === null)
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].fileError = "Document file is required ";       // update safely
+            
+            return newErrors;
+          });
+        }
+        else
+        {
+           const existingExtraDocumentErrors = [...extraDocumentErrors];
+            setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].fileError = "";      
+            
+            return newErrors;
+          });
+        }
+  });
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -480,21 +564,9 @@ const EligibilityInformation = () => {
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
     subData.append("BacCertificateFile", FileList7);
-    // extraDocuments.forEach((file) => {
-    //   console.log("file = ",file);
-     
-      
-    //   if (file) {
-    //     subData.append("ExtraDocuments", file); 
-    //   }
-    //   });
-    //   for (let [key, value] of subData.entries()) {
-    //     console.log("key val = ");
-    //     console.log(key, value);
-    //   }
+   
     // append each extra document
     extraDocuments.forEach((doc, index) => {
-      console.log("doc = ",doc);
       
       if (doc.name) {
         subData.append(`ExtraDocuments[${index}].Name`, doc.name);
@@ -503,14 +575,10 @@ const EligibilityInformation = () => {
         subData.append(`ExtraDocuments[${index}].Document`, doc.file);
       }
     });
-      // console.table(subData);
     subData.append(
       "expireDate",
       residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
     );
-    // if (exDate) {
-    //   subData.append("expireDate", exDate);
-    // }
 
     if (ValidateForm()) {
       setButtonStatus(true);
@@ -646,6 +714,8 @@ const EligibilityInformation = () => {
                 removeExtraDocument={removeExtraDocument}
                 extraDocumentErrors={extraDocumentErrors}
                 setExtraDocumentErrors={setExtraDocumentErrors}
+                handleExtraDocumentFileChange={handleExtraDocumentFileChange}
+                handleExtraDocumentFileNameChange={handleExtraDocumentFileNameChange}
               ></EligibilityForm>
             </TabPane>
           </TabContent>
