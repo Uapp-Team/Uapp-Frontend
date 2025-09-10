@@ -50,6 +50,7 @@ const SelectAndClear = ({
   setSalesTeamLeaderLabel,
 }) => {
   const userType = localStorage.getItem("userType");
+
   return (
     <Card className="uapp-employee-search zindex-100">
       <CardBody>
@@ -131,7 +132,7 @@ const SelectAndClear = ({
           <Col className="uapp-mb mb-2" md="4" sm="12">
             <Typing
               name="search"
-              placeholder="Id, Name, Email"
+              placeholder="Id, Name, Email ,Phone number"
               value={searchStr}
               setValue={setSearchStr}
               setIsTyping={setIsTyping}
