@@ -865,7 +865,7 @@ const EligibilityForm = ({
                   file={doc.file}
                   id = {`extraDocuments[${index}].Document`}
                   name = {`extraDocuments[${index}].Document`}
-                  defaultValue = {extraDocuments[index].file}
+                  defaultValue = {extraDocuments[index].file+"extra doc file"}
                   setFile={(file) => {
                           const existingDocuments = [...extraDocuments];
                           existingDocuments[index].file = file;

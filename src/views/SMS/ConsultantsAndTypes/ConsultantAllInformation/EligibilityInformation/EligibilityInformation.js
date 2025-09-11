@@ -100,6 +100,7 @@ const EligibilityInformation = () => {
         res?.proofOfAddress?.fileUrl ? res?.proofOfAddress?.fileUrl : null
       );
       setBrpFile(res?.brp?.fileUrl ? res?.brp?.fileUrl : null);
+      
       setCvFile(res?.cv?.fileUrl ? res?.cv?.fileUrl : null);
       setBacFile(
         res?.bacCertificate?.fileUrl ? res?.bacCertificate?.fileUrl : null
@@ -110,6 +111,9 @@ const EligibilityInformation = () => {
         // console.log("extraDocumentFile url  = ",extraDocumentFile[fileUrl]);
         // console.table(extraDocumentFile?.fileUrl);
         existingDocuments =  [...existingDocuments, { title: "", file: null }];
+        console.log("file url before set = "+extraDocumentFile.fileUrl);
+        
+        existingDocuments[index].title = extraDocumentFile?.fileName;
         existingDocuments[index].file = extraDocumentFile?.fileUrl;
       });
       setExtraDocuments(existingDocuments);
@@ -173,6 +177,10 @@ const EligibilityInformation = () => {
         });
       }
     },[residencyValue]);
+
+useEffect(() => {
+  console.log("extraDocuments updated:", extraDocuments);
+}, [extraDocuments]);
 
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
