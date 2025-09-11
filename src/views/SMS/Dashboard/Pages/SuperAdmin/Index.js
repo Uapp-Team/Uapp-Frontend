@@ -59,10 +59,12 @@ const SuperAdmin = () => {
   }, [intakeRngDD, intake]);
 
   useEffect(() => {
-    get(`AdminDashboard/Cards/${intakeRngValue}`).then((res) => {
-      setCount(res);
-      console.log(res);
-    });
+    if (intakeRngValue) {
+      get(`AdminDashboard/Cards/${intakeRngValue}`).then((res) => {
+        setCount(res);
+        console.log(res);
+      });
+    }
   }, [intakeRngValue]);
 
   const currentUser = JSON?.parse(localStorage.getItem("current_user"));
@@ -204,14 +206,20 @@ const SuperAdmin = () => {
       {/* table start */}
 
       <>
-        <DashboardApplication
-          url={`AdminDashboard/NewApplications/${intakeRngValue}`}
-        />
-        <DashboardReadyToApply
-          url={`AdminDashboard/ReadyToApplyApplications/${intakeRngValue}`}
-        />
+        {intakeRngValue && (
+          <DashboardApplication
+            url={`AdminDashboard/NewApplications/${intakeRngValue}`}
+          />
+        )}
+
+        {intakeRngValue && (
+          <DashboardReadyToApply
+            url={`AdminDashboard/ReadyToApplyApplications/${intakeRngValue}`}
+          />
+        )}
+
         <DashboardProgressChart />
-        <DashboardComission id={intakeRngValue} />
+        {intakeRngValue && <DashboardComission id={intakeRngValue} />}
       </>
 
       <div className="custom-card-border p-4 mb-30px">
