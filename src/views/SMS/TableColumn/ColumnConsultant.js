@@ -32,6 +32,10 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
+    title: "Sales Training",
+    isActive: true,
+  },
+  {
     title: "Started",
     isActive: true,
   },

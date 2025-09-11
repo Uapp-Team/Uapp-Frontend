@@ -113,6 +113,12 @@ const Index = () => {
   );
   const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
+  const [salesTrainingStatus, setSalesTrainingStatus] = useState([]);
+  const [salesTrainingStatusLabel, setSalesTrainingStatusLabel] = useState(
+    "Select Sales Training"
+  );
+  const [salesTrainingStatusValue, setSalesTrainingStatusValue] = useState(0);
+
   useEffect(() => {
     sessionStorage.setItem(
       "consultant",
@@ -151,6 +157,10 @@ const Index = () => {
 
     get("AccountStatusDD/index").then((res) => {
       setStatusType(res);
+    });
+
+    Uget(`ConsultantDD/GetSalesTrainingStatus`).then((res) => {
+      setSalesTrainingStatus(res?.data);
     });
   }, []);
 
@@ -230,7 +240,7 @@ const Index = () => {
     if (!isTyping) {
       setLoading(true);
 
-      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesTrainingStatus=${salesTrainingStatusValue}`;
 
       if (checkBac) {
         url += `&isBacCertificate=${checkBac}`;
@@ -263,6 +273,7 @@ const Index = () => {
     tierValue,
     SalesTeamLeaderValue,
     checkBac,
+    salesTrainingStatusValue,
   ]);
 
   // useEffect(() => {
@@ -481,7 +492,21 @@ const Index = () => {
     // handleSearch();
   };
 
+  const salesTrainingStatusMenu = salesTrainingStatus?.map(
+    (salesTrainingStatusOptions) => ({
+      label: salesTrainingStatusOptions?.name,
+      value: salesTrainingStatusOptions?.id,
+    })
+  );
+
+  const salesTrainingStatusType = (label, value) => {
+    setSalesTrainingStatusLabel(label);
+    setSalesTrainingStatusValue(value);
+  };
+
   const handleReset = () => {
+    setSalesTrainingStatusLabel("Select Sales Training");
+    setSalesTrainingStatusValue(0);
     setSalesTeamLeaderLabel("Select Sales Team Leader");
     setSalesTeamLeaderValue(0);
     setBranchLabel("Select Branch");
@@ -540,6 +565,12 @@ const Index = () => {
           selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
           setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
           setSalesTeamLeaderValue={setSalesTeamLeaderValue}
+          salesTrainingStatusLabel={salesTrainingStatusLabel}
+          salesTrainingStatusValue={salesTrainingStatusValue}
+          salesTrainingStatusMenu={salesTrainingStatusMenu}
+          salesTrainingStatusType={salesTrainingStatusType}
+          setSalesTrainingStatusValue={setSalesTrainingStatusValue}
+          setSalesTrainingStatusLabel={setSalesTrainingStatusLabel}
         ></SelectAndClear>
         {/* filter starts here */}
 
