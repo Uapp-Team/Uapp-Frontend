@@ -7,6 +7,7 @@ import icon_info from "../../../../../assets/img/icons/icon_info.png";
 import Typing from "../../../../../components/form/Typing";
 import Filter from "../../../../../components/Dropdown/Filter";
 import { consultantTier } from "../../../../../constants/presetData";
+import { permissionList } from "../../../../../constants/AuthorizationConstant";
 
 const SelectAndClear = ({
   empOptiopns,
@@ -54,8 +55,21 @@ const SelectAndClear = ({
   salesTrainingStatusType,
   setSalesTrainingStatusLabel,
   setSalesTrainingStatusValue,
+  countryLabel,
+  countryName,
+  countryValue,
+  selectCountry,
+  nationalityCountryLabel,
+  nationalityCountryName,
+  nationalityCountryValue,
+  selectNationalityCountry,
+  setCountryLabel,
+  setCountryValue,
+  setNationalityCountryLabel,
+  setNationalityCountryValue,
 }) => {
   const userType = localStorage.getItem("userType");
+  const permissions = JSON.parse(localStorage.getItem("permissions"));
 
   return (
     <Card className="uapp-employee-search zindex-100">
@@ -73,6 +87,29 @@ const SelectAndClear = ({
               />
             </Col>
           )}
+          <Col className="uapp-mb mb-2" md="3" sm="12">
+            <Select
+              options={countryName}
+              value={{ label: countryLabel, value: countryValue }}
+              onChange={(opt) => selectCountry(opt.label, opt.value)}
+              name="countryId"
+              id="countryId"
+            />
+          </Col>
+
+          <Col className="uapp-mb mb-2" md="3" sm="12">
+            <Select
+              options={nationalityCountryName}
+              value={{
+                label: nationalityCountryLabel,
+                value: nationalityCountryValue,
+              }}
+              onChange={(opt) => selectNationalityCountry(opt.label, opt.value)}
+              name="countryOfCitizenShipId"
+              id="countryOfCitizenShipId"
+            />
+          </Col>
+
           {userTypeId === userTypes?.SystemAdmin ||
           userTypeId === userTypes?.Admin ||
           userTypeId === userTypes?.BranchAdmin ||
@@ -119,19 +156,27 @@ const SelectAndClear = ({
             />
           </Col>
 
-          <Col className="uapp-mb mb-2" md="3" sm="12">
-            <Select
-              options={salesTrainingStatusMenu}
-              value={{
-                label: salesTrainingStatusLabel,
-                value: salesTrainingStatusValue,
-              }}
-              onChange={(opt) => salesTrainingStatusType(opt.label, opt.value)}
-              name="salesTrainingStatus"
-              id="salesTrainingStatus"
-              // isDisabled={type ? true : false}
-            />
-          </Col>
+          {permissions?.includes(
+            permissionList.Change_Consultant_Sales_Training_Status
+          ) ? (
+            <>
+              <Col className="uapp-mb mb-2" md="3" sm="12">
+                <Select
+                  options={salesTrainingStatusMenu}
+                  value={{
+                    label: salesTrainingStatusLabel,
+                    value: salesTrainingStatusValue,
+                  }}
+                  onChange={(opt) =>
+                    salesTrainingStatusType(opt.label, opt.value)
+                  }
+                  name="salesTrainingStatus"
+                  id="salesTrainingStatus"
+                  // isDisabled={type ? true : false}
+                />
+              </Col>
+            </>
+          ) : null}
 
           <Col className="uapp-mb mb-2" md="3" sm="12">
             <Filter
@@ -166,8 +211,38 @@ const SelectAndClear = ({
               </div>
             </div>
           </Col>
+          <Col
+            className="uapp-mb mt-3 mb-2 d-flex justify-content-between"
+            md="3"
+            sm="12"
+          >
+            <div>
+              <input
+                onChange={(e) => {
+                  setCheck(e.target.checked);
+                }}
+                type="checkbox"
+                name=""
+                value=""
+                checked={check}
+              />{" "}
+              <span>Is From Student?</span>
+            </div>
+            <div>
+              <input
+                onChange={(e) => {
+                  setCheckBac(e.target.checked);
+                }}
+                type="checkbox"
+                name=""
+                value=""
+                checked={checkBac}
+              />{" "}
+              <span>BAC Certificate</span>
+            </div>
+          </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col className="uapp-mb mb-2" md="2" sm="12">
             <div>
               <input
@@ -196,7 +271,7 @@ const SelectAndClear = ({
               <span>BAC Certificate</span>
             </div>
           </Col>
-        </Row>
+        </Row> */}
 
         <Row>
           <Col lg="12" md="12" sm="12" xs="12">
@@ -207,13 +282,56 @@ const SelectAndClear = ({
               }}
             >
               <div className="mt-1 mx-1" style={{ display: "flex" }}>
-                {salesTrainingStatusValue !== 0 ||
+                {countryValue !== 0 ||
+                nationalityCountryValue !== 0 ||
+                salesTrainingStatusValue !== 0 ||
                 SalesTeamLeaderValue !== 0 ||
                 empValue !== 0 ||
                 branchValue !== 0 ||
                 statusValue !== 0
                   ? ""
                   : ""}
+
+                {countryValue !== 0 ? (
+                  <TagButton
+                    label={countryLabel}
+                    setValue={() => setCountryValue(0)}
+                    setLabel={() => setCountryLabel("Select Country")}
+                  ></TagButton>
+                ) : (
+                  ""
+                )}
+
+                {countryValue !== 0 &&
+                  (nationalityCountryValue !== 0 ||
+                  salesTrainingStatusValue !== 0 ||
+                  SalesTeamLeaderValue !== 0 ||
+                  empValue !== 0 ||
+                  branchValue !== 0 ||
+                  statusValue !== 0
+                    ? ""
+                    : "")}
+
+                {nationalityCountryValue !== 0 ? (
+                  <TagButton
+                    label={nationalityCountryLabel}
+                    setValue={() => setNationalityCountryValue(0)}
+                    setLabel={() =>
+                      setNationalityCountryLabel("Select Nationality")
+                    }
+                  ></TagButton>
+                ) : (
+                  ""
+                )}
+
+                {nationalityCountryValue !== 0 &&
+                  (salesTrainingStatusValue !== 0 ||
+                  SalesTeamLeaderValue !== 0 ||
+                  empValue !== 0 ||
+                  branchValue !== 0 ||
+                  statusValue !== 0
+                    ? ""
+                    : "")}
 
                 {salesTrainingStatusValue !== 0 ? (
                   <TagButton
@@ -287,7 +405,9 @@ const SelectAndClear = ({
               </div>
 
               <div className="mt-1 mx-0 d-flex btn-clear">
-                {salesTrainingStatusValue !== 0 ||
+                {countryValue !== 0 ||
+                nationalityCountryValue !== 0 ||
+                salesTrainingStatusValue !== 0 ||
                 SalesTeamLeaderValue !== 0 ||
                 empValue !== 0 ||
                 branchValue !== 0 ||

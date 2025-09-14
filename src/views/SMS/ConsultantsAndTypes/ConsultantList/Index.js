@@ -119,6 +119,14 @@ const Index = () => {
   );
   const [salesTrainingStatusValue, setSalesTrainingStatusValue] = useState(0);
 
+  const [country, setCountry] = useState([]);
+  const [countryLabel, setCountryLabel] = useState("Select Country");
+  const [countryValue, setCountryValue] = useState(0);
+  const [nationalityCountry, setNationalityCountry] = useState([]);
+  const [nationalityCountryLabel, setNationalityCountryLabel] =
+    useState("Select Nationality");
+  const [nationalityCountryValue, setNationalityCountryValue] = useState(0);
+
   useEffect(() => {
     sessionStorage.setItem(
       "consultant",
@@ -147,6 +155,14 @@ const Index = () => {
   ]);
 
   useEffect(() => {
+    get("CountryDD/index").then((res) => {
+      setCountry(res);
+    });
+
+    get("CountryDD/index").then((res) => {
+      setNationalityCountry(res);
+    });
+
     get("ConsultantTypeDD/Index").then((res) => {
       setEmpList(res);
     });
@@ -240,7 +256,7 @@ const Index = () => {
     if (!isTyping) {
       setLoading(true);
 
-      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesTrainingStatus=${salesTrainingStatusValue}`;
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesTrainingStatus=${salesTrainingStatusValue}&countryId=${countryValue}&countryOfCitizenShipId=${nationalityCountryValue}`;
 
       if (checkBac) {
         url += `&isBacCertificate=${checkBac}`;
@@ -274,6 +290,8 @@ const Index = () => {
     SalesTeamLeaderValue,
     checkBac,
     salesTrainingStatusValue,
+    countryValue,
+    nationalityCountryValue,
   ]);
 
   // useEffect(() => {
@@ -470,6 +488,26 @@ const Index = () => {
     // handleSearch();
   };
 
+  const countryName = country?.map((branchCountry) => ({
+    label: branchCountry.name,
+    value: branchCountry.id,
+  }));
+
+  const selectCountry = (label, value) => {
+    setCountryLabel(label);
+    setCountryValue(value);
+  };
+
+  const nationalityCountryName = nationalityCountry?.map((branchCountry) => ({
+    label: branchCountry.name,
+    value: branchCountry.id,
+  }));
+
+  const selectNationalityCountry = (label, value) => {
+    setNationalityCountryLabel(label);
+    setNationalityCountryValue(value);
+  };
+
   const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
     (consSalesTeamLeaderOptions) => ({
       label: consSalesTeamLeaderOptions?.name,
@@ -505,6 +543,10 @@ const Index = () => {
   };
 
   const handleReset = () => {
+    setCountryValue(0);
+    setCountryLabel("Select Country");
+    setNationalityCountryValue(0);
+    setNationalityCountryLabel("Select Nationality");
     setSalesTrainingStatusLabel("Select Sales Training");
     setSalesTrainingStatusValue(0);
     setSalesTeamLeaderLabel("Select Sales Team Leader");
@@ -571,6 +613,18 @@ const Index = () => {
           salesTrainingStatusType={salesTrainingStatusType}
           setSalesTrainingStatusValue={setSalesTrainingStatusValue}
           setSalesTrainingStatusLabel={setSalesTrainingStatusLabel}
+          countryLabel={countryLabel}
+          countryName={countryName}
+          countryValue={countryValue}
+          setCountryLabel={setCountryLabel}
+          setCountryValue={setCountryValue}
+          selectCountry={selectCountry}
+          nationalityCountryLabel={nationalityCountryLabel}
+          nationalityCountryName={nationalityCountryName}
+          nationalityCountryValue={nationalityCountryValue}
+          selectNationalityCountry={selectNationalityCountry}
+          setNationalityCountryLabel={setNationalityCountryLabel}
+          setNationalityCountryValue={setNationalityCountryValue}
         ></SelectAndClear>
         {/* filter starts here */}
 

@@ -75,6 +75,60 @@ const ConsultantColumnHide = ({
                     </div>
                   )}
                 </>
+              ) : i === 8 ? (
+                <>
+                  {permissions?.includes(
+                    permissionList.Change_Consultant_Sales_Training_Status
+                  ) && (
+                    <div className="d-flex justify-content-between">
+                      <Col md="8" className="">
+                        <p className="">{table?.title}</p>
+                      </Col>
+
+                      <Col md="4" className="text-center">
+                        <FormGroup check inline>
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id=""
+                            name="check"
+                            onChange={(e) => {
+                              handleChecked(e, i);
+                            }}
+                            defaultChecked={table?.isActive}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </div>
+                  )}
+                </>
+              ) : i === 9 ? (
+                <>
+                  {permissions?.includes(
+                    permissionList.Change_Consultant_Admission_Training_Status
+                  ) && (
+                    <div className="d-flex justify-content-between">
+                      <Col md="8" className="">
+                        <p className="">{table?.title}</p>
+                      </Col>
+
+                      <Col md="4" className="text-center">
+                        <FormGroup check inline>
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id=""
+                            name="check"
+                            onChange={(e) => {
+                              handleChecked(e, i);
+                            }}
+                            defaultChecked={table?.isActive}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </div>
+                  )}
+                </>
               ) : i === 12 ? (
                 <>
                   {permissions?.includes(

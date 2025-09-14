@@ -79,7 +79,9 @@ const ProfileHeadCard = ({ id, status = false }) => {
         setTierValue(res?.tireStatusValue);
         setTierLabel(res?.tireStatus);
         setSalesTrainingStatusValue(res?.salesTrainingStatusId);
+        setSalesTrainingStatusLabel(res?.salesTrainingStatus);
         setAdMissionTrainingStatusValue(res?.admissionTrainingStatusId);
+        setAdMissionTrainingStatusLabel(res?.admissionTrainingStatus);
       });
 
       get(`AccountStatusDD/index/${id}`).then((res) => {
@@ -102,30 +104,21 @@ const ProfileHeadCard = ({ id, status = false }) => {
   useEffect(() => {
     Uget(`ConsultantDD/GetSalesTrainingStatus`).then((res) => {
       setSalesTrainingStatus(res?.data);
-
-      if (salesTrainingStatusValue) {
-        const filterData = res?.data?.filter(
-          (item) => item.id === salesTrainingStatusValue
-        );
-        filterData?.length === 1
-          ? setSalesTrainingStatusLabel(filterData[0].name)
-          : setSalesTrainingStatusLabel("Sales Training");
-      }
     });
 
     Uget(`ConsultantDD/GetAdmissionTrainingStatus`).then((res) => {
       setAdMissionTrainingStatus(res?.data);
 
-      if (adMissionTrainingStatusValue) {
-        const filterData = res?.data?.filter(
-          (item) => item.id === adMissionTrainingStatusValue
-        );
-        filterData?.length === 1
-          ? setAdMissionTrainingStatusLabel(filterData[0].name)
-          : setAdMissionTrainingStatusLabel("Sales Training");
-      }
+      // if (adMissionTrainingStatusValue) {
+      //   const filterData = res?.data?.filter(
+      //     (item) => item.id === adMissionTrainingStatusValue
+      //   );
+      //   filterData?.length === 1
+      //     ? setAdMissionTrainingStatusLabel(filterData[0].name)
+      //     : setAdMissionTrainingStatusLabel("Sales Training");
+      // }
     });
-  }, [salesTrainingStatusValue, adMissionTrainingStatusValue]);
+  }, []);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
