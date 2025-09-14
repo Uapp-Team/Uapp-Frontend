@@ -113,6 +113,20 @@ const Index = () => {
   );
   const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
 
+  const [salesTrainingStatus, setSalesTrainingStatus] = useState([]);
+  const [salesTrainingStatusLabel, setSalesTrainingStatusLabel] = useState(
+    "Select Sales Training"
+  );
+  const [salesTrainingStatusValue, setSalesTrainingStatusValue] = useState(0);
+
+  const [country, setCountry] = useState([]);
+  const [countryLabel, setCountryLabel] = useState("Select Country");
+  const [countryValue, setCountryValue] = useState(0);
+  const [nationalityCountry, setNationalityCountry] = useState([]);
+  const [nationalityCountryLabel, setNationalityCountryLabel] =
+    useState("Select Nationality");
+  const [nationalityCountryValue, setNationalityCountryValue] = useState(0);
+
   useEffect(() => {
     sessionStorage.setItem(
       "consultant",
@@ -141,6 +155,14 @@ const Index = () => {
   ]);
 
   useEffect(() => {
+    get("CountryDD/index").then((res) => {
+      setCountry(res);
+    });
+
+    get("CountryDD/index").then((res) => {
+      setNationalityCountry(res);
+    });
+
     get("ConsultantTypeDD/Index").then((res) => {
       setEmpList(res);
     });
@@ -151,6 +173,10 @@ const Index = () => {
 
     get("AccountStatusDD/index").then((res) => {
       setStatusType(res);
+    });
+
+    Uget(`ConsultantDD/GetSalesTrainingStatus`).then((res) => {
+      setSalesTrainingStatus(res?.data);
     });
   }, []);
 
@@ -230,7 +256,7 @@ const Index = () => {
     if (!isTyping) {
       setLoading(true);
 
-      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`;
+      let url = `Consultant/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&searchstring=${searchStr}&consultantTypeId=${empValue}&branchId=${branchValue}&status=${statusValue}&isfromstudent=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesTrainingStatus=${salesTrainingStatusValue}&countryId=${countryValue}&countryOfCitizenShipId=${nationalityCountryValue}`;
 
       if (checkBac) {
         url += `&isBacCertificate=${checkBac}`;
@@ -263,6 +289,9 @@ const Index = () => {
     tierValue,
     SalesTeamLeaderValue,
     checkBac,
+    salesTrainingStatusValue,
+    countryValue,
+    nationalityCountryValue,
   ]);
 
   // useEffect(() => {
@@ -459,6 +488,26 @@ const Index = () => {
     // handleSearch();
   };
 
+  const countryName = country?.map((branchCountry) => ({
+    label: branchCountry.name,
+    value: branchCountry.id,
+  }));
+
+  const selectCountry = (label, value) => {
+    setCountryLabel(label);
+    setCountryValue(value);
+  };
+
+  const nationalityCountryName = nationalityCountry?.map((branchCountry) => ({
+    label: branchCountry.name,
+    value: branchCountry.id,
+  }));
+
+  const selectNationalityCountry = (label, value) => {
+    setNationalityCountryLabel(label);
+    setNationalityCountryValue(value);
+  };
+
   const consSalesTeamLeaderMenu = consSalesTeamLeader?.map(
     (consSalesTeamLeaderOptions) => ({
       label: consSalesTeamLeaderOptions?.name,
@@ -481,7 +530,25 @@ const Index = () => {
     // handleSearch();
   };
 
+  const salesTrainingStatusMenu = salesTrainingStatus?.map(
+    (salesTrainingStatusOptions) => ({
+      label: salesTrainingStatusOptions?.name,
+      value: salesTrainingStatusOptions?.id,
+    })
+  );
+
+  const salesTrainingStatusType = (label, value) => {
+    setSalesTrainingStatusLabel(label);
+    setSalesTrainingStatusValue(value);
+  };
+
   const handleReset = () => {
+    setCountryValue(0);
+    setCountryLabel("Select Country");
+    setNationalityCountryValue(0);
+    setNationalityCountryLabel("Select Nationality");
+    setSalesTrainingStatusLabel("Select Sales Training");
+    setSalesTrainingStatusValue(0);
     setSalesTeamLeaderLabel("Select Sales Team Leader");
     setSalesTeamLeaderValue(0);
     setBranchLabel("Select Branch");
@@ -540,6 +607,24 @@ const Index = () => {
           selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
           setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
           setSalesTeamLeaderValue={setSalesTeamLeaderValue}
+          salesTrainingStatusLabel={salesTrainingStatusLabel}
+          salesTrainingStatusValue={salesTrainingStatusValue}
+          salesTrainingStatusMenu={salesTrainingStatusMenu}
+          salesTrainingStatusType={salesTrainingStatusType}
+          setSalesTrainingStatusValue={setSalesTrainingStatusValue}
+          setSalesTrainingStatusLabel={setSalesTrainingStatusLabel}
+          countryLabel={countryLabel}
+          countryName={countryName}
+          countryValue={countryValue}
+          setCountryLabel={setCountryLabel}
+          setCountryValue={setCountryValue}
+          selectCountry={selectCountry}
+          nationalityCountryLabel={nationalityCountryLabel}
+          nationalityCountryName={nationalityCountryName}
+          nationalityCountryValue={nationalityCountryValue}
+          selectNationalityCountry={selectNationalityCountry}
+          setNationalityCountryLabel={setNationalityCountryLabel}
+          setNationalityCountryValue={setNationalityCountryValue}
         ></SelectAndClear>
         {/* filter starts here */}
 

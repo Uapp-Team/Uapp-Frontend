@@ -104,6 +104,8 @@ export const permissionList = {
   View_Consultant_Application: 63,
   Approve_Consultant_Eligibility: 68,
   View_Consultant_Report: 70,
+  Change_Consultant_Sales_Training_Status: 71,
+  Change_Consultant_Admission_Training_Status: 72,
 
   //Consultant_Commission
   Assign_Commission_Group: 64,
