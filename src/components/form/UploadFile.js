@@ -19,15 +19,9 @@ const UploadFile = ({
   require = false,
 }) => {
 
-    console.log("default value = "+defaultValue);
-
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [fileType, setFileType] = useState(null);
   const [base64, setBash64] = useState(null);
-  useEffect(()=>{
-    console.log("default value = "+defaultValue);
-    
-  },[]);
 
   const handleFile = (e) => {
     const file = e.target.files[0];

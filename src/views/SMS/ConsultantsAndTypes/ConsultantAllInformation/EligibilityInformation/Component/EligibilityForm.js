@@ -865,12 +865,8 @@ const EligibilityForm = ({
                   file={doc.file}
                   id = {`extraDocuments[${index}].Document`}
                   name = {`extraDocuments[${index}].Document`}
-                  defaultValue = {extraDocuments[index].file+"extra doc file"}
-                  setFile={(file) => {
-                          const existingDocuments = [...extraDocuments];
-                          existingDocuments[index].file = file;
-                          setExtraDocuments(existingDocuments);
-                        }}
+                  defaultValue = {extraDocuments[index].fileUrl}
+                  setFile={(file) => { handleExtraDocumentFileChange(index,file) }}
                 />
                 {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
               </Col>

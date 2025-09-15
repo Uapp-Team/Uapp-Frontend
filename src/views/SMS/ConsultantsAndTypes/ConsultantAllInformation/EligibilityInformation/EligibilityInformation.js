@@ -90,8 +90,6 @@ const EligibilityInformation = () => {
     get(
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
-      console.log("res = ");
-      console.table(res?.extraDocumentFiles[0]);
       setEligibilityData(res);
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
@@ -108,18 +106,13 @@ const EligibilityInformation = () => {
        
       let existingDocuments = [...extraDocuments];
       const result =  res?.extraDocumentFiles.map((extraDocumentFile,index)=>{
-        // console.log("extraDocumentFile url  = ",extraDocumentFile[fileUrl]);
-        // console.table(extraDocumentFile?.fileUrl);
-        existingDocuments =  [...existingDocuments, { title: "", file: null }];
-        console.log("file url before set = "+extraDocumentFile.fileUrl);
+        existingDocuments =  [...existingDocuments, { title: "", file: null,fileUrl:null }];
         
         existingDocuments[index].title = extraDocumentFile?.fileName;
-        existingDocuments[index].file = extraDocumentFile?.fileUrl;
+        existingDocuments[index].fileUrl = extraDocumentFile?.fileUrl;
       });
       setExtraDocuments(existingDocuments);
-      console.log("state ext doc  = ");
       
-      console.table(extraDocuments);
       setUniCountryLabel(
         res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
@@ -237,7 +230,7 @@ useEffect(() => {
 
   // Add new extra doc
   const addExtraDocument = () => {
-    setExtraDocuments([...extraDocuments, { title: "", file: null }]);
+    setExtraDocuments([...extraDocuments, { title: "", file: null , fileUrl:null}]);
     setExtraDocumentErrors([...extraDocumentErrors, { titleError: "", fileError: "" }]); 
   };
 
@@ -414,12 +407,16 @@ useEffect(() => {
     displayErrorExtraDocumentNames(extraDocuments,index,setExtraDocumentErrors);
   };  
 
-  const handleExtraDocumentFileChange = (index, file) => {
-    console.log("file = ");
+  const handleExtraDocumentFileChange = (index, newFile) => {
     
-    console.table(file);
+    setExtraDocuments(prev => {
+    const existingExtraDocuments = [...prev];
+    existingExtraDocuments[index] = { ...existingExtraDocuments[index], file: newFile };
+    return existingExtraDocuments;
+  });
+
     const newDocs = [...extraDocuments];
-    newDocs[index].file = file;
+    newDocs[index].file = newFile;
     setExtraDocuments(newDocs);
     displayErrorExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
 

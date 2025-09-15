@@ -6,10 +6,7 @@ import { Modal } from "reactstrap";
 const Preview = ({ file }) => {
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [popoverData, setPopoverData] = useState(false);
-  useEffect(()=>{
-    console.log("file in preview = ",file);
-    
-  });
+ 
   const openPopover = (url) => {
     console.log("call came in openPopover() ");
     
