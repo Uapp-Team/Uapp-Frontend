@@ -91,6 +91,9 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
+      console.log("res = ");
+      console.table(res);
+      
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
       );
@@ -106,10 +109,12 @@ const EligibilityInformation = () => {
        
       let existingDocuments = [...extraDocuments];
       const result =  res?.extraDocumentFiles.map((extraDocumentFile,index)=>{
-        existingDocuments =  [...existingDocuments, { title: "", file: null,fileUrl:null }];
+        existingDocuments =  [...existingDocuments, { id:null,title: "", file: null,fileUrl:null,isDocumentApproved:null }];
         
+        existingDocuments[index].id = extraDocumentFile?.id;
         existingDocuments[index].title = extraDocumentFile?.fileName;
         existingDocuments[index].fileUrl = extraDocumentFile?.fileUrl;
+        existingDocuments[index].isDocumentApproved = extraDocumentFile?.isDocumentApproved;
       });
       setExtraDocuments(existingDocuments);
       
@@ -172,7 +177,8 @@ const EligibilityInformation = () => {
     },[residencyValue]);
 
 useEffect(() => {
-  console.log("extraDocuments updated:", extraDocuments);
+  console.log("extraDocuments updated : ");
+  console.table(extraDocuments);
 }, [extraDocuments]);
 
   const countryDD = countryList.map((countryOptions) => ({
@@ -230,7 +236,7 @@ useEffect(() => {
 
   // Add new extra doc
   const addExtraDocument = () => {
-    setExtraDocuments([...extraDocuments, { title: "", file: null , fileUrl:null}]);
+    setExtraDocuments([...extraDocuments, { id:null,title: "", file: null , fileUrl:null,isDocumentApproved:null }]);
     setExtraDocumentErrors([...extraDocumentErrors, { titleError: "", fileError: "" }]); 
   };
 
@@ -418,7 +424,7 @@ useEffect(() => {
     const newDocs = [...extraDocuments];
     newDocs[index].file = newFile;
     setExtraDocuments(newDocs);
-    displayErrorExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
+    displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
 
   };
   const ValidateForm = () => {
@@ -495,7 +501,7 @@ useEffect(() => {
 
   const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
     extraDocuments.forEach((element,index) => {
-      if(extraDocuments[index].file===null)
+      if(extraDocuments[index].fileUrl === null && extraDocuments[index].file === null)
       {
         isValid = false;
         setExtraDocumentErrors((prevErrors)=>{
@@ -534,25 +540,25 @@ useEffect(() => {
         }
   });
 
-  const displayErrorExtraDocuments = ((extraDocuments,index,setExtraDocumentErrors)=>{
-       if(extraDocuments[index].file === null)
+  const displayErrorOfExtraDocuments = ((extraDocuments,index,setExtraDocumentErrors)=>{
+       if(extraDocuments[index].fileUrl !== null || extraDocuments[index].file !== null)
         {
           const existingExtraDocumentErrors = [...extraDocumentErrors];
-          setExtraDocumentErrors((prevErrors) => {
-            const newErrors = [...prevErrors];              // copy existing error's array
-            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
-            newErrors[index].fileError = "Document file is required ";       // update safely
+            setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].fileError = "";      
             
             return newErrors;
           });
         }
         else
         {
-           const existingExtraDocumentErrors = [...extraDocumentErrors];
-            setExtraDocumentErrors((prevErrors) => {
-            const newErrors = [...prevErrors];              
-            newErrors[index] = { ...newErrors[index] };     
-            newErrors[index].fileError = "";      
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].fileError = "Document file is required ";       // update safely
             
             return newErrors;
           });

@@ -116,6 +116,25 @@ const EligibilityForm = ({
       }
     });
   };
+  const handleApproveForExtraDocuments = (id, isDocApproved) => {
+    console.log("hit came in method");
+    
+    post(
+      `ConsultantEligibility/ApproveEligibilityExtraDocument?id=${id}&isDocApproved=${isDocApproved}`
+    ).then((res) => {
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+  };
   return (
     <Form onSubmit={handleSubmit}>
       <input
@@ -870,6 +889,97 @@ const EligibilityForm = ({
                 />
                 {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
               </Col>
+              {/* New Portion Added */}
+              {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {" "}
+                {extraDocuments[index].fileUrl !== null ? (
+                  <Col md="3">
+                    <div className="d-flex">
+                      {extraDocuments[index].isDocumentApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApproveForExtraDocuments(extraDocuments[index].id,true);
+                              
+                            }}
+                            title="Approve ck"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApproveForExtraDocuments(extraDocuments[index].id,false);
+                              // setIsBacApproved(false);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : extraDocuments[index].isDocumentApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApproveForExtraDocuments(extraDocuments[index].id,false);
+                            // setIsBacApproved(false);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApproveForExtraDocuments(extraDocuments[index].id,true);
+                            // setIsBacApproved(true);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
+                  </Col>
+                ) : null}
+              </>
+            ) : (
+              <>
+                {extraDocuments[index].fileUrl !== null ? (
+                  <>
+                    {extraDocuments[index].isDocumentApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : extraDocuments[index].isDocumentApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
+            {/* New Portion Added */}
 
               {/* Remove button */}
               <Col md="3">
@@ -878,7 +988,11 @@ const EligibilityForm = ({
                 </Button>
               </Col>
             </FormGroup>
+            
           ))}
+ 
+
+            
           <Button color="primary" onClick={addExtraDocument}>
             <i className="fas fa-plus"></i> 
           </Button>
