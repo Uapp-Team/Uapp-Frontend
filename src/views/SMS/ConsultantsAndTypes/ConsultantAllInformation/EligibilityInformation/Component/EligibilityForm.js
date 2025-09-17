@@ -116,7 +116,7 @@ const EligibilityForm = ({
       }
     });
   };
-  const handleApproveForExtraDocuments = (id, isDocApproved) => {
+  const handleApproveForExtraDocuments = (id, isDocApproved,index) => {
     console.log("hit came in method");
     
     post(
@@ -127,6 +127,9 @@ const EligibilityForm = ({
           appearance: "success",
           autoDismiss: true,
         });
+         const newDocs = [...extraDocuments];
+        newDocs[index].isDocumentApproved = isDocApproved;       
+        setExtraDocuments(newDocs);
       } else {
         addToast(res?.data?.message, {
           appearance: "error",
@@ -868,11 +871,17 @@ const EligibilityForm = ({
             <FormGroup row key={index}>
               {/* Document Name */}
               <Col md="3">
+                <input
+                  type="hidden"
+                  name={`extraDocuments[${index}].Id`}
+                  id="id"
+                  value={extraDocuments[index]?.id !== null ? extraDocuments[index]?.id : 0}
+                />
                 <Input 
                   type="text"
                   name={`extraDocuments[${index}].Title`}
                   placeholder="Enter Document Name"
-                  value={extraDocuments[index].title}
+                  value={extraDocuments[index]?.title}
                   onChange={(e)=>handleExtraDocumentFileNameChange(index,e.target.value)}
                 />
                 {extraDocumentErrors[index]?.titleError && <span className="text-danger">{extraDocumentErrors[index].titleError}</span>}
@@ -880,11 +889,17 @@ const EligibilityForm = ({
 
               {/* Upload */}                                                       
               <Col md="6">
+                <input
+                    type="hidden"
+                    name={`extraDocuments[${index}].mediaFileId`}
+                    id="id"
+                    value={extraDocuments[index]?.mediaFileId !== null ? extraDocuments[index]?.mediaFileId : 0}
+                  />
                 <UploadFile
                   file={doc.file}
                   id = {`extraDocuments[${index}].Document`}
                   name = {`extraDocuments[${index}].Document`}
-                  defaultValue = {extraDocuments[index].fileUrl}
+                  defaultValue = {extraDocuments[index]?.fileUrl}
                   setFile={(file) => { handleExtraDocumentFileChange(index,file) }}
                 />
                 {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
@@ -905,10 +920,10 @@ const EligibilityForm = ({
                             className="btn btn-success mr-2"
                             style={{ width: "55px", height: "33px" }}
                             onClick={() => {
-                              handleApproveForExtraDocuments(extraDocuments[index].id,true);
+                              handleApproveForExtraDocuments(extraDocuments[index].id,true,index);
                               
                             }}
-                            title="Approve ck"
+                            title="Approve"
                           >
                             <i className="fas fa-check"></i>
                           </button>
@@ -917,8 +932,7 @@ const EligibilityForm = ({
                             className="btn btn-danger"
                             style={{ width: "55px", height: "33px" }}
                             onClick={() => {
-                              handleApproveForExtraDocuments(extraDocuments[index].id,false);
-                              // setIsBacApproved(false);
+                              handleApproveForExtraDocuments(extraDocuments[index].id,false,index);
                             }}
                             title="Not Approve"
                           >
@@ -931,8 +945,7 @@ const EligibilityForm = ({
                           className="btn btn-danger"
                           style={{ width: "55px", height: "33px" }}
                           onClick={() => {
-                            handleApproveForExtraDocuments(extraDocuments[index].id,false);
-                            // setIsBacApproved(false);
+                            handleApproveForExtraDocuments(extraDocuments[index].id,false,index);
                           }}
                           title="Not Approve"
                         >
@@ -944,8 +957,7 @@ const EligibilityForm = ({
                           className="btn btn-success mr-2"
                           style={{ width: "55px", height: "33px" }}
                           onClick={() => {
-                            handleApproveForExtraDocuments(extraDocuments[index].id,true);
-                            // setIsBacApproved(true);
+                            handleApproveForExtraDocuments(extraDocuments[index].id,true,index);
                           }}
                           title="Approve"
                         >

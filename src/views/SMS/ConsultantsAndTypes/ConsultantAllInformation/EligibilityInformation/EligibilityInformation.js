@@ -108,12 +108,13 @@ const EligibilityInformation = () => {
       );
        
       let existingDocuments = [...extraDocuments];
-      const result =  res?.extraDocumentFiles.map((extraDocumentFile,index)=>{
+      const result =  res?.extraDocuments.map((extraDocumentFile,index)=>{
         existingDocuments =  [...existingDocuments, { id:null,title: "", file: null,fileUrl:null,isDocumentApproved:null }];
         
         existingDocuments[index].id = extraDocumentFile?.id;
-        existingDocuments[index].title = extraDocumentFile?.fileName;
-        existingDocuments[index].fileUrl = extraDocumentFile?.fileUrl;
+        existingDocuments[index].title = extraDocumentFile?.title;
+        existingDocuments[index].fileUrl = extraDocumentFile?.mediaFile?.fileUrl;
+        existingDocuments[index].mediaFileId = extraDocumentFile?.mediaFileId;
         existingDocuments[index].isDocumentApproved = extraDocumentFile?.isDocumentApproved;
       });
       setExtraDocuments(existingDocuments);
@@ -236,7 +237,7 @@ useEffect(() => {
 
   // Add new extra doc
   const addExtraDocument = () => {
-    setExtraDocuments([...extraDocuments, { id:null,title: "", file: null , fileUrl:null,isDocumentApproved:null }]);
+    setExtraDocuments([...extraDocuments, { id:null,title: "", file: null , fileUrl:null,isDocumentApproved:null,mediaFileId:null }]);
     setExtraDocumentErrors([...extraDocumentErrors, { titleError: "", fileError: "" }]); 
   };
 
@@ -578,14 +579,25 @@ useEffect(() => {
    
     // append each extra document
     extraDocuments.forEach((doc, index) => {
-      
+      if (doc.id) {
+        subData.append(`ExtraDocuments[${index}].Id`, doc.id);
+      }
       if (doc.name) {
-        subData.append(`ExtraDocuments[${index}].Name`, doc.name);
+        subData.append(`ExtraDocuments[${index}].Title`, doc.name);
       }
       if (doc.file) {
         subData.append(`ExtraDocuments[${index}].Document`, doc.file);
       }
+      if(doc.fileUrl)
+      {
+        subData.append(`ExtraDocuments[${index}].MediaFile.fileUrl`, doc.fileUrl);
+        subData.append(`ExtraDocuments[${index}].MediaFileId`, doc.fileUrl);
+
+      }
     });
+    console.log("sub data before api call = ");
+    console.table(subData);
+    
     subData.append(
       "expireDate",
       residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
