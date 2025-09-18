@@ -27,6 +27,13 @@ const EligibilityInformation = () => {
   const [residencyLabel, setResidencyLabel] = useState(
     "Select Residency Status"
   );
+  const [permanentResidencyStatusList, setPermanentResidencyStatusList] = useState([]);
+  const [permanentResidencyStatusLabel, setPermanentResidencyStatusLabel] = useState(
+    "Select Permanent Residency Status"
+  );
+  const [permanentResidencyStatusValue, setPermanentResidencyStatusValue] = useState(0);
+  const [permanentResidencyStatusError, setPermanentResidencyStatusError] = useState("");
+  
   const [residencyValue, setResidencyValue] = useState(0);
   const [residencyError, setResidencyError] = useState("");
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -62,6 +69,8 @@ const EligibilityInformation = () => {
   const [isBrpApproved, setIsBrpApproved] = useState(true);
   const [isCvApproved, setIsCvApproved] = useState(true);
   const [isBacApproved, setIsBacApproved] = useState(true);
+  const [extraDocuments, setExtraDocuments] = useState([]);
+  const [extraDocumentErrors, setExtraDocumentErrors] = useState([]);
 
   useEffect(() => {
     get("CountryDD/index").then((res) => {
@@ -82,6 +91,9 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
+      console.log("res = ");
+      console.table(res);
+      
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
       );
@@ -89,10 +101,24 @@ const EligibilityInformation = () => {
         res?.proofOfAddress?.fileUrl ? res?.proofOfAddress?.fileUrl : null
       );
       setBrpFile(res?.brp?.fileUrl ? res?.brp?.fileUrl : null);
+      
       setCvFile(res?.cv?.fileUrl ? res?.cv?.fileUrl : null);
       setBacFile(
         res?.bacCertificate?.fileUrl ? res?.bacCertificate?.fileUrl : null
       );
+       
+      let existingDocuments = [...extraDocuments];
+      const result =  res?.extraDocuments.map((extraDocumentFile,index)=>{
+        existingDocuments =  [...existingDocuments, { id:null,title: "", file: null,fileUrl:null,isDocumentApproved:null }];
+        
+        existingDocuments[index].id = extraDocumentFile?.id;
+        existingDocuments[index].title = extraDocumentFile?.title;
+        existingDocuments[index].fileUrl = extraDocumentFile?.mediaFile?.fileUrl;
+        existingDocuments[index].mediaFileId = extraDocumentFile?.mediaFileId;
+        existingDocuments[index].isDocumentApproved = extraDocumentFile?.isDocumentApproved;
+      });
+      setExtraDocuments(existingDocuments);
+      
       setUniCountryLabel(
         res?.countryOfCitizenShip?.name
           ? res?.countryOfCitizenShip?.name
@@ -117,7 +143,9 @@ const EligibilityInformation = () => {
         res !== null ? res?.residencyStatus?.name : "Select Residency Status"
       );
       setResidencyValue(res !== null ? res?.residencyStatus?.id : "0");
-      //   setRadioPracticalTraining();
+      
+      setPermanentResidencyStatusLabel(res !== null ? res?.permanentResidencyStatus : "Select Permanent Residency Status");
+      setPermanentResidencyStatusValue(res !== null ? res?.permanentResidencyStatusId : "0");
       setRightToWork(
         res != null && res?.haveRightToWork === true
           ? true
@@ -136,8 +164,23 @@ const EligibilityInformation = () => {
       setIsBrpApproved(res?.isBRPApproved);
       setIsCvApproved(res?.isCvApproved);
       setIsBacApproved(res?.isBacCertificateApproved);
+
     });
   }, [success, consultantRegisterId, setRightToWork]);
+
+  useEffect(() => {
+      if(residencyValue === 1)
+      {
+        get(`ConsultantDD/GetPermanentResidencyStatusTypes`).then((res) => {
+            setPermanentResidencyStatusList(res);
+        });
+      }
+    },[residencyValue]);
+
+useEffect(() => {
+  console.log("extraDocuments updated : ");
+  console.table(extraDocuments);
+}, [extraDocuments]);
 
   const countryDD = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
@@ -147,6 +190,11 @@ const EligibilityInformation = () => {
   const countryDD2 = countryList.map((countryOptions) => ({
     label: countryOptions?.name,
     value: countryOptions?.id,
+  }));
+
+ const permanentResidencyStatusOptions = permanentResidencyStatusList?.map((residencyStatusOption) => ({
+    label: residencyStatusOption?.name,
+    value: residencyStatusOption?.id,
   }));
 
   // select Country
@@ -170,6 +218,11 @@ const EligibilityInformation = () => {
       setResidencyLabel("Select Residency Status");
     }
   };
+  // select permanent Residence
+  const selectPermanentResidencyStatus = (label, value) => {
+    setPermanentResidencyStatusLabel(label);
+    setPermanentResidencyStatusValue(value);
+  };
 
   const residencyOptions = residency?.map((r) => ({
     label: r.name,
@@ -181,6 +234,19 @@ const EligibilityInformation = () => {
     setResidencyLabel(label);
     setResidencyValue(value);
   };
+
+  // Add new extra doc
+  const addExtraDocument = () => {
+    setExtraDocuments([...extraDocuments, { id:null,title: "", file: null , fileUrl:null,isDocumentApproved:null,mediaFileId:null }]);
+    setExtraDocumentErrors([...extraDocumentErrors, { titleError: "", fileError: "" }]); 
+  };
+
+  // Remove extra doc by index
+  const removeExtraDocument = (index) => {
+    setExtraDocuments(extraDocuments.filter((element, i) => i !== index));
+    setExtraDocumentErrors(extraDocumentErrors.filter((element, i) => i !== index));
+  };
+
   // Id or Passport Code Start
 
   // function getBase643(file) {
@@ -341,7 +407,27 @@ const EligibilityInformation = () => {
       setDateError("Expiry Date of Your BRP/TRP or Visa Should be future date");
     }
   };
+  const handleExtraDocumentFileNameChange = (index, value) => {
+    const newDocs = [...extraDocuments];
+    newDocs[index].title = value;       
+    setExtraDocuments(newDocs);
+    displayErrorExtraDocumentNames(extraDocuments,index,setExtraDocumentErrors);
+  };  
 
+  const handleExtraDocumentFileChange = (index, newFile) => {
+    
+    setExtraDocuments(prev => {
+    const existingExtraDocuments = [...prev];
+    existingExtraDocuments[index] = { ...existingExtraDocuments[index], file: newFile };
+    return existingExtraDocuments;
+  });
+
+    const newDocs = [...extraDocuments];
+    newDocs[index].file = newFile;
+    setExtraDocuments(newDocs);
+    displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
+
+  };
   const ValidateForm = () => {
     var isValid = true;
     if (uniCountryValue === 0) {
@@ -390,12 +476,96 @@ const EligibilityInformation = () => {
       isValid = false;
       setCvError("File is required");
     }
-    // if (FileList7 === null && bacFile == null) {
-    //   isValid = false;
-    //   setBacError("File is required");
-    // }
+
+    isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+    //Reassigning the isValid after checking extra Doc Names 
     return isValid;
+    
   };
+
+  const validateExtraDocumentNames = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
+    extraDocuments.forEach((element,index) => {
+      if(extraDocuments[index].title===null || extraDocuments[index].title==="")
+      {
+        isValid = false;
+        setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].titleError = "Document name is required";
+          return newErrors;
+        }) 
+      }
+    });
+    return isValid;
+  });
+
+  const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
+    extraDocuments.forEach((element,index) => {
+      if(extraDocuments[index].fileUrl === null && extraDocuments[index].file === null)
+      {
+        isValid = false;
+        setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].fileError = "Document file is required";
+          return newErrors;
+        }) 
+      }
+    });
+    return isValid;
+  });
+
+  const displayErrorExtraDocumentNames = ((extraDocuments,index,setExtraDocumentErrors)=>{
+       if(extraDocuments[index].title === "")
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].titleError = "Document name is required ";       // update safely
+            
+            return newErrors;
+          });
+        }
+        else
+        {
+           const existingExtraDocumentErrors = [...extraDocumentErrors];
+            setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].titleError = "";      
+            
+            return newErrors;
+          });
+        }
+  });
+
+  const displayErrorOfExtraDocuments = ((extraDocuments,index,setExtraDocumentErrors)=>{
+       if(extraDocuments[index].fileUrl !== null || extraDocuments[index].file !== null)
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+            setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].fileError = "";      
+            
+            return newErrors;
+          });
+        }
+        else
+        {
+          const existingExtraDocumentErrors = [...extraDocumentErrors];
+          setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              // copy existing error's array
+            newErrors[index] = { ...newErrors[index] };     // copy the object index wise
+            newErrors[index].fileError = "Document file is required ";       // update safely
+            
+            return newErrors;
+          });
+        }
+  });
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -406,14 +576,32 @@ const EligibilityInformation = () => {
     subData.append("BRPFile", FileList5);
     subData.append("CvFile", FileList6);
     subData.append("BacCertificateFile", FileList7);
+   
+    // append each extra document
+    extraDocuments.forEach((doc, index) => {
+      if (doc.id) {
+        subData.append(`ExtraDocuments[${index}].Id`, doc.id);
+      }
+      if (doc.name) {
+        subData.append(`ExtraDocuments[${index}].Title`, doc.name);
+      }
+      if (doc.file) {
+        subData.append(`ExtraDocuments[${index}].Document`, doc.file);
+      }
+      if(doc.fileUrl)
+      {
+        subData.append(`ExtraDocuments[${index}].MediaFile.fileUrl`, doc.fileUrl);
+        subData.append(`ExtraDocuments[${index}].MediaFileId`, doc.fileUrl);
 
+      }
+    });
+    console.log("sub data before api call = ");
+    console.table(subData);
+    
     subData.append(
       "expireDate",
       residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? exDate : ""
     );
-    // if (exDate) {
-    //   subData.append("expireDate", exDate);
-    // }
 
     if (ValidateForm()) {
       setButtonStatus(true);
@@ -480,6 +668,11 @@ const EligibilityInformation = () => {
                 selectResidency={selectResidency}
                 residencyError={residencyError}
                 residencyLabel={residencyLabel}
+                permanetResidencyStatusValue={permanentResidencyStatusValue}
+                permanetResidencyStatusOptions={permanentResidencyStatusOptions}
+                selectPermanentResidencyStatus={selectPermanentResidencyStatus}
+                permanetResidencyStatusError={permanentResidencyStatusError}
+                permanetResidencyStatusLabel={permanentResidencyStatusLabel}
                 exDate={exDate}
                 onRadioValueChange={onRadioValueChange}
                 rightToWork={rightToWork}
@@ -538,6 +731,14 @@ const EligibilityInformation = () => {
                 setIsCvApproved={setIsCvApproved}
                 isBacApproved={isBacApproved}
                 setIsBacApproved={setIsBacApproved}
+                extraDocuments={extraDocuments}
+                setExtraDocuments={setExtraDocuments}
+                addExtraDocument={addExtraDocument}
+                removeExtraDocument={removeExtraDocument}
+                extraDocumentErrors={extraDocumentErrors}
+                setExtraDocumentErrors={setExtraDocumentErrors}
+                handleExtraDocumentFileChange={handleExtraDocumentFileChange}
+                handleExtraDocumentFileNameChange={handleExtraDocumentFileNameChange}
               ></EligibilityForm>
             </TabPane>
           </TabContent>

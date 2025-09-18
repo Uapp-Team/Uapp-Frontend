@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Modal } from "reactstrap";
@@ -18,6 +18,7 @@ const UploadFile = ({
   setError,
   require = false,
 }) => {
+
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [fileType, setFileType] = useState(null);
   const [base64, setBash64] = useState(null);
@@ -26,10 +27,10 @@ const UploadFile = ({
     const file = e.target.files[0];
     setFile && setFile(e.target.files[0]);
     setFileType(file?.type);
-
+    
     if (file?.type && !file?.type.includes("image")) {
       const url = URL.createObjectURL(file);
-      console.log(url, "imad naki");
+      
 
       setBash64(url);
     } else if (file?.type && file?.type.includes("image")) {
@@ -43,6 +44,7 @@ const UploadFile = ({
     } else setBash64(null);
 
     setError && setError("");
+    
   };
 
   return (
