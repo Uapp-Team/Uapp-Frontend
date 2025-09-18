@@ -234,7 +234,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       ? AdmissionManagerApplicationPaging?.applicationValue
       : 0
   );
-  console.log(applicationValue, "vai plz");
+  // console.log(applicationValue, "vai plz");
 
   const [applicationSubLabel, setApplicationSubLabel] = useState(
     AdmissionManagerApplicationPaging?.applicationSubLabel
@@ -378,6 +378,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
         JSON.stringify(ColumnApplicationManager)
       );
     !tableColumnAdmissionManager && setTableData(ColumnApplicationManager);
+    
   }, []);
 
   const [delData, setDelData] = useState({});
@@ -676,6 +677,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
     });
   }, [parameters]);
 
+   useEffect(() => {
+    console.log("manager uapp id dd = ");
+          console.table(managerUappIdDD);
+  }, [managerUappIdDD]);
+
+  //    useEffect(() => {
+  //   console.log("manager Std dd = ");
+  //         console.table(managerStdDD);
+  // }, [managerStdDD]);
+
+ 
   useEffect(() => {
     get(`ApplicationConfidence/SelectList`).then((res) => {
       setConfidenceLevelDD(res);
@@ -764,9 +776,11 @@ const AdmissionManagerApplication = ({ currentUser }) => {
 
     // for admission manager
     if (currentUser !== undefined) {
+      
       if (universityId) {
+        
         get(
-          `CommonApplicationFilterDD/UappId?universityId=${universityId}`
+          `CommonApplicationFilterDD/UappId?universityId=${universityId}&courseId=${courseId}`
         ).then((res) => {
           setManagerUappIdDD(res);
         });
@@ -776,12 +790,20 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             setManagerUappIdDD(res);
           }
         );
-      } else {
-        get(`CommonApplicationFilterDD/UappId`).then((res) => {
+      } else if (courseId) {
+         get(
+          `CommonApplicationFilterDD/UappId?courseId=${courseId}`
+        ).then((res) => {
           setManagerUappIdDD(res);
         });
       }
+      else {
+        get(`CommonApplicationFilterDD/UappId`).then((res) => {
 
+          setManagerUappIdDD(res);
+        });
+      }
+      
       if (universityId) {
         get(
           `CommonApplicationFilterDD/Student?universityId=${universityId}`
@@ -794,7 +816,15 @@ const AdmissionManagerApplication = ({ currentUser }) => {
             setManagerStdDD(res);
           }
         );
-      } else {
+      } 
+      else if (courseId) {
+        get(`CommonApplicationFilterDD/Student?courseId=${courseId}`).then(
+          (res) => {
+            setManagerStdDD(res);
+          }
+        );
+      }
+      else {
         get("CommonApplicationFilterDD/Student").then((res) => {
           setManagerStdDD(res);
         });
