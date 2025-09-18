@@ -1,15 +1,12 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { rootUrl } from "../../constants/constants";
 import { Modal } from "reactstrap";
 
 const Preview = ({ file }) => {
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
   const [popoverData, setPopoverData] = useState(false);
- 
   const openPopover = (url) => {
-    console.log("call came in openPopover() ");
-    
     setIsPopoverVisible(true);
     setPopoverData(url);
   };
