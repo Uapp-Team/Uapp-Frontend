@@ -77,7 +77,7 @@ const AdmissionManagerOwnProfile = () => {
 
                       <td width="60%">
                         {data?.admissionManagerGeneralInfo?.firstName}{" "}
-                        {data?.dmissionManagerGeneralInfo?.lastName}
+                        {data?.admissionManagerGeneralInfo?.lastName}
                       </td>
                     </tr>
 
@@ -168,7 +168,18 @@ const AdmissionManagerOwnProfile = () => {
                       <td width="40%">Phone Number</td>
 
                       <td width="60%">
-                        {data?.admissionManagerPersonalInfo?.phoneNumber}
+                        {data?.admissionManagerPersonalInfo?.phoneNumber &&
+                        data?.admissionManagerPersonalInfo?.phoneNumber.includes(
+                          "+"
+                        )
+                          ? data?.admissionManagerPersonalInfo?.phoneNumber
+                          : data?.admissionManagerPersonalInfo?.phoneNumber &&
+                            !data?.admissionManagerPersonalInfo?.phoneNumber.includes(
+                              "+"
+                            )
+                          ? "+" +
+                            data?.admissionManagerPersonalInfo?.phoneNumber
+                          : null}
                       </td>
                     </tr>
                   </tbody>
@@ -261,7 +272,7 @@ const AdmissionManagerOwnProfile = () => {
 
                 {/* Eligibility */}
 
-                <span
+                {/* <span
                   className="app-style-const p-2"
                   style={{ backgroundColor: "#DFEEEE" }}
                 >
@@ -488,7 +499,7 @@ const AdmissionManagerOwnProfile = () => {
                       ) : null}
                     </tr>
                   </tbody>
-                </Table>
+                </Table> */}
               </Card>
               {/* Eligibility */}
             </>

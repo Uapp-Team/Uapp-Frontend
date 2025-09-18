@@ -61,9 +61,9 @@ const SideMenuStudent = () => {
         </li>
       )} */}
 
-      {/* {!isLead && (
-        <> */}
-      {/* <button
+      {!isLead && (
+        <>
+          <button
             onClick={() => {
               setModalShow(true);
             }}
@@ -71,9 +71,9 @@ const SideMenuStudent = () => {
             className="login-to-lead"
           >
             Refer a friend
-          </button> */}
-      {/* 
-          <li
+          </button>
+
+          {/* <li
             className={`nav-item uapp-nav-item`}
             onClick={() => {
               setModalShow(true);
@@ -86,7 +86,7 @@ const SideMenuStudent = () => {
             </Link>
           </li> */}
 
-      {/* <Modal
+          <Modal
             size="md"
             aria-labelledby="contained-modal-title-vcenter"
             isOpen={modalShow}
@@ -97,9 +97,9 @@ const SideMenuStudent = () => {
               apiUrl={`Consultant/referralForStudent/${referenceId}`}
               modalClose={() => setModalShow(false)}
             />
-          </Modal> */}
-      {/* </>
-      )} */}
+          </Modal>
+        </>
+      )}
 
       {!value.sidebar && <StudentJoinBanner />}
     </>

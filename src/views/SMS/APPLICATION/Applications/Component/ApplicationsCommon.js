@@ -44,6 +44,7 @@ const ApplicationsCommon = () => {
   const location = useLocation();
   const history = useHistory();
   const parameters = history?.location?.state?.state;
+
   const {
     affiliateId,
     admId,
@@ -57,7 +58,9 @@ const ApplicationsCommon = () => {
     providerId,
     companionId,
     courseId,
+    salesTeamLeaderId,
   } = useParams();
+
   // Previous states get from session storage
   const application = JSON.parse(sessionStorage.getItem("application"));
 
@@ -178,6 +181,8 @@ const ApplicationsCommon = () => {
       ? application?.applicationValue
       : 0
   );
+  console.log(applicationValue, "vaiya");
+
   const [applicationSubLabel, setApplicationSubLabel] = useState(
     application?.applicationSubLabel
       ? application?.applicationSubLabel
@@ -262,7 +267,7 @@ const ApplicationsCommon = () => {
   //   application?.affiliateValue ? application?.affiliateValue : 0
   // );
   const [companionLabel, setCompanionLabel] = useState(
-    application?.companionLabel ? application?.companionLabel : "Companion"
+    application?.companionLabel ? application?.companionLabel : "Referrer"
   );
   const [companionValue, setCompanionValue] = useState(
     companionId ? companionId : 0
@@ -378,9 +383,17 @@ const ApplicationsCommon = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [salesTeamLeader, setSalesTeamLeader] = useState([]);
   const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
-    "Select Sales Team Leader"
+    application?.SalesTeamLeaderLabel
+      ? application?.SalesTeamLeaderLabel
+      : "Select Sales Team Leader"
   );
-  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(
+    salesTeamLeaderId
+      ? salesTeamLeaderId
+      : application?.SalesTeamLeaderValue
+      ? application?.SalesTeamLeaderValue
+      : 0
+  );
 
   // table column data get from localstorage or initial set
   useEffect(() => {
@@ -451,6 +464,10 @@ const ApplicationsCommon = () => {
           !adoId && admissionOfficerValue && admissionOfficerValue,
         branchLabel: !branchId && branchLabel && branchLabel,
         branchValue: !branchId && branchValue && branchValue,
+        SalesTeamLeaderLabel:
+          !salesTeamLeaderId && SalesTeamLeaderLabel && SalesTeamLeaderLabel,
+        SalesTeamLeaderValue:
+          !salesTeamLeaderId && SalesTeamLeaderValue && SalesTeamLeaderValue,
         educationLevelLabel: educationLevelLabel && educationLevelLabel,
         educationLevelValue: educationLevelValue && educationLevelValue,
         departmentLabel: departmentLabel && departmentLabel,
@@ -531,6 +548,9 @@ const ApplicationsCommon = () => {
     educationLevelLabel,
     departmentValue,
     departmentLabel,
+    SalesTeamLeaderValue,
+    SalesTeamLeaderLabel,
+    salesTeamLeaderId,
   ]);
 
   // for all dropdown
@@ -831,9 +851,28 @@ const ApplicationsCommon = () => {
       setFinanceDD(res);
     });
     // for common
-    get("CommonApplicationFilterDD/UappId").then((res) => {
-      setCommonUappIdDD(res);
-    });
+    if (universityId) {
+      get(`CommonApplicationFilterDD/UappId?universityId=${universityId}`).then(
+        (res) => {
+          setCommonUappIdDD(res);
+        }
+      );
+    } else if (intake) {
+      get(`CommonApplicationFilterDD/UappId?intakeId=${intake}`).then((res) => {
+        setCommonUappIdDD(res);
+      });
+    } else if (companionId) {
+      get(`CommonApplicationFilterDD/UappId?referrerId=${companionId}`).then(
+        (res) => {
+          setCommonUappIdDD(res);
+        }
+      );
+    } else {
+      get("CommonApplicationFilterDD/UappId").then((res) => {
+        setCommonUappIdDD(res);
+      });
+    }
+
     get("CommonApplicationFilterDD/University").then((res) => {
       setCommonUniDD(res);
       if (universityId) {
@@ -850,9 +889,29 @@ const ApplicationsCommon = () => {
         setConsultantLabel(result?.name);
       }
     });
-    get("CommonApplicationFilterDD/Student").then((res) => {
-      setCommonStdDD(res);
-    });
+    if (universityId) {
+      get(
+        `CommonApplicationFilterDD/Student?universityId=${universityId}`
+      ).then((res) => {
+        setCommonStdDD(res);
+      });
+    } else if (intake) {
+      get(`CommonApplicationFilterDD/Student?intakeId=${intake}`).then(
+        (res) => {
+          setCommonStdDD(res);
+        }
+      );
+    } else if (companionId) {
+      get(`CommonApplicationFilterDD/Student?referrerId=${companionId}`).then(
+        (res) => {
+          setCommonStdDD(res);
+        }
+      );
+    } else {
+      get("CommonApplicationFilterDD/Student").then((res) => {
+        setCommonStdDD(res);
+      });
+    }
   }, [
     branchId,
     intake,
@@ -872,8 +931,14 @@ const ApplicationsCommon = () => {
   useEffect(() => {
     get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
       setSalesTeamLeader(res);
+      if (salesTeamLeaderId) {
+        const result = res?.find(
+          (ans) => ans?.id.toString() === salesTeamLeaderId
+        );
+        setSalesTeamLeaderLabel(result?.name);
+      }
     });
-  }, [branchValue]);
+  }, [branchValue, salesTeamLeaderId]);
 
   useEffect(() => {
     get(`AdmissionManagerDD/Index/${proValue}`).then((res) => {
@@ -1083,10 +1148,10 @@ const ApplicationsCommon = () => {
     !admId && setAdmissionManagerValue(0);
     !affiliateId && setAffiliateLabel("Affiliate");
     !affiliateId && setAffiliateValue(0);
-    !companionId && setCompanionLabel("Companion");
+    !companionId && setCompanionLabel("Referrer");
     !companionId && setCompanionValue(0);
-    setSalesTeamLeaderLabel("Select Sales Team Leader");
-    setSalesTeamLeaderValue(0);
+    !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
+    !salesTeamLeaderId && setSalesTeamLeaderValue(0);
     setEducationLevelLabel("Select Education Level");
     setEducationLevelValue(0);
     setDepartmentLabel("Select Department");
@@ -1495,13 +1560,16 @@ const ApplicationsCommon = () => {
                     options={companionMenu}
                     value={{ label: companionLabel, value: companionValue }}
                     onChange={(opt) => selectReferrerDD(opt.label, opt.value)}
-                    placeholder="companion"
+                    placeholder="Referrer"
                     name="name"
                     id="id"
                     isDisabled={companionId ? true : false}
                   />
                 </Col>
-                {userType === userTypes?.SalesManager ? (
+                {userType === userTypes?.SalesManager ||
+                userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.BranchAdmin ||
+                userType === userTypes?.Admin ? (
                   <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                     <Select
                       options={consSalesTeamLeaderMenu}
@@ -1515,6 +1583,7 @@ const ApplicationsCommon = () => {
                       name="salesTeamLeaderId"
                       id="salesTeamLeaderId"
                       placeholder="Sales Team Leader"
+                      isDisabled={salesTeamLeaderId ? true : false}
                     />
                   </Col>
                 ) : null}
@@ -1572,6 +1641,7 @@ const ApplicationsCommon = () => {
                   selector={selector}
                   admId={admId}
                   adoId={adoId}
+                  salesTeamLeaderId={salesTeamLeaderId}
                   branchId={branchId}
                   branchLabel={branchLabel}
                   setBranchLabel={setBranchLabel}
@@ -1714,7 +1784,7 @@ const ApplicationsCommon = () => {
                   (!affiliateId && affiliateValue !== 0) ||
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
-                  SalesTeamLeaderValue !== 0 ||
+                  (!salesTeamLeaderId && SalesTeamLeaderValue !== 0) ||
                   educationLevelValue !== 0 ||
                   departmentValue !== 0 ||
                   percentageValue !== 0 ||
@@ -1739,11 +1809,6 @@ const ApplicationsCommon = () => {
           <Row className="mb-3 align-items-center">
             <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
-              <Download
-                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}`}
-                className="mx-2"
-                fileName="Applications.xlsx"
-              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1775,39 +1840,21 @@ const ApplicationsCommon = () => {
                 </div>
 
                 <div className="mr-3">
-                  <Dropdown
-                    className="uapp-dropdown"
-                    style={{ float: "right" }}
-                    isOpen={dropdownOpen}
-                    toggle={toggle}
-                  >
-                    <DropdownToggle caret>
-                      <i className="fas fa-print fs-7"></i>
-                    </DropdownToggle>
-                    <DropdownMenu className="bg-dd-4">
-                      <div className="d-flex justify-content-around align-items-center mt-2">
-                        <div className="cursor-pointer">
-                          <ReactTableConvertToXl
-                            id="test-table-xls-button"
-                            table="table-to-xls"
-                            filename="tablexls"
-                            sheet="tablexls"
-                            icon={<i className="fas fa-file-excel"></i>}
-                          />
-                        </div>
-                        {/* <div className="cursor-pointer">
-                          <ReactToPrint
-                            trigger={() => (
-                              <p>
-                                <i className="fas fa-file-pdf"></i>
-                              </p>
-                            )}
-                            content={() => componentRef.current}
-                          />
-                        </div> */}
-                      </div>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <Download
+                    url={`Application/GetReport?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${commonUappIdValue}&studentId=${commonStdValue}&consultantId=${consultantValue}&universityId=${commonUniValue}&appId=${applicationId}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&branchid=${branchValue}&intakerangeid=${intakeRngValue}&branchManagerId=${branchManagerValue}&admissionManagerId=${admissionManagerValue}&providerId=${proValue}&documentStatus=${documentStatusValue}&percentage=${
+                      percentageValue ? percentageValue : 0
+                    }&adoId=${admissionOfficerValue}&affiliateId=${affiliateValue}&companionId=${companionValue}&courseId=${
+                      courseId ? courseId : 0
+                    }&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+                      selectedDates[0] ? selectedDates[0] : ""
+                    }&toApplicationDate=${
+                      selectedDates[1] ? selectedDates[1] : ""
+                    }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+                      confidenceValue ? confidenceValue : ""
+                    }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`}
+                    className="mx-2"
+                    fileName="Applications.xlsx"
+                  />
                 </div>
 
                 {/* column hide unhide starts here */}

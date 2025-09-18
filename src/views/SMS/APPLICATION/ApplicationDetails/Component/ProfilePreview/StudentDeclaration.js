@@ -201,6 +201,7 @@ const StudentDeclaration = ({
             {userTypeId === userTypes?.SystemAdmin.toString() ||
             userTypeId === userTypes?.Admin.toString() ||
             userTypeId === userTypes?.ComplianceManager.toString() ||
+            userTypeId === userTypes?.AdmissionManager.toString() ||
             userTypeId === userTypes?.Consultant.toString() ? (
               <>
                 {conscentData == null ||

@@ -8,6 +8,7 @@ import {
   Input,
 } from "reactstrap";
 import { permissionList } from "../../../../../../constants/AuthorizationConstant";
+import { userTypes } from "../../../../../../constants/userTypeConstant";
 
 const AdmissionOfficerColumnHide = ({
   dropdownOpen1,
@@ -16,6 +17,7 @@ const AdmissionOfficerColumnHide = ({
   handleChecked,
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
+  const userTypeId = localStorage.getItem("userType");
   return (
     <div className="ml-3">
       <Dropdown
@@ -35,26 +37,31 @@ const AdmissionOfficerColumnHide = ({
                   {permissions?.includes(
                     permissionList.Staff_Password_Change
                   ) && (
-                    <div className="d-flex justify-content-between">
-                      <Col md="8" className="">
-                        <p className="">{table?.title}</p>
-                      </Col>
+                    <>
+                      {userTypeId === userTypes?.SystemAdmin ||
+                      userTypeId === userTypes?.Admin ? (
+                        <div className="d-flex justify-content-between">
+                          <Col md="8" className="">
+                            <p className="">{table?.title}</p>
+                          </Col>
 
-                      <Col md="4" className="text-center">
-                        <FormGroup check inline>
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            id=""
-                            name="isAcceptHome"
-                            onChange={(e) => {
-                              handleChecked(e, i);
-                            }}
-                            defaultChecked={table?.isActive}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </div>
+                          <Col md="4" className="text-center">
+                            <FormGroup check inline>
+                              <Input
+                                className="form-check-input"
+                                type="checkbox"
+                                id=""
+                                name="isAcceptHome"
+                                onChange={(e) => {
+                                  handleChecked(e, i);
+                                }}
+                                defaultChecked={table?.isActive}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </div>
+                      ) : null}
+                    </>
                   )}{" "}
                 </>
               ) : i === 5 ? (

@@ -714,7 +714,7 @@ const AdmissionManagerApplication = ({ currentUser }) => {
       get(`CommonApplicationFilterDD/InterestUappId`).then((res) => {
         setManagerUappIdDD(res);
       });
-      get(`CommonApplicationFilterDD/Student`).then((res) => {
+      get(`CommonApplicationFilterDD/InterestStudent`).then((res) => {
         setManagerStdDD(res);
       });
       get(`CommonApplicationFilterDD/Consultant`).then((res) => {
@@ -1296,11 +1296,6 @@ const AdmissionManagerApplication = ({ currentUser }) => {
           <Row className="mb-3">
             <Col lg="5" md="5" sm="12" xs="12" className="d-flex">
               <h5 className="text-orange fw-700">Total {entity} items</h5>
-              <Download
-                url={`Application/GetReport?page=${currentPage}&pagesize=${9999999}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}`}
-                className="mx-2"
-                fileName="Applications.xlsx"
-              />
             </Col>
 
             <Col lg="7" md="7" sm="12" xs="12">
@@ -1332,39 +1327,17 @@ const AdmissionManagerApplication = ({ currentUser }) => {
                 </div>
 
                 <div className="mr-3">
-                  <Dropdown
-                    className="uapp-dropdown"
-                    style={{ float: "right" }}
-                    isOpen={dropdownOpen}
-                    toggle={toggle}
-                  >
-                    <DropdownToggle caret>
-                      <i className="fas fa-print fs-7"></i>
-                    </DropdownToggle>
-                    <DropdownMenu className="bg-dd-4">
-                      <div className="d-flex justify-content-around align-items-center mt-2">
-                        <div className="cursor-pointer">
-                          <ReactTableConvertToXl
-                            id="test-table-xls-button"
-                            table="table-to-xls"
-                            filename="tablexls"
-                            sheet="tablexls"
-                            icon={<i className="fas fa-file-excel"></i>}
-                          />
-                        </div>
-                        {/* <div className="cursor-pointer">
-                          <ReactToPrint
-                            trigger={() => (
-                              <p>
-                                <i className="fas fa-file-pdf"></i>
-                              </p>
-                            )}
-                            content={() => componentRef.current}
-                          />
-                        </div> */}
-                      </div>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <Download
+                    url={`Application/GetReport?page=${currentPage}&pagesize=${dataPerPage}&uappStudentId=${managerUappIdValue}&studentId=${managerStdValue}&consultantId=${managerConsValue}&universityId=${managerUniValue}&uappPhoneId=${managerPhnValue}&applicationStatusId=${applicationValue}&offerStatusId=${offerValue}&enrollmentId=${enrollValue}&intakeId=${intakeValue}&interviewId=${interviewValue}&elptId=${elptValue}&studentFinanceId=${financeValue}&orderId=${orderValue}&intakerangeid=${intakeRngValue}&documentStatus=${documentStatusValue}&percentage=${percentageValue}&appId=${applicationId}&consultantTypeId=${consultantTypeValue}&fromApplicationDate=${
+                      selectedDates[0] ? selectedDates[0] : ""
+                    }&toApplicationDate=${
+                      selectedDates[1] ? selectedDates[1] : ""
+                    }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
+                      confidenceValue ? confidenceValue : ""
+                    }&isTBC=${true}`}
+                    className="mx-2"
+                    fileName="Applications.xlsx"
+                  />
                 </div>
 
                 {/* column hide unhide starts here */}

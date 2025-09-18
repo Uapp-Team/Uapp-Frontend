@@ -348,8 +348,14 @@ const ProfileHeadCardForView = ({ id }) => {
                             <i class="far fa-envelope"></i> {headData?.email}
                           </p>
                           <p>
-                            <i className="fas fa-phone"></i>
-                            {headData?.phoneNumber}
+                            <i className="fas fa-phone pr-2"></i>
+                            {headData?.phoneNumber &&
+                            headData?.phoneNumber.includes("+")
+                              ? headData?.phoneNumber
+                              : headData?.phoneNumber &&
+                                !headData?.phoneNumber.includes("+")
+                              ? "+" + headData?.phoneNumber
+                              : null}
                           </p>
                         </div>
                       </li>

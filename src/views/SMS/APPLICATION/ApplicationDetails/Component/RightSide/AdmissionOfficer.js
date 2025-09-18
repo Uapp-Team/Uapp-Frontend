@@ -122,96 +122,60 @@ const AdmissionOfficer = ({
           </>
         ) : (
           <>
-            <div className="d-flex justify-content-between">
-              <div>
-                {" "}
-                <Row>
-                  <Col md="3">
-                    <div className="user-profile-pic">
-                      {applicationInfo?.admissionOfficer
-                        ?.admissionOfficerMedia === null ? (
-                        <img
-                          src={profileImage}
-                          alt="profile_img"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "50px",
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={
-                            rootUrl +
-                            applicationInfo?.admissionOfficer
-                              ?.admissionOfficerMedia?.thumbnailUrl
-                          }
-                          alt="profile_img"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "50px",
-                          }}
-                        />
-                      )}
-                    </div>
-                  </Col>
-                  <Col md="9">
-                    <div>
-                      <div className="d-flex justify-content-between">
-                        <h5>Admission Officer</h5>
-                        <div>
-                          {permissions?.includes(
-                            permissionList.Change_Admission_Officer
-                          ) ? (
-                            <>
-                              {applicationInfo?.applicationSubStatusId !== 38 &&
-                              (userType === userTypes?.SystemAdmin ||
-                                userType === userTypes?.Admin ||
-                                userType === userTypes?.ProviderAdmin) ? (
-                                <p
-                                  className="text-blue text-underline pointer "
-                                  onClick={() => handleChange1(uniId)}
-                                >
-                                  <i
-                                    class="far fa-edit"
-                                    style={{
-                                      color: "#619bff",
-                                      cursor: "pointer",
-                                    }}
-                                  ></i>
-                                </p>
-                              ) : null}
-                            </>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      <p>
-                        {" "}
-                        {applicationInfo?.admissionOfficer?.firstName}{" "}
-                        {applicationInfo?.admissionOfficer?.lastName}
-                      </p>
-                      <ul className="uapp-ul">
-                        <li>
-                          {" "}
-                          <i className="far fa-envelope pr-1 pb-2"></i>{" "}
-                          {applicationInfo?.admissionOfficer?.email}
-                        </li>
-                        {applicationInfo?.admissionOfficer?.phoneNumber ===
-                        null ? null : (
-                          <li>
-                            {" "}
-                            <i className="fas fa-phone pr-1"></i>{" "}
-                            {applicationInfo?.admissionOfficer?.phoneNumber}
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
+            <div className="d-flex">
+              {" "}
+              <div className="user-profile-pic">
+                {applicationInfo?.admissionOfficer?.admissionOfficerMedia ===
+                null ? (
+                  <img src={profileImage} alt="profile_img" />
+                ) : (
+                  <img
+                    src={
+                      rootUrl +
+                      applicationInfo?.admissionOfficer?.admissionOfficerMedia
+                        ?.thumbnailUrl
+                    }
+                    alt="profile_img"
+                  />
+                )}
               </div>
-              {/* <div>
+              <div className="mx-4">
+                <div>
+                  <h5>Admission Officer</h5>
+                </div>
+
+                <p>
+                  {" "}
+                  {applicationInfo?.admissionOfficer?.firstName}{" "}
+                  {applicationInfo?.admissionOfficer?.lastName}
+                </p>
+                <ul className="uapp-ul word-break">
+                  <li>
+                    {" "}
+                    <i className="far fa-envelope pr-1 pb-2"></i>{" "}
+                    {applicationInfo?.admissionOfficer?.email}
+                  </li>
+                  {applicationInfo?.admissionOfficer?.phoneNumber ===
+                  null ? null : (
+                    <li>
+                      {" "}
+                      <i className="fas fa-phone pr-1"></i>{" "}
+                      {applicationInfo?.admissionOfficer?.phoneNumber &&
+                      applicationInfo?.admissionOfficer?.phoneNumber.includes(
+                        "+"
+                      )
+                        ? applicationInfo?.admissionOfficer?.phoneNumber
+                        : applicationInfo?.admissionOfficer?.phoneNumber &&
+                          !applicationInfo?.admissionOfficer?.phoneNumber.includes(
+                            "+"
+                          )
+                        ? "+" + applicationInfo?.admissionOfficer?.phoneNumber
+                        : null}
+                    </li>
+                  )}
+                </ul>
+              </div>{" "}
+              <div>
                 {permissions?.includes(
                   permissionList.Change_Admission_Officer
                 ) ? (
@@ -232,7 +196,7 @@ const AdmissionOfficer = ({
                     ) : null}
                   </>
                 ) : null}
-              </div> */}
+              </div>
             </div>
           </>
         )}

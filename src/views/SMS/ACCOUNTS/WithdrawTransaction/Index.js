@@ -83,7 +83,7 @@ const Index = () => {
   const [companionLabel, setCompanionLabel] = useState(
     withdrawTransactionPaging?.companionLabel
       ? withdrawTransactionPaging?.companionLabel
-      : "Select Companion"
+      : "Select Referrer"
   );
   const [companionValue, setCompanionValue] = useState(
     withdrawTransactionPaging?.companionValue
@@ -460,7 +460,7 @@ const Index = () => {
     setConsultantValue(0);
     setAffiliateLabel("Select Affiliate");
     setAffiliateValue(0);
-    setCompanionLabel("Select Companion");
+    setCompanionLabel("Select Referrer");
     setCompanionValue(0);
   };
 

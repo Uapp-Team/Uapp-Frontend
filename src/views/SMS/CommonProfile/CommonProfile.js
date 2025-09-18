@@ -44,7 +44,8 @@ const CommonProfile = () => {
         currentUser === userTypes?.ComplianceManager.toString() ||
         currentUser === userTypes?.ConsultantCompliance.toString() ||
         currentUser === userTypes?.AdmissionCompliance.toString() ||
-        currentUser === userTypes?.FinanceManager.toString()) && (
+        currentUser === userTypes?.FinanceManager.toString() ||
+        currentUser === userTypes?.DirectorSalesMarketing.toString()) && (
         <EmployeeProfile userId={userId} />
         // <EmployeeNewProfile />
       )}

@@ -166,15 +166,9 @@ const ProviderCard = ({ admissionManagerId }) => {
               <div>
                 {" "}
                 <h5>
-                  <span style={{ cursor: "pointer" }}>
-                    Assigned Admission Officer
-                  </span>
+                  <span>Assigned Admission Officer</span>
                 </h5>
-                <p>
-                  {managerOfficers.nameTittleName}
-                  <span className="mx-1">{managerOfficers.firstName}</span>
-                  {managerOfficers.lastName}
-                </p>
+                <p>{managerOfficers.fullName}</p>
               </div>
             </div>
 

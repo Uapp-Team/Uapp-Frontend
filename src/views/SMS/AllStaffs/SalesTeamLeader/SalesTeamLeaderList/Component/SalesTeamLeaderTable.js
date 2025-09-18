@@ -51,6 +51,8 @@ const SalesTeamLeaderTable = ({
   pass,
   cPass,
   redirectToAssignPage,
+  redirectStudentList,
+  redirectToApplications,
 }) => {
   const [popoverOpen, setPopoverOpen] = useState("");
   const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
@@ -72,7 +74,7 @@ const SalesTeamLeaderTable = ({
             {tableData[6]?.isActive ? <th>Started</th> : null}
             {tableData[7]?.isActive ? <th>Assigned Consultant</th> : null}
             {tableData[8]?.isActive ? <th>Student</th> : null}
-            {tableData[9]?.isActive ? <th>Companions</th> : null}
+            {tableData[9]?.isActive ? <th>Referrers</th> : null}
             {tableData[10]?.isActive ? <th>Applications</th> : null}
 
             {tableData[11]?.isActive ? (
@@ -173,7 +175,10 @@ const SalesTeamLeaderTable = ({
               {tableData[8]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
-                    <span className="Count-first-no-pointer">
+                    <span
+                      className="Count-first"
+                      onClick={() => redirectStudentList(emp?.employeeId)}
+                    >
                       {emp?.studentCount}
                     </span>
                   </div>
@@ -192,7 +197,10 @@ const SalesTeamLeaderTable = ({
               {tableData[10]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
-                    <span className="Count-second-no-pointer">
+                    <span
+                      className="Count-second"
+                      onClick={() => redirectToApplications(emp?.employeeId)}
+                    >
                       {emp?.applicationCount}
                     </span>
                   </div>

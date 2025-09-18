@@ -30,13 +30,10 @@ import ColumnStudent from "../../TableColumn/ColumnStudent.js";
 
 const StudentList = () => {
   const student = JSON.parse(sessionStorage.getItem("student"));
-
   const [deleteModal, setDeleteModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const permissions = JSON.parse(localStorage.getItem("permissions"));
-  const { cId, type, id } = useParams();
-  console.log(id, "id");
-
+  const { cId, type, id, salesTeamLeaderId } = useParams();
   const [serialNum, setSerialNum] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -106,9 +103,17 @@ const StudentList = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [consSalesTeamLeader, setConsSalesTeamLeader] = useState([]);
   const [SalesTeamLeaderLabel, setSalesTeamLeaderLabel] = useState(
-    "Select Sales Team Leader"
+    student?.SalesTeamLeaderLabel
+      ? student?.SalesTeamLeaderLabel
+      : "Select Sales Team Leader"
   );
-  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(0);
+  const [SalesTeamLeaderValue, setSalesTeamLeaderValue] = useState(
+    salesTeamLeaderId
+      ? salesTeamLeaderId
+      : student?.SalesTeamLeaderValue
+      ? student?.SalesTeamLeaderValue
+      : 0
+  );
 
   // api starts here
   useEffect(() => {
@@ -132,6 +137,10 @@ const StudentList = () => {
         branchValue: branchValue && branchValue,
         consultantLabel: consultantLabel && consultantLabel,
         consultantValue: consultantValue && consultantValue,
+        SalesTeamLeaderLabel:
+          !salesTeamLeaderId && SalesTeamLeaderLabel && SalesTeamLeaderLabel,
+        SalesTeamLeaderValue:
+          !salesTeamLeaderId && SalesTeamLeaderValue && SalesTeamLeaderValue,
         statusLabel: statusLabel && statusLabel,
         statusValue: statusValue && statusValue,
         searchStr: searchStr && searchStr,
@@ -145,6 +154,8 @@ const StudentList = () => {
     branchValue,
     consultantLabel,
     consultantValue,
+    SalesTeamLeaderValue,
+    SalesTeamLeaderLabel,
     currentPage,
     dataPerPage,
     orderLabel,
@@ -154,6 +165,7 @@ const StudentList = () => {
     statusValue,
     studentTypeLabel,
     studentTypeValue,
+    salesTeamLeaderId,
   ]);
 
   useEffect(() => {
@@ -194,8 +206,14 @@ const StudentList = () => {
   useEffect(() => {
     get(`SalesTeamLeaderDD/Index/${branchValue}`).then((res) => {
       setConsSalesTeamLeader(res);
+      if (salesTeamLeaderId) {
+        const result = res?.find(
+          (ans) => ans?.id.toString() === salesTeamLeaderId
+        );
+        setSalesTeamLeaderLabel(result?.name);
+      }
     });
-  }, [branchValue]);
+  }, [branchValue, salesTeamLeaderId]);
 
   useEffect(() => {
     if (!isTyping) {
@@ -417,8 +435,8 @@ const StudentList = () => {
   // on clear button parts here
 
   const handleClearSearch = () => {
-    setSalesTeamLeaderLabel("Select Sales Team Leader");
-    setSalesTeamLeaderValue(0);
+    !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
+    !salesTeamLeaderId && setSalesTeamLeaderValue(0);
     setCurrentPage(1);
     setStudentTypeLabel("Type");
     setStudentTypeValue(0);
@@ -648,6 +666,7 @@ const StudentList = () => {
             selectSalesTeamLeaderCons={selectSalesTeamLeaderCons}
             setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
             setSalesTeamLeaderValue={setSalesTeamLeaderValue}
+            salesTeamLeaderId={salesTeamLeaderId}
           />
 
           {/*SearchAndClear ends here */}
@@ -750,7 +769,7 @@ const StudentList = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData?.map((table, i) => (
                             <div key={i}>
-                              {i === 6 ? (
+                              {i === 7 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Password
@@ -777,7 +796,7 @@ const StudentList = () => {
                                     </div>
                                   )}
                                 </>
-                              ) : i === 7 ? (
+                              ) : i === 8 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Account_Status

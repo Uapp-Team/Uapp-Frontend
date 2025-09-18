@@ -8,6 +8,10 @@ const ColumnLiveIntake = [
     isActive: true,
   },
   {
+    title: "Contact",
+    isActive: true,
+  },
+  {
     title: "Intake",
     isActive: true,
   },

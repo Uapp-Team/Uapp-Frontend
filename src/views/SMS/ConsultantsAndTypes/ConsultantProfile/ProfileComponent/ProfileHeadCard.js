@@ -30,6 +30,7 @@ import ImageUploadCrop from "../../../../../components/ImageUpload/ImageUploadCr
 import Filter from "../../../../../components/Dropdown/Filter";
 import { consultantTier } from "../../../../../constants/presetData";
 import bacCertImg from "../../../../../assets/img/bac-cert.svg";
+import Uget from "../../../../../helpers/Uget";
 
 const ProfileHeadCard = ({ id, status = false }) => {
   const userType = localStorage.getItem("userType");
@@ -40,6 +41,16 @@ const ProfileHeadCard = ({ id, status = false }) => {
   const [statusType, setStatusType] = useState([]);
   const [statusLabel, setStatusLabel] = useState("Account Status");
   const [statusValue, setStatusValue] = useState(0);
+  const [salesTrainingStatus, setSalesTrainingStatus] = useState([]);
+  const [salesTrainingStatusLabel, setSalesTrainingStatusLabel] =
+    useState("sales Training");
+  const [salesTrainingStatusValue, setSalesTrainingStatusValue] = useState(0);
+  const [adMissionTrainingStatus, setAdMissionTrainingStatus] = useState([]);
+  const [adMissionTrainingStatusLabel, setAdMissionTrainingStatusLabel] =
+    useState("Admission Training");
+  const [adMissionTrainingStatusValue, setAdMissionTrainingStatusValue] =
+    useState(0);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(false);
@@ -67,6 +78,10 @@ const ProfileHeadCard = ({ id, status = false }) => {
         setStatusLabel(res?.accountStatus?.statusName);
         setTierValue(res?.tireStatusValue);
         setTierLabel(res?.tireStatus);
+        setSalesTrainingStatusValue(res?.salesTrainingStatusId);
+        setSalesTrainingStatusLabel(res?.salesTrainingStatus);
+        setAdMissionTrainingStatusValue(res?.admissionTrainingStatusId);
+        setAdMissionTrainingStatusLabel(res?.admissionTrainingStatus);
       });
 
       get(`AccountStatusDD/index/${id}`).then((res) => {
@@ -86,7 +101,24 @@ const ProfileHeadCard = ({ id, status = false }) => {
     }
   }, [success, id, userId]);
 
-  console.log(headData);
+  useEffect(() => {
+    Uget(`ConsultantDD/GetSalesTrainingStatus`).then((res) => {
+      setSalesTrainingStatus(res?.data);
+    });
+
+    Uget(`ConsultantDD/GetAdmissionTrainingStatus`).then((res) => {
+      setAdMissionTrainingStatus(res?.data);
+
+      // if (adMissionTrainingStatusValue) {
+      //   const filterData = res?.data?.filter(
+      //     (item) => item.id === adMissionTrainingStatusValue
+      //   );
+      //   filterData?.length === 1
+      //     ? setAdMissionTrainingStatusLabel(filterData[0].name)
+      //     : setAdMissionTrainingStatusLabel("Sales Training");
+      // }
+    });
+  }, []);
 
   const statusTypeMenu = statusType?.map((statusTypeOptions) => ({
     label: statusTypeOptions?.name,
@@ -109,6 +141,58 @@ const ProfileHeadCard = ({ id, status = false }) => {
       });
       setSuccess(!success);
     });
+  };
+
+  const adMissionTrainingStatusMenu = adMissionTrainingStatus?.map(
+    (adMissionTrainingStatusOptions) => ({
+      label: adMissionTrainingStatusOptions?.name,
+      value: adMissionTrainingStatusOptions?.id,
+    })
+  );
+
+  const adMissionTrainingStatusType = (label, value) => {
+    setAdMissionTrainingStatusLabel(label);
+    setAdMissionTrainingStatusValue(value);
+
+    const adMissionTrainingStatusData = new FormData();
+    adMissionTrainingStatusData.append("id", parseInt(id));
+    adMissionTrainingStatusData.append("AdmissionTrainingStatus", value);
+
+    put("Consultant/UpdateTrainingStatus", adMissionTrainingStatusData).then(
+      (res) => {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
+      }
+    );
+  };
+
+  const salesTrainingStatusMenu = salesTrainingStatus?.map(
+    (salesTrainingStatusOptions) => ({
+      label: salesTrainingStatusOptions?.name,
+      value: salesTrainingStatusOptions?.id,
+    })
+  );
+
+  const salesTrainingStatusType = (label, value) => {
+    setSalesTrainingStatusLabel(label);
+    setSalesTrainingStatusValue(value);
+
+    const salesTrainingStatusData = new FormData();
+    salesTrainingStatusData.append("id", parseInt(id));
+    salesTrainingStatusData.append("SalesTrainingStatus", value);
+
+    put("Consultant/UpdateTrainingStatus", salesTrainingStatusData).then(
+      (res) => {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+        setSuccess(!success);
+      }
+    );
   };
 
   const handleTier = (e) => {
@@ -669,6 +753,50 @@ const ProfileHeadCard = ({ id, status = false }) => {
                           />
                         ) : (
                           <span>{tierLabel !== "No Tier" && tierLabel}</span>
+                        )}
+                      </div>
+
+                      <div className="d-flex justify-content-md-end mb-2">
+                        {permissions?.includes(
+                          permissionList.Change_Consultant_Sales_Training_Status
+                        ) ? (
+                          <Select
+                            className="w-50"
+                            options={salesTrainingStatusMenu}
+                            value={{
+                              label: salesTrainingStatusLabel,
+                              value: salesTrainingStatusValue,
+                            }}
+                            onChange={(opt) =>
+                              salesTrainingStatusType(opt.label, opt.value)
+                            }
+                            name="salesTrainingStatus"
+                            id="salesTrainingStatus"
+                          />
+                        ) : (
+                          salesTrainingStatusLabel
+                        )}
+                      </div>
+
+                      <div className="d-flex justify-content-md-end mb-2">
+                        {permissions?.includes(
+                          permissionList.Change_Consultant_Admission_Training_Status
+                        ) ? (
+                          <Select
+                            className="w-50"
+                            options={adMissionTrainingStatusMenu}
+                            value={{
+                              label: adMissionTrainingStatusLabel,
+                              value: adMissionTrainingStatusValue,
+                            }}
+                            onChange={(opt) =>
+                              adMissionTrainingStatusType(opt.label, opt.value)
+                            }
+                            name="adMissionTrainingStatusId"
+                            id="adMissionTrainingStatusId"
+                          />
+                        ) : (
+                          adMissionTrainingStatusLabel
                         )}
                       </div>
                     </ul>

@@ -418,7 +418,9 @@ const StaffEligibility = () => {
           setFileList4(null);
           setFileList5(null);
           setFileList6(null);
-          history.push("/staffList");
+          userType === userTypes?.SystemAdmin
+            ? history.push("/staffList")
+            : history.push("/profile");
         } else {
           addToast(res?.data?.message, {
             appearance: "error",
@@ -443,7 +445,8 @@ const StaffEligibility = () => {
           userType === userTypes?.ComplianceManager ||
           userType === userTypes?.AccountOfficer ||
           userType === userTypes?.FinanceManager ||
-          userType === userTypes?.Editor
+          userType === userTypes?.Editor ||
+          userType === userTypes?.DirectorSalesMarketing
             ? null
             : "Staff"
         }
