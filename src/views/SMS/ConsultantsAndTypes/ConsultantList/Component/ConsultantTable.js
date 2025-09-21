@@ -98,16 +98,16 @@ const ConsultantTable = ({
             ) ? (
               <> {tableData[10]?.isActive ? <th>Sales Training</th> : null}</>
             ) : null}
+
+            {tableData[11]?.isActive ? <th>Started</th> : null}
+            {tableData[12]?.isActive ? <th>Student</th> : null}
+            {tableData[13]?.isActive ? <th>Applications</th> : null}
+            {tableData[14]?.isActive ? <th>Associates</th> : null}
             {permissions?.includes(
               permissionList.Change_Consultant_Admission_Training_Status
             ) ? (
-              <> {tableData[11]?.isActive ? <th>Adm Training</th> : null}</>
+              <> {tableData[15]?.isActive ? <th>Adm Training</th> : null}</>
             ) : null}
-
-            {tableData[12]?.isActive ? <th>Started</th> : null}
-            {tableData[13]?.isActive ? <th>Student</th> : null}
-            {tableData[14]?.isActive ? <th>Applications</th> : null}
-            {tableData[15]?.isActive ? <th>Associates</th> : null}
             {tableData[16]?.isActive ? <th>Affiliates</th> : null}
             {tableData[17]?.isActive ? <th>Referrers</th> : null}
 
@@ -247,23 +247,13 @@ const ConsultantTable = ({
                 </>
               ) : null}
 
-              {permissions?.includes(
-                permissionList.Change_Consultant_Admission_Training_Status
-              ) ? (
-                <>
-                  {tableData[11]?.isActive ? (
-                    <td>{consultant?.admissionTrainingStatus}</td>
-                  ) : null}
-                </>
-              ) : null}
-
-              {tableData[12]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td>{dateFormate(consultant?.createdOn)}</td>
               ) : null}
 
               {permissions?.includes(permissionList.View_Consultant_Student) ? (
                 <>
-                  {tableData[13]?.isActive ? (
+                  {tableData[12]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -282,7 +272,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[13]?.isActive ? (
+                  {tableData[12]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-first">
@@ -298,7 +288,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Application
               ) ? (
                 <>
-                  {tableData[14]?.isActive ? (
+                  {tableData[13]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -313,7 +303,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[14]?.isActive ? (
+                  {tableData[13]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-second">
@@ -329,7 +319,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Associate
               ) ? (
                 <>
-                  {tableData[15]?.isActive ? (
+                  {tableData[14]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -346,7 +336,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[15]?.isActive ? (
+                  {tableData[14]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-third">
@@ -357,6 +347,16 @@ const ConsultantTable = ({
                   ) : null}
                 </>
               )}
+
+              {permissions?.includes(
+                permissionList.Change_Consultant_Admission_Training_Status
+              ) ? (
+                <>
+                  {tableData[15]?.isActive ? (
+                    <td>{consultant?.admissionTrainingStatus}</td>
+                  ) : null}
+                </>
+              ) : null}
               {tableData[16]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>

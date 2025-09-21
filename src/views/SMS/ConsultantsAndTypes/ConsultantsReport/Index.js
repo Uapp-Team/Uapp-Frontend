@@ -72,6 +72,7 @@ const Index = () => {
       const dataArray = [
         res?.data?.totalRejected,
         res?.data?.totalInactive,
+        res?.data?.totalJunkAccount,
         res?.data?.totalActive,
         res?.data?.totalUnderReview,
         res?.data?.totalNewAccount,
@@ -201,6 +202,7 @@ const Index = () => {
                   categories: [
                     "Rejected",
                     "InActive",
+                    "Junk",
                     "Active",
                     "Under Review",
                     "New Account",
@@ -223,6 +225,7 @@ const Index = () => {
                 colors: [
                   "#E74C3C",
                   "#95A5A6",
+                  "#FFA500",
                   "#28A745",
                   "#F1C40F",
                   "#3498DB",

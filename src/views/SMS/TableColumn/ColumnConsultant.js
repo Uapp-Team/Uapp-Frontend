@@ -43,10 +43,7 @@ const ColumnConsultant = [
     title: "Sales Training",
     isActive: true,
   },
-  {
-    title: "Adm Training",
-    isActive: true,
-  },
+
   {
     title: "Started",
     isActive: true,
@@ -61,6 +58,10 @@ const ColumnConsultant = [
   },
   {
     title: "Associates",
+    isActive: true,
+  },
+  {
+    title: "Adm Training",
     isActive: true,
   },
   {
