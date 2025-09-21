@@ -107,7 +107,7 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
               <FormGroup>
                 <span>Note</span>
                 <span className="text-danger">*</span>{" "}
-                <div className="notetext">
+                {/* <div className="notetext">
                   <ReactQuill
                     theme="snow"
                     value={note}
@@ -115,8 +115,8 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
                     placeholder="Write note..."
                     onChange={setNote}
                   />
-                </div>
-                {/* <Input
+                </div> */}
+                <Input
                   type="textarea"
                   placeholder="Write note"
                   name="note"
@@ -126,7 +126,7 @@ const ApplicationStatus = ({ id, success, setSuccess }) => {
                     setNote(e.target.value);
                     setNoteError(false);
                   }}
-                /> */}
+                />
                 {noteError && (
                   <span className="text-danger">Note is required</span>
                 )}

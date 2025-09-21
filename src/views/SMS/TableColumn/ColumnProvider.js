@@ -12,7 +12,7 @@ const ColumnProvider = [
     isActive: true,
   },
   {
-    title: "Login Email",
+    title: "Email",
     isActive: true,
   },
   {

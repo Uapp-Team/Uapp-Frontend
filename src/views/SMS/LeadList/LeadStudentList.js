@@ -397,6 +397,17 @@ const LeadStudentList = () => {
     setCallApi((prev) => !prev);
   };
 
+  const handleReset = () => {
+    setBranchLabel("Select branch");
+    setBranchValue(0);
+    setCompanionLabel("Select Referrer");
+    setCompanionValue(0);
+    setConsultantLabel("Select Consultant");
+    setConsultantValue(0);
+    setSearchStr("");
+    setCurrentPage(1);
+  };
+
   // Edit students parts here
 
   const handleEdit = (data) => {
@@ -587,6 +598,7 @@ const LeadStudentList = () => {
             searchStr={searchStr}
             searchValue={searchValue}
             handleClearSearch={handleClearSearch}
+            handleReset={handleReset}
             handleKeyDown={handleKeyDown}
             userTypes={userTypes}
             consultantLabel={consultantLabel}

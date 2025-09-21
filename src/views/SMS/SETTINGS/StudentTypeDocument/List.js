@@ -215,7 +215,7 @@ const List = () => {
               appearance: "error",
               autoDismiss: true,
             });
-            // closeModal();
+            closeModal();
           }
         });
       }
