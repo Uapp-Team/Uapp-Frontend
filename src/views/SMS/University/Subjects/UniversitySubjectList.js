@@ -242,7 +242,9 @@ const UniversitySubjectList = (props) => {
       `Subject/TableShowPaged?page=${currentPage}&pageSize=${dataPerPage}&educationLevelId=${educationValue}&UniversityId=${id}&intakeid=${intakeValue}&search=${searchStr}&sortby=${orderValue}`
     ).then((res) => {
       setSubList(res?.models);
-
+      console.log("subject list from res =");
+      console.table(subList);
+      
       setSerialNum(res?.firstSerialNumber);
       setEntity(res?.totalEntity);
       setLoading(false);
