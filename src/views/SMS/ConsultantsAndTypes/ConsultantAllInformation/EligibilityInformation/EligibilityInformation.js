@@ -478,6 +478,7 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
@@ -499,6 +500,42 @@ useEffect(() => {
     });
     return isValid;
   });
+
+ const validateExtraDocumentNameDuplicacy = (extraDocuments, setExtraDocumentErrors, isValid) => {
+  // Count occurrences of each title (ignoring empty/null)
+  const titleCount = {};
+  extraDocuments.forEach((doc) => {
+    const title = doc.title?.trim().toLowerCase(); // case-insensitive
+    if (title) {
+      titleCount[title] = (titleCount[title] || 0) + 1;
+    }
+  });
+
+  extraDocuments.forEach((element, index) => {
+    const title = element.title?.trim().toLowerCase();
+
+    setExtraDocumentErrors((prevErrors) => {
+      const newErrors = [...prevErrors];
+      newErrors[index] = { ...newErrors[index] };
+
+      if (title && titleCount[title] > 1) {
+        // Duplicate found
+        newErrors[index].titleError = "Document name is duplicate.";
+        isValid = false;
+      } else {
+        // No duplicate
+        if (!newErrors[index].titleError?.includes("required")) {
+          // only clear if not a "required" error
+          newErrors[index].titleError = "";
+        }
+      }
+      return newErrors;
+    });
+  });
+
+  return isValid;
+};
+
 
   const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
     extraDocuments.forEach((element,index) => {
