@@ -421,6 +421,7 @@ useEffect(() => {
     existingExtraDocuments[index] = { ...existingExtraDocuments[index], file: newFile };
     return existingExtraDocuments;
   });
+  
 
     const newDocs = [...extraDocuments];
     newDocs[index].file = newFile;
@@ -428,6 +429,21 @@ useEffect(() => {
     displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
 
   };
+  
+   const handleExtraDocumentFileRemove = (index) => {
+    
+    setExtraDocuments(prev => {
+    const existingExtraDocuments = [...prev];
+    existingExtraDocuments[index] = { ...existingExtraDocuments[index], fileUrl: null };
+    return existingExtraDocuments;
+  });
+    const newDocs = [...extraDocuments];
+    newDocs[index].fileUrl = null;
+    setExtraDocuments(newDocs);
+    displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
+
+  };
+
   const ValidateForm = () => {
     var isValid = true;
     if (uniCountryValue === 0) {
@@ -776,6 +792,7 @@ useEffect(() => {
                 setExtraDocumentErrors={setExtraDocumentErrors}
                 handleExtraDocumentFileChange={handleExtraDocumentFileChange}
                 handleExtraDocumentFileNameChange={handleExtraDocumentFileNameChange}
+                handleExtraDocumentFileRemove={handleExtraDocumentFileRemove}
               ></EligibilityForm>
             </TabPane>
           </TabContent>

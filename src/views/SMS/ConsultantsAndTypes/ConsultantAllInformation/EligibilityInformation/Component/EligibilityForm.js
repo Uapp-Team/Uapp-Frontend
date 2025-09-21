@@ -94,7 +94,8 @@ const EligibilityForm = ({
   extraDocumentErrors,
   setExtraDocumentErrors,
   handleExtraDocumentFileNameChange,
-  handleExtraDocumentFileChange
+  handleExtraDocumentFileChange,
+  handleExtraDocumentFileRemove
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
@@ -901,6 +902,7 @@ const EligibilityForm = ({
                   name = {`extraDocuments[${index}].Document`}
                   defaultValue = {extraDocuments[index]?.fileUrl}
                   setFile={(file) => { handleExtraDocumentFileChange(index,file) }}
+                  setRemove={(file) => { handleExtraDocumentFileRemove(index) }}
                 />
                 {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
               </Col>
