@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import PreviousButton from "../../../../../../components/buttons/PreviousButton";
 import SaveButton from "../../../../../../components/buttons/SaveButton";
 import DMYPicker from "../../../../../../components/form/DMYPicker";
@@ -28,6 +28,11 @@ const EligibilityForm = ({
   selectResidency,
   residencyError,
   residencyLabel,
+  permanetResidencyStatusValue,
+  permanetResidencyStatusOptions,
+  selectPermanentResidencyStatus,
+  permanetResidencyStatusError,
+  permanetResidencyStatusLabel,
   exDate,
   onRadioValueChange,
   rightToWork,
@@ -82,6 +87,14 @@ const EligibilityForm = ({
   setIsCvApproved,
   isBacApproved,
   setIsBacApproved,
+  extraDocuments,
+  setExtraDocuments,
+  addExtraDocument,
+  removeExtraDocument,
+  extraDocumentErrors,
+  setExtraDocumentErrors,
+  handleExtraDocumentFileNameChange,
+  handleExtraDocumentFileChange
 }) => {
   const permissions = JSON.parse(localStorage.getItem("permissions"));
   const { addToast } = useToasts();
@@ -103,7 +116,28 @@ const EligibilityForm = ({
       }
     });
   };
-
+  const handleApproveForExtraDocuments = (id, isDocApproved,index) => {
+    console.log("hit came in method");
+    
+    post(
+      `ConsultantEligibility/ApproveEligibilityExtraDocument?id=${id}&isDocApproved=${isDocApproved}`
+    ).then((res) => {
+      if (res?.status === 200 && res?.data?.isSuccess === true) {
+        addToast(res?.data?.message, {
+          appearance: "success",
+          autoDismiss: true,
+        });
+         const newDocs = [...extraDocuments];
+        newDocs[index].isDocumentApproved = isDocApproved;       
+        setExtraDocuments(newDocs);
+      } else {
+        addToast(res?.data?.message, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+    });
+  };
   return (
     <Form onSubmit={handleSubmit}>
       <input
@@ -180,7 +214,25 @@ const EligibilityForm = ({
               <span className="text-danger">{residencyError}</span>
             </FormGroup>
           )}
+          {residencyValue === 1 && uniCountryValue !== uniCountryValue2 ? (
+            <>
+              <FormGroup className="has-icon-left position-relative">
+              <span>
+                <span className="text-danger">*</span> Status Type
+              </span>
 
+              <Select
+                options={permanetResidencyStatusOptions}
+                value={{ label: permanetResidencyStatusLabel, value: permanetResidencyStatusValue }}
+                onChange={(opt) => selectPermanentResidencyStatus(opt.label, opt.value)}
+                name="permanentResidencyStatusId"
+                id="permanentResidencyStatusId"
+              />
+
+              <span className="text-danger">{residencyError}</span>
+            </FormGroup>
+            </>
+          ) : null}
           {residencyValue === 2 && uniCountryValue !== uniCountryValue2 ? (
             <>
               <FormGroup className="has-icon-left position-relative">
@@ -262,6 +314,7 @@ const EligibilityForm = ({
               </FormGroup>
             </>
           ) : null}
+          
         </Col>{" "}
       </Row>
       <Row>
@@ -812,6 +865,152 @@ const EligibilityForm = ({
               </>
             )}
           </FormGroup>
+          {/* ----- New Addition ----- */}
+          {/* Map function rendering  */}
+          {extraDocuments.map((doc, index) => (
+            <FormGroup row key={index}>
+              {/* Document Name */}
+              <Col md="3">
+                <input
+                  type="hidden"
+                  name={`extraDocuments[${index}].Id`}
+                  id="id"
+                  value={extraDocuments[index]?.id !== null ? extraDocuments[index]?.id : 0}
+                />
+                <Input 
+                  type="text"
+                  name={`extraDocuments[${index}].Title`}
+                  placeholder="Enter Document Name"
+                  value={extraDocuments[index]?.title}
+                  onChange={(e)=>handleExtraDocumentFileNameChange(index,e.target.value)}
+                />
+                {extraDocumentErrors[index]?.titleError && <span className="text-danger">{extraDocumentErrors[index].titleError}</span>}
+              </Col>
+
+              {/* Upload */}                                                       
+              <Col md="6">
+                <input
+                    type="hidden"
+                    name={`extraDocuments[${index}].mediaFileId`}
+                    id="id"
+                    value={extraDocuments[index]?.mediaFileId !== null ? extraDocuments[index]?.mediaFileId : 0}
+                  />
+                <UploadFile
+                  file={doc.file}
+                  id = {`extraDocuments[${index}].Document`}
+                  name = {`extraDocuments[${index}].Document`}
+                  defaultValue = {extraDocuments[index]?.fileUrl}
+                  setFile={(file) => { handleExtraDocumentFileChange(index,file) }}
+                />
+                {extraDocumentErrors[index]?.fileError && <span className="text-danger">{extraDocumentErrors[index].fileError}</span>}
+              </Col>
+              {/* New Portion Added */}
+              {permissions?.includes(
+              permissionList?.Approve_Consultant_Eligibility
+            ) ? (
+              <>
+                {" "}
+                {extraDocuments[index].fileUrl !== null ? (
+                  <Col md="3">
+                    <div className="d-flex">
+                      {extraDocuments[index].isDocumentApproved === null ? (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-success mr-2"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApproveForExtraDocuments(extraDocuments[index].id,true,index);
+                              
+                            }}
+                            title="Approve"
+                          >
+                            <i className="fas fa-check"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            style={{ width: "55px", height: "33px" }}
+                            onClick={() => {
+                              handleApproveForExtraDocuments(extraDocuments[index].id,false,index);
+                            }}
+                            title="Not Approve"
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </>
+                      ) : extraDocuments[index].isDocumentApproved === true ? (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApproveForExtraDocuments(extraDocuments[index].id,false,index);
+                          }}
+                          title="Not Approve"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-success mr-2"
+                          style={{ width: "55px", height: "33px" }}
+                          onClick={() => {
+                            handleApproveForExtraDocuments(extraDocuments[index].id,true,index);
+                          }}
+                          title="Approve"
+                        >
+                          <i className="fas fa-check"></i>
+                        </button>
+                      )}
+                    </div>
+                  </Col>
+                ) : null}
+              </>
+            ) : (
+              <>
+                {extraDocuments[index].fileUrl !== null ? (
+                  <>
+                    {extraDocuments[index].isDocumentApproved === null ? (
+                      <>
+                        <p className="d-flex align-items-center text-warning font-weight-bold">
+                          In Review
+                        </p>
+                      </>
+                    ) : extraDocuments[index].isDocumentApproved === true ? (
+                      <p className="d-flex align-items-center text-success font-weight-bold">
+                        Approved
+                      </p>
+                    ) : (
+                      <p className="d-flex align-items-center text-danger font-weight-bold">
+                        Rejected (Need valid document)
+                      </p>
+                    )}
+                  </>
+                ) : null}
+              </>
+            )}
+            {/* New Portion Added */}
+
+              {/* Remove button */}
+              <Col md="3">
+                <Button color="danger" onClick={() => removeExtraDocument(index)}>
+                  <i className="fas fa-minus"></i>
+                </Button>
+              </Col>
+            </FormGroup>
+            
+          ))}
+ 
+
+            
+          <Button color="primary" onClick={addExtraDocument}>
+            <i className="fas fa-plus"></i> 
+          </Button>
+          {/* ---- New Addition  ----*/}
+        
+
           <FormGroup className="d-flex justify-content-between mt-4">
             <PreviousButton action={handlePrevious} />
             {permissions?.includes(permissionList?.Edit_Consultant) && (
