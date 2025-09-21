@@ -421,6 +421,7 @@ useEffect(() => {
     existingExtraDocuments[index] = { ...existingExtraDocuments[index], file: newFile };
     return existingExtraDocuments;
   });
+  
 
     const newDocs = [...extraDocuments];
     newDocs[index].file = newFile;
@@ -428,6 +429,21 @@ useEffect(() => {
     displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
 
   };
+  
+   const handleExtraDocumentFileRemove = (index) => {
+    
+    setExtraDocuments(prev => {
+    const existingExtraDocuments = [...prev];
+    existingExtraDocuments[index] = { ...existingExtraDocuments[index], fileUrl: null };
+    return existingExtraDocuments;
+  });
+    const newDocs = [...extraDocuments];
+    newDocs[index].fileUrl = null;
+    setExtraDocuments(newDocs);
+    displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
+
+  };
+
   const ValidateForm = () => {
     var isValid = true;
     if (uniCountryValue === 0) {
@@ -478,6 +494,7 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
@@ -499,6 +516,42 @@ useEffect(() => {
     });
     return isValid;
   });
+
+ const validateExtraDocumentNameDuplicacy = (extraDocuments, setExtraDocumentErrors, isValid) => {
+  // Count occurrences of each title (ignoring empty/null)
+  const titleCount = {};
+  extraDocuments.forEach((doc) => {
+    const title = doc.title?.trim().toLowerCase(); // case-insensitive
+    if (title) {
+      titleCount[title] = (titleCount[title] || 0) + 1;
+    }
+  });
+
+  extraDocuments.forEach((element, index) => {
+    const title = element.title?.trim().toLowerCase();
+
+    setExtraDocumentErrors((prevErrors) => {
+      const newErrors = [...prevErrors];
+      newErrors[index] = { ...newErrors[index] };
+
+      if (title && titleCount[title] > 1) {
+        // Duplicate found
+        newErrors[index].titleError = "Document name is duplicate.";
+        isValid = false;
+      } else {
+        // No duplicate
+        if (!newErrors[index].titleError?.includes("required")) {
+          // only clear if not a "required" error
+          newErrors[index].titleError = "";
+        }
+      }
+      return newErrors;
+    });
+  });
+
+  return isValid;
+};
+
 
   const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
     extraDocuments.forEach((element,index) => {
@@ -739,6 +792,7 @@ useEffect(() => {
                 setExtraDocumentErrors={setExtraDocumentErrors}
                 handleExtraDocumentFileChange={handleExtraDocumentFileChange}
                 handleExtraDocumentFileNameChange={handleExtraDocumentFileNameChange}
+                handleExtraDocumentFileRemove={handleExtraDocumentFileRemove}
               ></EligibilityForm>
             </TabPane>
           </TabContent>
