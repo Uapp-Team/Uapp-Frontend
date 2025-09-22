@@ -20,6 +20,7 @@ import Consent from "./ProfileComponent/Consent";
 import ProfileImportantLinks from "./ProfileComponent/ProfileImportantLinks";
 import TargetApplications from "./ProfileComponent/TargetApplications";
 import ProfileRatingsBreakdown from "./ProfileComponent/ProfileRatingsBreakdown";
+import ProfileHeadCard from "./ProfileComponent/ProfileHeadCard";
 
 const ConsultantProfileForOthers = () => {
   const { id } = useParams();
@@ -32,7 +33,12 @@ const ConsultantProfileForOthers = () => {
 
       <div className="row">
         <div className="col-lg-8 col-sm-12">
-          <ProfileHeadCardForView id={id} />
+          <ProfileHeadCard
+            id={id}
+            headData={headData}
+            setHeadData={setHeadData}
+          />
+          {/* <ProfileHeadCardForView id={id} /> */}
 
           {permissions?.includes(permissionList.View_Consultant_Application) ? (
             <CountingCards id={id} />
