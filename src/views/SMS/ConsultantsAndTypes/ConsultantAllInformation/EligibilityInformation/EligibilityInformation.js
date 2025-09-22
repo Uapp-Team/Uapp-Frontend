@@ -91,8 +91,6 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
-      console.log("res = ");
-      console.table(res);
       
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
@@ -178,8 +176,8 @@ const EligibilityInformation = () => {
     },[residencyValue]);
 
 useEffect(() => {
-  console.log("extraDocuments updated : ");
-  console.table(extraDocuments);
+  // console.log("extraDocuments updated : ");
+  // console.table(extraDocuments);
 }, [extraDocuments]);
 
   const countryDD = countryList.map((countryOptions) => ({
@@ -496,7 +494,7 @@ useEffect(() => {
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
     isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
-    console.log("is valid before submit = "+isValid);
+    // console.log("is valid before submit = "+isValid);
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
     
@@ -540,7 +538,7 @@ useEffect(() => {
         newErrors[index].titleError = "Document name is duplicate.";
         
         isValid = false;
-        console.log("is valid inside func = ",isValid);
+        // console.log("is valid inside func = ",isValid);
 
       } 
       // else {
@@ -553,8 +551,8 @@ useEffect(() => {
       return newErrors;
     });
   });
-  console.log("before return from dupli = "+isValid);
-  console.log("------- one check done  --------");
+  // console.log("before return from dupli = "+isValid);
+  // console.log("------- one check done  --------");
   
   return isValid;
 };
@@ -655,8 +653,8 @@ useEffect(() => {
 
       }
     });
-    console.log("sub data before api call = ");
-    console.table(subData);
+    // console.log("sub data before api call = ");
+    // console.table(subData);
     
     subData.append(
       "expireDate",
