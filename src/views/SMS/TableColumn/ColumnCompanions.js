@@ -60,6 +60,14 @@ const ColumnCompanions = [
     isActive: true,
   },
   {
+    title: "country",
+    isActive: true,
+  },
+  {
+    title: "city",
+    isActive: true,
+  },
+  {
     title: "BlackList",
     isActive: true,
   },

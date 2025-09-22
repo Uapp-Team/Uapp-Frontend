@@ -92,14 +92,16 @@ const CompanionTable = ({
             {tableData[12]?.isActive ? <th>Registered</th> : null}
             {tableData[13]?.isActive ? <th>Status</th> : null}
             {tableData[14]?.isActive ? <th>Branch</th> : null}
+            {tableData[15]?.isActive ? <th>country</th> : null}
+            {tableData[16]?.isActive ? <th>city</th> : null}
 
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[15]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[17]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[16]?.isActive ? (
+            {tableData[18]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -222,9 +224,7 @@ const CompanionTable = ({
                     <span
                       className="Count-sixth-no-pointer"
                       onClick={() => {
-                        history.push(
-                          `/referrer-student-list/${companion?.id}`
-                        );
+                        history.push(`/referrer-student-list/${companion?.id}`);
                       }}
                     >
                       {companion?.studentCount}
@@ -288,12 +288,16 @@ const CompanionTable = ({
               {tableData[14]?.isActive ? (
                 <td>{companion?.branchName}</td>
               ) : null}
+              {tableData[15]?.isActive ? (
+                <td>{companion?.countryName}</td>
+              ) : null}
+              {tableData[16]?.isActive ? <td>{companion?.cityName}</td> : null}
 
               {permissions?.includes(
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[15]?.isActive ? (
+                  {tableData[17]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={!companion?.isActive}
@@ -304,7 +308,7 @@ const CompanionTable = ({
                 </>
               ) : null}
 
-              {tableData[16]?.isActive ? (
+              {tableData[18]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {/* {permissions?.includes(permissionList.View_Consultant) ? ( */}
