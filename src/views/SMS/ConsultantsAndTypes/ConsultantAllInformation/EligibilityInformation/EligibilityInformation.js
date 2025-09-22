@@ -91,8 +91,6 @@ const EligibilityInformation = () => {
       `ConsultantEligibility/GetConsultantEligibility/${consultantRegisterId}`
     ).then((res) => {
       setEligibilityData(res);
-      console.log("res = ");
-      console.table(res);
       
       setIdPassportFile(
         res?.idOrPassport?.fileUrl ? res?.idOrPassport?.fileUrl : null
@@ -178,8 +176,8 @@ const EligibilityInformation = () => {
     },[residencyValue]);
 
 useEffect(() => {
-  console.log("extraDocuments updated : ");
-  console.table(extraDocuments);
+  // console.log("extraDocuments updated : ");
+  // console.table(extraDocuments);
 }, [extraDocuments]);
 
   const countryDD = countryList.map((countryOptions) => ({
@@ -494,8 +492,9 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
-    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
+    // console.log("is valid before submit = "+isValid);
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
     
@@ -537,18 +536,24 @@ useEffect(() => {
       if (title && titleCount[title] > 1) {
         // Duplicate found
         newErrors[index].titleError = "Document name is duplicate.";
+        
         isValid = false;
-      } else {
-        // No duplicate
-        if (!newErrors[index].titleError?.includes("required")) {
-          // only clear if not a "required" error
-          newErrors[index].titleError = "";
-        }
-      }
+        // console.log("is valid inside func = ",isValid);
+
+      } 
+      // else {
+      //   // No duplicate
+      //   if (!newErrors[index].titleError?.includes("required")) {
+      //     // only clear if not a "required" error
+      //     newErrors[index].titleError = "";
+      //   }
+      // }
       return newErrors;
     });
   });
-
+  // console.log("before return from dupli = "+isValid);
+  // console.log("------- one check done  --------");
+  
   return isValid;
 };
 
@@ -648,8 +653,8 @@ useEffect(() => {
 
       }
     });
-    console.log("sub data before api call = ");
-    console.table(subData);
+    // console.log("sub data before api call = ");
+    // console.table(subData);
     
     subData.append(
       "expireDate",
