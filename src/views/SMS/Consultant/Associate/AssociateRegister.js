@@ -220,7 +220,7 @@ const AssociateRegister = () => {
 
             <Row>
               <Col md="6">
-                {userType === userTypes?.SalesTeamLeader && (
+                {userType === userTypes?.SystemAdmin && (
                   <FormGroup className="has-icon-left position-relative">
                     <span>
                       Parent Consultant <span className="text-danger">*</span>{" "}
@@ -229,15 +229,15 @@ const AssociateRegister = () => {
                       options={consParentMenu}
                       value={{ label: parentLabel, value: parentValue }}
                       onChange={(opt) => selectParentCons(opt.label, opt.value)}
-                      // name="parentConsultantId"
-                      // id="parentConsultantId"
+                      name="parentConsultantId"
+                      id="parentConsultantId"
                     />
 
-                    {/* {parentError && (
+                    {parentError && (
                       <span className="text-danger">
                         Parent consultant is required
                       </span>
-                    )} */}
+                    )}
                   </FormGroup>
                 )}
 
