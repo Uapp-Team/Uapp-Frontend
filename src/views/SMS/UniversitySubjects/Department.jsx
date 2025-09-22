@@ -62,9 +62,8 @@ const Department = (props) => {
   const [FileList, setFileList] = useState([]);
   const [error, setError] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const [dImg, setDImg] = useState({})
-  console.log(dImg, 'dimg');
-
+  const [dImg, setDImg] = useState({});
+  console.log(dImg, "dimg");
 
   useEffect(() => {
     get(`Department/index`).then((res) => {
@@ -81,8 +80,6 @@ const Department = (props) => {
     setDescription("");
     setDescriptionError("");
     setDepartmentNameError("");
-
-
   };
 
   const handleDepartmentName = (e) => {
@@ -118,7 +115,7 @@ const Department = (props) => {
   const handleUpdate = (data) => {
     setData(data);
     console.log(data);
-    setDImg(data?.departmentImage?.fileUrl)
+    setDImg(data?.departmentImage?.fileUrl);
     setModalOpen(true);
     setdepartment(data?.name);
     setDescription(data?.description);
@@ -132,7 +129,6 @@ const Department = (props) => {
       reader.onerror = (error) => reject(error);
     });
   }
-
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -182,7 +178,6 @@ const Department = (props) => {
     //   description: description,
     //   departmentImage: FileList[0]?.originFileObj,
     // };
-
 
     var formIsValid = validateRegisterForm(subData);
     if (formIsValid) {
@@ -383,21 +378,24 @@ const Department = (props) => {
                         className="has-icon-left position-relative"
                       >
                         <Col md="5">
-                          <span>
-                            Image <span className="text-danger">*</span>{" "}
-                          </span>
+                          <span>Image</span>
                         </Col>
                         <Col md="7">
                           <div className="row">
-                            {data?.id ? <>   {data?.departmentImage !== null ? (
-                              <div className="col-md-6 pb-2 pr-3">
-                                <Image
-                                  width={104}
-                                  height={104}
-                                  src={rootUrl + dImg}
-                                />
-                              </div>
-                            ) : null}</> : null}
+                            {data?.id ? (
+                              <>
+                                {" "}
+                                {data?.departmentImage !== null ? (
+                                  <div className="col-md-6 pb-2 pr-3">
+                                    <Image
+                                      width={104}
+                                      height={104}
+                                      src={rootUrl + dImg}
+                                    />
+                                  </div>
+                                ) : null}
+                              </>
+                            ) : null}
 
                             <div className="col-md-6 pb-2 pr-3">
                               <Upload
@@ -435,7 +433,9 @@ const Department = (props) => {
                                   src={previewImage}
                                 />
                               </Modal>
-                              <span className="text-danger d-block">{error}</span>
+                              <span className="text-danger d-block">
+                                {error}
+                              </span>
                             </div>
                           </div>
                         </Col>

@@ -1,10 +1,14 @@
-const ColumnCompanions = [
+const ColumnInterestApplicationCommon = [
+  {
+    title: "APP ID",
+    isActive: true,
+  },
   {
     title: "UAPP ID",
     isActive: true,
   },
   {
-    title: "Full Name",
+    title: "Applicant",
     isActive: true,
   },
   {
@@ -12,43 +16,28 @@ const ColumnCompanions = [
     isActive: true,
   },
   {
-    title: "Password",
+    title: "Branch",
+    isActive: true,
+  },
+
+  {
+    title: "University",
     isActive: true,
   },
   {
-    title: "Parent",
+    title: "Campus",
     isActive: true,
   },
   {
-    title: "Consultant",
+    title: "Courses",
     isActive: true,
   },
   {
-    title: "Started",
+    title: "Intake",
     isActive: true,
   },
   {
-    title: "Invitation",
-    isActive: true,
-  },
-  {
-    title: "Leads",
-    isActive: true,
-  },
-  {
-    title: "Students",
-    isActive: true,
-  },
-  {
-    title: "Team Member",
-    isActive: true,
-  },
-  {
-    title: "Application",
-    isActive: true,
-  },
-  {
-    title: "Registered",
+    title: "Application Date",
     isActive: true,
   },
   {
@@ -56,19 +45,27 @@ const ColumnCompanions = [
     isActive: true,
   },
   {
-    title: "Branch",
+    title: "Document Status",
     isActive: true,
   },
   {
-    title: "country",
+    title: "Assessment",
     isActive: true,
   },
   {
-    title: "city",
+    title: "Interview",
     isActive: true,
   },
   {
-    title: "BlackList",
+    title: "Manager",
+    isActive: true,
+  },
+  {
+    title: "SLCs",
+    isActive: true,
+  },
+  {
+    title: "Consultant",
     isActive: true,
   },
   {
@@ -76,5 +73,4 @@ const ColumnCompanions = [
     isActive: true,
   },
 ];
-
-export default ColumnCompanions;
+export default ColumnInterestApplicationCommon;

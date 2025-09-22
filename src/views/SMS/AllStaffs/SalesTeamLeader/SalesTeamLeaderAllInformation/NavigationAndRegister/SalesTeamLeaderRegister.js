@@ -208,7 +208,7 @@ const SalesTeamLeaderRegister = () => {
 
       <Card>
         <CardBody>
-          <p className="section-title">Create A New Staff</p>
+          <p className="section-title">Create A New Sales Team Leader</p>
 
           <Form onSubmit={handleSubmit}>
             <Row>

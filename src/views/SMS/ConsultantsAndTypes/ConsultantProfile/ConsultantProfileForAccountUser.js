@@ -11,6 +11,7 @@ import ConsultantAddress from "./ProfileComponent/ConsultantAddress";
 import EstimatedIncome from "./ProfileComponent/EstimatedIncome";
 import AccountTransaction from "./ProfileComponent/AccountTransaction";
 import WithdrawTransaction from "./ProfileComponent/WithdrawTransaction";
+import ProfileHeadCard from "./ProfileComponent/ProfileHeadCard";
 
 const ConsultantProfileForAccountUser = () => {
   const { id } = useParams();
@@ -21,7 +22,8 @@ const ConsultantProfileForAccountUser = () => {
 
       <div className="row">
         <div className="col-lg-8 col-sm-12">
-          <ProfileHeadCardForView id={id} />
+          {/* <ProfileHeadCardForView id={id} /> */}
+          <ProfileHeadCard id={id} />
           <Applicationtransactions id={id} />
           <AccountTransaction id={id} />
           <WithdrawTransaction id={id} />

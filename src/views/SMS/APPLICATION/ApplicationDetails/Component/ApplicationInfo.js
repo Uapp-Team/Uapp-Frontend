@@ -2621,39 +2621,33 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.intake?.name}</div>
 
-                  {((applicationInfo?.applicationStatusId === 3 &&
-                    applicationInfo?.applicationSubStatusId === 1) ||
-                    (applicationInfo?.applicationStatusId === 6 &&
-                      applicationInfo?.applicationSubStatusId === 20) ||
-                    (applicationInfo?.applicationStatusId === 7 &&
-                      applicationInfo?.applicationSubStatusId === 23) ||
-                    (applicationInfo?.applicationStatusId === 8 &&
-                      applicationInfo?.applicationSubStatusId === 26)) && (
-                    <>
-                      {permissions?.includes(
-                        permissionList.Update_Application_Info
-                      ) ? (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{
-                                color: "#619bff",
-                                cursor: "pointer",
-                              }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleUpdateIntake(
-                              applicationInfo?.intake?.id,
-                              applicationInfo?.intake?.name
-                            )
-                          }
-                          permission={6}
-                        />
-                      ) : null}
-                    </>
-                  )}
+                  {applicationInfo?.applicationStatusId === 9 &&
+                    applicationInfo?.applicationSubStatusId === 43 && (
+                      <>
+                        {permissions?.includes(
+                          permissionList.Update_Application_Info
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{
+                                  color: "#619bff",
+                                  cursor: "pointer",
+                                }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleUpdateIntake(
+                                applicationInfo?.intake?.id,
+                                applicationInfo?.intake?.name
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
 
                   <Modal
                     isOpen={intakeModal}

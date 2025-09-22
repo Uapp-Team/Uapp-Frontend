@@ -78,10 +78,20 @@ const ProfileHeadCard = ({ id, status = false }) => {
         setStatusLabel(res?.accountStatus?.statusName);
         setTierValue(res?.tireStatusValue);
         setTierLabel(res?.tireStatus);
-        setSalesTrainingStatusValue(res?.salesTrainingStatusId);
-        setSalesTrainingStatusLabel(res?.salesTrainingStatus);
-        setAdMissionTrainingStatusValue(res?.admissionTrainingStatusId);
-        setAdMissionTrainingStatusLabel(res?.admissionTrainingStatus);
+        setSalesTrainingStatusValue(
+          res?.salesTrainingStatusId ? res?.salesTrainingStatusId : 0
+        );
+        setSalesTrainingStatusLabel(
+          res?.salesTrainingStatus ? res?.salesTrainingStatus : "sales Training"
+        );
+        setAdMissionTrainingStatusValue(
+          res?.admissionTrainingStatusId ? res?.admissionTrainingStatusId : 0
+        );
+        setAdMissionTrainingStatusLabel(
+          res?.admissionTrainingStatus
+            ? res?.admissionTrainingStatus
+            : "Admission Training"
+        );
       });
 
       get(`AccountStatusDD/index/${id}`).then((res) => {
