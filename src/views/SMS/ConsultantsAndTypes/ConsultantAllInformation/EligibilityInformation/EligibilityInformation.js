@@ -494,8 +494,9 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
-    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
+    console.log("is valid before submit = "+isValid);
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
     
@@ -537,18 +538,24 @@ useEffect(() => {
       if (title && titleCount[title] > 1) {
         // Duplicate found
         newErrors[index].titleError = "Document name is duplicate.";
+        
         isValid = false;
-      } else {
-        // No duplicate
-        if (!newErrors[index].titleError?.includes("required")) {
-          // only clear if not a "required" error
-          newErrors[index].titleError = "";
-        }
-      }
+        console.log("is valid inside func = ",isValid);
+
+      } 
+      // else {
+      //   // No duplicate
+      //   if (!newErrors[index].titleError?.includes("required")) {
+      //     // only clear if not a "required" error
+      //     newErrors[index].titleError = "";
+      //   }
+      // }
       return newErrors;
     });
   });
-
+  console.log("before return from dupli = "+isValid);
+  console.log("------- one check done  --------");
+  
   return isValid;
 };
 
