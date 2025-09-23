@@ -72,6 +72,14 @@ const ColumnApplicationCommon = [
     title: "Manager",
     isActive: true,
   },
+  {
+    title: "Sales Manager",
+    isActive: true,
+  },
+  {
+    title: "Sales Team Leader",
+    isActive: true,
+  },
 
   {
     title: "SLCs",

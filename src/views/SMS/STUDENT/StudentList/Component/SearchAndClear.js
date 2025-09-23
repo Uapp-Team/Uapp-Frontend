@@ -50,6 +50,12 @@ const SearchAndClear = ({
   selectSalesTeamLeaderCons,
   setSalesTeamLeaderValue,
   setSalesTeamLeaderLabel,
+  setSalesManagerLabel,
+  setSalesManagerValue,
+  SalesManagerValue,
+  SalesManagerLabel,
+  selectSalesManager,
+  SalesManagerMenu,
 }) => {
   const userType = localStorage.getItem("userType");
 
@@ -97,6 +103,25 @@ const SearchAndClear = ({
                   name="salesTeamLeaderId"
                   id="salesTeamLeaderId"
                   isDisabled={salesTeamLeaderId ? true : false}
+                />
+              </Col>
+            ) : null}
+
+            {userType === userTypes?.SystemAdmin ||
+            userType === userTypes?.BranchAdmin ||
+            userType === userTypes?.BranchManager ||
+            userType === userTypes?.Admin ? (
+              <Col className="uapp-mb mb-2" md="4" sm="12">
+                <Select
+                  options={SalesManagerMenu}
+                  value={{
+                    label: SalesManagerLabel,
+                    value: SalesManagerValue,
+                  }}
+                  onChange={(opt) => selectSalesManager(opt.label, opt.value)}
+                  name="salesManagerId"
+                  id="salesManagerId"
+                  placeholder="Sales Manager"
                 />
               </Col>
             ) : null}
@@ -172,12 +197,6 @@ const SearchAndClear = ({
             <Col lg="12" md="12" sm="12">
               <div style={{ display: "flex", justifyContent: "start" }}>
                 <div className="d-flex mt-1">
-                  {SalesTeamLeaderValue !== 0 ||
-                  studentTypeValue !== 0 ||
-                  branchValue !== 0 ||
-                  statusValue !== 0
-                    ? ""
-                    : ""}
                   {!salesTeamLeaderId &&
                   SalesTeamLeaderValue &&
                   SalesTeamLeaderValue !== 0 ? (
@@ -191,14 +210,19 @@ const SearchAndClear = ({
                   ) : (
                     ""
                   )}
-                  {SalesTeamLeaderValue !== 0 &&
-                    (studentTypeValue !== 0 ||
-                    branchValue !== 0 ||
-                    statusValue !== 0
-                      ? ""
-                      : "")}
 
-                  {studentTypeValue !== 0 ? (
+                  {SalesManagerValue && SalesManagerValue !== 0 ? (
+                    <TagButton
+                      label={SalesManagerLabel}
+                      setValue={() => setSalesManagerValue(0)}
+                      setLabel={() =>
+                        setSalesManagerLabel("Select Sales Manager")
+                      }
+                    ></TagButton>
+                  ) : (
+                    ""
+                  )}
+                  {studentTypeValue && studentTypeValue !== 0 ? (
                     <TagButton
                       label={studentTypeLabel}
                       setValue={() => setStudentTypeValue(0)}
@@ -218,9 +242,7 @@ const SearchAndClear = ({
                     ""
                   )}
 
-                  {studentTypeValue !== 0 &&
-                    (consultantValue !== 0 || statusValue !== 0 ? "" : "")}
-                  {consultantValue !== 0 ? (
+                  {consultantValue && consultantValue !== 0 ? (
                     <TagButton
                       label={consultantLabel}
                       setValue={() => setConsultantValue(0)}
@@ -229,8 +251,8 @@ const SearchAndClear = ({
                   ) : (
                     ""
                   )}
-                  {consultantValue !== 0 && statusValue !== 0 ? "" : ""}
-                  {statusValue !== 0 ? (
+
+                  {statusValue && statusValue !== 0 ? (
                     <TagButton
                       label={statusLabel}
                       setValue={() => setStatusValue(0)}
@@ -242,6 +264,7 @@ const SearchAndClear = ({
                 </div>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {(!salesTeamLeaderId && SalesTeamLeaderValue !== 0) ||
+                  SalesManagerValue !== 0 ||
                   studentTypeValue !== 0 ||
                   consultantValue !== 0 ||
                   (!branchId && branchValue !== 0) ||

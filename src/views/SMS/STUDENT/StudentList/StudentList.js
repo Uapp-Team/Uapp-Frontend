@@ -27,6 +27,7 @@ import SearchAndClear from "./Component/SearchAndClear.js";
 import StudentTable from "./Component/StudentTable.js";
 import BreadCrumb from "../../../../components/breadCrumb/BreadCrumb.js";
 import ColumnStudent from "../../TableColumn/ColumnStudent.js";
+import Uget from "../../../../helpers/Uget.js";
 
 const StudentList = () => {
   const student = JSON.parse(sessionStorage.getItem("student"));
@@ -114,6 +115,15 @@ const StudentList = () => {
       ? student?.SalesTeamLeaderValue
       : 0
   );
+  const [salesManager, setSalesManager] = useState([]);
+  const [SalesManagerLabel, setSalesManagerLabel] = useState(
+    student?.SalesManagerLabel
+      ? student?.SalesManagerLabel
+      : "Select Sales Manager"
+  );
+  const [SalesManagerValue, setSalesManagerValue] = useState(
+    student?.SalesManagerValue ? student?.SalesManagerValue : 0
+  );
 
   // api starts here
   useEffect(() => {
@@ -141,6 +151,8 @@ const StudentList = () => {
           !salesTeamLeaderId && SalesTeamLeaderLabel && SalesTeamLeaderLabel,
         SalesTeamLeaderValue:
           !salesTeamLeaderId && SalesTeamLeaderValue && SalesTeamLeaderValue,
+        SalesManagerLabel: SalesManagerLabel && SalesManagerLabel,
+        SalesManagerValue: SalesManagerValue && SalesManagerValue,
         statusLabel: statusLabel && statusLabel,
         statusValue: statusValue && statusValue,
         searchStr: searchStr && searchStr,
@@ -166,6 +178,8 @@ const StudentList = () => {
     studentTypeLabel,
     studentTypeValue,
     salesTeamLeaderId,
+    SalesManagerValue,
+    SalesManagerLabel,
   ]);
 
   useEffect(() => {
@@ -213,6 +227,10 @@ const StudentList = () => {
         setSalesTeamLeaderLabel(result?.name);
       }
     });
+
+    Uget(`SalesManager/IndexDD/${branchValue}`).then((res) => {
+      setSalesManager(res?.data);
+    });
   }, [branchValue, salesTeamLeaderId]);
 
   useEffect(() => {
@@ -223,7 +241,7 @@ const StudentList = () => {
               userTypeId === userTypes?.Consultant
                 ? referenceId
                 : consultantValue
-            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesManagerId=${SalesManagerValue}`
           ).then((res) => {
             setStudentData(res?.models);
             setEntity(res?.totalEntity);
@@ -234,7 +252,7 @@ const StudentList = () => {
         ? get(
             `Student/GetPaginated?page=${currentPage}&pageSize=${dataPerPage}&studenttype=${studentTypeValue}&searchstring=${searchStr}&consultantId=${
               userTypeId === userTypes?.Consultant ? referenceId : cId
-            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+            }&status=${statusValue}&sortby=${orderValue}&branchid=${branchValue}&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesManagerId=${SalesManagerValue}`
           ).then((res) => {
             setStudentData(res?.models);
             setEntity(res?.totalEntity);
@@ -248,7 +266,7 @@ const StudentList = () => {
                 : consultantValue
             }&status=${statusValue}&sortby=${orderValue}&branchid=${
               branchValue ? branchValue : id ? id : 0
-            }&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}`
+            }&isconsultant=${check}&salesTeamLeaderId=${SalesTeamLeaderValue}&salesManagerId=${SalesManagerValue}`
           ).then((res) => {
             console.log(res?.models, "pore");
 
@@ -282,6 +300,7 @@ const StudentList = () => {
     isTyping,
     id,
     SalesTeamLeaderValue,
+    SalesManagerValue,
   ]);
 
   // api ends here
@@ -404,9 +423,20 @@ const StudentList = () => {
       value: consSalesTeamLeaderOptions?.id,
     })
   );
+
   const selectSalesTeamLeaderCons = (label, value) => {
     setSalesTeamLeaderLabel(label);
     setSalesTeamLeaderValue(value);
+  };
+
+  const SalesManagerMenu = salesManager?.map((salesManagerOptions) => ({
+    label: salesManagerOptions?.name,
+    value: salesManagerOptions?.id,
+  }));
+
+  const selectSalesManager = (label, value) => {
+    setSalesManagerLabel(label);
+    setSalesManagerValue(value);
   };
 
   // toggle dropdown
@@ -437,6 +467,8 @@ const StudentList = () => {
   const handleClearSearch = () => {
     !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
     !salesTeamLeaderId && setSalesTeamLeaderValue(0);
+    setSalesManagerLabel("Select Sales Manager");
+    setSalesManagerValue(0);
     setCurrentPage(1);
     setStudentTypeLabel("Type");
     setStudentTypeValue(0);
@@ -667,6 +699,12 @@ const StudentList = () => {
             setSalesTeamLeaderLabel={setSalesTeamLeaderLabel}
             setSalesTeamLeaderValue={setSalesTeamLeaderValue}
             salesTeamLeaderId={salesTeamLeaderId}
+            SalesManagerLabel={SalesManagerLabel}
+            SalesManagerValue={SalesManagerValue}
+            setSalesManagerLabel={setSalesManagerLabel}
+            setSalesManagerValue={setSalesManagerValue}
+            selectSalesManager={selectSalesManager}
+            SalesManagerMenu={SalesManagerMenu}
           />
 
           {/*SearchAndClear ends here */}
@@ -769,7 +807,7 @@ const StudentList = () => {
                         <DropdownMenu className="bg-dd-1">
                           {tableData?.map((table, i) => (
                             <div key={i}>
-                              {i === 7 ? (
+                              {i === 8 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Password
@@ -796,7 +834,7 @@ const StudentList = () => {
                                     </div>
                                   )}
                                 </>
-                              ) : i === 8 ? (
+                              ) : i === 9 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Account_Status

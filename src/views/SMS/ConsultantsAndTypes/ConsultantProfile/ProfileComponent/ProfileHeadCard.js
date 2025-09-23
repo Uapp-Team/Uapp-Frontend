@@ -43,7 +43,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
   const [statusValue, setStatusValue] = useState(0);
   const [salesTrainingStatus, setSalesTrainingStatus] = useState([]);
   const [salesTrainingStatusLabel, setSalesTrainingStatusLabel] =
-    useState("sales Training");
+    useState("Sales Training");
   const [salesTrainingStatusValue, setSalesTrainingStatusValue] = useState(0);
   const [adMissionTrainingStatus, setAdMissionTrainingStatus] = useState([]);
   const [adMissionTrainingStatusLabel, setAdMissionTrainingStatusLabel] =
@@ -82,7 +82,7 @@ const ProfileHeadCard = ({ id, status = false }) => {
           res?.salesTrainingStatusId ? res?.salesTrainingStatusId : 0
         );
         setSalesTrainingStatusLabel(
-          res?.salesTrainingStatus ? res?.salesTrainingStatus : "sales Training"
+          res?.salesTrainingStatus ? res?.salesTrainingStatus : "Sales Training"
         );
         setAdMissionTrainingStatusValue(
           res?.admissionTrainingStatusId ? res?.admissionTrainingStatusId : 0
@@ -783,9 +783,9 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             name="salesTrainingStatus"
                             id="salesTrainingStatus"
                           />
-                        ) : (
+                        ) : salesTrainingStatusValue !== 0 ? (
                           salesTrainingStatusLabel
-                        )}
+                        ) : null}
                       </div>
 
                       <div className="d-flex justify-content-md-end mb-2">
@@ -805,9 +805,9 @@ const ProfileHeadCard = ({ id, status = false }) => {
                             name="adMissionTrainingStatusId"
                             id="adMissionTrainingStatusId"
                           />
-                        ) : (
+                        ) : adMissionTrainingStatusValue !== 0 ? (
                           adMissionTrainingStatusLabel
-                        )}
+                        ) : null}
                       </div>
                     </ul>
                   </Col>

@@ -747,7 +747,7 @@ const LeadStudentList = () => {
                                     </div>
                                   )}
                                 </>
-                              ) : i === 6 ? (
+                              ) : i === 7 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Password
@@ -774,7 +774,7 @@ const LeadStudentList = () => {
                                     </div>
                                   )}
                                 </>
-                              ) : i === 7 ? (
+                              ) : i === 8 ? (
                                 <>
                                   {permissions?.includes(
                                     permissionList.Change_Student_Account_Status

@@ -1009,7 +1009,7 @@ const UniversityList = (props) => {
                                   </div>
                                 )}
                               </>
-                            ) : i === 10 ? (
+                            ) : i === 11 ? (
                               <>
                                 {" "}
                                 {permissions?.includes(

@@ -20,6 +20,10 @@ const ColumnStudent = [
     isActive: true,
   },
   {
+    title: "Sales Manager",
+    isActive: true,
+  },
+  {
     title: "Branch",
     isActive: true,
   },

@@ -112,18 +112,19 @@ const StudentTable = ({
             {tableData[2]?.isActive ? <th>Contact</th> : null}
             {tableData[3]?.isActive ? <th>Consultant</th> : null}
             {tableData[4]?.isActive ? <th>Sales Team Leader</th> : null}
-            {tableData[5]?.isActive ? <th>Branch</th> : null}
-            {tableData[6]?.isActive ? <th>UAPP Reg Date</th> : null}
+            {tableData[5]?.isActive ? <th>Sales Manager</th> : null}
+            {tableData[6]?.isActive ? <th>Branch</th> : null}
+            {tableData[7]?.isActive ? <th>UAPP Reg Date</th> : null}
             {permissions?.includes(permissionList.Change_Student_Password) ? (
-              <>{tableData[7]?.isActive ? <th>Password</th> : null}</>
+              <>{tableData[8]?.isActive ? <th>Password</th> : null}</>
             ) : null}
             {permissions?.includes(
               permissionList.Change_Student_Account_Status
             ) ? (
-              <>{tableData[8]?.isActive ? <th>Black List</th> : null}</>
+              <>{tableData[9]?.isActive ? <th>Black List</th> : null}</>
             ) : null}
-            {tableData[9]?.isActive ? <th>Verified</th> : null}
-            {tableData[10]?.isActive ? (
+            {tableData[10]?.isActive ? <th>Verified</th> : null}
+            {tableData[11]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -212,7 +213,7 @@ const StudentTable = ({
                 <>
                   {" "}
                   {permissions?.includes(
-                    permissionList.View_SalesManager_Details
+                    permissionList.View_SalesTeamLeader_Details
                   ) ? (
                     <td className="cursor-pointer hyperlink-hover">
                       <Link
@@ -230,6 +231,25 @@ const StudentTable = ({
               {tableData[5]?.isActive ? (
                 <>
                   {" "}
+                  {permissions?.includes(
+                    permissionList.View_SalesManager_Details
+                  ) ? (
+                    <td className="cursor-pointer hyperlink-hover">
+                      <Link
+                        className="text-id hover"
+                        to={`/salesManagerProfile/${student?.salesManagerId}`}
+                      >
+                        {student?.salesManagerName}
+                      </Link>
+                    </td>
+                  ) : (
+                    <td> {student?.salesManagerName}</td>
+                  )}
+                </>
+              ) : null}
+              {tableData[6]?.isActive ? (
+                <>
+                  {" "}
                   {permissions?.includes(permissionList.View_Branch) ? (
                     <td className="cursor-pointer hyperlink-hover">
                       <Link
@@ -245,13 +265,13 @@ const StudentTable = ({
                 </>
               ) : null}
 
-              {tableData[6]?.isActive ? (
+              {tableData[7]?.isActive ? (
                 <td>{dateFormate(student?.createdOn)}</td>
               ) : null}
 
               {permissions?.includes(permissionList.Change_Student_Password) ? (
                 <>
-                  {tableData[7]?.isActive ? (
+                  {tableData[8]?.isActive ? (
                     <td>
                       <Link
                         to="/studentList"
@@ -267,7 +287,7 @@ const StudentTable = ({
                 permissionList.Change_Student_Account_Status
               ) ? (
                 <>
-                  {tableData[8]?.isActive ? (
+                  {tableData[9]?.isActive ? (
                     <td>
                       <ToggleSwitch
                         defaultChecked={
@@ -285,7 +305,7 @@ const StudentTable = ({
                   ) : null}
                 </>
               ) : null}
-              {tableData[9]?.isActive ? (
+              {tableData[10]?.isActive ? (
                 <td>
                   {student?.isVerified === true ? (
                     <>
@@ -309,7 +329,7 @@ const StudentTable = ({
                 </td>
               ) : null}
 
-              {tableData[10]?.isActive ? (
+              {tableData[11]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Student) ? (
