@@ -413,6 +413,7 @@ useEffect(() => {
   };  
 
   const handleExtraDocumentFileChange = (index, newFile) => {
+    console.log("changed triggered ");
     
     setExtraDocuments(prev => {
     const existingExtraDocuments = [...prev];
@@ -424,6 +425,7 @@ useEffect(() => {
     const newDocs = [...extraDocuments];
     newDocs[index].file = newFile;
     setExtraDocuments(newDocs);
+    console.table(extraDocuments);
     displayErrorOfExtraDocuments(extraDocuments,index,setExtraDocumentErrors);
 
   };
@@ -491,16 +493,19 @@ useEffect(() => {
       setCvError("File is required");
     }
 
-    isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
-    isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
-
-    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
-
+    isValid =  validateExtraDocumentElements(extraDocuments,setExtraDocumentErrors,isValid);
+    // console.log(" is valid = "+isValid);
+    
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
     
   };
-
+  const validateExtraDocumentElements=(extraDocuments,setExtraDocumentErrors,isValid)=>{
+      const isDocumentNamesValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
+      const isDocumentNameUniquenessValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
+      const isDocumentFileValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+      return (isDocumentNamesValid && isDocumentNameUniquenessValid && isDocumentFileValid);
+  };
   const validateExtraDocumentNames = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
     extraDocuments.forEach((element,index) => {
       if(extraDocuments[index].title===null || extraDocuments[index].title==="")
@@ -519,9 +524,16 @@ useEffect(() => {
 
  const validateExtraDocumentNameDuplicacy = (extraDocuments, setExtraDocumentErrors, isValid) => {
   // Count occurrences of each title (ignoring empty/null)
+
   const titleCount = {};
-  extraDocuments.forEach((doc) => {
-    const title = doc.title?.trim().toLowerCase(); // case-insensitive
+  extraDocuments.forEach((document,index) => {
+      setExtraDocumentErrors((prevErrors) => {
+              const newErrors = [...prevErrors];
+              newErrors[index] = { ...newErrors[index] };
+              newErrors[index].titleError = "";
+              return newErrors;
+            });
+    const title = document.title?.trim().toLowerCase(); // case-insensitive
     if (title) {
       titleCount[title] = (titleCount[title] || 0) + 1;
     }
@@ -539,26 +551,21 @@ useEffect(() => {
         });
         isValid = false;
       } 
-      else {
-        // No duplicate
-        if (!extraDocumentErrors[index]?.titleError?.includes("Document name is required")) {
-          // only clear if not a "required" error
-           setExtraDocumentErrors((prevErrors) => {
-              const newErrors = [...prevErrors];
-              newErrors[index] = { ...newErrors[index] };
-              newErrors[index].titleError = "";
-              return newErrors;
-            });
-          isValid=true;
-        }
-      }
     });
-  return isValid;
+    return isValid;
   };
 
 
   const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
+    
     extraDocuments.forEach((element,index) => {
+       setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].fileError = "";
+          return newErrors;
+        }) 
+
       if(extraDocuments[index].fileUrl === null && extraDocuments[index].file === null)
       {
         isValid = false;
@@ -569,21 +576,18 @@ useEffect(() => {
           return newErrors;
         }) 
       }
-      else
-      {
-        isValid = true;
-        setExtraDocumentErrors((prevErrors)=>{
-          const newErrors = [...prevErrors];
-          newErrors[index] = {...newErrors[index]};
-          newErrors[index].fileError = "";
-          return newErrors;
-        }) 
-      }
     });
     return isValid;
   });
 
   const displayErrorExtraDocumentNames = ((extraDocuments,index,setExtraDocumentErrors)=>{
+     setExtraDocumentErrors((prevErrors) => {
+            const newErrors = [...prevErrors];              
+            newErrors[index] = { ...newErrors[index] };     
+            newErrors[index].titleError = "";      
+            
+            return newErrors;
+          });
        if(extraDocuments[index].title === "")
         {
           const existingExtraDocumentErrors = [...extraDocumentErrors];
@@ -595,20 +599,10 @@ useEffect(() => {
             return newErrors;
           });
         }
-        else
-        {
-           const existingExtraDocumentErrors = [...extraDocumentErrors];
-            setExtraDocumentErrors((prevErrors) => {
-            const newErrors = [...prevErrors];              
-            newErrors[index] = { ...newErrors[index] };     
-            newErrors[index].titleError = "";      
-            
-            return newErrors;
-          });
-        }
   });
 
   const displayErrorOfExtraDocuments = ((extraDocuments,index,setExtraDocumentErrors)=>{
+    
        if(extraDocuments[index].fileUrl !== null || extraDocuments[index].file !== null)
         {
           const existingExtraDocumentErrors = [...extraDocumentErrors];
