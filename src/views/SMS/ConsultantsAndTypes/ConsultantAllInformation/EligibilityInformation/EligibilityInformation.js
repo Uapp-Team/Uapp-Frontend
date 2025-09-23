@@ -492,8 +492,9 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
-    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
     isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+
+    isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
 
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
