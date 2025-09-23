@@ -492,9 +492,9 @@ useEffect(() => {
     }
 
     isValid =  validateExtraDocumentNames(extraDocuments,setExtraDocumentErrors,isValid);
-    isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
     isValid = validateExtraDocumentNameDuplicacy(extraDocuments,setExtraDocumentErrors,isValid);
-    // console.log("is valid before submit = "+isValid);
+    isValid =  validateExtraDocuments(extraDocuments,setExtraDocumentErrors,isValid);
+
     //Reassigning the isValid after checking extra Doc Names 
     return isValid;
     
@@ -528,34 +528,32 @@ useEffect(() => {
 
   extraDocuments.forEach((element, index) => {
     const title = element.title?.trim().toLowerCase();
-
-    setExtraDocumentErrors((prevErrors) => {
-      const newErrors = [...prevErrors];
-      newErrors[index] = { ...newErrors[index] };
-
       if (title && titleCount[title] > 1) {
         // Duplicate found
-        newErrors[index].titleError = "Document name is duplicate.";
-        
+        setExtraDocumentErrors((prevErrors) => {
+          const newErrors = [...prevErrors];
+          newErrors[index] = { ...newErrors[index] };
+          newErrors[index].titleError = "Document name is duplicate.";
+          return newErrors;
+        });
         isValid = false;
-        // console.log("is valid inside func = ",isValid);
-
       } 
-      // else {
-      //   // No duplicate
-      //   if (!newErrors[index].titleError?.includes("required")) {
-      //     // only clear if not a "required" error
-      //     newErrors[index].titleError = "";
-      //   }
-      // }
-      return newErrors;
+      else {
+        // No duplicate
+        if (!extraDocumentErrors[index]?.titleError?.includes("Document name is required")) {
+          // only clear if not a "required" error
+           setExtraDocumentErrors((prevErrors) => {
+              const newErrors = [...prevErrors];
+              newErrors[index] = { ...newErrors[index] };
+              newErrors[index].titleError = "";
+              return newErrors;
+            });
+          isValid=true;
+        }
+      }
     });
-  });
-  // console.log("before return from dupli = "+isValid);
-  // console.log("------- one check done  --------");
-  
   return isValid;
-};
+  };
 
 
   const validateExtraDocuments = ((extraDocuments,setExtraDocumentErrors,isValid) =>{
@@ -567,6 +565,16 @@ useEffect(() => {
           const newErrors = [...prevErrors];
           newErrors[index] = {...newErrors[index]};
           newErrors[index].fileError = "Document file is required";
+          return newErrors;
+        }) 
+      }
+      else
+      {
+        isValid = true;
+        setExtraDocumentErrors((prevErrors)=>{
+          const newErrors = [...prevErrors];
+          newErrors[index] = {...newErrors[index]};
+          newErrors[index].fileError = "";
           return newErrors;
         }) 
       }
