@@ -1,0 +1,95 @@
+/* widget Start*/
+.animated-btn {
+    z-index: 1000;
+    color: #005f56;
+    cursor: pointer;
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    box-shadow: 0 275px 77px 0 rgba(0, 0, 0, 0),
+        0 176px 70px 0 rgba(0, 0, 0, 0.01), 0 99px 59px 0 rgba(0, 0, 0, 0.05),
+        0 44px 44px 0 rgba(0, 0, 0, 0.09), 0 11px 24px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.text-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.widget-animated-span {
+    display: inline-block;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #045d5e;
+    font-style: normal;
+    transition: opacity 0.5s;
+}
+
+/* === Animations === */
+
+/* First text - fade in */
+.showFirst.active {
+    animation: fadeIn 1.5s ease forwards;
+}
+
+/* Second text - from right */
+.showSecond.active {
+    animation: slideFromRight 1.8s ease forwards;
+}
+
+/* Third text - from bottom right */
+.showThird.active {
+    animation: slideFromBottomRight 2s ease forwards;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideFromBottomRight {
+    from {
+        opacity: 0;
+        transform: translate(40px, 40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.widget-iframe {
+    border: none;
+}
+
+/* widget End*/
