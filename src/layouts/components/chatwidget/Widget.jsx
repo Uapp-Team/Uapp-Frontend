@@ -60,7 +60,6 @@ const Widget = () => {
               backgroundColor: "white",
               height: "calc(100vh - 120px)",
               maxHeight: "650px",
-
               borderRadius: '16px',
               boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
               overflow: "hidden",
