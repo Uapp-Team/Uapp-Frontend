@@ -1,7 +1,5 @@
-/* eslint-disable jsx-a11y/iframe-has-title */
-
 import React, { useEffect, useRef, useState } from "react";
-import "./widget.css"
+import "./widget.css";
 // Animation durations and delays
 const ANIMATION_DURATION = 5000; // 5 seconds per text
 
@@ -18,8 +16,8 @@ const Widget = () => {
   const email = currentUser?.displayEmail;
   const consultantsName = "";
   const destinationCountry = "";
-  const domainUrl = "http://chatuapp.ddns.net:90/";
-  const __key = "hDMEL3lFlwv7dK7SZKgXoTOq8QevROqyIGr6IoJz7qkQPVh7ha";
+  const domainUrl = "https://test.chatuapp.com/";
+  const __key = "Y9xBrqRI5ZneHPP8M3dnOBetyl7bfuPp88fiEtKNN08NB7lKP4";
   const __tenant = "Default";
   const url = `${domainUrl}echat?name=${encodeURIComponent(
     name
@@ -32,6 +30,7 @@ const Widget = () => {
   )}`;
   // Changes Here End
 
+  const widgetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef(null);
@@ -46,29 +45,41 @@ const Widget = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (widgetRef.current && !widgetRef.current.contains(event.target)) {
+        setIsOpen(false);
+      } else setIsOpen(true);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsOpen]);
+
   return (
     <>
-      {isOpen && (
-        <>
-          <div
-            style={{
-              zIndex: 999999999999999999,
-              width: "410px",
-              right: "70px",
-              bottom: "100px",
-              position: "fixed",
-              backgroundColor: "white",
-              height: "calc(100vh - 120px)",
-              maxHeight: "650px",
-              borderRadius: '16px',
-              boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-              overflow: "hidden",
-            }}
-          >
-            <iframe className="widget-iframe" src={url} width="100%" height="100%"></iframe>
-          </div>
-        </>
-      )}
+      <div
+        ref={widgetRef}
+        style={{
+          display: `${isOpen ? "block" : "none"}`,
+          zIndex: 99999999999999999,
+          width: "410px",
+          right: "50px",
+          bottom: "100px",
+          position: "fixed",
+          backgroundColor: "white",
+          height: "calc(100vh - 120px)",
+          maxHeight: "650px",
+          borderRadius: "16px",
+          boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+          overflow: "hidden",
+        }}
+      >
+        <iframe src={url} style={{ border: 'none' }} width="100%" height="100%"></iframe>
+      </div>
 
       <button
         className="animated-btn"
@@ -76,7 +87,17 @@ const Widget = () => {
           setIsOpen(!isOpen);
         }}
       >
-        <div>
+        <div
+          style={{
+            transition: "transform 1s ease-in-out",
+            transform:
+              activeIndex === 1
+                ? "rotate(-60deg)"
+                : activeIndex === 2
+                  ? "rotate(-120deg)"
+                  : "rotate(0deg)",
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="19"
@@ -503,7 +524,6 @@ const Widget = () => {
                 opacity: activeIndex === idx ? 1 : 0,
                 pointerEvents: "none",
                 transition: "opacity 0.5s",
-                // Animation handled by CSS below
               }}
             >
               <span
