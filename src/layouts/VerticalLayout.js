@@ -229,7 +229,7 @@ const VerticalLayout = ({ children, permission }) => {
         <div className="content-wrapper coustom-wrapper">
           {children}
 
-          {/* <Widget /> */}
+          <Widget />
         </div>
       </div>
       <Footer {...footerProps} />
