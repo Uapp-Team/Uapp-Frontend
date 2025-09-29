@@ -24,6 +24,10 @@ const ColumnConsultant = [
     isActive: true,
   },
   {
+    title: "City",
+    isActive: true,
+  },
+  {
     title: "Nationality",
     isActive: true,
   },
@@ -43,6 +47,10 @@ const ColumnConsultant = [
     title: "Sales Training",
     isActive: true,
   },
+  {
+    title: "Adm Training",
+    isActive: true,
+  },
 
   {
     title: "Started",
@@ -60,10 +68,7 @@ const ColumnConsultant = [
     title: "Associates",
     isActive: true,
   },
-  {
-    title: "Adm Training",
-    isActive: true,
-  },
+
   {
     title: "Affiliates",
     isActive: true,
