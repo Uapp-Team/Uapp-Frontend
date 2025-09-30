@@ -2250,31 +2250,32 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.universityStudentId}</div>
 
-                  {applicationInfo?.applicationStatusId === 4 && (
-                    <>
-                      {permissions?.includes(
-                        permissionList.Update_Application_Info
-                      ) ? (
-                        <SpanButton
-                          icon={
-                            <i
-                              class="far fa-edit"
-                              style={{
-                                color: "#619bff",
-                                cursor: "pointer",
-                              }}
-                            ></i>
-                          }
-                          func={() =>
-                            handleEditUniStdId(
-                              applicationInfo?.universityStudentId
-                            )
-                          }
-                          permission={6}
-                        />
-                      ) : null}
-                    </>
-                  )}
+                  {applicationInfo?.applicationStatusId >= 4 &&
+                    applicationInfo?.applicationStatusId !== 13 && (
+                      <>
+                        {permissions?.includes(
+                          permissionList.Update_Application_Info
+                        ) ? (
+                          <SpanButton
+                            icon={
+                              <i
+                                class="far fa-edit"
+                                style={{
+                                  color: "#619bff",
+                                  cursor: "pointer",
+                                }}
+                              ></i>
+                            }
+                            func={() =>
+                              handleEditUniStdId(
+                                applicationInfo?.universityStudentId
+                              )
+                            }
+                            permission={6}
+                          />
+                        ) : null}
+                      </>
+                    )}
 
                   <Modal
                     isOpen={uniStdIdModalOpen}

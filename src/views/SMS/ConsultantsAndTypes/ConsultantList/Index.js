@@ -61,15 +61,15 @@ const Index = () => {
 
   const [statusType, setStatusType] = useState([]);
   const [statusLabel, setStatusLabel] = useState(
-    data.name
-      ? data.name
+    data?.name
+      ? data?.name
       : ConsultantPaging?.statusLabel
       ? ConsultantPaging?.statusLabel
       : "Account Status"
   );
   const [statusValue, setStatusValue] = useState(
-    data.id
-      ? data.id
+    data?.id
+      ? data?.id
       : ConsultantPaging?.statusValue
       ? ConsultantPaging?.statusValue
       : 0

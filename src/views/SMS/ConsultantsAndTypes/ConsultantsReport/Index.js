@@ -94,7 +94,7 @@ const Index = () => {
     };
 
     // Add id based on category
-    if (clickedCategory.toLowerCase() === "inactive") {
+    if (clickedCategory.toLowerCase() === "in active") {
       stateData.id = 4;
       stateData.name = "Inactive";
     } else if (clickedCategory.toLowerCase() === "active") {
@@ -222,7 +222,7 @@ const Index = () => {
                 xaxis: {
                   categories: [
                     "Rejected",
-                    "InActive",
+                    "In Active",
                     "Junk",
                     "Active",
                     "Under Review",

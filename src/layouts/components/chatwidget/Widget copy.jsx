@@ -4,9 +4,9 @@ import "./widget.css";
 const ANIMATION_DURATION = 5000; // 5 seconds per text
 
 const texts = [
-  { text: "", animation: "showFirst" },
-  { text: "Ask", animation: "showSecond" },
-  { text: "Connect", animation: "showThird" },
+  { text: "Connect", animation: "showFirst" },
+  { text: "ChatUAPP", animation: "showSecond" },
+  { text: "AI System", animation: "showThird" },
 ];
 
 const Widget = () => {
@@ -16,14 +16,9 @@ const Widget = () => {
   const email = currentUser?.displayEmail;
   const consultantsName = "";
   const destinationCountry = "";
-
   const domainUrl = "https://test.chatuapp.com/";
-  const __key = "DM9Fphc1XKT6xselZOMh9eKsWs3rUbvEzmSKP35JbUDFjs3zXQ";
+  const __key = "Y9xBrqRI5ZneHPP8M3dnOBetyl7bfuPp88fiEtKNN08NB7lKP4";
   const __tenant = "Default";
-  // const domainUrl = process.env.NEXT_PUBLIC_WIDGET_DOMAIN;
-  // const __key = process.env.NEXT_PUBLIC_WIDGET_KEY;
-  // const __tenant = process.env.NEXT_PUBLIC_WIDGET_TENANT;
-
   const url = `${domainUrl}echat?name=${encodeURIComponent(
     name
   )}&email=${encodeURIComponent(email)}&consultantsName=${encodeURIComponent(
@@ -36,9 +31,7 @@ const Widget = () => {
   // Changes Here End
 
   const widgetRef = useRef(null);
-  const widgetRef2 = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMaximized, setIsMaximized] = useState(1);
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef(null);
 
@@ -54,14 +47,9 @@ const Widget = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        widgetRef.current &&
-        !widgetRef.current.contains(event.target) &&
-        widgetRef2.current &&
-        !widgetRef2.current.contains(event.target)
-      ) {
+      if (widgetRef.current && !widgetRef.current.contains(event.target)) {
         setIsOpen(false);
-      }
+      } else setIsOpen(true);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -76,146 +64,24 @@ const Widget = () => {
       <div
         ref={widgetRef}
         style={{
-          display: isOpen ? "block" : "none",
+          display: `${isOpen ? "block" : "none"}`,
           zIndex: 99999999999999999,
-          minWidth: "360px",
-          width:
-            isMaximized === 3
-              ? "100vw"
-              : isMaximized === 2
-              ? "calc(100vw - 500px)"
-              : "360px",
-          height:
-            isMaximized === 3
-              ? "100vh"
-              : isMaximized === 2
-              ? "calc(100vh - 120px)"
-              : "calc(100vh - 120px)",
-          maxHeight: isMaximized === 3 ? "100vh" : "650px",
-          right: isMaximized === 3 ? "0" : "20px",
-          bottom: isMaximized === 3 ? "0" : "100px",
+          width: "410px",
+          right: "50px",
+          bottom: "100px",
           position: "fixed",
           backgroundColor: "white",
-          borderRadius: isMaximized === 3 ? "0" : "16px",
+          height: "calc(100vh - 120px)",
+          maxHeight: "650px",
+          borderRadius: "16px",
           boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
           overflow: "hidden",
-          transition: "all 0.5s ease-in-out",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            display: "flex",
-            gap: "8px",
-            zIndex: 1000,
-          }}
-        >
-          {/* Minimize Button */}
-          <button
-            style={{
-              background: "#f3f4f6",
-              border: "none",
-              borderRadius: "4px",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
-            }}
-            title="Minimize"
-            onClick={() => setIsOpen(false)}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="4"
-                y="7.25"
-                width="8"
-                height="1.5"
-                rx="0.75"
-                fill="#515151"
-              />
-            </svg>
-          </button>
-          {/* Maximize Button */}
-          <button
-            style={{
-              background: "#f3f4f6",
-              border: "none",
-              borderRadius: "4px",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
-            }}
-            title="Maximize"
-            onClick={() => {
-              setIsMaximized(isMaximized === 1 || isMaximized === 3 ? 2 : 1);
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="3"
-                y="3"
-                width="10"
-                height="10"
-                rx="2"
-                stroke="#515151"
-                strokeWidth="1.2"
-              />
-            </svg>
-          </button>
-
-          <button
-            style={{
-              background: "#f3f4f6",
-              border: "none",
-              borderRadius: "4px",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
-            }}
-            title="Full Screen"
-            onClick={() => {
-              setIsMaximized(isMaximized === 1 || isMaximized === 2 ? 3 : 1);
-            }}
-          >
-            {/* External Link Arrow Icon */}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M4 12L12 4M12 4H6.5M12 4V9.5"
-                stroke="#515151"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <iframe
-          src={url}
-          style={{ border: "none", minWidth: "360px" }}
-          width="100%"
-          height="100%"
-        ></iframe>
+        <iframe src={url} style={{ border: 'none' }} width="100%" height="100%"></iframe>
       </div>
 
       <button
-        ref={widgetRef2}
         className="animated-btn"
         onClick={() => {
           setIsOpen(!isOpen);
@@ -228,8 +94,8 @@ const Widget = () => {
               activeIndex === 1
                 ? "rotate(-60deg)"
                 : activeIndex === 2
-                ? "rotate(-120deg)"
-                : "rotate(0deg)",
+                  ? "rotate(-120deg)"
+                  : "rotate(0deg)",
           }}
         >
           <svg
@@ -641,17 +507,16 @@ const Widget = () => {
               activeIndex === 0
                 ? "70px"
                 : activeIndex === 1
-                ? "100px"
-                : "130px",
+                  ? "100px"
+                  : "130px",
             transition: "width 1s ease-in-out",
           }}
         >
           {texts.map((item, idx) => (
             <span
-              key={idx}
-              className={`widget-animated-span ${item.animation} ${
-                activeIndex === idx ? "active" : ""
-              }`}
+              key={item.text}
+              className={`widget-animated-span ${item.animation} ${activeIndex === idx ? "active" : ""
+                }`}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -675,7 +540,11 @@ const Widget = () => {
                     fontWeight: 300,
                   }}
                 >
-                  {item.text}
+                  {activeIndex === 0
+                    ? ""
+                    : activeIndex === 1
+                      ? "Ask"
+                      : "Connect"}
                 </span>
                 <span>&nbsp;</span>
                 <span
