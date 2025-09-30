@@ -803,7 +803,7 @@ const ApplicationInfo = ({
     e.preventDefault();
     const subData = new FormData(e.target);
     setProgress9(true);
-    put(`Application/UpdateIntake`, subData).then((action) => {
+    put(`Application/UpdateNextIntake`, subData).then((action) => {
       setProgress9(false);
       setSuccess(!success);
       setIntakeModal(false);
