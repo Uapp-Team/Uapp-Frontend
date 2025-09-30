@@ -1261,6 +1261,21 @@ const ApplicationInfo = ({
     }
   };
 
+  const validPairs = [
+    { status: 9, subStatus: 43 },
+    { status: 3, subStatus: 1 },
+    { status: 4, subStatus: 42 },
+    { status: 6, subStatus: 20 },
+    { status: 7, subStatus: 23 },
+    { status: 8, subStatus: 26 },
+  ];
+
+  const canShowButton = validPairs.some(
+    (pair) =>
+      pair.status === applicationInfo?.applicationStatusId &&
+      pair.subStatus === applicationInfo?.applicationSubStatusId
+  );
+
   return (
     <>
       <div className="custom-card-border p-4 mb-3 ">
@@ -2622,33 +2637,32 @@ const ApplicationInfo = ({
                 <div className="d-flex justify-content-between">
                   <div>{applicationInfo?.intake?.name}</div>
 
-                  {applicationInfo?.applicationStatusId === 9 &&
-                    applicationInfo?.applicationSubStatusId === 43 && (
-                      <>
-                        {permissions?.includes(
-                          permissionList.Update_Application_Info
-                        ) ? (
-                          <SpanButton
-                            icon={
-                              <i
-                                class="far fa-edit"
-                                style={{
-                                  color: "#619bff",
-                                  cursor: "pointer",
-                                }}
-                              ></i>
-                            }
-                            func={() =>
-                              handleUpdateIntake(
-                                applicationInfo?.intake?.id,
-                                applicationInfo?.intake?.name
-                              )
-                            }
-                            permission={6}
-                          />
-                        ) : null}
-                      </>
-                    )}
+                  {canShowButton && (
+                    <>
+                      {permissions?.includes(
+                        permissionList.Update_Application_Info
+                      ) ? (
+                        <SpanButton
+                          icon={
+                            <i
+                              class="far fa-edit"
+                              style={{
+                                color: "#619bff",
+                                cursor: "pointer",
+                              }}
+                            ></i>
+                          }
+                          func={() =>
+                            handleUpdateIntake(
+                              applicationInfo?.intake?.id,
+                              applicationInfo?.intake?.name
+                            )
+                          }
+                          permission={6}
+                        />
+                      ) : null}
+                    </>
+                  )}
 
                   <Modal
                     isOpen={intakeModal}
