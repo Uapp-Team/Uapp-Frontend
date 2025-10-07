@@ -18,7 +18,7 @@ const Widget = () => {
   const destinationCountry = "";
 
   const domainUrl = "https://test.chatuapp.com/";
-  const __key = "DM9Fphc1XKT6xselZOMh9eKsWs3rUbvEzmSKP35JbUDFjs3zXQ";
+  const __key = "3IwKOvPiGvD6Z2h2X69a11YIJzDN0Mx8NjNWthVGYAqn6CjmT4";
   const __tenant = "Default";
   // const domainUrl = process.env.NEXT_PUBLIC_WIDGET_DOMAIN;
   // const __key = process.env.NEXT_PUBLIC_WIDGET_KEY;

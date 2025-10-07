@@ -63,7 +63,7 @@ const SideMenuStudent = () => {
 
       {!isLead && (
         <>
-          <button
+          {/* <button
             onClick={() => {
               setModalShow(true);
             }}
@@ -71,7 +71,7 @@ const SideMenuStudent = () => {
             className="login-to-lead"
           >
             Refer a friend
-          </button>
+          </button> */}
 
           {/* <li
             className={`nav-item uapp-nav-item`}
