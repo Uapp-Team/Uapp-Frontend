@@ -88,44 +88,46 @@ const ConsultantTable = ({
             ) : null}
             {tableData[4]?.isActive ? <th>Branch</th> : null}
             {tableData[5]?.isActive ? <th>Country</th> : null}
-            {tableData[6]?.isActive ? <th>Nationality</th> : null}
-            {tableData[7]?.isActive ? <th>Sales Team Leader</th> : null}
-            {tableData[8]?.isActive ? <th>Parent Consultant</th> : null}
-            {tableData[9]?.isActive ? <th>Type</th> : null}
+            {tableData[6]?.isActive ? <th>City</th> : null}
+            {tableData[7]?.isActive ? <th>Nationality</th> : null}
+            {tableData[8]?.isActive ? <th>Sales Team Leader</th> : null}
+            {tableData[9]?.isActive ? <th>Parent Consultant</th> : null}
+            {tableData[10]?.isActive ? <th>Type</th> : null}
 
             {permissions?.includes(
               permissionList.Change_Consultant_Sales_Training_Status
             ) ? (
-              <> {tableData[10]?.isActive ? <th>Sales Training</th> : null}</>
+              <> {tableData[11]?.isActive ? <th>Sales Training</th> : null}</>
             ) : null}
-
-            {tableData[11]?.isActive ? <th>Started</th> : null}
-            {tableData[12]?.isActive ? <th>Student</th> : null}
-            {tableData[13]?.isActive ? <th>Applications</th> : null}
-            {tableData[14]?.isActive ? <th>Associates</th> : null}
             {permissions?.includes(
               permissionList.Change_Consultant_Admission_Training_Status
             ) ? (
-              <> {tableData[15]?.isActive ? <th>Adm Training</th> : null}</>
+              <> {tableData[12]?.isActive ? <th>Adm Training</th> : null}</>
             ) : null}
-            {tableData[16]?.isActive ? <th>Affiliates</th> : null}
-            {tableData[17]?.isActive ? <th>Referrers</th> : null}
+
+            {tableData[13]?.isActive ? <th>Started</th> : null}
+            {tableData[14]?.isActive ? <th>Student</th> : null}
+            {tableData[15]?.isActive ? <th>Applications</th> : null}
+            {tableData[16]?.isActive ? <th>Associates</th> : null}
+
+            {tableData[17]?.isActive ? <th>Affiliates</th> : null}
+            {tableData[18]?.isActive ? <th>Referrers</th> : null}
 
             {/* {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
               <>{tableData[13]?.isActive ? <th>Status</th> : null}</>
             ) : null} */}
-            {tableData[18]?.isActive ? <th>BAC Cert</th> : null}
-            {tableData[19]?.isActive ? <th>Status</th> : null}
-            {tableData[20]?.isActive ? <th>Tier</th> : null}
+            {tableData[19]?.isActive ? <th>BAC Cert</th> : null}
+            {tableData[20]?.isActive ? <th>Status</th> : null}
+            {tableData[21]?.isActive ? <th>Tier</th> : null}
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus
             ) ? (
-              <>{tableData[21]?.isActive ? <th>BlackList</th> : null}</>
+              <>{tableData[22]?.isActive ? <th>BlackList</th> : null}</>
             ) : null}
 
-            {tableData[22]?.isActive ? (
+            {tableData[23]?.isActive ? (
               <th style={{ width: "8%" }} className="text-center">
                 Action
               </th>
@@ -223,16 +225,17 @@ const ConsultantTable = ({
               {tableData[5]?.isActive ? (
                 <td>{consultant?.countryName}</td>
               ) : null}
-              {tableData[6]?.isActive ? (
+              {tableData[6]?.isActive ? <td>{consultant?.cityName}</td> : null}
+              {tableData[7]?.isActive ? (
                 <td>{consultant?.countryOfCitizenship}</td>
               ) : null}
-              {tableData[7]?.isActive ? (
+              {tableData[8]?.isActive ? (
                 <td>{consultant?.salesTeamLeaderName}</td>
               ) : null}
-              {tableData[8]?.isActive ? (
+              {tableData[9]?.isActive ? (
                 <td>{consultant?.parentConsultantName}</td>
               ) : null}
-              {tableData[9]?.isActive ? (
+              {tableData[10]?.isActive ? (
                 <td>{consultant?.consultantType?.name}</td>
               ) : null}
 
@@ -241,19 +244,29 @@ const ConsultantTable = ({
               ) ? (
                 <>
                   {" "}
-                  {tableData[10]?.isActive ? (
+                  {tableData[11]?.isActive ? (
                     <td>{consultant?.salesTrainingStatus}</td>
                   ) : null}
                 </>
               ) : null}
 
-              {tableData[11]?.isActive ? (
+              {permissions?.includes(
+                permissionList.Change_Consultant_Admission_Training_Status
+              ) ? (
+                <>
+                  {tableData[12]?.isActive ? (
+                    <td>{consultant?.admissionTrainingStatus}</td>
+                  ) : null}
+                </>
+              ) : null}
+
+              {tableData[13]?.isActive ? (
                 <td>{dateFormate(consultant?.createdOn)}</td>
               ) : null}
 
               {permissions?.includes(permissionList.View_Consultant_Student) ? (
                 <>
-                  {tableData[12]?.isActive ? (
+                  {tableData[14]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -272,7 +285,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[12]?.isActive ? (
+                  {tableData[14]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-first">
@@ -288,7 +301,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Application
               ) ? (
                 <>
-                  {tableData[13]?.isActive ? (
+                  {tableData[15]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -303,7 +316,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[13]?.isActive ? (
+                  {tableData[15]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-second">
@@ -319,7 +332,7 @@ const ConsultantTable = ({
                 permissionList.View_Consultant_Associate
               ) ? (
                 <>
-                  {tableData[14]?.isActive ? (
+                  {tableData[16]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span
@@ -336,7 +349,7 @@ const ConsultantTable = ({
                 </>
               ) : (
                 <>
-                  {tableData[14]?.isActive ? (
+                  {tableData[16]?.isActive ? (
                     <td>
                       <div style={{ marginTop: "5px" }}>
                         <span className="Count-third">
@@ -348,16 +361,7 @@ const ConsultantTable = ({
                 </>
               )}
 
-              {permissions?.includes(
-                permissionList.Change_Consultant_Admission_Training_Status
-              ) ? (
-                <>
-                  {tableData[15]?.isActive ? (
-                    <td>{consultant?.admissionTrainingStatus}</td>
-                  ) : null}
-                </>
-              ) : null}
-              {tableData[16]?.isActive ? (
+              {tableData[17]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -374,7 +378,7 @@ const ConsultantTable = ({
                 </td>
               ) : null}
 
-              {tableData[17]?.isActive ? (
+              {tableData[18]?.isActive ? (
                 <td>
                   <div style={{ marginTop: "5px" }}>
                     <span
@@ -388,17 +392,17 @@ const ConsultantTable = ({
                   </div>
                 </td>
               ) : null}
-              {tableData[18]?.isActive ? (
+              {tableData[19]?.isActive ? (
                 <td>
                   {consultant?.isBacCertificateApproved === true
                     ? "Approved"
                     : "Not Approved"}
                 </td>
               ) : null}
-              {tableData[19]?.isActive ? (
+              {tableData[20]?.isActive ? (
                 <td>{consultant?.accountStatus?.statusName}</td>
               ) : null}
-              {tableData[20]?.isActive ? (
+              {tableData[21]?.isActive ? (
                 <td>{consultant?.tier !== "No Tier" && consultant?.tier}</td>
               ) : null}
 
@@ -406,7 +410,7 @@ const ConsultantTable = ({
                 permissionList?.Change_Consultant_AccountStatus
               ) ? (
                 <>
-                  {tableData[21]?.isActive ? (
+                  {tableData[22]?.isActive ? (
                     <td>
                       <ConsultantActive
                         id={consultant?.id}
@@ -417,7 +421,7 @@ const ConsultantTable = ({
                 </>
               ) : null}
 
-              {tableData[22]?.isActive ? (
+              {tableData[23]?.isActive ? (
                 <td style={{ width: "8%" }} className="text-center">
                   <ButtonGroup variant="text">
                     {permissions?.includes(permissionList.View_Consultant) ? (

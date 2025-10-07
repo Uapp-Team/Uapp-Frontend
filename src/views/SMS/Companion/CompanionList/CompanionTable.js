@@ -92,8 +92,8 @@ const CompanionTable = ({
             {tableData[12]?.isActive ? <th>Registered</th> : null}
             {tableData[13]?.isActive ? <th>Status</th> : null}
             {tableData[14]?.isActive ? <th>Branch</th> : null}
-            {tableData[15]?.isActive ? <th>country</th> : null}
-            {tableData[16]?.isActive ? <th>city</th> : null}
+            {tableData[15]?.isActive ? <th>Country</th> : null}
+            {tableData[16]?.isActive ? <th>City</th> : null}
 
             {permissions?.includes(
               permissionList?.Change_Consultant_AccountStatus

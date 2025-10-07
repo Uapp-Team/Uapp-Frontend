@@ -16,6 +16,7 @@ import {
   hideScrollToTop,
 } from "../redux/actions/customizer";
 import { useContextData } from "./context/AppContext";
+import Widget from "./components/chatwidget/Widget";
 
 const VerticalLayout = ({ children, permission }) => {
   const value = useContextData();
@@ -225,7 +226,11 @@ const VerticalLayout = ({ children, permission }) => {
         onClick={handleAppOverlayClick}
       >
         <Navbar {...navbarProps} />
-        <div className="content-wrapper coustom-wrapper">{children}</div>
+        <div className="content-wrapper coustom-wrapper">
+          {children}
+
+          <Widget />
+        </div>
       </div>
       <Footer {...footerProps} />
       {/* {!disableCustomizer && <Customizer {...customizerProps} />} */}

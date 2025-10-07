@@ -35,6 +35,9 @@ import Uget from "../../../../helpers/Uget.js";
 import { domain } from "../../../../constants/constants.js";
 
 const Index = () => {
+  const history = useHistory();
+  const data = history?.location?.state;
+  console.log(data, "siam");
   const ConsultantPaging = JSON.parse(sessionStorage.getItem("consultant"));
   const { type } = useParams();
   const [empList, setEmpList] = useState([]);
@@ -58,12 +61,18 @@ const Index = () => {
 
   const [statusType, setStatusType] = useState([]);
   const [statusLabel, setStatusLabel] = useState(
-    ConsultantPaging?.statusLabel
+    data?.name
+      ? data?.name
+      : ConsultantPaging?.statusLabel
       ? ConsultantPaging?.statusLabel
       : "Account Status"
   );
   const [statusValue, setStatusValue] = useState(
-    ConsultantPaging?.statusValue ? ConsultantPaging?.statusValue : 0
+    data?.id
+      ? data?.id
+      : ConsultantPaging?.statusValue
+      ? ConsultantPaging?.statusValue
+      : 0
   );
 
   const permissions = JSON.parse(localStorage.getItem("permissions"));
@@ -99,7 +108,7 @@ const Index = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
   const [progress, setProgress] = useState(false);
   const userType = localStorage.getItem("userType");
-  const history = useHistory();
+
   const [check, setCheck] = useState(false);
   const [checkBac, setCheckBac] = useState(false);
   const [tierLabel, setTierLabel] = useState("Select Tier");
@@ -625,6 +634,7 @@ const Index = () => {
           selectNationalityCountry={selectNationalityCountry}
           setNationalityCountryLabel={setNationalityCountryLabel}
           setNationalityCountryValue={setNationalityCountryValue}
+          data={data}
         ></SelectAndClear>
         {/* filter starts here */}
 

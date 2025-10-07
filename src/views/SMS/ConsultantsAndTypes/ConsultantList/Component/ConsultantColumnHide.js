@@ -75,7 +75,7 @@ const ConsultantColumnHide = ({
                     </div>
                   )}
                 </>
-              ) : i === 8 ? (
+              ) : i === 11 ? (
                 <>
                   {permissions?.includes(
                     permissionList.Change_Consultant_Sales_Training_Status
@@ -102,7 +102,7 @@ const ConsultantColumnHide = ({
                     </div>
                   )}
                 </>
-              ) : i === 15 ? (
+              ) : i === 12 ? (
                 <>
                   {permissions?.includes(
                     permissionList.Change_Consultant_Admission_Training_Status

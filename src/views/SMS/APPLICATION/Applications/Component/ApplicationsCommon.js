@@ -37,6 +37,7 @@ import Loader from "../../../Search/Loader/Loader";
 import ColumnApplicationCommon from "../../../TableColumn/ColumnApplicationCommon.js";
 import MessageHistoryCardApplicationDetailsPage from "../../ApplicationDetails/Component/RightSide/MessageHistoryCardApplicationDetailsPage.js";
 import ConditionForText from "./ConditionForText.js";
+import Uget from "../../../../../helpers/Uget.js";
 
 const ApplicationsCommon = () => {
   const { addToast } = useToasts();
@@ -394,6 +395,15 @@ const ApplicationsCommon = () => {
       ? application?.SalesTeamLeaderValue
       : 0
   );
+  const [salesManager, setSalesManager] = useState([]);
+  const [SalesManagerLabel, setSalesManagerLabel] = useState(
+    application?.SalesManagerLabel
+      ? application?.SalesManagerLabel
+      : "Select Sales Manager"
+  );
+  const [SalesManagerValue, setSalesManagerValue] = useState(
+    application?.SalesManagerValue ? application?.SalesManagerValue : 0
+  );
 
   // table column data get from localstorage or initial set
   useEffect(() => {
@@ -468,6 +478,8 @@ const ApplicationsCommon = () => {
           !salesTeamLeaderId && SalesTeamLeaderLabel && SalesTeamLeaderLabel,
         SalesTeamLeaderValue:
           !salesTeamLeaderId && SalesTeamLeaderValue && SalesTeamLeaderValue,
+        SalesManagerLabel: SalesManagerLabel && SalesManagerLabel,
+        SalesManagerValue: SalesManagerValue && SalesManagerValue,
         educationLevelLabel: educationLevelLabel && educationLevelLabel,
         educationLevelValue: educationLevelValue && educationLevelValue,
         departmentLabel: departmentLabel && departmentLabel,
@@ -551,6 +563,8 @@ const ApplicationsCommon = () => {
     SalesTeamLeaderValue,
     SalesTeamLeaderLabel,
     salesTeamLeaderId,
+    SalesManagerValue,
+    SalesManagerLabel,
   ]);
 
   // for all dropdown
@@ -594,6 +608,11 @@ const ApplicationsCommon = () => {
       value: consSalesTeamLeaderOptions?.id,
     })
   );
+
+  const SalesManagerMenu = salesManager?.map((salesManagerOptions) => ({
+    label: salesManagerOptions?.name,
+    value: salesManagerOptions?.id,
+  }));
 
   const admissionManagerMenu = admissionManagerDD.map((admissionManager) => ({
     label: admissionManager?.name,
@@ -706,6 +725,10 @@ const ApplicationsCommon = () => {
   const selectSalesTeamLeaderCons = (label, value) => {
     setSalesTeamLeaderLabel(label);
     setSalesTeamLeaderValue(value);
+  };
+  const selectSalesManager = (label, value) => {
+    setSalesManagerLabel(label);
+    setSalesManagerValue(value);
   };
 
   const selectAdmissionManagerDD = (label, value) => {
@@ -938,6 +961,10 @@ const ApplicationsCommon = () => {
         setSalesTeamLeaderLabel(result?.name);
       }
     });
+
+    Uget(`SalesManager/IndexDD/${branchValue}`).then((res) => {
+      setSalesManager(res?.data);
+    });
   }, [branchValue, salesTeamLeaderId]);
 
   useEffect(() => {
@@ -1024,7 +1051,7 @@ const ApplicationsCommon = () => {
           selectedDates[1] ? selectedDates[1] : ""
         }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
           confidenceValue ? confidenceValue : ""
-        }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`
+        }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}&salesManagerId=${SalesManagerValue}`
       ).then((res) => {
         setLoading(false);
         setApplicationList(res?.models);
@@ -1071,6 +1098,7 @@ const ApplicationsCommon = () => {
     SalesTeamLeaderValue,
     educationLevelValue,
     departmentValue,
+    SalesManagerValue,
   ]);
 
   // Delete Button Click Action
@@ -1152,6 +1180,8 @@ const ApplicationsCommon = () => {
     !companionId && setCompanionValue(0);
     !salesTeamLeaderId && setSalesTeamLeaderLabel("Select Sales Team Leader");
     !salesTeamLeaderId && setSalesTeamLeaderValue(0);
+    setSalesManagerLabel("Select Sales Manager");
+    setSalesManagerValue(0);
     setEducationLevelLabel("Select Education Level");
     setEducationLevelValue(0);
     setDepartmentLabel("Select Department");
@@ -1587,6 +1617,25 @@ const ApplicationsCommon = () => {
                     />
                   </Col>
                 ) : null}
+                {userType === userTypes?.SystemAdmin ||
+                userType === userTypes?.BranchAdmin ||
+                userType === userTypes?.Admin ? (
+                  <Col lg="2" md="3" sm="6" xs="6" className="p-2">
+                    <Select
+                      options={SalesManagerMenu}
+                      value={{
+                        label: SalesManagerLabel,
+                        value: SalesManagerValue,
+                      }}
+                      onChange={(opt) =>
+                        selectSalesManager(opt.label, opt.value)
+                      }
+                      name="salesManagerId"
+                      id="salesManagerId"
+                      placeholder="Sales Manager"
+                    />
+                  </Col>
+                ) : null}
 
                 <Col lg="2" md="3" sm="6" xs="6" className="p-2">
                   <Filter
@@ -1759,6 +1808,10 @@ const ApplicationsCommon = () => {
                   setConfidenceLevel={setConfidenceLevel}
                   confidenceValue={confidenceValue}
                   setConfidenceValue={setConfidenceValue}
+                  SalesManagerLabel={SalesManagerLabel}
+                  SalesManagerValue={SalesManagerValue}
+                  setSalesManagerLabel={setSalesManagerLabel}
+                  setSalesManagerValue={setSalesManagerValue}
                 ></ConditionForText>
                 <div className="mt-1 mx-1 d-flex btn-clear">
                   {commonUappIdValue !== 0 ||
@@ -1785,6 +1838,7 @@ const ApplicationsCommon = () => {
                   (!adoId && admissionOfficerValue !== 0) ||
                   (!companionId && companionValue !== 0) ||
                   (!salesTeamLeaderId && SalesTeamLeaderValue !== 0) ||
+                  SalesManagerValue !== 0 ||
                   educationLevelValue !== 0 ||
                   departmentValue !== 0 ||
                   percentageValue !== 0 ||
@@ -1851,7 +1905,7 @@ const ApplicationsCommon = () => {
                       selectedDates[1] ? selectedDates[1] : ""
                     }&applicationSubStatusId=${applicationSubValue}&confidenceLevel=${
                       confidenceValue ? confidenceValue : ""
-                    }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}`}
+                    }&salesTeamLeaderId=${SalesTeamLeaderValue}&educationLevelId=${educationLevelValue}&departmentId=${departmentValue}&salesManagerId=${SalesManagerValue}`}
                     className="mx-2"
                     fileName="Applications.xlsx"
                   />
@@ -2028,16 +2082,27 @@ const ApplicationsCommon = () => {
 
                                 {tableData[18]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
+                                    Sales Manager
+                                  </th>
+                                ) : null}
+                                {tableData[19]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
+                                    Sales Team Leader
+                                  </th>
+                                ) : null}
+
+                                {tableData[20]?.isActive ? (
+                                  <th style={{ verticalAlign: "middle" }}>
                                     SLCs
                                   </th>
                                 ) : null}
 
-                                {tableData[19]?.isActive ? (
+                                {tableData[21]?.isActive ? (
                                   <th style={{ verticalAlign: "middle" }}>
                                     Consultant
                                   </th>
                                 ) : null}
-                                {tableData[20]?.isActive ? (
+                                {tableData[22]?.isActive ? (
                                   <th
                                     style={{ verticalAlign: "middle" }}
                                     className="text-center"
@@ -2188,20 +2253,30 @@ const ApplicationsCommon = () => {
                                       {app?.managerName}
                                     </td>
                                   ) : null}
-
                                   {tableData[18]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.salesManagerName}
+                                    </td>
+                                  ) : null}
+                                  {tableData[19]?.isActive ? (
+                                    <td style={{ verticalAlign: "middle" }}>
+                                      {app?.salesTeamLeaderName}
+                                    </td>
+                                  ) : null}
+
+                                  {tableData[20]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.studentFinanceName}
                                     </td>
                                   ) : null}
 
-                                  {tableData[19]?.isActive ? (
+                                  {tableData[21]?.isActive ? (
                                     <td style={{ verticalAlign: "middle" }}>
                                       {app?.consultantName}
                                     </td>
                                   ) : null}
 
-                                  {tableData[20]?.isActive ? (
+                                  {tableData[22]?.isActive ? (
                                     <td
                                       style={{ width: "8%" }}
                                       className="text-center my-auto"

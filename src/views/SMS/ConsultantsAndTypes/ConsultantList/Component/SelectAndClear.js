@@ -67,6 +67,7 @@ const SelectAndClear = ({
   setCountryValue,
   setNationalityCountryLabel,
   setNationalityCountryValue,
+  data,
 }) => {
   const userType = localStorage.getItem("userType");
   const permissions = JSON.parse(localStorage.getItem("permissions"));

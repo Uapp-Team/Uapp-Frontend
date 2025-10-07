@@ -618,25 +618,27 @@ export default function StudentProfileHeadComponent({ studentid }) {
                   <ul className="uapp-ul text-right1">
                     {userType !== userTypes?.Student ? (
                       <div className="d-flex justify-content-end">
-                        <div>
-                          <span className="mr-1">Blacklist : </span>
-                        </div>
                         {permissions?.includes(
                           permissionList?.Change_Student_Account_Status
                         ) ? (
-                          <ToggleSwitch2
-                            style={{ marginRight: "4px" }}
-                            checked={
-                              blackList === null
-                                ? false
-                                : blackList === false
-                                ? false
-                                : true
-                            }
-                            onChange={(e) => {
-                              handleBlacklist(e, studentDetails?.id);
-                            }}
-                          />
+                          <>
+                            <div>
+                              <span className="mr-1">Blacklist : </span>
+                            </div>
+                            <ToggleSwitch2
+                              style={{ marginRight: "4px" }}
+                              checked={
+                                blackList === null
+                                  ? false
+                                  : blackList === false
+                                  ? false
+                                  : true
+                              }
+                              onChange={(e) => {
+                                handleBlacklist(e, studentDetails?.id);
+                              }}
+                            />
+                          </>
                         ) : null}
                       </div>
                     ) : null}

@@ -24,6 +24,10 @@
   display: none;
 } */
 
+.ism img {
+  width: 100%;
+}
+
 .overflow {
   overflow: auto;
 }

@@ -87,17 +87,38 @@ const Index = () => {
     console.log(value, "my value");
     const clickedCategory =
       config.w.config.xaxis.categories[config.dataPointIndex];
+
+    // Prepare state object
+    const stateData = {
+      selectedCategory: clickedCategory,
+    };
+
+    // Add id based on category
+    if (clickedCategory.toLowerCase() === "in active") {
+      stateData.id = 4;
+      stateData.name = "Inactive";
+    } else if (clickedCategory.toLowerCase() === "active") {
+      stateData.id = 3;
+      stateData.name = "Active";
+    } else if (clickedCategory.toLowerCase() === "under review") {
+      stateData.id = 2;
+      stateData.name = "Under Review";
+    } else if (clickedCategory.toLowerCase() === "rejected") {
+      stateData.id = 5;
+      stateData.name = "Rejected";
+    } else if (clickedCategory.toLowerCase() === "new account") {
+      stateData.id = 1;
+      stateData.name = "New Account";
+    } else if (clickedCategory.toLowerCase() === "junk") {
+      stateData.id = 6;
+      stateData.name = "Junk Account";
+    }
+
     history.push({
-      pathname: `/AdmissionsPipeline/${clickedCategory
-        .replace(/\s+/g, "-")
+      pathname: `/consultantList/${clickedCategory
+        .replace(/\s+/g, "")
         .toLowerCase()}`,
-      state: {
-        selectedCategory: clickedCategory,
-        intakeRngValue,
-        intake,
-        selectedDates,
-        chartData,
-      },
+      state: stateData,
     });
   };
 
@@ -201,7 +222,7 @@ const Index = () => {
                 xaxis: {
                   categories: [
                     "Rejected",
-                    "InActive",
+                    "In Active",
                     "Junk",
                     "Active",
                     "Under Review",

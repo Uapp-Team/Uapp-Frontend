@@ -124,6 +124,10 @@ const ConditionForText = ({
   setDepartmentValue,
   departmentLabel,
   setDepartmentLabel,
+  setSalesManagerLabel,
+  setSalesManagerValue,
+  SalesManagerValue,
+  SalesManagerLabel,
 }) => {
   return (
     <>
@@ -362,6 +366,15 @@ const ConditionForText = ({
             label={SalesTeamLeaderLabel}
             setValue={() => setSalesTeamLeaderValue(0)}
             setLabel={() => setSalesTeamLeaderLabel("Select Sales Team Leader")}
+          ></TagButton>
+        ) : (
+          ""
+        )}
+        {SalesManagerValue && SalesManagerValue !== 0 ? (
+          <TagButton
+            label={SalesManagerLabel}
+            setValue={() => setSalesManagerValue(0)}
+            setLabel={() => setSalesManagerLabel("Select Sales Manager")}
           ></TagButton>
         ) : (
           ""

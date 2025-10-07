@@ -177,12 +177,6 @@ const AgentReport = () => {
                     <h5 className="mb-0">Progress Report</h5>
                     <div className="d-flex flex-wrap justify-content-between">
                       <Select
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            border: "none",
-                          }),
-                        }}
                         options={intakeList}
                         value={{ label: intakeLabel, value: intakeValue }}
                         onChange={(opt) => selectIntake(opt.label, opt.value)}
@@ -204,12 +198,6 @@ const AgentReport = () => {
                         }}
                       />
                       <Select
-                        styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            border: "none",
-                          }),
-                        }}
                         options={monthList}
                         value={{ label: monthLabel, value: monthValue }}
                         onChange={(opt) => selectMonth(opt.label, opt.value)}
@@ -219,7 +207,11 @@ const AgentReport = () => {
                       />
 
                       <input
-                        style={{ border: "none" }}
+                        style={{
+                          border: "1px solid #cccccc",
+                          borderRadius: "4px",
+                          marginLeft: "5px",
+                        }}
                         type="date"
                         name="date"
                         id="date"

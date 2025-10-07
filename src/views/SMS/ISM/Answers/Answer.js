@@ -80,6 +80,7 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
               <>
                 <p className="mt-2" style={{ color: "#626767" }}>
                   <div
+                    className="ism"
                     dangerouslySetInnerHTML={createMarkup(
                       defaultData?.answerList &&
                         defaultData?.answerList[0]?.answers
@@ -96,6 +97,7 @@ const Answer = ({ defaultData, refetch, byQues = false, isPublic = false }) => {
 
                       <p className="mt-2" style={{ color: "#626767" }}>
                         <div
+                          className="ism"
                           dangerouslySetInnerHTML={createMarkup(
                             item?.answers && item?.answers
                           )}
