@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./widget.css";
+import { MinusIcon, SquareIcon } from "lucide-react";
 // Animation durations and delays
 const ANIMATION_DURATION = 5000; // 5 seconds per text
 
@@ -115,90 +116,70 @@ const Widget = () => {
           {/* Minimize Button */}
           <button
             style={{
-              background: "#f3f4f6",
+              background: "#e3e3e3",
               border: "none",
               borderRadius: "4px",
-              width: "20px",
-              height: "20px",
+              width: "25px",
+              height: "25px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
               boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
+              opacity: 0.8,
             }}
             title="Minimize"
             onClick={() => setIsOpen(false)}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="4"
-                y="7.25"
-                width="8"
-                height="1.5"
-                rx="0.75"
-                fill="#515151"
-              />
-            </svg>
+            <MinusIcon strokeWidth={4} />
           </button>
           {/* Maximize Button */}
           <button
             style={{
-              background: "#f3f4f6",
+              background: "#e3e3e3",
               border: "none",
               borderRadius: "4px",
-              width: "20px",
-              height: "20px",
+              width: "25px",
+              height: "25px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
               boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
+              opacity: 0.8,
             }}
             title="Maximize"
             onClick={() => {
               setIsMaximized(isMaximized === 1 || isMaximized === 3 ? 2 : 1);
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect
-                x="3"
-                y="3"
-                width="10"
-                height="10"
-                rx="2"
-                stroke="#515151"
-                strokeWidth="1.2"
-              />
-            </svg>
+            <SquareIcon strokeWidth={3} />
           </button>
 
           <button
             style={{
-              background: "#f3f4f6",
+              background: "#e3e3e3",
               border: "none",
               borderRadius: "4px",
-              width: "20px",
-              height: "20px",
+              width: "25px",
+              height: "25px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
               boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-              opacity: 0.5,
+              opacity: 0.8,
             }}
-            title="Full Screen"
+            title={isMaximized === 3 ? "Exit Full Screen" : "Full Screen"}
             onClick={() => {
               setIsMaximized(isMaximized === 1 || isMaximized === 2 ? 3 : 1);
             }}
           >
-            {/* External Link Arrow Icon */}
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12L12 4M12 4H6.5M12 4V9.5"
-                stroke="#515151"
-                strokeWidth="1.2"
+                stroke="black"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
